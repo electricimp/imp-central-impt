@@ -28,8 +28,8 @@ const Auth = require('../../lib/Auth');
 const Options = require('../../lib/util/Options');
 
 const COMMAND = 'login';
-const COMMAND_DESCRIPTION = 'Global login to impCentral CLI';
-const COMMAND_OPTIONS = '[--endpoint <endpoint_url>] (--user <user_id> --pwd <password> | --login-key <login_key>) [--debug] [--help]';
+const COMMAND_DESCRIPTION = 'Login to impCentral CLI';
+const COMMAND_OPTIONS = '[--local] [--endpoint <endpoint_url>] (--user <user_id> --pwd <password> | --login-key <login_key>) [--debug] [--help]';
 
 exports.command = COMMAND;
 
@@ -37,6 +37,7 @@ exports.describe = COMMAND_DESCRIPTION;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({
+        [Options.LOCAL] : false,
         [Options.ENDPOINT] : false,
         [Options.USER] : false,
         [Options.PASSWORD] : false,
@@ -57,5 +58,5 @@ exports.handler = function (argv) {
     if (!Options.checkLoginParameters(options)) {
         return;
     }
-    new Auth(options, true).login(options);
+    new Auth(options).login(options);
 };

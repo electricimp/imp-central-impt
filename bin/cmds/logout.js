@@ -28,7 +28,7 @@ const Auth = require('../../lib/Auth');
 const Options = require('../../lib/util/Options');
 
 const COMMAND = 'logout';
-const COMMAND_DESCRIPTION = 'Deletes global Auth File';
+const COMMAND_DESCRIPTION = 'Deletes Auth File';
 
 exports.command = COMMAND;
 
@@ -36,6 +36,7 @@ exports.describe = COMMAND_DESCRIPTION;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({
+        [Options.LOCAL] : false,
         [Options.DEBUG] : false
     });
     return yargs
@@ -49,5 +50,5 @@ exports.handler = function (argv) {
         return;
     }
     const options = new Options(argv);
-    new Auth(options, true).logout();
+    new Auth(options).logout();
 };
