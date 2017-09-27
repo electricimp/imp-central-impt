@@ -4,26 +4,27 @@
 
 ### List Of Commands
 
+**[help](#help)**
+
 ### Command Syntax
 
-**climp <command_group> <command_name> \[\<options>]**
-  
-All commands (except login/logout ) are named by the two mandatory parts:
+**climp <command_group> \[<command_name>] \[\<options>]**, where:
 - **<command_group>** - a logical group of commands
-- **<command_name>** - a command name unique inside the group
+- **<command_name>** - a command name, unique inside the group. Few commands do not have <command_name> but only <command_group>.
+- **\<options>** - one or more options applicable to a corresponded command. Most of commands has them. Options may be written in any order.
 
-Most of commands have **\<options>** - one or more options applicable to a corresponded command. Options may be written in any order. An option has the following format:
+One **option** has the following format:
   
 **--<option_name> [<option_value>]** or **-<option_alias> [<option_value>]**, where:
 - **<option_name>** - is unique across a particular command. For a user convenience many of the option names are reused across different commands.
 - **<option_alias>** - a one letter alias for the option, unique for a particular command. Not all but many options have aliases.
 - **<option_value>** - a value of the option. Not all options require value. If option value has spaces it must be put into double quotes (“”).
 
-### Entities Identification
+### Entity Identification
 
 Applicable to impCentral API entities: Product, Device Group, Device, Build (Deployment).
 
-There are the following **rules** how the tool searches an entity:
+**The rules** how the tool searches an entity:
 
 - There is an order of attributes for every entity type (see below).
 - The tool starts from the first attribute in the order and searches the specified value for
@@ -58,7 +59,7 @@ Attributes accepted as <DEVICE_IDENTIFIER> (in order of search):
 - Device Id (always unique)
 - MAC address
 - IP address
-- Agent Id
+- IMP Agent Id
 - Device Name
 
 #### Build Identification
@@ -71,6 +72,16 @@ Attributes accepted as <BUILD_IDENTIFIER> (in order of search):
 - origin
 
 
-
-
 ## Commands Description
+
+In alphabetical order.
+
+### Help Commands
+
+#### Help
+
+**help**
+
+Displays the list of all commands (w/o command options). To display the details of every command use the command’s **--help** option.
+
+
