@@ -4,7 +4,7 @@
 
 ### List Of Commands
 
-**[help](#help)**
+**[help](#help-command)**
 
 ### Command Syntax
 
@@ -76,9 +76,7 @@ Attributes accepted as <BUILD_IDENTIFIER> (in order of search):
 
 In alphabetical order.
 
-### Help Commands
-
-#### Help
+### Help Command
 
 **help**
 
