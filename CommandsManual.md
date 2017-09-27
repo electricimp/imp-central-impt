@@ -4,9 +4,8 @@
 
 ### List Of Commands
 
-**[help](#help-command)**
-
-**[product create](#product-create)**
+**[climp help](#help-command)**
+**[climp product create](#product-create)**
 
 ### Command Syntax
 
@@ -80,7 +79,7 @@ In alphabetical order.
 
 ### Help Command
 
-**help**
+**climp help**
 
 Displays the list of all commands (w/o command options). To display the details of every command use the command’s **--help** option.
 
@@ -88,7 +87,7 @@ Displays the list of all commands (w/o command options). To display the details 
 
 #### Product Create
 
-**product create --name <product_name> \[--descr <product_description>] \[--debug] \[--help]**
+**climp product create --name <product_name> \[--descr <product_description>] \[--debug] \[--help]**
 
 Creates a new Product with the specified Name and Description (if specified).
 Fails if Product with the specified Name already exists.
