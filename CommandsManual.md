@@ -6,6 +6,8 @@
 
 **[help](#help-command)**
 
+**[product create](#product-create)**
+
 ### Command Syntax
 
 **climp <command_group> \[<command_name>] \[\<options>]**, where:
@@ -81,5 +83,21 @@ In alphabetical order.
 **help**
 
 Displays the list of all commands (w/o command options). To display the details of every command use the command’s **--help** option.
+
+### Product Manipulation Commands
+
+#### Product Create
+
+**product create --name <product_name> \[--descr <product_description>] \[--debug] \[--help]**
+
+Creates a new Product with the specified Name and Description (if specified).
+Fails if Product with the specified Name already exists.
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --name | -n | yes | yes | Name of the Product. |
+| --descr | -s | no | yes | Description of the Product. |
+| --debug | -z | no | no | Display debug info of the command execution. |
+| --help | -h | no | no | Display description of the command. Ignore any other options. |
 
 
