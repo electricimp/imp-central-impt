@@ -5,6 +5,7 @@
 ### List Of Commands
 
 **[climp help](#help-command)**
+
 **[climp product create](#product-create)**
 
 ### Command Syntax
@@ -39,21 +40,21 @@ command is failed.
 - If no entity is found for all attributes, the command is usually failed (depends on a
 command).
 
-#### Product Identification
+#### Product Identifier
 Option: **--product <PRODUCT_IDENTIFIER>**
 
 Attributes accepted as <PRODUCT_IDENTIFIER> (in order of search):
 - Product Id (always unique)
 - Product Name (unique for all Products owned by a particular user)
 
-#### Device Group Identification
+#### Device Group Identifier
 Option: **--dg <DEVICE_GROUP_IDENTIFIER>**
 
 Attributes accepted as <DEVICE_GROUP_IDENTIFIER> (in order of search):
 - Device Group Id (always unique)
 - Device Group Name (unique for all Device Groups in a Product)
 
-#### Device Identification
+#### Device Identifier
 Option: **--device <DEVICE_IDENTIFIER>**
 
 Attributes accepted as <DEVICE_IDENTIFIER> (in order of search):
@@ -63,7 +64,7 @@ Attributes accepted as <DEVICE_IDENTIFIER> (in order of search):
 - IMP Agent Id
 - Device Name
 
-#### Build Identification
+#### Build Identifier
 Option: **--build <BUILD_IDENTIFIER>**
 
 Attributes accepted as <BUILD_IDENTIFIER> (in order of search):
@@ -99,4 +100,29 @@ Fails if Product with the specified Name already exists.
 | --debug | -z | no | no | Display debug info of the command execution. |
 | --help | -h | no | no | Display description of the command. Ignore any other options. |
 
+### Test Commands
 
+#### Test Init
+
+**test init \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--device-file \[<device_file>]] \[--agent-file \[<agent_file>]] \[--timeout \<timeout>] \[--stop-on-fail] \[--tests <test_file_names_pattern>] \[--create-templates] \[--force] \[--debug] \[--help]**
+
+Creates or updates test configuration file (*.climp.test*) in the current directory.
+
+If the current directory already contains test configuration file, a user is informed and asked to:
+- Cancel the operation
+- Continue the operation (done automatically with **--force** option). In this case the existing test configuration file is updated by the new option values provided. Options which are not specified in the command keep their previous values from the existing test configuration file.
+
+At the end of the command execution information about the test configuration is displayed (the same as by [Test Info command](#test-info)).
+
+| Option | Alias | Mandatory? | Value Required? | Description | When option is not specified and test configuration file does not exist in the current directory |
+| --- | --- | --- | --- | --- | --- |
+| --dg | -g | no | yes | [Device Group Identifier](#device-group-identifier) of a group whose devices are used for tests execution. | The command is stopped with an error. |
+| --device-file | -x | no | yes |  | No additional device code is deployed. |
+| --agent-file | -y | no | yes |  | No additional agent code is deployed. |
+| --timeout | -t | no | yes | A timeout period (in seconds) after which the tests are interrupted and considered as failed. | By default: 30 seconds. |
+| --stop-on-fail | | no | no | The tests execution is stopped after a test failure. | By default: the tests execution is not stopped after a failure. |
+| --tests | | no | yes | Test file names pattern. All files located in the current directory (and its subdirectories) which names match this pattern are considered as files with Test Cases. | By default: |
+| --create-templates | -c | no | no | | n/a |
+| --force | -f | no | no | Forces the test configuration file updated (if existed) by the new option values w/o asking a user. | n/a |
+| --debug | -z | no | no | Display debug info of the command execution. | n/a |
+| --help | -h | no | no | Display description of the command. Ignore any other options. | n/a |
