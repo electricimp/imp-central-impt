@@ -11,7 +11,8 @@
 **[climp test init](#test-init)**  
 **[climp test info](#test-info)**  
 **[climp test github](#test-github)**  
-**[climp test run](#test-run)**
+**[climp test run](#test-run)**  
+**[climp test delete](#test-delete)**
 
 ### Command Syntax
 
@@ -102,10 +103,26 @@ Fails if Product with the specified Name already exists.
 | --- | --- | --- | --- | --- |
 | --name | -n | yes | yes | Name of the Product. |
 | --descr | -s | no | yes | Description of the Product. |
-| --debug | -z | no | no | Display debug info of the command execution. |
-| --help | -h | no | no | Display description of the command. Ignore any other options. |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
 ### Test Commands
+
+#### Test Delete
+
+**test delete \[--github-config <github_credentials_file_name>] \[--builder-config <builder_file_name>] \[--force] \[--debug] \[--help]**
+
+Deletes (if existed) test configuration file *.climp.test* in the current directory, the specified github credentials configuration file, the specified file with *Builder* variables.
+
+A user is asked to confirm the operation (confirmed automatically with **--force** option).
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --github-config | | no | yes | A path to the github credentials configuration file that should be deleted. A relative or absolute path can be used. If the option is absent, *.climp.github-info* file in the current directory is assumed. |
+| --builder-config | | no | yes | A path to the file with *Builder* variables that should be deleted. A relative or absolute path can be used. If the option is absent, *.climp.builder* file in the current directory is assumed. |
+| --force | -f | no | no | Forces the operation w/o asking a confirmation from user. |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
 #### Test Github
 
@@ -123,8 +140,8 @@ If the file already exists, a user is informed and asked to:
 | --user | -u | yes | yes | GitHub username. |
 | --pwd | -w | yes | yes | GitHub password or personal access token. |
 | --force | -f | no | no | Forces the github credentials configuration file update (if existed) by the new option values w/o asking a user. |
-| --debug | -z | no | no | Display debug info of the command execution. |
-| --help | -h | no | no | Display description of the command. Ignore any other options. |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
 #### Test Info
 
@@ -135,8 +152,8 @@ With every call the latest actual information is obtained using impCentral API.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --debug | -z | no | no | Display debug info of the command execution. |
-| --help | -h | no | no | Display description of the command. Ignore any other options. |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
 #### Test Init
 
@@ -159,8 +176,8 @@ At the end of the command execution information about the test configuration is 
 | --stop-on-fail | | no | no | If *true* or no value: the tests execution is stopped after a test failure. If *false* value: the tests execution is not stopped after a failure. | By default: *false* |
 | --test-file | | no | yes | Test file name or pattern. All files located in the current directory (and its subdirectories) which names match this pattern are considered as files with Test Cases. This option may be repeated several times to specify several names and/or patterns. | By default: *"\*.test.nut" "tests/\*\*/\*.test.nut"* |
 | --force | -f | no | no | Forces the test configuration file update (if existed) by the new option values w/o asking a user. | n/a |
-| --debug | -z | no | no | Display debug info of the command execution. | n/a |
-| --help | -h | no | no | Display description of the command. Ignore any other options. | n/a |
+| --debug | -z | no | no | Displays debug info of the command execution. | n/a |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. | n/a |
 
 #### Test Run
 
@@ -173,6 +190,6 @@ Runs the tests specified by test configuration file *.climp.test* (if exists in 
 | --tests | | no | yes | A pattern for selective test runs, allows to execute a single test or a set of tests from one or several Test Cases. The syntax of the pattern: *\[testFileName]:\[testClass].\[testMethod]* If the option is missed all tests from all test files specified in the test configuration are executed. |
 | --github-config | | no | yes | A path to the github credentials configuration file. A relative or absolute path can be used. If the option is absent, *.climp.github-info* file in the current directory is assumed. |
 | --builder-config | | no | yes | A path to the file with *Builder* variables. A relative or absolute path can be used. If the option is absent, *.climp.builder* file in the current directory is assumed. |
-| --debug | -z | no | no | Display debug info of the command execution. |
-| --help | -h | no | no | Display description of the command. Ignore any other options. |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
