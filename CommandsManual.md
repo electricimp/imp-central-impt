@@ -8,6 +8,11 @@
 
 **[climp product create](#product-create)**
 
+**[climp test init](#test-init)**  
+**[climp test info](#test-info)**  
+**[climp test github](#test-github)**  
+**[climp test run](#test-run)**
+
 ### Command Syntax
 
 **climp <command_group> \[<command_name>] \[\<options>]**, where:
@@ -157,4 +162,18 @@ At the end of the command execution information about the test configuration is 
 | --force | -f | no | no | Forces the test configuration file update (if existed) by the new option values w/o asking a user. | n/a |
 | --debug | -z | no | no | Display debug info of the command execution. | n/a |
 | --help | -h | no | no | Display description of the command. Ignore any other options. | n/a |
+
+#### Test Run
+
+**test run \[--tests <testcase_pattern>] \[--github-config <github_credentials_file_name>] \[--builder-config <builder_file_name>] \[--debug] \[--help]**
+
+Runs the tests specified by test configuration file *.climp.test* (if exists in the current directory).
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| -- tests | | no | yes | A pattern for selective test runs, allows to execute a single test or a set of tests from one or several Test Cases. The syntax of the pattern: *\[testFileName]:\[testClass].\[testMethod]* |
+| --github-config | | no | yes | A path to the github credentials configuration file. A relative or absolute path can be used. If the option is absent, *.climp.github-info* file in the current directory is assumed. |
+| --builder-config | | no | yes | A path to the file with *Builder* variables. A relative or absolute path can be used. If the option is absent, *.climp.builder* file in the current directory is assumed. |
+| --debug | -z | no | no | Display debug info of the command execution. |
+| --help | -h | no | no | Display description of the command. Ignore any other options. |
 
