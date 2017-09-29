@@ -117,6 +117,7 @@ If the file already exists, a user is informed and asked to:
 | --github-config | | no | yes | A path to the github credentials configuration file. A relative or absolute path can be used. If the option is absent, *.climp.github-info* file in the current directory is assumed. |
 | --user | -u | yes | yes | GitHub username. |
 | --pwd | -w | yes | yes | GitHub password or personal access token. |
+| --force | -f | no | no | Forces the github credentials configuration file update (if existed) by the new option values w/o asking a user. |
 | --debug | -z | no | no | Display debug info of the command execution. |
 | --help | -h | no | no | Display description of the command. Ignore any other options. |
 
@@ -153,7 +154,7 @@ At the end of the command execution information about the test configuration is 
 | --stop-on-fail | | no | no | The tests execution is stopped after a test failure. | By default: the tests execution is not stopped after a failure. |
 | --tests | | no | yes | Test file names pattern. All files located in the current directory (and its subdirectories) which names match this pattern are considered as files with Test Cases. | By default: |
 | --create-templates | -c | no | no | | n/a |
-| --force | -f | no | no | Forces the test configuration file updated (if existed) by the new option values w/o asking a user. | n/a |
+| --force | -f | no | no | Forces the test configuration file update (if existed) by the new option values w/o asking a user. | n/a |
 | --debug | -z | no | no | Display debug info of the command execution. | n/a |
 | --help | -h | no | no | Display description of the command. Ignore any other options. | n/a |
 
