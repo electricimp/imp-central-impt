@@ -140,7 +140,7 @@ With every call the latest actual information is obtained using impCentral API.
 
 #### Test Init
 
-**test init \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--device-file \[<device_file>]] \[--agent-file \[<agent_file>]] \[--timeout \<timeout>] \[--stop-on-fail] \[--tests <test_file_names_pattern>] \[--create-templates] \[--force] \[--debug] \[--help]**
+**test init \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--device-file \[<device_file>]] \[--agent-file \[<agent_file>]] \[--timeout \<timeout>] \[--stop-on-fail \[true|false]] \[--test-file <test_file_name_pattern>] \[--create-templates] \[--force] \[--debug] \[--help]**
 
 Creates or updates test configuration file *.climp.test* in the current directory.
 
@@ -153,11 +153,11 @@ At the end of the command execution information about the test configuration is 
 | Option | Alias | Mandatory? | Value Required? | Description | When option is not specified and test configuration file does not exist in the current directory |
 | --- | --- | --- | --- | --- | --- |
 | --dg | -g | no | yes | [Device Group Identifier](#device-group-identifier) of a group whose devices are used for tests execution. | The command is stopped with an error. |
-| --device-file | -x | no | yes |  | No additional device code is deployed. |
-| --agent-file | -y | no | yes |  | No additional agent code is deployed. |
+| --device-file | -x | no | no | A path to a file with the device source code that is deployed along with the tests. A relative or absolute path can be used. Specify this option w/o a value to remove this file from the test configuration. | No additional device code is deployed. |
+| --agent-file | -y | no | no | A path to a file with the agent source code that is deployed along with the tests. A relative or absolute path can be used. Specify this option w/o a value to remove this file from the test configuration. | No additional agent code is deployed. |
 | --timeout | -t | no | yes | A timeout period (in seconds) after which the tests are interrupted and considered as failed. | By default: 30 seconds. |
-| --stop-on-fail | | no | no | The tests execution is stopped after a test failure. | By default: the tests execution is not stopped after a failure. |
-| --tests | | no | yes | Test file names pattern. All files located in the current directory (and its subdirectories) which names match this pattern are considered as files with Test Cases. | By default: |
+| --stop-on-fail | | no | no | If *true* or no value: the tests execution is stopped after a test failure. If *false* value: the tests execution is not stopped after a failure. | By default: *false* |
+| --test-file | | no | yes | Test file name or pattern. All files located in the current directory (and its subdirectories) which names match this pattern are considered as files with Test Cases. This option may be repeated several times to specify several names and/or patterns. | By default: *"\*.test.nut" "tests/\*\*/\*.test.nut"* |
 | --create-templates | -c | no | no | | n/a |
 | --force | -f | no | no | Forces the test configuration file update (if existed) by the new option values w/o asking a user. | n/a |
 | --debug | -z | no | no | Display debug info of the command execution. | n/a |
@@ -171,7 +171,7 @@ Runs the tests specified by test configuration file *.climp.test* (if exists in 
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| -- tests | | no | yes | A pattern for selective test runs, allows to execute a single test or a set of tests from one or several Test Cases. The syntax of the pattern: *\[testFileName]:\[testClass].\[testMethod]* |
+| --tests | | no | yes | A pattern for selective test runs, allows to execute a single test or a set of tests from one or several Test Cases. The syntax of the pattern: *\[testFileName]:\[testClass].\[testMethod]* If the option is missed all tests from all test files specified in the test configuration are executed. |
 | --github-config | | no | yes | A path to the github credentials configuration file. A relative or absolute path can be used. If the option is absent, *.climp.github-info* file in the current directory is assumed. |
 | --builder-config | | no | yes | A path to the file with *Builder* variables. A relative or absolute path can be used. If the option is absent, *.climp.builder* file in the current directory is assumed. |
 | --debug | -z | no | no | Display debug info of the command execution. |
