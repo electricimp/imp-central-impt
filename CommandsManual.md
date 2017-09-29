@@ -140,7 +140,7 @@ With every call the latest actual information is obtained using impCentral API.
 
 #### Test Init
 
-**test init \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--device-file \[<device_file>]] \[--agent-file \[<agent_file>]] \[--timeout \<timeout>] \[--stop-on-fail \[true|false]] \[--test-file <test_file_name_pattern>] \[--create-templates] \[--force] \[--debug] \[--help]**
+**test init \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--device-file \[<device_file>]] \[--agent-file \[<agent_file>]] \[--timeout \<timeout>] \[--stop-on-fail \[true|false]] \[--test-file <test_file_name_pattern>] \[--force] \[--debug] \[--help]**
 
 Creates or updates test configuration file *.climp.test* in the current directory.
 
@@ -158,7 +158,6 @@ At the end of the command execution information about the test configuration is 
 | --timeout | -t | no | yes | A timeout period (in seconds) after which the tests are interrupted and considered as failed. | By default: 30 seconds. |
 | --stop-on-fail | | no | no | If *true* or no value: the tests execution is stopped after a test failure. If *false* value: the tests execution is not stopped after a failure. | By default: *false* |
 | --test-file | | no | yes | Test file name or pattern. All files located in the current directory (and its subdirectories) which names match this pattern are considered as files with Test Cases. This option may be repeated several times to specify several names and/or patterns. | By default: *"\*.test.nut" "tests/\*\*/\*.test.nut"* |
-| --create-templates | -c | no | no | | n/a |
 | --force | -f | no | no | Forces the test configuration file update (if existed) by the new option values w/o asking a user. | n/a |
 | --debug | -z | no | no | Display debug info of the command execution. | n/a |
 | --help | -h | no | no | Display description of the command. Ignore any other options. | n/a |
