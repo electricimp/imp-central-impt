@@ -102,11 +102,41 @@ Fails if Product with the specified Name already exists.
 
 ### Test Commands
 
+#### Test Github
+
+**test github \[--github-config <github_credentials_file_name>] --user <github_username> --pwd <github_password> \[--force] \[--debug] \[--help]**
+
+Creates or updates github credentials configuration file.
+
+If the file already exists, a user is informed and asked to:
+- Cancel the operation
+- Continue the operation (done automatically with **--force** option). In this case the existing github credentials configuration file is updated by the new option values provided.
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --github-config | | no | yes | A path to the github credentials configuration file. A relative or absolute path can be used. If the option is absent, *.climp.github-info* file in the current directory is assumed. |
+| --user | -u | yes | yes | GitHub username. |
+| --pwd | -w | yes | yes | GitHub password or personal access token. |
+| --debug | -z | no | no | Display debug info of the command execution. |
+| --help | -h | no | no | Display description of the command. Ignore any other options. |
+
+#### Test Info
+
+**test info \[--debug] \[--help]**
+
+Displays information about the current test configuration (if test configuration file *.climp.test* exists in the current directory).
+With every call the latest actual information is obtained using impCentral API.
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --debug | -z | no | no | Display debug info of the command execution. |
+| --help | -h | no | no | Display description of the command. Ignore any other options. |
+
 #### Test Init
 
 **test init \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--device-file \[<device_file>]] \[--agent-file \[<agent_file>]] \[--timeout \<timeout>] \[--stop-on-fail] \[--tests <test_file_names_pattern>] \[--create-templates] \[--force] \[--debug] \[--help]**
 
-Creates or updates test configuration file (*.climp.test*) in the current directory.
+Creates or updates test configuration file *.climp.test* in the current directory.
 
 If the current directory already contains test configuration file, a user is informed and asked to:
 - Cancel the operation
@@ -126,3 +156,4 @@ At the end of the command execution information about the test configuration is 
 | --force | -f | no | no | Forces the test configuration file updated (if existed) by the new option values w/o asking a user. | n/a |
 | --debug | -z | no | no | Display debug info of the command execution. | n/a |
 | --help | -h | no | no | Display description of the command. Ignore any other options. | n/a |
+
