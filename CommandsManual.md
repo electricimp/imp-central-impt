@@ -6,7 +6,8 @@
 
 **[climp help](#help-command)**
 
-**[climp product create](#product-create)**
+**[climp product create](#product-create)**  
+**[climp product update](#product-update)**  
 
 **[climp test init](#test-init)**  
 **[climp test info](#test-info)**  
@@ -101,8 +102,23 @@ Fails if Product with the specified Name already exists.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --name | -n | yes | yes | Name of the Product. |
+| --name | -n | yes | yes | Name of the Product. Must be unique for all Products owned by a particular Account. |
 | --descr | -s | no | yes | Description of the Product. |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
+#### Product Update
+
+**climp product update --product <PRODUCT_IDENTIFIER> \[--name <product_name>] \[--descr <product_description>] \[--debug] \[--help]**
+
+Updates the specified Product by a new Name and/or Description.
+Fails if the specified Product does not exist.
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --product | -p | yes | yes | [Product Identifier](#product-identifier). |
+| --name | -n | no | yes | New Name of the Product. Must be unique for all Products owned by a particular Account. |
+| --descr | -s | no | yes | New Description of the Product. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
