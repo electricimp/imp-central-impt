@@ -80,6 +80,13 @@ Attributes accepted as <BUILD_IDENTIFIER> (in order of search):
 - tag
 - origin
 
+### Project File
+
+Project File is *.climp.project-settings* file located in a directory. Different directories may contain different Project Files. One directory may contain not more than one Project File.
+
+Project File references a Device Group ("development" or "pre-factory" types of Device Group only) and, correspondingly, the Product which contains that Device Group.
+
+Project File may affect commands called from the directory where the file is located. Device Group and/or Product referenced by Project File may be assumed by a command, if they are not specified explicitly.
 
 ## Commands Description
 
@@ -109,14 +116,14 @@ Fails if Product with the specified Name already exists.
 
 #### Product Update
 
-**climp product update --product <PRODUCT_IDENTIFIER> \[--name <product_name>] \[--descr <product_description>] \[--debug] \[--help]**
+**climp product update \[--product <PRODUCT_IDENTIFIER>] \[--name <product_name>] \[--descr <product_description>] \[--debug] \[--help]**
 
 Updates the specified Product by a new Name and/or Description.
 Fails if the specified Product does not exist.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --product | -p | yes | yes | [Product Identifier](#product-identifier). |
+| --product | -p | no | yes | [Product Identifier](#product-identifier). If not specified, the Product referenced by [Project File](#project-file) in the current directory is assumed. If no Project File, the command fails. |
 | --name | -n | no | yes | New Name of the Product. Must be unique for all Products owned by a particular Account. |
 | --descr | -s | no | yes | New Description of the Product. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
