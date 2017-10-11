@@ -8,6 +8,8 @@
 
 **[impt product create](#product-create)**  
 **[impt product update](#product-update)**  
+**[impt product list](#product-list)**  
+**[impt product info](#product-info)**  
 
 **[impt test init](#test-init)**  
 **[impt test info](#test-info)**  
@@ -109,10 +111,35 @@ Fails if Product with the specified Name already exists.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --name | -n | yes | yes | Name of the Product. Must be unique for all Products owned by a particular Account. |
+| --name | -n | yes | yes | Name of the Product. Must be unique for all Products owned by the logged-in account. |
 | --descr | -s | no | yes | Description of the Product. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
+#### Product Info
+
+**impt product info \[--product <PRODUCT_IDENTIFIER>] \[--debug] \[--help]**
+
+Displays information about the specified Product.
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --product | -p | no | yes | [Product Identifier](#product-identifier). If not specified, the Product referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
+#### Product List
+
+**impt product list \[--my] \[--debug] \[--help]**
+
+Displays information about all Products available for the current logged-in account.
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --my | | no | no | Displays information about all Products owned by the current logged-in account.  |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
 
 #### Product Update
 
@@ -123,7 +150,7 @@ Fails if the specified Product does not exist.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --product | -p | no | yes | [Product Identifier](#product-identifier). If not specified, the Product referenced by [Project File](#project-file) in the current directory is assumed. If no Project File, the command fails. |
+| --product | -p | no | yes | [Product Identifier](#product-identifier). If not specified, the Product referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
 | --name | -n | no | yes | New Name of the Product. Must be unique for all Products owned by a particular Account. |
 | --descr | -s | no | yes | New Description of the Product. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
