@@ -1,23 +1,23 @@
-# climp Commands Manual
+# impt Commands Manual
 
 ## General
 
 ### List Of Commands
 
-**[climp help](#help-command)**
+**[impt help](#help-command)**
 
-**[climp product create](#product-create)**  
-**[climp product update](#product-update)**  
+**[impt product create](#product-create)**  
+**[impt product update](#product-update)**  
 
-**[climp test init](#test-init)**  
-**[climp test info](#test-info)**  
-**[climp test github](#test-github)**  
-**[climp test run](#test-run)**  
-**[climp test delete](#test-delete)**
+**[impt test init](#test-init)**  
+**[impt test info](#test-info)**  
+**[impt test github](#test-github)**  
+**[impt test run](#test-run)**  
+**[impt test delete](#test-delete)**
 
 ### Command Syntax
 
-**climp <command_group> \[<command_name>] \[\<options>]**, where:
+**impt <command_group> \[<command_name>] \[\<options>]**, where:
 - **<command_group>** - a logical group of commands
 - **<command_name>** - a command name, unique inside the group. Few commands do not have <command_name> but only <command_group>.
 - **\<options>** - one or more options applicable to a corresponded command. Most of commands has them. Options may be written in any order.
@@ -82,7 +82,7 @@ Attributes accepted as <BUILD_IDENTIFIER> (in order of search):
 
 ### Project File
 
-Project File is *.climp.project-settings* file located in a directory. Different directories may contain different Project Files. One directory may contain not more than one Project File.
+Project File is *.impt.project* file located in a directory. Different directories may contain different Project Files. One directory may contain not more than one Project File.
 
 Project File references a Device Group ("development" or "pre-factory" types of Device Group only) and, correspondingly, the Product which contains that Device Group.
 
@@ -94,7 +94,7 @@ In alphabetical order.
 
 ### Help Command
 
-**climp help**
+**impt help**
 
 Displays the list of all commands (w/o command options). To display the details of every command use the command’s **--help** option.
 
@@ -102,7 +102,7 @@ Displays the list of all commands (w/o command options). To display the details 
 
 #### Product Create
 
-**climp product create --name <product_name> \[--descr <product_description>] \[--debug] \[--help]**
+**impt product create --name <product_name> \[--descr <product_description>] \[--debug] \[--help]**
 
 Creates a new Product with the specified Name and Description (if specified).
 Fails if Product with the specified Name already exists.
@@ -116,7 +116,7 @@ Fails if Product with the specified Name already exists.
 
 #### Product Update
 
-**climp product update \[--product <PRODUCT_IDENTIFIER>] \[--name <product_name>] \[--descr <product_description>] \[--debug] \[--help]**
+**impt product update \[--product <PRODUCT_IDENTIFIER>] \[--name <product_name>] \[--descr <product_description>] \[--debug] \[--help]**
 
 Updates the specified Product by a new Name and/or Description.
 Fails if the specified Product does not exist.
@@ -133,23 +133,23 @@ Fails if the specified Product does not exist.
 
 #### Test Delete
 
-**test delete \[--github-config <github_credentials_file_name>] \[--builder-config <builder_file_name>] \[--force] \[--debug] \[--help]**
+**impt test delete \[--github-config <github_credentials_file_name>] \[--builder-config <builder_file_name>] \[--force] \[--debug] \[--help]**
 
-Deletes (if existed) test configuration file *.climp.test* in the current directory, the specified github credentials configuration file, the specified file with *Builder* variables.
+Deletes (if existed) test configuration file *.impt.test* in the current directory, the specified github credentials configuration file, the specified file with *Builder* variables.
 
 A user is asked to confirm the operation (confirmed automatically with **--force** option).
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --github-config | | no | yes | A path to the github credentials configuration file that should be deleted. A relative or absolute path can be used. If the option is absent, *.climp.github-info* file in the current directory is assumed. |
-| --builder-config | | no | yes | A path to the file with *Builder* variables that should be deleted. A relative or absolute path can be used. If the option is absent, *.climp.builder* file in the current directory is assumed. |
+| --github-config | | no | yes | A path to the github credentials configuration file that should be deleted. A relative or absolute path can be used. If the option is absent, *.impt.github-info* file in the current directory is assumed. |
+| --builder-config | | no | yes | A path to the file with *Builder* variables that should be deleted. A relative or absolute path can be used. If the option is absent, *.impt.builder* file in the current directory is assumed. |
 | --force | -f | no | no | Forces the operation w/o asking a confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
 #### Test Github
 
-**test github \[--github-config <github_credentials_file_name>] --user <github_username> --pwd <github_password> \[--force] \[--debug] \[--help]**
+**impt test github \[--github-config <github_credentials_file_name>] --user <github_username> --pwd <github_password> \[--force] \[--debug] \[--help]**
 
 Creates or updates github credentials configuration file.
 
@@ -159,7 +159,7 @@ If the file already exists, a user is informed and asked to:
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --github-config | | no | yes | A path to the github credentials configuration file. A relative or absolute path can be used. If the option is absent, *.climp.github-info* file in the current directory is assumed. |
+| --github-config | | no | yes | A path to the github credentials configuration file. A relative or absolute path can be used. If the option is absent, *.impt.github-info* file in the current directory is assumed. |
 | --user | -u | yes | yes | GitHub username. |
 | --pwd | -w | yes | yes | GitHub password or personal access token. |
 | --force | -f | no | no | Forces the github credentials configuration file update (if existed) by the new option values w/o asking a user. |
@@ -168,9 +168,9 @@ If the file already exists, a user is informed and asked to:
 
 #### Test Info
 
-**test info \[--debug] \[--help]**
+**impt test info \[--debug] \[--help]**
 
-Displays information about the current test configuration (if test configuration file *.climp.test* exists in the current directory).
+Displays information about the current test configuration (if test configuration file *.impt.test* exists in the current directory).
 With every call the latest actual information is obtained using impCentral API.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
@@ -179,10 +179,10 @@ With every call the latest actual information is obtained using impCentral API.
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
 #### Test Init
+ 
+**impt test init \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--device-file \[<device_file>]] \[--agent-file \[<agent_file>]] \[--timeout \<timeout>] \[--stop-on-fail \[true|false]] \[--test-file <test_file_name_pattern>] \[--force] \[--debug] \[--help]**
 
-**test init \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--device-file \[<device_file>]] \[--agent-file \[<agent_file>]] \[--timeout \<timeout>] \[--stop-on-fail \[true|false]] \[--test-file <test_file_name_pattern>] \[--force] \[--debug] \[--help]**
-
-Creates or updates test configuration file *.climp.test* in the current directory.
+Creates or updates test configuration file *.impt.test* in the current directory.
 
 If the current directory already contains test configuration file, a user is informed and asked to:
 - Cancel the operation
@@ -204,15 +204,15 @@ At the end of the command execution information about the test configuration is 
 
 #### Test Run
 
-**test run \[--tests <testcase_pattern>] \[--github-config <github_credentials_file_name>] \[--builder-config <builder_file_name>] \[--debug] \[--help]**
+**impt test run \[--tests <testcase_pattern>] \[--github-config <github_credentials_file_name>] \[--builder-config <builder_file_name>] \[--debug] \[--help]**
 
-Runs the tests specified by test configuration file *.climp.test* (if exists in the current directory).
+Runs the tests specified by test configuration file *.impt.test* (if exists in the current directory).
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --tests | | no | yes | A pattern for selective test runs, allows to execute a single test or a set of tests from one or several Test Cases. The syntax of the pattern: *\[testFileName]:\[testClass].\[testMethod]* If the option is missed all tests from all test files specified in the test configuration are executed. |
-| --github-config | | no | yes | A path to the github credentials configuration file. A relative or absolute path can be used. If the option is absent, *.climp.github-info* file in the current directory is assumed. |
-| --builder-config | | no | yes | A path to the file with *Builder* variables. A relative or absolute path can be used. If the option is absent, *.climp.builder* file in the current directory is assumed. |
+| --github-config | | no | yes | A path to the github credentials configuration file. A relative or absolute path can be used. If the option is absent, *.impt.github-info* file in the current directory is assumed. |
+| --builder-config | | no | yes | A path to the file with *Builder* variables. A relative or absolute path can be used. If the option is absent, *.impt.builder* file in the current directory is assumed. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
