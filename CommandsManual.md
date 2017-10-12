@@ -10,6 +10,9 @@
 **[impt product update](#product-update)**  
 **[impt product list](#product-list)**  
 **[impt product info](#product-info)**  
+**[impt product delete](#product-delete)**  
+
+**[impt dg create](#device-group-create)**  
 
 **[impt test init](#test-init)**  
 **[impt test info](#test-info)**  
@@ -86,7 +89,7 @@ Attributes accepted as <BUILD_IDENTIFIER> (in order of search):
 
 Project File is *.impt.project* file located in a directory. Different directories may contain different Project Files. One directory may contain not more than one Project File.
 
-Project File references a Device Group ("development" or "pre-factory" types of Device Group only) and, correspondingly, the Product which contains that Device Group.
+Project File references a Device Group ("development" or "pre-factory" - **TBD** - types of Device Group only) and, correspondingly, the Product which contains that Device Group.
 
 Project File may affect commands called from the directory where the file is located. Device Group and/or Product referenced by Project File may be assumed by a command, if they are not specified explicitly.
 
@@ -100,6 +103,22 @@ In alphabetical order.
 
 Displays the list of all commands (w/o command options). To display the details of every command use the command’s **--help** option.
 
+### Device Group Manipulation Commands
+
+#### Device Group Create
+
+**impt dg create --name <device_group_name> --type <device_group_type> \[--product <PRODUCT_IDENTIFIER>] \[--descr <device_group_description>] \[--target <DEVICE_GROUP_IDENTIFIER>] \[--debug] \[--help]**
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --name | -n | yes | yes | Name of the Device Group. Must be unique among all Device Groups in the specified Product. |
+| --type | | yes | yes | Type of the Device Group. Valid values are:**TBD**. If the value is invalid, the command fails. |
+| --product | -p | yes/[project](#project-file) | yes | [Product Identifier](#product-identifier) of the Product which the Device Group belongs to. If not specified, the Product referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| --descr | -s | no | yes | Description of the Device Group. |
+| --target | -g | no | yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the newly created Device Group. May be specified for the newly created Device Group of the type **TBD** or **TBD** only. The target Device Group must have the type **TBD** or **TBD** correspondingly. Otherwise the command fails. |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
 ### Product Manipulation Commands
 
 #### Product Create
@@ -111,8 +130,23 @@ Fails if Product with the specified Name already exists.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --name | -n | yes | yes | Name of the Product. Must be unique for all Products owned by the logged-in account. |
+| --name | -n | yes | yes | Name of the Product. Must be unique among all Products owned by the logged-in account. |
 | --descr | -s | no | yes | Description of the Product. |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
+#### Product Delete
+
+**impt product delete \[--product <PRODUCT_IDENTIFIER>] \[--force] \[--debug] \[--help]**
+
+Deletes the specified Product.
+
+**TBD** - deletes Device Groups?
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --product | -p | no | yes | [Product Identifier](#product-identifier). If not specified, the Product referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| --force | -f | no | no | Forces the operation w/o asking a confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -151,7 +185,7 @@ Fails if the specified Product does not exist.
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --product | -p | no | yes | [Product Identifier](#product-identifier). If not specified, the Product referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
-| --name | -n | no | yes | New Name of the Product. Must be unique for all Products owned by a particular Account. |
+| --name | -n | no | yes | New Name of the Product. Must be unique among all Products owned by a particular Account. |
 | --descr | -s | no | yes | New Description of the Product. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
