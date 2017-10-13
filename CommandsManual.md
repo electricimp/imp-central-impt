@@ -16,13 +16,14 @@
 **[impt dg delete](#device-group-delete)**  
 **[impt dg info](#device-group-info)**  
 **[impt dg list](#device-group-list)**  
+**[impt dg reassign](#device-group-reassign)**  
 **[impt dg restart](#device-group-restart)**  
+**[impt dg unassign](#device-group-unassign)**  
 **[impt dg update](#device-group-update)**  
 
 **[impt device assign](#device-assign)**  
 **[impt device info](#device-info)**  
 **[impt device list](#device-list)**  
-**[impt device reassign](#device-reassign)**  
 **[impt device remove](#device-remove)**  
 **[impt device restart](#device-restart)**  
 **[impt device unassign](#device-unassign)**  
@@ -121,20 +122,20 @@ Displays the list of all commands (w/o command options). To display the details 
 
 #### Device Assign
 
-**impt device assign --device <DEVICE_IDENTIFIER> \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--debug] \[--help]**
+**impt device assign --device <DEVICE_IDENTIFIER> \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--force] \[--debug] \[--help]**
 
 Assigns the specified Device to the specified Device Group.
 Fails if the specified Device Group does not exist.
 
-If the specified Device already assigned to a production Device Group, the commands fails.
-
-If the specified Device already assigned to another, not a production Device Group, it is automatically unassigned from it
-and assigned to the new one.
+User is asked to confirm the operation (confirmed automatically with **--force** option) when:
+- the specified Device Group is of the production/pre-production type ? **TBD**
+- the specified Device is already assigned to another Device Group. If operation is confirmed, the Device is reassigned to the new Device Group, may fail for some combinations of the Device Groups.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --device | -d | yes | yes | [Device Identifier](#device-identifier). |
 | --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| --force | -f | no | no | Forces the operation w/o asking a confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -198,6 +199,20 @@ Reboots the specified Device.
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --device | -d | yes | yes | [Device Identifier](#device-identifier). |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
+#### Device Unassign
+
+**impt device unassign --device <DEVICE_IDENTIFIER> \[--unbond <unbond_key>] \[--debug] \[--help]**
+
+Unassigns the specified Device.
+Does nothing if the Device already unassigned.
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --device | -d | yes | yes | [Device Identifier](#device-identifier). |
+| **TBD** --unbond | | no | yes | Unbond key is required to unassign Device from a production Device Group. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -283,11 +298,32 @@ The returned list of the Device Groups may be filtered. Filtering is possible by
 | --product-id | | no | yes | Device Groups which belong to the specified Product only. |
 | **TBD** --product-name | | no | yes | Device Groups which belong to the specified Product only. |
 
+#### Device Group Reassign
+
+**impt dg reassign --from <DEVICE_GROUP_IDENTIFIER> \[--to <DEVICE_GROUP_IDENTIFIER>] \[--force] \[--debug] \[--help]**
+
+Reassigns all Devices from one Device Group to another.
+Fails if any of the specified Device Groups does not exist.
+
+User is asked to confirm the operation when the specified Device Groups are of different types or belong to different Products (confirmed automatically with **--force** option).
+
+The operation may fail for some combinations of the Device Groups.
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --device | -d | yes | yes | [Device Identifier](#device-identifier). |
+| --from | | yes | yes | [Device Group Identifier](#device-group-identifier) of the origin Device Group. |
+| --to | | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier) of the destination Device Group. If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| --force | -f | no | no | Forces the operation w/o asking a confirmation from user. |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
 #### Device Group Restart
 
 **impt dg restart \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--debug] \[--help]**
 
-Reboots all the Devices assigned to the specified Device Group.
+Reboots all Devices assigned to the specified Device Group.
+Does nothing if the Device Group has no Devices assigned.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
@@ -295,6 +331,19 @@ Reboots all the Devices assigned to the specified Device Group.
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
+#### Device Group Unassign
+
+**impt dg unassign \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--unbond <unbond_key>] \[--debug] \[--help]**
+
+Unassigns all Devices from the specified Device Group.
+Does nothing if the Device Group has no Devices assigned.
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| **TBD** --unbond | | no | yes | Unbond key is required to unassign Devices from a production Device Group. |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
 #### Device Group Update
 
