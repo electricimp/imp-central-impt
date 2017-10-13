@@ -19,6 +19,15 @@
 **[impt dg restart](#device-group-restart)**  
 **[impt dg update](#device-group-update)**  
 
+**[impt device assign](#device-assign)**  
+**[impt device info](#device-info)**  
+**[impt device list](#device-list)**  
+**[impt device reassign](#device-reassign)**  
+**[impt device remove](#device-remove)**  
+**[impt device restart](#device-restart)**  
+**[impt device unassign](#device-unassign)**  
+**[impt device update](#device-update)**  
+
 **[impt test init](#test-init)**  
 **[impt test info](#test-info)**  
 **[impt test github](#test-github)**  
@@ -77,8 +86,8 @@ Option: **--device <DEVICE_IDENTIFIER>**
 Attributes accepted as <DEVICE_IDENTIFIER> (in order of search):
 - Device Id (always unique)
 - MAC address
-- IP address
 - IMP Agent Id
+- IP address **TBD**
 - Device Name
 
 #### Build Identifier
@@ -107,6 +116,103 @@ In alphabetical order.
 **impt help**
 
 Displays the list of all commands (w/o command options). To display the details of every command use the command’s **--help** option.
+
+### Device Manipulation Commands
+
+#### Device Assign
+
+**impt device assign --device <DEVICE_IDENTIFIER> \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--debug] \[--help]**
+
+Assigns the specified Device to the specified Device Group.
+Fails if the specified Device Group does not exist.
+
+If the specified Device already assigned to a production Device Group, the commands fails.
+
+If the specified Device already assigned to another, not a production Device Group, it is automatically unassigned from it
+and assigned to the new one.
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --device | -d | yes | yes | [Device Identifier](#device-identifier). |
+| --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
+#### Device Info
+
+**impt device info --device <DEVICE_IDENTIFIER> \[--debug] \[--help]**
+
+Displays information about the specified Device.
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --device | -d | yes | yes | [Device Identifier](#device-identifier). |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
+#### Device List
+
+**impt device list \[--my] \[--unassigned] \[--assigned] \[--online] \[--offline] \[--product-id <product_id>] \[--product-name <product_name>] \[--dg-type <device_group_type>] \[--dg-id <device_group_id>] \[--dg-name <device_group_name>] \[--debug] \[--help]**
+
+Displays information about all Devices available for the current logged-in account. **TBD** or owned only?.
+
+The returned list of the Devices may be filtered. Filtering is possible by any combination of the described Filter Options. Every Filter Option may be repeated several times - **TBD**
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+| Filter Options: | | | | |
+| **TBD** --my | | no | no | Devices owned by the current logged-in account only. |
+| --unassigned | | no | no | Unassigned Devices only. |
+| --assigned | | no | no | Assigned Devices only. |
+| --online | | no | no | Devices in online state only. |
+| --offline | | no | no | Devices in offline state only. |
+| --product-id | | no | yes | Devices assigned to Device Groups which belong to the specified Product only. |
+| **TBD** --product-name | | no | yes | Devices assigned to Device Groups which belong to the specified Product only. |
+| --dg-type | | no | yes | Devices assigned to Device Groups of the specified type only. Valid values are: **TBD**. |
+| --dg-id | | no | yes | Devices assigned to the specified Device Group only. |
+| **TBD** --dg-name | | no | yes | Devices assigned to the specified Device Group only. |
+
+#### Device Remove
+
+**impt device remove --device <DEVICE_IDENTIFIER> \[--force] \[--debug] \[--help]**
+
+Removes the specified Device from the logged-in account.
+
+User is asked to confirm the operation (confirmed automatically with **--force** option).
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --device | -d | yes | yes | [Device Identifier](#device-identifier). |
+| --force | -f | no | no | Forces the operation w/o asking a confirmation from user. |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
+#### Device Restart
+
+**impt device restart --device <DEVICE_IDENTIFIER> \[--debug] \[--help]**
+
+Reboots the specified Device.
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --device | -d | yes | yes | [Device Identifier](#device-identifier). |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
+#### Device Update
+
+**impt device update --device <DEVICE_IDENTIFIER> --name <device_name> \[--debug] \[--help]**
+
+Updates Name of the specified Device.
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --device | -d | yes | yes | [Device Identifier](#device-identifier). |
+| --name | -n | yes | yes | New Name of the Device. |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
 ### Device Group Manipulation Commands
 
@@ -138,6 +244,8 @@ Deletes the specified Device Group.
     the group is the production target of a pre_factoryfixture or factoryfixture group
     the group has any flagged deployments
 
+User is asked to confirm the operation (confirmed automatically with **--force** option).
+
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
@@ -163,17 +271,17 @@ Displays information about the specified Device Group.
 
 Displays information about all Device Groups available for the current logged-in account.
 
-The returned list of the Device Groups may be filtered by using Filter Options. Filtering is possible by any combination of the described Filter Options. Every Filter Option may be repeated several times - **TBD**
+The returned list of the Device Groups may be filtered. Filtering is possible by any combination of the described Filter Options. Every Filter Option may be repeated several times - **TBD**
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 | Filter Options: | | | | |
-| --my | | no | no | Displays information about Device Groups owned by the current logged-in account only. |
-| --type | | no | yes | Displays information about Device Groups of the specified type only. Valid values are: **TBD**. |
-| --product-id | | no | yes | Displays information about Device Groups which belong to the specified Product only. |
-| **TBD** --product-name | | no | yes | Displays information about Device Groups which belong to the specified Product only. |
+| --my | | no | no | Device Groups owned by the current logged-in account only. |
+| --type | | no | yes | Device Groups of the specified type only. Valid values are: **TBD**. |
+| --product-id | | no | yes | Device Groups which belong to the specified Product only. |
+| **TBD** --product-name | | no | yes | Device Groups which belong to the specified Product only. |
 
 #### Device Group Restart
 
@@ -205,7 +313,6 @@ Fails if the specified Device Group does not exist.
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
-
 ### Product Manipulation Commands
 
 #### Product Create
@@ -229,6 +336,8 @@ Fails if Product with the specified Name already exists.
 Deletes the specified Product.
 
 **TBD** - deletes Device Groups?
+
+User is asked to confirm the operation (confirmed automatically with **--force** option).
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
@@ -285,7 +394,7 @@ Fails if the specified Product does not exist.
 
 Deletes (if existed) test configuration file *.impt.test* in the current directory, the specified github credentials configuration file, the specified file with *Builder* variables.
 
-A user is asked to confirm the operation (confirmed automatically with **--force** option).
+User is asked to confirm the operation (confirmed automatically with **--force** option).
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
