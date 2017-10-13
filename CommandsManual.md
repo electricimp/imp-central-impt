@@ -7,12 +7,16 @@
 **[impt help](#help-command)**
 
 **[impt product create](#product-create)**  
-**[impt product update](#product-update)**  
-**[impt product list](#product-list)**  
-**[impt product info](#product-info)**  
 **[impt product delete](#product-delete)**  
+**[impt product info](#product-info)**  
+**[impt product list](#product-list)**  
+**[impt product update](#product-update)**  
 
 **[impt dg create](#device-group-create)**  
+**[impt dg delete](#device-group-delete)**  
+**[impt dg info](#device-group-info)**  
+**[impt dg list](#device-group-list)**  
+**[impt dg restart](#device-group-restart)**  
 **[impt dg update](#device-group-update)**  
 
 **[impt test init](#test-init)**  
@@ -123,6 +127,67 @@ Fails if Device Group with the specified Name already exists in the specified Pr
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
+#### Device Group Delete
+
+**impt dg delete \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--force] \[--debug] \[--help]**
+
+Deletes the specified Device Group.
+
+**TBD** - from the spec: Device Groups cannot be deleted if any of the following are true:
+    there are devices assigned to the group
+    the group is the production target of a pre_factoryfixture or factoryfixture group
+    the group has any flagged deployments
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| --force | -f | no | no | Forces the operation w/o asking a confirmation from user. |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
+#### Device Group Info
+
+**impt dg info \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--debug] \[--help]**
+
+Displays information about the specified Device Group.
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
+#### Device Group List
+
+**impt dg list \[--my] \[--type <device_group_type>] \[--product-id <product_id>] \[--product-name <product_name>] \[--debug] \[--help]**
+
+Displays information about all Device Groups available for the current logged-in account.
+
+The returned list of the Device Groups may be filtered by using Filter Options. Filtering is possible by any combination of the described Filter Options. Every Filter Option may be repeated several times - **TBD**
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+| Filter Options: | | | | |
+| --my | | no | no | Displays information about Device Groups owned by the current logged-in account only. |
+| --type | | no | yes | Displays information about Device Groups of the specified type only. Valid values are: **TBD**. |
+| --product-id | | no | yes | Displays information about Device Groups which belong to the specified Product only. |
+| **TBD** --product-name | | no | yes | Displays information about Device Groups which belong to the specified Product only. |
+
+#### Device Group Restart
+
+**impt dg restart \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--debug] \[--help]**
+
+Reboots all the Devices assigned to the specified Device Group.
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
+
 #### Device Group Update
 
 **impt dg update \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--name <device_group_name>] \[--descr <device_group_description>] \[--target <DEVICE_GROUP_IDENTIFIER>] \[--load-code-after-blessing \[true|false]] \[--debug] \[--help]**
@@ -134,7 +199,7 @@ Fails if the specified Device Group does not exist.
 | --- | --- | --- | --- | --- |
 | --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
 | --name | -n | no | yes | New Name of the Device Group. Must be unique among all Device Groups in the Product. |
-| --descr | -s | no | yes | New Description of the Device Group. |
+| --descr | -s | no | yes | Description of the Device Group. |
 | --target | | no | yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the being updated Device Group. May be specified for the being update Device Group of the type **TBD** or **TBD** only. The target Device Group must be of the type **TBD** or **TBD** correspondingly. Otherwise the command fails. |
 | --load-code-after-blessing | | no | no | Applicable to Device Group of the type **TBD**. If *true* or no value, production code is immediately loaded by the device after blessing. If *false*, production code will be loaded the next time the device connects as part of BlinkUp, whether successful or not. Note, the newly created production Device Group always has this option *true*. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
@@ -192,7 +257,7 @@ Displays information about all Products available for the current logged-in acco
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --my | | no | no | Displays information about all Products owned by the current logged-in account.  |
+| --my | | no | no | Displays information about Products owned by the current logged-in account only.  |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -208,7 +273,7 @@ Fails if the specified Product does not exist.
 | --- | --- | --- | --- | --- |
 | --product | -p | yes/[project](#project-file) | yes | [Product Identifier](#product-identifier). If not specified, the Product referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
 | --name | -n | no | yes | New Name of the Product. Must be unique among all Products owned by a particular Account. |
-| --descr | -s | no | yes | New Description of the Product. |
+| --descr | -s | no | yes | Description of the Product. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
