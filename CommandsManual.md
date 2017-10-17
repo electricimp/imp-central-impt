@@ -29,6 +29,9 @@
 **[impt device unassign](#device-unassign)**  
 **[impt device update](#device-update)**  
 
+**[impt build deploy](#build-deploy)**  
+**[impt build run](#build-run)**  
+
 **[impt test init](#test-init)**  
 **[impt test info](#test-info)**  
 **[impt test github](#test-github)**  
@@ -157,7 +160,7 @@ Informs user if the specified Device Group does not have assigned Devices, in th
 | --origin | | no | yes | A free-form key to store the source of the code. |
 | --tag | -t | no | yes | A tag applied to this build (Deployment). This option may be repeated several times to apply several tags. |
 | --flagged | | no | no | If *true* or no value, this build (Deployment) cannot be deleted without first setting this option back to *false*. If *false* or the option is not specified, the build can be deleted. |
-| --log | -l | no | no | Starts displaying logs from the Devices assigned to the specified Device Group (see **[impt log stream](#log-stream)** command description). To stop logs displaying press *<Ctrl-C>*. |
+| --log | -l | no | no | Starts displaying logs from the Devices assigned to the specified Device Group (see **[impt log stream](#log-stream)** command description). To stop logs displaying press *\<Ctrl-C>*. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
