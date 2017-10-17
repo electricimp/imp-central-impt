@@ -63,8 +63,8 @@ attribute in the order.
 - If one and only one entity is found for the particular attribute, the search is stopped, the
 command is processed for the found entity.
 - If more than one entity is found for the particular attribute, the search is stopped, the
-command is failed.
-- If no entity is found for all attributes, the command is usually failed (depends on a
+command fails.
+- If no entity is found for all attributes, the command usually fails (depends on a
 command).
 
 #### Product Identifier
@@ -106,17 +106,61 @@ Project File is *.impt.project* **TBD** file located in a directory. Different d
 
 Project File references a Device Group ("development" or "pre-factory" - **TBD** - types of Device Group only) and, correspondingly, the Product which contains that Device Group.
 
-Project File may affect commands called from the directory where the file is located. Device Group and/or Product referenced by Project File may be assumed by a command, if they are not specified explicitly.
+Project File may affect commands called from the directory where the file is located. Device Group, Product, source files referenced by Project File may be assumed by a command, if they are not specified explicitly.
 
 ## Commands Description
 
 In alphabetical order.
 
-### Help Command
+### Build Manipulation Commands
 
-**impt help**
+#### Build Deploy
 
-Displays the list of all commands (w/o command options). To display the details of every command use the command’s **--help** option.
+**impt build deploy \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--device-file <device_file>] \[--agent-file <agent_file>] \[--descr <build_description>] \[--origin \<origin>] \[--tag \<tag>] \[--flagged \[true|false]] \[--debug] \[--help]**
+
+Creates a build (Deployment) from the specified source files, with Description (if specified) and attributes (if
+specified) and deploys it to all Devices of the specified Device Group.
+
+Fails if one or both of the specified source files do not exist or the specified Device Group does not exist.
+
+The new build is not ran until the Devices are rebooted. To run it call **[impt dg restart](#device-group-restart)** or **[impt device restart](#device-restart)** command.
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| --device-file | -x | yes/[project](#project-file) | yes | Name of a file which contains a source code for IMP device. If not specified, the file referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| --agent-file | -y | yes/[project](#project-file) | yes | Name of a file which contains a source code for IMP agent. If not specified, the file referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| --descr | -s | no | yes | Description of the build (Deployment). |
+| --origin | | no | yes | A free-form key to store the source of the code. |
+| --tag | -t | no | yes | A tag applied to this build (Deployment). This option may be repeated several times to apply several tags. |
+| --flagged | | no | no | If *true* or no value, this build (Deployment) cannot be deleted without first setting this option back to *false*. If *false* or the option is not specified, the build can be deleted. |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
+#### Build Run
+
+**impt build run \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--device-file <device_file>] \[--agent-file <agent_file>] \[--descr <build_description>] \[--origin \<origin>] \[--tag \<tag>] \[--flagged \[true|false]] \[--log] \[--debug] \[--help]**
+
+Creates, deploys and runs a build (Deployment). Optionally, displays logs of the running build.
+
+It behaves exactly like **[impt build deploy](#build-deploy)** command followed by **[impt dg restart](#device-group-restart)** command and, optionally, by **[impt log stream](#log-stream)** command.
+
+Fails if one or both of the specified source files do not exist or the specified Device Group does not exist.
+Informs user if the specified Device Group does not have assigned Devices, in this case the Deployment is created anyway.
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| --device-file | -x | yes/[project](#project-file) | yes | Name of a file which contains a source code for IMP device. If not specified, the file referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| --agent-file | -y | yes/[project](#project-file) | yes | Name of a file which contains a source code for IMP agent. If not specified, the file referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| --descr | -s | no | yes | Description of the build (Deployment). |
+| --origin | | no | yes | A free-form key to store the source of the code. |
+| --tag | -t | no | yes | A tag applied to this build (Deployment). This option may be repeated several times to apply several tags. |
+| --flagged | | no | no | If *true* or no value, this build (Deployment) cannot be deleted without first setting this option back to *false*. If *false* or the option is not specified, the build can be deleted. |
+| --log | -l | no | no | Starts displaying logs from the Devices assigned to the specified Device Group (see **[impt log stream](#log-stream)** command description). To stop logs displaying press *<Ctrl-C>*. |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
 
 ### Device Manipulation Commands
 
@@ -361,6 +405,12 @@ Fails if the specified Device Group does not exist.
 | --load-code-after-blessing | | no | no | Applicable to Device Group of the type **TBD**. If *true* or no value, production code is immediately loaded by the device after blessing. If *false*, production code will be loaded the next time the device connects as part of BlinkUp, whether successful or not. Note, the newly created production Device Group always has this option *true*. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
+### Help Command
+
+**impt help**
+
+Displays the list of all commands (w/o command options). To display the details of every command use the command’s **--help** option.
 
 ### Product Manipulation Commands
 
