@@ -29,8 +29,13 @@
 **[impt device unassign](#device-unassign)**  
 **[impt device update](#device-update)**  
 
+**[impt build delete](#build-delete)**  
 **[impt build deploy](#build-deploy)**  
+**[impt build get](#build-get)**  
+**[impt build info](#build-info)**  
+**[impt build list](#build-list)**  
 **[impt build run](#build-run)**  
+**[impt build update](#build-update)**  
 
 **[impt test init](#test-init)**  
 **[impt test info](#test-info)**  
@@ -109,13 +114,32 @@ Project File is *.impt.project* **TBD** file located in a directory. Different d
 
 Project File references a Device Group ("development" or "pre-factory" - **TBD** - types of Device Group only) and, correspondingly, the Product which contains that Device Group.
 
-Project File may affect commands called from the directory where the file is located. Device Group, Product, source files referenced by Project File may be assumed by a command, if they are not specified explicitly.
+Project File may affect commands called from the directory where the file is located. Device Group, Product, Deployment, source files referenced by Project File may be assumed by a command, if they are not specified explicitly.
 
 ## Commands Description
 
 In alphabetical order.
 
 ### Build Manipulation Commands
+
+#### Build Delete
+
+**impt build delete --build <BUILD_IDENTIFIER> \[--force] \[--debug] \[--help]**
+
+Deletes the specified build (Deployment).
+
+The most recent Deployment of a Device Group can not be deleted.
+
+**TBD** - what about flagged attribute?
+
+User is asked to confirm the operation (confirmed automatically with **--force** option).
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --build | -b | yes | yes | [Build Identifier](#build-identifier). |
+| --force | -f | no | no | Forces the operation w/o asking a confirmation from user. |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
 #### Build Deploy
 
@@ -140,6 +164,60 @@ The new build is not ran until the Devices are rebooted. To run it call **[impt 
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
+#### Build Get
+
+**impt build get \[--build <BUILD_IDENTIFIER>] \[--device-file <device_file>] \[--agent-file <agent_file>] \[--device-only] \[--agent-only] \[--force] \[--debug] \[--help]**
+
+Downloads the source files of the specified build (Deployment) and displays information about the build.
+
+If the files with the specified names already exist in the current directory, user is asked to confirm their overwriting (confirmed automatically with **--force** option).
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --build | -b | yes/[project](#project-file) | yes | [Build Identifier](#build-identifier). If not specified, the most recent Deployment for the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| --device-file | -x | yes/[project](#project-file) | yes | Name of a file to where download the source code for IMP device. If not specified, the file referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| --agent-file | -y | yes/[project](#project-file) | yes | Name of a file to where download the source code for IMP agent. If not specified, the file referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| --device-only | | no | yes | Downloads the source code for IMP device only. |
+| --agent-only | | no | yes | Downloads the source code for IMP agent only. |
+| --force | -f | no | no | Forces the operation w/o asking a confirmation from user. |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
+#### Build Info
+
+**impt build info \[--build <BUILD_IDENTIFIER>] \[--debug] \[--help]**
+
+Displays information about the specified build (Deployment).
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --build | -b | yes/[project](#project-file) | yes | [Build Identifier](#build-identifier). If not specified, the most recent Deployment for the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
+#### Build List
+
+**impt build list \[--my] \[--sha <deployment_sha>] \[--tag \<tag>] \[--flagged \[true|false]] \[--product-id <product_id>] \[--product-name <product_name>] \[--dg-type <device_group_type>] \[--dg-id <device_group_id>] \[--dg-name <device_group_name>] \[--debug] \[--help]**
+
+Displays information about all builds (Deployments) available to the current logged-in account.
+
+The returned list of the builds may be filtered. Filtering is possible by any combination of the described Filter Options. Every Filter Option may be repeated several times - **TBD**
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+| Filter Options: | | | | |
+| **TBD** --my | | no | no | Builds owned by the current logged-in account only. |
+| --sha | | no | yes | Builds with the specified *SHA* only. |
+| --tag | -t | no | yes | Builds with the specified tag only. |
+| --flagged | | no | no | If *true* or no value, builds with the flagged attribute set to *true* only. If *false*, builds with the flagged attribute set to *false* only. |
+| --product-id | | no | yes | Builds deployed to Device Groups which belong to the specified Product only. |
+| **TBD** --product-name | | no | yes | Builds deployed to Device Groups which belong to the specified Product only. |
+| **TBD** --dg-type | | no | yes | Builds deployed to Device Groups of the specified type only. Valid values are: **TBD**. |
+| --dg-id | | no | yes | Builds deployed to the specified Device Group only. |
+| **TBD** --dg-name | | no | yes | Builds deployed to the specified Device Group only. |
+
 #### Build Run
 
 **impt build run \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--device-file <device_file>] \[--agent-file <agent_file>] \[--descr <build_description>] \[--origin \<origin>] \[--tag \<tag>] \[--flagged \[true|false]] \[--log] \[--debug] \[--help]**
@@ -161,6 +239,23 @@ Informs user if the specified Device Group does not have assigned Devices, in th
 | --tag | -t | no | yes | A tag applied to this build (Deployment). This option may be repeated several times to apply several tags. |
 | --flagged | | no | no | If *true* or no value, this build (Deployment) cannot be deleted without first setting this option back to *false*. If *false* or the option is not specified, the build can be deleted. |
 | --log | -l | no | no | Starts displaying logs from the Devices assigned to the specified Device Group (see **[impt log stream](#log-stream)** command description). To stop logs displaying press *\<Ctrl-C>*. |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
+#### Build Update
+
+**impt build update \[--build <BUILD_IDENTIFIER>] \[--descr <build_description>] \[--tag \<tag>] \[--remove-tag \<tag>] \[--flagged \[true|false]] \[--debug] \[--help]**
+
+Updates Description, tags and flagged attribute (whatever specified) of the specified build (Deployment).
+Fails if the specified build (Deployment) does not exist.
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --build | -b | yes/[project](#project-file) | yes | [Build Identifier](#build-identifier). If not specified, the most recent Deployment for the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| --descr | -s | no | yes | Description of the build (Deployment). |
+| --tag | -t | no | yes | A tag applied to this build (Deployment). This option may be repeated several times to apply several tags. |
+| --remove-tag | -r | no | yes | A tag removed from this build (Deployment). This option may be repeated several times to remove several tags. |
+| --flagged | | no | no | If *true* or no value, this build (Deployment) cannot be deleted without first setting this attribute back to *false*. If *false*, the build can be deleted. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -202,7 +297,7 @@ Displays information about the specified Device.
 
 **impt device list \[--my] \[--unassigned] \[--assigned] \[--online] \[--offline] \[--product-id <product_id>] \[--product-name <product_name>] \[--dg-type <device_group_type>] \[--dg-id <device_group_id>] \[--dg-name <device_group_name>] \[--debug] \[--help]**
 
-Displays information about all Devices available for the current logged-in account. **TBD** or owned only?.
+Displays information about all Devices available to the current logged-in account. **TBD** or owned only?
 
 The returned list of the Devices may be filtered. Filtering is possible by any combination of the described Filter Options. Every Filter Option may be repeated several times - **TBD**
 
@@ -331,7 +426,7 @@ Displays information about the specified Device Group.
 
 **impt dg list \[--my] \[--type <device_group_type>] \[--product-id <product_id>] \[--product-name <product_name>] \[--debug] \[--help]**
 
-Displays information about all Device Groups available for the current logged-in account.
+Displays information about all Device Groups available to the current logged-in account.
 
 The returned list of the Device Groups may be filtered. Filtering is possible by any combination of the described Filter Options. Every Filter Option may be repeated several times - **TBD**
 
@@ -464,7 +559,7 @@ Displays information about the specified Product.
 
 **impt product list \[--my] \[--debug] \[--help]**
 
-Displays information about all Products available for the current logged-in account.
+Displays information about all Products available to the current logged-in account.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
