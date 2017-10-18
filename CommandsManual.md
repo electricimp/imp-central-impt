@@ -37,6 +37,9 @@
 **[impt build run](#build-run)**  
 **[impt build update](#build-update)**  
 
+**[impt log get](#log-get)**  
+**[impt log stream](#log-stream)**  
+
 **[impt test init](#test-init)**  
 **[impt test info](#test-info)**  
 **[impt test github](#test-github)**  
@@ -114,11 +117,15 @@ Project File is *.impt.project* **TBD** file located in a directory. Different d
 
 Project File references a Device Group ("development" or "pre-factory" - **TBD** - types of Device Group only) and, correspondingly, the Product which contains that Device Group.
 
-Project File may affect commands called from the directory where the file is located. Device Group, Product, Deployment, source files referenced by Project File may be assumed by a command, if they are not specified explicitly.
+Project File may affect commands called from the directory where the file is located. Product, Device Group, Devices, Deployment, source files referenced by Project File may be assumed by a command, if they are not specified explicitly.
 
 ## Commands Description
 
 In alphabetical order.
+
+### Account Manipulation Commands
+
+**TBD**
 
 ### Build Manipulation Commands
 
@@ -509,6 +516,42 @@ Fails if the specified Device Group does not exist.
 **impt help**
 
 Displays the list of all commands (w/o command options). To display the details of every command use the command’s **--help** option.
+
+### Log Manipulation Commands
+
+#### Log Get
+
+**impt log get \[--device <DEVICE_IDENTIFIER>] \[--quantity <number_of_entries>] \[--debug] \[--help]**
+
+Displays historical logs for the specified Device.
+The logs are displayed starting from the most recent one.
+
+Note, a limited number of logs are kept for a limited period of time.
+
+To abort the command before the logs displaying is finished - press *\<Ctrl-C>*.
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --device | -d | yes/[project](#project-file) | yes | [Device Identifier](#device-identifier). If not specified and there is one and only one Device in the Device Group referenced by [Project File](#project-file) in the current directory, then this Device is assumed (if no Project File or the Device Group has zero or more than one Devices, the command fails). |
+| **TBD** --quantity | -q | no | no | Number of the most recent log entries to display. If not specified, all saved log entries are displayed. |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
+#### Log Stream
+
+**impt log stream \[--device <DEVICE_IDENTIFIER>] \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--debug] \[--help]**
+
+Creates a log stream and displays logs from the specified Devices in real-time.
+
+Note, one account can have only one log stream at a time. And there is a limit to number of Devices in a log stream. The least recently added device will be removed as devices are added beyond that limit.
+
+**TBD**
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --device | -d | yes/[project](#project-file) | yes | [Device Identifier](#device-identifier). If not specified, the Dev referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
 ### Product Manipulation Commands
 
