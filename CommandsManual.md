@@ -34,6 +34,9 @@
 **[impt log get](#log-get)**  
 **[impt log stream](#log-stream)**  
 
+**[impt login](#login-command)**  
+**[impt logout](#logout-command)**  
+
 **[impt product create](#product-create)**  
 **[impt product delete](#product-delete)**  
 **[impt product info](#product-info)**  
@@ -119,9 +122,26 @@ Attributes accepted as <BUILD_IDENTIFIER> (in order of search):
 - tag
 - origin
 
+### Auth File
+
+Auth File is *.impt.auth* file. It stores authentication and other information necessary to execute the tool commands. There are two types of Auth File - local and global. The both types have identical format and store similar information.
+
+#### Local Auth File
+
+Local Auth File is Auth File located in the directory from where a tool command is called. Different directories may contain different Local Auth Files. One directory may contain not more than one Local Auth File.
+
+Any command called from a directory where Local Auth File exists is executed in the context (with authentication and other settings) defined by that Local Auth File.
+If the current directory does not contain Local Auth File, the command is executed in the context defined by [Global Auth File](#global-auth-file).
+
+#### Global Auth File
+
+Global Auth File affects the tool commands which are called from a directory where [Local Auth File](#local-auth-file) does not exist. There may be not more than one Global Auth File per the tool installation. It is located in the tool specific place.
+
+Any command called from a directory where [Local Auth File](#local-auth-file) does not exist is executed in the context (with authentication and other settings) defined by the Global Auth File. If the both Local Auth File and Global Auth File do not exist, the command fails.
+
 ### Project File
 
-Project File is *.impt.project* **TBD** file located in a directory. Different directories may contain different Project Files. One directory may contain not more than one Project File.
+Project File is *.impt.project* file located in a directory. Different directories may contain different Project Files. One directory may contain not more than one Project File.
 
 Project File references a Device Group ("development" or "pre-factory" - **TBD** - types of Device Group only) and, correspondingly, the Product which contains that Device Group.
 
@@ -572,6 +592,43 @@ Note, there is a limit to the number of Devices in one log stream. If the number
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
+### Login Command
+
+**impt login \[--local] \[--endpoint <endpoint_url>] (--user <user_id> --pwd \<password> | --login-key <login_key>) \[--debug] \[--help]**
+
+Global or local login.
+
+Creates [Global](#global-auth-file) or [Local](#local-auth-file) Auth File.
+If the corresponding Auth File already exists, it is overwritten.
+
+The options for one and only one of the following authentication methods must be specified in the command:
+- using an account identifier and password (**--user** and **--pwd** options)
+- **TBD** using a login key (**--login-key** option)
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --local | -l | no | no | If specified, creates/replaces [Local Auth File](#local-auth-file) in the current directory. If not specified, creates/replaces [Global Auth File](#global-auth-file). |
+| --endpoint | -e | no | yes | impCentral API endpoint. Default value: **TBD** |
+| --user | -u | yes/no | yes | The account identifier: username or email address. If specified, **--pwd** option must be specified as well. |
+| --pwd | -w | yes/no | yes | The account password. If specified, **--user** option must be specified as well. |
+| **TBD** --login-key | -k | yes/no | yes | The login key. |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
+### Logout Command
+
+**impt logout \[--local] \[--debug] \[--help]**
+
+Global or local logout.
+
+Deletes [Global](#global-auth-file) or [Local](#local-auth-file) Auth File.
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --local | -l | no | no | If specified, deletes [Local Auth File](#local-auth-file) (if existed in the current directory). If not specified, deletes [Global Auth File](#global-auth-file) (if existed). |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
 ### Product Manipulation Commands
 
 #### Product Create
@@ -785,7 +842,7 @@ User is asked to confirm the operation (confirmed automatically with **--force**
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --wh | | yes | yes | The Webhook id. |
+| --wh | -w | yes | yes | The Webhook id. |
 | --force | -f | no | no | Forces the operation w/o asking a confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
@@ -798,7 +855,7 @@ Displays information about the specified Webhook.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --wh | | yes | yes | The Webhook id. |
+| --wh | -w | yes | yes | The Webhook id. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -832,7 +889,7 @@ Fails if the specified Webhook does not exist.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --wh | | yes | yes | The Webhook id. |
+| --wh | -w | yes | yes | The Webhook id. |
 | --url | | yes | yes | The Webhook's new target URL. |
 | --mime | | yes | yes | New MIME content-type of the event data. Valid values: "json", "urlencoded". |
 | --debug | -z | no | no | Displays debug info of the command execution. |
