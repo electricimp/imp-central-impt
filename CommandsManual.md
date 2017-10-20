@@ -4,13 +4,21 @@
 
 ### List Of Commands
 
-**[impt help](#help-command)**
+**[impt build delete](#build-delete)**  
+**[impt build deploy](#build-deploy)**  
+**[impt build get](#build-get)**  
+**[impt build info](#build-info)**  
+**[impt build list](#build-list)**  
+**[impt build run](#build-run)**  
+**[impt build update](#build-update)**  
 
-**[impt product create](#product-create)**  
-**[impt product delete](#product-delete)**  
-**[impt product info](#product-info)**  
-**[impt product list](#product-list)**  
-**[impt product update](#product-update)**  
+**[impt device assign](#device-assign)**  
+**[impt device info](#device-info)**  
+**[impt device list](#device-list)**  
+**[impt device remove](#device-remove)**  
+**[impt device restart](#device-restart)**  
+**[impt device unassign](#device-unassign)**  
+**[impt device update](#device-update)**  
 
 **[impt dg create](#device-group-create)**  
 **[impt dg delete](#device-group-delete)**  
@@ -21,30 +29,28 @@
 **[impt dg unassign](#device-group-unassign)**  
 **[impt dg update](#device-group-update)**  
 
-**[impt device assign](#device-assign)**  
-**[impt device info](#device-info)**  
-**[impt device list](#device-list)**  
-**[impt device remove](#device-remove)**  
-**[impt device restart](#device-restart)**  
-**[impt device unassign](#device-unassign)**  
-**[impt device update](#device-update)**  
-
-**[impt build delete](#build-delete)**  
-**[impt build deploy](#build-deploy)**  
-**[impt build get](#build-get)**  
-**[impt build info](#build-info)**  
-**[impt build list](#build-list)**  
-**[impt build run](#build-run)**  
-**[impt build update](#build-update)**  
+**[impt help](#help-command)**
 
 **[impt log get](#log-get)**  
 **[impt log stream](#log-stream)**  
+
+**[impt product create](#product-create)**  
+**[impt product delete](#product-delete)**  
+**[impt product info](#product-info)**  
+**[impt product list](#product-list)**  
+**[impt product update](#product-update)**  
 
 **[impt test init](#test-init)**  
 **[impt test info](#test-info)**  
 **[impt test github](#test-github)**  
 **[impt test run](#test-run)**  
 **[impt test delete](#test-delete)**
+
+**[impt webhook create](#webhook-create)**  
+**[impt webhook delete](#webhook-delete)**  
+**[impt webhook info](#webhook-info)**  
+**[impt webhook list](#webhook-list)**  
+**[impt webhook update](#webhook-update)**  
 
 ### Command Syntax
 
@@ -621,7 +627,6 @@ Displays information about all Products available to the current logged-in accou
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
-
 #### Product Update
 
 **impt product update \[--product <PRODUCT_IDENTIFIER>] \[--name <product_name>] \[--descr <product_description>] \[--debug] \[--help]**
@@ -721,6 +726,86 @@ Runs the tests specified by test configuration file *.impt.test* (if exists in t
 | --tests | | no | yes | A pattern for selective test runs, allows to execute a single test or a set of tests from one or several Test Cases. The syntax of the pattern: *\[testFileName]:\[testClass].\[testMethod]* If the option is missed all tests from all test files specified in the test configuration are executed. |
 | --github-config | | no | yes | A path to the github credentials configuration file. A relative or absolute path can be used. If the option is absent, *.impt.github-info* file in the current directory is assumed. |
 | --builder-config | | no | yes | A path to the file with *Builder* variables. A relative or absolute path can be used. If the option is absent, *.impt.builder* file in the current directory is assumed. |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
+### Webhook Manipulation Commands
+
+#### Webhook Create
+
+**impt webhook create \[--dg <DEVICE_GROUP_IDENTIFIER>] --url <target_url> --event <triggered_event> --mime <content_type> \[--debug] \[--help]**
+
+Creates a new Webhook for the specified Device Group.
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| --url | | yes | yes | The Webhook's target URL. |
+| --event | | yes | yes | The event that triggers the Webhook. Valid values: "blessing", "blinkup", "deployment". |
+| --mime | | yes | yes | The MIME content-type of the event data. Valid values: "json", "urlencoded". |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
+#### Webhook Delete
+
+**impt webhook delete --wh <webhook_id> \[--force] \[--debug] \[--help]**
+
+Deletes the specified Webhook.
+
+User is asked to confirm the operation (confirmed automatically with **--force** option).
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --wh | | yes | yes | The Webhook id. |
+| --force | -f | no | no | Forces the operation w/o asking a confirmation from user. |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
+#### Webhook Info
+
+**impt webhook info--wh <webhook_id> \[--debug] \[--help]**
+
+Displays information about the specified Webhook.
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --wh | | yes | yes | The Webhook id. |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
+#### Webhook List
+
+**impt webhook list \[--url] \[--event] \[--product-id <product_id>] \[--product-name <product_name>] \[--dg-type <device_group_type>] \[--dg-id <device_group_id>] \[--dg-name <device_group_name>] \[--debug] \[--help]**
+
+Displays information about all Webhooks associated with the logged-in account.
+
+The returned list of the Webhooks may be filtered. Filtering is possible by any combination of the described Filter Options. Every Filter Option may be repeated several times.
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+| Filter Options: | | | | |
+| --url | | no | yes | Webhooks with the specified target URL only. |
+| --event | | no | yes | Webhooks for the specified event only. Valid values: "blessing", "blinkup", "deployment". |
+| --product-id | | no | yes | Webhooks created for Device Groups which belong to the specified Product only. |
+| --product-name | | no | yes | Webhooks created for Device Groups which belong to the specified Product only. |
+| --dg-type | | no | yes | Webhooks created for Device Groups of the specified type only. Valid values are: **TBD**. |
+| --dg-id | | no | yes | Webhooks created for the specified Device Group only. |
+| --dg-name | | no | yes | Webhooks created for the specified Device Group only. |
+
+#### Webhook Update
+
+**impt webhook update --wh <webhook_id> --url <target_url> --mime <content_type> \[--debug] \[--help]**
+
+Updates the specified Webhook by a new target URL and/or MIME content-type.
+Fails if the specified Webhook does not exist.
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --wh | | yes | yes | The Webhook id. |
+| --url | | yes | yes | The Webhook's new target URL. |
+| --mime | | yes | yes | New MIME content-type of the event data. Valid values: "json", "urlencoded". |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
