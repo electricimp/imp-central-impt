@@ -245,7 +245,7 @@ Informs user if the specified Device Group does not have assigned Devices, in th
 | --origin | | no | yes | A free-form key to store the source of the code. |
 | --tag | -t | no | yes | A tag applied to this build (Deployment). This option may be repeated several times to apply several tags. |
 | --flagged | | no | no | If *true* or no value, this build (Deployment) cannot be deleted without first setting this option back to *false*. If *false* or the option is not specified, the build can be deleted. |
-| --log | -l | no | no | Starts displaying logs from the Devices assigned to the specified Device Group (see **[impt log stream](#log-stream)** command description). To stop logs displaying press *\<Ctrl-C>*. |
+| --log | -l | no | no | Starts displaying logs from the Devices assigned to the specified Device Group (see **[impt log stream](#log-stream)** command description). To stop displaying the logs press *\<Ctrl-C>*. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -521,19 +521,24 @@ Displays the list of all commands (w/o command options). To display the details 
 
 #### Log Get
 
-**impt log get \[--device <DEVICE_IDENTIFIER>] \[--quantity <number_of_entries>] \[--debug] \[--help]**
+**impt log get \[--device <DEVICE_IDENTIFIER>] \[--page-size <number_of_entries>] \[--page-number <page_number>] \[--debug] \[--help]**
 
 Displays historical logs for the specified Device.
 The logs are displayed starting from the most recent one.
 
-Note, a limited number of logs are kept for a limited period of time.
+Note, a limited number of log entries are kept for a limited period of time.
 
-To abort the command before the logs displaying is finished - press *\<Ctrl-C>*.
+If **--page-number** option is specified, the command displays the specified page of the log entries and finishes.
+
+If **--page-number** option is not specified, the command displays all saved log entries by pages, starting from the page with the most recent log entries. After every page of log entries is displayed the command is paused:
+- to display the next page press *<Enter>*
+- to abort the command execution press *\<Ctrl-C>*
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --device | -d | yes/[project](#project-file) | yes | [Device Identifier](#device-identifier). If not specified and there is one and only one Device in the Device Group referenced by [Project File](#project-file) in the current directory, then this Device is assumed (if no Project File or the Device Group has zero or more than one Devices, the command fails). |
-| **TBD** --quantity | -q | no | no | Number of the most recent log entries to display. If not specified, all saved log entries are displayed. |
+| --page-size | | no | no | Number of log entries in one page. Default value: 20 |
+| --page-number | | no | no | Ordinal page number with the log entries to display. Must have a positive value. Page 1 is a page with the most recent log entries. If specified, the command displays this page of the log entries only. If not specified, the command displays all saved log entries. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -543,13 +548,19 @@ To abort the command before the logs displaying is finished - press *\<Ctrl-C>*.
 
 Creates a log stream and displays logs from the specified Devices in real-time.
 
-Note, one account can have only one log stream at a time. And there is a limit to number of Devices in a log stream. The least recently added device will be removed as devices are added beyond that limit.
+No one command can be called while the logs are being streamed.
+To stop displaying the logs press *\<Ctrl-C>*.
 
-**TBD**
+Note, one account can have a limited number of log streams at a time. If the limit is reached and a new log stream is created, an existing one is automatically closed.
+
+The command allows to specify several Devices which logs will be added to the newly created log stream. It is also possible to specify one or several Device Groups. Logs from all Devices assigned to the specified Device Groups as well as from directly specified Devices will be displayed in the newly created log stream.
+
+Note, there is a limit to the number of Devices in one log stream. If the number of the specified Devices more than the limit, - **TBD**
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --device | -d | yes/[project](#project-file) | yes | [Device Identifier](#device-identifier). If not specified, the Dev referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| --device | -d | no | yes | [Device Identifier](#device-identifier) of the Device which logs will be added to the log stream. This option may be repeated several times to specify several Devices. |
+| --dg | -g | no/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). This option may be repeated several times to specify several Device Groups. Logs from all Devices assigned to the specified Device Groups will be added to the log stream. **--device** and **--dg** options are cumulative. If the both **--device** and **--dg** options are not specified but there is [Project File](#project-file) in the current directory, all Devices assigned to the Device Group referenced by the [Project File](#project-file) are assumed. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
