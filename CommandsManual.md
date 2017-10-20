@@ -43,7 +43,9 @@
 **[impt product list](#product-list)**  
 **[impt product update](#product-update)**  
 
+**[impt project info](#project-info)**  
 **[impt project link](#project-link)**  
+**[impt project update](#project-update)**  
 
 **[impt test init](#test-init)**  
 **[impt test info](#test-info)**  
@@ -703,6 +705,20 @@ Fails if the specified Product does not exist.
 
 ### Project Manipulation Commands
 
+#### Project Info
+
+**impt project info \[--debug] \[--help]**
+
+Displays information about the project.
+Fails if there is no [Project File](#project-file) in the current directory.
+
+Informs user if the Device Group referenced by [Project File](#project-file) does not exist. [Project File](#project-file) is not deleted in this case. To delete it - explicitly call [**impt project delete**](#project-delete) command.
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
 #### Project Link
 
 **impt project link --dg <DEVICE_GROUP_IDENTIFIER> \[--device-file <device_file>] \[--agent-file <agent_file>] \[--create-files] \[--force] \[--debug] \[--help]**
@@ -712,10 +728,9 @@ Fails if the specified Device Group does not exist or is not unique.
 
 User is asked to confirm the operation if the current directory already contains [Project File](#project-file) (confirmed automatically with **--force** option). If confirmed, the existed [Project File](#project-file) is overwritten.
 
-The command does not download any Deployment. To download source code from a Deployment - explicitly call **impt build get** command.
+The command does not download any Deployment. To download source code from a Deployment - explicitly call [**impt build get**](#build-get) command.
 
-At the end of the command execution information about the project is displayed (the same as by **impt project info**
-command).
+At the end of the command execution information about the project is displayed (as by **impt project info** command).
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
@@ -727,6 +742,26 @@ command).
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
+#### Project Update
+
+**impt project update \[--name <device_group_name>] \[--descr <device_group_description>] \[--device-file <device_file>] \[--agent-file <agent_file>] \[--create-files] \[--debug] \[--help]**
+
+Updates the project settings and/or the corresponded Device Group Name/Description.
+Fails if there is no [Project File](#project-file) in the current directory.
+
+Informs user if the Device Group referenced by [Project File](#project-file) does not exist. [Project File](#project-file) is not updated and not deleted in this case. To delete it - explicitly call [**impt project delete**](#project-delete) command.
+
+At the end of the command execution information about the project is displayed (as by **impt project info** command).
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --name | -n | no | yes | New Name of the Device Group referenced by [Project File](#project-file). Must be unique among all Device Groups in the Product. |
+| --descr | -s | no | yes | New Description of the Device Group referenced by [Project File](#project-file). |
+| --device-file | -x | no | yes | New name of a file for IMP device source code. |
+| --agent-file | -y | no | yes | New name of a file for IMP agent source code. |
+| --create-files | -c | no | no | Creates empty file(s) if the file(s) specified by **--device-file**, **--agent-file** options does not exist. |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
 ### Test Commands
 
