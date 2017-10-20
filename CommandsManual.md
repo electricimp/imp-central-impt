@@ -40,6 +40,8 @@
 **[impt product list](#product-list)**  
 **[impt product update](#product-update)**  
 
+**[impt project link](#project-link)**  
+
 **[impt test init](#test-init)**  
 **[impt test info](#test-info)**  
 **[impt test github](#test-github)**  
@@ -641,6 +643,33 @@ Fails if the specified Product does not exist.
 | --descr | -s | no | yes | Description of the Product. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
+### Project Manipulation Commands
+
+#### Project Link
+
+**impt project link --dg <DEVICE_GROUP_IDENTIFIER> \[--device-file <device_file>] \[--agent-file <agent_file>] \[--create-files] \[--force] \[--debug] \[--help]**
+
+Creates a new [Project File](#project-file) in the current directory by linking it to the specified Device Group.
+Fails if the specified Device Group does not exist or is not unique.
+
+User is asked to confirm the operation if the current directory already contains [Project File](#project-file) (confirmed automatically with **--force** option). If confirmed, the existed [Project File](#project-file) is overwritten.
+
+The command does not download any Deployment. To download source code from a Deployment - explicitly call **impt build get** command.
+
+At the end of the command execution information about the project is displayed (the same as by **impt project info**
+command).
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --dg | -g | yes | yes | [Device Group Identifier](#device-group-identifier). |
+| --device-file | -x | no | yes | Name of a file for IMP device source code. Default value: *device.nut* |
+| --agent-file | -y | no | yes | Name of a file for IMP agent source code. Default value: *agent.nut* |
+| --create-files | -c | no | no | Creates empty file(s) if the file(s) specified by **--device-file**, **--agent-file** options does not exist. |
+| --force | -f | no | no | Forces the operation w/o asking a confirmation from user. |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
 
 ### Test Commands
 
