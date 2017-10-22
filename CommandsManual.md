@@ -43,8 +43,10 @@
 **[impt product list](#product-list)**  
 **[impt product update](#product-update)**  
 
+**[impt project delete](#project-delete)**  
 **[impt project info](#project-info)**  
 **[impt project link](#project-link)**  
+**[impt project new](#project-new)**  
 **[impt project update](#project-update)**  
 
 **[impt test init](#test-init)**  
@@ -432,7 +434,7 @@ Fails if Device Group with the specified Name already exists in the specified Pr
 | --type | | yes | yes | Type of the Device Group. Valid values are: **TBD**. If the value is invalid, the command fails. |
 | --product | -p | yes/[project](#project-file) | yes | [Product Identifier](#product-identifier) of the Product which the Device Group belongs to. If not specified, the Product referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
 | --descr | -s | no | yes | Description of the Device Group. |
-| --target | | no | yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the being created Device Group. May be specified for the being created Device Group of the type **TBD** or **TBD** only. The target Device Group must be of the type **TBD** or **TBD** correspondingly. Otherwise the command fails. |
+| --target | | no | yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the being created Device Group. May be specified for the being created Device Group of the type **TBD** or **TBD** only. The target Device Group must be of the type **TBD** or **TBD** correspondingly and belongs to the specified Product. Otherwise the command fails. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -545,7 +547,7 @@ Fails if the specified Device Group does not exist.
 | --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
 | --name | -n | no | yes | New Name of the Device Group. Must be unique among all Device Groups in the Product. |
 | --descr | -s | no | yes | Description of the Device Group. |
-| --target | | no | yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the being updated Device Group. May be specified for the being update Device Group of the type **TBD** or **TBD** only. The target Device Group must be of the type **TBD** or **TBD** correspondingly. Otherwise the command fails. |
+| --target | | no | yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the being updated Device Group. May be specified for the being updated Device Group of the type **TBD** or **TBD** only. The target Device Group must be of the type **TBD** or **TBD** correspondingly and belongs to the same Product as the being updated Device Group. Otherwise the command fails. |
 | --load-code-after-blessing | | no | no | Applicable to Device Group of the type **TBD**. If *true* or no value, production code is immediately loaded by the device after blessing. If *false*, production code will be loaded the next time the device connects as part of BlinkUp, whether successful or not. Note, the newly created production Device Group always has this option *true*. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
@@ -714,6 +716,10 @@ Fails if the specified Product does not exist.
 
 ### Project Manipulation Commands
 
+#### Project Delete
+
+**TBD**
+
 #### Project Info
 
 **impt project info \[--debug] \[--help]**
@@ -752,9 +758,11 @@ At the end of the command execution information about the project is displayed (
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
-#### Project Update
+#### Project New
 
-**impt project update \[--name <device_group_name>] \[--descr <device_group_description>] \[--device-file <device_file>] \[--agent-file <agent_file>] \[--create-files] \[--debug] \[--help]**
+**impt project new --product <PRODUCT_IDENTIFIER> --name <device_group_name> \[--descr <device_group_description>] \[--device-file <device_file>] \[--agent-file <agent_file>] \[--create-files] \[--factory] \[--target <DEVICE_GROUP_IDENTIFIER>] \[--force] \[--debug] \[--help]**
+
+**TBD**
 
 Updates the project settings and/or the corresponded Device Group Name/Description.
 Fails if there is no [Project File](#project-file) in the current directory.
@@ -765,11 +773,37 @@ At the end of the command execution information about the project is displayed (
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
+| --product | -p | yes | yes | [Product Identifier](#product-identifier) of the Product which the Device Group belongs to. |
+| --name | -n | yes | yes | Name of the Device Group. Must be unique among all Device Groups in the specified Product. |
+| --descr | -s | no | yes | Description of the Device Group. |
+| --device-file | -x | no | yes | Name of a file for IMP device source code. Default value: *device.nut* |
+| --agent-file | -y | no | yes | Name of a file for IMP agent source code. Default value: *agent.nut* |
+| --create-files | -c | no | no | Creates empty file(s) if the file(s) specified by **--device-file**, **--agent-file** options does not exist. |
+| --factory | | no | no |  |
+| --target | | no | yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the being created Device Group. May be specified for the being created Device Group of the type **TBD** or **TBD** only. The target Device Group must be of the type **TBD** or **TBD** correspondingly. Otherwise the command fails. |
+| --force | -f | no | no | Forces the operation w/o asking a confirmation from user. |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
+#### Project Update
+
+**impt project update \[--name <device_group_name>] \[--descr <device_group_description>] \[--device-file <device_file>] \[--agent-file <agent_file>] \[--create-files] \[--target <DEVICE_GROUP_IDENTIFIER>] \[--debug] \[--help]**
+
+Updates the project settings and/or Name, Description, production target of the Device Group referenced by [Project File](#project-file).
+Fails if there is no [Project File](#project-file) in the current directory.
+
+Informs user if the Device Group referenced by [Project File](#project-file) does not exist. [Project File](#project-file) is not updated or deleted in this case. To delete it - explicitly call [**impt project delete**](#project-delete) command.
+
+At the end of the command execution information about the project is displayed (as by **impt project info** command).
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
 | --name | -n | no | yes | New Name of the Device Group referenced by [Project File](#project-file). Must be unique among all Device Groups in the Product. |
 | --descr | -s | no | yes | New Description of the Device Group referenced by [Project File](#project-file). |
 | --device-file | -x | no | yes | New name of a file for IMP device source code. |
 | --agent-file | -y | no | yes | New name of a file for IMP agent source code. |
 | --create-files | -c | no | no | Creates empty file(s) if the file(s) specified by **--device-file**, **--agent-file** options does not exist. |
+| --target | | no | yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the Device Group referenced by [Project File](#project-file). May be specified if the Device Group referenced by [Project File](#project-file) is of the type **TBD** only. The specified target Device Group must be of the type **TBD** and belongs to the same Product as the Device Group referenced by [Project File](#project-file). Otherwise the command fails. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -834,7 +868,7 @@ Creates or updates [Test Configuration File](#test-configuration-file) in the cu
 
 User is asked to confirm the operation if the current directory already contains Test Configuration File (confirmed automatically with **--force** option). If confirmed, the existed Test Configuration File is updated by the new option values provided, options which are not specified in the command keep their previous values from the existed Test Configuration File.
 
-At the end of the command execution information about the tests configuration is displayed (as by [**impt test info** command](#test-info)).
+At the end of the command execution information about the tests configuration is displayed (as by [**impt test info**](#test-info) command).
 
 | Option | Alias | Mandatory? | Value Required? | Description | When option is not specified and test configuration file does not exist in the current directory |
 | --- | --- | --- | --- | --- | --- |
@@ -860,7 +894,7 @@ Runs the tests specified by [Test Configuration File](#test-configuration-file) 
 | --tests | | no | yes | A pattern for selective test runs, allows to execute a single test or a set of tests from one or several Test Cases. The syntax of the pattern: *\[testFileName]:\[testClass].\[testMethod]* If the option is missed all tests from all test files specified in [Test Configuration File](#test-configuration-file) are executed. |
 | --github-config | | no | yes | A path to the github credentials configuration file. A relative or absolute path can be used. If the option is absent, *.impt.github-info* file in the current directory is assumed. |
 | --builder-config | | no | yes | A path to the file with *Builder* variables. A relative or absolute path can be used. If the option is absent, *.impt.builder* file in the current directory is assumed. |
-| --builder-cache | | no | no | If *true* or no value: cache (if not cached yet) external libraries in the local *.builder-cache* directory and use them from the cache for this test run. If *false* value: do not use external libraries from the cache even if they are cached. If not specified, the behavior is defined by the corresponding settings in [Test Configuration File](#test-configuration-file) that was initialized/updated by [**impt test init** command](#test-init). |
+| --builder-cache | | no | no | If *true* or no value: cache (if not cached yet) external libraries in the local *.builder-cache* directory and use them from the cache for this test run. If *false* value: do not use external libraries from the cache even if they are cached. If not specified, the behavior is defined by the corresponding settings in [Test Configuration File](#test-configuration-file) that was initialized/updated by [**impt test init**](#test-init) command. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
