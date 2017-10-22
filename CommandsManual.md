@@ -145,9 +145,18 @@ Any command called from a directory where [Local Auth File](#local-auth-file) do
 
 Project File is *.impt.project* file located in a directory. Different directories may contain different Project Files. One directory may contain not more than one Project File.
 
-Project File references a Device Group ("development" or "pre-factory" - **TBD** - types of Device Group only) and, correspondingly, the Product which contains that Device Group.
+Project File contains settings for a project - an entity which links the source files in the current directory with a concrete Device Group.
+Project File references the linked Device Group ("development" or "pre-factory" - **TBD** - types of Device Group only) and, correspondingly, the Product which contains that Device Group, Devices assigned to the Device Group, Deployments created for that Device Group, etc.
 
-Project File may affect commands called from the directory where the file is located. Product, Device Group, Devices, Deployment, source files referenced by Project File may be assumed by a command, if they are not specified explicitly.
+Project File may affect commands called from the directory where the file is located. Product, Device Group, Devices, Deployment, source files referenced by Project File may be assumed by a command when they are not specified explicitly.
+
+### Test Configuration File
+
+Test Configuration File is *.impt.test* file located in a directory. Different directories may contain different Test Configuration Files. One directory may contain not more than one Test Configuration File.
+
+Test Configuration File contains settings to run unit tests that are built with the [*impUnit*](https://github.com/electricimp/impUnit) test framework.
+
+Test Configuration File affects [Test Commands](#test-commands) only.
 
 ## Commands Description
 
@@ -711,6 +720,7 @@ Fails if the specified Product does not exist.
 
 Displays information about the project.
 Fails if there is no [Project File](#project-file) in the current directory.
+With every call the latest actual information is obtained using impCentral API.
 
 Informs user if the Device Group referenced by [Project File](#project-file) does not exist. [Project File](#project-file) is not deleted in this case. To delete it - explicitly call [**impt project delete**](#project-delete) command.
 
@@ -769,7 +779,11 @@ At the end of the command execution information about the project is displayed (
 
 **impt test delete \[--github-config <github_credentials_file_name>] \[--builder-config <builder_file_name>] \[--force] \[--debug] \[--help]**
 
-Deletes (if existed) test configuration file *.impt.test* in the current directory, the specified github credentials configuration file, the specified file with *Builder* variables.
+Deletes (if existed):
+- [Test Configuration File](#test-configuration-file) in the current directory
+- *Builder* cache (*.builder-cache* directory) in the current directory
+- the specified github credentials configuration file
+- the specified file with *Builder* variables
 
 User is asked to confirm the operation (confirmed automatically with **--force** option).
 
@@ -804,7 +818,7 @@ If the file already exists, a user is informed and asked to:
 
 **impt test info \[--debug] \[--help]**
 
-Displays information about the current test configuration (if test configuration file *.impt.test* exists in the current directory).
+Displays information about the tests configuration defined by [Test Configuration File](#test-configuration-file) in the current directory.
 With every call the latest actual information is obtained using impCentral API.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
@@ -814,39 +828,39 @@ With every call the latest actual information is obtained using impCentral API.
 
 #### Test Init
  
-**impt test init \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--device-file \[<device_file>]] \[--agent-file \[<agent_file>]] \[--timeout \<timeout>] \[--stop-on-fail \[true|false]] \[--test-file <test_file_name_pattern>] \[--force] \[--debug] \[--help]**
+**impt test init \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--device-file \[<device_file>]] \[--agent-file \[<agent_file>]] \[--timeout \<timeout>] \[--stop-on-fail \[true|false]] \[--builder-cache \[true|false]] \[--test-file <test_file_name_pattern>] \[--force] \[--debug] \[--help]**
 
-Creates or updates test configuration file *.impt.test* in the current directory.
+Creates or updates [Test Configuration File](#test-configuration-file) in the current directory.
 
-If the current directory already contains test configuration file, a user is informed and asked to:
-- Cancel the operation
-- Continue the operation (done automatically with **--force** option). In this case the existing test configuration file is updated by the new option values provided. Options which are not specified in the command keep their previous values from the existing test configuration file.
+User is asked to confirm the operation if the current directory already contains Test Configuration File (confirmed automatically with **--force** option). If confirmed, the existed Test Configuration File is updated by the new option values provided, options which are not specified in the command keep their previous values from the existed Test Configuration File.
 
-At the end of the command execution information about the test configuration is displayed (the same as by [Test Info command](#test-info)).
+At the end of the command execution information about the tests configuration is displayed (as by [**impt test info** command](#test-info)).
 
 | Option | Alias | Mandatory? | Value Required? | Description | When option is not specified and test configuration file does not exist in the current directory |
 | --- | --- | --- | --- | --- | --- |
 | --dg | -g | no | yes | [Device Group Identifier](#device-group-identifier) of a group whose devices are used for tests execution. | The command is stopped with an error. |
 | --device-file | -x | no | no | A path to a file with the device source code that is deployed along with the tests. A relative or absolute path can be used. Specify this option w/o a value to remove this file from the test configuration. | No additional device code is deployed. |
 | --agent-file | -y | no | no | A path to a file with the agent source code that is deployed along with the tests. A relative or absolute path can be used. Specify this option w/o a value to remove this file from the test configuration. | No additional agent code is deployed. |
-| --timeout | -t | no | yes | A timeout period (in seconds) after which the tests are interrupted and considered as failed. | By default: 30 seconds. |
-| --stop-on-fail | | no | no | If *true* or no value: the tests execution is stopped after a test failure. If *false* value: the tests execution is not stopped after a failure. | By default: *false* |
-| --test-file | | no | yes | Test file name or pattern. All files located in the current directory (and its subdirectories) which names match this pattern are considered as files with Test Cases. This option may be repeated several times to specify several names and/or patterns. | By default: *"\*.test.nut" "tests/\*\*/\*.test.nut"* |
+| --timeout | -t | no | yes | A timeout period (in seconds) after which the tests are interrupted and considered as failed. | 30 seconds. |
+| --stop-on-fail | | no | no | If *true* or no value: the tests execution is stopped after a test failure. If *false* value: the tests execution is not stopped after a failure. | *false* |
+| --builder-cache | | no | no | If *true* or no value: cache external libraries in the local *.builder-cache* directory. If *false* value: do not cache external libraries. | By default: *false* |
+| --test-file | | no | yes | Test file name or pattern. All files located in the current directory (and its subdirectories) which names match this pattern are considered as files with Test Cases. This option may be repeated several times to specify several names and/or patterns. | *"\*.test.nut" "tests/\*\*/\*.test.nut"* |
 | --force | -f | no | no | Forces the test configuration file update (if existed) by the new option values w/o asking a user. | n/a |
 | --debug | -z | no | no | Displays debug info of the command execution. | n/a |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. | n/a |
 
 #### Test Run
 
-**impt test run \[--tests <testcase_pattern>] \[--github-config <github_credentials_file_name>] \[--builder-config <builder_file_name>] \[--debug] \[--help]**
+**impt test run \[--tests <testcase_pattern>] \[--github-config <github_credentials_file_name>] \[--builder-config <builder_file_name>] \[--builder-cache \[true|false]] \[--debug] \[--help]**
 
-Runs the tests specified by test configuration file *.impt.test* (if exists in the current directory).
+Runs the tests specified by [Test Configuration File](#test-configuration-file) in the current directory.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --tests | | no | yes | A pattern for selective test runs, allows to execute a single test or a set of tests from one or several Test Cases. The syntax of the pattern: *\[testFileName]:\[testClass].\[testMethod]* If the option is missed all tests from all test files specified in the test configuration are executed. |
+| --tests | | no | yes | A pattern for selective test runs, allows to execute a single test or a set of tests from one or several Test Cases. The syntax of the pattern: *\[testFileName]:\[testClass].\[testMethod]* If the option is missed all tests from all test files specified in [Test Configuration File](#test-configuration-file) are executed. |
 | --github-config | | no | yes | A path to the github credentials configuration file. A relative or absolute path can be used. If the option is absent, *.impt.github-info* file in the current directory is assumed. |
 | --builder-config | | no | yes | A path to the file with *Builder* variables. A relative or absolute path can be used. If the option is absent, *.impt.builder* file in the current directory is assumed. |
+| --builder-cache | | no | no | If *true* or no value: cache (if not cached yet) external libraries in the local *.builder-cache* directory and use them from the cache for this test run. If *false* value: do not use external libraries from the cache even if they are cached. If not specified, the behavior is defined by the corresponding settings in [Test Configuration File](#test-configuration-file) that was initialized/updated by [**impt test init** command](#test-init). |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
