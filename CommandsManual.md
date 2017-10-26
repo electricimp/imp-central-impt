@@ -126,6 +126,15 @@ Attributes accepted as <BUILD_IDENTIFIER> (in order of search):
 - tag
 - origin
 
+### Device Group Type
+
+The tool commands accept the following constants to specify a type of Device Group:
+- *development* - for impCentral API "development_devicegroup" type
+- *pre-factory* - for impCentral API "pre_factoryfixture_devicegroup" type
+- *pre-production* - for impCentral API "pre_production_devicegroup" type
+- *factory* - for impCentral API "factoryfixture_devicegroup" type
+- *production* - for impCentral API "production_devicegroup" type
+
 ### Auth File
 
 Auth File is *.impt.auth* file. It stores authentication and other information necessary to execute the tool commands. There are two types of Auth File - local and global. The both types have identical format and store similar information.
@@ -148,7 +157,7 @@ Any command called from a directory where [Local Auth File](#local-auth-file) do
 Project File is *.impt.project* file located in a directory. Different directories may contain different Project Files. One directory may contain not more than one Project File.
 
 Project File contains settings for a project - an entity which links the source files in the current directory with a concrete Device Group.
-Project File references the linked Device Group ("development" or "pre-factory" - **TBD** - types of Device Group only) and, correspondingly, the Product which contains that Device Group, Devices assigned to the Device Group, Deployments created for that Device Group, etc.
+Project File references the linked Device Group (of the [types](#device-group-type) *development* or *pre-factory* only) and, correspondingly, the Product which contains that Device Group, Devices assigned to the Device Group, Deployments created for that Device Group, etc.
 
 Project File may affect commands called from the directory where the file is located. Product, Device Group, Devices, Deployment, source files referenced by Project File may be assumed by a command when they are not specified explicitly.
 
@@ -318,8 +327,8 @@ Assigns the specified Device to the specified Device Group.
 Fails if the specified Device Group does not exist.
 
 User is asked to confirm the operation (confirmed automatically with **--force** option) when:
-- the specified Device Group is of the production/pre-production type ? **TBD**
-- the specified Device is already assigned to another Device Group. If operation is confirmed, the Device is reassigned to the new Device Group, may fail for some combinations of the Device Groups.
+- the specified Device Group is of the [types](#device-group-type) *production* or *pre-production* **TBD - does it work at all?**
+- the specified Device is already assigned to another Device Group. If operation is confirmed, the Device is reassigned to the new Device Group, but may fail for some combinations of the Device Groups.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
@@ -402,7 +411,7 @@ Does nothing if the Device already unassigned.
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --device | -d | yes | yes | [Device Identifier](#device-identifier). |
-| **TBD** --unbond | | no | yes | Unbond key is required to unassign Device from a production Device Group. |
+| **TBD** --unbond | | no | yes | Unbond key is required to unassign Device from Device Group of the [type](#device-group-type) *production*. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -431,10 +440,10 @@ Fails if Device Group with the specified Name already exists in the specified Pr
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --name | -n | yes | yes | Name of the Device Group. Must be unique among all Device Groups in the specified Product. |
-| --type | | yes | yes | Type of the Device Group. Valid values are: **TBD**. If the value is invalid, the command fails. |
+| --type | | yes | yes | [Type](#device-group-type) of the Device Group. If the value is invalid, the command fails. |
 | --product | -p | yes/[project](#project-file) | yes | [Product Identifier](#product-identifier) of the Product which the Device Group belongs to. If not specified, the Product referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
 | --descr | -s | no | yes | Description of the Device Group. |
-| --target | | no | yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the being created Device Group. May be specified for the being created Device Group of the type **TBD** or **TBD** only. The target Device Group must be of the type **TBD** or **TBD** correspondingly and belongs to the specified Product. Otherwise the command fails. |
+| --target | | no | yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the being created Device Group. May be specified for the being created Device Group of the [type](#device-group-type) *factory* or *pre-factory* only. The target Device Group must be of the [type](#device-group-type) *production* or *pre-production* correspondingly and belongs to the specified Product. Otherwise the command fails. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -484,7 +493,7 @@ The returned list of the Device Groups may be filtered. Filtering is possible by
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 | Filter Options: | | | | |
 | --my | | no | no | Device Groups owned by the current logged-in account only. |
-| --type | | no | yes | Device Groups of the specified type only. Valid values are: **TBD**. |
+| --type | | no | yes | Device Groups of the specified [type](#device-group-type) only. |
 | --product-id | | no | yes | Device Groups which belong to the specified Product only. |
 | **TBD** --product-name | | no | yes | Device Groups which belong to the specified Product only. |
 
@@ -547,8 +556,8 @@ Fails if the specified Device Group does not exist.
 | --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
 | --name | -n | no | yes | New Name of the Device Group. Must be unique among all Device Groups in the Product. |
 | --descr | -s | no | yes | Description of the Device Group. |
-| --target | | no | yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the being updated Device Group. May be specified for the being updated Device Group of the type **TBD** or **TBD** only. The target Device Group must be of the type **TBD** or **TBD** correspondingly and belongs to the same Product as the being updated Device Group. Otherwise the command fails. |
-| --load-code-after-blessing | | no | no | Applicable to Device Group of the type **TBD**. If *true* or no value, production code is immediately loaded by the device after blessing. If *false*, production code will be loaded the next time the device connects as part of BlinkUp, whether successful or not. Note, the newly created production Device Group always has this option *true*. |
+| --target | | no | yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the being updated Device Group. May be specified for the being updated Device Group of the [type](#device-group-type) *factory* or *pre-factory* only. The target Device Group must be of the [type](#device-group-type) *production* or *pre-production* correspondingly and belongs to the same Product as the being updated Device Group. Otherwise the command fails. |
+| --load-code-after-blessing | | no | no | Applicable to Device Group of the [type](#device-group-type) *production* (**TBD** for pre-production) only. If *true* or no value, production code is immediately loaded by the device after blessing. If *false*, production code will be loaded the next time the device connects as part of BlinkUp, whether successful or not. Note, the newly created production Device Group always has this option *true*. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -718,7 +727,7 @@ Fails if the specified Product does not exist.
 
 #### Project Create
 
-**impt project create --product <PRODUCT_IDENTIFIER> --name <device_group_name> \[--descr <device_group_description>] \[--device-file <device_file>] \[--agent-file <agent_file>] \[--create-files] \[--factory] \[--target <DEVICE_GROUP_IDENTIFIER>] \[--force] \[--debug] \[--help]**
+**impt project create --product <PRODUCT_IDENTIFIER> --name <device_group_name> \[--descr <device_group_description>] \[--device-file <device_file>] \[--agent-file <agent_file>] \[--create-files] \[--pre-factory] \[--target <DEVICE_GROUP_IDENTIFIER>] \[--force] \[--debug] \[--help]**
 
 Creates a new Device Group for the specified Product and creates new [Project File](#project-file) in the current directory by linking it to the new Device Group.
 
@@ -728,7 +737,7 @@ The command fails if:
 
 User is asked to confirm the operation if the current directory already contains [Project File](#project-file) (confirmed automatically with **--force** option). If confirmed, the existed [Project File](#project-file) is overwritten.
 
-The created Device Group is of the type **TBD** or **TBD** (depends on **--factory** option).
+The created Device Group is of the [type](#device-group-type) *development* or *pre-factory* (depends on **--pre-factory** option).
 
 At the end of the command execution information about the project is displayed (as by [**impt project info**](#project-info) command).
 
@@ -740,8 +749,8 @@ At the end of the command execution information about the project is displayed (
 | --device-file | -x | no | yes | Name of a file for IMP device source code. Default value: *device.nut* |
 | --agent-file | -y | no | yes | Name of a file for IMP agent source code. Default value: *agent.nut* |
 | --create-files | -c | no | no | Creates empty file(s) if the file(s) specified by **--device-file**, **--agent-file** options does not exist. |
-| --factory | | no | no | If not specified, the new Device Group is of the type **TBD**. If specified, the new Device Group is of the type **TBD**. |
-| --target | | no | yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the being created Device Group. May be specified if and only if **--factory** option is specified. The specified target Device Group must be of the type **TBD** and belongs to the specified Product. Otherwise the command fails. |
+| --factory | | no | no | If not specified, the new Device Group is of the [type](#device-group-type) *development*. If specified, the new Device Group is of the [type](#device-group-type) *pre-factory*. |
+| --target | | no | yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the being created Device Group. May be specified if and only if **--factory** option is specified. The specified target Device Group must be of the [type](#device-group-type) *pre-production* and belongs to the specified Product. Otherwise the command fails. |
 | --force | -f | no | no | Forces the operation w/o asking a confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
@@ -773,7 +782,7 @@ Creates new [Project File](#project-file) in the current directory by linking it
 
 The command fails if:
 - the specified Device Group does not exist or is not unique.
-- the specified Device Group is not of the type **TBD** or **TBD**.
+- the specified Device Group is not of the [type](#device-group-type) *development* or *pre-factory*.
 
 User is asked to confirm the operation if the current directory already contains [Project File](#project-file) (confirmed automatically with **--force** option). If confirmed, the existed [Project File](#project-file) is overwritten.
 
@@ -809,7 +818,7 @@ At the end of the command execution information about the project is displayed (
 | --device-file | -x | no | yes | New name of a file for IMP device source code. |
 | --agent-file | -y | no | yes | New name of a file for IMP agent source code. |
 | --create-files | -c | no | no | Creates empty file(s) if the file(s) specified by **--device-file**, **--agent-file** options does not exist. |
-| --target | | no | yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the Device Group referenced by [Project File](#project-file). May be specified if the Device Group referenced by [Project File](#project-file) is of the type **TBD** only. The specified target Device Group must be of the type **TBD** and belongs to the same Product as the Device Group referenced by [Project File](#project-file). Otherwise the command fails. |
+| --target | | no | yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the Device Group referenced by [Project File](#project-file). May be specified if the Device Group referenced by [Project File](#project-file) is of the [type](#device-group-type) *pre-factory* only. The specified target Device Group must be of the [type](#device-group-type) *pre-production* and belongs to the same Product as the Device Group referenced by [Project File](#project-file). Otherwise the command fails. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -965,7 +974,7 @@ The returned list of the Webhooks may be filtered. Filtering is possible by any 
 | --event | | no | yes | Webhooks for the specified event only. Valid values: "blessing", "blinkup", "deployment". |
 | --product-id | | no | yes | Webhooks created for Device Groups which belong to the specified Product only. |
 | --product-name | | no | yes | Webhooks created for Device Groups which belong to the specified Product only. |
-| --dg-type | | no | yes | Webhooks created for Device Groups of the specified type only. Valid values are: **TBD**. |
+| --dg-type | | no | yes | Webhooks created for Device Groups of the specified [type](#device-group-type) only. |
 | --dg-id | | no | yes | Webhooks created for the specified Device Group only. |
 | --dg-name | | no | yes | Webhooks created for the specified Device Group only. |
 
