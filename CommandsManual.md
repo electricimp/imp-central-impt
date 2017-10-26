@@ -114,7 +114,7 @@ Attributes accepted as <DEVICE_IDENTIFIER> (in order of search):
 - Device Id (always unique)
 - MAC address
 - IMP Agent Id
-- IP address **TBD**
+- IP address
 - Device Name
 
 #### Build Identifier
@@ -185,9 +185,9 @@ In alphabetical order.
 
 Deletes the specified build (Deployment).
 
-The most recent Deployment of a Device Group can not be deleted.
-
-**TBD** - what about flagged attribute?
+The command fails if:
+- the Deployment has *"flagged"* attribute set to *true*. Use [**impt build update**](#build-update) command to update the attribute.
+- it is the most recent Deployment of a Device Group.
 
 User is asked to confirm the operation (confirmed automatically with **--force** option).
 
@@ -258,7 +258,7 @@ Displays information about the specified build (Deployment).
 
 Displays information about all builds (Deployments) available to the current logged-in account.
 
-The returned list of the builds may be filtered. Filtering is possible by any combination of the described Filter Options. Every Filter Option may be repeated several times - **TBD**
+The returned list of the builds may be filtered. Filtering is possible by any combination of the described Filter Options. Every Filter Option may be repeated several times.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
@@ -270,10 +270,10 @@ The returned list of the builds may be filtered. Filtering is possible by any co
 | --tag | -t | no | yes | Builds with the specified tag only. |
 | --flagged | | no | no | If *true* or no value, builds with the flagged attribute set to *true* only. If *false*, builds with the flagged attribute set to *false* only. |
 | --product-id | | no | yes | Builds deployed to Device Groups which belong to the specified Product only. |
-| **TBD** --product-name | | no | yes | Builds deployed to Device Groups which belong to the specified Product only. |
-| **TBD** --dg-type | | no | yes | Builds deployed to Device Groups of the specified type only. Valid values are: **TBD**. |
+| --product-name | | no | yes | Builds deployed to Device Groups which belong to the specified Product only. |
+| --dg-type | | no | yes | Builds deployed to Device Groups of the specified [type](#device-group-type) only. |
 | --dg-id | | no | yes | Builds deployed to the specified Device Group only. |
-| **TBD** --dg-name | | no | yes | Builds deployed to the specified Device Group only. |
+| --dg-name | | no | yes | Builds deployed to the specified Device Group only. |
 
 #### Build Run
 
@@ -327,7 +327,7 @@ Assigns the specified Device to the specified Device Group.
 Fails if the specified Device Group does not exist.
 
 User is asked to confirm the operation (confirmed automatically with **--force** option) when:
-- the specified Device Group is of the [types](#device-group-type) *production* or *pre-production* **TBD - does it work at all?**
+- the specified Device Group is of the [types](#device-group-type) *production* or *pre-production* **TBD** - does it work at all?
 - the specified Device is already assigned to another Device Group. If operation is confirmed, the Device is reassigned to the new Device Group, but may fail for some combinations of the Device Groups.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
@@ -354,9 +354,9 @@ Displays information about the specified Device.
 
 **impt device list \[--my] \[--unassigned] \[--assigned] \[--online] \[--offline] \[--product-id <product_id>] \[--product-name <product_name>] \[--dg-type <device_group_type>] \[--dg-id <device_group_id>] \[--dg-name <device_group_name>] \[--debug] \[--help]**
 
-Displays information about all Devices available to the current logged-in account. **TBD** or owned only?
+Displays information about all Devices available to the current logged-in account.
 
-The returned list of the Devices may be filtered. Filtering is possible by any combination of the described Filter Options. Every Filter Option may be repeated several times - **TBD**
+The returned list of the Devices may be filtered. Filtering is possible by any combination of the described Filter Options. Every Filter Option may be repeated several times.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
@@ -369,10 +369,10 @@ The returned list of the Devices may be filtered. Filtering is possible by any c
 | --online | | no | no | Devices in online state only. |
 | --offline | | no | no | Devices in offline state only. |
 | --product-id | | no | yes | Devices assigned to Device Groups which belong to the specified Product only. |
-| **TBD** --product-name | | no | yes | Devices assigned to Device Groups which belong to the specified Product only. |
-| --dg-type | | no | yes | Devices assigned to Device Groups of the specified type only. Valid values are: **TBD**. |
+| --product-name | | no | yes | Devices assigned to Device Groups which belong to the specified Product only. |
+| --dg-type | | no | yes | Devices assigned to Device Groups of the specified [type](#device-group-type) only. |
 | --dg-id | | no | yes | Devices assigned to the specified Device Group only. |
-| **TBD** --dg-name | | no | yes | Devices assigned to the specified Device Group only. |
+| --dg-name | | no | yes | Devices assigned to the specified Device Group only. |
 
 #### Device Remove
 
@@ -411,7 +411,7 @@ Does nothing if the Device already unassigned.
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --device | -d | yes | yes | [Device Identifier](#device-identifier). |
-| **TBD** --unbond | | no | yes | Unbond key is required to unassign Device from Device Group of the [type](#device-group-type) *production*. |
+| --unbond | | no | yes | Unbond key is required to unassign Device from Device Group of the [type](#device-group-type) *production*. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -453,10 +453,10 @@ Fails if Device Group with the specified Name already exists in the specified Pr
 
 Deletes the specified Device Group.
 
-**TBD** - from the spec: Device Groups cannot be deleted if any of the following are true:
-    there are devices assigned to the group
-    the group is the production target of a pre_factoryfixture or factoryfixture group
-    the group has any flagged deployments
+The command fails if:
+- there are Devices assigned to this Device Group. Use [**impt dg unassign**](#device-group-unassign) or [**impt dg reassign**](#device-group-reassign) commands to unassign the Devices.
+- the Device Group has any Deployments with *"flagged"* attribute set to *true*. Use [**impt build update**](#build-update) command to update that attribute.
+- the Device Group is the production target of another Device Group of the [type](#device-group-type) *factory* or *pre-factory*. Use [**impt dg update**](#device-group-update) to update the production target of that Device Group.
 
 User is asked to confirm the operation (confirmed automatically with **--force** option).
 
@@ -485,7 +485,7 @@ Displays information about the specified Device Group.
 
 Displays information about all Device Groups available to the current logged-in account.
 
-The returned list of the Device Groups may be filtered. Filtering is possible by any combination of the described Filter Options. Every Filter Option may be repeated several times - **TBD**
+The returned list of the Device Groups may be filtered. Filtering is possible by any combination of the described Filter Options. Every Filter Option may be repeated several times.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
@@ -495,7 +495,7 @@ The returned list of the Device Groups may be filtered. Filtering is possible by
 | --my | | no | no | Device Groups owned by the current logged-in account only. |
 | --type | | no | yes | Device Groups of the specified [type](#device-group-type) only. |
 | --product-id | | no | yes | Device Groups which belong to the specified Product only. |
-| **TBD** --product-name | | no | yes | Device Groups which belong to the specified Product only. |
+| --product-name | | no | yes | Device Groups which belong to the specified Product only. |
 
 #### Device Group Reassign
 
@@ -540,7 +540,7 @@ Does nothing if the Device Group has no Devices assigned.
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
-| **TBD** --unbond | | no | yes | Unbond key is required to unassign Devices from a production Device Group. |
+| --unbond | | no | yes | Unbond key is required to unassign Devices from a Device Group of the [type](#device-group-type) *production*. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -605,7 +605,7 @@ Note, one account can have a limited number of log streams at a time. If the lim
 
 The command allows to specify several Devices which logs will be added to the newly created log stream. It is also possible to specify one or several Device Groups. Logs from all Devices assigned to the specified Device Groups as well as from directly specified Devices will be displayed in the newly created log stream.
 
-Note, there is a limit to the number of Devices in one log stream. If the number of the specified Devices more than the limit, - **TBD**
+Note, there is a limit to the number of Devices in one log stream. If the number of the specified Devices more than the limit, **TBD**
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
@@ -673,7 +673,7 @@ Fails if Product with the specified Name already exists.
 
 Deletes the specified Product.
 
-**TBD** - deletes Device Groups?
+The command fails if the Product has one or several Device Groups. Use [**impt dg delete**](#device-group-delete) command to delete a Device Group.
 
 User is asked to confirm the operation (confirmed automatically with **--force** option).
 
@@ -729,11 +729,16 @@ Fails if the specified Product does not exist.
 
 **impt project create --product <PRODUCT_IDENTIFIER> --name <device_group_name> \[--descr <device_group_description>] \[--device-file <device_file>] \[--agent-file <agent_file>] \[--create-files] \[--pre-factory] \[--target <DEVICE_GROUP_IDENTIFIER>] \[--force] \[--debug] \[--help]**
 
+**TBD**:
+- add --create-product <product_name> as alternative to --product <PRODUCT_IDENTIFIER> ?
+- add --create-target <dg_name> as alternative to --target <DEVICE_GROUP_IDENTIFIER> ?
+
 Creates a new Device Group for the specified Product and creates new [Project File](#project-file) in the current directory by linking it to the new Device Group.
 
 The command fails if:
 - the specified Product does not exist. Use [**impt product create**](#product-create) command to create the Product before the Project.
 - Device Group with the specified name already exist in the specified Product. Use [**impt project link**](#project-link) command to create the Project linked to that Device Group.
+- optionally specified production target Device Group does not exist. Use [**impt dg create**](#project-link) command to create the required Device Group of the [type](#device-group-type) *pre-production*.
 
 User is asked to confirm the operation if the current directory already contains [Project File](#project-file) (confirmed automatically with **--force** option). If confirmed, the existed [Project File](#project-file) is overwritten.
 
@@ -749,15 +754,31 @@ At the end of the command execution information about the project is displayed (
 | --device-file | -x | no | yes | Name of a file for IMP device source code. Default value: *device.nut* |
 | --agent-file | -y | no | yes | Name of a file for IMP agent source code. Default value: *agent.nut* |
 | --create-files | -c | no | no | Creates empty file(s) if the file(s) specified by **--device-file**, **--agent-file** options does not exist. |
-| --factory | | no | no | If not specified, the new Device Group is of the [type](#device-group-type) *development*. If specified, the new Device Group is of the [type](#device-group-type) *pre-factory*. |
-| --target | | no | yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the being created Device Group. May be specified if and only if **--factory** option is specified. The specified target Device Group must be of the [type](#device-group-type) *pre-production* and belongs to the specified Product. Otherwise the command fails. |
+| --pre-factory | | no | no | If not specified, the new Device Group is of the [type](#device-group-type) *development*. If specified, the new Device Group is of the [type](#device-group-type) *pre-factory*. |
+| --target | | no | yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the being created Device Group. May be specified if and only if **--pre-factory** option is specified. The specified target Device Group must be of the [type](#device-group-type) *pre-production* and belongs to the specified Product. Otherwise the command fails. |
 | --force | -f | no | no | Forces the operation w/o asking a confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
 #### Project Delete
 
-**TBD**
+**impt project delete \[--dg] \[--files] \[--force] \[--debug] \[--help]**
+
+**TBD**:
+- add --product as alternative to --dg - to delete the Product (with DG), fails if there are other DGs in the Product ?
+
+Deletes [Project File](#project-file) in the current directory and, optionally, the Device Group referenced by the Project File and the local source files.
+Does nothing if there is no [Project File](#project-file) in the current directory.
+
+User is informed about all entities which are going to be deleted or updated and asked to confirm the operation (confirmed automatically with **--force** option).
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --dg | -g | no | no | Also deletes the Device Group referenced by [Project File](#project-file). All Devices assigned to this Device Group to be unassigned. All Deployments for this Device Group which have *"flagged"* attribute with value *true* to be updated to set it to *false* - **TBD** for flagged. |
+| --files | | no | no | Also deletes the files referenced by [Project File](#project-file) as files with IMP device and agent source code. |
+| --force | -f | no | no | Forces the operation w/o asking a confirmation from user. |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
 #### Project Info
 
