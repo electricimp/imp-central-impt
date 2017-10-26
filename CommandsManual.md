@@ -215,7 +215,7 @@ The new build is not ran until the Devices are rebooted. To run it call **[impt 
 | --device-file | -x | yes/[project](#project-file) | yes | Name of a file which contains a source code for IMP device. If not specified, the file referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
 | --agent-file | -y | yes/[project](#project-file) | yes | Name of a file which contains a source code for IMP agent. If not specified, the file referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
 | --descr | -s | no | yes | Description of the build (Deployment). |
-| --origin | | no | yes | A free-form key to store the source of the code. |
+| --origin | -o | no | yes | A free-form key to store the source of the code. |
 | --tag | -t | no | yes | A tag applied to this build (Deployment). This option may be repeated several times to apply several tags. |
 | --flagged | | no | no | If *true* or no value, this build (Deployment) cannot be deleted without first setting this option back to *false*. If *false* or the option is not specified, the build can be deleted. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
@@ -267,7 +267,7 @@ The returned list of the builds may be filtered. Filtering is possible by any co
 | Filter Options: | | | | |
 | **TBD** --my | | no | no | Builds owned by the current logged-in account only. |
 | --sha | | no | yes | Builds with the specified *SHA* only. |
-| --tag | -t | no | yes | Builds with the specified tag only. |
+| --tag | | no | yes | Builds with the specified tag only. |
 | --flagged | | no | no | If *true* or no value, builds with the flagged attribute set to *true* only. If *false*, builds with the flagged attribute set to *false* only. |
 | --product-id | | no | yes | Builds deployed to Device Groups which belong to the specified Product only. |
 | --product-name | | no | yes | Builds deployed to Device Groups which belong to the specified Product only. |
@@ -292,7 +292,7 @@ Informs user if the specified Device Group does not have assigned Devices, in th
 | --device-file | -x | yes/[project](#project-file) | yes | Name of a file which contains a source code for IMP device. If not specified, the file referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
 | --agent-file | -y | yes/[project](#project-file) | yes | Name of a file which contains a source code for IMP agent. If not specified, the file referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
 | --descr | -s | no | yes | Description of the build (Deployment). |
-| --origin | | no | yes | A free-form key to store the source of the code. |
+| --origin | -o | no | yes | A free-form key to store the source of the code. |
 | --tag | -t | no | yes | A tag applied to this build (Deployment). This option may be repeated several times to apply several tags. |
 | --flagged | | no | no | If *true* or no value, this build (Deployment) cannot be deleted without first setting this option back to *false*. If *false* or the option is not specified, the build can be deleted. |
 | --log | -l | no | no | Starts displaying logs from the Devices assigned to the specified Device Group (see **[impt log stream](#log-stream)** command description). To stop displaying the logs press *\<Ctrl-C>*. |
@@ -1013,4 +1013,36 @@ Fails if the specified Webhook does not exist.
 | --mime | | yes | yes | New MIME content-type of the event data. Valid values: "json", "urlencoded". |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
+## List of Aliases
+
+| Command Option Alias | Command Option Full Name(s) |
+| --- | --- |
+| -a |   |
+| -b | --build  |
+| -c | --create-files  |
+| -d | --device  |
+| -e | --endpoint  |
+| -f | --force  |
+| -g | --dg  |
+| -h | --help  |
+| -i |   |
+| -j |   |
+| -k | --login-key  |
+| -l | --log, --local  |
+| -m |   |
+| -n | --name  |
+| -o | --origin  |
+| -p | --product  |
+| -q |   |
+| -r | --remove-tag  |
+| -s | --descr  |
+| -t | --tag, --timeout  |
+| -u | --user  |
+| -v |   |
+| -w | --wh, --pwd  |
+| -x | --device-file  |
+| -y | --agent-file  |
+| -z | --debug  |
+
 
