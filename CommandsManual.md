@@ -581,7 +581,7 @@ Note, a limited number of log entries are kept for a limited period of time.
 If **--page-number** option is specified, the command displays the specified page of the log entries and finishes.
 
 If **--page-number** option is not specified, the command displays all saved log entries by pages, starting from the page with the most recent log entries. After every page of log entries is displayed the command is paused:
-- to display the next page press *<Enter>*
+- to display the next page press *\<Enter>*
 - to abort the command execution press *\<Ctrl-C>*
 
 | Option | Alias | Mandatory? | Value Required? | Description |
@@ -727,18 +727,14 @@ Fails if the specified Product does not exist.
 
 #### Project Create
 
-**impt project create --product <PRODUCT_IDENTIFIER> --name <device_group_name> \[--descr <device_group_description>] \[--device-file <device_file>] \[--agent-file <agent_file>] \[--create-files] \[--pre-factory] \[--target <DEVICE_GROUP_IDENTIFIER>] \[--force] \[--debug] \[--help]**
-
-**TBD**:
-- add --create-product <product_name> as alternative to --product <PRODUCT_IDENTIFIER> ?
-- add --create-target <dg_name> as alternative to --target <DEVICE_GROUP_IDENTIFIER> ?
+**impt project create --product <PRODUCT_IDENTIFIER> \[--create-product] --name <device_group_name> \[--descr <device_group_description>] \[--device-file <device_file>] \[--agent-file <agent_file>] \[--create-files] \[--pre-factory] \[--target <DEVICE_GROUP_IDENTIFIER>] \[--create-target] \[--force] \[--debug] \[--help]**
 
 Creates a new Device Group for the specified Product and creates new [Project File](#project-file) in the current directory by linking it to the new Device Group.
 
 The command fails if:
-- the specified Product does not exist. Use [**impt product create**](#product-create) command to create the Product before the Project.
+- the specified Product does not exist and **--create-product** option is not specified. Use either **--create-product** option, or [**impt product create**](#product-create) command to create the Product before the Project.
 - Device Group with the specified name already exist in the specified Product. Use [**impt project link**](#project-link) command to create the Project linked to that Device Group.
-- optionally specified production target Device Group does not exist. Use [**impt dg create**](#project-link) command to create the required Device Group of the [type](#device-group-type) *pre-production*.
+- optionally specified production target Device Group does not exist and **--create-target** option is not specified. Use either **--create-target** option, or [**impt dg create**](#project-link) command to create the required Device Group of the [type](#device-group-type) *pre-production*.
 
 User is asked to confirm the operation if the current directory already contains [Project File](#project-file) (confirmed automatically with **--force** option). If confirmed, the existed [Project File](#project-file) is overwritten.
 
@@ -749,6 +745,7 @@ At the end of the command execution information about the project is displayed (
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --product | -p | yes | yes | [Product Identifier](#product-identifier). |
+| --create-product | | no | no | If the Product specified by **--product** option does not exist, it is created. In this case, the value of **--product** option is considered as a Name of the new Product. If the Product specified by **--product** option exists, **--create-product** option is ignored. |
 | --name | -n | yes | yes | Name of the new Device Group. Must be unique among all Device Groups in the specified Product. |
 | --descr | -s | no | yes | Description of the Device Group. |
 | --device-file | -x | no | yes | Name of a file for IMP device source code. Default value: *device.nut* |
@@ -756,6 +753,7 @@ At the end of the command execution information about the project is displayed (
 | --create-files | -c | no | no | Creates empty file(s) if the file(s) specified by **--device-file**, **--agent-file** options does not exist. |
 | --pre-factory | | no | no | If not specified, the new Device Group is of the [type](#device-group-type) *development*. If specified, the new Device Group is of the [type](#device-group-type) *pre-factory*. |
 | --target | | no | yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the being created Device Group. May be specified if and only if **--pre-factory** option is specified. The specified target Device Group must be of the [type](#device-group-type) *pre-production* and belongs to the specified Product. Otherwise the command fails. |
+| --create-target | | no | no | If the Device Group specified by **--target** option does not exist, it is created. In this case, the value of **--target** option is considered as a Name of the new Device Group. If **--target** option is not specified or the Device Group specified by **--target** option exists, **--create-target** option is ignored. |
 | --force | -f | no | no | Forces the operation w/o asking a confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
@@ -823,7 +821,7 @@ At the end of the command execution information about the project is displayed (
 
 #### Project Update
 
-**impt project update \[--name <device_group_name>] \[--descr <device_group_description>] \[--device-file <device_file>] \[--agent-file <agent_file>] \[--create-files] \[--target <DEVICE_GROUP_IDENTIFIER>] \[--debug] \[--help]**
+**impt project update \[--name <device_group_name>] \[--descr <device_group_description>] \[--device-file <device_file>] \[--agent-file <agent_file>] \[--rename-files] \[--create-files] \[--target <DEVICE_GROUP_IDENTIFIER>] \[--debug] \[--help]**
 
 Updates the project settings and/or Name, Description, production target of the Device Group referenced by [Project File](#project-file).
 Fails if there is no [Project File](#project-file) in the current directory.
@@ -838,7 +836,8 @@ At the end of the command execution information about the project is displayed (
 | --descr | -s | no | yes | New Description of the Device Group referenced by [Project File](#project-file). |
 | --device-file | -x | no | yes | New name of a file for IMP device source code. |
 | --agent-file | -y | no | yes | New name of a file for IMP agent source code. |
-| --create-files | -c | no | no | Creates empty file(s) if the file(s) specified by **--device-file**, **--agent-file** options does not exist. |
+| --rename-files | -r | no | no | Renames file(s) (if existed) which were referenced by [Project File](#project-file) as the file(s) with IMP device/agent source code to the new name(s) specified by **--device-file**, **--agent-file** options. Should not be specified together with **--create-files** option. |
+| --create-files | -c | no | no | Creates empty file(s) if the file(s) specified by **--device-file**, **--agent-file** options does not exist. Should not be specified together with **--rename-files** option. |
 | --target | | no | yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the Device Group referenced by [Project File](#project-file). May be specified if the Device Group referenced by [Project File](#project-file) is of the [type](#device-group-type) *pre-factory* only. The specified target Device Group must be of the [type](#device-group-type) *pre-production* and belongs to the same Product as the Device Group referenced by [Project File](#project-file). Otherwise the command fails. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
@@ -847,7 +846,7 @@ At the end of the command execution information about the project is displayed (
 
 #### Test Delete
 
-**impt test delete \[--github-config <github_credentials_file_name>] \[--builder-config <builder_file_name>] \[--force] \[--debug] \[--help]**
+**impt test delete \[--github-config \[<github_credentials_file_name>]] \[--builder-config \[<builder_file_name>]] \[--force] \[--debug] \[--help]**
 
 Deletes (if existed):
 - [Test Configuration File](#test-configuration-file) in the current directory
@@ -859,8 +858,8 @@ User is asked to confirm the operation (confirmed automatically with **--force**
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --github-config | | no | yes | A path to the github credentials configuration file that should be deleted. A relative or absolute path can be used. If the option is absent, *.impt.github-info* file in the current directory is assumed. |
-| --builder-config | | no | yes | A path to the file with *Builder* variables that should be deleted. A relative or absolute path can be used. If the option is absent, *.impt.builder* file in the current directory is assumed. |
+| --github-config | | no | no | A path to the github credentials configuration file that should be deleted. A relative or absolute path can be used. If the value of the option is not specified, *.impt.github-info* file in the current directory is assumed. |
+| --builder-config | | no | no | A path to the file with *Builder* variables that should be deleted. A relative or absolute path can be used. If the value of the option is not specified, *.impt.builder* file in the current directory is assumed. |
 | --force | -f | no | no | Forces the operation w/o asking a confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
@@ -921,15 +920,15 @@ At the end of the command execution information about the tests configuration is
 
 #### Test Run
 
-**impt test run \[--tests <testcase_pattern>] \[--github-config <github_credentials_file_name>] \[--builder-config <builder_file_name>] \[--builder-cache \[true|false]] \[--debug] \[--help]**
+**impt test run \[--tests <testcase_pattern>] \[--github-config \[<github_credentials_file_name>]] \[--builder-config \[<builder_file_name>]] \[--builder-cache \[true|false]] \[--debug] \[--help]**
 
 Runs the tests specified by [Test Configuration File](#test-configuration-file) in the current directory.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --tests | | no | yes | A pattern for selective test runs, allows to execute a single test or a set of tests from one or several Test Cases. The syntax of the pattern: *\[testFileName]:\[testClass].\[testMethod]* If the option is missed all tests from all test files specified in [Test Configuration File](#test-configuration-file) are executed. |
-| --github-config | | no | yes | A path to the github credentials configuration file. A relative or absolute path can be used. If the option is absent, *.impt.github-info* file in the current directory is assumed. |
-| --builder-config | | no | yes | A path to the file with *Builder* variables. A relative or absolute path can be used. If the option is absent, *.impt.builder* file in the current directory is assumed. |
+| --github-config | | no | no | A path to the github credentials configuration file. A relative or absolute path can be used. If the value of the option is not specified, *.impt.github-info* file in the current directory is assumed. |
+| --builder-config | | no | no | A path to the file with *Builder* variables. A relative or absolute path can be used. If the value of the option is not specified, *.impt.builder* file in the current directory is assumed. |
 | --builder-cache | | no | no | If *true* or no value: cache (if not cached yet) external libraries in the local *.builder-cache* directory and use them from the cache for this test run. If *false* value: do not use external libraries from the cache even if they are cached. If not specified, the behavior is defined by the corresponding settings in [Test Configuration File](#test-configuration-file) that was initialized/updated by [**impt test init**](#test-init) command. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
@@ -968,7 +967,7 @@ User is asked to confirm the operation (confirmed automatically with **--force**
 
 #### Webhook Info
 
-**impt webhook info--wh <webhook_id> \[--debug] \[--help]**
+**impt webhook info --wh <webhook_id> \[--debug] \[--help]**
 
 Displays information about the specified Webhook.
 
@@ -980,7 +979,7 @@ Displays information about the specified Webhook.
 
 #### Webhook List
 
-**impt webhook list \[--url] \[--event] \[--product-id <product_id>] \[--product-name <product_name>] \[--dg-type <device_group_type>] \[--dg-id <device_group_id>] \[--dg-name <device_group_name>] \[--debug] \[--help]**
+**impt webhook list \[--url <target_url>] \[--event <triggered_event>] \[--product-id <product_id>] \[--product-name <product_name>] \[--dg-type <device_group_type>] \[--dg-id <device_group_id>] \[--dg-name <device_group_name>] \[--debug] \[--help]**
 
 Displays information about all Webhooks associated with the logged-in account.
 
@@ -1001,7 +1000,7 @@ The returned list of the Webhooks may be filtered. Filtering is possible by any 
 
 #### Webhook Update
 
-**impt webhook update --wh <webhook_id> --url <target_url> --mime <content_type> \[--debug] \[--help]**
+**impt webhook update --wh <webhook_id> \[--url <target_url>] \[--mime <content_type>] \[--debug] \[--help]**
 
 Updates the specified Webhook by a new target URL and/or MIME content-type.
 Fails if the specified Webhook does not exist.
@@ -1009,8 +1008,8 @@ Fails if the specified Webhook does not exist.
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --wh | -w | yes | yes | The Webhook id. |
-| --url | | yes | yes | The Webhook's new target URL. |
-| --mime | | yes | yes | New MIME content-type of the event data. Valid values: "json", "urlencoded". |
+| --url | | no | yes | The Webhook's new target URL. |
+| --mime | | no | yes | New MIME content-type of the event data. Valid values: "json", "urlencoded". |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -1035,7 +1034,7 @@ Fails if the specified Webhook does not exist.
 | -o | --origin  |
 | -p | --product  |
 | -q |   |
-| -r | --remove-tag  |
+| -r | --remove-tag, --rename-files  |
 | -s | --descr  |
 | -t | --tag, --timeout  |
 | -u | --user  |
