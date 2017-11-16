@@ -4,6 +4,7 @@
 
 ### List Of Commands
 
+**[impt build copy](#build-copy)**  
 **[impt build delete](#build-delete)**  
 **[impt build deploy](#build-deploy)**  
 **[impt build get](#build-get)**  
@@ -27,6 +28,7 @@
 **[impt dg reassign](#device-group-reassign)**  
 **[impt dg restart](#device-group-restart)**  
 **[impt dg unassign](#device-group-unassign)**  
+**[impt dg unflag](#device-group-unflag)**  
 **[impt dg update](#device-group-update)**  
 
 **[impt help](#help-command)**
@@ -173,27 +175,44 @@ Test Configuration File affects [Test Commands](#test-commands) only.
 
 In alphabetical order.
 
-### Account Manipulation Commands
-
-**TBD**
-
 ### Build Manipulation Commands
+
+#### Build Copy
+
+**impt build copy --build <BUILD_IDENTIFIER> \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--debug] \[--help]**
+
+Copies the specified build (Deployment) to the new Deployment of the specified Device Group.
+Fails if the specified Deployment or the specified Device Group does not exist.
+
+The new build for the specified Device Group is created with the same attributes as the specified original build has.
+
+The new build is not ran until the Devices are rebooted. To run it call **[impt dg restart](#device-group-restart)** or **[impt device restart](#device-restart)** command.
+
+The source code of the builds is not saved locally. To download the source code from a Deployment - explicitly call [**impt build get**](#build-get) command.
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --build | -b | yes | yes | [Build Identifier](#build-identifier) of the Deployment to be copied. |
+| --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier) of the Device Group the new Deployment is created for. If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
 #### Build Delete
 
-**impt build delete --build <BUILD_IDENTIFIER> \[--force] \[--debug] \[--help]**
+**impt build delete --build <BUILD_IDENTIFIER> \[--full] \[--force] \[--debug] \[--help]**
 
 Deletes the specified build (Deployment).
 
-The command fails if:
-- the Deployment has *"flagged"* attribute set to *true*. Use [**impt build update**](#build-update) command to update the attribute.
-- it is the most recent Deployment of a Device Group.
+The command fails if it is the most recent Deployment of the Device Group.
+
+Also the command fails if the Deployment has *"flagged"* attribute set to *true* and **--full** option is not specified. Use either **--full** option, or [**impt build update**](#build-update) command to update the attribute.
 
 User is asked to confirm the operation (confirmed automatically with **--force** option).
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --build | -b | yes | yes | [Build Identifier](#build-identifier). |
+| --full | | no | no | If the Deployment has *"flagged"* attribute set to *true*, set it to *false* to be able to delete the Deployment. |
 | --force | -f | no | no | Forces the operation w/o asking a confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
@@ -254,18 +273,19 @@ Displays information about the specified build (Deployment).
 
 #### Build List
 
-**impt build list \[--my] \[--sha <deployment_sha>] \[--tag \<tag>] \[--flagged \[true|false]] \[--product-id <product_id>] \[--product-name <product_name>] \[--dg-type <device_group_type>] \[--dg-id <device_group_id>] \[--dg-name <device_group_name>] \[--debug] \[--help]**
+**impt build list \[--my] \[--owner <account_id>] \[--sha <deployment_sha>] \[--tag \<tag>] \[--flagged \[true|false]] \[--product-id <product_id>] \[--product-name <product_name>] \[--dg-type <device_group_type>] \[--dg-id <device_group_id>] \[--dg-name <device_group_name>] \[--debug] \[--help]**
 
 Displays information about all builds (Deployments) available to the current logged-in account.
 
-The returned list of the builds may be filtered. Filtering is possible by any combination of the described Filter Options. Every Filter Option may be repeated several times.
+The returned list of the builds may be filtered. Filtering is possible by any combination of the described Filter Options. Every Filter Option may be repeated several times. At first, all Filter Options with the same option name are combined by logical OR. After that, all Filter Options with different option names are combined by logical AND.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 | Filter Options: | | | | |
-| **TBD** --my | | no | no | Builds owned by the current logged-in account only. |
+| --my | | no | no | Builds owned by the current logged-in account only. |
+| --owner | | no | yes | Builds owned by the account with the specified account id only. |
 | --sha | | no | yes | Builds with the specified *SHA* only. |
 | --tag | | no | yes | Builds with the specified tag only. |
 | --flagged | | no | no | If *true* or no value, builds with the flagged attribute set to *true* only. If *false*, builds with the flagged attribute set to *false* only. |
@@ -326,9 +346,9 @@ Fails if the specified build (Deployment) does not exist.
 Assigns the specified Device to the specified Device Group.
 Fails if the specified Device Group does not exist.
 
-User is asked to confirm the operation (confirmed automatically with **--force** option) when:
-- the specified Device Group is of the [types](#device-group-type) *production* or *pre-production* **TBD** - does it work at all?
-- the specified Device is already assigned to another Device Group. If operation is confirmed, the Device is reassigned to the new Device Group, but may fail for some combinations of the Device Groups.
+User is asked to confirm the operation if the specified Device is already assigned to another Device Group. If the operation is confirmed (confirmed automatically with **--force** option), the Device is reassigned to the new Device Group. 
+
+The operation may fail for some combinations of the Device Group [types](#device-group-type) and between the Products.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
@@ -352,18 +372,19 @@ Displays information about the specified Device.
 
 #### Device List
 
-**impt device list \[--my] \[--unassigned] \[--assigned] \[--online] \[--offline] \[--product-id <product_id>] \[--product-name <product_name>] \[--dg-type <device_group_type>] \[--dg-id <device_group_id>] \[--dg-name <device_group_name>] \[--debug] \[--help]**
+**impt device list \[--my] \[--owner <account_id>] \[--unassigned] \[--assigned] \[--online] \[--offline] \[--product-id <product_id>] \[--product-name <product_name>] \[--dg-type <device_group_type>] \[--dg-id <device_group_id>] \[--dg-name <device_group_name>] \[--debug] \[--help]**
 
 Displays information about all Devices available to the current logged-in account.
 
-The returned list of the Devices may be filtered. Filtering is possible by any combination of the described Filter Options. Every Filter Option may be repeated several times.
+The returned list of the builds may be filtered. Filtering is possible by any combination of the described Filter Options. Every Filter Option may be repeated several times. At first, all Filter Options with the same option name are combined by logical OR. After that, all Filter Options with different option names are combined by logical AND.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 | Filter Options: | | | | |
-| **TBD** --my | | no | no | Devices owned by the current logged-in account only. |
+| --my | | no | no | Devices owned by the current logged-in account only. |
+| --owner | | no | yes | Devices owned by the account with the specified account id only. |
 | --unassigned | | no | no | Unassigned Devices only. |
 | --assigned | | no | no | Assigned Devices only. |
 | --online | | no | no | Devices in online state only. |
@@ -449,20 +470,22 @@ Fails if Device Group with the specified Name already exists in the specified Pr
 
 #### Device Group Delete
 
-**impt dg delete \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--force] \[--debug] \[--help]**
+**impt dg delete \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--full] \[--force] \[--debug] \[--help]**
 
 Deletes the specified Device Group.
 
-The command fails if:
-- there are Devices assigned to this Device Group. Use [**impt dg unassign**](#device-group-unassign) or [**impt dg reassign**](#device-group-reassign) commands to unassign the Devices.
-- the Device Group has any Deployments with *"flagged"* attribute set to *true*. Use [**impt build update**](#build-update) command to update that attribute.
-- the Device Group is the production target of another Device Group of the [type](#device-group-type) *factory* or *pre-factory*. Use [**impt dg update**](#device-group-update) to update the production target of that Device Group.
+The command fails if the Device Group is the production target of another Device Group of the [type](#device-group-type) *factory* or *pre-factory*. Use either [**impt dg update**](#device-group-update) command to update the production target of that Device Group, or **impt dg delete** command to delete that Device Group before this one.
+
+Also, the command fails when **--full** option is not specified and:
+- there are Devices assigned to this Device Group. Use either **--full** option, or [**impt dg unassign**](#device-group-unassign) / [**impt dg reassign**](#device-group-reassign) commands to unassign the Devices from this Device Group,
+- or the Device Group has any Deployments with *"flagged"* attribute set to *true*. Use either **--full** option, or [**impt build update**](#build-update) command to update that attribute.
 
 User is asked to confirm the operation (confirmed automatically with **--force** option).
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| --full | | no | no | Unassigns all Devices of the Device Group, as by [**impt dg unassign**](#device-group-unassign) command. Set *"flagged"* attribute to *false* in all Deployments of the Device Group. |
 | --force | -f | no | no | Forces the operation w/o asking a confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
@@ -481,11 +504,11 @@ Displays information about the specified Device Group.
 
 #### Device Group List
 
-**impt dg list \[--my] \[--type <device_group_type>] \[--product-id <product_id>] \[--product-name <product_name>] \[--debug] \[--help]**
+**impt dg list \[--my] \[--owner <account_id>] \[--type <device_group_type>] \[--product-id <product_id>] \[--product-name <product_name>] \[--debug] \[--help]**
 
 Displays information about all Device Groups available to the current logged-in account.
 
-The returned list of the Device Groups may be filtered. Filtering is possible by any combination of the described Filter Options. Every Filter Option may be repeated several times.
+The returned list of the builds may be filtered. Filtering is possible by any combination of the described Filter Options. Every Filter Option may be repeated several times. At first, all Filter Options with the same option name are combined by logical OR. After that, all Filter Options with different option names are combined by logical AND.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
@@ -493,6 +516,7 @@ The returned list of the Device Groups may be filtered. Filtering is possible by
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 | Filter Options: | | | | |
 | --my | | no | no | Device Groups owned by the current logged-in account only. |
+| --owner | | no | yes | Device Groups owned by the account with the specified account id only. |
 | --type | | no | yes | Device Groups of the specified [type](#device-group-type) only. |
 | --product-id | | no | yes | Device Groups which belong to the specified Product only. |
 | --product-name | | no | yes | Device Groups which belong to the specified Product only. |
@@ -544,6 +568,18 @@ Does nothing if the Device Group has no Devices assigned.
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
+#### Device Group Unflag
+
+**impt dg unflag \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--debug] \[--help]**
+
+Set *"flagged"* attribute to *false* in all Deployments of the specified Device Group.
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
 #### Device Group Update
 
 **impt dg update \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--name <device_group_name>] \[--descr <device_group_description>] \[--target <DEVICE_GROUP_IDENTIFIER>] \[--load-code-after-blessing \[true|false]] \[--debug] \[--help]**
@@ -557,7 +593,7 @@ Fails if the specified Device Group does not exist.
 | --name | -n | no | yes | New Name of the Device Group. Must be unique among all Device Groups in the Product. |
 | --descr | -s | no | yes | Description of the Device Group. |
 | --target | | no | yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the being updated Device Group. May be specified for the being updated Device Group of the [type](#device-group-type) *factory* or *pre-factory* only. The target Device Group must be of the [type](#device-group-type) *production* or *pre-production* correspondingly and belongs to the same Product as the being updated Device Group. Otherwise the command fails. |
-| --load-code-after-blessing | | no | no | Applicable to Device Group of the [type](#device-group-type) *production* (**TBD** for pre-production) only. If *true* or no value, production code is immediately loaded by the device after blessing. If *false*, production code will be loaded the next time the device connects as part of BlinkUp, whether successful or not. Note, the newly created production Device Group always has this option *true*. |
+| --load-code-after-blessing | | no | no | Applicable to Device Group of the [type](#device-group-type) *production* or *pre-production* only. If *true* or no value, production code is immediately loaded by the device after blessing. If *false*, production code will be loaded the next time the device connects as part of BlinkUp, whether successful or not. Note, the newly created production Device Group always has this option *true*. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -605,7 +641,7 @@ Note, one account can have a limited number of log streams at a time. If the lim
 
 The command allows to specify several Devices which logs will be added to the newly created log stream. It is also possible to specify one or several Device Groups. Logs from all Devices assigned to the specified Device Groups as well as from directly specified Devices will be displayed in the newly created log stream.
 
-Note, there is a limit to the number of Devices in one log stream. If the number of the specified Devices more than the limit, **TBD**
+Note, there is a limit to the number of Devices in one log stream. The tool does not check this limit and allow you to specify any number of Devices. Check the operation output to see which Devices are finally added to the log stream.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
@@ -616,7 +652,7 @@ Note, there is a limit to the number of Devices in one log stream. If the number
 
 ### Login Command
 
-**impt login \[--local] \[--endpoint <endpoint_url>] (--user <user_id> --pwd \<password> | --login-key <login_key>) \[--debug] \[--help]**
+**impt login \[--local] \[--endpoint <endpoint_url>] (--user <user_id> --pwd \<password> | --login-key <login_key>) \[--temp] \[--debug] \[--help]**
 
 Global or local login.
 
@@ -624,16 +660,17 @@ Creates [Global](#global-auth-file) or [Local](#local-auth-file) Auth File.
 If the corresponding Auth File already exists, it is overwritten.
 
 The options for one and only one of the following authentication methods must be specified in the command:
-- using an account identifier and password (**--user** and **--pwd** options)
-- **TBD** using a login key (**--login-key** option)
+- using an account identifier and password (**--user** and **--pwd** options),
+- using a login key (**--login-key** option).
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --local | -l | no | no | If specified, creates/replaces [Local Auth File](#local-auth-file) in the current directory. If not specified, creates/replaces [Global Auth File](#global-auth-file). |
-| --endpoint | -e | no | yes | impCentral API endpoint. Default value: **TBD** |
+| --endpoint | -e | no | yes | impCentral API endpoint. Default value: https://preview-api.electricimp.com/v5 |
 | --user | -u | yes/no | yes | The account identifier: username or email address. If specified, **--pwd** option must be specified as well. |
 | --pwd | -w | yes/no | yes | The account password. If specified, **--user** option must be specified as well. |
-| **TBD** --login-key | -k | yes/no | yes | The login key. |
+| --login-key | -k | yes/no | yes | The login key. |
+| --temp | -t | no | no | If the option is not specified, the tool saves information required to refresh access token and refreshes it automatically when the token expires. If the option is specified, the tool does not save information required to refresh access token. In this case you need to call **impt login** command again after the access token is expired. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -669,17 +706,18 @@ Fails if Product with the specified Name already exists.
 
 #### Product Delete
 
-**impt product delete \[--product <PRODUCT_IDENTIFIER>] \[--force] \[--debug] \[--help]**
+**impt product delete \[--product <PRODUCT_IDENTIFIER>] \[--full] \[--force] \[--debug] \[--help]**
 
 Deletes the specified Product.
 
-The command fails if the Product has one or several Device Groups. Use [**impt dg delete**](#device-group-delete) command to delete a Device Group.
+The command fails if the Product has one or several Device Groups and **--full** option is not specified. Use either **--full** option, or [**impt dg delete**](#device-group-delete) command to delete Device Groups of the Product.
 
 User is asked to confirm the operation (confirmed automatically with **--force** option).
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --product | -p | yes/[project](#project-file) | yes | [Product Identifier](#product-identifier). If not specified, the Product referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| --full | | no | no | Deletes all Device Groups of the Product to be able to delete the Product. As by [**impt dg delete --full**](#device-group-delete) command called for every Device Group. |
 | --force | -f | no | no | Forces the operation w/o asking a confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
@@ -698,15 +736,19 @@ Displays information about the specified Product.
 
 #### Product List
 
-**impt product list \[--my] \[--debug] \[--help]**
+**impt product list \[--my] \[--owner <account_id>] \[--debug] \[--help]**
 
 Displays information about all Products available to the current logged-in account.
 
+The returned list of the builds may be filtered. Filtering is possible by any combination of the described Filter Options. Every Filter Option may be repeated several times. At first, all Filter Options with the same option name are combined by logical OR. After that, all Filter Options with different option names are combined by logical AND.
+
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --my | | no | no | Displays information about Products owned by the current logged-in account only.  |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
+| Filter Options: | | | | |
+| --my | | no | no | Displays information about Products owned by the current logged-in account only. |
+| --owner | | no | yes | Displays information about Products owned by the account with the specified account id only. |
 
 #### Product Update
 
@@ -760,19 +802,17 @@ At the end of the command execution information about the project is displayed (
 
 #### Project Delete
 
-**impt project delete \[--dg] \[--files] \[--force] \[--debug] \[--help]**
+**impt project delete \[--dg | --product] \[--files] \[--force] \[--debug] \[--help]**
 
-**TBD**:
-- add --product as alternative to --dg - to delete the Product (with DG), fails if there are other DGs in the Product ?
-
-Deletes [Project File](#project-file) in the current directory and, optionally, the Device Group referenced by the Project File and the local source files.
+Deletes [Project File](#project-file) in the current directory and, optionally, the Device Group referenced by the Project File, the corresponding Product (if it contains one Device Group only) and the local source files.
 Does nothing if there is no [Project File](#project-file) in the current directory.
 
 User is informed about all entities which are going to be deleted or updated and asked to confirm the operation (confirmed automatically with **--force** option).
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --dg | -g | no | no | Also deletes the Device Group referenced by [Project File](#project-file). All Devices assigned to this Device Group to be unassigned. All Deployments for this Device Group which have *"flagged"* attribute with value *true* to be updated to set it to *false* - **TBD** for flagged. |
+| --dg | -g | no | no | Also deletes the Device Group referenced by [Project File](#project-file). All Devices assigned to this Device Group to be unassigned. All Deployments for this Device Group which have *"flagged"* attribute with value *true* to be updated to set it to *false*. As by [**impt dg delete --full**](#device-group-delete) command. |
+| --product | -p | no | no | Includes and acts as **--dg** option. Also deletes the Product which contains the Device Group referenced by [Project File](#project-file). The Product can be deleted if it contains this one Device Group only. Otherwise, the Product is not deleted but this is not considered as a fail, the rest of the command may be completed successfully, including the Device Group deletion. |
 | --files | | no | no | Also deletes the files referenced by [Project File](#project-file) as files with IMP device and agent source code. |
 | --force | -f | no | no | Forces the operation w/o asking a confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
@@ -979,17 +1019,19 @@ Displays information about the specified Webhook.
 
 #### Webhook List
 
-**impt webhook list \[--url <target_url>] \[--event <triggered_event>] \[--product-id <product_id>] \[--product-name <product_name>] \[--dg-type <device_group_type>] \[--dg-id <device_group_id>] \[--dg-name <device_group_name>] \[--debug] \[--help]**
+**impt webhook list \[--my] \[--owner <account_id>] \[--url <target_url>] \[--event <triggered_event>] \[--product-id <product_id>] \[--product-name <product_name>] \[--dg-type <device_group_type>] \[--dg-id <device_group_id>] \[--dg-name <device_group_name>] \[--debug] \[--help]**
 
-Displays information about all Webhooks associated with the logged-in account.
+Displays information about all Webhooks available to the current logged-in account.
 
-The returned list of the Webhooks may be filtered. Filtering is possible by any combination of the described Filter Options. Every Filter Option may be repeated several times.
+The returned list of the builds may be filtered. Filtering is possible by any combination of the described Filter Options. Every Filter Option may be repeated several times. At first, all Filter Options with the same option name are combined by logical OR. After that, all Filter Options with different option names are combined by logical AND.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 | Filter Options: | | | | |
+| --my | | no | no | Webhooks owned by the current logged-in account only. |
+| --owner | | no | yes | Webhooks owned by the account with the specified account id only. |
 | --url | | no | yes | Webhooks with the specified target URL only. |
 | --event | | no | yes | Webhooks for the specified event only. Valid values: "blessing", "blinkup", "deployment". |
 | --product-id | | no | yes | Webhooks created for Device Groups which belong to the specified Product only. |
@@ -1021,7 +1063,7 @@ Fails if the specified Webhook does not exist.
 | -b | --build  |
 | -c | --create-files  |
 | -d | --device  |
-| -e | --endpoint  |
+| -e | --endpoint,  |
 | -f | --force  |
 | -g | --dg  |
 | -h | --help  |
@@ -1036,7 +1078,7 @@ Fails if the specified Webhook does not exist.
 | -q |   |
 | -r | --remove-tag, --rename-files  |
 | -s | --descr  |
-| -t | --tag, --timeout  |
+| -t | --tag, --timeout, --temp  |
 | -u | --user  |
 | -v |   |
 | -w | --wh, --pwd  |
