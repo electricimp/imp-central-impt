@@ -37,6 +37,13 @@
 **[impt log stream](#log-stream)**  
 
 **[impt login](#login-command)**  
+
+**[impt loginkey create](#login-key-create)**  
+**[impt loginkey delete](#login-key-delete)**  
+**[impt loginkey info](#login-key-info)**  
+**[impt loginkey list](#login-key-list)**  
+**[impt loginkey update](#login-key-update)**  
+
 **[impt logout](#logout-command)**  
 
 **[impt product create](#product-create)**  
@@ -661,7 +668,7 @@ If the corresponding Auth File already exists, it is overwritten.
 
 The options for one and only one of the following authentication methods must be specified in the command:
 - using an account identifier and password (**--user** and **--pwd** options),
-- using a login key (**--login-key** option).
+- using a [login key](#login-key-manipulation-commands) (**--lk** option).
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
@@ -669,8 +676,78 @@ The options for one and only one of the following authentication methods must be
 | --endpoint | -e | no | yes | impCentral API endpoint. Default value: https://preview-api.electricimp.com/v5 |
 | --user | -u | yes/no | yes | The account identifier: username or email address. If specified, **--pwd** option must be specified as well. |
 | --pwd | -w | yes/no | yes | The account password. If specified, **--user** option must be specified as well. |
-| --login-key | -k | yes/no | yes | The login key. |
+| --lk | -k | yes/no | yes | The login key id. |
 | --temp | -t | no | no | If the option is not specified, the tool saves information required to refresh access token and refreshes it automatically when the token expires. If the option is specified, the tool does not save information required to refresh access token. In this case you need to call **impt login** command again after the access token is expired. |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
+### Login Key Manipulation Commands
+
+#### Login Key Create
+
+**impt loginkey create --pwd \<password> \[--descr <login_key_description>] \[--debug] \[--help]**
+
+Creates a new Login Key for the currently logged-in account.
+
+Note, there is a limit on a total number of Login Keys per one account. Use [**impt loginkey delete**](#login-key-delete) command to delete an existent Login Key.
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --pwd | -w | yes | yes | The account password. |
+| --descr | -s | no | yes | Description of the Login Key. |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
+#### Login Key Delete
+
+**impt loginkey delete --lk <login_key_id> --pwd \<password> \[--force] \[--debug] \[--help]**
+
+Deletes the specified Login Key.
+
+User is asked to confirm the operation (confirmed automatically with **--force** option).
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --lk | -k | yes | yes | The login key id. |
+| --pwd | -w | yes | yes | The account password. |
+| --force | -f | no | no | Forces the operation w/o asking a confirmation from user. |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
+#### Login Key Info
+
+**impt loginkey info --lk <login_key_id> \[--debug] \[--help]**
+
+Displays information about the specified Login Key.
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --lk | -k | yes | yes | The login key id. |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
+#### Login Key List
+
+**impt loginkey list \[--debug] \[--help]**
+
+Displays information about all Login Keys of the current logged-in account.
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
+#### Login Key Update
+
+**impt loginkey update --lk <login_key_id> --pwd \<password> --descr <login_key_description> \[--debug] \[--help]**
+
+Updates the Description of the specified Login Key.
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --lk | -k | yes | yes | The login key id. |
+| --pwd | -w | yes | yes | The account password. |
+| --descr | -s | no | yes | New Description of the Login Key. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -1069,7 +1146,7 @@ Fails if the specified Webhook does not exist.
 | -h | --help  |
 | -i |   |
 | -j |   |
-| -k | --login-key  |
+| -k | --lk  |
 | -l | --log, --local  |
 | -m |   |
 | -n | --name  |
