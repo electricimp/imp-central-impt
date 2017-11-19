@@ -659,7 +659,7 @@ Note, there is a limit to the number of Devices in one log stream. The tool does
 
 ### Login Command
 
-**impt login \[--local] \[--endpoint <endpoint_url>] (--user <user_id> --pwd \<password> | --login-key <login_key>) \[--temp] \[--debug] \[--help]**
+**impt login \[--local] \[--endpoint <endpoint_url>] (--user <user_id> --pwd \<password> | --lk <login_key_id>) \[--temp] \[--debug] \[--help]**
 
 Global or local login.
 
