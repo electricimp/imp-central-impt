@@ -4,6 +4,10 @@
 
 ### List Of Commands
 
+**[impt auth info](#auth-info)**  
+**[impt auth login](#auth-login)**  
+**[impt auth logout](#auth-logout)**  
+
 **[impt build copy](#build-copy)**  
 **[impt build delete](#build-delete)**  
 **[impt build deploy](#build-deploy)**  
@@ -36,15 +40,11 @@
 **[impt log get](#log-get)**  
 **[impt log stream](#log-stream)**  
 
-**[impt login](#login-command)**  
-
 **[impt loginkey create](#login-key-create)**  
 **[impt loginkey delete](#login-key-delete)**  
 **[impt loginkey info](#login-key-info)**  
 **[impt loginkey list](#login-key-list)**  
 **[impt loginkey update](#login-key-update)**  
-
-**[impt logout](#logout-command)**  
 
 **[impt product create](#product-create)**  
 **[impt product delete](#product-delete)**  
@@ -72,9 +72,9 @@
 
 ### Command Syntax
 
-**impt <command_group> \[<command_name>] \[\<options>]**, where:
-- **<command_group>** - a logical group of commands
-- **<command_name>** - a command name, unique inside the group. Few commands do not have <command_name> but only <command_group>.
+**impt <command_group> <command_name> \[\<options>]**, where:
+- **<command_group>** - a logical group of commands.
+- **<command_name>** - a command name, unique inside the group.
 - **\<options>** - one or more options applicable to a corresponded command. Most of commands has them. Options may be written in any order.
 
 One **option** has the following format:
@@ -181,6 +181,57 @@ Test Configuration File affects [Test Commands](#test-commands) only.
 ## Commands Description
 
 In alphabetical order.
+
+### Authentication Commands
+
+#### Auth Info
+
+**impt auth info \[--debug] \[--help]**
+
+Displays the status and the details of the tool authentication applicable to the current directory. Whether [Local](#local-auth-file) or [Global](#global-auth-file) Auth File is used.
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
+#### Auth Login
+
+**impt auth login \[--local] \[--endpoint <endpoint_url>] (--user <user_id> --pwd \<password> | --lk <login_key_id>) \[--temp] \[--debug] \[--help]**
+
+Global or local login.
+
+Creates [Global](#global-auth-file) or [Local](#local-auth-file) Auth File.
+If the corresponding Auth File already exists, it is overwritten.
+
+The options for one and only one of the following authentication methods must be specified in the command:
+- using an account identifier and password (**--user** and **--pwd** options),
+- using a [login key](#login-key-manipulation-commands) (**--lk** option).
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --local | -l | no | no | If specified, creates/replaces [Local Auth File](#local-auth-file) in the current directory. If not specified, creates/replaces [Global Auth File](#global-auth-file). |
+| --endpoint | -e | no | yes | impCentral API endpoint. Default value: https://preview-api.electricimp.com/v5 |
+| --user | -u | yes/no | yes | The account identifier: username or email address. If specified, **--pwd** option must be specified as well. |
+| --pwd | -w | yes/no | yes | The account password. If specified, **--user** option must be specified as well. |
+| --lk | -k | yes/no | yes | The login key id. |
+| --temp | -t | no | no | If the option is not specified, the tool saves information required to refresh access token and refreshes it automatically when the token expires. If the option is specified, the tool does not save information required to refresh access token. In this case you need to call **impt auth login** command again after the access token is expired. |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
+#### Auth Logout
+
+**impt auth logout \[--local] \[--debug] \[--help]**
+
+Global or local logout.
+
+Deletes [Global](#global-auth-file) or [Local](#local-auth-file) Auth File.
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --local | -l | no | no | If specified, deletes [Local Auth File](#local-auth-file) (if existed in the current directory). If not specified, deletes [Global Auth File](#global-auth-file) (if existed). |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
 ### Build Manipulation Commands
 
@@ -657,30 +708,6 @@ Note, there is a limit to the number of Devices in one log stream. The tool does
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
-### Login Command
-
-**impt login \[--local] \[--endpoint <endpoint_url>] (--user <user_id> --pwd \<password> | --lk <login_key_id>) \[--temp] \[--debug] \[--help]**
-
-Global or local login.
-
-Creates [Global](#global-auth-file) or [Local](#local-auth-file) Auth File.
-If the corresponding Auth File already exists, it is overwritten.
-
-The options for one and only one of the following authentication methods must be specified in the command:
-- using an account identifier and password (**--user** and **--pwd** options),
-- using a [login key](#login-key-manipulation-commands) (**--lk** option).
-
-| Option | Alias | Mandatory? | Value Required? | Description |
-| --- | --- | --- | --- | --- |
-| --local | -l | no | no | If specified, creates/replaces [Local Auth File](#local-auth-file) in the current directory. If not specified, creates/replaces [Global Auth File](#global-auth-file). |
-| --endpoint | -e | no | yes | impCentral API endpoint. Default value: https://preview-api.electricimp.com/v5 |
-| --user | -u | yes/no | yes | The account identifier: username or email address. If specified, **--pwd** option must be specified as well. |
-| --pwd | -w | yes/no | yes | The account password. If specified, **--user** option must be specified as well. |
-| --lk | -k | yes/no | yes | The login key id. |
-| --temp | -t | no | no | If the option is not specified, the tool saves information required to refresh access token and refreshes it automatically when the token expires. If the option is specified, the tool does not save information required to refresh access token. In this case you need to call **impt login** command again after the access token is expired. |
-| --debug | -z | no | no | Displays debug info of the command execution. |
-| --help | -h | no | no | Displays description of the command. Ignores any other options. |
-
 ### Login Key Manipulation Commands
 
 #### Login Key Create
@@ -748,20 +775,6 @@ Updates the Description of the specified Login Key.
 | --lk | -k | yes | yes | The login key id. |
 | --pwd | -w | yes | yes | The account password. |
 | --descr | -s | no | yes | New Description of the Login Key. |
-| --debug | -z | no | no | Displays debug info of the command execution. |
-| --help | -h | no | no | Displays description of the command. Ignores any other options. |
-
-### Logout Command
-
-**impt logout \[--local] \[--debug] \[--help]**
-
-Global or local logout.
-
-Deletes [Global](#global-auth-file) or [Local](#local-auth-file) Auth File.
-
-| Option | Alias | Mandatory? | Value Required? | Description |
-| --- | --- | --- | --- | --- |
-| --local | -l | no | no | If specified, deletes [Local Auth File](#local-auth-file) (if existed in the current directory). If not specified, deletes [Global Auth File](#global-auth-file) (if existed). |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
