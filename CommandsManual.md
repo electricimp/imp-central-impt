@@ -35,8 +35,6 @@
 **[impt dg unflag](#device-group-unflag)**  
 **[impt dg update](#device-group-update)**  
 
-**[impt help](#help-command)**
-
 **[impt log get](#log-get)**  
 **[impt log stream](#log-stream)**  
 
@@ -83,6 +81,13 @@ One **option** has the following format:
 - **<option_name>** - is unique across a particular command. For a user convenience many of the option names are reused across different commands.
 - **<option_alias>** - a one letter alias for the option, unique for a particular command. Not all but many options have aliases.
 - **<option_value>** - a value of the option. Not all options require value. If option value has spaces it must be put into double quotes (“”).
+
+### Help Option
+
+**--help** option (**-h** option alias) can be used with a fully or a partially specified command:
+- **impt --help** - Displays the list of all groups of the commands.
+- **impt <command_group> --help** - Displays the list of all commands of the group.
+- **impt <command_group> <command_name> --help** - Displays the detailed description of the command.
 
 ### Entity Identification
 
@@ -654,12 +659,6 @@ Fails if the specified Device Group does not exist.
 | --load-code-after-blessing | | no | no | Applicable to Device Group of the [type](#device-group-type) *production* or *pre-production* only. If *true* or no value, production code is immediately loaded by the device after blessing. If *false*, production code will be loaded the next time the device connects as part of BlinkUp, whether successful or not. Note, the newly created production Device Group always has this option *true*. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
-
-### Help Command
-
-**impt help**
-
-Displays the list of all commands (w/o command options). To display the details of every command use the command’s **--help** option.
 
 ### Log Manipulation Commands
 
