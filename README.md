@@ -38,11 +38,27 @@ There are two additional groups that include commands convenient for code develo
 - [Project Manipulation Commands](./CommandsManual.md#project-manipulation-commands) - `impt project <command_name> [<options>]`,
 - [Test Commands](./CommandsManual.md#test-commands) - `impt test <command_name> [<options>]`.
 
-The most of commands has `<options>`. Options may be written in any order. As a general rule, the same option should not be repeated in the same command, but there are exceptions. Some options require values, some not. If option value has spaces it must be put into double quotes (“”). Options for every command are described in details in the command specification.
+The most of commands has `<options>`. Options may be written in any order. As a general rule, the same option should not be specified many times in the same command, but exceptions exist. Some options require values, some not. If option value has spaces it must be put into double quotes - `“option value with spaces”`. Many options have one letter [aliases](./CommandsManual.md#list-of-aliases). Options applicable for every command, the aliases and every option explanation are detailed in [Commands Description](./CommandsManual.md#commands-description).
 
-**TBD** - examples of commands with options.
+Examples of the syntax and commands with options:  
+`impt product create --name TestProduct --descr "My test product"`  
+`impt dg create --name "TestDG" --type development -p TestProduct`  
+`impt device assign -g TestDG -d "my device 1"`  
 
 ## Help
+
+Every command has `--help` option (`-h` option alias). If it is specified, any other specified options are ignored, the command is not executed but the tool displays full description of the command - the format, explanation, options. 
+
+[Help option](./CommandsManual.md#help-option) is also applicable to a not fully specified command. It may be used to list all available command groups or to list all commands available in one group.
+
+List all command groups:  
+**TBD** screenshot, leave only 3-4 first groups in the output
+
+List all commands in one group:  
+**TBD** screenshot
+
+Display a command description:  
+**TBD** screenshot for a command with few options
 
 ## Debug
 
