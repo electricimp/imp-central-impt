@@ -62,6 +62,25 @@ Display a command description:
 
 ## Debug
 
+Every command has `--debug` option (`-z` option alias). If it is specified, the tool displays debug information of the command execution, including impCentral API requests and responses.
+
+Example:  
+**TBD** screenshot with not a huge output
+
+## Scripts Support
+
+The tool's commands are designed to be "friendly" for processing by scripts.
+
+Interaction with a user is minimal. Only commands which delete entities ask a confirmation from user. But all these commands have `--force` option (`-f` option alias). If it is specified, the command is executed without asking the confirmation from user. Scripts can use this option.
+
+An output of every command execution always contains one of the two predefined phrases - `IMPT SUCCESS` or `IMPT FAIL` (**TBD** final phrases). Scripts can parse a command output to find these standard phrases to quickly realize when the command execution is completed and does the command succeed or fail.
+
+Example of a successful command execution:  
+**TBD** screenshot - success command with --force option
+
+Example of a failed command execution:  
+**TBD** screenshot - failed command
+
 ## Authentication
 
 ## Project
