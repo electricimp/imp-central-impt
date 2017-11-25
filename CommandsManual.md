@@ -56,11 +56,11 @@
 **[impt project link](#project-link)**  
 **[impt project update](#project-update)**  
 
-**[impt test init](#test-init)**  
-**[impt test info](#test-info)**  
+**[impt test delete](#test-delete)**  
 **[impt test github](#test-github)**  
+**[impt test info](#test-info)**  
+**[impt test init](#test-init)**  
 **[impt test run](#test-run)**  
-**[impt test delete](#test-delete)**
 
 **[impt webhook create](#webhook-create)**  
 **[impt webhook delete](#webhook-delete)**  
@@ -216,7 +216,7 @@ The options for one and only one of the following authentication methods must be
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --local | -l | no | no | If specified, creates/replaces [Local Auth File](#local-auth-file) in the current directory. If not specified, creates/replaces [Global Auth File](#global-auth-file). |
-| --endpoint | -e | no | yes | impCentral API endpoint. Default value: https://preview-api.electricimp.com/v5 |
+| --endpoint | -e | no | yes | impCentral API endpoint. Default value: https://api.electricimp.com/v5 |
 | --user | -u | yes/no | yes | The account identifier: username or email address. If specified, **--pwd** option must be specified as well. |
 | --pwd | -w | yes/no | yes | The account password. If specified, **--user** option must be specified as well. |
 | --lk | -k | yes/no | yes | The login key id. |
@@ -567,7 +567,7 @@ Displays information about the specified Device Group.
 
 #### Device Group List
 
-**impt dg list \[--my] \[--owner <account_id>] \[--type <device_group_type>] \[--product-id <product_id>] \[--product-name <product_name>] \[--debug] \[--help]**
+**impt dg list \[--my] \[--owner <account_id>] \[--dg-type <device_group_type>] \[--product-id <product_id>] \[--product-name <product_name>] \[--debug] \[--help]**
 
 Displays information about all Device Groups available to the current logged-in account.
 
@@ -580,7 +580,7 @@ The returned list of the Device Groups may be filtered. Filtering is possible by
 | Filter Options: | | | | |
 | --my | | no | no | Device Groups owned by the current logged-in account only. |
 | --owner | | no | yes | Device Groups owned by the account with the specified account id only. |
-| --type | | no | yes | Device Groups of the specified [type](#device-group-type) only. |
+| --dg-type | | no | yes | Device Groups of the specified [type](#device-group-type) only. |
 | --product-id | | no | yes | Device Groups which belong to the specified Product only. |
 | --product-name | | no | yes | Device Groups which belong to the specified Product only. |
 
@@ -1175,4 +1175,15 @@ Fails if the specified Webhook does not exist.
 | -y | --agent-file  |
 | -z | --debug  |
 
+## Common Filter Options
+
+| Filter Option | Value Required? | Description |
+| --- | --- | --- |
+| --my | no | Entities owned by the current logged-in account only. |
+| --owner | yes | Entities owned by the account with the specified account id only. |
+| --product-id | yes | Entities related to the specified Product only. |
+| --product-name | yes | Entities related to the specified Product only. |
+| --dg-id | yes | Entities related to the specified Device Group only. |
+| --dg-name | yes | Entities related to the specified Device Group only. |
+| --dg-type | yes | Entities related to the Device Groups of the specified [type](#device-group-type) only. |
 
