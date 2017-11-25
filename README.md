@@ -71,7 +71,7 @@ Every command has `--debug` option (`-z` option alias). If it is specified, the 
 
 The tool's commands are designed to be "friendly" for processing by scripts.
 
-Interaction with a user is minimal. Only commands which delete entities ask a confirmation from user. But all these commands have `--force` option (`-f` option alias). If it is specified, the command is executed without asking the confirmation from user. Scripts can use this option.
+Interaction with a user is minimal. Only commands which [delete entities](#entity-deletion) ask a confirmation from user. But all these commands have `--force` option (`-f` option alias). If it is specified, the command is executed without asking the confirmation from user. Scripts can use this option.
 
 An output of every command execution always contains one of the two predefined phrases - `IMPT SUCCESS` or `IMPT FAIL` (**TBD** final phrases). Scripts can parse a command output to find these standard phrases to quickly realize when the command execution is completed and does the command succeed or fail.
 
@@ -181,4 +181,16 @@ Note, for some list commands the returned default list of entities available to 
 
 **Example**:  
 **TODO** screenshot - another list command, with --my and some other filters, with not a huge output
+
+## Entity Deletion
+
+By default, the commands which delete impCentral entities (like Product, Device Group, Deployment) have the same limitations like the corresponding impCentral API functionality. For example, a Product deletion fails if the Product has Device Groups; a build (Deployment) fails if the Deployment has the *"flagged"* attribute set to *true*. If you specify the `--full` option of the delete command, the tool implicitly update or delete all other required entities in order to delete the target entity. For example, the tool deletes all Device Groups of the Product in order to delete the Product; the tool updates the *"flagged"* attribute of the Deployment in order to delete the Deployment.
+
+Also by default, every delete command asks a confirmation of the operation from the user. Before that the command lists all the entities which are going to be deleted or updated. If you specify the `--force` option of the delete command, the operation is executed without asking a confirmation from user.
+
+**Example** - a failed delete command execution:  
+**TODO** screenshot - failed delete something w/o --full, use --force
+
+**Example** - a successful delete command execution:  
+**TODO** screenshot - the same command succeeds with --full, now w/o --force
 
