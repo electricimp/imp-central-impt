@@ -194,3 +194,6 @@ Also by default, every delete command asks a confirmation of the operation from 
 **Example** - a successful delete command execution:  
 **TODO** screenshot - the same command succeeds with --full, now w/o --force
 
+## License
+
+The impt tool is licensed under the [MIT License](./LICENSE)
