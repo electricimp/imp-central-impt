@@ -71,9 +71,9 @@ Every command has `--debug` option (`-z` option alias). If it is specified, the 
 
 The tool's commands are designed to be "friendly" for processing by scripts.
 
-Interaction with a user is minimal. Only commands which [delete entities](#entity-deletion) ask a confirmation from user. But all these commands have `--force` option (`-f` option alias). If it is specified, the command is executed without asking the confirmation from user. Scripts can use this option.
+Interaction with a user is minimal. Only few commands, for example [delete entities](#entity-deletion) commands, ask a confirmation from user. But all these commands have `--force` option (`-f` option alias). If it is specified, the command is executed without asking the confirmation from user. Scripts can use this option.
 
-An output of every command execution always contains one of the two predefined phrases - `IMPT SUCCESS` or `IMPT FAIL` (**TBD** final phrases). Scripts can parse a command output to find these standard phrases to quickly realize when the command execution is completed and does the command succeed or fail.
+An output of every command execution always contains one of the two predefined phrases - `IMPT SUCCESS` or `IMPT FAIL` (**TODO** confirm the final phrases). Scripts can parse a command output to find these standard phrases to quickly realize when the command execution is completed and does the command succeed or fail.
 
 **Example** - a successful command execution:  
 **TODO** screenshot - success command with --force option
