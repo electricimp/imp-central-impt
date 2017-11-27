@@ -24,31 +24,19 @@
 
 'use strict';
 
-const Auth = require('../../lib/Auth');
 const Options = require('../../lib/util/Options');
 
-const COMMAND = 'logout';
-const COMMAND_DESCRIPTION = 'Deletes Auth File';
+const COMMAND = 'auth';
+const COMMAND_DESCRIPTION = 'Authentication commands';
 
 exports.command = COMMAND;
 
 exports.describe = COMMAND_DESCRIPTION;
 
 exports.builder = function (yargs) {
-    const options = Options.getOptions({
-        [Options.LOCAL] : false,
-        [Options.DEBUG] : false
-    });
     return yargs
-        .usage(Options.getUsage(null, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
-        .options(options)
-        .strict();
-};
-
-exports.handler = function (argv) {
-    if (!Options.checkCommandArgs(argv, 1)) {
-        return;
-    }
-    const options = new Options(argv);
-    new Auth(options).logout();
+        .commandDir('auth')
+        .demandCommand(1, 'Please specify a valid command')
+        .strict()
+        .usage(Options.getCommandGroupUsage(COMMAND, COMMAND_DESCRIPTION));
 };

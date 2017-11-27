@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 // MIT License
 //
 // Copyright 2017 Electric Imp
@@ -24,19 +26,24 @@
 
 'use strict';
 
-const Options = require('../../lib/util/Options');
+const Options = require('../lib/util/Options');
+const UserInteractor = require('../lib/util/UserInteractor');
+const Yargs = require('yargs');
 
-const COMMAND = 'device';
-const COMMAND_DESCRIPTION = 'Device manipulation commands';
-
-exports.command = COMMAND;
-
-exports.describe = COMMAND_DESCRIPTION;
-
-exports.builder = function (yargs) {
-    return yargs
-        .commandDir('device')
-        .demandCommand(1, 'Please specify a valid command')
-        .strict()
-        .usage(Options.getCommandGroupUsage(COMMAND, COMMAND_DESCRIPTION));
-};
+Yargs
+    .commandDir('cmds')
+    .demandCommand(1, 'Please specify a valid command')
+    .strict()
+    .version(false)
+    .usage(Options.getCommandGroupUsage(null))
+    .help('help', 'Displays description of the command')
+    .alias('help', 'h')
+    .fail(function (msg, err, yargs) {
+        if (err) {
+            throw err; // preserve stack
+        }
+        console.log(yargs.help());
+        UserInteractor.printErrorMessage(msg);
+        process.exit(1);
+    })    
+    .argv

@@ -24,19 +24,34 @@
 
 'use strict';
 
-const Options = require('../../lib/util/Options');
+const LoginKey = require('../../../lib/LoginKey');
+const Options = require('../../../lib/util/Options');
 
-const COMMAND = 'device';
-const COMMAND_DESCRIPTION = 'Device manipulation commands';
+const COMMAND = 'update';
+const COMMAND_SECTION = 'loginkey';
+const COMMAND_DESCRIPTION = 'Updates the Description of the specified Login Key';
 
 exports.command = COMMAND;
 
 exports.describe = COMMAND_DESCRIPTION;
 
 exports.builder = function (yargs) {
+    const options = Options.getOptions({
+        [Options.LOGIN_KEY] : true,
+        [Options.PASSWORD] : true,
+        [Options.DESCRIPTION] : { demandOption : true, describe : 'New Description of the Login Key', _usage : '<login_key_description>' },
+        [Options.DEBUG] : false
+    });
     return yargs
-        .commandDir('device')
-        .demandCommand(1, 'Please specify a valid command')
-        .strict()
-        .usage(Options.getCommandGroupUsage(COMMAND, COMMAND_DESCRIPTION));
+        .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
+        .options(options)
+        .strict();
+};
+
+exports.handler = function (argv) {
+    if (!Options.checkCommandArgs(argv)) {
+        return;
+    }
+    const options = new Options(argv);
+    new LoginKey(options).update(options);
 };

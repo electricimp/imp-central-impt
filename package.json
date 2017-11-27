@@ -2,13 +2,13 @@
   "name": "imp-central-cli",
   "version": "1.0.0",
   "description": "Command line interface for the Electric Imp Central API v5",
-  "main": "bin/main.js",
+  "main": "bin/impt",
   "engines": {
     "node": ""
   },
   "preferGlobal": "true",
   "bin": {
-    "climp": "bin/main.js"
+    "impt": "bin/impt"
   },
   "repository": {
     "type": "git",

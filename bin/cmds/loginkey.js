@@ -24,39 +24,19 @@
 
 'use strict';
 
-const Auth = require('../../lib/Auth');
 const Options = require('../../lib/util/Options');
 
-const COMMAND = 'login';
-const COMMAND_DESCRIPTION = 'Login to impCentral CLI';
-const COMMAND_OPTIONS = '[--local] [--endpoint <endpoint_url>] (--user <user_id> --pwd <password> | --login-key <login_key>) [--debug] [--help]';
+const COMMAND = 'loginkey';
+const COMMAND_DESCRIPTION = 'Login Key manipulation commands';
 
 exports.command = COMMAND;
 
 exports.describe = COMMAND_DESCRIPTION;
 
 exports.builder = function (yargs) {
-    const options = Options.getOptions({
-        [Options.LOCAL] : false,
-        [Options.ENDPOINT] : false,
-        [Options.USER] : false,
-        [Options.PASSWORD] : false,
-        [Options.LOGIN_KEY] : false,
-        [Options.DEBUG] : false
-    });
     return yargs
-        .usage(Options.getUsage(null, COMMAND, COMMAND_DESCRIPTION, COMMAND_OPTIONS))
-        .options(options)
-        .strict();
-};
-
-exports.handler = function (argv) {
-    if (!Options.checkCommandArgs(argv, 1)) {
-        return;
-    }
-    const options = new Options(argv);
-    if (!Options.checkLoginParameters(options)) {
-        return;
-    }
-    new Auth(options).login(options);
+        .commandDir('loginkey')
+        .demandCommand(1, 'Please specify a valid command')
+        .strict()
+        .usage(Options.getCommandGroupUsage(COMMAND, COMMAND_DESCRIPTION));
 };

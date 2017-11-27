@@ -24,19 +24,31 @@
 
 'use strict';
 
-const Options = require('../../lib/util/Options');
+const LoginKey = require('../../../lib/LoginKey');
+const Options = require('../../../lib/util/Options');
 
-const COMMAND = 'device';
-const COMMAND_DESCRIPTION = 'Device manipulation commands';
+const COMMAND = 'list';
+const COMMAND_SECTION = 'loginkey';
+const COMMAND_DESCRIPTION = 'Displays information about all Login Keys of the current logged-in account';
 
 exports.command = COMMAND;
 
 exports.describe = COMMAND_DESCRIPTION;
 
 exports.builder = function (yargs) {
+    const options = Options.getOptions({
+        [Options.DEBUG] : false
+    });
     return yargs
-        .commandDir('device')
-        .demandCommand(1, 'Please specify a valid command')
-        .strict()
-        .usage(Options.getCommandGroupUsage(COMMAND, COMMAND_DESCRIPTION));
+        .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
+        .options(options)
+        .strict();
+};
+
+exports.handler = function (argv) {
+    if (!Options.checkCommandArgs(argv)) {
+        return;
+    }
+    const options = new Options(argv);
+    new LoginKey(options).list(options);
 };

@@ -24,19 +24,41 @@
 
 'use strict';
 
-const Options = require('../../lib/util/Options');
+const Auth = require('../../../lib/Auth');
+const Options = require('../../../lib/util/Options');
 
-const COMMAND = 'device';
-const COMMAND_DESCRIPTION = 'Device manipulation commands';
+const COMMAND = 'login';
+const COMMAND_SECTION = 'auth';
+const COMMAND_DESCRIPTION = 'Global or local login.\nCreates Global or Local Auth File. If the corresponding Auth File already exists, it is overwritten.';
+const COMMAND_OPTIONS = '[--local] [--endpoint <endpoint_url>] (--user <user_id> --pwd <password> | --lk <login_key_id>) [--temp] [--debug] [--help]';
 
 exports.command = COMMAND;
 
 exports.describe = COMMAND_DESCRIPTION;
 
 exports.builder = function (yargs) {
+    const options = Options.getOptions({
+        [Options.LOCAL] : false,
+        [Options.ENDPOINT] : false,
+        [Options.USER] : false,
+        [Options.PASSWORD] : false,
+        [Options.LOGIN_KEY] : false,
+        [Options.TEMP] : false,
+        [Options.DEBUG] : false
+    });
     return yargs
-        .commandDir('device')
-        .demandCommand(1, 'Please specify a valid command')
-        .strict()
-        .usage(Options.getCommandGroupUsage(COMMAND, COMMAND_DESCRIPTION));
+        .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, COMMAND_OPTIONS))
+        .options(options)
+        .strict();
+};
+
+exports.handler = function (argv) {
+    if (!Options.checkCommandArgs(argv)) {
+        return;
+    }
+    const options = new Options(argv);
+    if (!Options.checkLoginParameters(options)) {
+        return;
+    }
+    new Auth(options).login(options);
 };

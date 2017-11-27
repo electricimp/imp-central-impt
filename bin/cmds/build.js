@@ -26,7 +26,7 @@
 
 const Options = require('../../lib/util/Options');
 
-const COMMAND = 'build <command>';
+const COMMAND = 'build';
 const COMMAND_DESCRIPTION = 'Build manipulation commands';
 
 exports.command = COMMAND;
@@ -38,5 +38,5 @@ exports.builder = function (yargs) {
         .commandDir('build')
         .demandCommand(1, 'Please specify a valid command')
         .strict()
-        .usage(Options.getUsage(null, COMMAND, COMMAND_DESCRIPTION));
+        .usage(Options.getCommandGroupUsage(COMMAND, COMMAND_DESCRIPTION));
 };

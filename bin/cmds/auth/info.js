@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 // MIT License
 //
 // Copyright 2017 Electric Imp
@@ -26,14 +24,32 @@
 
 'use strict';
 
-const Options = require('../lib/util/Options');
-const Yargs = require('yargs');
+const Auth = require('../../../lib/Auth');
+const Options = require('../../../lib/util/Options');
 
-Yargs
-    .commandDir('cmds')
-    .demandCommand(1, 'Please specify a valid command')
-    .strict()
-    .usage(Options.getUsage(null, '<command>', null))
-    .help('help')
-    .alias('help', 'h')
-    .argv
+const COMMAND = 'info';
+const COMMAND_SECTION = 'auth';
+const COMMAND_DESCRIPTION = 'Displays the status and the details of the tool authentication applicable to the current directory.\n' +
+    'Whether Local or Global Auth File is used.';
+
+exports.command = COMMAND;
+
+exports.describe = COMMAND_DESCRIPTION;
+
+exports.builder = function (yargs) {
+    const options = Options.getOptions({
+        [Options.DEBUG] : false
+    });
+    return yargs
+        .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
+        .options(options)
+        .strict();
+};
+
+exports.handler = function (argv) {
+    if (!Options.checkCommandArgs(argv)) {
+        return;
+    }
+    const options = new Options(argv);
+    new Auth(options, true).info(options);
+};
