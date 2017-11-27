@@ -29,7 +29,7 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'delete';
 const COMMAND_SECTION = 'dg';
-const COMMAND_DESCRIPTION = 'Deletes the specified Device Group. All Devices which belonged to this Device Group become unassigned';
+const COMMAND_DESCRIPTION = 'Deletes the specified Device Group. All Devices which belonged to this Device Group become unassigned.';
 
 exports.command = COMMAND;
 

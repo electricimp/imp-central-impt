@@ -29,7 +29,7 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'create';
 const COMMAND_SECTION = 'dg';
-const COMMAND_DESCRIPTION = 'Creates a new Device Group with the specified Name and Description (if specified) and related to the specified Product';
+const COMMAND_DESCRIPTION = 'Creates a new Device Group with the specified Name and Description (if specified) and related to the specified Product.';
 
 exports.command = COMMAND;
 
@@ -37,10 +37,9 @@ exports.describe = COMMAND_DESCRIPTION;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({
-        [Options.NAME] : { demandOption : true, describe : 'Device Group name', _usage : '<device_group_name>' },
-        [Options.DESCRIPTION] : { demandOption : false, describe : 'Device Group description', _usage : '<device_group_description>' },
+        [Options.NAME] : { demandOption : true, describe : 'Device Group name.', _usage : '<device_group_name>' },
+        [Options.DESCRIPTION] : { demandOption : false, describe : 'Device Group description.', _usage : '<device_group_description>' },
         [Options.PRODUCT_IDENTIFIER] : false,
-        [Options.ACTIVATE] : false,
         [Options.DEBUG] : false
     });
     return yargs

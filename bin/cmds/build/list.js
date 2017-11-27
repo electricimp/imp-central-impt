@@ -29,7 +29,7 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'list';
 const COMMAND_SECTION = 'build';
-const COMMAND_DESCRIPTION = 'Displays info about all or filtered Builds (Deployments) available for a user';
+const COMMAND_DESCRIPTION = 'Displays info about all or filtered Builds (Deployments) available for a user.';
 
 exports.command = COMMAND;
 
@@ -41,9 +41,9 @@ exports.builder = function (yargs) {
         [Options.PRODUCT_NAME] : { demandOption : false, describeFormatArgs : ['Builds'] },
         [Options.DEVICE_GROUP_ID] : { demandOption : false, describeFormatArgs : ['Builds'] },
         [Options.DEVICE_GROUP_NAME] : { demandOption : false, describeFormatArgs : ['Builds'] },
-        [Options.SHA] : { demandOption : false, describe : 'List Builds with the specified Deployment SHA' },
-        [Options.TAG] : { demandOption : false, describe : 'List Builds with the specified Deployment tag' },
-        [Options.FLAGGED] : { demandOption : false, describe : 'List Builds with the specified flagged marker' },
+        [Options.SHA] : { demandOption : false, describe : 'List Builds with the specified Deployment SHA.' },
+        [Options.TAG] : { demandOption : false, describe : 'List Builds with the specified Deployment tag.' },
+        [Options.FLAGGED] : { demandOption : false, describe : 'List Builds with the specified flagged marker.' },
         [Options.DEBUG] : false
     });
     return yargs

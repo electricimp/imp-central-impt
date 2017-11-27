@@ -29,7 +29,7 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'restart';
 const COMMAND_SECTION = 'dg';
-const COMMAND_DESCRIPTION = 'Reboots all of the Devices associated with the specified Device Group';
+const COMMAND_DESCRIPTION = 'Reboots all of the Devices associated with the specified Device Group.';
 
 exports.command = COMMAND;
 

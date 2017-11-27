@@ -29,7 +29,7 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'info';
 const COMMAND_SECTION = 'project';
-const COMMAND_DESCRIPTION = 'Displays info about the current project';
+const COMMAND_DESCRIPTION = 'Displays information about the Project.';
 
 exports.command = COMMAND;
 

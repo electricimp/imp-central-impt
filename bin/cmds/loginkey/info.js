@@ -29,7 +29,7 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'info';
 const COMMAND_SECTION = 'loginkey';
-const COMMAND_DESCRIPTION = 'Displays information about the specified Login Key';
+const COMMAND_DESCRIPTION = 'Displays information about the specified Login Key.';
 
 exports.command = COMMAND;
 

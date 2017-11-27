@@ -29,7 +29,7 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'stream';
 const COMMAND_SECTION = 'log';
-const COMMAND_DESCRIPTION = 'Displays logs from the specified Devices in real-time';
+const COMMAND_DESCRIPTION = 'Displays logs from the specified Devices in real-time.';
 
 exports.command = COMMAND;
 

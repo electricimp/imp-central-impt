@@ -27,7 +27,7 @@
 const Options = require('../../lib/util/Options');
 
 const COMMAND = 'product';
-const COMMAND_DESCRIPTION = 'Product manipulation commands';
+const COMMAND_DESCRIPTION = 'Product manipulation commands.';
 
 exports.command = COMMAND;
 

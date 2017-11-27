@@ -26,26 +26,37 @@
 
 const Project = require('../../../lib/Project');
 const Options = require('../../../lib/util/Options');
+const UserInteractor = require('../../../lib/util/UserInteractor');
 
 const COMMAND = 'delete';
 const COMMAND_SECTION = 'project';
-const COMMAND_DESCRIPTION = 'Deletes the current project';
+const COMMAND_DESCRIPTION = 'Deletes Project File in the current directory and, optionally, the Device Group referenced by the Project File,' +
+    ' the corresponding Product (if it contains one Device Group only) and the local source files.';
 
 exports.command = COMMAND;
 
 exports.describe = COMMAND_DESCRIPTION;
 
 exports.builder = function (yargs) {
+    const formattedCommandOptions = Options.getFormattedCommandOptions(
+        '[%s | %s] %s',
+        { [Options.DEVICE_GROUP] : { demandOption : true, isProjectOption : true } },
+        { [Options.PRODUCT] : { demandOption : true, isProjectOption : true } },
+        {
+            [Options.FILES] : false,
+            [Options.FORCE] : false,
+            [Options.DEBUG] : false
+        });
+
     const options = Options.getOptions({
+        [Options.DEVICE_GROUP] : { demandOption : false, isProjectOption : true },
         [Options.PRODUCT] : { demandOption : false, isProjectOption : true },
         [Options.FILES] : false,
-        [Options.LOGOUT] : false,
-        [Options.ALL] : false,
         [Options.FORCE] : false,
         [Options.DEBUG] : false
     });
     return yargs
-        .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
+        .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, formattedCommandOptions))
         .options(options)
         .strict();
 };
@@ -55,5 +66,9 @@ exports.handler = function (argv) {
         return;
     }
     const options = new Options(argv);
+    if (options.product && options.deviceGroup) {
+        UserInteractor.printErrorMessage(UserInteractor.ERRORS.CMD_MUTUALLY_EXCLUSIVE_OPTIONS, Options.PRODUCT, Options.DEVICE_GROUP);
+        return;
+    }
     new Project(options).delete(options);
 };

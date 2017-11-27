@@ -27,7 +27,7 @@
 const Options = require('../../lib/util/Options');
 
 const COMMAND = 'log';
-const COMMAND_DESCRIPTION = 'Logs manipulation commands';
+const COMMAND_DESCRIPTION = 'Logs manipulation commands.';
 
 exports.command = COMMAND;
 

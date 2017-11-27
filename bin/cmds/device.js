@@ -27,7 +27,7 @@
 const Options = require('../../lib/util/Options');
 
 const COMMAND = 'device';
-const COMMAND_DESCRIPTION = 'Device manipulation commands';
+const COMMAND_DESCRIPTION = 'Device manipulation commands.';
 
 exports.command = COMMAND;
 

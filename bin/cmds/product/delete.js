@@ -29,7 +29,7 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'delete';
 const COMMAND_SECTION = 'product';
-const COMMAND_DESCRIPTION = 'Deletes the specified Product and Device Groups associated with it';
+const COMMAND_DESCRIPTION = 'Deletes the specified Product and Device Groups associated with it.';
 
 exports.command = COMMAND;
 

@@ -29,7 +29,7 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'create';
 const COMMAND_SECTION = 'loginkey';
-const COMMAND_DESCRIPTION = 'Creates a new Login Key for the currently logged-in account';
+const COMMAND_DESCRIPTION = 'Creates a new Login Key for the currently logged-in account.';
 
 exports.command = COMMAND;
 

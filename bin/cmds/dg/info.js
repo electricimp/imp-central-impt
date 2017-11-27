@@ -29,7 +29,7 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'info';
 const COMMAND_SECTION = 'dg';
-const COMMAND_DESCRIPTION = 'Displays info about the specified Device Group';
+const COMMAND_DESCRIPTION = 'Displays info about the specified Device Group.';
 
 exports.command = COMMAND;
 

@@ -29,7 +29,7 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'delete';
 const COMMAND_SECTION = 'build';
-const COMMAND_DESCRIPTION = 'Deletes the specified Build';
+const COMMAND_DESCRIPTION = 'Deletes the specified Build.';
 
 exports.command = COMMAND;
 

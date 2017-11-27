@@ -27,7 +27,7 @@
 const Options = require('../../lib/util/Options');
 
 const COMMAND = 'auth';
-const COMMAND_DESCRIPTION = 'Authentication commands';
+const COMMAND_DESCRIPTION = 'Authentication commands.';
 
 exports.command = COMMAND;
 

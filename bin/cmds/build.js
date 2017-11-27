@@ -27,7 +27,7 @@
 const Options = require('../../lib/util/Options');
 
 const COMMAND = 'build';
-const COMMAND_DESCRIPTION = 'Build manipulation commands';
+const COMMAND_DESCRIPTION = 'Build manipulation commands.';
 
 exports.command = COMMAND;
 

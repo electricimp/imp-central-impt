@@ -29,7 +29,7 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'assign';
 const COMMAND_SECTION = 'device';
-const COMMAND_DESCRIPTION = 'Assigns the specified Device to the specified Device Group';
+const COMMAND_DESCRIPTION = 'Assigns the specified Device to the specified Device Group.';
 
 exports.command = COMMAND;
 

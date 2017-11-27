@@ -29,7 +29,7 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'unassign';
 const COMMAND_SECTION = 'device';
-const COMMAND_DESCRIPTION = 'Removes the specified Device(s) from the specified Device Group';
+const COMMAND_DESCRIPTION = 'Removes the specified Device(s) from the specified Device Group.';
 
 exports.command = COMMAND;
 

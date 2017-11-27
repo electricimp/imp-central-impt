@@ -27,7 +27,7 @@
 const Options = require('../../lib/util/Options');
 
 const COMMAND = 'dg';
-const COMMAND_DESCRIPTION = 'Device Group manipulation commands';
+const COMMAND_DESCRIPTION = 'Device Group manipulation commands.';
 
 exports.command = COMMAND;
 

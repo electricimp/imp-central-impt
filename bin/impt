@@ -36,12 +36,9 @@ Yargs
     .strict()
     .version(false)
     .usage(Options.getCommandGroupUsage(null))
-    .help('help', 'Displays description of the command')
+    .help('help', 'Displays description of the command.')
     .alias('help', 'h')
     .fail(function (msg, err, yargs) {
-        if (err) {
-            throw err; // preserve stack
-        }
         console.log(yargs.help());
         UserInteractor.printErrorMessage(msg);
         process.exit(1);

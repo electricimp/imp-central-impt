@@ -29,7 +29,7 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'get';
 const COMMAND_SECTION = 'log';
-const COMMAND_DESCRIPTION = 'Displays historical logs for the specified Device';
+const COMMAND_DESCRIPTION = 'Displays historical logs for the specified Device.';
 
 exports.command = COMMAND;
 

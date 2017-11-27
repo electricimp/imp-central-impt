@@ -27,7 +27,7 @@
 const Options = require('../../lib/util/Options');
 
 const COMMAND = 'project';
-const COMMAND_DESCRIPTION = 'Project manipulation commands';
+const COMMAND_DESCRIPTION = 'Project manipulation commands.';
 
 exports.command = COMMAND;
 

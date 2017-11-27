@@ -29,7 +29,7 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'update';
 const COMMAND_SECTION = 'loginkey';
-const COMMAND_DESCRIPTION = 'Updates the Description of the specified Login Key';
+const COMMAND_DESCRIPTION = 'Updates the Description of the specified Login Key.';
 
 exports.command = COMMAND;
 
@@ -39,7 +39,7 @@ exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.LOGIN_KEY] : true,
         [Options.PASSWORD] : true,
-        [Options.DESCRIPTION] : { demandOption : true, describe : 'New Description of the Login Key', _usage : '<login_key_description>' },
+        [Options.DESCRIPTION] : { demandOption : true, describe : 'New Description of the Login Key.', _usage : '<login_key_description>' },
         [Options.DEBUG] : false
     });
     return yargs

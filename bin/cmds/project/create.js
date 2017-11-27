@@ -26,10 +26,12 @@
 
 const Project = require('../../../lib/Project');
 const Options = require('../../../lib/util/Options');
+const UserInteractor = require('../../../lib/util/UserInteractor');
 
-const COMMAND = 'new';
+const COMMAND = 'create';
 const COMMAND_SECTION = 'project';
-const COMMAND_DESCRIPTION = 'Creates a new Project in the current directory';
+const COMMAND_DESCRIPTION = 'Creates a new Device Group for the specified Product and creates new Project File' +
+    ' in the current directory by linking it to the new Device Group.';
 
 exports.command = COMMAND;
 
@@ -37,12 +39,28 @@ exports.describe = COMMAND_DESCRIPTION;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({
-        [Options.NAME] : { demandOption : true, describe : 'Product name', _usage : '<product_name>' },
-        [Options.DESCRIPTION] : { demandOption : false, describe : 'Product description', _usage : '<product_description>' },
-        [Options.ACTIVATE] : { demandOption : false, isProjectOption : true },
+        [Options.PRODUCT_IDENTIFIER] : true,
+        [Options.CREATE_PRODUCT] : false,
+        [Options.NAME] : {
+            demandOption : true,
+            describe : 'Name of the new Device Group. Must be unique among all Device Groups in the specified Product.',
+            _usage : '<device_group_name>'
+        },
+        [Options.DESCRIPTION] : {
+            demandOption : false,
+            describe : 'Description of the Device Group.',
+            _usage : '<device_group_description>'
+        },
         [Options.DEVICE_FILE] : false,
         [Options.AGENT_FILE] : false,
         [Options.CREATE_FILES] : false,
+        [Options.PRE_FACTORY] : false,
+        [Options.TARGET] : {
+            demandOption : false,
+            describe : 'Device Group Identifier of the production target Device Group for the being created Device Group.' +
+                ' The specified target Device Group must be of the type pre-production and belongs to the specified Product.'
+        },
+        [Options.CREATE_TARGET] : false,
         [Options.FORCE] : false,
         [Options.DEBUG] : false
     });
@@ -57,5 +75,9 @@ exports.handler = function (argv) {
         return;
     }
     const options = new Options(argv);
+    if (options.preFactory && !options.target || !options.preFactory && options.target) {
+        UserInteractor.printErrorMessage(UserInteractor.ERRORS.CMD_COOPERATIVE_OPTIONS, Options.PRE_FACTORY, Options.TARGET);
+        return;
+    }
     new Project(options).create(options);
 };

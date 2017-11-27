@@ -26,17 +26,35 @@
 
 const Auth = require('../../../lib/Auth');
 const Options = require('../../../lib/util/Options');
+const UserInteractor = require('../../../lib/util/UserInteractor');
 
 const COMMAND = 'login';
 const COMMAND_SECTION = 'auth';
 const COMMAND_DESCRIPTION = 'Global or local login.\nCreates Global or Local Auth File. If the corresponding Auth File already exists, it is overwritten.';
-const COMMAND_OPTIONS = '[--local] [--endpoint <endpoint_url>] (--user <user_id> --pwd <password> | --lk <login_key_id>) [--temp] [--debug] [--help]';
 
 exports.command = COMMAND;
 
 exports.describe = COMMAND_DESCRIPTION;
 
 exports.builder = function (yargs) {
+    const formattedCommandOptions = Options.getFormattedCommandOptions(
+        '%s (%s | %s) %s',
+        {
+            [Options.LOCAL] : false,
+            [Options.ENDPOINT] : false,
+        },
+        {
+            [Options.USER] : true,
+            [Options.PASSWORD] : true,
+        },
+        {
+            [Options.LOGIN_KEY] : true
+        },
+        {
+            [Options.TEMP] : false,
+            [Options.DEBUG] : false,
+        });
+
     const options = Options.getOptions({
         [Options.LOCAL] : false,
         [Options.ENDPOINT] : false,
@@ -46,8 +64,9 @@ exports.builder = function (yargs) {
         [Options.TEMP] : false,
         [Options.DEBUG] : false
     });
+
     return yargs
-        .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, COMMAND_OPTIONS))
+        .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, formattedCommandOptions))
         .options(options)
         .strict();
 };

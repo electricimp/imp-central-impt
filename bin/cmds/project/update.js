@@ -26,10 +26,11 @@
 
 const Project = require('../../../lib/Project');
 const Options = require('../../../lib/util/Options');
+const UserInteractor = require('../../../lib/util/UserInteractor');
 
 const COMMAND = 'update';
 const COMMAND_SECTION = 'project';
-const COMMAND_DESCRIPTION = 'Updates project in the current directory';
+const COMMAND_DESCRIPTION = 'Updates the project settings and/or Name, Description, production target of the Device Group referenced by Project File.';
 
 exports.command = COMMAND;
 
@@ -37,12 +38,27 @@ exports.describe = COMMAND_DESCRIPTION;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({
-        [Options.NAME] : { demandOption : false, describe : 'New Product name', _usage : '<product_name>' },
-        [Options.DESCRIPTION] : { demandOption : false, describe : 'New Product description', _usage : '<product_description>' },
-        [Options.ACTIVATE] : { demandOption : false, isProjectOption : true },
+        [Options.NAME] : {
+            demandOption : false,
+            describe : 'New Name of the Device Group referenced by Project File. Must be unique among all Device Groups in the Product.',
+            _usage : '<device_group_name>'
+        },
+        [Options.DESCRIPTION] : {
+            demandOption : false,
+            describe : 'New Description of the Device Group referenced by Project File.',
+            _usage : '<device_group_description>'
+        },
         [Options.DEVICE_FILE] : false,
         [Options.AGENT_FILE] : false,
+        [Options.RENAME_FILES] : false,
         [Options.CREATE_FILES] : false,
+        [Options.TARGET] : {
+            demandOption : false,
+            describe : 'Device Group Identifier of the production target Device Group for the Device Group referenced by Project File.' +
+                ' May be specified if the Device Group referenced by Project File is of the type pre-factory only.' +
+                ' The specified target Device Group must be of the type pre-production and belongs to the same Product' +
+                ' as the Device Group referenced by Project File.'
+        },
         [Options.DEBUG] : false
     });
     return yargs
@@ -56,5 +72,9 @@ exports.handler = function (argv) {
         return;
     }
     const options = new Options(argv);
+    if (options.createFiles && options.renameFiles) {
+        UserInteractor.printErrorMessage(UserInteractor.ERRORS.CMD_MUTUALLY_EXCLUSIVE_OPTIONS, Options.CREATE_FILES, Options.RENAME_FILES);
+        return;
+    }
     new Project(options).update(options);
 };

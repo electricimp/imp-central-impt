@@ -29,7 +29,7 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'info';
 const COMMAND_SECTION = 'device';
-const COMMAND_DESCRIPTION = 'Displays info about the specified Device';
+const COMMAND_DESCRIPTION = 'Displays info about the specified Device.';
 
 exports.command = COMMAND;
 

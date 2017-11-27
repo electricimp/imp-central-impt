@@ -29,7 +29,7 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'remove';
 const COMMAND_SECTION = 'device';
-const COMMAND_DESCRIPTION = 'Removes the specified Device from the user’s account';
+const COMMAND_DESCRIPTION = 'Removes the specified Device from the user’s account.';
 
 exports.command = COMMAND;
 

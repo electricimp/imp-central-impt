@@ -29,7 +29,7 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'run';
 const COMMAND_SECTION = 'build';
-const COMMAND_DESCRIPTION = 'Creates, deploys and runs a build. Optionally, displays logs of the running build';
+const COMMAND_DESCRIPTION = 'Creates, deploys and runs a build. Optionally, displays logs of the running build.';
 
 exports.command = COMMAND;
 
@@ -40,7 +40,7 @@ exports.builder = function (yargs) {
         [Options.DEVICE_GROUP_IDENTIFIER] : false,
         [Options.DEVICE_FILE] : false,
         [Options.AGENT_FILE] : false,
-        [Options.DESCRIPTION] : { demandOption : false, describe : 'Description of the Deployment', _usage : '<build_description>' },
+        [Options.DESCRIPTION] : { demandOption : false, describe : 'Description of the Deployment.', _usage : '<build_description>' },
         [Options.ORIGIN] : false,
         [Options.TAG] : false,
         [Options.FLAGGED] : false,

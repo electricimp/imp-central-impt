@@ -27,7 +27,7 @@
 const Options = require('../../lib/util/Options');
 
 const COMMAND = 'loginkey';
-const COMMAND_DESCRIPTION = 'Login Key manipulation commands';
+const COMMAND_DESCRIPTION = 'Login Key manipulation commands.';
 
 exports.command = COMMAND;
 

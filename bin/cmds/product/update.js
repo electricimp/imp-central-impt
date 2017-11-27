@@ -29,7 +29,7 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'update';
 const COMMAND_SECTION = 'product';
-const COMMAND_DESCRIPTION = 'Updates the specified Product by a new Name and/or Description';
+const COMMAND_DESCRIPTION = 'Updates the specified Product by a new Name and/or Description.';
 
 exports.command = COMMAND;
 
@@ -38,8 +38,8 @@ exports.describe = COMMAND_DESCRIPTION;
 exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.PRODUCT_IDENTIFIER] : false,
-        [Options.NAME] : { demandOption : false, describe : 'New Product name', _usage : '<product_name>' },
-        [Options.DESCRIPTION] : { demandOption : false, describe : 'New Product description', _usage : '<product_description>' },
+        [Options.NAME] : { demandOption : false, describe : 'New Product name.', _usage : '<product_name>' },
+        [Options.DESCRIPTION] : { demandOption : false, describe : 'New Product description.', _usage : '<product_description>' },
         [Options.DEBUG] : false
     });
     return yargs
