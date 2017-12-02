@@ -36,11 +36,19 @@ Yargs
     .strict()
     .version(false)
     .usage(Options.getCommandGroupUsage(null))
-    .help('help', 'Displays description of the command.')
+    .help('help', 'Displays description of the command. Ignores any other options.')
     .alias('help', 'h')
     .fail(function (msg, err, yargs) {
         console.log(yargs.help());
-        UserInteractor.printErrorMessage(msg);
+        if (err) {
+            UserInteractor.processError(err);
+        }
+        else {
+            UserInteractor.printErrorWithStatus(msg);
+        }
         process.exit(1);
-    })    
+    })
+    .check(function (argv) {
+        return Options.checkCommandArgs(argv);
+    })
     .argv

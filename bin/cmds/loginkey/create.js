@@ -48,9 +48,6 @@ exports.builder = function (yargs) {
 };
 
 exports.handler = function (argv) {
-    if (!Options.checkCommandArgs(argv)) {
-        return;
-    }
     const options = new Options(argv);
     new LoginKey(options).create(options);
 };

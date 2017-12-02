@@ -24,12 +24,13 @@
 
 'use strict';
 
-const Project = require('../../../lib/Project');
+const DeviceGroup = require('../../../lib/DeviceGroup');
 const Options = require('../../../lib/util/Options');
 
-const COMMAND = 'link';
-const COMMAND_SECTION = 'project';
-const COMMAND_DESCRIPTION = 'Creates new Project File in the current directory by linking it to the specified Device Group.';
+const COMMAND = 'reassign';
+const COMMAND_SECTION = 'dg';
+const COMMAND_DESCRIPTION = 'Reassigns all Devices from one Device Group to another.' +
+    ' Fails if any of the specified Device Groups does not exist.';
 
 exports.command = COMMAND;
 
@@ -37,18 +38,8 @@ exports.describe = COMMAND_DESCRIPTION;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({
-        [Options.DEVICE_GROUP_IDENTIFIER] : true,
-        [Options.DEVICE_FILE] :  {
-            demandOption : false,
-            describe: 'Name of a file for IMP device source code.',
-            default: 'device.nut'
-        },
-        [Options.AGENT_FILE] : {
-            demandOption : false,
-            describe: 'Name of a file for IMP agent source code.',
-            default: 'agent.nut'
-        },
-        [Options.CREATE_FILES] : false,
+        [Options.FROM] : true,
+        [Options.TO] : false,
         [Options.FORCE] : false,
         [Options.DEBUG] : false
     });
@@ -60,5 +51,5 @@ exports.builder = function (yargs) {
 
 exports.handler = function (argv) {
     const options = new Options(argv);
-    new Project(options).link(options);
+    new DeviceGroup(options).reassign(options);
 };

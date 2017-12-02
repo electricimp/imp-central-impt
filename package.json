@@ -29,7 +29,6 @@
   "homepage": "https://github.com/electricimp/imp-central-cli",
   "dependencies": {
     "cli-prompt": "^0.6.0",
-    "prettyjson": "latest",
     "colors": "^1.1.2",
     "yargs": "latest",
     "osenv": "^0.1.3",

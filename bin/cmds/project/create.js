@@ -24,8 +24,10 @@
 
 'use strict';
 
+const Util = require('util');
 const Project = require('../../../lib/Project');
 const Options = require('../../../lib/util/Options');
+const Errors = require('../../../lib/util/Errors');
 const UserInteractor = require('../../../lib/util/UserInteractor');
 
 const COMMAND = 'create';
@@ -51,14 +53,25 @@ exports.builder = function (yargs) {
             describe : 'Description of the Device Group.',
             _usage : '<device_group_description>'
         },
-        [Options.DEVICE_FILE] : false,
-        [Options.AGENT_FILE] : false,
+        [Options.DEVICE_FILE] :  {
+            demandOption : false,
+            describe: 'Name of a file for IMP device source code.',
+            default: 'device.nut'
+        },
+        [Options.AGENT_FILE] : {
+            demandOption : false,
+            describe: 'Name of a file for IMP agent source code.',
+            default: 'agent.nut'
+        },
         [Options.CREATE_FILES] : false,
         [Options.PRE_FACTORY] : false,
         [Options.TARGET] : {
             demandOption : false,
-            describe : 'Device Group Identifier of the production target Device Group for the being created Device Group.' +
-                ' The specified target Device Group must be of the type pre-production and belongs to the specified Product.'
+            describe : Util.format('Device Group Identifier of the production target Device Group for the being created Device Group.' +
+                ' May be specified if and only if --%s option is specified.' +
+                ' The specified target Device Group must be of the type %s and belongs to the specified Product.' +
+                ' Otherwise the command fails.',
+                Options.PRE_FACTORY, Options.DG_TYPE_PRE_PRODUCTION)
         },
         [Options.CREATE_TARGET] : false,
         [Options.FORCE] : false,
@@ -67,17 +80,17 @@ exports.builder = function (yargs) {
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
         .options(options)
+        .check(function (argv) {
+            const options = new Options(argv);
+            if (options.preFactory && !options.target || !options.preFactory && options.target) {
+                return new Errors.CommandSyntaxError(UserInteractor.ERRORS.CMD_COOPERATIVE_OPTIONS, Options.PRE_FACTORY, Options.TARGET);
+            }
+            return true;
+        })
         .strict();
 };
 
 exports.handler = function (argv) {
-    if (!Options.checkCommandArgs(argv)) {
-        return;
-    }
     const options = new Options(argv);
-    if (options.preFactory && !options.target || !options.preFactory && options.target) {
-        UserInteractor.printErrorMessage(UserInteractor.ERRORS.CMD_COOPERATIVE_OPTIONS, Options.PRE_FACTORY, Options.TARGET);
-        return;
-    }
     new Project(options).create(options);
 };

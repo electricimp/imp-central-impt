@@ -29,7 +29,7 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'restart';
 const COMMAND_SECTION = 'dg';
-const COMMAND_DESCRIPTION = 'Reboots all of the Devices associated with the specified Device Group.';
+const COMMAND_DESCRIPTION = 'Reboots all Devices assigned to the specified Device Group. Does nothing if the Device Group has no Devices assigned.';
 
 exports.command = COMMAND;
 
@@ -47,9 +47,6 @@ exports.builder = function (yargs) {
 };
 
 exports.handler = function (argv) {
-    if (!Options.checkCommandArgs(argv)) {
-        return;
-    }
     const options = new Options(argv);
     new DeviceGroup(options).restart(options);
 };

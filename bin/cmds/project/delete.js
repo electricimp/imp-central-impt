@@ -26,12 +26,14 @@
 
 const Project = require('../../../lib/Project');
 const Options = require('../../../lib/util/Options');
+const Errors = require('../../../lib/util/Errors');
 const UserInteractor = require('../../../lib/util/UserInteractor');
 
 const COMMAND = 'delete';
 const COMMAND_SECTION = 'project';
 const COMMAND_DESCRIPTION = 'Deletes Project File in the current directory and, optionally, the Device Group referenced by the Project File,' +
-    ' the corresponding Product (if it contains one Device Group only) and the local source files.';
+    ' the corresponding Product (if it contains one Device Group only) and the local source files.' +
+    ' Does nothing if there is no Project File in the current directory.';
 
 exports.command = COMMAND;
 
@@ -58,17 +60,17 @@ exports.builder = function (yargs) {
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, formattedCommandOptions))
         .options(options)
+        .check(function (argv) {
+            const options = new Options(argv);
+            if (options.product && options.deviceGroup) {
+                return new Errors.CommandSyntaxError(UserInteractor.ERRORS.CMD_MUTUALLY_EXCLUSIVE_OPTIONS, Options.PRODUCT, Options.DEVICE_GROUP);
+            }
+            return true;
+        })
         .strict();
 };
 
 exports.handler = function (argv) {
-    if (!Options.checkCommandArgs(argv)) {
-        return;
-    }
     const options = new Options(argv);
-    if (options.product && options.deviceGroup) {
-        UserInteractor.printErrorMessage(UserInteractor.ERRORS.CMD_MUTUALLY_EXCLUSIVE_OPTIONS, Options.PRODUCT, Options.DEVICE_GROUP);
-        return;
-    }
     new Project(options).delete(options);
 };

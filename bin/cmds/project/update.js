@@ -24,13 +24,16 @@
 
 'use strict';
 
+const Util = require('util');
 const Project = require('../../../lib/Project');
 const Options = require('../../../lib/util/Options');
+const Errors = require('../../../lib/util/Errors');
 const UserInteractor = require('../../../lib/util/UserInteractor');
 
 const COMMAND = 'update';
 const COMMAND_SECTION = 'project';
-const COMMAND_DESCRIPTION = 'Updates the project settings and/or Name, Description, production target of the Device Group referenced by Project File.';
+const COMMAND_DESCRIPTION = 'Updates the project settings and/or Name, Description, production target of the' +
+    ' Device Group referenced by Project File. Fails if there is no Project File in the current directory.';
 
 exports.command = COMMAND;
 
@@ -48,33 +51,45 @@ exports.builder = function (yargs) {
             describe : 'New Description of the Device Group referenced by Project File.',
             _usage : '<device_group_description>'
         },
-        [Options.DEVICE_FILE] : false,
-        [Options.AGENT_FILE] : false,
+        [Options.DEVICE_FILE] :  {
+            demandOption : false,
+            describe: 'New name of a file for IMP device source code.'
+        },
+        [Options.AGENT_FILE] : {
+            demandOption : false,
+            describe: 'New name of a file for IMP agent source code.'
+        },
         [Options.RENAME_FILES] : false,
-        [Options.CREATE_FILES] : false,
+        [Options.CREATE_FILES] : {
+            demandOption : false,
+            describe : Util.format('Creates empty file(s) if the file(s) specified by --%s, --%s options does not exist.' +
+                ' Should not be specified together with --%s option.',
+                Options.DEVICE_FILE, Options.AGENT_FILE, Options.RENAME_FILES)
+        },
         [Options.TARGET] : {
             demandOption : false,
-            describe : 'Device Group Identifier of the production target Device Group for the Device Group referenced by Project File.' +
-                ' May be specified if the Device Group referenced by Project File is of the type pre-factory only.' +
-                ' The specified target Device Group must be of the type pre-production and belongs to the same Product' +
-                ' as the Device Group referenced by Project File.'
+            describe : Util.format('Device Group Identifier of the production target Device Group for the Device Group referenced by Project File.' +
+                ' May be specified if the Device Group referenced by Project File is of the type %s only.' +
+                ' The specified target Device Group must be of the type %s and belongs to the same Product' +
+                ' as the Device Group referenced by Project File.',
+                Options.DG_TYPE_PRE_FACTORY, Options.DG_TYPE_PRE_PRODUCTION)
         },
         [Options.DEBUG] : false
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
         .options(options)
+        .check(function (argv) {
+            const options = new Options(argv);
+            if (options.createFiles && options.renameFiles) {
+                return new Errors.CommandSyntaxError(UserInteractor.ERRORS.CMD_MUTUALLY_EXCLUSIVE_OPTIONS, Options.CREATE_FILES, Options.RENAME_FILES);
+            }
+            return true;
+        })
         .strict();
 };
 
 exports.handler = function (argv) {
-    if (!Options.checkCommandArgs(argv)) {
-        return;
-    }
     const options = new Options(argv);
-    if (options.createFiles && options.renameFiles) {
-        UserInteractor.printErrorMessage(UserInteractor.ERRORS.CMD_MUTUALLY_EXCLUSIVE_OPTIONS, Options.CREATE_FILES, Options.RENAME_FILES);
-        return;
-    }
     new Project(options).update(options);
 };

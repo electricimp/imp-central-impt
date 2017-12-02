@@ -29,7 +29,7 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'logout';
 const COMMAND_SECTION = 'auth';
-const COMMAND_DESCRIPTION = 'Global or local logout.\nDeletes Global or Local Auth File.';
+const COMMAND_DESCRIPTION = 'Global or local logout. Deletes Global or Local Auth File.';
 
 exports.command = COMMAND;
 
@@ -47,9 +47,6 @@ exports.builder = function (yargs) {
 };
 
 exports.handler = function (argv) {
-    if (!Options.checkCommandArgs(argv)) {
-        return;
-    }
     const options = new Options(argv);
     new Auth(options).logout();
 };

@@ -26,11 +26,13 @@
 
 const Auth = require('../../../lib/Auth');
 const Options = require('../../../lib/util/Options');
+const Errors = require('../../../lib/util/Errors');
 const UserInteractor = require('../../../lib/util/UserInteractor');
 
 const COMMAND = 'login';
 const COMMAND_SECTION = 'auth';
-const COMMAND_DESCRIPTION = 'Global or local login.\nCreates Global or Local Auth File. If the corresponding Auth File already exists, it is overwritten.';
+const COMMAND_DESCRIPTION = 'Global or local login. Creates Global or Local Auth File.' +
+    ' If the corresponding Auth File already exists, it is overwritten.';
 
 exports.command = COMMAND;
 
@@ -68,16 +70,23 @@ exports.builder = function (yargs) {
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, formattedCommandOptions))
         .options(options)
+        .check(function (argv) {
+            const options = new Options(argv);
+            if (!options.user && !options.loginKey) {
+                return new Errors.CommandSyntaxError(UserInteractor.ERRORS.CMD_REQUIRED_OPTIONS, Options.USER, Options.LOGIN_KEY);
+            }
+            if (options.user && options.loginKey) {
+                return new Errors.CommandSyntaxError(UserInteractor.ERRORS.CMD_MUTUALLY_EXCLUSIVE_OPTIONS, Options.USER, Options.LOGIN_KEY);
+            }
+            if (options.user && !options.password) {
+                return new Errors.CommandSyntaxError(UserInteractor.ERRORS.CMD_REQUIRED_OPTION, Options.PASSWORD);
+            }
+            return true;
+        })
         .strict();
 };
 
 exports.handler = function (argv) {
-    if (!Options.checkCommandArgs(argv)) {
-        return;
-    }
     const options = new Options(argv);
-    if (!Options.checkLoginParameters(options)) {
-        return;
-    }
     new Auth(options).login(options);
 };

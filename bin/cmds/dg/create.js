@@ -24,12 +24,16 @@
 
 'use strict';
 
+const Util = require('util');
 const DeviceGroup = require('../../../lib/DeviceGroup');
 const Options = require('../../../lib/util/Options');
+const Errors = require('../../../lib/util/Errors');
+const UserInteractor = require('../../../lib/util/UserInteractor');
 
 const COMMAND = 'create';
 const COMMAND_SECTION = 'dg';
-const COMMAND_DESCRIPTION = 'Creates a new Device Group with the specified Name and Description (if specified) and related to the specified Product.';
+const COMMAND_DESCRIPTION = 'Creates a new Device Group for the specified Product.' +
+    ' Fails if Device Group with the specified Name already exists in the specified Product.';
 
 exports.command = COMMAND;
 
@@ -37,21 +41,42 @@ exports.describe = COMMAND_DESCRIPTION;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({
-        [Options.NAME] : { demandOption : true, describe : 'Device Group name.', _usage : '<device_group_name>' },
-        [Options.DESCRIPTION] : { demandOption : false, describe : 'Device Group description.', _usage : '<device_group_description>' },
+        [Options.NAME] : {
+            demandOption : true,
+            describe : 'Name of the Device Group. Must be unique among all Device Groups in the specified Product.',
+            _usage : '<device_group_name>'
+        },
+        [Options.TYPE] : true,
         [Options.PRODUCT_IDENTIFIER] : false,
+        [Options.DESCRIPTION] : {
+            demandOption : false,
+            describe : 'Description of the Device Group.',
+            _usage : '<device_group_description>'
+        },
+        [Options.TARGET] : {
+            demandOption : false,
+            describe : Util.format('Device Group Identifier of the production target Device Group for the being created Device Group.' +
+                ' May be specified for the being created Device Group of the type %s or %s only.' +
+                ' The target Device Group must be of the type %s or %s correspondingly and belongs to the specified Product.',
+                Options.DG_TYPE_FACTORY, Options.DG_TYPE_PRE_FACTORY, Options.DG_TYPE_PRODUCTION, Options.DG_TYPE_PRE_PRODUCTION)
+        },
         [Options.DEBUG] : false
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
         .options(options)
+        .check(function (argv) {
+            const options = new Options(argv);
+            if (!options.target && Options.isProductionTargetRequired(options.type)) {
+                return new Errors.ImptError(UserInteractor.ERRORS.CMD_TARGET_REQUIRED,
+                    Options.TARGET, Options.getDeviceGroupTypeName(options.type));
+            }
+            return true;
+        })
         .strict();
 };
 
 exports.handler = function (argv) {
-    if (!Options.checkCommandArgs(argv)) {
-        return;
-    }
     const options = new Options(argv);
     new DeviceGroup(options).create(options);
 };

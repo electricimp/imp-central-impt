@@ -29,7 +29,7 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'info';
 const COMMAND_SECTION = 'auth';
-const COMMAND_DESCRIPTION = 'Displays the status and the details of the tool authentication applicable to the current directory.\n' +
+const COMMAND_DESCRIPTION = 'Displays the status and the details of the tool authentication applicable to the current directory. ' +
     'Whether Local or Global Auth File is used.';
 
 exports.command = COMMAND;
@@ -47,9 +47,6 @@ exports.builder = function (yargs) {
 };
 
 exports.handler = function (argv) {
-    if (!Options.checkCommandArgs(argv)) {
-        return;
-    }
     const options = new Options(argv);
     new Auth(options, true).info(options);
 };

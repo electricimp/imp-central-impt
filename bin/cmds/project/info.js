@@ -29,7 +29,9 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'info';
 const COMMAND_SECTION = 'project';
-const COMMAND_DESCRIPTION = 'Displays information about the Project.';
+const COMMAND_DESCRIPTION = 'Displays information about the Project.' +
+    ' Fails if there is no Project File in the current directory.' +
+    ' With every call the latest actual information is obtained using impCentral API.';
 
 exports.command = COMMAND;
 
@@ -46,9 +48,6 @@ exports.builder = function (yargs) {
 };
 
 exports.handler = function (argv) {
-    if (!Options.checkCommandArgs(argv)) {
-        return;
-    }
     const options = new Options(argv);
     new Project(options).info();
 };

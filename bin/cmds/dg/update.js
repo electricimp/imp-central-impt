@@ -24,12 +24,13 @@
 
 'use strict';
 
+const Util = require('util');
 const DeviceGroup = require('../../../lib/DeviceGroup');
 const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'update';
 const COMMAND_SECTION = 'dg';
-const COMMAND_DESCRIPTION = 'Updates the specified Device Group by a new Name and/or Description.';
+const COMMAND_DESCRIPTION = 'Updates the specified Device Group. Fails if the specified Device Group does not exist.';
 
 exports.command = COMMAND;
 
@@ -38,8 +39,25 @@ exports.describe = COMMAND_DESCRIPTION;
 exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.DEVICE_GROUP_IDENTIFIER] : false,
-        [Options.NAME] : { demandOption : false, describe : 'New Device Group name.', _usage : '<device_group_name>' },
-        [Options.DESCRIPTION] : { demandOption : false, describe : 'New Device Group description.', _usage : '<device_group_description>' },
+        [Options.NAME] : {
+            demandOption : false,
+            describe : 'New Name of the Device Group. Must be unique among all Device Groups in the Product.',
+            _usage : '<device_group_name>'
+        },
+        [Options.DESCRIPTION] : {
+            demandOption : false,
+            describe : 'Description of the Device Group.',
+            _usage : '<device_group_description>'
+        },
+        [Options.TARGET] : {
+            demandOption : false,
+            describe : Util.format('Device Group Identifier of the production target Device Group for the being updated Device Group.' +
+                ' May be specified for the being updated Device Group of the type %s or %s only.' +
+                ' The target Device Group must be of the type %s or %s correspondingly and' +
+                ' belongs to the same Product as the being updated Device Group. Otherwise the command fails.',
+                Options.DG_TYPE_FACTORY, Options.DG_TYPE_PRE_FACTORY, Options.DG_TYPE_PRODUCTION, Options.DG_TYPE_PRE_PRODUCTION)
+        },
+        [Options.LOAD_CODE_AFTER_BLESSING] : false,
         [Options.DEBUG] : false
     });
     return yargs
@@ -49,9 +67,6 @@ exports.builder = function (yargs) {
 };
 
 exports.handler = function (argv) {
-    if (!Options.checkCommandArgs(argv)) {
-        return;
-    }
     const options = new Options(argv);
     new DeviceGroup(options).update(options);
 };
