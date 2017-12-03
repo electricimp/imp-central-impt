@@ -29,14 +29,18 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'list';
 const COMMAND_SECTION = 'product';
-const COMMAND_DESCRIPTION = 'Displays info about all Products available for a user.';
+const COMMAND_SHORT_DESCR = 'Displays information about available Products.';
+const COMMAND_DESCRIPTION = 'Displays information about all Products available to the current logged-in account.';
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
+    const entityType = 'Products';
     const options = Options.getOptions({
+        [Options.MY] : { demandOption : false, describeFormatArgs : [ entityType ] },
+        [Options.OWNER] : { demandOption : false, describeFormatArgs : [ entityType ] },
         [Options.DEBUG] : false
     });
     return yargs

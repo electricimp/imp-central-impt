@@ -29,22 +29,42 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'list';
 const COMMAND_SECTION = 'device';
-const COMMAND_DESCRIPTION = 'Displays info about all or filtered Devices available for a user.';
+const COMMAND_SHORT_DESCR = 'Displays information about available Devices.';
+const COMMAND_DESCRIPTION = 'Displays information about all Devices available to the current logged-in account.';
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
+    const entityType = 'Devices';
     const options = Options.getOptions({
+        [Options.MY] : { demandOption : false, describeFormatArgs : [ entityType ] },
+        [Options.OWNER] : { demandOption : false, describeFormatArgs : [ entityType ] },
         [Options.UNASSIGNED] : false,
         [Options.ASSIGNED] : false,
         [Options.ONLINE] : false,
         [Options.OFFLINE] : false,
-        [Options.PRODUCT_ID] : { demandOption : false, describeFormatArgs : ['Devices'] },
-        [Options.PRODUCT_NAME] : { demandOption : false, describeFormatArgs : ['Devices'] },
-        [Options.DEVICE_GROUP_ID] : { demandOption : false, describeFormatArgs : ['Devices'] },
-        [Options.DEVICE_GROUP_NAME] : { demandOption : false, describeFormatArgs : ['Devices'] },
+        [Options.PRODUCT_ID] : {
+            demandOption : false,
+            describe : 'Lists Devices assigned to Device Groups which belong to the specified Product only.'
+        },
+        [Options.PRODUCT_NAME] : {
+            demandOption : false,
+            describe : 'Lists Devices assigned to Device Groups which belong to the specified Product only.'
+        },
+        [Options.DEVICE_GROUP_TYPE] : {
+            demandOption : false,
+            describe : 'Lists Devices assigned to Device Groups of the specified type only.'
+        },
+        [Options.DEVICE_GROUP_ID] : {
+            demandOption : false,
+            describe : 'Lists Devices assigned to the specified Device Group only.'
+        },
+        [Options.DEVICE_GROUP_NAME] : {
+            demandOption : false,
+            describe : 'Lists Devices assigned to the specified Device Group only.'
+        },
         [Options.DEBUG] : false
     });
     return yargs

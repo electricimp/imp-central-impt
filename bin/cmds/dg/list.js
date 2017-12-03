@@ -40,7 +40,10 @@ exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.MY] : { demandOption : false, describeFormatArgs : [ entityType ] },
         [Options.OWNER] : { demandOption : false, describeFormatArgs : [ entityType ] },
-        [Options.DEVICE_GROUP_TYPE] : false,
+        [Options.DEVICE_GROUP_TYPE] : {
+            demandOption : false,
+            describe : 'Lists Device Groups of the specified type only.',
+        },
         [Options.PRODUCT_ID] : { demandOption : false, describeFormatArgs : [ entityType ] },
         [Options.PRODUCT_NAME] : { demandOption : false, describeFormatArgs : [ entityType ] },
         [Options.DEBUG] : false
