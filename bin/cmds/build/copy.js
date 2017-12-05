@@ -27,10 +27,11 @@
 const Build = require('../../../lib/Build');
 const Options = require('../../../lib/util/Options');
 
-const COMMAND = 'info';
+const COMMAND = 'copy';
 const COMMAND_SECTION = 'build';
-const COMMAND_SHORT_DESCR = 'Displays information about the specified build.';
-const COMMAND_DESCRIPTION = 'Displays information about the specified build (Deployment).';
+const COMMAND_SHORT_DESCR = 'Copies the specified build to the specified Device Group.';
+const COMMAND_DESCRIPTION = 'Copies the specified build (Deployment) to the new Deployment of the specified Device Group.' +
+    ' Fails if the specified Deployment or the specified Device Group does not exist.';
 
 exports.command = COMMAND;
 
@@ -38,7 +39,16 @@ exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({
-        [Options.BUILD_IDENTIFIER] : false,
+        [Options.BUILD_IDENTIFIER] :  {
+            demandOption : true,
+            describe : 'Build Identifier of the Deployment to be copied.'
+        },
+        [Options.DEVICE_GROUP_IDENTIFIER] : {
+            demandOption : false,
+            describe : 'Device Group Identifier of the Device Group the new Deployment is created for.' +
+                ' If not specified, the Device Group referenced by Project File in the current directory is assumed' +
+                ' (if no Project File, the command fails).'
+        },
         [Options.DEBUG] : false
     });
     return yargs
@@ -49,5 +59,5 @@ exports.builder = function (yargs) {
 
 exports.handler = function (argv) {
     const options = new Options(argv);
-    new Build(options).info(options);
+    new Build(options).copy(options);
 };

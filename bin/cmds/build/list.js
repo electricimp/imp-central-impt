@@ -29,21 +29,53 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'list';
 const COMMAND_SECTION = 'build';
-const COMMAND_DESCRIPTION = 'Displays info about all or filtered Builds (Deployments) available for a user.';
+const COMMAND_SHORT_DESCR = 'Displays information about all or filtered builds.';
+const COMMAND_DESCRIPTION = 'Displays information about all builds (Deployments) available to the current logged-in account.';
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
+    const entityType = 'Builds';
     const options = Options.getOptions({
-        [Options.PRODUCT_ID] : { demandOption : false, describeFormatArgs : ['Builds'] },
-        [Options.PRODUCT_NAME] : { demandOption : false, describeFormatArgs : ['Builds'] },
-        [Options.DEVICE_GROUP_ID] : { demandOption : false, describeFormatArgs : ['Builds'] },
-        [Options.DEVICE_GROUP_NAME] : { demandOption : false, describeFormatArgs : ['Builds'] },
-        [Options.SHA] : { demandOption : false, describe : 'List Builds with the specified Deployment SHA.' },
-        [Options.TAG] : { demandOption : false, describe : 'List Builds with the specified Deployment tag.' },
-        [Options.FLAGGED] : { demandOption : false, describe : 'List Builds with the specified flagged marker.' },
+        [Options.MY] : { demandOption : false, describeFormatArgs : [ entityType ] },
+        [Options.OWNER] : { demandOption : false, describeFormatArgs : [ entityType ] },
+        [Options.SHA] : {
+            demandOption : false,
+            type : 'array',
+            describe : 'Lists builds with the specified SHA only.'
+        },
+        [Options.TAG] : {
+            demandOption : false,
+            describe : 'Lists builds with the specified tag only.'
+        },
+        [Options.FLAGGED] : {
+            demandOption : false,
+            type : 'array',
+            describe : 'If true or no value, lists builds with the flagged attribute set to true only.' +
+                ' If false, lists builds with the flagged attribute set to false only.'
+        },
+        [Options.PRODUCT_ID] : {
+            demandOption : false,
+            describe : 'Lists builds deployed to Device Groups which belong to the specified Product only.'
+        },
+        [Options.PRODUCT_NAME] : {
+            demandOption : false,
+            describe : 'Lists builds deployed to Device Groups which belong to the specified Product only.'
+        },
+        [Options.DEVICE_GROUP_TYPE] : {
+            demandOption : false,
+            describe : 'Lists builds deployed to Device Groups of the specified type only.'
+        },
+        [Options.DEVICE_GROUP_ID] : {
+            demandOption : false,
+            describe : 'Lists builds deployed to the specified Device Group only.'
+        },
+        [Options.DEVICE_GROUP_NAME] : {
+            demandOption : false,
+            describe : 'Lists builds deployed to the specified Device Group only.'
+        },
         [Options.DEBUG] : false
     });
     return yargs

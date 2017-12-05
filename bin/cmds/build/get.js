@@ -29,17 +29,28 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'get';
 const COMMAND_SECTION = 'build';
-const COMMAND_DESCRIPTION = 'Downloads the specified Build and displays information about it.';
+const COMMAND_SHORT_DESCR = 'Downloads the source files of the specified build.';
+const COMMAND_DESCRIPTION = 'Downloads the source files of the specified build (Deployment) and displays information about the build.';
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.BUILD_IDENTIFIER] : false,
-        [Options.DEVICE_FILE] : false,
-        [Options.AGENT_FILE] : false,
+        [Options.DEVICE_FILE] : {
+            demandOption : false,
+            describe : 'Name of a file to where download the source code for IMP device.' +
+                ' If not specified, the file referenced by Project File in the current directory is assumed' +
+                ' (if no Project File, the command fails).'
+        },
+        [Options.AGENT_FILE] : {
+            demandOption : false,
+            describe : 'Name of a file to where download the source code for IMP agent.' +
+                ' If not specified, the file referenced by Project File in the current directory is assumed' +
+                ' (if no Project File, the command fails).'
+        },
         [Options.DEVICE_ONLY] : false,
         [Options.AGENT_ONLY] : false,
         [Options.FORCE] : false,

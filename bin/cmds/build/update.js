@@ -30,17 +30,23 @@ const Options = require('../../../lib/util/Options');
 const COMMAND = 'update';
 const COMMAND_SECTION = 'build';
  
-const COMMAND_DESCRIPTION = 'Updates description, tags and flagged attribute (whatever specified) of the specified Build.';
+const COMMAND_SHORT_DESCR = 'Updates the specified build.';
+const COMMAND_DESCRIPTION = 'Updates Description, tags and flagged attribute (whatever specified) of the specified build (Deployment).' +
+    ' Fails if the specified build (Deployment) does not exist.';
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.BUILD_IDENTIFIER] : false,
-        [Options.DESCRIPTION] : { demandOption : false, describe : 'Description of the Deployment.', _usage : '<build_description>' },
-        [Options.TAG] : { demandOption : false, describe : 'Deployment tag to be added.' },
+        [Options.DESCRIPTION] : {
+            demandOption : false,
+            describe : 'Description of the build (Deployment).',
+            _usage : '<build_description>'
+        },
+        [Options.TAG] : false,
         [Options.REMOVE_TAG] : false,
         [Options.FLAGGED] : false,
         [Options.DEBUG] : false

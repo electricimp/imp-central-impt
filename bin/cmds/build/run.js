@@ -29,18 +29,33 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'run';
 const COMMAND_SECTION = 'build';
-const COMMAND_DESCRIPTION = 'Creates, deploys and runs a build. Optionally, displays logs of the running build.';
+const COMMAND_SHORT_DESCR = 'Creates, deploys and runs a build.';
+const COMMAND_DESCRIPTION = 'Creates, deploys and runs a build (Deployment). Optionally, displays logs of the running build.';
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.DEVICE_GROUP_IDENTIFIER] : false,
-        [Options.DEVICE_FILE] : false,
-        [Options.AGENT_FILE] : false,
-        [Options.DESCRIPTION] : { demandOption : false, describe : 'Description of the Deployment.', _usage : '<build_description>' },
+        [Options.DEVICE_FILE] : {
+            demandOption : false,
+            describe : 'Name of a file which contains a source code for IMP device.' +
+                ' If not specified, the file referenced by Project File in the current directory is assumed' +
+                ' (if no Project File, the command fails).'
+        },
+        [Options.AGENT_FILE] : {
+            demandOption : false,
+            describe : 'Name of a file which contains a source code for IMP agent.' +
+                ' If not specified, the file referenced by Project File in the current directory is assumed' +
+                ' (if no Project File, the command fails).'
+        },
+        [Options.DESCRIPTION] : {
+            demandOption : false,
+            describe : 'Description of the build (Deployment).',
+            _usage : '<build_description>'
+        },
         [Options.ORIGIN] : false,
         [Options.TAG] : false,
         [Options.FLAGGED] : false,

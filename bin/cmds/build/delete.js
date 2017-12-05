@@ -29,15 +29,20 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'delete';
 const COMMAND_SECTION = 'build';
-const COMMAND_DESCRIPTION = 'Deletes the specified Build.';
+const COMMAND_SHORT_DESCR = 'Deletes the specified build.';
+const COMMAND_DESCRIPTION = 'Deletes the specified build (Deployment).';
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({
-        [Options.BUILD_IDENTIFIER] : true,
+        [Options.BUILD_IDENTIFIER] : {
+            demandOption : true,
+            describe : 'Build Identifier: Deployment Id, sha, tag or origin.'
+        },
+        [Options.FULL] : false,
         [Options.FORCE] : false,
         [Options.DEBUG] : false
     });

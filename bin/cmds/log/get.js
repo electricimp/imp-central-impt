@@ -29,20 +29,35 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'get';
 const COMMAND_SECTION = 'log';
-const COMMAND_DESCRIPTION = 'Displays historical logs for the specified Device.';
+const COMMAND_SHORT_DESCR = 'Displays historical logs for the specified Device.';
+const COMMAND_DESCRIPTION = 'Displays historical logs for the specified Device. The logs are displayed starting from the most recent one.';
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({
-        [Options.DEVICE_IDENTIFIER] : false,
+        [Options.DEVICE_IDENTIFIER] : {
+            demandOption : false,
+            describe : 'Device Identifier: Device Id, MAC address, IP address, Agent Id or Device name.' +
+                ' If not specified and there is one and only one Device in the Device Group referenced by' +
+                ' Project File in the current directory, then this Device is assumed' +
+                ' (if no Project File or the Device Group has zero or more than one Devices, the command fails).'
+        },
+        [Options.PAGE_SIZE] : false,
+        [Options.PAGE_NUMBER] : false,
         [Options.DEBUG] : false
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
         .options(options)
+        .check(function (argv) {
+            const options = new Options(argv);
+            const check = Options.checkPositiveInteger(options.pageSize, Options.PAGE_SIZE) ||
+                Options.checkPositiveInteger(options.pageNumber, Options.PAGE_NUMBER);
+            return check === null ? true : check;
+        })
         .strict();
 };
 
