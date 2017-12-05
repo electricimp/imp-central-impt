@@ -25,6 +25,7 @@
 'use strict';
 
 const Options = require('../../lib/util/Options');
+const UserInteractor = require('../../lib/util/UserInteractor');
 
 const COMMAND = 'auth';
 const COMMAND_DESCRIPTION = 'Authentication commands.';
@@ -36,7 +37,7 @@ exports.describe = COMMAND_DESCRIPTION;
 exports.builder = function (yargs) {
     return yargs
         .commandDir('auth')
-        .demandCommand(1, 'Please specify a valid command')
+        .demandCommand(1, UserInteractor.ERRORS.CMD_UNKNOWN)
         .strict()
         .usage(Options.getCommandGroupUsage(COMMAND, COMMAND_DESCRIPTION));
 };

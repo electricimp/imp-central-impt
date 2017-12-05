@@ -27,8 +27,8 @@
 const Options = require('../../lib/util/Options');
 const UserInteractor = require('../../lib/util/UserInteractor');
 
-const COMMAND = 'log';
-const COMMAND_DESCRIPTION = 'Logs manipulation commands.';
+const COMMAND = 'webhook';
+const COMMAND_DESCRIPTION = 'Webhook Manipulation Commands.';
 
 exports.command = COMMAND;
 
@@ -36,7 +36,7 @@ exports.describe = COMMAND_DESCRIPTION;
 
 exports.builder = function (yargs) {
     return yargs
-        .commandDir('log')
+        .commandDir('webhook')
         .demandCommand(1, UserInteractor.ERRORS.CMD_UNKNOWN)
         .strict()
         .usage(Options.getCommandGroupUsage(COMMAND, COMMAND_DESCRIPTION));

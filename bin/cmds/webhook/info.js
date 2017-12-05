@@ -24,20 +24,30 @@
 
 'use strict';
 
-const Options = require('../../lib/util/Options');
-const UserInteractor = require('../../lib/util/UserInteractor');
+const Webhook = require('../../../lib/Webhook');
+const Options = require('../../../lib/util/Options');
 
-const COMMAND = 'log';
-const COMMAND_DESCRIPTION = 'Logs manipulation commands.';
+const COMMAND = 'info';
+const COMMAND_SECTION = 'webhook';
+const COMMAND_SHORT_DESCR = 'Displays information about the specified Webhook.';
+const COMMAND_DESCRIPTION = COMMAND_SHORT_DESCR;
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
+    const options = Options.getOptions({
+        [Options.WEBHOOK_IDENTIFIER] : true,
+        [Options.DEBUG] : false
+    });
     return yargs
-        .commandDir('log')
-        .demandCommand(1, UserInteractor.ERRORS.CMD_UNKNOWN)
-        .strict()
-        .usage(Options.getCommandGroupUsage(COMMAND, COMMAND_DESCRIPTION));
+        .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
+        .options(options)
+        .strict();
+};
+
+exports.handler = function (argv) {
+    const options = new Options(argv);
+    new Webhook(options).info(options);
 };

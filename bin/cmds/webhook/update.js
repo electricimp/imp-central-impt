@@ -24,20 +24,39 @@
 
 'use strict';
 
-const Options = require('../../lib/util/Options');
-const UserInteractor = require('../../lib/util/UserInteractor');
+const Webhook = require('../../../lib/Webhook');
+const Options = require('../../../lib/util/Options');
 
-const COMMAND = 'log';
-const COMMAND_DESCRIPTION = 'Logs manipulation commands.';
+const COMMAND = 'update';
+const COMMAND_SECTION = 'webhook';
+const COMMAND_SHORT_DESCR = 'Updates the specified Webhook.';
+const COMMAND_DESCRIPTION = 'Updates the specified Webhook by a new target URL and/or MIME content-type.' +
+    ' Fails if the specified Webhook does not exist.';
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
+    const options = Options.getOptions({
+        [Options.WEBHOOK_IDENTIFIER] : true,
+        [Options.URL] : {
+            demandOption : false,
+            describe : "The Webhook's new target URL."
+        },
+        [Options.MIME] :  {
+            demandOption : false,
+            describe : 'New MIME content-type of the event data.'
+        },
+        [Options.DEBUG] : false
+    });
     return yargs
-        .commandDir('log')
-        .demandCommand(1, UserInteractor.ERRORS.CMD_UNKNOWN)
-        .strict()
-        .usage(Options.getCommandGroupUsage(COMMAND, COMMAND_DESCRIPTION));
+        .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
+        .options(options)
+        .strict();
+};
+
+exports.handler = function (argv) {
+    const options = new Options(argv);
+    new Webhook(options).update(options);
 };

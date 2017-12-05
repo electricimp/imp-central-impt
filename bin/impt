@@ -32,7 +32,7 @@ const Yargs = require('yargs');
 
 Yargs
     .commandDir('cmds')
-    .demandCommand(1, 'Please specify a valid command')
+    .demandCommand(1, UserInteractor.ERRORS.CMD_UNKNOWN)
     .strict()
     .version(false)
     .usage(Options.getCommandGroupUsage(null))
