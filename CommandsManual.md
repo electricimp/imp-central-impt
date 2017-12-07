@@ -82,6 +82,8 @@ One **option** has the following format:
 - **<option_alias>** - a one letter alias for the option, unique for a particular command. Not all but many options have aliases.
 - **<option_value>** - a value of the option. Not all options require value. If option value has spaces it must be put into double quotes (“”).
 
+All commands and options are case sensitive.
+
 ### Help Option
 
 **--help** option (**-h** option alias) can be used with a fully or a partially specified command:
@@ -128,7 +130,6 @@ Attributes accepted as <DEVICE_IDENTIFIER> (in order of search):
 - Device Id (always unique)
 - MAC address
 - IMP Agent Id
-- IP address
 - Device Name
 
 #### Build Identifier
@@ -266,7 +267,7 @@ The source code of the builds is not saved locally. To download the source code 
 
 Deletes the specified build (Deployment).
 
-The command fails if it is the most recent Deployment of the Device Group.
+The command fails if it is the *min_supported_deployment* (see the impCentral APi spec) or a newer Deployment for a Device Group.
 
 Also the command fails if the Deployment has *"flagged"* attribute set to *true* and **--full** option is not specified. Use either **--full** option, or [**impt build update**](#build-update) command to update the attribute.
 
@@ -460,28 +461,32 @@ The returned list of the Devices may be filtered. Filtering is possible by any c
 
 #### Device Remove
 
-**impt device remove --device <DEVICE_IDENTIFIER> \[--force] \[--debug] \[--help]**
+**impt device remove --device <DEVICE_IDENTIFIER> \[--full] \[--force] \[--debug] \[--help]**
 
 Removes the specified Device from the logged-in account.
+
+The command fails if the Device is assigned to a Device Group and **--full** option is not specified. Use either **--full** option, or [**impt device unassign**](#device-unassign) command to unassign the Device before removal.
 
 User is asked to confirm the operation (confirmed automatically with **--force** option).
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --device | -d | yes | yes | [Device Identifier](#device-identifier). |
+| --full | | no | no | If the Device is assigned to a Device Group, unassign it first to be able to remove. |
 | --force | -f | no | no | Forces the operation w/o asking a confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
 #### Device Restart
 
-**impt device restart --device <DEVICE_IDENTIFIER> \[--debug] \[--help]**
+**impt device restart --device <DEVICE_IDENTIFIER> \[--conditional] \[--debug] \[--help]**
 
 Reboots the specified Device.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --device | -d | yes | yes | [Device Identifier](#device-identifier). |
+| --conditional | -c | no | no | Conditional restart (see the impCentral API spec). |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -597,7 +602,6 @@ The operation may fail for some combinations of the Device Groups.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --device | -d | yes | yes | [Device Identifier](#device-identifier). |
 | --from | | yes | yes | [Device Group Identifier](#device-group-identifier) of the origin Device Group. |
 | --to | | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier) of the destination Device Group. If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
 | --force | -f | no | no | Forces the operation w/o asking a confirmation from user. |
@@ -606,7 +610,7 @@ The operation may fail for some combinations of the Device Groups.
 
 #### Device Group Restart
 
-**impt dg restart \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--debug] \[--help]**
+**impt dg restart \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--conditional] \[--debug] \[--help]**
 
 Reboots all Devices assigned to the specified Device Group.
 Does nothing if the Device Group has no Devices assigned.
@@ -614,6 +618,7 @@ Does nothing if the Device Group has no Devices assigned.
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| --conditional | -c | no | no | Conditional restart (see the impCentral API spec). |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -645,7 +650,7 @@ Set *"flagged"* attribute to *false* in all Deployments of the specified Device 
 
 #### Device Group Update
 
-**impt dg update \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--name <device_group_name>] \[--descr <device_group_description>] \[--target <DEVICE_GROUP_IDENTIFIER>] \[--load-code-after-blessing \[true|false]] \[--debug] \[--help]**
+**impt dg update \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--name <device_group_name>] \[--descr <device_group_description>] \[--target <DEVICE_GROUP_IDENTIFIER>] \[--load-code-after-blessing \[true|false]] \[--min-supported-deployment <BUILD_IDENTIFIER>] \[--debug] \[--help]**
 
 Updates the specified Device Group.
 Fails if the specified Device Group does not exist.
@@ -657,6 +662,7 @@ Fails if the specified Device Group does not exist.
 | --descr | -s | no | yes | Description of the Device Group. |
 | --target | | no | yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the being updated Device Group. May be specified for the being updated Device Group of the [type](#device-group-type) *factory* or *pre-factory* only. The target Device Group must be of the [type](#device-group-type) *production* or *pre-production* correspondingly and belongs to the same Product as the being updated Device Group. Otherwise the command fails. |
 | --load-code-after-blessing | | no | no | Applicable to Device Group of the [type](#device-group-type) *production* or *pre-production* only. If *true* or no value, production code is immediately loaded by the device after blessing. If *false*, production code will be loaded the next time the device connects as part of BlinkUp, whether successful or not. Note, the newly created production Device Group always has this option *true*. |
+| --min-supported-deployment | | no | no | [Build Identifier](#build-identifier) of the new *min_supported_deployment* (see the impCentral API spec). The Deployment should belong to this Device Group and should be newer than the current *min_supported_deployment*. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -881,7 +887,7 @@ At the end of the command execution information about the project is displayed (
 | --descr | -s | no | yes | Description of the Device Group. |
 | --device-file | -x | no | yes | Name of a file for IMP device source code. Default value: *device.nut* |
 | --agent-file | -y | no | yes | Name of a file for IMP agent source code. Default value: *agent.nut* |
-| --create-files | -c | no | no | Creates empty file(s) if the file(s) specified by **--device-file**, **--agent-file** options does not exist. |
+| --create-files | -c | no | no | Creates empty file(s) if the file(s) referenced by [Project File](#project-file) as the file(s) with IMP device/agent source code do not exist. |
 | --pre-factory | | no | no | If not specified, the new Device Group is of the [type](#device-group-type) *development*. If specified, the new Device Group is of the [type](#device-group-type) *pre-factory*. |
 | --target | | no | yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the being created Device Group. May be specified if and only if **--pre-factory** option is specified. The specified target Device Group must be of the [type](#device-group-type) *pre-production* and belongs to the specified Product. Otherwise the command fails. |
 | --create-target | | no | no | If the Device Group specified by **--target** option does not exist, it is created. In this case, the value of **--target** option is considered as a Name of the new Device Group. If **--target** option is not specified or the Device Group specified by **--target** option exists, **--create-target** option is ignored. |
@@ -891,18 +897,23 @@ At the end of the command execution information about the project is displayed (
 
 #### Project Delete
 
-**impt project delete \[--dg | --product] \[--files] \[--force] \[--debug] \[--help]**
+**impt project delete \[--entities] \[--files] \[--all] \[--force] \[--debug] \[--help]**
 
-Deletes [Project File](#project-file) in the current directory and, optionally, the Device Group referenced by the Project File, the corresponding Product (if it contains one Device Group only) and the local source files.
+Deletes [Project File](#project-file) in the current directory and, optionally, the impCentral API entities (Device Group, Product) related to the project, and, optionally, the local source files.
 Does nothing if there is no [Project File](#project-file) in the current directory.
 
-User is informed about all entities which are going to be deleted or updated and asked to confirm the operation (confirmed automatically with **--force** option).
+If **--entities** option is specified, the command additionally deletes:
+- the Device Group referenced by [Project File](#project-file). All Devices assigned to this Device Group to be unassigned. All Deployments for this Device Group which have *"flagged"* attribute with value *true* to be updated to set it to *false*. As by [**impt dg delete --full**](#device-group-delete) command.
+- (if applicable) the production target Device Group for the Device Group referenced by [Project File](#project-file). All Devices assigned to this Device Group to be unassigned. All Deployments for this Device Group which have *"flagged"* attribute with value *true* to be updated to set it to *false*. As by [**impt dg delete --full**](#device-group-delete) command.
+- the Product which contains the Device Group referenced by [Project File](#project-file). The Product is NOT deleted if it contains more Device Groups, additional to the Device Groups mentioned above. But this is NOT considered as a command fail, the rest of the command may be completed successfully.
+
+User is informed about all entities and files which are going to be deleted or updated and is asked to confirm the operation (confirmed automatically with **--force** option).
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --dg | -g | no | no | Also deletes the Device Group referenced by [Project File](#project-file). All Devices assigned to this Device Group to be unassigned. All Deployments for this Device Group which have *"flagged"* attribute with value *true* to be updated to set it to *false*. As by [**impt dg delete --full**](#device-group-delete) command. |
-| --product | -p | no | no | Includes and acts as **--dg** option. Also deletes the Product which contains the Device Group referenced by [Project File](#project-file). The Product can be deleted if it contains this one Device Group only. Otherwise, the Product is not deleted but this is not considered as a fail, the rest of the command may be completed successfully, including the Device Group deletion. |
+| --entities | | no | no | Also deletes the impCentral API entities (Device Group, Product) referenced by [Project File](#project-file). See above. |
 | --files | | no | no | Also deletes the files referenced by [Project File](#project-file) as files with IMP device and agent source code. |
+| --all | -a | no | no | Includes **--entities** and **--files** options. |
 | --force | -f | no | no | Forces the operation w/o asking a confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
@@ -914,6 +925,7 @@ User is informed about all entities which are going to be deleted or updated and
 Displays information about the project.
 Fails if there is no [Project File](#project-file) in the current directory.
 With every call the latest actual information is obtained using impCentral API.
+Additionally, displays the authentication status applicable to the current directory, like [**impt auth info**](#auth-info) command does.
 
 Informs user if the Device Group referenced by [Project File](#project-file) does not exist. [Project File](#project-file) is not deleted in this case. To delete it - explicitly call [**impt project delete**](#project-delete) command.
 
@@ -966,7 +978,7 @@ At the end of the command execution information about the project is displayed (
 | --device-file | -x | no | yes | New name of a file for IMP device source code. |
 | --agent-file | -y | no | yes | New name of a file for IMP agent source code. |
 | --rename-files | -r | no | no | Renames file(s) (if existed) which were referenced by [Project File](#project-file) as the file(s) with IMP device/agent source code to the new name(s) specified by **--device-file**, **--agent-file** options. Should not be specified together with **--create-files** option. |
-| --create-files | -c | no | no | Creates empty file(s) if the file(s) specified by **--device-file**, **--agent-file** options does not exist. Should not be specified together with **--rename-files** option. |
+| --create-files | -c | no | no | Creates empty file(s) if the file(s) referenced by [Project File](#project-file) as the file(s) with IMP device/agent source code do not exist. Should not be specified together with **--rename-files** option. |
 | --target | | no | yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the Device Group referenced by [Project File](#project-file). May be specified if the Device Group referenced by [Project File](#project-file) is of the [type](#device-group-type) *pre-factory* only. The specified target Device Group must be of the [type](#device-group-type) *pre-production* and belongs to the same Product as the Device Group referenced by [Project File](#project-file). Otherwise the command fails. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
@@ -1148,9 +1160,9 @@ Fails if the specified Webhook does not exist.
 
 | Command Option Alias | Command Option Full Name(s) |
 | --- | --- |
-| -a |   |
+| -a | --all  |
 | -b | --build  |
-| -c | --create-files  |
+| -c | --create-files, --conditional  |
 | -d | --device  |
 | -e | --endpoint  |
 | -f | --force  |
