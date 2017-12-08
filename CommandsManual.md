@@ -263,21 +263,21 @@ The source code of the builds is not saved locally. To download the source code 
 
 #### Build Delete
 
-**impt build delete --build <BUILD_IDENTIFIER> \[--full] \[--force] \[--debug] \[--help]**
+**impt build delete --build <BUILD_IDENTIFIER> \[--force] \[--confirmed] \[--debug] \[--help]**
 
 Deletes the specified build (Deployment).
 
 The command fails if it is the *min_supported_deployment* (see the impCentral APi spec) or a newer Deployment for a Device Group.
 
-Also the command fails if the Deployment has *"flagged"* attribute set to *true* and **--full** option is not specified. Use either **--full** option, or [**impt build update**](#build-update) command to update the attribute.
+Also the command fails if the Deployment has *"flagged"* attribute set to *true* and **--force** option is not specified. Use either **--force** option, or [**impt build update**](#build-update) command to update the attribute.
 
-User is asked to confirm the operation (confirmed automatically with **--force** option).
+User is asked to confirm the operation (confirmed automatically with **--confirmed** option).
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --build | -b | yes | yes | [Build Identifier](#build-identifier). |
-| --full | | no | no | If the Deployment has *"flagged"* attribute set to *true*, set it to *false* to be able to delete the Deployment. |
-| --force | -f | no | no | Forces the operation w/o asking a confirmation from user. |
+| --force | -f | no | no | If the Deployment has *"flagged"* attribute set to *true*, set it to *false* to be able to delete the Deployment. |
+| --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -306,11 +306,11 @@ The new build is not ran until the Devices are rebooted. To run it call **[impt 
 
 #### Build Get
 
-**impt build get \[--build <BUILD_IDENTIFIER>] \[--device-file <device_file>] \[--agent-file <agent_file>] \[--device-only] \[--agent-only] \[--force] \[--debug] \[--help]**
+**impt build get \[--build <BUILD_IDENTIFIER>] \[--device-file <device_file>] \[--agent-file <agent_file>] \[--device-only] \[--agent-only] \[--confirmed] \[--debug] \[--help]**
 
 Downloads the source files of the specified build (Deployment) and displays information about the build.
 
-If the files with the specified names already exist in the current directory, user is asked to confirm their overwriting (confirmed automatically with **--force** option).
+If the files with the specified names already exist in the current directory, user is asked to confirm their overwriting (confirmed automatically with **--confirmed** option).
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
@@ -319,7 +319,7 @@ If the files with the specified names already exist in the current directory, us
 | --agent-file | -y | yes/[project](#project-file) | yes | Name of a file to where download the source code for IMP agent. If not specified, the file referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
 | --device-only | | no | yes | Downloads the source code for IMP device only. |
 | --agent-only | | no | yes | Downloads the source code for IMP agent only. |
-| --force | -f | no | no | Forces the operation w/o asking a confirmation from user. |
+| --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -406,20 +406,20 @@ Fails if the specified build (Deployment) does not exist.
 
 #### Device Assign
 
-**impt device assign --device <DEVICE_IDENTIFIER> \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--force] \[--debug] \[--help]**
+**impt device assign --device <DEVICE_IDENTIFIER> \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--confirmed] \[--debug] \[--help]**
 
 Assigns the specified Device to the specified Device Group.
 Fails if the specified Device Group does not exist.
 
-User is asked to confirm the operation if the specified Device is already assigned to another Device Group. If the operation is confirmed (confirmed automatically with **--force** option), the Device is reassigned to the new Device Group. 
+User is asked to confirm the operation if the specified Device is already assigned to another Device Group. If the operation is confirmed (confirmed automatically with **--confirmed** option), the Device is reassigned to the new Device Group. 
 
-The operation may fail for some combinations of the Device Group [types](#device-group-type) and between the Products.
+The operation may fail for some combinations of the Device Group [types](#device-group-type), for some models of IMP devices, for reassigning between the Products, etc.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --device | -d | yes | yes | [Device Identifier](#device-identifier). |
 | --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
-| --force | -f | no | no | Forces the operation w/o asking a confirmation from user. |
+| --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -462,19 +462,19 @@ The returned list of the Devices may be filtered. Filtering is possible by any c
 
 #### Device Remove
 
-**impt device remove --device <DEVICE_IDENTIFIER> \[--full] \[--force] \[--debug] \[--help]**
+**impt device remove --device <DEVICE_IDENTIFIER> \[--force] \[--confirmed] \[--debug] \[--help]**
 
 Removes the specified Device from the logged-in account.
 
-The command fails if the Device is assigned to a Device Group and **--full** option is not specified. Use either **--full** option, or [**impt device unassign**](#device-unassign) command to unassign the Device before removal.
+The command fails if the Device is assigned to a Device Group and **--force** option is not specified. Use either **--force** option, or [**impt device unassign**](#device-unassign) command to unassign the Device before removal.
 
-User is asked to confirm the operation (confirmed automatically with **--force** option).
+User is asked to confirm the operation (confirmed automatically with **--confirmed** option).
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --device | -d | yes | yes | [Device Identifier](#device-identifier). |
-| --full | | no | no | If the Device is assigned to a Device Group, unassign it first to be able to remove. |
-| --force | -f | no | no | Forces the operation w/o asking a confirmation from user. |
+| --force | -f | no | no | If the Device is assigned to a Device Group, unassign it first to be able to remove. |
+| --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -539,23 +539,23 @@ Fails if Device Group with the specified Name already exists in the specified Pr
 
 #### Device Group Delete
 
-**impt dg delete \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--full] \[--force] \[--debug] \[--help]**
+**impt dg delete \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--force] \[--confirmed] \[--debug] \[--help]**
 
 Deletes the specified Device Group.
 
 The command fails if the Device Group is the production target of another Device Group of the [type](#device-group-type) *factory* or *pre-factory*. Use either [**impt dg update**](#device-group-update) command to update the production target of that Device Group, or **impt dg delete** command to delete that Device Group before this one.
 
-Also, the command fails when **--full** option is not specified and:
-- there are Devices assigned to this Device Group. Use either **--full** option, or [**impt dg unassign**](#device-group-unassign) / [**impt dg reassign**](#device-group-reassign) commands to unassign the Devices from this Device Group,
-- or the Device Group has any Deployments with *"flagged"* attribute set to *true*. Use either **--full** option, or [**impt build update**](#build-update) command to update that attribute.
+Also, the command fails when **--force** option is not specified and:
+- there are Devices assigned to this Device Group. Use either **--force** option, or [**impt dg unassign**](#device-group-unassign) / [**impt dg reassign**](#device-group-reassign) commands to unassign the Devices from this Device Group,
+- or the Device Group has any Deployments with *"flagged"* attribute set to *true*. Use either **--force** option, or [**impt build update**](#build-update) command to update that attribute.
 
-User is asked to confirm the operation (confirmed automatically with **--force** option).
+User is asked to confirm the operation (confirmed automatically with **--confirmed** option).
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
-| --full | | no | no | Unassigns all Devices of the Device Group, as by [**impt dg unassign**](#device-group-unassign) command. Set *"flagged"* attribute to *false* in all Deployments of the Device Group. |
-| --force | -f | no | no | Forces the operation w/o asking a confirmation from user. |
+| --force | -f | no | no | Unassigns all Devices of the Device Group, as by [**impt dg unassign**](#device-group-unassign) command. Set *"flagged"* attribute to *false* in all Deployments of the Device Group. |
+| --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -592,20 +592,20 @@ The returned list of the Device Groups may be filtered. Filtering is possible by
 
 #### Device Group Reassign
 
-**impt dg reassign --from <DEVICE_GROUP_IDENTIFIER> \[--to <DEVICE_GROUP_IDENTIFIER>] \[--force] \[--debug] \[--help]**
+**impt dg reassign --from <DEVICE_GROUP_IDENTIFIER> \[--to <DEVICE_GROUP_IDENTIFIER>] \[--confirmed] \[--debug] \[--help]**
 
 Reassigns all Devices from one Device Group to another.
 Fails if any of the specified Device Groups does not exist.
 
-User is asked to confirm the operation when the specified Device Groups are of different types or belong to different Products (confirmed automatically with **--force** option).
+User is asked to confirm the operation when the specified Device Groups are of different types or belong to different Products (confirmed automatically with **--confirmed** option).
 
-The operation may fail for some combinations of the Device Groups.
+The operation may fail for some combinations of the Device Group [types](#device-group-type), for some models of IMP devices, for reassigning between the Products, etc.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --from | | yes | yes | [Device Group Identifier](#device-group-identifier) of the origin Device Group. |
 | --to | | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier) of the destination Device Group. If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
-| --force | -f | no | no | Forces the operation w/o asking a confirmation from user. |
+| --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -733,17 +733,17 @@ Note, there is a limit on a total number of Login Keys per one account. Use [**i
 
 #### Login Key Delete
 
-**impt loginkey delete --lk <login_key_id> --pwd \<password> \[--force] \[--debug] \[--help]**
+**impt loginkey delete --lk <login_key_id> --pwd \<password> \[--confirmed] \[--debug] \[--help]**
 
 Deletes the specified Login Key.
 
-User is asked to confirm the operation (confirmed automatically with **--force** option).
+User is asked to confirm the operation (confirmed automatically with **--confirmed** option).
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --lk | -k | yes | yes | The login key id. |
 | --pwd | -w | yes | yes | The account password. |
-| --force | -f | no | no | Forces the operation w/o asking a confirmation from user. |
+| --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -802,19 +802,19 @@ Fails if Product with the specified Name already exists.
 
 #### Product Delete
 
-**impt product delete \[--product <PRODUCT_IDENTIFIER>] \[--full] \[--force] \[--debug] \[--help]**
+**impt product delete \[--product <PRODUCT_IDENTIFIER>] \[--force] \[--confirmed] \[--debug] \[--help]**
 
 Deletes the specified Product.
 
-The command fails if the Product has one or several Device Groups and **--full** option is not specified. Use either **--full** option, or [**impt dg delete**](#device-group-delete) command to delete Device Groups of the Product.
+The command fails if the Product has one or several Device Groups and **--force** option is not specified. Use either **--force** option, or [**impt dg delete**](#device-group-delete) command to delete Device Groups of the Product.
 
-User is asked to confirm the operation (confirmed automatically with **--force** option).
+User is asked to confirm the operation (confirmed automatically with **--confirmed** option).
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --product | -p | yes/[project](#project-file) | yes | [Product Identifier](#product-identifier). If not specified, the Product referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
-| --full | | no | no | Deletes all Device Groups of the Product to be able to delete the Product. As by [**impt dg delete --full**](#device-group-delete) command called for every Device Group. |
-| --force | -f | no | no | Forces the operation w/o asking a confirmation from user. |
+| --force | -f | no | no | Deletes all Device Groups of the Product to be able to delete the Product. As by [**impt dg delete --force**](#device-group-delete) command called for every Device Group. |
+| --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -865,7 +865,7 @@ Fails if the specified Product does not exist.
 
 #### Project Create
 
-**impt project create --product <PRODUCT_IDENTIFIER> \[--create-product] --name <device_group_name> \[--descr <device_group_description>] \[--device-file <device_file>] \[--agent-file <agent_file>] \[--create-files] \[--pre-factory] \[--target <DEVICE_GROUP_IDENTIFIER>] \[--create-target] \[--force] \[--debug] \[--help]**
+**impt project create --product <PRODUCT_IDENTIFIER> \[--create-product] --name <device_group_name> \[--descr <device_group_description>] \[--device-file <device_file>] \[--agent-file <agent_file>] \[--create-files] \[--pre-factory] \[--target <DEVICE_GROUP_IDENTIFIER>] \[--create-target] \[--confirmed] \[--debug] \[--help]**
 
 Creates a new Device Group for the specified Product and creates new [Project File](#project-file) in the current directory by linking it to the new Device Group.
 
@@ -874,7 +874,7 @@ The command fails if:
 - Device Group with the specified name already exist in the specified Product. Use [**impt project link**](#project-link) command to create the Project linked to that Device Group.
 - optionally specified production target Device Group does not exist and **--create-target** option is not specified. Use either **--create-target** option, or [**impt dg create**](#project-link) command to create the required Device Group of the [type](#device-group-type) *pre-production*.
 
-User is asked to confirm the operation if the current directory already contains [Project File](#project-file) (confirmed automatically with **--force** option). If confirmed, the existed [Project File](#project-file) is overwritten.
+User is asked to confirm the operation if the current directory already contains [Project File](#project-file) (confirmed automatically with **--confirmed** option). If confirmed, the existed [Project File](#project-file) is overwritten.
 
 The created Device Group is of the [type](#device-group-type) *development* or *pre-factory* (depends on **--pre-factory** option).
 
@@ -892,30 +892,30 @@ At the end of the command execution information about the project is displayed (
 | --pre-factory | | no | no | If not specified, the new Device Group is of the [type](#device-group-type) *development*. If specified, the new Device Group is of the [type](#device-group-type) *pre-factory*. |
 | --target | | no | yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the being created Device Group. May be specified if and only if **--pre-factory** option is specified. The specified target Device Group must be of the [type](#device-group-type) *pre-production* and belongs to the specified Product. Otherwise the command fails. |
 | --create-target | | no | no | If the Device Group specified by **--target** option does not exist, it is created. In this case, the value of **--target** option is considered as a Name of the new Device Group. If **--target** option is not specified or the Device Group specified by **--target** option exists, **--create-target** option is ignored. |
-| --force | -f | no | no | Forces the operation w/o asking a confirmation from user. |
+| --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
 #### Project Delete
 
-**impt project delete \[--entities] \[--files] \[--all] \[--force] \[--debug] \[--help]**
+**impt project delete \[--entities] \[--files] \[--all] \[--confirmed] \[--debug] \[--help]**
 
 Deletes [Project File](#project-file) in the current directory and, optionally, the impCentral API entities (Device Group, Product) related to the project, and, optionally, the local source files.
 Does nothing if there is no [Project File](#project-file) in the current directory.
 
 If **--entities** option is specified, the command additionally deletes:
-- the Device Group referenced by [Project File](#project-file). All Devices assigned to this Device Group to be unassigned. All Deployments for this Device Group which have *"flagged"* attribute with value *true* to be updated to set it to *false*. As by [**impt dg delete --full**](#device-group-delete) command.
-- (if applicable) the production target Device Group for the Device Group referenced by [Project File](#project-file). All Devices assigned to this Device Group to be unassigned. All Deployments for this Device Group which have *"flagged"* attribute with value *true* to be updated to set it to *false*. As by [**impt dg delete --full**](#device-group-delete) command.
+- the Device Group referenced by [Project File](#project-file). All Devices assigned to this Device Group to be unassigned. All Deployments for this Device Group which have *"flagged"* attribute with value *true* to be updated to set it to *false*. As by [**impt dg delete --force**](#device-group-delete) command.
+- (if applicable) the production target Device Group for the Device Group referenced by [Project File](#project-file). All Devices assigned to this Device Group to be unassigned. All Deployments for this Device Group which have *"flagged"* attribute with value *true* to be updated to set it to *false*. As by [**impt dg delete --force**](#device-group-delete) command.
 - the Product which contains the Device Group referenced by [Project File](#project-file). The Product is NOT deleted if it contains more Device Groups, additional to the Device Groups mentioned above. But this is NOT considered as a command fail, the rest of the command may be completed successfully.
 
-User is informed about all entities and files which are going to be deleted or updated and is asked to confirm the operation (confirmed automatically with **--force** option).
+User is informed about all entities and files which are going to be deleted or updated and is asked to confirm the operation (confirmed automatically with **--confirmed** option).
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --entities | | no | no | Also deletes the impCentral API entities (Device Group, Product) referenced by [Project File](#project-file). See above. |
 | --files | | no | no | Also deletes the files referenced by [Project File](#project-file) as files with IMP device and agent source code. |
 | --all | -a | no | no | Includes **--entities** and **--files** options. |
-| --force | -f | no | no | Forces the operation w/o asking a confirmation from user. |
+| --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -937,7 +937,7 @@ Informs user if the Device Group referenced by [Project File](#project-file) doe
 
 #### Project Link
 
-**impt project link --dg <DEVICE_GROUP_IDENTIFIER> \[--device-file <device_file>] \[--agent-file <agent_file>] \[--create-files] \[--force] \[--debug] \[--help]**
+**impt project link --dg <DEVICE_GROUP_IDENTIFIER> \[--device-file <device_file>] \[--agent-file <agent_file>] \[--create-files] \[--confirmed] \[--debug] \[--help]**
 
 Creates new [Project File](#project-file) in the current directory by linking it to the specified Device Group.
 
@@ -945,7 +945,7 @@ The command fails if:
 - the specified Device Group does not exist or is not unique.
 - the specified Device Group is not of the [type](#device-group-type) *development* or *pre-factory*.
 
-User is asked to confirm the operation if the current directory already contains [Project File](#project-file) (confirmed automatically with **--force** option). If confirmed, the existed [Project File](#project-file) is overwritten.
+User is asked to confirm the operation if the current directory already contains [Project File](#project-file) (confirmed automatically with **--confirmed** option). If confirmed, the existed [Project File](#project-file) is overwritten.
 
 The command does not download any Deployment. To download source code from a Deployment - explicitly call [**impt build get**](#build-get) command.
 
@@ -957,7 +957,7 @@ At the end of the command execution information about the project is displayed (
 | --device-file | -x | no | yes | Name of a file for IMP device source code. Default value: *device.nut* |
 | --agent-file | -y | no | yes | Name of a file for IMP agent source code. Default value: *agent.nut* |
 | --create-files | -c | no | no | Creates empty file(s) if the file(s) specified by **--device-file**, **--agent-file** options does not exist. |
-| --force | -f | no | no | Forces the operation w/o asking a confirmation from user. |
+| --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -988,7 +988,7 @@ At the end of the command execution information about the project is displayed (
 
 #### Test Delete
 
-**impt test delete \[--github-config \[<github_credentials_file_name>]] \[--builder-config \[<builder_file_name>]] \[--force] \[--debug] \[--help]**
+**impt test delete \[--github-config \[<github_credentials_file_name>]] \[--builder-config \[<builder_file_name>]] \[--confirmed] \[--debug] \[--help]**
 
 Deletes (if existed):
 - [Test Configuration File](#test-configuration-file) in the current directory
@@ -996,32 +996,30 @@ Deletes (if existed):
 - the specified github credentials configuration file
 - the specified file with *Builder* variables
 
-User is asked to confirm the operation (confirmed automatically with **--force** option).
+User is asked to confirm the operation (confirmed automatically with **--confirmed** option).
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --github-config | | no | no | A path to the github credentials configuration file that should be deleted. A relative or absolute path can be used. If the value of the option is not specified, *.impt.github-info* file in the current directory is assumed. |
 | --builder-config | | no | no | A path to the file with *Builder* variables that should be deleted. A relative or absolute path can be used. If the value of the option is not specified, *.impt.builder* file in the current directory is assumed. |
-| --force | -f | no | no | Forces the operation w/o asking a confirmation from user. |
+| --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
 #### Test Github
 
-**impt test github \[--github-config <github_credentials_file_name>] --user <github_username> --pwd <github_password> \[--force] \[--debug] \[--help]**
+**impt test github \[--github-config <github_credentials_file_name>] --user <github_username> --pwd <github_password> \[--confirmed] \[--debug] \[--help]**
 
 Creates or updates github credentials configuration file.
 
-If the file already exists, a user is informed and asked to:
-- Cancel the operation
-- Continue the operation (done automatically with **--force** option). In this case the existing github credentials configuration file is updated by the new option values provided.
+User is asked to confirm the operation if the specified github credentials configuration file already exists (confirmed automatically with **--confirmed** option). If confirmed, the existed github credentials configuration file is overwritten.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --github-config | | no | yes | A path to the github credentials configuration file. A relative or absolute path can be used. If the option is absent, *.impt.github-info* file in the current directory is assumed. |
 | --user | -u | yes | yes | GitHub username. |
 | --pwd | -w | yes | yes | GitHub password or personal access token. |
-| --force | -f | no | no | Forces the github credentials configuration file update (if existed) by the new option values w/o asking a user. |
+| --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -1039,11 +1037,11 @@ With every call the latest actual information is obtained using impCentral API.
 
 #### Test Init
  
-**impt test init \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--device-file \[<device_file>]] \[--agent-file \[<agent_file>]] \[--timeout \<timeout>] \[--stop-on-fail \[true|false]] \[--builder-cache \[true|false]] \[--test-file <test_file_name_pattern>] \[--force] \[--debug] \[--help]**
+**impt test init \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--device-file \[<device_file>]] \[--agent-file \[<agent_file>]] \[--timeout \<timeout>] \[--stop-on-fail \[true|false]] \[--builder-cache \[true|false]] \[--test-file <test_file_name_pattern>] \[--confirmed] \[--debug] \[--help]**
 
 Creates or updates [Test Configuration File](#test-configuration-file) in the current directory.
 
-User is asked to confirm the operation if the current directory already contains Test Configuration File (confirmed automatically with **--force** option). If confirmed, the existed Test Configuration File is updated by the new option values provided, options which are not specified in the command keep their previous values from the existed Test Configuration File.
+User is asked to confirm the operation if the current directory already contains Test Configuration File (confirmed automatically with **--confirmed** option). If confirmed, the existed Test Configuration File is updated by the new option values provided, options which are not specified in the command keep their previous values from the existed Test Configuration File.
 
 At the end of the command execution information about the tests configuration is displayed (as by [**impt test info**](#test-info) command).
 
@@ -1056,7 +1054,7 @@ At the end of the command execution information about the tests configuration is
 | --stop-on-fail | | no | no | If *true* or no value: the tests execution is stopped after a test failure. If *false* value: the tests execution is not stopped after a failure. | *false* |
 | --builder-cache | | no | no | If *true* or no value: cache external libraries in the local *.builder-cache* directory. If *false* value: do not cache external libraries. | By default: *false* |
 | --test-file | | no | yes | Test file name or pattern. All files located in the current directory (and its subdirectories) which names match this pattern are considered as files with Test Cases. This option may be repeated several times to specify several names and/or patterns. | *"\*.test.nut" "tests/\*\*/\*.test.nut"* |
-| --force | -f | no | no | Forces the test configuration file update (if existed) by the new option values w/o asking a user. | n/a |
+| --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. | n/a |
 | --debug | -z | no | no | Displays debug info of the command execution. | n/a |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. | n/a |
 
@@ -1094,16 +1092,16 @@ Creates a new Webhook for the specified Device Group.
 
 #### Webhook Delete
 
-**impt webhook delete --wh <webhook_id> \[--force] \[--debug] \[--help]**
+**impt webhook delete --wh <webhook_id> \[--confirmed] \[--debug] \[--help]**
 
 Deletes the specified Webhook.
 
-User is asked to confirm the operation (confirmed automatically with **--force** option).
+User is asked to confirm the operation (confirmed automatically with **--confirmed** option).
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --wh | -w | yes | yes | The Webhook id. |
-| --force | -f | no | no | Forces the operation w/o asking a confirmation from user. |
+| --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
