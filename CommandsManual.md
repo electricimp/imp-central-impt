@@ -337,7 +337,7 @@ Displays information about the specified build (Deployment).
 
 #### Build List
 
-**impt build list \[--my] \[--owner <account_id>] \[--sha <deployment_sha>] \[--tag \<tag>] \[--flagged \[true|false]] \[--product-id <product_id>] \[--product-name <product_name>] \[--dg-type <device_group_type>] \[--dg-id <device_group_id>] \[--dg-name <device_group_name>] \[--debug] \[--help]**
+**impt build list \[--my] \[--owner <account_id>] \[--sha <deployment_sha>] \[--tag \<tag>] \[--flagged] \[--unflagged] \[--product-id <product_id>] \[--product-name <product_name>] \[--dg-type <device_group_type>] \[--dg-id <device_group_id>] \[--dg-name <device_group_name>] \[--debug] \[--help]**
 
 Displays information about all builds (Deployments) available to the current logged-in account.
 
@@ -352,7 +352,8 @@ The returned list of the builds may be filtered. Filtering is possible by any co
 | --owner | | no | yes | Builds owned by the account with the specified account id only. |
 | --sha | | no | yes | Builds with the specified *SHA* only. |
 | --tag | | no | yes | Builds with the specified tag only. |
-| --flagged | | no | no | If *true* or no value, builds with the flagged attribute set to *true* only. If *false*, builds with the flagged attribute set to *false* only. |
+| --flagged | | no | no | Builds with the flagged attribute set to *true* only. |
+| --unflagged | | no | no | Builds with the flagged attribute set to *false* only. |
 | --product-id | | no | yes | Builds deployed to Device Groups which belong to the specified Product only. |
 | --product-name | | no | yes | Builds deployed to Device Groups which belong to the specified Product only. |
 | --dg-type | | no | yes | Builds deployed to Device Groups of the specified [type](#device-group-type) only. |
