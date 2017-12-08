@@ -563,13 +563,14 @@ User is asked to confirm the operation (confirmed automatically with **--confirm
 
 #### Device Group Info
 
-**impt dg info \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--debug] \[--help]**
+**impt dg info \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--full] \[--debug] \[--help]**
 
 Displays information about the specified Device Group.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| --full | | no | no | Displays additional information. Details about every Device assigned to the Device Group, Deployments and other. | 
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -819,13 +820,14 @@ User is asked to confirm the operation (confirmed automatically with **--confirm
 
 #### Product Info
 
-**impt product info \[--product <PRODUCT_IDENTIFIER>] \[--debug] \[--help]**
+**impt product info \[--product <PRODUCT_IDENTIFIER>] \[--full] \[--debug] \[--help]**
 
 Displays information about the specified Product.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --product | -p | yes/[project](#project-file) | yes | [Product Identifier](#product-identifier). If not specified, the Product referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| --full | | no | no | Displays additional information. Details about every Device Group that belongs to the Product, Devices assigned to every Device Group and other. | 
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
