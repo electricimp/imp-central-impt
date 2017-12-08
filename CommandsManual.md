@@ -203,16 +203,17 @@ Displays the status and the details of the tool authentication applicable to the
 
 #### Auth Login
 
-**impt auth login \[--local] \[--endpoint <endpoint_url>] (--user <user_id> --pwd \<password> | --lk <login_key_id>) \[--temp] \[--debug] \[--help]**
+**impt auth login \[--local] \[--endpoint <endpoint_url>] (--user <user_id> --pwd \<password> | --lk <login_key_id>) \[--temp] \[--confirmed] \[--debug] \[--help]**
 
 Global or local login.
 
 Creates [Global](#global-auth-file) or [Local](#local-auth-file) Auth File.
-If the corresponding Auth File already exists, it is overwritten.
 
 The options for one and only one of the following authentication methods must be specified in the command:
 - using an account identifier and password (**--user** and **--pwd** options),
 - using a [login key](#login-key-manipulation-commands) (**--lk** option).
+
+User is asked to confirm the operation if the corresponding Auth File already exists (confirmed automatically with **--confirmed** option). If confirmed, the existed Auth File is overwritten.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
@@ -222,6 +223,7 @@ The options for one and only one of the following authentication methods must be
 | --pwd | -w | yes/no | yes | The account password. If specified, **--user** option must be specified as well. |
 | --lk | -k | yes/no | yes | The login key id. |
 | --temp | -t | no | no | If the option is not specified, the tool saves information required to refresh access token and refreshes it automatically when the token expires. If the option is specified, the tool does not save information required to refresh access token. In this case you need to call **impt auth login** command again after the access token is expired. |
+| --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -310,7 +312,7 @@ The new build is not ran until the Devices are rebooted. To run it call **[impt 
 
 Downloads the source files of the specified build (Deployment) and displays information about the build.
 
-If the files with the specified names already exist in the current directory, user is asked to confirm their overwriting (confirmed automatically with **--confirmed** option).
+User is asked to confirm the operation if the files with the specified names already exist in the current directory (confirmed automatically with **--confirmed** option). If confirmed, the existed files are overwritten.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
@@ -592,12 +594,10 @@ The returned list of the Device Groups may be filtered. Filtering is possible by
 
 #### Device Group Reassign
 
-**impt dg reassign --from <DEVICE_GROUP_IDENTIFIER> \[--to <DEVICE_GROUP_IDENTIFIER>] \[--confirmed] \[--debug] \[--help]**
+**impt dg reassign --from <DEVICE_GROUP_IDENTIFIER> \[--to <DEVICE_GROUP_IDENTIFIER>] \[--debug] \[--help]**
 
 Reassigns all Devices from one Device Group to another.
 Fails if any of the specified Device Groups does not exist.
-
-User is asked to confirm the operation when the specified Device Groups are of different types or belong to different Products (confirmed automatically with **--confirmed** option).
 
 The operation may fail for some combinations of the Device Group [types](#device-group-type), for some models of IMP devices, for reassigning between the Products, etc.
 
@@ -605,7 +605,6 @@ The operation may fail for some combinations of the Device Group [types](#device
 | --- | --- | --- | --- | --- |
 | --from | | yes | yes | [Device Group Identifier](#device-group-identifier) of the origin Device Group. |
 | --to | | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier) of the destination Device Group. If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
-| --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
