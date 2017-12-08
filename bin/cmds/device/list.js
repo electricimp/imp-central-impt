@@ -26,6 +26,8 @@
 
 const Device = require('../../../lib/Device');
 const Options = require('../../../lib/util/Options');
+const Errors = require('../../../lib/util/Errors');
+const UserInteractor = require('../../../lib/util/UserInteractor');
 
 const COMMAND = 'list';
 const COMMAND_SECTION = 'device';
@@ -70,6 +72,22 @@ exports.builder = function (yargs) {
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
         .options(options)
+        .check(function (argv) {
+            const options = new Options(argv);
+            const wrongOption = options.unassigned === false ?
+                Options.UNASSIGNED :
+                options.assigned === false ?
+                    Options.ASSIGNED : 
+                    options.online === false ?
+                        Options.ONLINE :
+                        options.offline === false ?
+                            Options.OFFLINE :
+                            null;
+            if (wrongOption) {
+                return new Errors.CommandSyntaxError(UserInteractor.ERRORS.CMD_INCORRECT_VALUE, wrongOption, false);
+            }
+            return true;
+        })
         .strict();
 };
 

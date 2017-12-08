@@ -26,6 +26,8 @@
 
 const Build = require('../../../lib/Build');
 const Options = require('../../../lib/util/Options');
+const Errors = require('../../../lib/util/Errors');
+const UserInteractor = require('../../../lib/util/UserInteractor');
 
 const COMMAND = 'list';
 const COMMAND_SECTION = 'build';
@@ -52,10 +54,11 @@ exports.builder = function (yargs) {
         },
         [Options.FLAGGED] : {
             demandOption : false,
-            type : 'array',
-            describe : 'If true or no value, lists builds with the flagged attribute set to true only.' +
-                ' If false, lists builds with the flagged attribute set to false only.'
+            describe : 'Lists builds with the flagged attribute set to true only.',
+            nargs: 0,
+            _usage: ''
         },
+        [Options.UNFLAGGED] : false,
         [Options.PRODUCT_ID] : {
             demandOption : false,
             describe : 'Lists builds deployed to Device Groups which belong to the specified Product only.'
@@ -81,6 +84,17 @@ exports.builder = function (yargs) {
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
         .options(options)
+        .check(function (argv) {
+            const options = new Options(argv);
+            const wrongOption = options.flagged === false ?
+                Options.FLAGGED :
+                options.unflagged === false ?
+                    Options.UNFLAGGED : null;
+            if (wrongOption) {
+                return new Errors.CommandSyntaxError(UserInteractor.ERRORS.CMD_INCORRECT_VALUE, wrongOption, false);
+            }
+            return true;
+        })
         .strict();
 };
 
