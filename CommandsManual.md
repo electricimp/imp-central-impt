@@ -110,7 +110,7 @@ command fails.
 command).
 
 #### Account Identifier
-Option: **--product <ACCOUNT_IDENTIFIER>**
+Option: **--owner <ACCOUNT_IDENTIFIER>**
 
 Attributes accepted as <ACCOUNT_IDENTIFIER> (in order of search):
 - "*me*" (a predefined word, means the current logged-in account)
