@@ -873,7 +873,7 @@ Creates a new Device Group for the specified Product and creates new [Project Fi
 The command fails if:
 - the specified Product does not exist and **--create-product** option is not specified. Use either **--create-product** option, or [**impt product create**](#product-create) command to create the Product before the Project.
 - Device Group with the specified name already exist in the specified Product. Use [**impt project link**](#project-link) command to create the Project linked to that Device Group.
-- optionally specified production target Device Group does not exist and **--create-target** option is not specified. Use either **--create-target** option, or [**impt dg create**](#project-link) command to create the required Device Group of the [type](#device-group-type) *pre-production*.
+- optionally specified production target Device Group does not exist and **--create-target** option is not specified. Use either **--create-target** option, or [**impt dg create**](#device-group-create) command to create the required Device Group of the [type](#device-group-type) *pre-production*.
 
 User is asked to confirm the operation if the current directory already contains [Project File](#project-file) (confirmed automatically with **--confirmed** option). If confirmed, the existed [Project File](#project-file) is overwritten.
 
