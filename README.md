@@ -19,7 +19,6 @@ The impt tool is written in [Node.js](https://nodejs.org) and uses the [Electric
 ```bash
 npm install -g imp-central-impt
 ```
-**TODO** check and update
 
 ## Syntax and Command Groups
 
@@ -102,7 +101,7 @@ At any time you can call the [logout command](./CommandsManual.md#auth-logout) -
 
 You do not need to use the logout command if you want just to re-login using other credentials. A new login command overwrites [Auth File](./CommandsManual.md#auth-file), if that existed and the operation is confirmed by user.
 
-During the login you can specify an alternative impCentral API endpoint using `--endpoint` option of the [login command](./CommandsManual.md#auth-login). You may need this if you work with a private impCloud&trade; installation. The default endpoint is `api.electricimp.com/v5`
+During the login you can specify an alternative impCentral API endpoint using `--endpoint` option of the [login command](./CommandsManual.md#auth-login). You may need this if you work with a private impCloud&trade; installation. The default endpoint is `https://api.electricimp.com/v5`
 
 There are two types of login - global and local.
 
@@ -126,7 +125,7 @@ At any time you can get known the login status related to any directory. Call th
 **TODO** screenshot - impt auth login --user <user_id> --pwd <password>
 
 **Example** - local login using a login key, specifying a endpoint, without storing the login key:  
-**TODO** screenshot - impt auth login --local --lk <login_key_id> --temp --endpoint api.electricimp.com/v5
+**TODO** screenshot - impt auth login --local --lk <login_key_id> --temp --endpoint https://api.electricimp.com/v5
 
 **Example** - display login status:  
 **TODO** screenshot - impt auth info
