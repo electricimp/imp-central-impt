@@ -1,8 +1,8 @@
 # impt
 
-impt is a command-line tool which allows to interact with the Electric Imp impCentral API (**link TODO**) for different purposes - development, testing, device and product management, creating deployments for factory and production, etc.
+impt is a command line tool which allows to interact with the [Electric Imp impCentral&trade; API](https://apidoc.electricimp.com) for different purposes - development, testing, device and product management, creating deployments for factory and production, etc.
 
-The impt tool supersedes [build-cli](https://github.com/electricimp/build-cli) and [impTest](https://github.com/electricimp/impTest) tools and includes much more additional functionality provided by the impCentral API.
+The impt tool supersedes [build-cli](https://github.com/electricimp/build-cli) and [impTest](https://github.com/electricimp/impTest) tools and includes much more additional functionality.
 
 This readme covers all basic and common aspects of the impt tool. Read it first. More details you can find in the following documentation:
 - Development Guide (**link TODO**),
@@ -10,19 +10,24 @@ This readme covers all basic and common aspects of the impt tool. Read it first.
 - Factory/Production Guide (**link TODO**),
 - [impt Commands Manual](./CommandsManual.md).
 
-The impt tool is written in [Node.js](https://nodejs.org) and uses [Electric Imp impCentral API JavaScript library](https://github.com/electricimp/imp-central-api).
+The impt tool is written in [Node.js](https://nodejs.org) and uses the [Electric Imp impCentral&trade; API JavaScript library](https://github.com/electricimp/imp-central-api).
 
 ## Installation
 
-**TBD**
+[Node.js](https://nodejs.org/en/) is required. You can download the Node.js [pre-built binary](https://nodejs.org/en/download/) for your platform, or install Node.js via [package manager](https://nodejs.org/en/download/package-manager). Once `node` and `npm` are installed, you need to execute the following command to set up the *impt* tool:
+
+```bash
+npm install -g imp-central-impt
+```
+**TODO** check and update
 
 ## Syntax and Command Groups
 
-All commands of the tool follow the unified format and [syntax](./CommandsManual.md#command-syntax): `impt <command_group> <command_name> [<options>]`.
+All commands of the tool follow the unified format and [syntax](./CommandsManual.md#command-syntax): `impt <command_group> <command_name> [<options>]`. All commands and options are case sensitive.
 
 The commands are logically divided into groups.
 
-Most of the groups directly maps to the corresponding groups of the Electric Imp impCentral API (**link TODO**) and provides access to the impCentral API functionality:
+Most of the groups directly maps to the corresponding groups of the [Electric Imp impCentral&trade; API](https://apidoc.electricimp.com) and provides access to the impCentral API functionality:
 - [Product Manipulation Commands](./CommandsManual.md#product-manipulation-commands) - `impt product <command_name> [<options>]`
 - [Device Group Manipulation Commands](./CommandsManual.md#device-group-manipulation-commands) - `impt dg <command_name> [<options>]`
 - [Device Manipulation Commands](./CommandsManual.md#device-manipulation-commands) - `impt device <command_name> [<options>]`
@@ -38,7 +43,9 @@ There are two additional groups that include commands convenient for code develo
 - [Project Manipulation Commands](./CommandsManual.md#project-manipulation-commands) - `impt project <command_name> [<options>]`
 - [Test Commands](./CommandsManual.md#test-commands) - `impt test <command_name> [<options>]`
 
-The most of commands have optional arguments called options - `<options>`. Options may be written in any order. As a general rule, the same option should not be specified many times in the same command, but exceptions exist. Some options require values, some not. If option value has spaces it must be put into double quotes - `“option value with spaces”`. Many options have one letter [aliases](./CommandsManual.md#list-of-aliases). The options and aliases are detailed in the [Commands Description](./CommandsManual.md#commands-description).
+For similar operations in different command groups the impt tool uses similar command names, like `create`, `update`, `delete`, `list`, `info`.
+
+The most of commands have optional arguments called options - `<options>`. Options may be written in any order. As a general rule, the same option should not be specified many times in the same command, but exceptions exist. Some options require values, some not. If option value has spaces it must be put into double quotes - `“option value with spaces”`. Many options have one letter [alias](./CommandsManual.md#list-of-aliases). The options and aliases are detailed in the [Commands Description](./CommandsManual.md#commands-description).
 
 **Examples** - the syntax and commands with options:  
 `impt product create --name TestProduct --descr "My test product"`  
@@ -71,12 +78,12 @@ Every command has `--debug` option (`-z` option alias). If it is specified, the 
 
 The tool's commands are designed to be "friendly" for processing by scripts.
 
-Interaction with a user is minimal. Only few commands, for example [delete entities](#entity-deletion) commands, ask a confirmation from user. But all these commands have `--force` option (`-f` option alias). If it is specified, the command is executed without asking the confirmation from user. Scripts can use this option.
+Interaction with a user is minimal. Only few commands, for example [delete entities](#entity-deletion) commands, ask a confirmation from user. But all these commands have `--confirmed` option. If it is specified, the command is executed without asking additional confirmation from user. Scripts can use this option.
 
-An output of every command execution always contains one of the two predefined phrases - `IMPT COMMAND SUCCEEDS` or `IMPT COMMAND FAILS` (**TODO** confirm the final phrases). Scripts can parse a command output to find these standard phrases to quickly realize when the command execution is completed and does the command succeed or fail.
+Output of a command execution contains one of the two predefined phrases - `IMPT COMMAND SUCCEEDS` or `IMPT COMMAND FAILS`. Scripts can parse a command's output to find these standard phrases to quickly realize does the command succeed or fail. If any command fails, `IMPT COMMAND FAILS` phrase is always on the last line of the command's output. If a command succeeds, `IMPT COMMAND SUCCEEDS` phrase is also on the last line of the output for the most of the commands. Logging-related commands may have additional `IMPT COMMAND SUCCEEDS` phrases in their output. If the [help option](#help) is specified for a command, it's output does not contain neither predefined phrase.
 
 **Example** - a successful command execution:  
-**TODO** screenshot - success command with --force option
+**TODO** screenshot - success command with --confirmed option
 
 **Example** - a failed command execution:  
 **TODO** screenshot - failed command
@@ -93,9 +100,9 @@ The impt tool never stores an account identifier and password. If you do not wan
 
 At any time you can call the [logout command](./CommandsManual.md#auth-logout) - `impt auth logout` - to delete [Auth File](./CommandsManual.md#auth-file). Usually you will not be able to work with the impCentral API right after the logout and will have to login again to continue the work. But see the explanation about global and local login/logout below.
 
-You do not need to use the logout command if you want just to re-login using other credentials. Every new login command overwrites [Auth File](./CommandsManual.md#auth-file), if that existed.
+You do not need to use the logout command if you want just to re-login using other credentials. A new login command overwrites [Auth File](./CommandsManual.md#auth-file), if that existed and the operation is confirmed by user.
 
-During the login you can specify an alternative impCentral API endpoint using `--endpoint` option of the [login command](./CommandsManual.md#auth-login). You may need this if you work with a private impCloud installation. The default endpoint is [https://api.electricimp.com/v5](https://api.electricimp.com/v5)
+During the login you can specify an alternative impCentral API endpoint using `--endpoint` option of the [login command](./CommandsManual.md#auth-login). You may need this if you work with a private impCloud&trade; installation. The default endpoint is `api.electricimp.com/v5`
 
 There are two types of login - global and local.
 
@@ -113,19 +120,13 @@ Summary of the **impt command execution context**:
 - Otherwise, if [Global Auth File](./CommandsManual.md#global-auth-file) exists, a command is executed in the context of the global login defined by that file.
 - Otherwise, a command fails (global or local login is required).
 
-At any time you can get known the login status related to any directory. Call the [auth info command](./CommandsManual.md#auth-info) - `impt auth info` - from the required directory. The returned information includes but may be not limited to:
-- a type of the login applicable to the current directory at this moment - whether [global](./CommandsManual.md#global-auth-file) or [local](./CommandsManual.md#local-auth-file) Auth File is applicable to commands called from the current directory,
-- what was used for the login - username/password or login key (their values are not displayed),
-- when will the current access token expire,
-- whether the refresh token / the login key is stored for automatic refreshing of the access token.
-
-Additionally, the [auth info command](./CommandsManual.md#auth-info) makes sure the login information is actual and you have access to the impCentral API at this moment.
+At any time you can get known the login status related to any directory. Call the [auth info command](./CommandsManual.md#auth-info) from the required directory - `impt auth info`. The returned information includes a type of the login applicable to the current directory, access token status, your account Id and other details.
 
 **Example** - global login:  
 **TODO** screenshot - impt auth login --user <user_id> --pwd <password>
 
 **Example** - local login using a login key, specifying a endpoint, without storing the login key:  
-**TODO** screenshot - impt auth login --local --lk <login_key_id> --temp --endpoint https://api.electricimp.com/v5
+**TODO** screenshot - impt auth login --local --lk <login_key_id> --temp --endpoint api.electricimp.com/v5
 
 **Example** - display login status:  
 **TODO** screenshot - impt auth info
@@ -172,27 +173,37 @@ Many groups of commands contain a command to list entities - list Products, list
 - At first, all Filter Options with the same option name are combined by logical OR.
 - After that, all Filter Options with different option names are combined by logical AND.
 
-Some Filter Options have the same name and meaning in several list commands. They are summarized [here](./CommandsManual.md#common-filter-options). At the same time, a particular list command may have specific Filter Options as well. Filter Options applicable to every concrete list command are detailed in the [Commands Description](./CommandsManual.md#commands-description).
+Some Filter Options have the same name and meaning in several list commands. They are summarized [here](./CommandsManual.md#common-filter-options). At the same time, a particular command may have specific Filter Options as well. Filter Options applicable to every concrete list command are detailed in the [Commands Description](./CommandsManual.md#commands-description).
 
-Note, for some list commands the returned default list of entities available to the current logged-in account includes the entities owned by this account as well as the entities owned by the collaborators. But for other list commands - only the entities owned by the current account. It is impCentral specific behavior, not controlled by the impt tool. But you can always specify a concrete Account Id as a value of the `--owner` Filter Option and get the entities owned by that account, if they are available to you as to a collaborator. Also, you can always specify the `--my` Filter Option and get only the entities owned by you.
+Note, for some list commands the returned default list of entities available to the current logged-in account includes the entities owned by this account as well as the entities owned by the collaborators. But for other list commands - only the entities owned by the current account. It is impCentral specific behavior, not controlled by the impt tool. But you can always specify a concrete Account Id, email or username as a value of the `--owner <value>` Filter Option and get the entities owned by that account, if they are available to you as to a collaborator. Also, you can always specify the `--owner me` Filter Option and get the entities owned by you only.
 
 **Example**:  
 **TODO** screenshot - a complex list command, with AND and OR, with not a huge output
 
 **Example**:  
-**TODO** screenshot - another list command, with --my and some other filters, with not a huge output
+**TODO** screenshot - another list command, with --owner me and some other filters, with not a huge output
+
+## Entity Information
+
+The most of command groups contain `info` command which returns information about the specified entity. Some of that commands have `--full` option. When it is specified, the command returns additional details about the related entities. For example, additional information about Device Groups which belong to the specified Product.
+
+**Example**:  
+**TODO** screenshot - impt device info
+
+**Example**:  
+**TODO** screenshot - impt product info --full, not a huge output
 
 ## Entity Deletion
 
-By default, the commands which delete impCentral entities (like Product, Device Group, Deployment) have the same limitations like the corresponding impCentral API functionality. For example, a Product deletion fails if the Product has Device Groups; a build (Deployment) fails if the Deployment has the *"flagged"* attribute set to *true*. If you specify the `--full` option of the delete command, the tool implicitly update or delete all other required entities in order to delete the target entity. For example, the tool deletes all Device Groups of the Product in order to delete the Product; the tool updates the *"flagged"* attribute of the Deployment in order to delete the Deployment.
+By default, the commands which delete impCentral entities (like Product, Device Group, Deployment) have the same limitations like the corresponding impCentral API functionality. For example, a Product deletion fails if the Product has Device Groups; a build (Deployment) fails if the Deployment has the *"flagged"* attribute set to *true*. If you specify the `--force` option (`-f` option alias) of the delete command, the tool implicitly update or delete all other required entities in order to delete the target entity. For example, the tool deletes all Device Groups of the Product in order to delete the Product; the tool updates the *"flagged"* attribute of the Deployment in order to delete the Deployment.
 
-Also by default, every delete command asks a confirmation of the operation from the user. Before that the command lists all the entities which are going to be deleted or updated. If you specify the `--force` option of the delete command, the operation is executed without asking a confirmation from user.
+Also by default, every delete command asks a confirmation of the operation from user. Before that the command lists all the entities which are going to be deleted or updated. If you specify the `--confirmed` option, the operation is executed without asking additional confirmation from user.
 
 **Example** - a failed delete command execution:  
-**TODO** screenshot - failed delete something w/o --full, use --force
+**TODO** screenshot - failed delete something w/o --force, use --confirmed
 
 **Example** - a successful delete command execution:  
-**TODO** screenshot - the same command succeeds with --full, now w/o --force
+**TODO** screenshot - the same command succeeds with --force, now w/o --confirmed
 
 ## License
 
