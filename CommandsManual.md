@@ -93,7 +93,7 @@ All commands and options are case sensitive.
 
 ### Entity Identification
 
-Applicable to impCentral API entities: Product, Device Group, Device, Build (Deployment).
+Applicable to impCentral API entities: Account, Product, Device Group, Device, Build (Deployment).
 
 **The rules** how the tool searches an entity:
 
@@ -108,6 +108,15 @@ command is processed for the found entity.
 command fails.
 - If no entity is found for all attributes, the command usually fails (depends on a
 command).
+
+#### Account Identifier
+Option: **--product <ACCOUNT_IDENTIFIER>**
+
+Attributes accepted as <ACCOUNT_IDENTIFIER> (in order of search):
+- "*me*" (a predefined word, means the current logged-in account)
+- Account Id (always unique)
+- Email (always unique)
+- Username (always unique)
 
 #### Product Identifier
 Option: **--product <PRODUCT_IDENTIFIER>**
@@ -339,7 +348,7 @@ Displays information about the specified build (Deployment).
 
 #### Build List
 
-**impt build list \[--my] \[--owner <account_id>] \[--sha <deployment_sha>] \[--tag \<tag>] \[--flagged] \[--unflagged] \[--product-id <product_id>] \[--product-name <product_name>] \[--dg-type <device_group_type>] \[--dg-id <device_group_id>] \[--dg-name <device_group_name>] \[--debug] \[--help]**
+**impt build list \[--owner <ACCOUNT_IDENTIFIER>] \[--product <PRODUCT_IDENTIFIER>] \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--dg-type <device_group_type>] \[--sha <deployment_sha>] \[--tag \<tag>] \[--flagged] \[--unflagged] \[--debug] \[--help]**
 
 Displays information about all builds (Deployments) available to the current logged-in account.
 
@@ -350,17 +359,14 @@ The returned list of the builds may be filtered. Filtering is possible by any co
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 | Filter Options: | | | | |
-| --my | | no | no | Builds owned by the current logged-in account only. |
-| --owner | | no | yes | Builds owned by the account with the specified account id only. |
+| --owner | -o | no | yes | Builds owned by the [specified Account](#account-identifier) only. |
+| --product | -p | no | yes | Builds deployed to Device Groups which belong to the [specified Product](#product-identifier) only. |
+| --dg | -g | no | yes | Builds deployed to the [specified Device Group](#device-group-identifier) only. |
+| --dg-type | | no | yes | Builds deployed to Device Groups of the [specified type](#device-group-type) only. |
 | --sha | | no | yes | Builds with the specified *SHA* only. |
 | --tag | | no | yes | Builds with the specified tag only. |
 | --flagged | | no | no | Builds with the flagged attribute set to *true* only. |
 | --unflagged | | no | no | Builds with the flagged attribute set to *false* only. |
-| --product-id | | no | yes | Builds deployed to Device Groups which belong to the specified Product only. |
-| --product-name | | no | yes | Builds deployed to Device Groups which belong to the specified Product only. |
-| --dg-type | | no | yes | Builds deployed to Device Groups of the specified [type](#device-group-type) only. |
-| --dg-id | | no | yes | Builds deployed to the specified Device Group only. |
-| --dg-name | | no | yes | Builds deployed to the specified Device Group only. |
 
 #### Build Run
 
@@ -439,7 +445,7 @@ Displays information about the specified Device.
 
 #### Device List
 
-**impt device list \[--my] \[--owner <account_id>] \[--unassigned] \[--assigned] \[--online] \[--offline] \[--product-id <product_id>] \[--product-name <product_name>] \[--dg-type <device_group_type>] \[--dg-id <device_group_id>] \[--dg-name <device_group_name>] \[--debug] \[--help]**
+**impt device list \[--owner <ACCOUNT_IDENTIFIER>] \[--product <PRODUCT_IDENTIFIER>] \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--dg-type <device_group_type>] \[--unassigned] \[--assigned] \[--online] \[--offline] \[--debug] \[--help]**
 
 Displays information about all Devices available to the current logged-in account.
 
@@ -450,17 +456,14 @@ The returned list of the Devices may be filtered. Filtering is possible by any c
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 | Filter Options: | | | | |
-| --my | | no | no | Devices owned by the current logged-in account only. |
-| --owner | | no | yes | Devices owned by the account with the specified account id only. |
+| --owner | -o | no | yes | Devices owned by the [specified Account](#account-identifier) only. |
+| --product | -p | no | yes | Devices assigned to Device Groups which belong to the [specified Product](#product-identifier) only. |
+| --dg | -g | no | yes | Devices assigned to the [specified Device Group](#device-group-identifier) only. |
+| --dg-type | | no | yes | Devices assigned to Device Groups of the [specified type](#device-group-type) only. |
 | --unassigned | | no | no | Unassigned Devices only. |
 | --assigned | | no | no | Assigned Devices only. |
 | --online | | no | no | Devices in online state only. |
 | --offline | | no | no | Devices in offline state only. |
-| --product-id | | no | yes | Devices assigned to Device Groups which belong to the specified Product only. |
-| --product-name | | no | yes | Devices assigned to Device Groups which belong to the specified Product only. |
-| --dg-type | | no | yes | Devices assigned to Device Groups of the specified [type](#device-group-type) only. |
-| --dg-id | | no | yes | Devices assigned to the specified Device Group only. |
-| --dg-name | | no | yes | Devices assigned to the specified Device Group only. |
 
 #### Device Remove
 
@@ -576,7 +579,7 @@ Displays information about the specified Device Group.
 
 #### Device Group List
 
-**impt dg list \[--my] \[--owner <account_id>] \[--dg-type <device_group_type>] \[--product-id <product_id>] \[--product-name <product_name>] \[--debug] \[--help]**
+**impt dg list \[--owner <ACCOUNT_IDENTIFIER>] \[--product <PRODUCT_IDENTIFIER>] \[--dg-type <device_group_type>] \[--debug] \[--help]**
 
 Displays information about all Device Groups available to the current logged-in account.
 
@@ -587,11 +590,9 @@ The returned list of the Device Groups may be filtered. Filtering is possible by
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 | Filter Options: | | | | |
-| --my | | no | no | Device Groups owned by the current logged-in account only. |
-| --owner | | no | yes | Device Groups owned by the account with the specified account id only. |
-| --dg-type | | no | yes | Device Groups of the specified [type](#device-group-type) only. |
-| --product-id | | no | yes | Device Groups which belong to the specified Product only. |
-| --product-name | | no | yes | Device Groups which belong to the specified Product only. |
+| --owner | -o | no | yes | Device Groups owned by the [specified Account](#account-identifier) only. |
+| --product | -p | no | yes | Device Groups which belong to the [specified Product](#product-identifier) only. |
+| --dg-type | | no | yes | Device Groups of the [specified type](#device-group-type) only. |
 
 #### Device Group Reassign
 
@@ -833,7 +834,7 @@ Displays information about the specified Product.
 
 #### Product List
 
-**impt product list \[--my] \[--owner <account_id>] \[--debug] \[--help]**
+**impt product list \[--owner <ACCOUNT_IDENTIFIER>] \[--debug] \[--help]**
 
 Displays information about all Products available to the current logged-in account.
 
@@ -844,8 +845,7 @@ The returned list of the Products may be filtered. Filtering is possible by any 
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 | Filter Options: | | | | |
-| --my | | no | no | Displays information about Products owned by the current logged-in account only. |
-| --owner | | no | yes | Displays information about Products owned by the account with the specified account id only. |
+| --owner | -o | no | yes | Products owned by the [specified Account](#account-identifier) only. |
 
 #### Product Update
 
@@ -1120,7 +1120,7 @@ Displays information about the specified Webhook.
 
 #### Webhook List
 
-**impt webhook list \[--my] \[--owner <account_id>] \[--url <target_url>] \[--event <triggered_event>] \[--product-id <product_id>] \[--product-name <product_name>] \[--dg-type <device_group_type>] \[--dg-id <device_group_id>] \[--dg-name <device_group_name>] \[--debug] \[--help]**
+**impt webhook list \[--owner <ACCOUNT_IDENTIFIER>] \[--product <PRODUCT_IDENTIFIER>] \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--dg-type <device_group_type>] \[--url <target_url>] \[--event <triggered_event>] \[--debug] \[--help]**
 
 Displays information about all Webhooks available to the current logged-in account.
 
@@ -1131,15 +1131,12 @@ The returned list of the Webhooks may be filtered. Filtering is possible by any 
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 | Filter Options: | | | | |
-| --my | | no | no | Webhooks owned by the current logged-in account only. |
-| --owner | | no | yes | Webhooks owned by the account with the specified account id only. |
+| --owner | -o | no | yes | Webhooks owned by the [specified Account](#account-identifier) only. |
+| --product | -p | no | yes | Webhooks created for Device Groups which belong to the [specified Product](#product-identifier) only. |
+| --dg | -g | no | yes | Webhooks created for the [specified Device Group](#device-group-identifier) only. |
+| --dg-type | | no | yes | Webhooks created for Device Groups of the [specified type](#device-group-type) only. |
 | --url | | no | yes | Webhooks with the specified target URL only. |
 | --event | | no | yes | Webhooks for the specified event only. Valid values: "blessing", "blinkup", "deployment". |
-| --product-id | | no | yes | Webhooks created for Device Groups which belong to the specified Product only. |
-| --product-name | | no | yes | Webhooks created for Device Groups which belong to the specified Product only. |
-| --dg-type | | no | yes | Webhooks created for Device Groups of the specified [type](#device-group-type) only. |
-| --dg-id | | no | yes | Webhooks created for the specified Device Group only. |
-| --dg-name | | no | yes | Webhooks created for the specified Device Group only. |
 
 #### Webhook Update
 
@@ -1174,7 +1171,7 @@ Fails if the specified Webhook does not exist.
 | -l | --log, --local  |
 | -m |   |
 | -n | --name  |
-| -o | --origin  |
+| -o | --owner, --origin  |
 | -p | --product  |
 | -q |   |
 | -r | --remove-tag, --rename-files  |
@@ -1189,13 +1186,10 @@ Fails if the specified Webhook does not exist.
 
 ## Common Filter Options
 
-| Filter Option | Value Required? | Description |
-| --- | --- | --- |
-| --my | no | Entities owned by the current logged-in account only. |
-| --owner | yes | Entities owned by the account with the specified account id only. |
-| --product-id | yes | Entities related to the specified Product only. |
-| --product-name | yes | Entities related to the specified Product only. |
-| --dg-id | yes | Entities related to the specified Device Group only. |
-| --dg-name | yes | Entities related to the specified Device Group only. |
-| --dg-type | yes | Entities related to the Device Groups of the specified [type](#device-group-type) only. |
+| Filter Option | Alias | Value | Description |
+| --- | --- | --- | --- |
+| --owner | -o | [<ACCOUNT_IDENTIFIER>](#account-identifier) | Entities owned by the specified Account only. |
+| --product | -p | [<PRODUCT_IDENTIFIER>](#product-identifier) | Entities related to the specified Product only. |
+| --dg | -g | [<DEVICE_GROUP_IDENTIFIER>](#device-group-identifier) | Entities related to the specified Device Group only. |
+| --dg-type | | [<device_group_type>](#device-group-type) | Entities related to the Device Groups of the specified type only. |
 
