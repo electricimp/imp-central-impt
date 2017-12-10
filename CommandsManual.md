@@ -97,17 +97,12 @@ Applicable to impCentral API entities: Account, Product, Device Group, Device, B
 
 **The rules** how the tool searches an entity:
 
+The rules how the tool searches an entity:
 - There is an order of attributes for every entity type (see below).
-- The tool starts from the first attribute in the order and searches the specified value for
-this attribute.
-- If no entity is found for this attribute, the tool searches the specified value for the next
-attribute in the order.
-- If one and only one entity is found for the particular attribute, the search is stopped, the
-command is processed for the found entity.
-- If more than one entity is found for the particular attribute, the search is stopped, the
-command fails.
-- If no entity is found for all attributes, the command usually fails (depends on a
-command).
+- The tool starts from the first attribute in the order and searches the specified value for this attribute.
+- If no entity is found for this attribute, the tool searches the specified value for the next attribute in the order.
+- If at least one entity is found for the particular attribute, the search is stopped.
+- If no entity is found for all attributes or more than one entity is found, then, depending on a particular command, that may be considered as a success (for all *list* commands) or as a fail (for all other commands).
 
 #### Account Identifier
 Option: **--owner <ACCOUNT_IDENTIFIER>**
@@ -359,9 +354,9 @@ The returned list of the builds may be filtered. Filtering is possible by any co
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 | Filter Options: | | | | |
-| --owner | -o | no | yes | Builds owned by the [specified Account](#account-identifier) only. |
-| --product | -p | no | yes | Builds deployed to Device Groups which belong to the [specified Product](#product-identifier) only. |
-| --dg | -g | no | yes | Builds deployed to the [specified Device Group](#device-group-identifier) only. |
+| --owner | -o | no | yes | Builds owned by the [specified Account(s)](#account-identifier) only. |
+| --product | -p | no | yes | Builds deployed to Device Groups which belong to the [specified Product(s)](#product-identifier) only. |
+| --dg | -g | no | yes | Builds deployed to the [specified Device Group(s)](#device-group-identifier) only. |
 | --dg-type | | no | yes | Builds deployed to Device Groups of the [specified type](#device-group-type) only. |
 | --sha | | no | yes | Builds with the specified *SHA* only. |
 | --tag | | no | yes | Builds with the specified tag only. |
@@ -456,9 +451,9 @@ The returned list of the Devices may be filtered. Filtering is possible by any c
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 | Filter Options: | | | | |
-| --owner | -o | no | yes | Devices owned by the [specified Account](#account-identifier) only. |
-| --product | -p | no | yes | Devices assigned to Device Groups which belong to the [specified Product](#product-identifier) only. |
-| --dg | -g | no | yes | Devices assigned to the [specified Device Group](#device-group-identifier) only. |
+| --owner | -o | no | yes | Devices owned by the [specified Account(s)](#account-identifier) only. |
+| --product | -p | no | yes | Devices assigned to Device Groups which belong to the [specified Product(s)](#product-identifier) only. |
+| --dg | -g | no | yes | Devices assigned to the [specified Device Group(s)](#device-group-identifier) only. |
 | --dg-type | | no | yes | Devices assigned to Device Groups of the [specified type](#device-group-type) only. |
 | --unassigned | | no | no | Unassigned Devices only. |
 | --assigned | | no | no | Assigned Devices only. |
@@ -590,8 +585,8 @@ The returned list of the Device Groups may be filtered. Filtering is possible by
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 | Filter Options: | | | | |
-| --owner | -o | no | yes | Device Groups owned by the [specified Account](#account-identifier) only. |
-| --product | -p | no | yes | Device Groups which belong to the [specified Product](#product-identifier) only. |
+| --owner | -o | no | yes | Device Groups owned by the [specified Account(s)](#account-identifier) only. |
+| --product | -p | no | yes | Device Groups which belong to the [specified Product(s)](#product-identifier) only. |
 | --dg-type | | no | yes | Device Groups of the [specified type](#device-group-type) only. |
 
 #### Device Group Reassign
@@ -845,7 +840,7 @@ The returned list of the Products may be filtered. Filtering is possible by any 
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 | Filter Options: | | | | |
-| --owner | -o | no | yes | Products owned by the [specified Account](#account-identifier) only. |
+| --owner | -o | no | yes | Products owned by the [specified Account(s)](#account-identifier) only. |
 
 #### Product Update
 
@@ -1131,9 +1126,9 @@ The returned list of the Webhooks may be filtered. Filtering is possible by any 
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 | Filter Options: | | | | |
-| --owner | -o | no | yes | Webhooks owned by the [specified Account](#account-identifier) only. |
-| --product | -p | no | yes | Webhooks created for Device Groups which belong to the [specified Product](#product-identifier) only. |
-| --dg | -g | no | yes | Webhooks created for the [specified Device Group](#device-group-identifier) only. |
+| --owner | -o | no | yes | Webhooks owned by the [specified Account(s)](#account-identifier) only. |
+| --product | -p | no | yes | Webhooks created for Device Groups which belong to the [specified Product(s)](#product-identifier) only. |
+| --dg | -g | no | yes | Webhooks created for the [specified Device Group(s)](#device-group-identifier) only. |
 | --dg-type | | no | yes | Webhooks created for Device Groups of the [specified type](#device-group-type) only. |
 | --url | | no | yes | Webhooks with the specified target URL only. |
 | --event | | no | yes | Webhooks for the specified event only. Valid values: "blessing", "blinkup", "deployment". |
