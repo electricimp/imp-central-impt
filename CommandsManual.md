@@ -96,8 +96,6 @@ All commands and options are case sensitive.
 Applicable to impCentral API entities: Account, Product, Device Group, Device, Build (Deployment).
 
 **The rules** how the tool searches an entity:
-
-The rules how the tool searches an entity:
 - There is an order of attributes for every entity type (see below).
 - The tool starts from the first attribute in the order and searches the specified value for this attribute.
 - If no entity is found for this attribute, the tool searches the specified value for the next attribute in the order.
