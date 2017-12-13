@@ -520,7 +520,7 @@ Updates Name of the specified Device.
 
 #### Device Group Builds
 
-**impt dg builds \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--unflag] \[--unflag-old] \[--clean] \[--debug] \[--help]**
+**impt dg builds \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--unflag] \[--unflag-old] \[--clean] \[--confirmed] \[--debug] \[--help]**
 
 Updates and/or deletes builds (Deployments) of the specified Device Group.
 At the end of the command execution information about all Deployments of the Device Group is displayed (as by [**impt build list**](#build-list) command).
