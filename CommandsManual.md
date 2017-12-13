@@ -25,6 +25,7 @@
 **[impt device unassign](#device-unassign)**  
 **[impt device update](#device-update)**  
 
+**[impt dg builds](#device-group-builds)**  
 **[impt dg create](#device-group-create)**  
 **[impt dg delete](#device-group-delete)**  
 **[impt dg info](#device-group-info)**  
@@ -32,7 +33,6 @@
 **[impt dg reassign](#device-group-reassign)**  
 **[impt dg restart](#device-group-restart)**  
 **[impt dg unassign](#device-group-unassign)**  
-**[impt dg unflag](#device-group-unflag)**  
 **[impt dg update](#device-group-update)**  
 
 **[impt log get](#log-get)**  
@@ -518,9 +518,27 @@ Updates Name of the specified Device.
 
 ### Device Group Manipulation Commands
 
+#### Device Group Builds
+
+**impt dg builds \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--unflag] \[--unflag-old] \[--clean] \[--debug] \[--help]**
+
+Updates and/or deletes builds (Deployments) of the specified Device Group.
+At the end of the command execution information about all Deployments of the Device Group is displayed (as by [**impt build list**](#build-list) command).
+
+User is asked to confirm the operation if any Deployment is going to be deleted (confirmed automatically with **--confirmed** option).
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| --unflag | | no | no | Set *"flagged"* attribute to *false* in all Deployments of the specified Device Group. |
+| --unflag-old | | no | no | Set *"flagged"* attribute to *false* in all Deployments of the specified Device Group which are older than *min_supported_deployment* (see the impCentral API spec). |
+| --clean | | no | no | Deletes all Deployments of the specified Device Group which are older than *min_supported_deployment* (see the impCentral API spec) and have *"flagged"* attribute set to *false*. This option works after **--unflag**/**--unflag-old** options. |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
 #### Device Group Create
 
-**impt dg create --name <device_group_name> --type <device_group_type> \[--product <PRODUCT_IDENTIFIER>] \[--descr <device_group_description>] \[--target <DEVICE_GROUP_IDENTIFIER>] \[--debug] \[--help]**
+**impt dg create --name <device_group_name> \[--dg-type <device_group_type>] \[--product <PRODUCT_IDENTIFIER>] \[--descr <device_group_description>] \[--target <DEVICE_GROUP_IDENTIFIER>] \[--debug] \[--help]**
 
 Creates a new Device Group for the specified Product.
 Fails if Device Group with the specified Name already exists in the specified Product.
@@ -528,7 +546,7 @@ Fails if Device Group with the specified Name already exists in the specified Pr
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --name | -n | yes | yes | Name of the Device Group. Must be unique among all Device Groups in the specified Product. |
-| --type | | yes | yes | [Type](#device-group-type) of the Device Group. If the value is invalid, the command fails. |
+| --dg-type | | no | yes | [Type](#device-group-type) of the Device Group. If not specified, *development* type is assumed. If the type value is invalid, the command fails. |
 | --product | -p | yes/[project](#project-file) | yes | [Product Identifier](#product-identifier) of the Product which the Device Group belongs to. If not specified, the Product referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
 | --descr | -s | no | yes | Description of the Device Group. |
 | --target | | no | yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the being created Device Group. May be specified for the being created Device Group of the [type](#device-group-type) *factory* or *pre-factory* only. The target Device Group must be of the [type](#device-group-type) *production* or *pre-production* correspondingly and belongs to the specified Product. Otherwise the command fails. |
@@ -628,18 +646,6 @@ Does nothing if the Device Group has no Devices assigned.
 | --- | --- | --- | --- | --- |
 | --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
 | --unbond | | no | yes | Unbond key is required to unassign Devices from a Device Group of the [type](#device-group-type) *production*. |
-| --debug | -z | no | no | Displays debug info of the command execution. |
-| --help | -h | no | no | Displays description of the command. Ignores any other options. |
-
-#### Device Group Unflag
-
-**impt dg unflag \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--debug] \[--help]**
-
-Set *"flagged"* attribute to *false* in all Deployments of the specified Device Group.
-
-| Option | Alias | Mandatory? | Value Required? | Description |
-| --- | --- | --- | --- | --- |
-| --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -915,17 +921,17 @@ User is informed about all entities and files which are going to be deleted or u
 
 #### Project Info
 
-**impt project info \[--debug] \[--help]**
+**impt project info \[--full] \[--debug] \[--help]**
 
 Displays information about the project.
 Fails if there is no [Project File](#project-file) in the current directory.
 With every call the latest actual information is obtained using impCentral API.
-Additionally, displays the authentication status applicable to the current directory, like [**impt auth info**](#auth-info) command does.
 
 Informs user if the Device Group referenced by [Project File](#project-file) does not exist. [Project File](#project-file) is not deleted in this case. To delete it - explicitly call [**impt project delete**](#project-delete) command.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
+| --full | | no | no | Displays additional information. Full details about the corresponding Device Group, like [**impt dg info --full**](#device-group-info) command does; authentication status applicable to the current directory, like [**impt auth info**](#auth-info) command does. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
