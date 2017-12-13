@@ -533,6 +533,7 @@ User is asked to confirm the operation if any Deployment is going to be deleted 
 | --unflag | | no | no | Set *"flagged"* attribute to *false* in all Deployments of the specified Device Group. |
 | --unflag-old | | no | no | Set *"flagged"* attribute to *false* in all Deployments of the specified Device Group which are older than *min_supported_deployment* (see the impCentral API spec). |
 | --clean | | no | no | Deletes all Deployments of the specified Device Group which are older than *min_supported_deployment* (see the impCentral API spec) and have *"flagged"* attribute set to *false*. This option works after **--unflag**/**--unflag-old** options. |
+| --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
