@@ -39,8 +39,21 @@ exports.describe = COMMAND_SHORT_DESCR;
 exports.builder = function (yargs) {
     const entityType = 'Webhooks';
     const options = Options.getOptions({
-        [Options.MY] : { demandOption : false, describeFormatArgs : [ entityType ] },
         [Options.OWNER] : { demandOption : false, describeFormatArgs : [ entityType ] },
+        [Options.PRODUCT_IDENTIFIER] : {
+            demandOption : false,
+            type : 'array',
+            describe : 'Lists Webhooks created for Device Groups which belong to the specified Product only.'
+        },
+        [Options.DEVICE_GROUP_IDENTIFIER] : {
+            demandOption : false,
+            type : 'array',
+            describe : 'Lists Webhooks created for the specified Device Group only.'
+        },
+        [Options.DEVICE_GROUP_TYPE] : {
+            demandOption : false,
+            describe : 'Lists Webhooks created for Device Groups of the specified type only.'
+        },
         [Options.URL] : {
             demandOption : false,
             describe : 'Lists Webhooks with the specified target URL only.',
@@ -50,26 +63,6 @@ exports.builder = function (yargs) {
             demandOption : false,
             describe : 'Lists Webhooks for the specified event only.',
             type : 'array'
-        },
-        [Options.PRODUCT_ID] : {
-            demandOption : false,
-            describe : 'Lists Webhooks created for Device Groups which belong to the specified Product only.'
-        },
-        [Options.PRODUCT_NAME] : {
-            demandOption : false,
-            describe : 'Lists Webhooks created for Device Groups which belong to the specified Product only.'
-        },
-        [Options.DEVICE_GROUP_TYPE] : {
-            demandOption : false,
-            describe : 'Lists Webhooks created for Device Groups of the specified type only.'
-        },
-        [Options.DEVICE_GROUP_ID] : {
-            demandOption : false,
-            describe : 'Lists Webhooks created for the specified Device Group only.'
-        },
-        [Options.DEVICE_GROUP_NAME] : {
-            demandOption : false,
-            describe : 'Lists Webhooks created for the specified Device Group only.'
         },
         [Options.DEBUG] : false
     });

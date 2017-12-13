@@ -41,8 +41,21 @@ exports.describe = COMMAND_SHORT_DESCR;
 exports.builder = function (yargs) {
     const entityType = 'Builds';
     const options = Options.getOptions({
-        [Options.MY] : { demandOption : false, describeFormatArgs : [ entityType ] },
         [Options.OWNER] : { demandOption : false, describeFormatArgs : [ entityType ] },
+        [Options.PRODUCT_IDENTIFIER] : {
+            demandOption : false,
+            type : 'array',
+            describe : 'Lists builds deployed to Device Groups which belong to the specified Product only.'
+        },
+        [Options.DEVICE_GROUP_IDENTIFIER] : {
+            demandOption : false,
+            type : 'array',
+            describe : 'Lists builds deployed to the specified Device Group only.'
+        },
+        [Options.DEVICE_GROUP_TYPE] : {
+            demandOption : false,
+            describe : 'Lists builds deployed to Device Groups of the specified type only.'
+        },
         [Options.SHA] : {
             demandOption : false,
             type : 'array',
@@ -59,26 +72,6 @@ exports.builder = function (yargs) {
             _usage: ''
         },
         [Options.UNFLAGGED] : false,
-        [Options.PRODUCT_ID] : {
-            demandOption : false,
-            describe : 'Lists builds deployed to Device Groups which belong to the specified Product only.'
-        },
-        [Options.PRODUCT_NAME] : {
-            demandOption : false,
-            describe : 'Lists builds deployed to Device Groups which belong to the specified Product only.'
-        },
-        [Options.DEVICE_GROUP_TYPE] : {
-            demandOption : false,
-            describe : 'Lists builds deployed to Device Groups of the specified type only.'
-        },
-        [Options.DEVICE_GROUP_ID] : {
-            demandOption : false,
-            describe : 'Lists builds deployed to the specified Device Group only.'
-        },
-        [Options.DEVICE_GROUP_NAME] : {
-            demandOption : false,
-            describe : 'Lists builds deployed to the specified Device Group only.'
-        },
         [Options.DEBUG] : false
     });
     return yargs

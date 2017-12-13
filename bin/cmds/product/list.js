@@ -39,7 +39,6 @@ exports.describe = COMMAND_SHORT_DESCR;
 exports.builder = function (yargs) {
     const entityType = 'Products';
     const options = Options.getOptions({
-        [Options.MY] : { demandOption : false, describeFormatArgs : [ entityType ] },
         [Options.OWNER] : { demandOption : false, describeFormatArgs : [ entityType ] },
         [Options.DEBUG] : false
     });

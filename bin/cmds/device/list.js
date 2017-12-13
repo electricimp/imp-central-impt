@@ -41,32 +41,25 @@ exports.describe = COMMAND_SHORT_DESCR;
 exports.builder = function (yargs) {
     const entityType = 'Devices';
     const options = Options.getOptions({
-        [Options.MY] : { demandOption : false, describeFormatArgs : [ entityType ] },
         [Options.OWNER] : { demandOption : false, describeFormatArgs : [ entityType ] },
-        [Options.UNASSIGNED] : false,
-        [Options.ASSIGNED] : false,
-        [Options.ONLINE] : false,
-        [Options.OFFLINE] : false,
-        [Options.PRODUCT_ID] : {
+        [Options.PRODUCT_IDENTIFIER] : {
             demandOption : false,
+            type : 'array',
             describe : 'Lists Devices assigned to Device Groups which belong to the specified Product only.'
         },
-        [Options.PRODUCT_NAME] : {
+        [Options.DEVICE_GROUP_IDENTIFIER] : {
             demandOption : false,
-            describe : 'Lists Devices assigned to Device Groups which belong to the specified Product only.'
+            type : 'array',
+            describe : 'Lists Devices assigned to the specified Device Group only.'
         },
         [Options.DEVICE_GROUP_TYPE] : {
             demandOption : false,
             describe : 'Lists Devices assigned to Device Groups of the specified type only.'
         },
-        [Options.DEVICE_GROUP_ID] : {
-            demandOption : false,
-            describe : 'Lists Devices assigned to the specified Device Group only.'
-        },
-        [Options.DEVICE_GROUP_NAME] : {
-            demandOption : false,
-            describe : 'Lists Devices assigned to the specified Device Group only.'
-        },
+        [Options.UNASSIGNED] : false,
+        [Options.ASSIGNED] : false,
+        [Options.ONLINE] : false,
+        [Options.OFFLINE] : false,
         [Options.DEBUG] : false
     });
     return yargs
