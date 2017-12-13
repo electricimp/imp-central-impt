@@ -155,9 +155,9 @@ But many other commands may be affected when called from a directory where [Proj
 
 Many impt tool commands have options which specify an impCentral API entity - a concrete Product, Device Group, Device, Deployment, etc. You can use an entity Id (Product Id, Device Group Id, etc.) that is always unique. But sometime it may be more convenient to use other attributes to specify an entity. For example, Product Name, Device Group Name, Device MAC address, Device agent Id, Build sha, Build tag, etc. The tool provides such a possibility. You can specify different attributes as an option value and the tool searches the specified value among different attributes.
 
-If you want to use this feature, please first read [here](./CommandsManual.md#entity-identification) the rules how the tool searches an entity and the lists of attributes acceptable for different entities. Command's options, to which the complex entity identification is applicable, are detailed in the [Commands Description](./CommandsManual.md#commands-description). Note, if more than one entity is found basing on the specified attribute value, the command fails.
+If you want to use this feature, please first read [here](./CommandsManual.md#entity-identification) the rules how the tool searches an entity and the lists of attributes acceptable for different entities. Command's options, to which the complex entity identification is applicable, are detailed in the [Commands Description](./CommandsManual.md#commands-description). Note, if more than one entity is found, then, depending on a particular command, that may be considered as a success (for all [Entity Listing](#entity-listing) commands) or as a fail (for all other commands).
 
-When it is hard to uniquely specify an entity without knowing the entity Id, use [Entity Listing](#entity-listing) commands to list the entities basing on some attributes, choose the required one, notice it's Id and use it in the required command.
+When it is hard to uniquely specify an entity without knowing the entity Id, use [Entity Listing](#entity-listing) commands to list the entities basing on some attributes, choose the required entity, notice it's Id and use it in the required command.
 
 **Example** - an entity is found successfully:  
 **TODO** screenshot - device by MAC ?
