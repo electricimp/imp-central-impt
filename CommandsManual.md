@@ -520,7 +520,7 @@ Updates Name of the specified Device.
 
 #### Device Group Builds
 
-**impt dg builds \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--unflag] \[--unflag-old] \[--clean] \[--confirmed] \[--debug] \[--help]**
+**impt dg builds \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--unflag-all] \[--unflag-old] \[--delete] \[--confirmed] \[--debug] \[--help]**
 
 Updates and/or deletes builds (Deployments) of the specified Device Group.
 At the end of the command execution information about all Deployments of the Device Group is displayed (as by [**impt build list**](#build-list) command).
@@ -530,9 +530,9 @@ User is asked to confirm the operation if any Deployment is going to be deleted 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
-| --unflag | | no | no | Set *"flagged"* attribute to *false* in all Deployments of the specified Device Group. |
+| --unflag-all | | no | no | Set *"flagged"* attribute to *false* in all Deployments of the specified Device Group. |
 | --unflag-old | | no | no | Set *"flagged"* attribute to *false* in all Deployments of the specified Device Group which are older than *min_supported_deployment* (see the impCentral API spec). |
-| --clean | | no | no | Deletes all Deployments of the specified Device Group which are older than *min_supported_deployment* (see the impCentral API spec) and have *"flagged"* attribute set to *false*. This option works after **--unflag**/**--unflag-old** options. |
+| --delete | | no | no | Deletes all Deployments of the specified Device Group which are older than *min_supported_deployment* (see the impCentral API spec) and have *"flagged"* attribute set to *false*. This option works after **--unflag-all**/**--unflag-old** options. |
 | --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
@@ -556,9 +556,9 @@ Fails if Device Group with the specified Name already exists in the specified Pr
 
 #### Device Group Delete
 
-**impt dg delete \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--force] \[--confirmed] \[--debug] \[--help]**
+**impt dg delete \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--builds] \[--force] \[--confirmed] \[--debug] \[--help]**
 
-Deletes the specified Device Group.
+Deletes the specified Device Group and, optionally, all the related builds (Deployments).
 
 The command fails if the Device Group is the production target of another Device Group of the [type](#device-group-type) *factory* or *pre-factory*. Use either [**impt dg update**](#device-group-update) command to update the production target of that Device Group, or **impt dg delete** command to delete that Device Group before this one.
 
@@ -571,6 +571,7 @@ User is asked to confirm the operation (confirmed automatically with **--confirm
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| --builds | | no | no | Additionally deletes all Deployments related to the Device Group. | 
 | --force | -f | no | no | Unassigns all Devices of the Device Group, as by [**impt dg unassign**](#device-group-unassign) command. Set *"flagged"* attribute to *false* in all Deployments of the Device Group. |
 | --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
@@ -803,7 +804,7 @@ Fails if Product with the specified Name already exists.
 
 #### Product Delete
 
-**impt product delete \[--product <PRODUCT_IDENTIFIER>] \[--force] \[--confirmed] \[--debug] \[--help]**
+**impt product delete \[--product <PRODUCT_IDENTIFIER>] \[--builds] \[--force] \[--confirmed] \[--debug] \[--help]**
 
 Deletes the specified Product.
 
@@ -814,6 +815,7 @@ User is asked to confirm the operation (confirmed automatically with **--confirm
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --product | -p | yes/[project](#project-file) | yes | [Product Identifier](#product-identifier). If not specified, the Product referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| --builds | | no | no | Additionally deletes all Deployments related to all Device Groups which belong/belonged to the Product, including the Device Groups that were deleted before. | 
 | --force | -f | no | no | Deletes all Device Groups of the Product to be able to delete the Product. As by [**impt dg delete --force**](#device-group-delete) command called for every Device Group. |
 | --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
@@ -907,6 +909,7 @@ Does nothing if there is no [Project File](#project-file) in the current directo
 If **--entities** option is specified, the command additionally deletes:
 - the Device Group referenced by [Project File](#project-file). All Devices assigned to this Device Group to be unassigned. All Deployments for this Device Group which have *"flagged"* attribute with value *true* to be updated to set it to *false*. As by [**impt dg delete --force**](#device-group-delete) command.
 - (if applicable) the production target Device Group for the Device Group referenced by [Project File](#project-file). All Devices assigned to this Device Group to be unassigned. All Deployments for this Device Group which have *"flagged"* attribute with value *true* to be updated to set it to *false*. As by [**impt dg delete --force**](#device-group-delete) command.
+- all builds (Deployments) related to the Device Groups mentioned above.
 - the Product which contains the Device Group referenced by [Project File](#project-file). The Product is NOT deleted if it contains more Device Groups, additional to the Device Groups mentioned above. But this is NOT considered as a command fail, the rest of the command may be completed successfully.
 
 User is informed about all entities and files which are going to be deleted or updated and is asked to confirm the operation (confirmed automatically with **--confirmed** option).
