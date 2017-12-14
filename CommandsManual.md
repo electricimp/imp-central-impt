@@ -8,6 +8,7 @@
 **[impt auth login](#auth-login)**  
 **[impt auth logout](#auth-logout)**  
 
+**[impt build cleanup](#build-cleanup)**  
 **[impt build copy](#build-copy)**  
 **[impt build delete](#build-delete)**  
 **[impt build deploy](#build-deploy)**  
@@ -245,6 +246,27 @@ Deletes [Global](#global-auth-file) or [Local](#local-auth-file) Auth File.
 
 ### Build Manipulation Commands
 
+#### Build Cleanup
+
+**impt build cleanup \[--product <PRODUCT_IDENTIFIER>] \[--unflag] \[--confirmed] \[--debug] \[--help]**
+
+Deletes builds (Deployments) which do not have existent relation to any Device Group ("zombie" builds).
+
+If **--product** option is specified, the command deletes Deployments which do not have existent relation to any Device Group but have relation to the specified Product and that Product is not deleted.  
+If **--product** option is not specified, the command deletes all Deployments owned by the current logged-in account and which do not have existent relation to any Device Group. This includes Deployments which relate to Products that exist as well as Products that were deleted.
+
+If a Deployment has *"flagged"* attribute set to *true* and **--unflag** option is not specified, this Deployment is excluded from the deletion. If **--unflag** option is specified, such a Deployment is deleted as well.
+
+User is asked to confirm the operation (confirmed automatically with **--confirmed** option).
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --product | -p | no | yes | [Product Identifier](#product-identifier) of the Product. See above. |
+| --unflag | | no | no | Delete a Deployment even if it has *"flagged"* attribute set to *true*. See above. |
+| --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
 #### Build Copy
 
 **impt build copy --build <BUILD_IDENTIFIER> \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--debug] \[--help]**
@@ -341,7 +363,7 @@ Displays information about the specified build (Deployment).
 
 #### Build List
 
-**impt build list \[--owner <ACCOUNT_IDENTIFIER>] \[--product <PRODUCT_IDENTIFIER>] \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--dg-type <device_group_type>] \[--sha <deployment_sha>] \[--tag \<tag>] \[--flagged] \[--unflagged] \[--debug] \[--help]**
+**impt build list \[--owner <ACCOUNT_IDENTIFIER>] \[--product <PRODUCT_IDENTIFIER>] \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--dg-type <device_group_type>] \[--sha <deployment_sha>] \[--tag \<tag>] \[--flagged] \[--unflagged] \[--non-zombie] \[--zombie] \[--debug] \[--help]**
 
 Displays information about all builds (Deployments) available to the current logged-in account.
 
@@ -360,10 +382,12 @@ The returned list of the builds may be filtered. Filtering is possible by any co
 | --tag | | no | yes | Builds with the specified tag only. |
 | --flagged | | no | no | Builds with the flagged attribute set to *true* only. |
 | --unflagged | | no | no | Builds with the flagged attribute set to *false* only. |
+| --non-zombie | | no | no | Only builds which have existent relation to Device Group. |
+| --zombie | | no | no | Only builds which do not have existent relation to Device Group. |
 
 #### Build Run
 
-**impt build run \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--device-file <device_file>] \[--agent-file <agent_file>] \[--descr <build_description>] \[--origin \<origin>] \[--tag \<tag>] \[--flagged \[true|false]] \[--log] \[--debug] \[--help]**
+**impt build run \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--device-file <device_file>] \[--agent-file <agent_file>] \[--descr <build_description>] \[--origin \<origin>] \[--tag \<tag>] \[--flagged \[true|false]] \[--conditional] \[--log] \[--debug] \[--help]**
 
 Creates, deploys and runs a build (Deployment). Optionally, displays logs of the running build.
 
@@ -381,6 +405,7 @@ Informs user if the specified Device Group does not have assigned Devices, in th
 | --origin | -o | no | yes | A free-form key to store the source of the code. |
 | --tag | -t | no | yes | A tag applied to this build (Deployment). This option may be repeated several times to apply several tags. |
 | --flagged | | no | no | If *true* or no value, this build (Deployment) cannot be deleted without first setting this option back to *false*. If *false* or the option is not specified, the build can be deleted. |
+| --conditional | -c | no | no | Conditional restart of Devices assigned to the specified Device Group instead of a normal restart (see the impCentral API spec). |
 | --log | -l | no | no | Starts displaying logs from the Devices assigned to the specified Device Group (see **[impt log stream](#log-stream)** command description). To stop displaying the logs press *\<Ctrl-C>*. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
@@ -520,7 +545,7 @@ Updates Name of the specified Device.
 
 #### Device Group Builds
 
-**impt dg builds \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--unflag-all] \[--unflag-old] \[--delete] \[--confirmed] \[--debug] \[--help]**
+**impt dg builds \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--unflag] \[--unflag-old] \[--delete] \[--confirmed] \[--debug] \[--help]**
 
 Updates and/or deletes builds (Deployments) of the specified Device Group.
 At the end of the command execution information about all Deployments of the Device Group is displayed (as by [**impt build list**](#build-list) command).
@@ -530,9 +555,9 @@ User is asked to confirm the operation if any Deployment is going to be deleted 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
-| --unflag-all | | no | no | Set *"flagged"* attribute to *false* in all Deployments of the specified Device Group. |
+| --unflag | | no | no | Set *"flagged"* attribute to *false* in all Deployments of the specified Device Group. |
 | --unflag-old | | no | no | Set *"flagged"* attribute to *false* in all Deployments of the specified Device Group which are older than *min_supported_deployment* (see the impCentral API spec). |
-| --delete | | no | no | Deletes all Deployments of the specified Device Group which are older than *min_supported_deployment* (see the impCentral API spec) and have *"flagged"* attribute set to *false*. This option works after **--unflag-all**/**--unflag-old** options. |
+| --delete | | no | no | Deletes all Deployments of the specified Device Group which are older than *min_supported_deployment* (see the impCentral API spec) and have *"flagged"* attribute set to *false*. This option works after **--unflag**/**--unflag-old** options. |
 | --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
