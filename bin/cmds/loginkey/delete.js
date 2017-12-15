@@ -40,7 +40,7 @@ exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.LOGIN_KEY] : true,
         [Options.PASSWORD] : true,
-        [Options.FORCE] : false,
+        [Options.CONFIRMED] : false,
         [Options.DEBUG] : false
     });
     return yargs

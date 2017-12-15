@@ -45,7 +45,7 @@ exports.builder = function (yargs) {
         [Options.ENTITIES] : false,
         [Options.FILES] : false,
         [Options.ALL] : false,
-        [Options.FORCE] : false,
+        [Options.CONFIRMED] : false,
         [Options.DEBUG] : false
     });
     return yargs

@@ -53,7 +53,7 @@ exports.builder = function (yargs) {
         },
         [Options.DEVICE_ONLY] : false,
         [Options.AGENT_ONLY] : false,
-        [Options.FORCE] : false,
+        [Options.CONFIRMED] : false,
         [Options.DEBUG] : false
     });
     return yargs

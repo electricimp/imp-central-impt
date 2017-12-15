@@ -50,7 +50,7 @@ exports.builder = function (yargs) {
             default: 'agent.nut'
         },
         [Options.CREATE_FILES] : false,
-        [Options.FORCE] : false,
+        [Options.CONFIRMED] : false,
         [Options.DEBUG] : false
     });
     return yargs

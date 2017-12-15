@@ -40,7 +40,7 @@ exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.DEVICE_IDENTIFIER] : true,
         [Options.DEVICE_GROUP_IDENTIFIER] : false,
-        [Options.FORCE] : false,
+        [Options.CONFIRMED] : false,
         [Options.DEBUG] : false
     });
     return yargs

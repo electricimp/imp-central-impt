@@ -42,8 +42,8 @@ exports.builder = function (yargs) {
             demandOption : true,
             describe : 'Build Identifier: Deployment Id, sha, tag or origin.'
         },
-        [Options.FULL] : false,
         [Options.FORCE] : false,
+        [Options.CONFIRMED] : false,
         [Options.DEBUG] : false
     });
     return yargs

@@ -39,7 +39,7 @@ exports.describe = COMMAND_SHORT_DESCR;
 exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.WEBHOOK_IDENTIFIER] : true,
-        [Options.FORCE] : false,
+        [Options.CONFIRMED] : false,
         [Options.DEBUG] : false
     });
     return yargs

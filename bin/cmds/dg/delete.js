@@ -39,8 +39,8 @@ exports.describe = COMMAND_SHORT_DESCR;
 exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.DEVICE_GROUP_IDENTIFIER] : false,
-        [Options.FULL] : false,
         [Options.FORCE] : false,
+        [Options.CONFIRMED] : false,
         [Options.DEBUG] : false
     });
     return yargs
