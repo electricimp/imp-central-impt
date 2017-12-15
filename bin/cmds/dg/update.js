@@ -30,11 +30,12 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'update';
 const COMMAND_SECTION = 'dg';
+const COMMAND_SHORT_DESCR = 'Updates the specified Device Group.';
 const COMMAND_DESCRIPTION = 'Updates the specified Device Group. Fails if the specified Device Group does not exist.';
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({
@@ -58,6 +59,7 @@ exports.builder = function (yargs) {
                 Options.DG_TYPE_FACTORY, Options.DG_TYPE_PRE_FACTORY, Options.DG_TYPE_PRODUCTION, Options.DG_TYPE_PRE_PRODUCTION)
         },
         [Options.LOAD_CODE_AFTER_BLESSING] : false,
+        [Options.MIN_SUPPORTED_DEPLOYMENT] : false,
         [Options.DEBUG] : false
     });
     return yargs

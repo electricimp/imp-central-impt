@@ -29,11 +29,12 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'link';
 const COMMAND_SECTION = 'project';
+const COMMAND_SHORT_DESCR = 'Creates new Project File by linking it to the specified Device Group.';
 const COMMAND_DESCRIPTION = 'Creates new Project File in the current directory by linking it to the specified Device Group.';
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({

@@ -32,12 +32,13 @@ const UserInteractor = require('../../../lib/util/UserInteractor');
 
 const COMMAND = 'create';
 const COMMAND_SECTION = 'dg';
+const COMMAND_SHORT_DESCR = 'Creates a new Device Group for the specified Product.';
 const COMMAND_DESCRIPTION = 'Creates a new Device Group for the specified Product.' +
     ' Fails if Device Group with the specified Name already exists in the specified Product.';
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({

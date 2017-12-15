@@ -32,12 +32,13 @@ const UserInteractor = require('../../../lib/util/UserInteractor');
 
 const COMMAND = 'create';
 const COMMAND_SECTION = 'project';
+const COMMAND_SHORT_DESCR = 'Creates a new Device Group and new Project File.';
 const COMMAND_DESCRIPTION = 'Creates a new Device Group for the specified Product and creates new Project File' +
     ' in the current directory by linking it to the new Device Group.';
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({

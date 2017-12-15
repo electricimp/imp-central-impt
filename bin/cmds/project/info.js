@@ -29,13 +29,14 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'info';
 const COMMAND_SECTION = 'project';
+const COMMAND_SHORT_DESCR = 'Displays information about the Project.';
 const COMMAND_DESCRIPTION = 'Displays information about the Project.' +
     ' Fails if there is no Project File in the current directory.' +
     ' With every call the latest actual information is obtained using impCentral API.';
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({

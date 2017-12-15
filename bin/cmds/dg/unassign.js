@@ -29,11 +29,13 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'unassign';
 const COMMAND_SECTION = 'dg';
-const COMMAND_DESCRIPTION = 'Unassigns all Devices from the specified Device Group. Does nothing if the Device Group has no Devices assigned.';
+const COMMAND_SHORT_DESCR = 'Unassigns all Devices from the specified Device Group.';
+const COMMAND_DESCRIPTION = 'Unassigns all Devices from the specified Device Group.' +
+    ' Does nothing if the Device Group has no Devices assigned.';
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({

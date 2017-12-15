@@ -29,11 +29,12 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'delete';
 const COMMAND_SECTION = 'loginkey';
-const COMMAND_DESCRIPTION = 'Deletes the specified Login Key.';
+const COMMAND_SHORT_DESCR = 'Deletes the specified Login Key.';
+const COMMAND_DESCRIPTION = COMMAND_SHORT_DESCR;
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({

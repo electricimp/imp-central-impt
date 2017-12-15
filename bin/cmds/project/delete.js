@@ -31,13 +31,14 @@ const UserInteractor = require('../../../lib/util/UserInteractor');
 
 const COMMAND = 'delete';
 const COMMAND_SECTION = 'project';
+const COMMAND_SHORT_DESCR = 'Deletes Project File and related entities.';
 const COMMAND_DESCRIPTION = 'Deletes Project File in the current directory and, optionally, the Device Group referenced by the Project File,' +
     ' the corresponding Product (if it contains one Device Group only) and the local source files.' +
     ' Does nothing if there is no Project File in the current directory.';
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const formattedCommandOptions = Options.getFormattedCommandOptions(

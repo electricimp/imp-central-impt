@@ -32,12 +32,13 @@ const UserInteractor = require('../../../lib/util/UserInteractor');
 
 const COMMAND = 'update';
 const COMMAND_SECTION = 'project';
+const COMMAND_SHORT_DESCR = 'Updates the project settings and/or related Device Group attributes.';
 const COMMAND_DESCRIPTION = 'Updates the project settings and/or Name, Description, production target of the' +
     ' Device Group referenced by Project File. Fails if there is no Project File in the current directory.';
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({

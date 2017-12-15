@@ -29,11 +29,12 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'unflag';
 const COMMAND_SECTION = 'dg';
-const COMMAND_DESCRIPTION = 'Set "flagged" attribute to false in all Deployments of the specified Device Group.';
+const COMMAND_SHORT_DESCR = 'Set "flagged" attribute to false in all Deployments of the specified Device Group.';
+const COMMAND_DESCRIPTION = COMMAND_SHORT_DESCR;
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({

@@ -29,11 +29,12 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'create';
 const COMMAND_SECTION = 'loginkey';
+const COMMAND_SHORT_DESCR = 'Creates a new Login Key.';
 const COMMAND_DESCRIPTION = 'Creates a new Login Key for the currently logged-in account.';
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({

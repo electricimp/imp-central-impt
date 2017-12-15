@@ -29,12 +29,13 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'reassign';
 const COMMAND_SECTION = 'dg';
+const COMMAND_SHORT_DESCR = 'Reassigns all Devices from one Device Group to another.';
 const COMMAND_DESCRIPTION = 'Reassigns all Devices from one Device Group to another.' +
     ' Fails if any of the specified Device Groups does not exist.';
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({
