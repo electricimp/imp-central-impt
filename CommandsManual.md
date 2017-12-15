@@ -931,11 +931,16 @@ At the end of the command execution information about the project is displayed (
 Deletes [Project File](#project-file) in the current directory and, optionally, the impCentral API entities (Device Group, Product) related to the project, and, optionally, the local source files.
 Does nothing if there is no [Project File](#project-file) in the current directory.
 
-If **--entities** option is specified, the command additionally deletes:
-- the Device Group referenced by [Project File](#project-file). All Devices assigned to this Device Group to be unassigned. All Deployments for this Device Group which have *"flagged"* attribute with value *true* to be updated to set it to *false*. As by [**impt dg delete --force**](#device-group-delete) command.
-- (if applicable) the production target Device Group for the Device Group referenced by [Project File](#project-file). All Devices assigned to this Device Group to be unassigned. All Deployments for this Device Group which have *"flagged"* attribute with value *true* to be updated to set it to *false*. As by [**impt dg delete --force**](#device-group-delete) command.
-- all builds (Deployments) related to the Device Groups mentioned above.
-- the Product which contains the Device Group referenced by [Project File](#project-file). The Product is NOT deleted if it contains more Device Groups, additional to the Device Groups mentioned above. But this is NOT considered as a command fail, the rest of the command may be completed successfully.
+If **--entities** option is specified, the command additionally:
+- unassigns all Devices from the project Device Group (Device Group referenced by [Project File](#project-file)).
+- deletes the project Device Group.
+- deletes all builds (Deployments) of the project Device Group, including Deployments with *"flagged"* attribute set to *true*.
+- if the project Device Group has a production target Device Group and that is a production target for one and only one Device Group:
+  - unassigns all Devices from the production target Device Group.
+  - deletes the production target Device Group.
+  - deletes all builds (Deployments) of the production target Device Group, including Deployments with *"flagged"* attribute set to *true*.
+- if the corresponding Product (the Product which contains the Device Group referenced by [Project File](#project-file)) includes only the project Device Group and, if applicable, the production target Device Group mentioned above and does not include any other Device Groups:
+  - deletes the corresponding Product.
 
 User is informed about all entities and files which are going to be deleted or updated and is asked to confirm the operation (confirmed automatically with **--confirmed** option).
 
@@ -985,7 +990,7 @@ At the end of the command execution information about the project is displayed (
 | --dg | -g | yes | yes | [Device Group Identifier](#device-group-identifier). |
 | --device-file | -x | no | yes | Name of a file for IMP device source code. Default value: *device.nut* |
 | --agent-file | -y | no | yes | Name of a file for IMP agent source code. Default value: *agent.nut* |
-| --create-files | -c | no | no | Creates empty file(s) if the file(s) specified by **--device-file**, **--agent-file** options does not exist. |
+| --create-files | -c | no | no | Creates empty file(s) if the file(s) referenced by [Project File](#project-file) as the file(s) with IMP device/agent source code do not exist. |
 | --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
