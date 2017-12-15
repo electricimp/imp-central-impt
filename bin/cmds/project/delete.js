@@ -32,8 +32,8 @@ const UserInteractor = require('../../../lib/util/UserInteractor');
 const COMMAND = 'delete';
 const COMMAND_SECTION = 'project';
 const COMMAND_SHORT_DESCR = 'Deletes Project File and related entities.';
-const COMMAND_DESCRIPTION = 'Deletes Project File in the current directory and, optionally, the Device Group referenced by the Project File,' +
-    ' the corresponding Product (if it contains one Device Group only) and the local source files.' +
+const COMMAND_DESCRIPTION = 'Deletes Project File in the current directory and, optionally,' +
+    ' the impCentral API entities (Device Group, Product) related to the project, and, optionally, the local source files.' +
     ' Does nothing if there is no Project File in the current directory.';
 
 exports.command = COMMAND;
@@ -41,25 +41,15 @@ exports.command = COMMAND;
 exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
-    const formattedCommandOptions = Options.getFormattedCommandOptions(
-        '[%s | %s] %s',
-        { [Options.DEVICE_GROUP] : { demandOption : true, isProjectOption : true } },
-        { [Options.PRODUCT] : { demandOption : true, isProjectOption : true } },
-        {
-            [Options.FILES] : false,
-            [Options.FORCE] : false,
-            [Options.DEBUG] : false
-        });
-
     const options = Options.getOptions({
-        [Options.DEVICE_GROUP] : { demandOption : false, isProjectOption : true },
-        [Options.PRODUCT] : { demandOption : false, isProjectOption : true },
+        [Options.ENTITIES] : false,
         [Options.FILES] : false,
+        [Options.ALL] : false,
         [Options.FORCE] : false,
         [Options.DEBUG] : false
     });
     return yargs
-        .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, formattedCommandOptions))
+        .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
         .options(options)
         .check(function (argv) {
             const options = new Options(argv);

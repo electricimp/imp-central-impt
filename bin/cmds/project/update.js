@@ -63,9 +63,10 @@ exports.builder = function (yargs) {
         [Options.RENAME_FILES] : false,
         [Options.CREATE_FILES] : {
             demandOption : false,
-            describe : Util.format('Creates empty file(s) if the file(s) specified by --%s, --%s options does not exist.' +
+            describe : Util.format('Creates empty file(s) if the file(s) referenced by Project File' +
+                ' as the file(s) with IMP device/agent source code do not exist.' +
                 ' Should not be specified together with --%s option.',
-                Options.DEVICE_FILE, Options.AGENT_FILE, Options.RENAME_FILES)
+                Options.RENAME_FILES)
         },
         [Options.TARGET] : {
             demandOption : false,
