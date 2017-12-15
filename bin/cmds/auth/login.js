@@ -32,8 +32,7 @@ const UserInteractor = require('../../../lib/util/UserInteractor');
 const COMMAND = 'login';
 const COMMAND_SECTION = 'auth';
 const COMMAND_SHORT_DESCR = 'Global or local login.';
-const COMMAND_DESCRIPTION = 'Global or local login. Creates Global or Local Auth File.' +
-    ' If the corresponding Auth File already exists, it is overwritten.';
+const COMMAND_DESCRIPTION = 'Global or local login. Creates Global or Local Auth File.';
 
 exports.command = COMMAND;
 
@@ -55,6 +54,7 @@ exports.builder = function (yargs) {
         },
         {
             [Options.TEMP] : false,
+            [Options.CONFIRMED] : false,
             [Options.DEBUG] : false,
         });
 
@@ -65,6 +65,7 @@ exports.builder = function (yargs) {
         [Options.PASSWORD] : false,
         [Options.LOGIN_KEY] : false,
         [Options.TEMP] : false,
+        [Options.CONFIRMED] : false,
         [Options.DEBUG] : false
     });
 
