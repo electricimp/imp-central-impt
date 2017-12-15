@@ -31,12 +31,13 @@ const UserInteractor = require('../../../lib/util/UserInteractor');
 
 const COMMAND = 'login';
 const COMMAND_SECTION = 'auth';
+const COMMAND_SHORT_DESCR = 'Global or local login.';
 const COMMAND_DESCRIPTION = 'Global or local login. Creates Global or Local Auth File.' +
     ' If the corresponding Auth File already exists, it is overwritten.';
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const formattedCommandOptions = Options.getFormattedCommandOptions(

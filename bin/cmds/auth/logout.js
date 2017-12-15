@@ -29,11 +29,12 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'logout';
 const COMMAND_SECTION = 'auth';
+const COMMAND_SHORT_DESCR = 'Global or local logout.';
 const COMMAND_DESCRIPTION = 'Global or local logout. Deletes Global or Local Auth File.';
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({

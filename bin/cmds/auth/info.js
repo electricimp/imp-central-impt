@@ -29,12 +29,13 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'info';
 const COMMAND_SECTION = 'auth';
+const COMMAND_SHORT_DESCR = 'Displays the status and the details of the tool authentication applicable to the current directory.';
 const COMMAND_DESCRIPTION = 'Displays the status and the details of the tool authentication applicable to the current directory. ' +
     'Whether Local or Global Auth File is used.';
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({
