@@ -41,7 +41,6 @@ exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.FROM] : true,
         [Options.TO] : false,
-        [Options.CONFIRMED] : false,
         [Options.DEBUG] : false
     });
     return yargs
