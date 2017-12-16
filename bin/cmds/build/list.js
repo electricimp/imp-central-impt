@@ -72,6 +72,8 @@ exports.builder = function (yargs) {
             _usage: ''
         },
         [Options.UNFLAGGED] : false,
+        [Options.NON_ZOMBIE] : false,
+        [Options.ZOMBIE] : false,
         [Options.DEBUG] : false
     });
     return yargs
