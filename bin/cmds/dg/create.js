@@ -47,7 +47,12 @@ exports.builder = function (yargs) {
             describe : 'Name of the Device Group. Must be unique among all Device Groups in the specified Product.',
             _usage : '<device_group_name>'
         },
-        [Options.TYPE] : true,
+        [Options.DEVICE_GROUP_TYPE] : {
+            demandOption : false,
+            describe : 'Type of the Device Group.',
+            type : 'string',
+            default: Options.DG_TYPE_DEVELOPMENT
+        },
         [Options.PRODUCT_IDENTIFIER] : false,
         [Options.DESCRIPTION] : {
             demandOption : false,
@@ -68,9 +73,9 @@ exports.builder = function (yargs) {
         .options(options)
         .check(function (argv) {
             const options = new Options(argv);
-            if (!options.target && Options.isProductionTargetRequired(options.type)) {
+            if (!options.target && Options.isProductionTargetRequired(options.deviceGroupType)) {
                 return new Errors.ImptError(UserInteractor.ERRORS.CMD_TARGET_REQUIRED,
-                    Options.TARGET, Options.getDeviceGroupTypeName(options.type));
+                    Options.TARGET, Options.getDeviceGroupTypeName(options.deviceGroupType));
             }
             return true;
         })
