@@ -30,7 +30,7 @@ const Options = require('../../../lib/util/Options');
 const COMMAND = 'delete';
 const COMMAND_SECTION = 'dg';
 const COMMAND_SHORT_DESCR = 'Deletes the specified Device Group.';
-const COMMAND_DESCRIPTION = COMMAND_SHORT_DESCR;
+const COMMAND_DESCRIPTION = 'Deletes the specified Device Group and, optionally, all the related builds (Deployments).';
 
 exports.command = COMMAND;
 
@@ -39,6 +39,10 @@ exports.describe = COMMAND_SHORT_DESCR;
 exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.DEVICE_GROUP_IDENTIFIER] : false,
+        [Options.BUILDS] : {
+            demandOption : false,
+            describe : 'Additionally deletes all Deployments related to the Device Group.',
+        },
         [Options.FORCE] : false,
         [Options.CONFIRMED] : false,
         [Options.DEBUG] : false

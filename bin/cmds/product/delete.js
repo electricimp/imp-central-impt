@@ -39,6 +39,11 @@ exports.describe = COMMAND_SHORT_DESCR;
 exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.PRODUCT_IDENTIFIER] : false,
+        [Options.BUILDS] : {
+            demandOption : false,
+            describe : 'Additionally deletes all Deployments related to all Device Groups which belong/belonged to the Product,' +
+                ' including the Device Groups that were deleted before.',
+        },
         [Options.FORCE] : false,
         [Options.CONFIRMED] : false,
         [Options.DEBUG] : false
