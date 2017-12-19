@@ -61,8 +61,8 @@
 **[impt test delete](#test-delete)**  
 **[impt test github](#test-github)**  
 **[impt test info](#test-info)**  
-**[impt test update](#test-update)**  
 **[impt test run](#test-run)**  
+**[impt test update](#test-update)**  
 
 **[impt webhook create](#webhook-create)**  
 **[impt webhook delete](#webhook-delete)**  
@@ -270,7 +270,7 @@ User is asked to confirm the operation (confirmed automatically with **--confirm
 
 #### Build Copy
 
-**impt build copy --build <BUILD_IDENTIFIER> \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--debug] \[--help]**
+**impt build copy \[--build <BUILD_IDENTIFIER>] --dg <DEVICE_GROUP_IDENTIFIER> \[--debug] \[--help]**
 
 Copies the specified build (Deployment) to the new Deployment of the specified Device Group.
 Fails if the specified Deployment or the specified Device Group does not exist.
@@ -283,8 +283,8 @@ The source code of the builds is not saved locally. To download the source code 
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --build | -b | yes | yes | [Build Identifier](#build-identifier) of the Deployment to be copied. |
-| --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier) of the Device Group the new Deployment is created for. If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| --build | -b | yes/[project](#project-file) | yes | [Build Identifier](#build-identifier) of the Deployment to be copied. If not specified, the most recent Deployment for the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| --dg | -g | yes | yes | [Device Group Identifier](#device-group-identifier) of the Device Group the new Deployment is created for. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -452,13 +452,14 @@ The operation may fail for some combinations of the Device Group [types](#device
 
 #### Device Info
 
-**impt device info --device <DEVICE_IDENTIFIER> \[--debug] \[--help]**
+**impt device info --device <DEVICE_IDENTIFIER> \[--full] \[--debug] \[--help]**
 
 Displays information about the specified Device.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --device | -d | yes | yes | [Device Identifier](#device-identifier). |
+| --full | | no | no | Displays additional information. Details about the Deployment currently running on the Device and other. | 
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -929,7 +930,7 @@ At the end of the command execution information about the project is displayed (
 
 **impt project delete \[--entities] \[--files] \[--all] \[--confirmed] \[--debug] \[--help]**
 
-Deletes [Project File](#project-file) in the current directory and, optionally, the impCentral API entities (Device Group, Product) related to the project, and, optionally, the local source files.
+Deletes [Project File](#project-file) in the current directory and, optionally, the impCentral API entities (Device Group, Product, Deployments) related to the project, and, optionally, the local source files.
 Does nothing if there is no [Project File](#project-file) in the current directory.
 
 If **--entities** option is specified, the command additionally:
@@ -947,7 +948,7 @@ User is informed about all entities and files which are going to be deleted or u
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --entities | | no | no | Also deletes the impCentral API entities (Device Group, Product) referenced by [Project File](#project-file). See above. |
+| --entities | | no | no | Also deletes the impCentral API entities (Device Group, Product, Deployments) referenced by [Project File](#project-file). See above. |
 | --files | | no | no | Also deletes the files referenced by [Project File](#project-file) as files with IMP device and agent source code. |
 | --all | -a | no | no | Includes **--entities** and **--files** options. |
 | --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
@@ -1023,7 +1024,7 @@ At the end of the command execution information about the project is displayed (
 
 #### Test Create
  
-**impt test create --dg <DEVICE_GROUP_IDENTIFIER> \[--device-file <device_file>] \[--agent-file <agent_file>] \[--timeout \<timeout>] \[--stop-on-fail \[true|false]] \[--builder-cache \[true|false]] \[--test-file <test_file_name_pattern>] \[--confirmed] \[--debug] \[--help]**
+**impt test create --dg <DEVICE_GROUP_IDENTIFIER> \[--device-file <device_file>] \[--agent-file <agent_file>] \[--timeout \<timeout>] \[--stop-on-fail \[true|false]] \[--allow-disconnect \[true|false]] \[--builder-cache \[true|false]] \[--test-file <test_file_name_pattern>] \[--confirmed] \[--debug] \[--help]**
 
 Creates [Test Configuration File](#test-configuration-file) in the current directory.
 
@@ -1038,6 +1039,7 @@ At the end of the command execution information about the tests configuration is
 | --agent-file | -y | no | yes | A path to an optional file with the agent source code that is deployed along with the tests. A relative or absolute path can be used. |
 | --timeout | -t | no | yes | A timeout period (in seconds) after which the tests are interrupted and considered as failed. By default: 30 seconds. |
 | --stop-on-fail | | no | no | If *true* or no value: the tests execution is stopped after a test failure. If *false* value: the tests execution is not stopped after a failure. By default: *false* |
+| --allow-disconnect | | no | no | If *true* or no value: keep a test session alive when a device is temporary disconnected. If *false* value: a test session fails when a device is disconnected. By default: *false* |
 | --builder-cache | | no | no | If *true* or no value: cache external libraries in the local *.builder-cache* directory. If *false* value: do not cache external libraries. By default: *false* |
 | --test-file | | no | yes | Test file name or pattern. All files located in the current directory (and its subdirectories) which names match this pattern are considered as files with Test Cases. This option may be repeated several times to specify several names and/or patterns. By default: *"\*.test.nut" "tests/\*\*/\*.test.nut"* |
 | --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
@@ -1093,26 +1095,6 @@ With every call the latest actual information is obtained using impCentral API.
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
-#### Test Update
- 
-**impt test update \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--device-file \[<device_file>]] \[--agent-file \[<agent_file>]] \[--timeout \<timeout>] \[--stop-on-fail \[true|false]] \[--builder-cache \[true|false]] \[--test-file <test_file_name_pattern>] \[--debug] \[--help]**
-
-Updates [Test Configuration File](#test-configuration-file) in the current directory. Fails if there is no [Test Configuration File](#test-configuration-file) in the current directory.
-
-At the end of the command execution information about the tests configuration is displayed (as by [**impt test info**](#test-info) command).
-
-| Option | Alias | Mandatory? | Value Required? | Description |
-| --- | --- | --- | --- | --- |
-| --dg | -g | no | yes | [Device Group Identifier](#device-group-identifier) of Device Group whose Devices are used for tests execution. |
-| --device-file | -x | no | no | A path to a file with the device source code that is deployed along with the tests. A relative or absolute path can be used. Specify this option w/o a value to remove this file from the test configuration. |
-| --agent-file | -y | no | no | A path to a file with the agent source code that is deployed along with the tests. A relative or absolute path can be used. Specify this option w/o a value to remove this file from the test configuration. |
-| --timeout | -t | no | yes | A timeout period (in seconds) after which the tests are interrupted and considered as failed. |
-| --stop-on-fail | | no | no | If *true* or no value: the tests execution is stopped after a test failure. If *false* value: the tests execution is not stopped after a failure. |
-| --builder-cache | | no | no | If *true* or no value: cache external libraries in the local *.builder-cache* directory. If *false* value: do not cache external libraries. |
-| --test-file | | no | yes | Test file name or pattern. All files located in the current directory (and its subdirectories) which names match this pattern are considered as files with Test Cases. This option may be repeated several times to specify several names and/or patterns. |
-| --debug | -z | no | no | Displays debug info of the command execution. |
-| --help | -h | no | no | Displays description of the command. Ignores any other options. |
-
 #### Test Run
 
 **impt test run \[--tests <testcase_pattern>] \[--github-config \[<github_credentials_file_name>]] \[--builder-config \[<builder_file_name>]] \[--builder-cache \[true|false]] \[--debug] \[--help]**
@@ -1125,6 +1107,27 @@ Runs the tests specified by [Test Configuration File](#test-configuration-file) 
 | --github-config | | no | no | A path to the github credentials configuration file. A relative or absolute path can be used. If the value of the option is not specified, *.impt.github-info* file in the current directory is assumed. |
 | --builder-config | | no | no | A path to the file with *Builder* variables. A relative or absolute path can be used. If the value of the option is not specified, *.impt.builder* file in the current directory is assumed. |
 | --builder-cache | | no | no | If *true* or no value: cache (if not cached yet) external libraries in the local *.builder-cache* directory and use them from the cache for this test run. If *false* value: do not use external libraries from the cache even if they are cached. If not specified, the behavior is defined by the corresponding settings in [Test Configuration File](#test-configuration-file) that was created by [**impt test create**](#test-create) command. |
+| --debug | -z | no | no | Displays debug info of the command execution. |
+| --help | -h | no | no | Displays description of the command. Ignores any other options. |
+
+#### Test Update
+ 
+**impt test update \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--device-file \[<device_file>]] \[--agent-file \[<agent_file>]] \[--timeout \<timeout>] \[--stop-on-fail \[true|false]] \[--allow-disconnect \[true|false]] \[--builder-cache \[true|false]] \[--test-file <test_file_name_pattern>] \[--debug] \[--help]**
+
+Updates [Test Configuration File](#test-configuration-file) in the current directory. Fails if there is no [Test Configuration File](#test-configuration-file) in the current directory.
+
+At the end of the command execution information about the tests configuration is displayed (as by [**impt test info**](#test-info) command).
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --dg | -g | no | yes | [Device Group Identifier](#device-group-identifier) of Device Group whose Devices are used for tests execution. |
+| --device-file | -x | no | no | A path to a file with the device source code that is deployed along with the tests. A relative or absolute path can be used. Specify this option w/o a value to remove this file from the test configuration. |
+| --agent-file | -y | no | no | A path to a file with the agent source code that is deployed along with the tests. A relative or absolute path can be used. Specify this option w/o a value to remove this file from the test configuration. |
+| --timeout | -t | no | yes | A timeout period (in seconds) after which the tests are interrupted and considered as failed. |
+| --stop-on-fail | | no | no | If *true* or no value: the tests execution is stopped after a test failure. If *false* value: the tests execution is not stopped after a failure. |
+| --allow-disconnect | | no | no | If *true* or no value: keep a test session alive when a device is temporary disconnected. If *false* value: a test session fails when a device is disconnected. |
+| --builder-cache | | no | no | If *true* or no value: cache external libraries in the local *.builder-cache* directory. If *false* value: do not cache external libraries. |
+| --test-file | | no | yes | Test file name or pattern. All files located in the current directory (and its subdirectories) which names match this pattern are considered as files with Test Cases. This option may be repeated several times to specify several names and/or patterns. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
