@@ -48,6 +48,10 @@ exports.builder = function (yargs) {
             demandOption : true,
             describe : 'Device Group Identifier of the Device Group the new Deployment is created for.'
         },
+        [Options.ALL] : {
+            demandOption : false,
+            describe : 'Copy all attributes of the specified Deployment.'
+        },
         [Options.DEBUG] : false
     });
     return yargs

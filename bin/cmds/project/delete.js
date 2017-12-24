@@ -24,6 +24,7 @@
 
 'use strict';
 
+const Util = require('util');
 const Project = require('../../../lib/Project');
 const Options = require('../../../lib/util/Options');
 const Errors = require('../../../lib/util/Errors');
@@ -44,7 +45,10 @@ exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.ENTITIES] : false,
         [Options.FILES] : false,
-        [Options.ALL] : false,
+        [Options.ALL] : {
+            demandOption : false,
+            describe : Util.format('Includes --%s and --%s options.', Options.ENTITIES, Options.FILES)
+        },
         [Options.CONFIRMED] : false,
         [Options.DEBUG] : false
     });
