@@ -33,8 +33,8 @@ const COMMAND = 'delete';
 const COMMAND_SECTION = 'project';
 const COMMAND_SHORT_DESCR = 'Deletes Project File and related entities.';
 const COMMAND_DESCRIPTION = 'Deletes Project File in the current directory and, optionally,' +
-    ' the impCentral API entities (Device Group, Product) related to the project, and, optionally, the local source files.' +
-    ' Does nothing if there is no Project File in the current directory.';
+    ' the impCentral API entities (Device Group, Product, Deployments) related to the project, and, optionally,' +
+    ' the local source files. Does nothing if there is no Project File in the current directory.';
 
 exports.command = COMMAND;
 
