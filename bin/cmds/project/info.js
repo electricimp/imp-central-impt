@@ -40,6 +40,11 @@ exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({
+        [Options.FULL] : {
+            demandOption : false,
+            describe : 'Displays additional information.' +
+                ' Full details about the corresponding Device Group, authentication status applicable to the current directory.'
+        },
         [Options.DEBUG] : false
     });
     return yargs
@@ -50,5 +55,5 @@ exports.builder = function (yargs) {
 
 exports.handler = function (argv) {
     const options = new Options(argv);
-    new Project(options).info();
+    new Project(options).info(options);
 };

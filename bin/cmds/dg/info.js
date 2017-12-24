@@ -39,6 +39,10 @@ exports.describe = COMMAND_SHORT_DESCR;
 exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.DEVICE_GROUP_IDENTIFIER] : false,
+        [Options.FULL] : {
+            demandOption : false,
+            describe : 'Displays additional information. Details about every Device assigned to the Device Group, Deployments and other.'
+        },
         [Options.DEBUG] : false
     });
     return yargs
