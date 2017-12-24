@@ -30,7 +30,7 @@ const Options = require('../../../lib/util/Options');
 const COMMAND = 'restart';
 const COMMAND_SECTION = 'device';
 const COMMAND_SHORT_DESCR = 'Reboots the specified Device.';
-const COMMAND_DESCRIPTION = COMMAND_SHORT_DESCR;
+const COMMAND_DESCRIPTION = 'Reboots the specified Device and, optionally, starts displaying logs from it.';
 
 exports.command = COMMAND;
 
@@ -40,6 +40,11 @@ exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.DEVICE_IDENTIFIER] : true,
         [Options.CONDITIONAL] : false,
+        [Options.LOG] : {
+            demandOption : false,
+            describe : 'Starts displaying logs from the specified Device (see impt log stream command description).' +
+                ' To stop displaying the logs press <Ctrl-C>.'
+        },
         [Options.DEBUG] : false
     });
     return yargs
