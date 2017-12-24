@@ -270,12 +270,12 @@ User is asked to confirm the operation (confirmed automatically with **--confirm
 
 #### Build Copy
 
-**impt build copy \[--build <BUILD_IDENTIFIER>] --dg <DEVICE_GROUP_IDENTIFIER> \[--debug] \[--help]**
+**impt build copy \[--build <BUILD_IDENTIFIER>] --dg <DEVICE_GROUP_IDENTIFIER> \[--all] \[--debug] \[--help]**
 
 Copies the specified build (Deployment) to the new Deployment of the specified Device Group.
 Fails if the specified Deployment or the specified Device Group does not exist.
 
-The new build for the specified Device Group is created with the same attributes as the specified original build has.
+The new build for the specified Device Group is created from the IMP device and agent code that the specified original build has. If **--all** option is specified, all other attributes (like Description, origin, flagged, tags) are copied to the new build as well.
 
 The new build is not ran until the Devices are rebooted. To run it call **[impt dg restart](#device-group-restart)** or **[impt device restart](#device-restart)** command.
 
@@ -285,6 +285,7 @@ The source code of the builds is not saved locally. To download the source code 
 | --- | --- | --- | --- | --- |
 | --build | -b | yes/[project](#project-file) | yes | [Build Identifier](#build-identifier) of the Deployment to be copied. If not specified, the most recent Deployment for the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
 | --dg | -g | yes | yes | [Device Group Identifier](#device-group-identifier) of the Device Group the new Deployment is created for. |
+| --all | -a | no | no | Copy all attributes of the specified Deployment. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -505,14 +506,15 @@ User is asked to confirm the operation (confirmed automatically with **--confirm
 
 #### Device Restart
 
-**impt device restart --device <DEVICE_IDENTIFIER> \[--conditional] \[--debug] \[--help]**
+**impt device restart --device <DEVICE_IDENTIFIER> \[--conditional] \[--log] \[--debug] \[--help]**
 
-Reboots the specified Device.
+Reboots the specified Device and, optionally, starts displaying logs from it.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --device | -d | yes | yes | [Device Identifier](#device-identifier). |
 | --conditional | -c | no | no | Conditional restart (see the impCentral API spec). |
+| --log | -l | no | no | Starts displaying logs from the specified Device (see **[impt log stream](#log-stream)** command description). To stop displaying the logs press *\<Ctrl-C>*. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -652,15 +654,16 @@ The operation may fail for some combinations of the Device Group [types](#device
 
 #### Device Group Restart
 
-**impt dg restart \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--conditional] \[--debug] \[--help]**
+**impt dg restart \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--conditional] \[--log] \[--debug] \[--help]**
 
-Reboots all Devices assigned to the specified Device Group.
+Reboots all Devices assigned to the specified Device Group and, optionally, starts displaying logs from them.
 Does nothing if the Device Group has no Devices assigned.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
 | --conditional | -c | no | no | Conditional restart (see the impCentral API spec). |
+| --log | -l | no | no | Starts displaying logs from the Devices assigned to the specified Device Group (see **[impt log stream](#log-stream)** command description). To stop displaying the logs press *\<Ctrl-C>*. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
