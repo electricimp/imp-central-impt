@@ -42,7 +42,10 @@ exports.builder = function (yargs) {
             demandOption : false,
             describe: 'Product Identifier: Product Id or Product name.'
         },
-        [Options.UNFLAG] : false,
+        [Options.UNFLAG] :  {
+            demandOption : false,
+            describe: 'Delete a Deployment even if it has "flagged" attribute set to true.'
+        },
         [Options.CONFIRMED] : false,
         [Options.DEBUG] : false
     });
