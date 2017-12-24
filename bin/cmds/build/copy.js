@@ -40,14 +40,13 @@ exports.describe = COMMAND_SHORT_DESCR;
 exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.BUILD_IDENTIFIER] :  {
-            demandOption : true,
-            describe : 'Build Identifier of the Deployment to be copied.'
+            demandOption : false,
+            describe : 'Build Identifier of the Deployment to be copied. If not specified, the most recent Deployment' +
+                ' for the Device Group referenced by Project File in the current directory is assumed (if no Project File, the command fails).'
         },
         [Options.DEVICE_GROUP_IDENTIFIER] : {
-            demandOption : false,
-            describe : 'Device Group Identifier of the Device Group the new Deployment is created for.' +
-                ' If not specified, the Device Group referenced by Project File in the current directory is assumed' +
-                ' (if no Project File, the command fails).'
+            demandOption : true,
+            describe : 'Device Group Identifier of the Device Group the new Deployment is created for.'
         },
         [Options.DEBUG] : false
     });
