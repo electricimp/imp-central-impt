@@ -75,9 +75,10 @@ At any time you can update your Project by [**impt project update**](./CommandsM
 - the project's Device Group Name and Description, the production target Device Group. The same can be done by [**impt dg update**](./CommandsManual.md#device-group-update) command as well.
 - change the source files which are linked to the Project. You can specify new file name(s), rename the previous file(s), create empty file(s).
 
-Note, you can update other impCentral API entities related to your Project by using other impt commands. For example, [**impt product update**](./CommandsManual.md#product-update) command to change Name and Description of the related Product.
+Note, you can update other impCentral API entities related to your Project by using other impt commands. For example, use [**impt product update**](./CommandsManual.md#product-update) command to change Name and Description of the related Product.
 
-*Example* - update Description of the project's Device Group, rename the linked device source file to "device1.nut"  
+*Example*
+*Update Description of the project's Device Group, rename the linked device source file to "device1.nut"*  
 **TODO** screenshot - impt project update -s "New description of my DG" -x device1.nut -r  
 
 ### Device Manipulation
@@ -99,16 +100,18 @@ Usually, it is enough to have one device added to your Project for development/d
 
 ### Build Creation and Running
 
-To create a new build (Deployment) without running it immediately use [**impt build deploy**](./CommandsManual.md#build-deploy) command. By default the Deployment will be created from the source files referenced by your Project. When you want to run the new Deployment:
+To create a new build (Deployment) without running it immediately use [**impt build deploy**](./CommandsManual.md#build-deploy) command. By default the Deployment will be created from the source files referenced by your Project. When you want/need to run the newly created Deployment:
 - use [**impt device restart --device <DEVICE_IDENTIFIER>**](./CommandsManual.md#device-restart) command to run the new build on a concrete device.
 - use [**impt dg restart**](./CommandsManual.md#device-group-restart) command to run the new build on all Devices of your Project (the project's Device Group).
 
 Alternatively, you can use [**impt build run**](./CommandsManual.md#build-run) command. It behaves exactly like [**impt build deploy**](./CommandsManual.md#build-deploy) command followed by [**impt dg restart**](./CommandsManual.md#device-group-restart) command.
 
-*Example* - create a new flagged Deployment with Description and tag  
+*Example*  
+*Create a new flagged Deployment with Description and tag*  
 **TODO** screenshot - impt build deploy -s "my new build" -t TAG1 --flagged  
 
-*Example* - run the new Deployment  
+*Example*  
+*Run the new Deployment*  
 **TODO** screenshot - impt dg restart  
 
 ### Logging
@@ -126,15 +129,57 @@ Note, a limited number of log entries are kept by impCentral API for a limited p
 *Example*  
 **TODO** screenshot - impt log get --page-size 5 - display 2 pages and Ctrl-C  
 
-#### Realtime Logs
+#### Real-time Logs
+
+impCentral API allows to get log entries from device(s) in real-time as a log stream. Several devices may be added to one log stream but there is a limit on a number of devices. Also, there is a limit on the number of log streams per one account. The both limits are controlled by the impCentral API, not by the impt tool.
+
+The impt tool provides several commands which start displaying real-time logs:
+- the most universal command is [**impt log stream**](./CommandsManual.md#log-stream). You can specify several concrete Devices and/or Device Groups, all the devices are added into new log stream and logs displaying is started. If you do not specify any Device or Device Group, all Devices assigned to your project's Device Group are added to the log stream.
+- [**impt build run**](./CommandsManual.md#build-run) command with the option **--log** adds all Devices of the Device Group, for which the new Deployment is created, into new log stream and logs displaying is started.
+- [**impt dg restart**](./CommandsManual.md#device-group-restart) command with the option **--log** adds all Devices of the rebooted Device Group into new log stream and logs displaying is started.
+- [**impt device restart --device <DEVICE_IDENTIFIER>**](./CommandsManual.md#device-restart) command with the option **--log** adds the specified Device into new log stream and logs displaying is started.
+
+If the total number of devices requested for adding to one log stream exceeds the limit of devices per stream, not all of them are really added. You may check the command's output to see which devices are added and which are not.
+
+While the logs are being streamed no one command can be called. To stop displaying the logs press *\<Ctrl-C>*. Also, the log stream may be closed by the impCentral API. For example, when a new log stream is requested by the same account and that exceeds the limit of opened streams.
+
+Every above command always creates a new log stream. In case impCentral API allows to have only one opened log stream per account, then it means every successful execution of the new command automatically closes the previous log stream, which was working in another impt tool instance or in the impCentral IDE. Starting a log in the impCentral IDE closes the log stream opened in the impt tool.
+
+*Example*  
+*Logging is started for a Device from the project's Device Group*  
+**TODO** screenshot - impt log stream : one device from project's DG is added, Ctrl-C  
 
 ### Pre-Factory Specifics
 
 ### Project Info
 
+At any time you can get known the actual status of your Project configuration - the related Device Group, Product, the linked source files, etc. - by [**impt project info**](./CommandsManual.md#project-info) command. Additional option **--full** provides you even moe details. For example, information about Devices added to your Project, the login status related to the directory with your Project - like by [**impt auth info**](./CommandsManual.md#auth-info) command.
+
+Use [**impt product info**](./CommandsManual.md#product-info) command with the option **--full** to review the full structure of the Product related by your Project.
+
+*Example*  
+**TODO** screenshot - impt project info --full  
+
 ### Project Sharing
 
+Your Project can be easily shared, copied or moved, if required by your. For example, copied from one computer to another. Just copy the whole directory with your Project - with [Project File](./CommandsManual.md#project-file) and the linked source files - and continue use the impt tool commands from the new directory.
+
+Note, the directory with your Project can also include [Local Auth File](./CommandsManual.md#local-auth-file). If you do not want to share/copy it, exclude it from copying.
+
+On the contrary, if you want to share/copy the authentication information along with your Project but the directory does not include [Local Auth File](./CommandsManual.md#local-auth-file) (i.e. you use global login), call [**impt auth login**](./CommandsManual.md#auth-login) command with the option **--local** and with the same credentials and endpoint as you used for global login, [Local Auth File](./CommandsManual.md#local-auth-file) will be created and you will be able to copy it as well.
+
 ### Project Deletion
+
+There are several levels of Project deletion:
+- [**impt project delete**](./CommandsManual.md#project-delete) command without additional options deletes [Project File](./CommandsManual.md#project-file) only. I.e. simply removes a link between Device Group and the source files. The same effect happens when you [create new Project](#project-creation) at the place of the previous one that overwrites the previous [Project File](./CommandsManual.md#project-file).
+- [**impt project delete**](./CommandsManual.md#project-delete) command with the option **--files** additionally deletes the linked source files. The same effect happens when you manually remove the directory with your Project.
+- [**impt project delete**](./CommandsManual.md#project-delete) command with the option **--entities** additionally deletes the related impCentral API entities - Device Group(s), Product, Deployments, etc. See [the command specification](./CommandsManual.md#project-delete) for more details and explanation. Use this option, for example, when you want/need to cleanup all the entities after your temporal or test project activities.
+
+Note, [**impt project delete**](./CommandsManual.md#project-delete) command never deletes [Local Auth File](./CommandsManual.md#local-auth-file), if it exists in the directory with your Project. Use [**impt auth logout --local**](./CommandsManual.md#auth-login) command to delete [Local Auth File](./CommandsManual.md#local-auth-file) or remove it manually.
+
+*Example*  
+*Delete everything*  
+**TODO** screenshot - impt project delete --all  
 
 ## Typical Usecase
 
