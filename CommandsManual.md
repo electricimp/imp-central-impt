@@ -453,14 +453,13 @@ The operation may fail for some combinations of the Device Group [types](#device
 
 #### Device Info
 
-**impt device info --device <DEVICE_IDENTIFIER> \[--full] \[--debug] \[--help]**
+**impt device info --device <DEVICE_IDENTIFIER> \[--debug] \[--help]**
 
 Displays information about the specified Device.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --device | -d | yes | yes | [Device Identifier](#device-identifier). |
-| --full | | no | no | Displays additional information. Details about the Deployment currently running on the Device and other. | 
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -615,7 +614,7 @@ Displays information about the specified Device Group.
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
-| --full | | no | no | Displays additional information. Details about every Device assigned to the Device Group, Deployments and other. | 
+| --full | | no | no | Displays additional information: details about Devices assigned to the Device Group, about Webhooks created for the Device Group and other. | 
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -860,7 +859,7 @@ Displays information about the specified Product.
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --product | -p | yes/[project](#project-file) | yes | [Product Identifier](#product-identifier). If not specified, the Product referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
-| --full | | no | no | Displays additional information. Details about every Device Group that belongs to the Product, Devices assigned to every Device Group and other. | 
+| --full | | no | no | Displays additional information and the full structure of the Product: Details about every Device Group that belongs to the Product, about Devices assigned to the Device Groups and other. | 
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -970,7 +969,7 @@ Informs user if the Device Group referenced by [Project File](#project-file) doe
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --full | | no | no | Displays additional information. Full details about the corresponding Device Group, like [**impt dg info --full**](#device-group-info) command does; authentication status applicable to the current directory, like [**impt auth info**](#auth-info) command does. |
+| --full | | no | no | Displays additional information: full details about the corresponding Device Group, like [**impt dg info --full**](#device-group-info) command displays; authentication status applicable to the current directory, like [**impt auth info**](#auth-info) command displays. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
