@@ -30,7 +30,6 @@
   },
   "homepage": "https://github.com/electricimp/imp-central-impt",
   "dependencies": {
-    "imp-central-api": "latest",
     "cli-prompt": "^0.6.0",
     "colors": "^1.1.2",
     "yargs": "latest",
