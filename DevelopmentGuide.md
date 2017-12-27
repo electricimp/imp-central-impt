@@ -183,10 +183,84 @@ Note, [**impt project delete**](./CommandsManual.md#project-delete) command neve
 
 ## Typical Usecase
 
-1. Create a project for an IMP application
+### Develop IMP Application
 
-1. Develop and debug
+1. Login to impCentral API using global login ([Global Auth File](./CommandsManual.md#global-auth-file))  
+  `impt auth login --user <user_id> --pwd <password>`  
+  **TODO** screenshot - the same command with aliases - ?  
 
-1. Create a build for pre-factory testing
+1. Create a new directory called, for example, "dev".
 
-...
+1. Goto the new directory.
+
+1. Create a project for an IMP application: a new Product "MyProduct", a new Device Group "MyDevDG" in that Product, empty files "myapp.device.nut" and "myapp.agent.nut", [Project File](./CommandsManual.md#project-file).   
+  `impt project create --product MyProduct --create-product --name MyDevDG --descr "IMP Application" --device-file myapp.device.nut --agent-file myapp.agent.nut --create-files`  
+  **TODO** screenshot - the same command with aliases  
+
+1. Write the code of your IMP application in "myapp.device.nut" and "myapp.agent.nut" files.
+
+1. BlinkUp a device which you plan to use for your application debugging.
+
+1. List all your unassigned devices and find the needed one.  
+  `impt device list --unassigned`  
+  **TODO** screenshot - the same command with aliases  
+
+1. Add the needed device to your project. You can specify the device by it's Id, Name, MAC, IMP Agent Id.  
+  `impt device assign --device <device_id>`  
+  **TODO** screenshot - the same command with aliases  
+
+1. Create a new build, run it and start the logs of your application.  
+  `impt build run --log`  
+  **TODO** screenshot - the same command with aliases  
+  
+1. Review how your application is working.
+
+1. Stop the logging by pressing *\<Ctrl-C>*.  
+
+1. If needed, update your code, create and run a new build by the same command as above.
+
+1. When you satisfied by your code, mark the latest build by a tag "MyRC1" and set *flagged* attribute to `true` (it saves the build from unintentional deletion).  
+  `impt build update --descr "My Release Candidate 1" --tag MyRC1 --flagged`  
+  **TODO** screenshot - the same command with aliases  
+  
+### Develop Factory Firmware
+
+1. Create a new directory called, for example, "factory".
+
+1. Goto the new directory.
+
+1. Create a project for a [factory firmware](https://developer.electricimp.com/examples/factoryfirmware) which is linked to the existent Product "MyProduct": a new Device Group "MyPreFactoryDG" in that Product, a new Device Group "MyPreProductionDG" that will be a production target, empty files "factory.device.nut" and "factory.agent.nut", [Project File](./CommandsManual.md#project-file).   
+  `impt project create --product MyProduct --name MyPreFactoryDG --descr "Factory Firmware" --target MyPreProductionDG --create-target --device-file factory.device.nut --agent-file factory.agent.nut --create-files`  
+  **TODO** screenshot - the same command with aliases  
+
+1. Copy your IMP application's build tagged as "MyRC1" to "MyPreProductionDG" Device Group. It will be a production code for devices blessed by your factory firmware. Attributes of the build are not copied.  
+  `impt build copy --build MyRC1 --dg MyPreProductionDG`  
+  **TODO** screenshot - the same command with aliases  
+
+1. Write the code of your [factory firmware](https://developer.electricimp.com/examples/factoryfirmware) in "factory.device.nut" and "factory.agent.nut" files.
+
+1. BlinkUp a device which you plan to use as a pre-factory fixture device.
+
+1. List all your unassigned devices and find the needed one.  
+  `impt device list --unassigned`  
+  **TODO** screenshot - the same command with aliases  
+
+1. Add the needed device to your project. You can specify the device by it's Id, Name, MAC, IMP Agent Id.  
+  `impt device assign --device <device_id>`  
+  **TODO** screenshot - the same command with aliases  
+
+1. Create a new build, run it and start the logs of your factory firmware part that runs on the pre-factory fixture device.  
+  `impt build run --log`  
+  **TODO** screenshot - the same command with aliases  
+  
+1. BlinkUp, test and bless your pre-production devices by your pre-factory fixture device.
+
+1. Stop the logging by pressing *\<Ctrl-C>*.  
+
+1. If needed, update your factory firmware code, create and run a new build by the same command as above.
+
+1. When you satisfied by your factory firmware code, mark the latest build by a tag "MyFactoryRC1" and set *flagged* attribute to `true` (it saves the build from unintentional deletion).  
+  `impt build update --descr "My Factory Firmware Release Candidate 1" --tag MyFactoryRC1 --flagged`  
+  **TODO** screenshot - the same command with aliases  
+  
+### Cleanup
