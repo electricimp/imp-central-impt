@@ -44,12 +44,12 @@ There are two additional groups that include commands convenient for code develo
 
 For similar operations in different command groups the impt tool uses similar command names, like `create`, `update`, `delete`, `list`, `info`.
 
-The most of commands have optional arguments called options - `<options>`. Options may be written in any order. As a general rule, the same option should not be specified many times in the same command, but exceptions exist. Some options require values, some not. If option value has spaces it must be put into double quotes - `“option value with spaces”`. Many options have one letter [alias](./CommandsManual.md#list-of-aliases). The options and aliases are detailed in the [Commands Description](./CommandsManual.md#commands-description).
+The most of commands have optional arguments called options - `<options>`. Options may be written in any order. As a general rule, the same option should not be specified many times in the same command, but exceptions exist. Some options require values, some not. If option value has spaces it must be put into double quotes - `“option value with spaces”`. Every option has one letter [alias](./CommandsManual.md#list-of-aliases). The aliases are unique for a particular command but may be reused for different options in different commands. At the same time, the same option in different commands always has the same alias. The options and aliases are detailed in the [Commands Description](./CommandsManual.md#commands-description).
 
 *Examples*  
 *The syntax and commands with options:*  
 `impt product create --name TestProduct --descr "My test product"`  
-`impt dg create --name "TestDG" --type development -p TestProduct`  
+`impt dg create --name "TestDG" -y development -p TestProduct`  
 `impt device assign -g TestDG -d "my device 1"`  
 
 ## Help
@@ -81,7 +81,7 @@ Every command has `--debug` option (`-z` option alias). If it is specified, the 
 
 The tool's commands are designed to be "friendly" for processing by scripts.
 
-Interaction with a user is minimal. Only few commands, for example [delete entities](#entity-deletion) commands, ask a confirmation from user. But all these commands have `--confirmed` option. If it is specified, the command is executed without asking additional confirmation from user. Scripts can use this option.
+Interaction with a user is minimal. Only few commands, for example [delete entities](#entity-deletion) commands, ask a confirmation from user. But all these commands have `--confirmed` option (`-q` option alias). If it is specified, the command is executed without asking additional confirmation from user. Scripts can use this option.
 
 Output of a command execution contains one of the two predefined phrases - `IMPT COMMAND SUCCEEDS` or `IMPT COMMAND FAILS`. Scripts can parse a command's output to find these standard phrases to quickly realize does the command succeed or fail. If any command fails, `IMPT COMMAND FAILS` phrase is always on the last line of the command's output. If a command succeeds, `IMPT COMMAND SUCCEEDS` phrase is also on the last line of the output for the most of the commands. Logging-related commands may have additional `IMPT COMMAND SUCCEEDS` phrases in their output. If the [help option](#help) is specified for a command, it's output does not contain neither predefined phrase.
 
@@ -107,18 +107,18 @@ At any time you can call the [logout command](./CommandsManual.md#auth-logout) -
 
 You do not need to use the logout command if you want just to re-login using other credentials. A new login command overwrites [Auth File](./CommandsManual.md#auth-file), if that existed and the operation is confirmed by user.
 
-During the login you can specify an alternative impCentral API endpoint using `--endpoint` option of the [login command](./CommandsManual.md#auth-login). You may need this if you work with a private impCloud&trade; installation. The default endpoint is `https://api.electricimp.com/v5`
+During the login you can specify an alternative impCentral API endpoint using `--endpoint` option (`-e` option alias) of the [login command](./CommandsManual.md#auth-login). You may need this if you work with a private impCloud&trade; installation. The default endpoint is `https://api.electricimp.com/v5`
 
 There are two types of login - global and local.
 
 **Global login** is the default one. It is enough to use only it if you always work on behalf of the same user with the same impCentral
 API endpoint. [Global Auth File](./CommandsManual.md#global-auth-file) - only one per the impt tool installation - is created for the global login. It is located in the tool specific place. Every impt command is executed in the context of the global login when a local login is not applicable.
 
-**Local login** works for a particular directory. It may be convenient if you often work on behalf of different users or use different impCentral API endpoints. In this case, you may choose a directory and in this directory call the [login command](./CommandsManual.md#auth-login) with `--local` option. If the authentication is successful, [Local Auth File](./CommandsManual.md#local-auth-file) is created in this directory. After that, every impt command called from this directory is executed in the context of the local login.
+**Local login** works for a particular directory. It may be convenient if you often work on behalf of different users or use different impCentral API endpoints. In this case, you may choose a directory and in this directory call the [login command](./CommandsManual.md#auth-login) with `--local` option (`-l` option alias). If the authentication is successful, [Local Auth File](./CommandsManual.md#local-auth-file) is created in this directory. After that, every impt command called from this directory is executed in the context of the local login.
 
 There can be only one [Local Auth File](./CommandsManual.md#local-auth-file) in a directory, but any number of directories with local Auth Files, i.e. any number of local logins. And all of them are independent from each other and from [Global Auth File](./CommandsManual.md#global-auth-file). You do not need to have the global login in order to use local logins. Note, that local Auth File affects the current directory only and does not affect any subdirectories - they may or may not contain their own local Auth Files.
 
-The [logout command](./CommandsManual.md#auth-logout) with `--local` option deletes [Local Auth File](./CommandsManual.md#local-auth-file), if it exists in the current directory. After that, any next command called from this directory will be executed in the context of the global login. The [logout command](./CommandsManual.md#auth-logout) without `--local` option deletes [Global Auth File](./CommandsManual.md#global-auth-file).
+The [logout command](./CommandsManual.md#auth-logout) with `--local` option (`-l` option alias) deletes [Local Auth File](./CommandsManual.md#local-auth-file), if it exists in the current directory. After that, any next command called from this directory will be executed in the context of the global login. The [logout command](./CommandsManual.md#auth-logout) without `--local` option deletes [Global Auth File](./CommandsManual.md#global-auth-file).
 
 Summary of the **impt command execution context**:
 - If the current directory contains Auth File, this file is considered as [Local Auth File](./CommandsManual.md#local-auth-file) and a command called from this directory is executed in the context of the local login defined by this file.
@@ -188,7 +188,7 @@ Many groups of commands contain a command to list entities - list Products, list
 
 Some Filter Options have the same name and meaning in several list commands. They are summarized [here](./CommandsManual.md#common-filter-options). At the same time, a particular command may have specific Filter Options as well. Filter Options applicable to every concrete list command are detailed in the [Commands Description](./CommandsManual.md#commands-description).
 
-Note, for some list commands the returned default list of entities available to the current logged-in account includes the entities owned by this account as well as the entities owned by the collaborators. But for other list commands - only the entities owned by the current account. It is impCentral specific behavior, not controlled by the impt tool. But you can always specify a concrete Account Id, email or username as a value of the `--owner <value>` Filter Option and get the entities owned by that account, if they are available to you as to a collaborator. Also, you can always specify the `--owner me` Filter Option and get the entities owned by you only.
+Note, for some list commands the returned default list of entities available to the current logged-in account includes the entities owned by this account as well as the entities owned by the collaborators. But for other list commands - only the entities owned by the current account. It is impCentral specific behavior, not controlled by the impt tool. But you can always specify a concrete Account Id, email or username as a value of the `--owner <value>` Filter Option (`-o` option alias) and get the entities owned by that account, if they are available to you as to a collaborator. Also, you can always specify the `--owner me` Filter Option and get the entities owned by you only.
 
 As a general rule, if an entity is owned by the current logged-in account, information about Owner is not displayed. If an entity is owned by another account, then Account Id and email of the Owner are displayed for the entity. This rule applies to all impt commands which display details of an entity - entity listing, [entity information](#entity-information) and other.
 
@@ -202,7 +202,7 @@ To display Account Id and email of the current logged-in account call the [auth 
 
 ## Entity Information
 
-The most of command groups contain `info` command which displays information about the specified entity. Some of that commands have `--full` option. When it is specified, the command displays additional details about the related entities. For example, `impt product info --full` command displays the full structure of the Product: Details about every Device Group that belongs to the Product, about Devices assigned to the Device Groups and other.
+The most of command groups contain `info` command which displays information about the specified entity. Some of that commands have `--full` option (`-u` option alias). When it is specified, the command displays additional details about the related entities. For example, `impt product info --full` command displays the full structure of the Product: Details about every Device Group that belongs to the Product, about Devices assigned to the Device Groups and other.
 
 *Example*:  
 **TODO** screenshot - impt product info --full, not a huge output
@@ -211,7 +211,7 @@ The most of command groups contain `info` command which displays information abo
 
 By default, the commands which delete impCentral entities (like Product, Device Group, Deployment) have the same limitations like the corresponding impCentral API functionality. For example, a Product deletion fails if the Product has Device Groups; a build (Deployment) fails if the Deployment has the *"flagged"* attribute set to *true*. If you specify the `--force` option (`-f` option alias) of the delete command, the tool implicitly update or delete all other required entities in order to delete the target entity. For example, the tool deletes all Device Groups of the Product in order to delete the Product; the tool updates the *"flagged"* attribute of the Deployment in order to delete the Deployment.
 
-Also by default, every delete command asks a confirmation of the operation from user. Before that the command lists all the entities which are going to be deleted or updated. If you specify the `--confirmed` option, the operation is executed without asking additional confirmation from user.
+Also by default, every delete command asks a confirmation of the operation from user. Before that the command lists all the entities which are going to be deleted or updated. If you specify the `--confirmed` option (`-q` option alias), the operation is executed without asking additional confirmation from user.
 
 *Example*  
 *A failed delete command execution:*  
