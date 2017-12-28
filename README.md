@@ -5,8 +5,8 @@ impt is a command line tool which allows to interact with the [Electric Imp impC
 The impt tool supersedes [build-cli](https://github.com/electricimp/build-cli) and [impTest](https://github.com/electricimp/impTest) tools and includes much more additional functionality.
 
 This readme covers all basic and common aspects of the impt tool. Read it first. More details you can find in the following documentation:
-- Development Guide (**link TODO**),
-- Testing Guide (**link TODO**),
+- [impt Development Guide](./DevelopmentGuide.md),
+- [impt Testing Guide](./TestingGuide.md),
 - Factory/Production Guide (**link TODO**),
 - [impt Commands Manual](./CommandsManual.md).
 
@@ -46,7 +46,8 @@ For similar operations in different command groups the impt tool uses similar co
 
 The most of commands have optional arguments called options - `<options>`. Options may be written in any order. As a general rule, the same option should not be specified many times in the same command, but exceptions exist. Some options require values, some not. If option value has spaces it must be put into double quotes - `“option value with spaces”`. Many options have one letter [alias](./CommandsManual.md#list-of-aliases). The options and aliases are detailed in the [Commands Description](./CommandsManual.md#commands-description).
 
-**Examples** - the syntax and commands with options:  
+*Examples*  
+*The syntax and commands with options:*  
 `impt product create --name TestProduct --descr "My test product"`  
 `impt dg create --name "TestDG" --type development -p TestProduct`  
 `impt device assign -g TestDG -d "my device 1"`  
@@ -57,20 +58,23 @@ Every command has `--help` option (`-h` option alias). If it is specified, any o
 
 [Help option](./CommandsManual.md#help-option) is also applicable to a not fully specified command. It may be used to list all available command groups or to list all commands available in one group.
 
-**Example** - list all command groups:  
+*Example*  
+*List all command groups:*  
 **TODO** screenshot, leave only 3-4 first groups in the output
 
-**Example** - list all commands in one group:  
+*Example*  
+*List all commands in one group:*  
 **TODO** screenshot
 
-**Example** - display a command description:  
+*Example*  
+*Display a command description:*  
 **TODO** screenshot for a command with few options
 
 ## Debug
 
 Every command has `--debug` option (`-z` option alias). If it is specified, the tool displays debug information of the command execution, including impCentral API requests and responses.
 
-**Example**:  
+*Example*:  
 **TODO** screenshot with not a huge output
 
 ## Scripts Support
@@ -81,10 +85,12 @@ Interaction with a user is minimal. Only few commands, for example [delete entit
 
 Output of a command execution contains one of the two predefined phrases - `IMPT COMMAND SUCCEEDS` or `IMPT COMMAND FAILS`. Scripts can parse a command's output to find these standard phrases to quickly realize does the command succeed or fail. If any command fails, `IMPT COMMAND FAILS` phrase is always on the last line of the command's output. If a command succeeds, `IMPT COMMAND SUCCEEDS` phrase is also on the last line of the output for the most of the commands. Logging-related commands may have additional `IMPT COMMAND SUCCEEDS` phrases in their output. If the [help option](#help) is specified for a command, it's output does not contain neither predefined phrase.
 
-**Example** - a successful command execution:  
+*Example*  
+*A successful command execution:*  
 **TODO** screenshot - success command with --confirmed option
 
-**Example** - a failed command execution:  
+*Example*  
+*A failed command execution:*  
 **TODO** screenshot - failed command
 
 ## Authentication
@@ -121,34 +127,40 @@ Summary of the **impt command execution context**:
 
 At any time you can get known the login status related to any directory. Call the [auth info command](./CommandsManual.md#auth-info) from the required directory - `impt auth info`. The returned information includes a type of the login applicable to the current directory, access token status, your account Id and other details.
 
-**Example** - global login:  
+*Example*  
+*Global login:*  
 **TODO** screenshot - impt auth login --user <user_id> --pwd <password>
 
-**Example** - local login using a login key, specifying a endpoint, without storing the login key:  
+*Example*  
+*Local login using a login key, specifying a endpoint, without storing the login key:*  
 **TODO** screenshot - impt auth login --local --lk <login_key_id> --temp --endpoint https://api.electricimp.com/v5
 
-**Example** - display login status:  
+*Example*  
+*Display login status:*  
 **TODO** screenshot - impt auth info
 
-**Example** - local logout:  
+*Example*  
+*Local logout:*  
 **TODO** screenshot - impt auth logout --local
 
 ## Login Key
 
 The tool provides a set of [Login Key Manipulation Commands](./CommandsManual.md#login-key-manipulation-commands) which allows you to fully control the login keys of your account - list the existent login keys, create a new one, delete, etc. Of course, you need to be logged-in in order to use that commands. Some commands additionally requires the password.
 
-**Example** - login key list? :  
+*Example*  
+*Login key list ? :*  
 **TODO** screenshot - login key command
 
 ## Project
 
 Project is an artificial entity introduced to help developers to align their work with the impCentral API. It is similar to Workspace in the impCentral IDE. Project is any directory where [Project File](./CommandsManual.md#project-file) is located. Project relates to one and only one Device Group of the impCentral API.
 
-Project is intended for developers and described in details in the Development Guide (**link TODO**). The tool provides a set of [Project Manipulation Commands](./CommandsManual.md#project-manipulation-commands) to operate with Project.
+Project is intended for developers and described in details in the [Development Guide](./DevelopmentGuide.md). The tool provides a set of [Project Manipulation Commands](./CommandsManual.md#project-manipulation-commands) to operate with Project.
 
 But many other commands may be affected when called from a directory where [Project File](./CommandsManual.md#project-file) is located. Product, Device Group, Devices, Deployment referenced by the Project File may be assumed by a command when they are not specified in the command's options explicitly. If you want to avoid that, always specify the mandatory options of the commands. All such options are detailed in the [Commands Description](./CommandsManual.md#commands-description).
 
-**Example** - unassign all Devices from Device Group. A Device Group is not specified in the command below. But the current directory contains Project File. All Devices are unassigned from the Device Group referenced by that Project File:  
+*Example*  
+*Unassign all Devices from Device Group. A Device Group is not specified in the command below. But the current directory contains Project File. All Devices are unassigned from the Device Group referenced by that Project File:*  
 **TODO** screenshot - impt dg unassign
 
 ## Entity Identification
@@ -159,10 +171,12 @@ If you want to use this feature, please first read [here](./CommandsManual.md#en
 
 When it is hard to uniquely specify an entity without knowing the entity Id, use [Entity Listing](#entity-listing) commands to list the entities basing on some attributes, choose the required entity, notice it's Id and use it in the required command.
 
-**Example** - an entity is found successfully:  
+*Example*  
+*An entity is found successfully:*  
 **TODO** screenshot - device by MAC ?
 
-**Example** - an entity is not unique, the command fails:  
+*Example*  
+*An entity is not unique, the command fails:*  
 **TODO** screenshot - build by tag but there are two deployments with this tag ?
 
 ## Entity Listing
@@ -176,20 +190,17 @@ Some Filter Options have the same name and meaning in several list commands. The
 
 Note, for some list commands the returned default list of entities available to the current logged-in account includes the entities owned by this account as well as the entities owned by the collaborators. But for other list commands - only the entities owned by the current account. It is impCentral specific behavior, not controlled by the impt tool. But you can always specify a concrete Account Id, email or username as a value of the `--owner <value>` Filter Option and get the entities owned by that account, if they are available to you as to a collaborator. Also, you can always specify the `--owner me` Filter Option and get the entities owned by you only.
 
-**Example**:  
+*Example*:  
 **TODO** screenshot - a complex list command, with AND and OR, with not a huge output
 
-**Example**:  
+*Example*:  
 **TODO** screenshot - another list command, with --owner me and some other filters, with not a huge output
 
 ## Entity Information
 
-The most of command groups contain `info` command which returns information about the specified entity. Some of that commands have `--full` option. When it is specified, the command returns additional details about the related entities. For example, additional information about Device Groups which belong to the specified Product.
+The most of command groups contain `info` command which displays information about the specified entity. Some of that commands have `--full` option. When it is specified, the command displays additional details about the related entities. For example, `impt product info --full` command displays the full structure of the Product: Details about every Device Group that belongs to the Product, about Devices assigned to the Device Groups and other.
 
-**Example**:  
-**TODO** screenshot - impt device info
-
-**Example**:  
+*Example*:  
 **TODO** screenshot - impt product info --full, not a huge output
 
 ## Entity Deletion
@@ -198,10 +209,12 @@ By default, the commands which delete impCentral entities (like Product, Device 
 
 Also by default, every delete command asks a confirmation of the operation from user. Before that the command lists all the entities which are going to be deleted or updated. If you specify the `--confirmed` option, the operation is executed without asking additional confirmation from user.
 
-**Example** - a failed delete command execution:  
+*Example*  
+*A failed delete command execution:*  
 **TODO** screenshot - failed delete something w/o --force, use --confirmed
 
-**Example** - a successful delete command execution:  
+*Example*  
+*A successful delete command execution:*  
 **TODO** screenshot - the same command succeeds with --force, now w/o --confirmed
 
 ## License
