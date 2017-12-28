@@ -167,9 +167,9 @@ But many other commands may be affected when called from a directory where [Proj
 
 Many impt tool commands have options which specify an impCentral API entity - a concrete Product, Device Group, Device, Deployment, etc. You can use an entity Id (Product Id, Device Group Id, etc.) that is always unique. But sometime it may be more convenient to use other attributes to specify an entity. For example, Product Name, Device Group Name, Device MAC address, Device agent Id, Build sha, Build tag, etc. The tool provides such a possibility. You can specify different attributes as an option value and the tool searches the specified value among different attributes.
 
-If you want to use this feature, please first read [here](./CommandsManual.md#entity-identification) the rules how the tool searches an entity and the lists of attributes acceptable for different entities. Command's options, to which the complex entity identification is applicable, are detailed in the [Commands Description](./CommandsManual.md#commands-description). Note, if more than one entity is found, then, depending on a particular command, that may be considered as a success (for all [Entity Listing](#entity-listing) commands) or as a fail (for all other commands).
+If you want to use this feature, please first read [here](./CommandsManual.md#entity-identification) the rules how the tool searches an entity and the lists of attributes acceptable for different entities. Command's options, to which the complex entity identification is applicable, are detailed in the [Commands Description](./CommandsManual.md#commands-description). Note, if more than one entity is found, then, depending on a particular command, that may be considered as a success (for all [Entity Listing](#entity-listing-and-owning) commands) or as a fail (for all other commands).
 
-When it is hard to uniquely specify an entity without knowing the entity Id, use [Entity Listing](#entity-listing) commands to list the entities basing on some attributes, choose the required entity, notice it's Id and use it in the required command.
+When it is hard to uniquely specify an entity without knowing the entity Id, use [Entity Listing](#entity-listing-and-owning) commands to list the entities basing on some attributes, choose the required entity, notice it's Id and use it in the required command.
 
 *Example*  
 *An entity is found successfully:*  
@@ -179,7 +179,7 @@ When it is hard to uniquely specify an entity without knowing the entity Id, use
 *An entity is not unique, the command fails:*  
 **TODO** screenshot - build by tag but there are two deployments with this tag ?
 
-## Entity Listing
+## Entity Listing and Owning
 
 Many groups of commands contain a command to list entities - list Products, list Device Groups, list Devices, etc. By default, such a command returns the list of all entities available to the current logged-in account. But the returned list may be filtered using the specified attributes - Filter Options - additional options of a list command. There are the common rules applicable to all list commands:
 - Every Filter Option may be repeated several times.
@@ -190,8 +190,12 @@ Some Filter Options have the same name and meaning in several list commands. The
 
 Note, for some list commands the returned default list of entities available to the current logged-in account includes the entities owned by this account as well as the entities owned by the collaborators. But for other list commands - only the entities owned by the current account. It is impCentral specific behavior, not controlled by the impt tool. But you can always specify a concrete Account Id, email or username as a value of the `--owner <value>` Filter Option and get the entities owned by that account, if they are available to you as to a collaborator. Also, you can always specify the `--owner me` Filter Option and get the entities owned by you only.
 
+As a general rule, if an entity is owned by the current logged-in account, information about Owner is not displayed. If an entity is owned by another account, then Account Id and email of the Owner are displayed for the entity. This rule applies to all impt commands which display details of an entity - entity listing, [entity information](#entity-information) and other.
+
+To display Account Id and email of the current logged-in account call the [auth info command](./CommandsManual.md#auth-info) - `impt auth info`.
+
 *Example*:  
-**TODO** screenshot - a complex list command, with AND and OR, with not a huge output
+**TODO** screenshot - a complex list command, with AND and OR, with Owner details, with not a huge output
 
 *Example*:  
 **TODO** screenshot - another list command, with --owner me and some other filters, with not a huge output
@@ -216,6 +220,10 @@ Also by default, every delete command asks a confirmation of the operation from 
 *Example*  
 *A successful delete command execution:*  
 **TODO** screenshot - the same command succeeds with --force, now w/o --confirmed
+
+## No Atomic Transaction
+
+Many impt commands use several impCentral API requests which changes impCentral API entities (like update, delete, etc.) to perform one operation. The impt tool does the best to pre-check all conditions before starting every operation. At the same time, the impt tool does not guarantee an operation is atomic. It is always possible that the first impCentral API update request succeeds but the next one fails due to the network connection lost. In this case, the operation is partially completed, the impt tool does not restore the original state of already changed entities, the impt command reports a fail. You can check an actual state of any impCentral entity using [entity information](#entity-information) commands.
 
 ## License
 
