@@ -81,7 +81,7 @@ One **option** has the following format:
   
 **--<option_name> [<option_value>]** or **-<option_alias> [<option_value>]**, where:
 - **<option_name>** - is unique across a particular command. For a user convenience many of the option names are reused across different commands.
-- **<option_alias>** - a one letter alias for the option, unique for a particular command. Not all but many options have aliases.
+- **<option_alias>** - a one letter alias for the option. Unique across all option aliases for a particular command. The same option name in different commands always has the same alias.
 - **<option_value>** - a value of the option. Not all options require value. If option value has spaces it must be put into double quotes (“”).
 
 All commands and options are case sensitive.
@@ -227,7 +227,7 @@ User is asked to confirm the operation if the corresponding Auth File already ex
 | --pwd | -w | yes/no | yes | The account password. If specified, **--user** option must be specified as well. |
 | --lk | -k | yes/no | yes | The login key id. |
 | --temp | -t | no | no | If the option is not specified, the tool saves information required to refresh access token and refreshes it automatically when the token expires. If the option is specified, the tool does not save information required to refresh access token. In this case you need to call **impt auth login** command again after the access token is expired. |
-| --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
+| --confirmed | -q | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -263,8 +263,8 @@ User is asked to confirm the operation (confirmed automatically with **--confirm
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --product | -p | no | yes | [Product Identifier](#product-identifier) of the Product. See above. |
-| --unflag | | no | no | Delete a Deployment even if it has *"flagged"* attribute set to *true*. See above. |
-| --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
+| --unflag | -u | no | no | Delete a Deployment even if it has *"flagged"* attribute set to *true*. See above. |
+| --confirmed | -q | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -305,7 +305,7 @@ User is asked to confirm the operation (confirmed automatically with **--confirm
 | --- | --- | --- | --- | --- |
 | --build | -b | yes | yes | [Build Identifier](#build-identifier). |
 | --force | -f | no | no | If the Deployment has *"flagged"* attribute set to *true*, set it to *false* to be able to delete the Deployment. |
-| --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
+| --confirmed | -q | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -328,7 +328,7 @@ The new build is not ran until the Devices are rebooted. To run it call **[impt 
 | --descr | -s | no | yes | Description of the build (Deployment). |
 | --origin | -o | no | yes | A free-form key to store the source of the code. |
 | --tag | -t | no | yes | A tag applied to this build (Deployment). This option may be repeated several times to apply several tags. |
-| --flagged | | no | no | If *true* or no value, this build (Deployment) cannot be deleted without first setting this option back to *false*. If *false* or the option is not specified, the build can be deleted. |
+| --flagged | -f | no | no | If *true* or no value, this build (Deployment) cannot be deleted without first setting this option back to *false*. If *false* or the option is not specified, the build can be deleted. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -345,9 +345,9 @@ User is asked to confirm the operation if the files with the specified names alr
 | --build | -b | yes/[project](#project-file) | yes | [Build Identifier](#build-identifier). If not specified, the most recent Deployment for the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
 | --device-file | -x | yes/[project](#project-file) | yes | Name of a file to where download the source code for IMP device. If not specified, the file referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
 | --agent-file | -y | yes/[project](#project-file) | yes | Name of a file to where download the source code for IMP agent. If not specified, the file referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
-| --device-only | | no | yes | Downloads the source code for IMP device only. |
-| --agent-only | | no | yes | Downloads the source code for IMP agent only. |
-| --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
+| --device-only | -i | no | yes | Downloads the source code for IMP device only. |
+| --agent-only | -j | no | yes | Downloads the source code for IMP agent only. |
+| --confirmed | -q | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -379,13 +379,13 @@ The returned list of the builds may be filtered. Filtering is possible by any co
 | --owner | -o | no | yes | Builds owned by the [specified Account(s)](#account-identifier) only. |
 | --product | -p | no | yes | Builds deployed to Device Groups which belong to the [specified Product(s)](#product-identifier) only. |
 | --dg | -g | no | yes | Builds deployed to the [specified Device Group(s)](#device-group-identifier) only. |
-| --dg-type | | no | yes | Builds deployed to Device Groups of the [specified type](#device-group-type) only. |
-| --sha | | no | yes | Builds with the specified *SHA* only. |
-| --tag | | no | yes | Builds with the specified tag only. |
-| --flagged | | no | no | Builds with the flagged attribute set to *true* only. |
-| --unflagged | | no | no | Builds with the flagged attribute set to *false* only. |
-| --non-zombie | | no | no | Only builds which have existent relation to Device Group. |
-| --zombie | | no | no | Only builds which do not have existent relation to Device Group. |
+| --dg-type | -y | no | yes | Builds deployed to Device Groups of the [specified type](#device-group-type) only. |
+| --sha | -s | no | yes | Builds with the specified *SHA* only. |
+| --tag | -t | no | yes | Builds with the specified tag only. |
+| --flagged | -f | no | no | Builds with the flagged attribute set to *true* only. |
+| --unflagged | -u | no | no | Builds with the flagged attribute set to *false* only. |
+| --non-zombie | -n | no | no | Only builds which have existent relation to Device Group. |
+| --zombie | -m | no | no | Only builds which do not have existent relation to Device Group. |
 
 #### Build Run
 
@@ -406,7 +406,7 @@ Informs user if the specified Device Group does not have assigned Devices, in th
 | --descr | -s | no | yes | Description of the build (Deployment). |
 | --origin | -o | no | yes | A free-form key to store the source of the code. |
 | --tag | -t | no | yes | A tag applied to this build (Deployment). This option may be repeated several times to apply several tags. |
-| --flagged | | no | no | If *true* or no value, this build (Deployment) cannot be deleted without first setting this option back to *false*. If *false* or the option is not specified, the build can be deleted. |
+| --flagged | -f | no | no | If *true* or no value, this build (Deployment) cannot be deleted without first setting this option back to *false*. If *false* or the option is not specified, the build can be deleted. |
 | --conditional | -c | no | no | Conditional restart of Devices assigned to the specified Device Group instead of a normal restart (see the impCentral API spec). |
 | --log | -l | no | no | Starts displaying logs from the Devices assigned to the specified Device Group (see **[impt log stream](#log-stream)** command description). To stop displaying the logs press *\<Ctrl-C>*. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
@@ -425,10 +425,9 @@ Fails if the specified build (Deployment) does not exist.
 | --descr | -s | no | yes | Description of the build (Deployment). |
 | --tag | -t | no | yes | A tag applied to this build (Deployment). This option may be repeated several times to apply several tags. |
 | --remove-tag | -r | no | yes | A tag removed from this build (Deployment). This option may be repeated several times to remove several tags. |
-| --flagged | | no | no | If *true* or no value, this build (Deployment) cannot be deleted without first setting this attribute back to *false*. If *false*, the build can be deleted. |
+| --flagged | -f | no | no | If *true* or no value, this build (Deployment) cannot be deleted without first setting this attribute back to *false*. If *false*, the build can be deleted. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
-
 
 ### Device Manipulation Commands
 
@@ -447,7 +446,7 @@ The operation may fail for some combinations of the Device Group [types](#device
 | --- | --- | --- | --- | --- |
 | --device | -d | yes | yes | [Device Identifier](#device-identifier). |
 | --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
-| --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
+| --confirmed | -q | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -479,11 +478,11 @@ The returned list of the Devices may be filtered. Filtering is possible by any c
 | --owner | -o | no | yes | Devices owned by the [specified Account(s)](#account-identifier) only. |
 | --product | -p | no | yes | Devices assigned to Device Groups which belong to the [specified Product(s)](#product-identifier) only. |
 | --dg | -g | no | yes | Devices assigned to the [specified Device Group(s)](#device-group-identifier) only. |
-| --dg-type | | no | yes | Devices assigned to Device Groups of the [specified type](#device-group-type) only. |
-| --unassigned | | no | no | Unassigned Devices only. |
-| --assigned | | no | no | Assigned Devices only. |
-| --online | | no | no | Devices in online state only. |
-| --offline | | no | no | Devices in offline state only. |
+| --dg-type | -y | no | yes | Devices assigned to Device Groups of the [specified type](#device-group-type) only. |
+| --unassigned | -u | no | no | Unassigned Devices only. |
+| --assigned | -a | no | no | Assigned Devices only. |
+| --online | -n | no | no | Devices in online state only. |
+| --offline | -f | no | no | Devices in offline state only. |
 
 #### Device Remove
 
@@ -499,7 +498,7 @@ User is asked to confirm the operation (confirmed automatically with **--confirm
 | --- | --- | --- | --- | --- |
 | --device | -d | yes | yes | [Device Identifier](#device-identifier). |
 | --force | -f | no | no | If the Device is assigned to a Device Group, unassign it first to be able to remove. |
-| --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
+| --confirmed | -q | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -527,7 +526,7 @@ Does nothing if the Device already unassigned.
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --device | -d | yes | yes | [Device Identifier](#device-identifier). |
-| --unbond | | no | yes | Unbond key is required to unassign Device from Device Group of the [type](#device-group-type) *production*. |
+| --unbond | -u | no | yes | Unbond key is required to unassign Device from Device Group of the [type](#device-group-type) *production*. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -548,7 +547,7 @@ Updates Name of the specified Device.
 
 #### Device Group Builds
 
-**impt dg builds \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--unflag] \[--unflag-old] \[--delete] \[--confirmed] \[--debug] \[--help]**
+**impt dg builds \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--unflag] \[--unflag-old] \[--remove] \[--confirmed] \[--debug] \[--help]**
 
 Updates and/or deletes builds (Deployments) of the specified Device Group.
 At the end of the command execution information about all Deployments of the Device Group is displayed (as by [**impt build list**](#build-list) command).
@@ -558,10 +557,10 @@ User is asked to confirm the operation if any Deployment is going to be deleted 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
-| --unflag | | no | no | Set *"flagged"* attribute to *false* in all Deployments of the specified Device Group. |
-| --unflag-old | | no | no | Set *"flagged"* attribute to *false* in all Deployments of the specified Device Group which are older than *min_supported_deployment* (see the impCentral API spec). |
-| --delete | | no | no | Deletes all Deployments of the specified Device Group which are older than *min_supported_deployment* (see the impCentral API spec) and have *"flagged"* attribute set to *false*. This option works after **--unflag**/**--unflag-old** options. |
-| --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
+| --unflag | -u | no | no | Set *"flagged"* attribute to *false* in all Deployments of the specified Device Group. |
+| --unflag-old | -o | no | no | Set *"flagged"* attribute to *false* in all Deployments of the specified Device Group which are older than *min_supported_deployment* (see the impCentral API spec). |
+| --remove | -r | no | no | Deletes all Deployments of the specified Device Group which are older than *min_supported_deployment* (see the impCentral API spec) and have *"flagged"* attribute set to *false*. This option works after **--unflag**/**--unflag-old** options. |
+| --confirmed | -q | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -575,10 +574,10 @@ Fails if Device Group with the specified Name already exists in the specified Pr
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --name | -n | yes | yes | Name of the Device Group. Must be unique among all Device Groups in the specified Product. |
-| --dg-type | | no | yes | [Type](#device-group-type) of the Device Group. If not specified, *development* type is assumed. If the type value is invalid, the command fails. |
+| --dg-type | -y | no | yes | [Type](#device-group-type) of the Device Group. If not specified, *development* type is assumed. If the type value is invalid, the command fails. |
 | --product | -p | yes/[project](#project-file) | yes | [Product Identifier](#product-identifier) of the Product which the Device Group belongs to. If not specified, the Product referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
 | --descr | -s | no | yes | Description of the Device Group. |
-| --target | | no | yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the being created Device Group. May be specified for the being created Device Group of the [type](#device-group-type) *factory* or *pre-factory* only. The target Device Group must be of the [type](#device-group-type) *production* or *pre-production* correspondingly and belongs to the specified Product. Otherwise the command fails. |
+| --target | -t | no | yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the being created Device Group. May be specified for the being created Device Group of the [type](#device-group-type) *factory* or *pre-factory* only. The target Device Group must be of the [type](#device-group-type) *production* or *pre-production* correspondingly and belongs to the specified Product. Otherwise the command fails. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -599,9 +598,9 @@ User is asked to confirm the operation (confirmed automatically with **--confirm
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
-| --builds | | no | no | Additionally deletes all Deployments related to the Device Group. | 
+| --builds | -b | no | no | Additionally deletes all Deployments related to the Device Group. | 
 | --force | -f | no | no | Unassigns all Devices of the Device Group, as by [**impt dg unassign**](#device-group-unassign) command. Set *"flagged"* attribute to *false* in all Deployments of the Device Group. |
-| --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
+| --confirmed | -q | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -614,7 +613,7 @@ Displays information about the specified Device Group.
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
-| --full | | no | no | Displays additional information: details about Devices assigned to the Device Group, about Webhooks created for the Device Group and other. | 
+| --full | -u | no | no | Displays additional information: details about Devices assigned to the Device Group, about Webhooks created for the Device Group and other. | 
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -633,7 +632,7 @@ The returned list of the Device Groups may be filtered. Filtering is possible by
 | Filter Options: | | | | |
 | --owner | -o | no | yes | Device Groups owned by the [specified Account(s)](#account-identifier) only. |
 | --product | -p | no | yes | Device Groups which belong to the [specified Product(s)](#product-identifier) only. |
-| --dg-type | | no | yes | Device Groups of the [specified type](#device-group-type) only. |
+| --dg-type | -q | no | yes | Device Groups of the [specified type](#device-group-type) only. |
 
 #### Device Group Reassign
 
@@ -646,8 +645,8 @@ The operation may fail for some combinations of the Device Group [types](#device
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --from | | yes | yes | [Device Group Identifier](#device-group-identifier) of the origin Device Group. |
-| --to | | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier) of the destination Device Group. If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| --from | -f | yes | yes | [Device Group Identifier](#device-group-identifier) of the origin Device Group. |
+| --to | -t | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier) of the destination Device Group. If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -676,7 +675,7 @@ Does nothing if the Device Group has no Devices assigned.
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
-| --unbond | | no | yes | Unbond key is required to unassign Devices from a Device Group of the [type](#device-group-type) *production*. |
+| --unbond | -u | no | yes | Unbond key is required to unassign Devices from a Device Group of the [type](#device-group-type) *production*. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -692,9 +691,9 @@ Fails if the specified Device Group does not exist.
 | --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
 | --name | -n | no | yes | New Name of the Device Group. Must be unique among all Device Groups in the Product. |
 | --descr | -s | no | yes | Description of the Device Group. |
-| --target | | no | yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the being updated Device Group. May be specified for the being updated Device Group of the [type](#device-group-type) *factory* or *pre-factory* only. The target Device Group must be of the [type](#device-group-type) *production* or *pre-production* correspondingly and belongs to the same Product as the being updated Device Group. Otherwise the command fails. |
-| --load-code-after-blessing | | no | no | Applicable to Device Group of the [type](#device-group-type) *production* or *pre-production* only. If *true* or no value, production code is immediately loaded by the device after blessing. If *false*, production code will be loaded the next time the device connects as part of BlinkUp, whether successful or not. Note, the newly created production Device Group always has this option *true*. |
-| --min-supported-deployment | | no | no | [Build Identifier](#build-identifier) of the new *min_supported_deployment* (see the impCentral API spec). The Deployment should belong to this Device Group and should be newer than the current *min_supported_deployment*. |
+| --target | -t | no | yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the being updated Device Group. May be specified for the being updated Device Group of the [type](#device-group-type) *factory* or *pre-factory* only. The target Device Group must be of the [type](#device-group-type) *production* or *pre-production* correspondingly and belongs to the same Product as the being updated Device Group. Otherwise the command fails. |
+| --load-code-after-blessing | -l | no | no | Applicable to Device Group of the [type](#device-group-type) *production* or *pre-production* only. If *true* or no value, production code is immediately loaded by the device after blessing. If *false*, production code will be loaded the next time the device connects as part of BlinkUp, whether successful or not. Note, the newly created production Device Group always has this option *true*. |
+| --min-supported-deployment | -m | no | no | [Build Identifier](#build-identifier) of the new *min_supported_deployment* (see the impCentral API spec). The Deployment should belong to this Device Group and should be newer than the current *min_supported_deployment*. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -718,8 +717,8 @@ If **--page-number** option is not specified, the command displays all saved log
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --device | -d | yes/[project](#project-file) | yes | [Device Identifier](#device-identifier). If not specified and there is one and only one Device in the Device Group referenced by [Project File](#project-file) in the current directory, then this Device is assumed (if no Project File or the Device Group has zero or more than one Devices, the command fails). |
-| --page-size | | no | no | Number of log entries in one page. Default value: 20 |
-| --page-number | | no | no | Ordinal page number with the log entries to display. Must have a positive value. Page 1 is a page with the most recent log entries. If specified, the command displays this page of the log entries only. If not specified, the command displays all saved log entries. |
+| --page-size | -s | no | no | Number of log entries in one page. Default value: 20 |
+| --page-number | -n | no | no | Ordinal page number with the log entries to display. Must have a positive value. Page 1 is a page with the most recent log entries. If specified, the command displays this page of the log entries only. If not specified, the command displays all saved log entries. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -774,7 +773,7 @@ User is asked to confirm the operation (confirmed automatically with **--confirm
 | --- | --- | --- | --- | --- |
 | --lk | -k | yes | yes | The login key id. |
 | --pwd | -w | yes | yes | The account password. |
-| --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
+| --confirmed | -q | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -844,9 +843,9 @@ User is asked to confirm the operation (confirmed automatically with **--confirm
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --product | -p | yes/[project](#project-file) | yes | [Product Identifier](#product-identifier). If not specified, the Product referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
-| --builds | | no | no | Additionally deletes all Deployments related to all Device Groups which belong/belonged to the Product, including the Device Groups that were deleted before. | 
+| --builds | -b | no | no | Additionally deletes all Deployments related to all Device Groups which belong/belonged to the Product, including the Device Groups that were deleted before. | 
 | --force | -f | no | no | Deletes all Device Groups of the Product to be able to delete the Product. As by [**impt dg delete --force**](#device-group-delete) command called for every Device Group. |
-| --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
+| --confirmed | -q | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -859,7 +858,7 @@ Displays information about the specified Product.
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --product | -p | yes/[project](#project-file) | yes | [Product Identifier](#product-identifier). If not specified, the Product referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
-| --full | | no | no | Displays additional information and the full structure of the Product: Details about every Device Group that belongs to the Product, about Devices assigned to the Device Groups and other. | 
+| --full | -u | no | no | Displays additional information and the full structure of the Product: Details about every Device Group that belongs to the Product, about Devices assigned to the Device Groups and other. | 
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -915,16 +914,16 @@ At the end of the command execution information about the project is displayed (
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --product | -p | yes | yes | [Product Identifier](#product-identifier). |
-| --create-product | | no | no | If the Product specified by **--product** option does not exist, it is created. In this case, the value of **--product** option is considered as a Name of the new Product. If the Product specified by **--product** option exists, **--create-product** option is ignored. |
+| --create-product | -i | no | no | If the Product specified by **--product** option does not exist, it is created. In this case, the value of **--product** option is considered as a Name of the new Product. If the Product specified by **--product** option exists, **--create-product** option is ignored. |
 | --name | -n | yes | yes | Name of the new Device Group. Must be unique among all Device Groups in the specified Product. |
 | --descr | -s | no | yes | Description of the Device Group. |
 | --device-file | -x | no | yes | Name of a file for IMP device source code. Default value: *device.nut* |
 | --agent-file | -y | no | yes | Name of a file for IMP agent source code. Default value: *agent.nut* |
 | --create-files | -c | no | no | Creates empty file(s) if the file(s) referenced by [Project File](#project-file) as the file(s) with IMP device/agent source code do not exist. |
-| --pre-factory | | no | no | If not specified, the new Device Group is of the [type](#device-group-type) *development*. If specified, the new Device Group is of the [type](#device-group-type) *pre-factory*. |
-| --target | | no | yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the being created Device Group. May be specified if and only if **--pre-factory** option is specified. The specified target Device Group must be of the [type](#device-group-type) *pre-production* and belongs to the specified Product. Otherwise the command fails. |
-| --create-target | | no | no | If the Device Group specified by **--target** option does not exist, it is created. In this case, the value of **--target** option is considered as a Name of the new Device Group. If **--target** option is not specified or the Device Group specified by **--target** option exists, **--create-target** option is ignored. |
-| --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
+| --pre-factory | -f | no | no | If not specified, the new Device Group is of the [type](#device-group-type) *development*. If specified, the new Device Group is of the [type](#device-group-type) *pre-factory*. |
+| --target | -t | no | yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the being created Device Group. May be specified if and only if **--pre-factory** option is specified. The specified target Device Group must be of the [type](#device-group-type) *pre-production* and belongs to the specified Product. Otherwise the command fails. |
+| --create-target | -j | no | no | If the Device Group specified by **--target** option does not exist, it is created. In this case, the value of **--target** option is considered as a Name of the new Device Group. If **--target** option is not specified or the Device Group specified by **--target** option exists, **--create-target** option is ignored. |
+| --confirmed | -q | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -950,10 +949,10 @@ User is informed about all entities and files which are going to be deleted or u
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --entities | | no | no | Also deletes the impCentral API entities (Device Group, Product, Deployments) referenced by [Project File](#project-file). See above. |
-| --files | | no | no | Also deletes the files referenced by [Project File](#project-file) as files with IMP device and agent source code. |
+| --entities | -e | no | no | Also deletes the impCentral API entities (Device Group, Product, Deployments) referenced by [Project File](#project-file). See above. |
+| --files | -f | no | no | Also deletes the files referenced by [Project File](#project-file) as files with IMP device and agent source code. |
 | --all | -a | no | no | Includes **--entities** and **--files** options. |
-| --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
+| --confirmed | -q | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -969,7 +968,7 @@ Informs user if the Device Group referenced by [Project File](#project-file) doe
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --full | | no | no | Displays additional information: full details about the corresponding Device Group, like [**impt dg info --full**](#device-group-info) command displays; authentication status applicable to the current directory, like [**impt auth info**](#auth-info) command displays. |
+| --full | -u | no | no | Displays additional information: full details about the corresponding Device Group, like [**impt dg info --full**](#device-group-info) command displays; authentication status applicable to the current directory, like [**impt auth info**](#auth-info) command displays. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -995,7 +994,7 @@ At the end of the command execution information about the project is displayed (
 | --device-file | -x | no | yes | Name of a file for IMP device source code. Default value: *device.nut* |
 | --agent-file | -y | no | yes | Name of a file for IMP agent source code. Default value: *agent.nut* |
 | --create-files | -c | no | no | Creates empty file(s) if the file(s) referenced by [Project File](#project-file) as the file(s) with IMP device/agent source code do not exist. |
-| --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
+| --confirmed | -q | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -1018,7 +1017,7 @@ At the end of the command execution information about the project is displayed (
 | --agent-file | -y | no | yes | New name of a file for IMP agent source code. |
 | --rename-files | -r | no | no | Renames file(s) (if existed) which were referenced by [Project File](#project-file) as the file(s) with IMP device/agent source code to the new name(s) specified by **--device-file**, **--agent-file** options. Should not be specified together with **--create-files** option. |
 | --create-files | -c | no | no | Creates empty file(s) if the file(s) referenced by [Project File](#project-file) as the file(s) with IMP device/agent source code do not exist. Should not be specified together with **--rename-files** option. |
-| --target | | no | yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the Device Group referenced by [Project File](#project-file). May be specified if the Device Group referenced by [Project File](#project-file) is of the [type](#device-group-type) *pre-factory* only. The specified target Device Group must be of the [type](#device-group-type) *pre-production* and belongs to the same Product as the Device Group referenced by [Project File](#project-file). Otherwise the command fails. |
+| --target | -t | no | yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the Device Group referenced by [Project File](#project-file). May be specified if the Device Group referenced by [Project File](#project-file) is of the [type](#device-group-type) *pre-factory* only. The specified target Device Group must be of the [type](#device-group-type) *pre-production* and belongs to the same Product as the Device Group referenced by [Project File](#project-file). Otherwise the command fails. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -1040,11 +1039,11 @@ At the end of the command execution information about the tests configuration is
 | --device-file | -x | no | yes | A path to an optional file with the device source code that is deployed along with the tests. A relative or absolute path can be used. |
 | --agent-file | -y | no | yes | A path to an optional file with the agent source code that is deployed along with the tests. A relative or absolute path can be used. |
 | --timeout | -t | no | yes | A timeout period (in seconds) after which the tests are interrupted and considered as failed. By default: 30 seconds. |
-| --stop-on-fail | | no | no | If *true* or no value: the tests execution is stopped after a test failure. If *false* value: the tests execution is not stopped after a failure. By default: *false* |
-| --allow-disconnect | | no | no | If *true* or no value: keep a test session alive when a device is temporary disconnected. If *false* value: a test session fails when a device is disconnected. By default: *false* |
-| --builder-cache | | no | no | If *true* or no value: cache external libraries in the local *.builder-cache* directory. If *false* value: do not cache external libraries. By default: *false* |
-| --test-file | | no | yes | Test file name or pattern. All files located in the current directory (and its subdirectories) which names match this pattern are considered as files with Test Cases. This option may be repeated several times to specify several names and/or patterns. By default: *"\*.test.nut" "tests/\*\*/\*.test.nut"* |
-| --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
+| --stop-on-fail | -s | no | no | If *true* or no value: the tests execution is stopped after a test failure. If *false* value: the tests execution is not stopped after a failure. By default: *false* |
+| --allow-disconnect | -a | no | no | If *true* or no value: keep a test session alive when a device is temporary disconnected. If *false* value: a test session fails when a device is disconnected. By default: *false* |
+| --builder-cache | -e | no | no | If *true* or no value: cache external libraries in the local *.builder-cache* directory. If *false* value: do not cache external libraries. By default: *false* |
+| --test-file | -f | no | yes | Test file name or pattern. All files located in the current directory (and its subdirectories) which names match this pattern are considered as files with Test Cases. This option may be repeated several times to specify several names and/or patterns. By default: *"\*.test.nut" "tests/\*\*/\*.test.nut"* |
+| --confirmed | -q | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -1062,9 +1061,9 @@ User is asked to confirm the operation (confirmed automatically with **--confirm
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --github-config | | no | no | A path to the github credentials configuration file that should be deleted. A relative or absolute path can be used. If the value of the option is not specified, *.impt.github-info* file in the current directory is assumed. |
-| --builder-config | | no | no | A path to the file with *Builder* variables that should be deleted. A relative or absolute path can be used. If the value of the option is not specified, *.impt.builder* file in the current directory is assumed. |
-| --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
+| --github-config | -i | no | no | A path to the github credentials configuration file that should be deleted. A relative or absolute path can be used. If the value of the option is not specified, *.impt.github-info* file in the current directory is assumed. |
+| --builder-config | -j | no | no | A path to the file with *Builder* variables that should be deleted. A relative or absolute path can be used. If the value of the option is not specified, *.impt.builder* file in the current directory is assumed. |
+| --confirmed | -q | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -1078,10 +1077,10 @@ User is asked to confirm the operation if the specified github credentials confi
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --github-config | | no | yes | A path to the github credentials configuration file. A relative or absolute path can be used. If the option is absent, *.impt.github-info* file in the current directory is assumed. |
+| --github-config | -i | no | yes | A path to the github credentials configuration file. A relative or absolute path can be used. If the option is absent, *.impt.github-info* file in the current directory is assumed. |
 | --user | -u | yes | yes | GitHub username. |
 | --pwd | -w | yes | yes | GitHub password or personal access token. |
-| --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
+| --confirmed | -q | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -1105,10 +1104,10 @@ Runs the tests specified by [Test Configuration File](#test-configuration-file) 
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --tests | | no | yes | A pattern for selective test runs, allows to execute a single test or a set of tests from one or several Test Cases. The syntax of the pattern: *\[testFileName]:\[testClass].\[testMethod]* If the option is missed all tests from all test files specified in [Test Configuration File](#test-configuration-file) are executed. |
-| --github-config | | no | no | A path to the github credentials configuration file. A relative or absolute path can be used. If the value of the option is not specified, *.impt.github-info* file in the current directory is assumed. |
-| --builder-config | | no | no | A path to the file with *Builder* variables. A relative or absolute path can be used. If the value of the option is not specified, *.impt.builder* file in the current directory is assumed. |
-| --builder-cache | | no | no | If *true* or no value: cache (if not cached yet) external libraries in the local *.builder-cache* directory and use them from the cache for this test run. If *false* value: do not use external libraries from the cache even if they are cached. If not specified, the behavior is defined by the corresponding settings in [Test Configuration File](#test-configuration-file) that was created by [**impt test create**](#test-create) command. |
+| --tests | -t | no | yes | A pattern for selective test runs, allows to execute a single test or a set of tests from one or several Test Cases. The syntax of the pattern: *\[testFileName]:\[testClass].\[testMethod]* If the option is missed all tests from all test files specified in [Test Configuration File](#test-configuration-file) are executed. |
+| --github-config | -i | no | no | A path to the github credentials configuration file. A relative or absolute path can be used. If the value of the option is not specified, *.impt.github-info* file in the current directory is assumed. |
+| --builder-config | -j | no | no | A path to the file with *Builder* variables. A relative or absolute path can be used. If the value of the option is not specified, *.impt.builder* file in the current directory is assumed. |
+| --builder-cache | -e | no | no | If *true* or no value: cache (if not cached yet) external libraries in the local *.builder-cache* directory and use them from the cache for this test run. If *false* value: do not use external libraries from the cache even if they are cached. If not specified, the behavior is defined by the corresponding settings in [Test Configuration File](#test-configuration-file) that was created by [**impt test create**](#test-create) command. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -1126,10 +1125,10 @@ At the end of the command execution information about the tests configuration is
 | --device-file | -x | no | no | A path to a file with the device source code that is deployed along with the tests. A relative or absolute path can be used. Specify this option w/o a value to remove this file from the test configuration. |
 | --agent-file | -y | no | no | A path to a file with the agent source code that is deployed along with the tests. A relative or absolute path can be used. Specify this option w/o a value to remove this file from the test configuration. |
 | --timeout | -t | no | yes | A timeout period (in seconds) after which the tests are interrupted and considered as failed. |
-| --stop-on-fail | | no | no | If *true* or no value: the tests execution is stopped after a test failure. If *false* value: the tests execution is not stopped after a failure. |
-| --allow-disconnect | | no | no | If *true* or no value: keep a test session alive when a device is temporary disconnected. If *false* value: a test session fails when a device is disconnected. |
-| --builder-cache | | no | no | If *true* or no value: cache external libraries in the local *.builder-cache* directory. If *false* value: do not cache external libraries. |
-| --test-file | | no | yes | Test file name or pattern. All files located in the current directory (and its subdirectories) which names match this pattern are considered as files with Test Cases. This option may be repeated several times to specify several names and/or patterns. |
+| --stop-on-fail | -s | no | no | If *true* or no value: the tests execution is stopped after a test failure. If *false* value: the tests execution is not stopped after a failure. |
+| --allow-disconnect | -a | no | no | If *true* or no value: keep a test session alive when a device is temporary disconnected. If *false* value: a test session fails when a device is disconnected. |
+| --builder-cache | -e | no | no | If *true* or no value: cache external libraries in the local *.builder-cache* directory. If *false* value: do not cache external libraries. |
+| --test-file | -f | no | yes | Test file name or pattern. All files located in the current directory (and its subdirectories) which names match this pattern are considered as files with Test Cases. This option may be repeated several times to specify several names and/or patterns. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -1144,9 +1143,9 @@ Creates a new Webhook for the specified Device Group.
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
-| --url | | yes | yes | The Webhook's target URL. |
-| --event | | yes | yes | The event that triggers the Webhook. Valid values: "blessing", "blinkup", "deployment". |
-| --mime | | yes | yes | The MIME content-type of the event data. Valid values: "json", "urlencoded". |
+| --url | -u | yes | yes | The Webhook's target URL. |
+| --event | -e | yes | yes | The event that triggers the Webhook. Valid values: "blessing", "blinkup", "deployment". |
+| --mime | -m | yes | yes | The MIME content-type of the event data. Valid values: "json", "urlencoded". |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -1161,7 +1160,7 @@ User is asked to confirm the operation (confirmed automatically with **--confirm
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --wh | -w | yes | yes | The Webhook id. |
-| --confirmed | | no | no | Executes the operation w/o asking additional confirmation from user. |
+| --confirmed | -q | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -1193,9 +1192,9 @@ The returned list of the Webhooks may be filtered. Filtering is possible by any 
 | --owner | -o | no | yes | Webhooks owned by the [specified Account(s)](#account-identifier) only. |
 | --product | -p | no | yes | Webhooks created for Device Groups which belong to the [specified Product(s)](#product-identifier) only. |
 | --dg | -g | no | yes | Webhooks created for the [specified Device Group(s)](#device-group-identifier) only. |
-| --dg-type | | no | yes | Webhooks created for Device Groups of the [specified type](#device-group-type) only. |
-| --url | | no | yes | Webhooks with the specified target URL only. |
-| --event | | no | yes | Webhooks for the specified event only. Valid values: "blessing", "blinkup", "deployment". |
+| --dg-type | -y | no | yes | Webhooks created for Device Groups of the [specified type](#device-group-type) only. |
+| --url | -u | no | yes | Webhooks with the specified target URL only. |
+| --event | -e | no | yes | Webhooks for the specified event only. Valid values: "blessing", "blinkup", "deployment". |
 
 #### Webhook Update
 
@@ -1207,8 +1206,8 @@ Fails if the specified Webhook does not exist.
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --wh | -w | yes | yes | The Webhook id. |
-| --url | | no | yes | The Webhook's new target URL. |
-| --mime | | no | yes | New MIME content-type of the event data. Valid values: "json", "urlencoded". |
+| --url | -u | no | yes | The Webhook's new target URL. |
+| --mime | -m | no | yes | New MIME content-type of the event data. Valid values: "json", "urlencoded". |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
@@ -1216,31 +1215,31 @@ Fails if the specified Webhook does not exist.
 
 | Command Option Alias | Command Option Full Name(s) |
 | --- | --- |
-| -a | --all  |
-| -b | --build  |
+| -a | --all, --assigned, --allow-disconnect  |
+| -b | --build, --builds  |
 | -c | --create-files, --conditional  |
 | -d | --device  |
-| -e | --endpoint  |
-| -f | --force  |
+| -e | --endpoint, --entities, --event, --builder-cache  |
+| -f | --force, --files, --pre-factory, --from, --flagged, --offline, --test-file  |
 | -g | --dg  |
 | -h | --help  |
-| -i |   |
-| -j |   |
+| -i | --device-only, --create-product, --github-config  |
+| -j | --agent-only, --create-target, --builder-config  |
 | -k | --lk  |
-| -l | --log, --local  |
-| -m |   |
-| -n | --name  |
-| -o | --owner, --origin  |
+| -l | --log, --local, --load-code-after-blessing  |
+| -m | --min-supported-deployment, --mime, --zombie  |
+| -n | --name, --online, --page-number, --non-zombie  |
+| -o | --owner, --origin, --unflag-old  |
 | -p | --product  |
-| -q |   |
-| -r | --remove-tag, --rename-files  |
-| -s | --descr  |
-| -t | --tag, --timeout, --temp  |
-| -u | --user  |
+| -q | --confirmed  |
+| -r | --remove-tag, --rename-files, --remove  |
+| -s | --descr, --sha, --page-size, --stop-on-fail  |
+| -t | --tag, --timeout, --temp, --target, --to, --tests  |
+| -u | --user, --full, --unflagged, --unflag, --unassigned, --unbond, --url  |
 | -v |   |
 | -w | --wh, --pwd  |
 | -x | --device-file  |
-| -y | --agent-file  |
+| -y | --agent-file, --dg-type  |
 | -z | --debug  |
 
 ## Common Filter Options
@@ -1250,5 +1249,5 @@ Fails if the specified Webhook does not exist.
 | --owner | -o | [<ACCOUNT_IDENTIFIER>](#account-identifier) | Entities owned by the specified Account only. |
 | --product | -p | [<PRODUCT_IDENTIFIER>](#product-identifier) | Entities related to the specified Product only. |
 | --dg | -g | [<DEVICE_GROUP_IDENTIFIER>](#device-group-identifier) | Entities related to the specified Device Group only. |
-| --dg-type | | [<device_group_type>](#device-group-type) | Entities related to the Device Groups of the specified type only. |
+| --dg-type | -y | [<device_group_type>](#device-group-type) | Entities related to the Device Groups of the specified type only. |
 
