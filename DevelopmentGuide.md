@@ -77,7 +77,7 @@ At any time you can update your Project by [**impt project update**](./CommandsM
 
 Note, you can update other impCentral API entities related to your Project by using other impt commands. For example, use [**impt product update**](./CommandsManual.md#product-update) command to change Name and Description of the related Product.
 
-*Example*
+*Example*  
 *Update Description of the project's Device Group, rename the linked device source file to "device1.nut"*  
 **TODO** screenshot - impt project update -s "New description of my DG" -x device1.nut -r  
 
@@ -219,7 +219,7 @@ Note, [**impt project delete**](./CommandsManual.md#project-delete) command neve
 
 1. If needed, update your code, create and run a new build by the same command as above.
 
-1. When you satisfied by your code, mark the latest build by a tag "MyRC1" and set *flagged* attribute to `true` (it saves the build from unintentional deletion).  
+1. When you satisfied by your code, mark the latest build by a tag, for example, "MyRC1" and set *flagged* attribute to `true` (it saves the build from unintentional deletion).  
   `impt build update --descr "My Release Candidate 1" --tag MyRC1 --flagged`  
   **TODO** screenshot - the same command with aliases  
   
@@ -259,8 +259,78 @@ Note, [**impt project delete**](./CommandsManual.md#project-delete) command neve
 
 1. If needed, update your factory firmware code, create and run a new build by the same command as above.
 
-1. When you satisfied by your factory firmware code, mark the latest build by a tag "MyFactoryRC1" and set *flagged* attribute to `true` (it saves the build from unintentional deletion).  
+1. When you satisfied by your factory firmware code, mark the latest build by a tag, for example, "MyFactoryRC1" and set *flagged* attribute to `true` (it saves the build from unintentional deletion).  
   `impt build update --descr "My Factory Firmware Release Candidate 1" --tag MyFactoryRC1 --flagged`  
   **TODO** screenshot - the same command with aliases  
   
 ### Cleanup
+
+#### Go To Production
+
+If your development is planned for production you may want/need to keep the impCentral API entities your created, especially the final builds, but still do some minimal cleanup after your development activities.
+
+1. Goto the "factory" directory.  
+
+1. Delete all unnecessary builds of your factory firmware code, *flagged* builds will not be deleted.  
+  `impt dg builds --delete`  
+  **TODO** screenshot - the same command with aliases  
+
+1. Unassign your pre-factory fixture device in order to reuse it in your other projects.  
+  `impt dg unassign`  
+  **TODO** screenshot - the same command with aliases  
+
+1. Unassign your pre-production devices in order to reuse them in your other projects.  
+  `impt dg unassign --dg MyPreProductionDG`  
+  **TODO** screenshot - the same command with aliases  
+
+1. If you want, delete your factory firmware project and the source files in this directory. The impCentral API entities will not be deleted, the source files you may keep in your version control / software configuration management tool.  
+  `impt project delete --files`  
+  **TODO** screenshot - the same command with aliases  
+
+1. Goto the "dev" directory.
+
+1. Delete all unnecessary builds of your IMP application code, *flagged* builds will not be deleted.  
+  `impt dg builds --delete`  
+  **TODO** screenshot - the same command with aliases  
+
+1. Unassign your device which you used for the application testing.  
+  `impt dg unassign`  
+  **TODO** screenshot - the same command with aliases  
+
+1. Display and review the full structure of your Product.  
+  `impt product info --full`  
+  **TODO** screenshot - the same command with aliases  
+
+1. If you want, delete your IMP application project and the source files in this directory. The impCentral API entities will not be deleted, the source files you may keep in your version control / software configuration management tool.  
+  `impt project delete --files`  
+  **TODO** screenshot - the same command with aliases  
+
+1. If you want, delete the "dev" and the "factory" directories.  
+
+1. If you want, logout from impCentral API.  
+  `impt auth logout`  
+  **TODO** screenshot - the same command with aliases  
+
+The impt tool usage for Factory/Production process is described in Factory/Production Guide (**link TODO**).
+
+#### Total Cleanup
+
+If your development was just to try, test or any other temporal purpose you may want to fully cleanup all your development activities, including all impCentral API entities you created.
+
+1. Goto the "factory" directory.  
+
+1. Delete your factory firmware project, the source files and all impCentral API entities. "MyPreFactoryDG" and "MyPreProductionDG" Device Groups and all their builds (including *flagged*) will be deleted, the devices will be unassigned from them. "MyProduct" Product will not be deleted as you still have another project (Device Group) related to it.  
+  `impt project delete --all`  
+  **TODO** screenshot - the same command with aliases  
+
+1. Goto the "dev" directory.
+
+1. Delete your IMP application project, the source files and all impCentral API entities. "MyDevDG" Device Group and all it's builds (including *flagged*) will be deleted, the devices will be unassigned from it. "MyProduct" Product will be.  
+  `impt project delete --all`  
+  **TODO** screenshot - the same command with aliases  
+
+1. If you want, delete the "dev" and the "factory" directories.  
+
+1. If you want, logout from impCentral API.  
+  `impt auth logout`  
+  **TODO** screenshot - the same command with aliases  
