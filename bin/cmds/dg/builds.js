@@ -44,7 +44,7 @@ exports.builder = function (yargs) {
             describe : 'Set "flagged" attribute to false in all Deployments of the specified Device Group.'
         },
         [Options.UNFLAG_OLD] : false,
-        [Options.DELETE] : false,
+        [Options.REMOVE] : false,
         [Options.CONFIRMED] : false,
         [Options.DEBUG] : false
     });

@@ -29,7 +29,7 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'delete';
 const COMMAND_SECTION = 'test';
-const COMMAND_SHORT_DESCR = 'Deletes Test Configuration File.';
+const COMMAND_SHORT_DESCR = 'Deletes Test Configuration and other settings files.';
 const COMMAND_DESCRIPTION = 'Deletes Test Configuration File in the current directory and, optionally,' +
     ' Builder cache, Builder Config and github credentials configuration file.';
 

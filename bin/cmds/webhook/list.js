@@ -29,7 +29,7 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'list';
 const COMMAND_SECTION = 'webhook';
-const COMMAND_SHORT_DESCR = 'Displays information about available Webhooks.';
+const COMMAND_SHORT_DESCR = 'Displays information about all or filtered Webhooks.';
 const COMMAND_DESCRIPTION = 'Displays information about all Webhooks available to the current logged-in account.';
 
 exports.command = COMMAND;

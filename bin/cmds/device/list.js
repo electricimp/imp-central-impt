@@ -31,7 +31,7 @@ const UserInteractor = require('../../../lib/util/UserInteractor');
 
 const COMMAND = 'list';
 const COMMAND_SECTION = 'device';
-const COMMAND_SHORT_DESCR = 'Displays information about available Devices.';
+const COMMAND_SHORT_DESCR = 'Displays information about all or filtered Devices.';
 const COMMAND_DESCRIPTION = 'Displays information about all Devices available to the current logged-in account.';
 
 exports.command = COMMAND;

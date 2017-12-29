@@ -29,7 +29,7 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'deploy';
 const COMMAND_SECTION = 'build';
-const COMMAND_SHORT_DESCR = 'Creates a build from the specified source files.';
+const COMMAND_SHORT_DESCR = 'Creates and deploys a build.';
 const COMMAND_DESCRIPTION = 'Creates a build (Deployment) from the specified source files,' +
     ' with Description (if specified) and attributes (if specified) and deploys it to all Devices' +
     ' of the specified Device Group.';
