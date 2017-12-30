@@ -149,11 +149,9 @@ Every above command always creates a new log stream. In case impCentral API allo
 *Logging is started for a Device from the project's Device Group*  
 **TODO** screenshot - impt log stream : one device from project's DG is added, Ctrl-C  
 
-### Pre-Factory Specifics
-
 ### Project Info
 
-At any time you can get known the actual status of your Project configuration - the related Device Group, Product, the linked source files, etc. - by [**impt project info**](./CommandsManual.md#project-info) command. Additional option **--full** provides you even moe details. For example, information about Devices added to your Project, the login status related to the directory with your Project - like by [**impt auth info**](./CommandsManual.md#auth-info) command.
+At any time you can get known the actual status of your Project configuration - the related Device Group, Product, the linked source files, etc. - by [**impt project info**](./CommandsManual.md#project-info) command. Additional option **--full** provides you even more details. For example, information about Devices added to your Project, the login status related to the directory with your Project - like by [**impt auth info**](./CommandsManual.md#auth-info) command.
 
 Use [**impt product info**](./CommandsManual.md#product-info) command with the option **--full** to review the full structure of the Product related by your Project.
 
@@ -272,7 +270,7 @@ If your development is planned for production you may want/need to keep the impC
 1. Goto the "factory" directory.  
 
 1. Delete all unnecessary builds of your factory firmware code, *flagged* builds will not be deleted.  
-  `impt dg builds --delete`  
+  `impt dg builds --remove`  
   **TODO** screenshot - the same command with aliases  
 
 1. Unassign your pre-factory fixture device in order to reuse it in your other projects.  
@@ -290,7 +288,7 @@ If your development is planned for production you may want/need to keep the impC
 1. Goto the "dev" directory.
 
 1. Delete all unnecessary builds of your IMP application code, *flagged* builds will not be deleted.  
-  `impt dg builds --delete`  
+  `impt dg builds --remove`  
   **TODO** screenshot - the same command with aliases  
 
 1. Unassign your device which you used for the application testing.  
@@ -325,7 +323,7 @@ If your development was just to try, test or any other temporal purpose you may 
 
 1. Goto the "dev" directory.
 
-1. Delete your IMP application project, the source files and all impCentral API entities. "MyDevDG" Device Group and all it's builds (including *flagged*) will be deleted, the devices will be unassigned from it. "MyProduct" Product will be.  
+1. Delete your IMP application project, the source files and all impCentral API entities. "MyDevDG" Device Group and all it's builds (including *flagged*) will be deleted, the devices will be unassigned from it. "MyProduct" Product will be deleted.  
   `impt project delete --all`  
   **TODO** screenshot - the same command with aliases  
 
