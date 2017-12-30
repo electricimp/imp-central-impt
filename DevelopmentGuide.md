@@ -67,7 +67,7 @@ If you create Project for [factory firmware](https://developer.electricimp.com/e
 Alternatively, you can pre-create the required impCentral API entities using other impt commands, before creation or linking a new Project. For example, use [**impt product create**](./CommandsManual.md#product-create) command to pre-create the Product, use [**impt dg create**](./CommandsManual.md#device-group-create) command to pre-create the production target Device Group and/or the project's Device Group itself.
 
 *Example*  
-**TODO** screenshot - impt project create - one or several examples?  
+**TODO** screenshot - impt project create - one simplest example  
 
 ### Project Updating
 
@@ -84,19 +84,20 @@ Note, you can update other impCentral API entities related to your Project by us
 ### Device Manipulation
 
 At any time you can easily add or remove devices to/from your Project. That means assigning/unassigning Devices to/from the project's Device Group. You just need to know an identifier of the required Device - either Device Id, or Device Name, or MAC address, or IMP Agent Id.
-- use [**impt device assign --device <DEVICE_IDENTIFIER>**](./CommandsManual.md#device-assign) command to add a device to your Project.
-- use [**impt device unassign --device <DEVICE_IDENTIFIER>**](./CommandsManual.md#device-unassign) command to remove a device from your Project.
-- use [**impt dg unassign**](./CommandsManual.md#device-group-unassign) command to remove all devices from your Project (the project's Device Group).
+- use [**impt device assign --device <DEVICE_IDENTIFIER>**](./CommandsManual.md#device-assign) command to add the specified Device to your Project.
+- use [**impt dg reassign --from <DEVICE_GROUP_IDENTIFIER>**](./CommandsManual.md#device-group-reassign) command to add all Devices from the specified (by Id or Name) Device Group to your Project.
+- use [**impt device unassign --device <DEVICE_IDENTIFIER>**](./CommandsManual.md#device-unassign) command to remove the specified Device from your Project.
+- use [**impt dg unassign**](./CommandsManual.md#device-group-unassign) command to remove all Devices from your Project (the project's Device Group).
 
 If you do not remember an identifier of the required Device, you can use [**impt device list**](./CommandsManual.md#device-list) command to find it.
 
 Usually, it is enough to have one device added to your Project for development/debugging purpose.
 
 *Example*  
-**TODO** screenshot - impt device assign -d <agent-id>  
+**TODO** screenshot - impt device assign -d \<agent-id>  
 
 *Example*  
-**TODO** screenshot - impt dg unassign  
+**TODO** screenshot - impt dg reassign -f \<dg-name>  
 
 ### Build Creation and Running
 
