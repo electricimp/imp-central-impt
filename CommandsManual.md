@@ -632,7 +632,7 @@ The returned list of the Device Groups may be filtered. Filtering is possible by
 | Filter Options: | | | | |
 | --owner | -o | no | yes | Device Groups owned by the [specified Account(s)](#account-identifier) only. |
 | --product | -p | no | yes | Device Groups which belong to the [specified Product(s)](#product-identifier) only. |
-| --dg-type | -q | no | yes | Device Groups of the [specified type](#device-group-type) only. |
+| --dg-type | -y | no | yes | Device Groups of the [specified type](#device-group-type) only. |
 
 #### Device Group Reassign
 
