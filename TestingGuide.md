@@ -55,17 +55,31 @@ Other impt commands may also be needed during a testing process. For example, co
 
 ## Writing Tests
 
+The main steps you need to perform in order to write tests:
+
+- Define a structure of your test files and test cases. It fully depends on design of your tests and on the functionality you are testing.
+  - You may combine all test cases in one test file or divide them by different test files.
+  - You may combine all test files in one directory or put some or all files into subdirectories. A test project can include test files from the test project home and all it's subdirectories.
+
+- Define names of your test files. In general, a test file may have any name but should follow few rules:
+  - A file is treated as test file for IMP agent if `agent` is present in the file name. Otherwise, the file is treated as test file for IMP device.
+  - By default, all test cases from a test file run either on IMP device or on IMP agent. If your test cases are intended to run on both the IMP device and its IMP agent, there is a way to organize this described [here](#tests-for-bi-directional-device-agent-communication).
+  - A test configuration has a pattern for location and names of the test files included into the test project. You specifies this pattern during test configuration [creation](TODO link) or [updating](TODO link). You should have this in mind when naming your test files.
+
+- Add test cases into your test files.
+  - Test case is a class inherited from the *ImpTestCase* class defined by the [*impUnit*](https://github.com/electricimp/impUnit) framework.
+  - A test file may have several test cases.
+  - There are no rules for test case naming. But there is a feature of the [selective test running](#selective-test-running). You may have it in mind when naming your test cases. Test cases may have identical names if they are in different test files.
+
+- Add and implement test methods (tests) in your test cases.
+  - Every test method name should start with `test`. There are no other rules for test method naming. But there is a feature of the [selective test running](#selective-test-running). You may have it in mind when naming your test methods. Test methods may have identical names if they are in different test cases.
+  - A test case may have several test methods (tests).
+  - Additionally, any test case may have *setUp()* and *tearDown()* methods:
+    - *setUp()* method may be used to perform the environment setup before execution the tests of the test case.
+    - *tearDown()* method may be used to clean-up the environment after execution the tests of the test case.
+
+
 **TODO - all below is just a copy of the previous impTest readme - to be updated!**
-
-The following are the basic steps you need to follow in order to write tests:
-
-- Choose the name and location of your file with tests. You can have several files with tests in the same or different locations.
-  - The name with the path, relative to Project Home, must conform to the patterns specified in the [Test Project Configuration](#test-project-configuration) file within your Test Project.
-  - The file is treated as agent test code if `agent` is present in the file name. Otherwise the file is treated as device test code.
-  - By default, the test code runs either on device or agent. If your Test Case must run on both the device and its agent, there is a way that allows you to execute [agent and device test code together](#tests-for-bi-directional-device-agent-communication).
-- Add a Test Case class that inherits from the *ImpTestCase* class. A file can have several Test Cases. Test Cases can have identical names if they are in different files.
-- Add and implement tests: methods whose names start with `test`. Every Test Case can have several tests.
-- Additionally, any Test Case can have *setUp()* and *tearDown()* methods to perform the environment setup before the tests execute and then perform cleaning-up afterwards.
 
 A test method can be designed as synchronous (by default) or [asynchronous](#asynchronous-testing).
 
