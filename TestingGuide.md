@@ -63,7 +63,7 @@ The main steps you need to perform in order to write tests:
 
 - Define names of your test files. In general, a test file may have any name but should follow few rules:
   - A file is treated as test file for IMP agent if `agent` is present in the file name. Otherwise, the file is treated as test file for IMP device.
-  - By default, all test cases from a test file run either on IMP device or on IMP agent. If your test cases are intended to run on both the IMP device and its IMP agent, there is a way to organize this described [here](#tests-for-bi-directional-device-agent-communication).
+  - By default, all test cases from a test file run either on IMP device or on IMP agent. If your test cases are intended to run on both the IMP device and its IMP agent, there is a way to organize this which is described [here](#tests-for-bi-directional-device-agent-communication).
   - A test configuration has a pattern for location and names of the test files included into the test project. You specifies this pattern during test configuration [creation](TODO link) or [updating](TODO link). You should have this in mind when naming your test files.
 
 - Add test cases into your test files.
@@ -78,14 +78,13 @@ The main steps you need to perform in order to write tests:
     - *setUp()* method may be used to perform the environment setup before execution the tests of the test case.
     - *tearDown()* method may be used to clean-up the environment after execution the tests of the test case.
 
+A test method may be designed as synchronous (by default) or [asynchronous](#asynchronous-testing).
 
-**TODO - all below is just a copy of the previous impTest readme - to be updated!**
+A test file must not contain any `#require` statement. Instead, an include from GitHub should be used. For example: `#require "messagemanager.class.nut:2.0.0"` should be replaced with `@include "github:electricimp/MessageManager/MessageManager.class.nut@v2.0.0"`. See more details about GitHub configuration [here](#github-credentials-configuration).
 
-A test method can be designed as synchronous (by default) or [asynchronous](#asynchronous-testing).
+You can use [*Builder*](https://github.com/electricimp/Builder) language in your tests. See more details [here](#builder-language).
 
-A test file must not contain any `#require` statement. Instead, [an include from GitHub](#github-credentials-configuration) must be used. For example: `#require "messagemanager.class.nut:1.0.2"` must be replaced with `@include "github:electricimp/MessageManager/MessageManager.class.nut@v1.0.2"`.
-
-Here is an example of a simple Test Case:
+*Example of a simple Test Case:*
 
 ```squirrel
 class MyTestCase extends ImpTestCase {
@@ -101,33 +100,27 @@ class MyTestCase extends ImpTestCase {
 
 ### Tests for Bi-directional Device-Agent Communication
 
-To test interaction between a device and an agent, *impTest* allows developers to extend tests with corresponding logic implemented on the other side of the link (agent or device, respectively). The test “extensions” can be used to emulate real device-agent interaction and communication.
+It is possible to test an interaction between IMP device and IMP agent by emulating one of the sides of the interaction.
 
-To identify partners file uniquely, there are some restrictions imposed on the test extensions:
+A test file is intended to test either IMP device or IMP agent side. The opposite side is emulated by a partner file. There are several rules:
+- a partner file must not contain any test cases. It should contain the IMP code needed for the emulation of interaction only.
+- the test file and the partner file should be located in the same directory.
+- the test file and the partner file should have similar names according to the following pattern: `TestFileName.(agent|device)[.test].nut`:
+  - the should have the same `TestFileName` prefix and the same `.nut` suffix.
+  - a file intended for IMP device should contain `.device` in the name, a file intended for IMP agent should contain `.agent` in the name.
+  - the test file should contain `.test` in the name, the partner file must not contain that in the name.
+  - for example, `"Test1.agent.test.nut"` (a test file with test cases for IMP agent side) and `"Test1.device.nut"` (the corresponding partner file with emulation of IMP device side).
+- Due to partner special naming **do not** change the default value of ["Test file search pattern"](#test-project-configuration).
 
-The [Test case](#overview) class must be located either in the device code or the agent code, but not in both. Whichever of the two it is included in, that is the **TestFile** &mdash; the other file is the **PartnerFile**. Both of these files must be located in the same directory on the disk.
-
-**TestFile** and **PartnerFile** must be named as follows: `TestName.(agent|device)[.test].nut`, ie. they need to have the same `TestName` prefix and the same `.nut` suffix.
-
-**TestFile** is indicated by the `.test` string in its filename; **PartnerFile** must not feature this string in the suffix.
-
-The type of execution environment is indicated by either `.device` or `.agent` in the file name &mdash; if **TestFile** contains `.agent`, **PartnerFile** must have `.device`, and *vice versa*.
-
-For example, `"Test1.agent.test.nut"` (test file) and `"Test1.device.nut"` (partner file).
-
-Due to partner special naming **do not** change the default value of ["Test file search pattern"](#test-project-configuration).
-
-Further examples of test extensions can be found at [sample7](./samples/sample7).
+Example of a test file / partner file pair can be found at [sample7](TODO link). **TODO** - do we have and mention samples at all?
 
 ### Asynchronous Testing
 
-Every test method (as well as *setUp()* and *tearDown()*) can be either synchronous (the default) or asynchronous.
+Every test method, including *setUp()* and *tearDown()*, can be either synchronous (by default) or asynchronous.
 
-Methods must return an instance of [**Promise**](https://github.com/electricimp/Promise) to notify that it needs to do some work asynchronously.
+A test method should return an instance of [Promise](https://github.com/electricimp/Promise) to notify that it needs to do some work asynchronously. The resolution of the Promise indicates that the test has been passed successfully. The rejection of the Promise denotes a failure.
 
-The resolution of the Promise indicates that all test have been passed successfully. The rejection of a Promise denotes a failure.
-
-#### Example
+*Example:*
 
 ```squirrel
 function testSomethingAsynchronously() {
@@ -139,9 +132,9 @@ function testSomethingAsynchronously() {
 
 ### Builder Language
 
-[*Builder*](https://github.com/electricimp/Builder) is supported by *impTest*. The *Builder* language combines a preprocessor with an expression language and advanced imports.
+You can use [*Builder*](https://github.com/electricimp/Builder) language in your tests. It combines a preprocessor with an expression language and advanced imports.
 
-#### Example
+*Example:*
 
 ```squirrel
 @set assertText = "Failed to assert that values are"
@@ -155,7 +148,7 @@ this.assertEqual(
     );
 ```
 
-[*\_\_FILE\_\_* and *\_\_LINE\_\_*](https://github.com/electricimp/Builder#variables) variables are defined in the [**Builder**](https://github.com/electricimp/Builder), they can be useful for debugging information. Below is a usage example:
+[*\_\_FILE\_\_* and *\_\_LINE\_\_*](https://github.com/electricimp/Builder#variables) variables are defined in the [Builder](https://github.com/electricimp/Builder), they can be useful for debugging information:
 
 ```squirrel
 this.assertEqual(
@@ -166,6 +159,9 @@ this.assertEqual(
         + " at line @{__LINE__}"
 );
 ```
+
+**TODO - all below is just a copy of the previous impTest readme - to be updated!**
+
 
 It is possible to define and propagate [custom variables](https://github.com/electricimp/Builder#variables) through a separate configuration file which syntax is similar to the [github credential file](#github-credentials-configuration):
 
