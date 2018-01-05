@@ -1,7 +1,6 @@
 # impt Testing Guide
 
-This additional guide is intended for developers and testers who use the impt tool to test IMP libraries or other IMP code.
-The impt tool supersedes the [previous version of impTest](https://github.com/electricimp/impTest) and now includes it as a part of the impt.
+This additional guide is intended for developers and testers who use the impt tool to test IMP libraries or other IMP code by unit tests which are created with the [*impUnit*](https://github.com/electricimp/impUnit) test framework. The impt tool supersedes the [previous version of impTest](https://github.com/electricimp/impTest) and includes it as a part of the impt now.
 
 First of all, please read the root [readme file](./README.md) that covers all basic and common aspects of the impt tool.
 
@@ -13,133 +12,50 @@ The full impt tool commands specification is described in the [impt Commands Man
 - Model is replaced by the new impCentral API entity - Device Group.
 - individual Devices are not specified. All Devices assigned to the specified Device Group are used for tests running.
 - impTest is a part of the impt tool.
+- impTest does not have a separate installation. It is installed as a part ot the impt tool.
 - impTest does not have a separate authentication. The impt tool's authentication is used.
 - impTest commands are re-designed and follows the general syntax and design of the impt tool commands.
 - impTest commands are less interactive, all settings are specified as command's options.
 
-**TODO - all below is just a copy of the previous impTest readme - to be updated!**
-
 ## Overview
 
-*impTest* is a set of tools intended to run unit tests that are built with the [*impUnit*](https://github.com/electricimp/impUnit) test framework. *impTest* leverages Electric Imp’s [Build API](https://electricimp.com/docs/buildapi/) to deploy and run the code on imp-enabled devices. All of the tools are written in [Node.js](https://nodejs.org/en/) and are fully open source.
+This guide contains two main parts:
+- explanation of how to [write tests](#writing-tests).
+- explanation of how to [use tests: configure and run](#using-tests).
 
-*impTest* makes use of the following files and directories:
+The main terms:
 
-**Test Project** is the directory (with all subdirectories) where the tests are located.
+### Test File, Test Case, Test Method
 
-There is one [**Test Project Configuration**](#test-project-configuration) file per Test Project directory. Test Project Configuration contains all of the settings related to all of the tests used in Test Project.
+Test file is a file with test cases.
 
-**Project Home** is the directory where Test Project Configuration is located.
+Test case is a class inherited from the *ImpTestCase* class defined by the [*impUnit*](https://github.com/electricimp/impUnit) framework. There can be several test cases in a test file. 
 
-All files located in Project Home (and in its subdirectories) are considered as files with Test Cases if their names match the patterns specified in Test Project Configuration.
+Test method (or simply called a test) is a method of test case. It is prefixed by *test*, eg. *testEverythingOk()*. There can be several test methods (tests) in a test case.
 
-**Test Case** is a class inherited from the *ImpTestCase* class. There can be several Test Cases (classes) in a file. A Test Case (class) can contain several tests (methods), each of which should be prefixed *test*, eg. *testEverythingOk()*.
+Every test may be uniquely identified or specified by the corresponding test file name, test case name and test method name.
 
-In order to work with impTest you need to:
+### Test Project, Test Configuration, Test Project Home
 
-- [Install *impTest*](#installation)
-- [Create or Update Test Project Configuration](#test-project-configuration)
-- [Write or Update Tests](#writing-tests)
-- [Run Tests](#running-tests)
+Test project is an artificial entity which combines test files intended to test an IMP library or other IMP code. One test project is defined by one test configuration.
 
-If you want to update *impTest* itself, please see [For *impTest* Tools Developers](./docs/forImptestToolsDevelopers.md).
+Test configuration is represented by [Test Configuration File](./CommandsManual.md#test-configuration-file). It defines the test files which are included into the test project, impCentral Device Group which is used to run the tests, source file(s) with the IMP library/code which is going to be tested and other settings required for the tests building and running.
 
-## Installation
+There may be one and only one [Test Configuration File](./CommandsManual.md#test-configuration-file) in a directory. Subdirectories may contain Test Configuration Files as well but it is not recommended.
 
-[Node.js 4.0 or greater](https://nodejs.org/en/) is required. You can download the Node.js [pre-built binary](https://nodejs.org/en/download/) for your platform or install Node.js via [package manager](https://nodejs.org/en/download/package-manager).
+Test home is a directory where [Test Configuration File](./CommandsManual.md#test-configuration-file) exists. All files located in the test project home and all its subdirectories are considered as test files of the corresponding test project if their names match the patterns specified in the test configuration.
 
-Once *node* and *npm* are installed, you must execute the following command to set up *impTest*:
+Note, test project has no any relation to development Project described in the [impt Development Guide](./DevelopmentGuide.md). Both [Project File](./CommandsManual.md#project-file) and [Test Configuration File](./CommandsManual.md#test-configuration-file) may coexist fully independently in a one directory.
 
-```bash
-npm i -g imptest
-```
+### Test Commands
 
-## Test Project Configuration
+The impt tool has a dedicated group of commands which operate with test projects - [Test Commands](./CommandsManual.md#test-commands). For a particular test project the commands should be called from the test project home.
 
-A configuration file is a JSON file that contains the following key-value pairs:
-
-| Key | Description |
-| --- | --- |
-| _apiKey_ | Your [Build API key](https://electricimp.com/docs/ideuserguide/account) provides access to [Build API](https://electricimp.com/docs/buildapi/). For security reasons we strongly recommend that you define the Build API key as an [environment variable](#environment-variables) |
-| _devices_ | A set of Device IDs that specify the devices that must be used for tests execution |
-| _modelId_ | The ID of the Model that the devices are assigned to |
-| _deviceFile_ | A path to a file with the device source code that is deployed along with the tests. `false` is used if no additional code is needed |
-| _agentFile_ | A path to a file with the agent source code that is deployed along with the tests. `false` is used if no additional code is needed |
-| _tests_ | A set of patterns that *impTest* uses to search for files with Test Cases. If `**` is alone in the path portion, then it matches zero or more directories and subdirectories that need to be searched. It does not crawl symlinked directories. The pattern default value is `["*.test.nut", "tests/**/*.test.nut"]`. Do not change this value if there is a plan to run [agent and device test code together](#tests-for-bi-directional-device-agent-communication) |
-| _stopOnFailure_ | Set this option to `true` if you want to stop an execution after a test failure. The default value is `false` |
-| _builderCache_ | Set this option to `true` if you want to enable the builder cache for remote libraries. The default value is `false` |
-| _allowDisconnect_ | Set this option to `true` if you want the test sessions to stay alive on temporary device disconnect. The default value is `false` |
-| _timeout_ | A timeout period (in seconds) after which the tests are considered as failed. Asynchronous tests are interrupted. The default value is ten seconds |
-
-This is the format of the configuration file, though the settings can be listed in any order:
-
-```js
-{ "apiKey":          <string>,                 // Build API key, optional
-  "modelId":         <string>,                 // Model ID
-  "devices":         <string array>,           // Device IDs
-  "deviceFile":      <string or false>,        // Device code file. Default: "device.nut"
-  "agentFile":       <string or false>,        // Agent code file. Default: "agent.nut"
-  "tests":           <string or string array>, // Test file search pattern. Default: ["*.test.nut", "tests/**/*.test.nut"]
-  "builderCache":    <boolean>,                // Enable build cache? Default: false
-  "stopOnFailure":   <boolean>,                // Stop tests execution on failure? Default: false
-  "allowDisconnect": <boolean>,                // Keep the session alive on device disconnects? Default: false
-  "timeout":         <number>                  // Async test methods timeout, seconds. Default: 10
-}
-```
-
-### Project Configuration Generation
-
-The Test Project Configuration file can be created or updated by the following command:
-
-```bash
-imptest init [-c <configuration_file>] [-d] [-f]
-```
-
-where:
-
-* `-d` &mdash; prints the debug output.
-* `-c` &mdash; provides a path to the configuration file. A relative or absolute path can be used. Generation fails if any intermediate directory in the path does not exist. If the `-c` option is not specified, the `.imptest` file in the current directory is assumed.
-* `-f` &mdash; updates (overwrites) an existing configuration. If the specified configuration file already exists, this option must be explicitly specified to update the file.
-
-During the command execution you will be asked for [configuration settings](#test-project-configuration) in either of the following cases:
-- if a new Test Project Configuration is being created, the default values of the settings are offered;
-- if the existing Test Project Configuration is being updated, the settings from the existing configuration file are offered as defaults.
-
-### GitHub Credentials Configuration
-
-Sources from [GitHub](https://github.com/electricimp/Builder#from-github) can be included in test files.
-
-For unauthenticated requests, the GitHub API allows you to make [up to 60 requests per hour](https://developer.github.com/v3/#rate-limiting). To overcome this limitation, you can provide user credentials.
-
-For security reasons, we strongly recommend that you provide the credentials via [Environment Variables](#environment-variables). However, there is also a way to store the credentials in a special file (one file per Test Project).
-The file can be created or updated by the following command:
-
-```bash
-imptest github [-g <credentials_file>] [-d] [-f]
-```
-
-where:
-
-* `-d` &mdash; prints the debug output/
-* `-g` &mdash; provides a path to the file with GitHub credentials. A relative or absolute path can be used. Generation fails if any intermediate directory in the path does not exist. If `-g` option is not specified, the `.imptest-auth` file in the current directory is assumed.
-* `-f` &mdash; updates (overwrites) an existing file. If the specified file already exists, this option must be explicitly specified to update it.
-
-The file syntax is as follows:
-
-```
-{ "github-user": "user",
-  "github-token": "password_or_token" }
-```
-
-### Environment Variables
-
-For security reasons, we strongly recommend that you define your Build API key and GitHub credentials as environment variables, as follows:
-
-- [*apiKey*](#test-project-configuration) -> `IMP_BUILD_API_KEY` &mdash; to deploy and run the code on imp devices via [Electric Imp Build API](https://electricimp.com/docs/buildapi/).
-- [*github-user*](#github-credentials-configuration) -> `GITHUB_USER` &mdash; to include external sources from GitHub.
-- [*github-token*](#github-credentials-configuration) -> `GITHUB_TOKEN` &mdash; to include external sources from GitHub.
+Other impt commands may also be needed during a testing process. For example, commands to assign devices to Device Group.
 
 ## Writing Tests
+
+**TODO - all below is just a copy of the previous impTest readme - to be updated!**
 
 The following are the basic steps you need to follow in order to write tests:
 
@@ -476,6 +392,62 @@ class TestCase1 extends ImpTestCase {
 }
 ```
 
+
+## Using Tests
+
+### Project Configuration Generation
+
+The Test Project Configuration file can be created or updated by the following command:
+
+```bash
+imptest init [-c <configuration_file>] [-d] [-f]
+```
+
+where:
+
+* `-d` &mdash; prints the debug output.
+* `-c` &mdash; provides a path to the configuration file. A relative or absolute path can be used. Generation fails if any intermediate directory in the path does not exist. If the `-c` option is not specified, the `.imptest` file in the current directory is assumed.
+* `-f` &mdash; updates (overwrites) an existing configuration. If the specified configuration file already exists, this option must be explicitly specified to update the file.
+
+During the command execution you will be asked for [configuration settings](#test-project-configuration) in either of the following cases:
+- if a new Test Project Configuration is being created, the default values of the settings are offered;
+- if the existing Test Project Configuration is being updated, the settings from the existing configuration file are offered as defaults.
+
+### GitHub Credentials Configuration
+
+Sources from [GitHub](https://github.com/electricimp/Builder#from-github) can be included in test files.
+
+For unauthenticated requests, the GitHub API allows you to make [up to 60 requests per hour](https://developer.github.com/v3/#rate-limiting). To overcome this limitation, you can provide user credentials.
+
+For security reasons, we strongly recommend that you provide the credentials via [Environment Variables](#environment-variables). However, there is also a way to store the credentials in a special file (one file per Test Project).
+The file can be created or updated by the following command:
+
+```bash
+imptest github [-g <credentials_file>] [-d] [-f]
+```
+
+where:
+
+* `-d` &mdash; prints the debug output/
+* `-g` &mdash; provides a path to the file with GitHub credentials. A relative or absolute path can be used. Generation fails if any intermediate directory in the path does not exist. If `-g` option is not specified, the `.imptest-auth` file in the current directory is assumed.
+* `-f` &mdash; updates (overwrites) an existing file. If the specified file already exists, this option must be explicitly specified to update it.
+
+The file syntax is as follows:
+
+```
+{ "github-user": "user",
+  "github-token": "password_or_token" }
+```
+
+### Environment Variables
+
+For security reasons, we strongly recommend that you define your Build API key and GitHub credentials as environment variables, as follows:
+
+- [*apiKey*](#test-project-configuration) -> `IMP_BUILD_API_KEY` &mdash; to deploy and run the code on imp devices via [Electric Imp Build API](https://electricimp.com/docs/buildapi/).
+- [*github-user*](#github-credentials-configuration) -> `GITHUB_USER` &mdash; to include external sources from GitHub.
+- [*github-token*](#github-credentials-configuration) -> `GITHUB_TOKEN` &mdash; to include external sources from GitHub.
+
+
 ## Running Tests
 
 Use this command to run the tests:
@@ -579,6 +551,6 @@ The following is an example of a debug log:
 
 <img src="./docs/diagnostic-messages3.png" width=497>
 
-## [For *impTest* Tools Developers](./docs/forImptestToolsDevelopers.md)
+
 
 
