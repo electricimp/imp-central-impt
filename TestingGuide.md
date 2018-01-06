@@ -53,6 +53,10 @@ The impt tool has a dedicated group of commands which operate with test projects
 
 Other impt commands may also be needed during a testing process. For example, commands to assign devices to Device Group.
 
+### Test Session
+
+**TODO** - worth to explain what is it?
+
 ## Writing Tests
 
 The main steps you need to perform in order to write tests:
@@ -82,7 +86,13 @@ A test method may be designed as synchronous (by default) or [asynchronous](#asy
 
 A test file must not contain any `#require` statement. Instead, an include from GitHub should be used. For example: `#require "messagemanager.class.nut:2.0.0"` should be replaced with `@include "github:electricimp/MessageManager/MessageManager.class.nut@v2.0.0"`. See more details about GitHub configuration [here](#github-credentials-configuration).
 
-You can use [*Builder*](https://github.com/electricimp/Builder) language in your tests. See more details [here](#builder-language).
+You can use [*Builder*](https://github.com/electricimp/Builder) language in your tests. See more details [here](#builder-usage).
+
+The tests may call external (a host operating system) commands. See more details [here](#external-commands).
+
+[Assertions](#assertions) are available in your tests.
+
+Several ways of [diagnostic](#diagnostic-messages) are available for your testing.
 
 *Example of a simple Test Case:*
 
@@ -103,14 +113,14 @@ class MyTestCase extends ImpTestCase {
 It is possible to test an interaction between IMP device and IMP agent by emulating one of the sides of the interaction.
 
 A test file is intended to test either IMP device or IMP agent side. The opposite side is emulated by a partner file. There are several rules:
-- a partner file must not contain any test cases. It should contain the IMP code needed for the emulation of interaction only.
-- the test file and the partner file should be located in the same directory.
-- the test file and the partner file should have similar names according to the following pattern: `TestFileName.(agent|device)[.test].nut`:
-  - the should have the same `TestFileName` prefix and the same `.nut` suffix.
-  - a file intended for IMP device should contain `.device` in the name, a file intended for IMP agent should contain `.agent` in the name.
-  - the test file should contain `.test` in the name, the partner file must not contain that in the name.
-  - for example, `"Test1.agent.test.nut"` (a test file with test cases for IMP agent side) and `"Test1.device.nut"` (the corresponding partner file with emulation of IMP device side).
-- Due to partner special naming **do not** change the default value of ["Test file search pattern"](#test-project-configuration).
+- A partner file must not contain any test cases. It should contain the IMP code needed for the emulation of interaction only.
+- The test file and the partner file should be located in the same directory.
+- The test file and the partner file should have similar names according to the following pattern: `TestFileName.(agent|device)[.test].nut`:
+  - The both files should have the same `TestFileName` prefix and the same `.nut` suffix.
+  - The file intended for IMP device should contain `.device` in the name, the file intended for IMP agent should contain `.agent` in the name.
+  - The test file should contain `.test` in the name, the partner file must not contain that in the name.
+  - For example, `"Test1.agent.test.nut"` (a test file with test cases for IMP agent side) and `"Test1.device.nut"` (the corresponding partner file with emulation of IMP device side).
+- If you use this feature, do not change the default value of the test file search pattern during test configuration [creation](TODO link) or [updating](TODO link). **TODO** - that seems strange - need to double check
 
 Example of a test file / partner file pair can be found at [sample7](TODO link). **TODO** - do we have and mention samples at all?
 
@@ -130,7 +140,9 @@ function testSomethingAsynchronously() {
 }
 ```
 
-### Builder Language
+### Builder Usage
+
+#### Builder Language
 
 You can use [*Builder*](https://github.com/electricimp/Builder) language in your tests. It combines a preprocessor with an expression language and advanced imports.
 
@@ -160,23 +172,16 @@ this.assertEqual(
 );
 ```
 
-**TODO - all below is just a copy of the previous impTest readme - to be updated!**
+#### Builder Variables
 
-
-It is possible to define and propagate [custom variables](https://github.com/electricimp/Builder#variables) through a separate configuration file which syntax is similar to the [github credential file](#github-credentials-configuration):
+It is possible to define and propagate [custom variables](https://github.com/electricimp/Builder#variables) through a separate configuration file. The syntax of this file is like this:
 
 ```
 { "pollServer": "http://example.com",
   "expectedAnswer": "data ready" }
 ```
 
-The default file name is `.imptest-builder` but an alternative name can be selected with the  `-b <builder_config_file>` command line option as follows:
-
-```bash
-imptest test -b tests/test1/.test1-builder-config
-```
-
-Now [*Builder*](https://github.com/electricimp/Builder) will be able to process any custom variables encountered in the source code.
+It allows the [*Builder*](https://github.com/electricimp/Builder) to process your custom variables used in the source code:
 
 ```squirrel
 local response = http.get("@{pollServer}", {}).sendsync();
@@ -186,6 +191,14 @@ this.assertEqual(
     "Failed to get expected answer"
 );
 ```
+
+You create and manage the file with the [*Builder*](https://github.com/electricimp/Builder) variables manually. You may locate it anywhere. The file is specified when you [run the tests](TODO link).
+
+#### Builder Cache
+
+Builder cache is intended to improve the build time and reduce the number of requests to external resources. It is only possible to cache external libraries. Builder stores the cache in the `.builer-cache` folder inside the test project home. The cache is stored for up to 24 hours.
+
+Builder cache is disabled by default. It can be activated during test configuration [creation](TODO link) or [updating](TODO link). Also it is possible to specify whether the builder cache should be enabled or disabled when you [run the tests](TODO link).
 
 ### External Commands
 
@@ -197,7 +210,7 @@ this.runCommand("echo 123");
 // The host operating system command `echo 123` is executed
 ```
 
-If the execution timeout of an external command expires (the timeout is specified by the _timeout_ parameter in the [Test Project Configuration](#test-project-configuration) file) or exits with a status code other than 0, the test session fails.
+If the execution timeout (specified during test configuration [creation](TODO link) or [updating](TODO link)) or the external command exits with a status code other than 0, the test session fails.
 
 ### Assertions
 
@@ -209,7 +222,7 @@ The following assertions are available in tests:
 
 Asserts that the condition is truthful.
 
-##### Example
+*Example:*
 
 ```squirrel
 // OK
@@ -225,7 +238,7 @@ this.assertTrue(1 == 2);
 
 Asserts that two values are equal.
 
-##### Example
+*Example:*
 
 ```squirrel
 // OK
@@ -241,7 +254,7 @@ this.assertEqual(1, 2);
 
 Asserts that a value is greater than some other value.
 
-##### Example
+*Example:*
 
 ```squirrel
 // OK
@@ -257,7 +270,7 @@ this.assertGreater(1, 2);
 
 Asserts that a value is less than some other value.
 
-##### Example
+*Example:*
 
 ```squirrel
 // OK
@@ -273,7 +286,7 @@ this.assertLess(2, 2);
 
 Asserts that a value is within some tolerance from an expected value.
 
-##### Example
+*Example:*
 
 ```squirrel
 // OK
@@ -289,7 +302,7 @@ this.assertClose(10, 9, 0.5);
 
 Performs a deep comparison of tables, arrays and classes.
 
-##### Example
+*Example:*
 
 ```squirrel
 // OK
@@ -311,7 +324,7 @@ this.assertDeepEqual({"a" : { "b" : 1 }}, {"a" : { "b" : 0 }});
 
 Asserts that a value belongs to the range from _from_ to _to_.
 
-##### Example
+*Example:*
 
 ```squirrel
 // OK
@@ -327,6 +340,8 @@ this.assertBetween(10, 11, 12);
 
 Asserts that the _func_ function throws an error when it is called with the _args_ arguments and the _ctx_ context. Returns an error thrown by _func_.
 
+*Example:*
+
 ```squirrel
 // OK, returns "abc"
 this.assertThrowsError(function (a) {
@@ -340,6 +355,8 @@ this.assertThrowsError(function () {
 ```
 
 ### Diagnostic Messages
+
+**TODO** - update by the actual text and screenshots
 
 Return values other than `null` are displayed in the console when a test succeeds and can be used to output the following diagnostic messages:
 
@@ -402,10 +419,20 @@ class TestCase1 extends ImpTestCase {
 }
 ```
 
+**TODO** - do we want to reference other "samples" of tests?
 
 ## Using Tests
 
-### Project Configuration Generation
+### Test Configuration
+
+Before running the tests you should create test configuration for your test project - call [**impt test create**](./CommandsManual.md#test-create) command from the test project home. If [Test Configuration File](./CommandsManual.md#test-configuration-file) already exists in that directory, it will be deleted (if confirmed by you) and the new configuration will be created from scratch.
+
+You may update the test configuration by calling [**impt test update**](./CommandsManual.md#test-update) command. The existing [Test Configuration File](./CommandsManual.md#test-configuration-file) will be updated by the new specified settings.
+
+You may display the current test configuration by calling [**impt test info**](./CommandsManual.md#test-info) command.
+
+
+**TODO - all below is just a copy of the previous impTest readme - to be updated!**
 
 The Test Project Configuration file can be created or updated by the following command:
 
@@ -531,23 +558,7 @@ In this case:
 
 **Note** An internal class can play the role of a test case. To denote this use case, put `"."` at the end of the filter. For example, `"imptest test :Inner.TestClass."` executes all test methods from the *Inner.TestClass* class.
 
-### Builder Cache
 
-Builder cache is intended to improve the build time and reduce the number of requests to external resources. It is only possible to cache external libraries. Builder stores the cache in the `.builer-cache` folder for up to 24 hours.
-
-Caching is disabled by default. It can be activated during a [test project configuration generation](#project-configuration-generation).
-
-It is possible to specify whether the builder cache should be enabled or disabled for a given [test run](#running-tests). For example, to disable the cache:
-
-```shell
-imptest test --builder-cache=false
-```
-
-There is no special impTest option or command to remove the builder cache, but you can do this manually:
-
-```shell
-rm -rf .builder-cache
-```
 
 ### Debug Mode
 
