@@ -68,7 +68,7 @@ The main steps you need to perform in order to write tests:
 - Define names of your test files. In general, a test file may have any name but should follow few rules:
   - A file is treated as test file for IMP agent if `agent` is present in the file name. Otherwise, the file is treated as test file for IMP device.
   - By default, all test cases from a test file run either on IMP device or on IMP agent. If your test cases are intended to run on both the IMP device and its IMP agent, there is a way to organize this which is described [here](#tests-for-bi-directional-device-agent-communication).
-  - A test configuration has a pattern for location and names of the test files included into the test project. You specifies this pattern during test configuration [creation](TODO link) or [updating](TODO link). You should have this in mind when naming your test files.
+  - A test configuration has a pattern for location and names of the test files included into the test project. You specifies this pattern during [test configuration creation or updating](#test-configuration). You should have this in mind when naming your test files.
 
 - Add test cases into your test files.
   - Test case is a class inherited from the *ImpTestCase* class defined by the [*impUnit*](https://github.com/electricimp/impUnit) framework.
@@ -84,9 +84,9 @@ The main steps you need to perform in order to write tests:
 
 A test method may be designed as synchronous (by default) or [asynchronous](#asynchronous-testing).
 
-A test file must not contain any `#require` statement. Instead, an include from GitHub should be used. For example: `#require "messagemanager.class.nut:2.0.0"` should be replaced with `@include "github:electricimp/MessageManager/MessageManager.class.nut@v2.0.0"`. See more details about GitHub configuration [here](#github-credentials-configuration).
-
 You can use [*Builder*](https://github.com/electricimp/Builder) language in your tests. See more details [here](#builder-usage).
+
+A test file must not contain any `#require` statement. Instead, an [include from GitHub](#include-from-github) should be used.
 
 The tests may call external (a host operating system) commands. See more details [here](#external-commands).
 
@@ -120,7 +120,7 @@ A test file is intended to test either IMP device or IMP agent side. The opposit
   - The file intended for IMP device should contain `.device` in the name, the file intended for IMP agent should contain `.agent` in the name.
   - The test file should contain `.test` in the name, the partner file must not contain that in the name.
   - For example, `"Test1.agent.test.nut"` (a test file with test cases for IMP agent side) and `"Test1.device.nut"` (the corresponding partner file with emulation of IMP device side).
-- If you use this feature, do not change the default value of the test file search pattern during test configuration [creation](TODO link) or [updating](TODO link). **TODO** - that seems strange - need to double check
+- If you use this feature, do not change the default value of the test file search pattern during [test configuration creation or updating](#test-configuration). **TODO** - that seems strange - need to double check
 
 Example of a test file / partner file pair can be found at [sample7](TODO link). **TODO** - do we have and mention samples at all?
 
@@ -192,13 +192,21 @@ this.assertEqual(
 );
 ```
 
-You create and manage the file with the [*Builder*](https://github.com/electricimp/Builder) variables manually. You may locate it anywhere. The file is specified when you [run the tests](TODO link).
+You create and manage the file with the [*Builder*](https://github.com/electricimp/Builder) variables manually. You may locate it anywhere. The file is specified when you [run the tests](#running-tests).
+
+#### Include From GitHub
+
+Source code / libraries from GitHub may be included in your test files by using the [Builder's include statement](https://github.com/electricimp/Builder#from-github). You should use it instead of the `#require` statement.
+
+For example: `#require "messagemanager.class.nut:2.0.0"` should be replaced with `@include "github:electricimp/MessageManager/MessageManager.class.nut@v2.0.0"`.
+
+There may be some limitations which you can overcome - see [here](#github-credentials).
 
 #### Builder Cache
 
 Builder cache is intended to improve the build time and reduce the number of requests to external resources. It is only possible to cache external libraries. Builder stores the cache in the `.builer-cache` folder inside the test project home. The cache is stored for up to 24 hours.
 
-Builder cache is disabled by default. It can be activated during test configuration [creation](TODO link) or [updating](TODO link). Also it is possible to specify whether the builder cache should be enabled or disabled when you [run the tests](TODO link).
+Builder cache is disabled by default. It can be activated during [test configuration creation or updating](#test-configuration). Also it is possible to specify whether the builder cache should be enabled or disabled when you [run the tests](#running-tests).
 
 ### External Commands
 
@@ -210,7 +218,7 @@ this.runCommand("echo 123");
 // The host operating system command `echo 123` is executed
 ```
 
-If the execution timeout (specified during test configuration [creation](TODO link) or [updating](TODO link)) or the external command exits with a status code other than 0, the test session fails.
+If the execution timeout (specified during [test configuration creation or updating](#test-configuration)) or the external command exits with a status code other than 0, the test session fails.
 
 ### Assertions
 
@@ -423,69 +431,77 @@ class TestCase1 extends ImpTestCase {
 
 ## Using Tests
 
+### Device Group
+
+To run your tests you need to:
+- have IMP device(s) blinked-up to your account.
+- have impCentral Device Group.
+- assign the needed device(s) to that Device Group.
+
+These are the main steps you should perform in order to prepare your devices and Device Group for testing:
+
+1. Obtain impCentral Product. If you already have/know a Product, notice it's Id or Name. If you do not have a Product, create a new one by [**impt product create**](./CommandsManual.md#product-create) command.
+
+*Example:*  
+**TODO** - screenshot   
+
+2. Obtain Device Group. If you already have/know a Device Group, notice it's Id or Name. If you do not have a Device Group, create a new one by [**impt dg create**](./CommandsManual.md#device-group-create) command. You need to specify the Product when creating the Device Group.
+
+*Example:*  
+**TODO** - screenshot   
+
+3. Assign one or several devices, on which you plan to run your tests, to the Device Group by [**impt device assign**](./CommandsManual.md#device-assign) command.
+
+*Example:*  
+**TODO** - screenshot   
+
+4. Specify the Device Group during [test configuration creation](#test-configuration). Your tests will run on all devices assigned to the Device Group. Note, you can always change the Device Group in the test configuration.
+
 ### Test Configuration
 
 Before running the tests you should create test configuration for your test project - call [**impt test create**](./CommandsManual.md#test-create) command from the test project home. If [Test Configuration File](./CommandsManual.md#test-configuration-file) already exists in that directory, it will be deleted (if confirmed by you) and the new configuration will be created from scratch.
 
-You may update the test configuration by calling [**impt test update**](./CommandsManual.md#test-update) command. The existing [Test Configuration File](./CommandsManual.md#test-configuration-file) will be updated by the new specified settings.
+The main configuration settings you should pay attention to:
+
+- `--dg` - identifier of impCentral [Device Group](#device-group). Your tests will run on all devices assigned to that Device Group. You may specify Device Group by it's Id or Name.
+
+- `--device-file`, `--agent-file` - IMP device / IMP agent source code which is deployed along with the tests. Usually, it is the source code of IMP library or other IMP code which you are planning to test and you specifies one of that options.
+
+- `--test-file` - test file name or pattern which specifies the test file(s) included into your test project. You may repeat this option several times and specify several file names and/or patterns. The values of the repeated option are combined by logical OR. There is a default pattern mentioned in the [command's spec](./CommandsManual.md#test-create).
+
+- `--timeout`, `--stop-on-fail`, `--allow-disconnect`, `--builder-cache` - other settings, their meaning and default values are described in the [command's spec](./CommandsManual.md#test-create).
+
+*Example:*  
+**TODO** - screenshot   
+
+You may update the test configuration by calling [**impt test update**](./CommandsManual.md#test-update) command. The existing [Test Configuration File](./CommandsManual.md#test-configuration-file) will be updated by the new specified settings. Note, the newly specified `--test-file` option value(s) totally replaces the existed setting.
+
+*Example:*  
+**TODO** - screenshot   
 
 You may display the current test configuration by calling [**impt test info**](./CommandsManual.md#test-info) command.
 
+*Example:*  
+**TODO** - screenshot   
 
-**TODO - all below is just a copy of the previous impTest readme - to be updated!**
+### GitHub Credentials
 
-The Test Project Configuration file can be created or updated by the following command:
+This is important if your test files use [include from GitHub](#include-from-github).
 
-```bash
-imptest init [-c <configuration_file>] [-d] [-f]
-```
+For unauthenticated requests the GitHub API allows you to make [up to 60 requests per hour](https://developer.github.com/v3/#rate-limiting). This may be not sufficient for intensive test running. To overcome the limitation you can provide GitHub's user credentials. There two ways to do this:
 
-where:
+- Via environment variables - we strongly recommend this way due to the security reasons. You should specify two environment variables:
+  - `GITHUB_USER`
+  - `GITHUB_TOKEN` (**TODO** - why there is token but in the file - password? need to check and allign
 
-* `-d` &mdash; prints the debug output.
-* `-c` &mdash; provides a path to the configuration file. A relative or absolute path can be used. Generation fails if any intermediate directory in the path does not exist. If the `-c` option is not specified, the `.imptest` file in the current directory is assumed.
-* `-f` &mdash; updates (overwrites) an existing configuration. If the specified configuration file already exists, this option must be explicitly specified to update the file.
+- Via a github credentials file.
+  - This file may be created or updated by [**impt test github**](./CommandsManual.md#test-github) command. You specifies GitHub's username and password and they are saved in the specified file. Note, the credentials are saved in a plain text.
+  - You may have several github credentials files and they may be located in any places. You specifies a concrete github credentials file when you [run the tests](TODO link). If the specified file exists, the GitHub's credentials are taken from it. If the specified file does not exist, the GitHub's credentials are taken from the environment variables. (**TODO** - is this correct? check and update... and the default file in the test project home seems strange.)
 
-During the command execution you will be asked for [configuration settings](#test-project-configuration) in either of the following cases:
-- if a new Test Project Configuration is being created, the default values of the settings are offered;
-- if the existing Test Project Configuration is being updated, the settings from the existing configuration file are offered as defaults.
+*Example:*  
+**TODO** - screenshot   
 
-### GitHub Credentials Configuration
-
-Sources from [GitHub](https://github.com/electricimp/Builder#from-github) can be included in test files.
-
-For unauthenticated requests, the GitHub API allows you to make [up to 60 requests per hour](https://developer.github.com/v3/#rate-limiting). To overcome this limitation, you can provide user credentials.
-
-For security reasons, we strongly recommend that you provide the credentials via [Environment Variables](#environment-variables). However, there is also a way to store the credentials in a special file (one file per Test Project).
-The file can be created or updated by the following command:
-
-```bash
-imptest github [-g <credentials_file>] [-d] [-f]
-```
-
-where:
-
-* `-d` &mdash; prints the debug output/
-* `-g` &mdash; provides a path to the file with GitHub credentials. A relative or absolute path can be used. Generation fails if any intermediate directory in the path does not exist. If `-g` option is not specified, the `.imptest-auth` file in the current directory is assumed.
-* `-f` &mdash; updates (overwrites) an existing file. If the specified file already exists, this option must be explicitly specified to update it.
-
-The file syntax is as follows:
-
-```
-{ "github-user": "user",
-  "github-token": "password_or_token" }
-```
-
-### Environment Variables
-
-For security reasons, we strongly recommend that you define your Build API key and GitHub credentials as environment variables, as follows:
-
-- [*apiKey*](#test-project-configuration) -> `IMP_BUILD_API_KEY` &mdash; to deploy and run the code on imp devices via [Electric Imp Build API](https://electricimp.com/docs/buildapi/).
-- [*github-user*](#github-credentials-configuration) -> `GITHUB_USER` &mdash; to include external sources from GitHub.
-- [*github-token*](#github-credentials-configuration) -> `GITHUB_TOKEN` &mdash; to include external sources from GitHub.
-
-
-## Running Tests
+### Running Tests
 
 Use this command to run the tests:
 
@@ -571,6 +587,7 @@ The debug mode is useful for analyzing failures.
 The following is an example of a debug log:
 
 <img src="./docs/diagnostic-messages3.png" width=497>
+
 
 
 
