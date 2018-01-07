@@ -94,9 +94,7 @@ A test file must not contain any `#require` statement. Instead, an [include from
 
 The tests may call external (a host operating system) commands. See more details [here](#external-commands).
 
-[Assertions](#assertions) are available in your tests.
-
-Several ways of [diagnostic](#diagnostic-messages) are available for your testing.
+[Assertions](#assertions) and [diagnostic messages](#diagnostic-messages) are available in your tests.
 
 *Example of a simple Test Case:*
 
@@ -368,23 +366,15 @@ this.assertThrowsError(function () {
 
 ### Diagnostic Messages
 
-**TODO** - update by the actual text and screenshots
+Return values other than `null` are displayed in the console when a test succeeds (**TODO** - I do not understand this - need to explain). This can be used to output diagnostic messages.
 
-Return values other than `null` are displayed in the console when a test succeeds and can be used to output the following diagnostic messages:
-
-<img src="./docs/diagnostic-messages.png" width=497>
-
-[Test cases](#overview) can also output informational messages with:
+Also, your tests may output informational messages by this way:
 
 ```squirrel
 this.info(<message>);
 ```
 
-A log of a failed test looks as follows:
-
-<img src="./docs/diagnostic-messages2.png" width=497>
-
-This means that the execution of the *testMe()* method in the *MyTestCase* class has failed: the incorrect syntax is in line 6 of the test file (containing the *MyTestCase* class).
+Examples of tests output are provided in the [running tests section](#running-tests).
 
 ### A Test Case Example
 
@@ -509,7 +499,7 @@ For unauthenticated requests the GitHub API allows you to make [up to 60 request
 
 To run the tests of your configured test project call [**impt test run**](./CommandsManual.md#test-run) command from the test project home. By default, the tests will be executed according to your [test configuration](#test-configuration). You may want or need to specify additional settings in the test run command:
 
-- By default, the tool searches for all test files according to the file names and/or patterns specified in the [test configuration](#test-configuration). The search starts from the test project home and includes all subdirectories. The tool looks for all test cases in the found files. All test methods in all found test cases are considered as tests for execution. For a particular run you may select a subset of test files, test cases, test methods by specifying `--tests` option. See the details [here](#running-selective-tests). The finally selected tests are executed in an arbitrary order.
+- By default, the tool searches for all test files according to the file names and/or patterns specified in the [test configuration](#test-configuration). The search starts from the test project home and includes all subdirectories. The tool looks for all test cases in the found files. All test methods in all found test cases are considered as tests for execution. For a particular run you may select a subset of test files, test cases, test methods by specifying `--tests` option. See the details [here](#running-selective-tests).
 
 - If your test files use [include from GitHub](#include-from-github) and you use github credentials file to store [GitHub's credentials](#github-credentials), you should specify a path to that file as a value of `--github-config` option.
 
@@ -517,7 +507,17 @@ To run the tests of your configured test project call [**impt test run**](./Comm
 
 - You may disable or enable [Builder cache](#builder-cache) by `--builder-cache` option. By default, Builder cache is controlled by the [test configuration](#test-configuration).
 
+- You may run the tests in the [debug mode](#debug-mode) by specifying `--debug` option.
+
 **TODO** - just obvious questions: - why a path to github file and, especially, to builder file are not part of test configuration? - why builder cache can be additionally changed before test run but other settings (eg. timeout, stop on fail, etc.) can not?
+
+The selected tests are executed in an arbitrary order. (**TODO** tests? test cases? or test files?). The tests run on all devices which are currently assigned to the Device Group specified in the [test configuration](#test-configuration). First - all tests run on one device, then - on a second one, etc. (**TBD** correct?) The order of devices - **TBD** - maybe explain all the above using a test session term (?)
+
+Every test is treated as failed if an error has been thrown. Otherwise the test is treated as passed.
+**TBD** - Explain about test-on-fail, timeout, allow-disconnect.
+
+*Example:*  
+**TODO** - screenshots and explanations for a successfull test execution and several failed test executions
 
 ### Running Selective Tests
 
@@ -530,7 +530,7 @@ To run the tests of your configured test project call [**impt test run**](./Comm
 - `testMethod` - name of a test method. Should be fully qualified. Test methods with an identical name may exist in different test cases, in this case all of them will be selected if the cases are selected.
 An internal class can play the role of a test case. To denote this use case, put `"."` at the end of the filter. For example, `"imptest test :Inner.TestClass."` executes all test methods from the *Inner.TestClass* class. **TODO** - I do not understand this statements about Inner class - check and update.
 
-**TODO** - check and update the syntax - it should be fully specified and clear.
+**TODO** - check the syntax - it should be fully specified and clear.
 
 *Example:*
 
@@ -564,24 +564,26 @@ In this case:
 - `--tests TestFile2` selects all test methods from the `TestFile2.test.nut` file.
 - `--tests :.testMe_1` selects the `testMe_1()` methods in all test cases from the both `TestFile1.test.nut` and `TestFile2.test.nut` files. **TODO** - it should be `--tests .testMe_1` - otherwise the syntax of the <testcase_pattern> is difficult to explain - update the syntax or the implementation ?
 
-### Test Results
-
-Every test is treated as failed if an error has been thrown. Otherwise the test is treated as passed.
-
-
 ### Debug Mode
 
-The `-d` option is used to run tests in the debug mode:
-- A debug output is switched on. JSON is used to communicate between [*impUnit*](https://github.com/electricimp/impUnit) test framework and **impTest**. Communication messages are printed.
-- Device and agent code are stored in the `./build` folder that is created in Project Home.
+**TODO** - check if it works and correct
 
-The debug mode is useful for analyzing failures.
+You may run the tests in the debug mode by specifying `--debug` option of the [**impt test run**](./CommandsManual.md#test-delete) command. It may be useful for analyzing failures. In this mode:
+- All communications with the impCentral API are displayed.
+- All communications with the [impUnit](https://github.com/electricimp/impUnit) test framework are displayed.
+- IMP device and IMP agent code are stored in the `./build` folder inside the test project home.
 
-The following is an example of a debug log:
+*Example:*  
+**TODO** - screenshot   
 
-<img src="./docs/diagnostic-messages3.png" width=497>
+### Clean-up
 
+After the testing is finished you may want to clean-up different entities created for your testing.
 
+If you want to delete your test project, call [**impt test delete**](./CommandsManual.md#test-run) command from the test project home. It deletes [Test Configuration File](./CommandsManual.md#test-configuration-file), Builder cache directory (if exists), github credentials file (if additionally specified), Builder variables file (if additionally specified). **TODO** - what about ./build folder (created in debug mode)?
 
+If you want to fully delete the Device Group which you used for the testing, call [**impt dg delete**](./CommandsManual.md#dg-delete) command as `impt dg delete --dg <DEVICE_GROUP_IDENTIFIER> --builds --force`. It makes a full clean-up of all impCentral entities created during your testing - unassigns all devices from the Device Group, deletes all builds created for the Device Group, deletes the Device Group itself. **TODO** - what about adding this as an option to test delete command?
 
+If you only want to unassign the devices from the Device Group, call [**impt dg unassign**](./CommandsManual.md#dg-unassign) or [**impt device unassign**](./CommandsManual.md#device-unassign) commands.
 
+If you want to delete the Product, call [**impt product delete**](./CommandsManual.md#product-delete) command.
