@@ -61,22 +61,26 @@ Other impt commands may also be needed during a testing process. For example, co
 
 The main steps you need to perform in order to write tests:
 
-- Define a structure of your test files and test cases. It fully depends on design of your tests and on the functionality you are testing.
+1. Define a structure of your test files and test cases. It fully depends on design of your tests and on the functionality you are testing.
+
   - You may combine all test cases in one test file or divide them by different test files.
   - You may combine all test files in one directory or put some or all files into subdirectories. A test project can include test files from the test project home and all it's subdirectories.
 
-- Define names of your test files. In general, a test file may have any name but should follow few rules:
+2. Define names of your test files. In general, a test file may have any name but should follow few rules:
+
   - A file is treated as test file for IMP agent if `agent` is present in the file name. Otherwise, the file is treated as test file for IMP device.
   - By default, all test cases from a test file run either on IMP device or on IMP agent. If your test cases are intended to run on both the IMP device and its IMP agent, there is a way to organize this which is described [here](#tests-for-bi-directional-device-agent-communication).
   - A test configuration has a pattern for location and names of the test files included into the test project. You specifies this pattern during [test configuration creation or updating](#test-configuration). You should have this in mind when naming your test files.
 
-- Add test cases into your test files.
+3. Add test cases into your test files.
+
   - Test case is a class inherited from the *ImpTestCase* class defined by the [*impUnit*](https://github.com/electricimp/impUnit) framework.
   - A test file may have several test cases.
-  - There are no rules for test case naming. But there is a feature of the [selective test running](#selective-test-running). You may have it in mind when naming your test cases. Test cases may have identical names if they are in different test files.
+  - There are no rules for test case naming. But there is a feature of the [running selective tests](#running-selective-tests). You may have it in mind when naming your test cases. Test cases may have identical names if they are in different test files.
 
-- Add and implement test methods (tests) in your test cases.
-  - Every test method name should start with `test`. There are no other rules for test method naming. But there is a feature of the [selective test running](#selective-test-running). You may have it in mind when naming your test methods. Test methods may have identical names if they are in different test cases.
+4. Add and implement test methods (tests) in your test cases.
+
+  - Every test method name should start with `test`. There are no other rules for test method naming. But there is a feature of the [running selective tests](#running-selective-tests). You may have it in mind when naming your test methods. Test methods may have identical names if they are in different test cases.
   - A test case may have several test methods (tests).
   - Additionally, any test case may have *setUp()* and *tearDown()* methods:
     - *setUp()* method may be used to perform the environment setup before execution the tests of the test case.
@@ -206,7 +210,7 @@ There may be some limitations which you can overcome - see [here](#github-creden
 
 Builder cache is intended to improve the build time and reduce the number of requests to external resources. It is only possible to cache external libraries. Builder stores the cache in the `.builer-cache` folder inside the test project home. The cache is stored for up to 24 hours.
 
-Builder cache is disabled by default. It can be activated during [test configuration creation or updating](#test-configuration). Also it is possible to specify whether the builder cache should be enabled or disabled when you [run the tests](#running-tests).
+Builder cache is disabled by default. It can be enabled during [test configuration creation or updating](#test-configuration). Also it is possible to specify whether the Builder cache should be enabled or disabled when you [run the tests](#running-tests).
 
 ### External Commands
 
@@ -494,7 +498,7 @@ For unauthenticated requests the GitHub API allows you to make [up to 60 request
   - `GITHUB_USER`
   - `GITHUB_TOKEN` (**TODO** - why there is token but in the file - password? need to check and allign
 
-- Via a github credentials file.
+- Via github credentials file.
   - This file may be created or updated by [**impt test github**](./CommandsManual.md#test-github) command. You specifies GitHub's username and password and they are saved in the specified file. Note, the credentials are saved in a plain text.
   - You may have several github credentials files and they may be located in any places. You specifies a concrete github credentials file when you [run the tests](TODO link). If the specified file exists, the GitHub's credentials are taken from it. If the specified file does not exist, the GitHub's credentials are taken from the environment variables. (**TODO** - is this correct? check and update... and the default file in the test project home seems strange.)
 
@@ -503,77 +507,66 @@ For unauthenticated requests the GitHub API allows you to make [up to 60 request
 
 ### Running Tests
 
-Use this command to run the tests:
+To run the tests of your configured test project call [**impt test run**](./CommandsManual.md#test-run) command from the test project home. By default, the tests will be executed according to your [test configuration](#test-configuration). You may want or need to specify additional settings in the test run command:
 
-```bash
-imptest test [-c <configuration_file>] [-g <credentials_file>] [-b <builder_file>] [--builder-cache=true|false] [-d] [testcase_pattern]
-```
-where:
+- By default, the tool searches for all test files according to the file names and/or patterns specified in the [test configuration](#test-configuration). The search starts from the test project home and includes all subdirectories. The tool looks for all test cases in the found files. All test methods in all found test cases are considered as tests for execution. For a particular run you may select a subset of test files, test cases, test methods by specifying `--tests` option. See the details [here](#running-selective-tests). The finally selected tests are executed in an arbitrary order.
 
-* `-c` &mdash; this option is used to provide a path to the Test Project Configuration file. A relative or absolute path can be used. If the `-c` option is left out, the `.imptest` file in the current directory is assumed.
-* `-g` &mdash; this option is used to provide a path to file with GitHub credentials. A relative or absolute path can be used. If the `-g` option is left out, the `.imptest-auth` file in the current directory is assumed.
-* `-b` &mdash; this option is used to provide a path to file with [Builder variables](https://github.com/electricimp/Builder#usage). A relative or absolute path can be used. If the `-b` option is left out, the `.imptest-builder` file in the current directory is assumed.
-* `--builder-cache` &mdash; enable (if `=true`) / disable (if `=false`) builder cache for this test run. If not specified, defined by the setting in the test project configuration.
-* `-d` &mdash; prints [debug output](#debug-mode), stores device and agent code.
-* `testcase_pattern` &mdash; a pattern for [selective test runs](#selective-test-runs).
+- If your test files use [include from GitHub](#include-from-github) and you use github credentials file to store [GitHub's credentials](#github-credentials), you should specify a path to that file as a value of `--github-config` option.
 
-The *impTest* tool searches all files that match the filename patterns specified in the [Test Project Configuration](#test-project-configuration). The search starts with Project Home. The tool looks for all Test Cases (classes) in the files. All the test methods from those classes are considered as tests for the current Test Project.
+- If your tests use [Builder variables](#builder-variables), you should specify a path to the file with Builder variables as a value of `--builder-config` option.
 
-The optional `testcase_pattern` selects a specific test or a set of tests for execution from all the found tests. If `testcase_pattern` is not specified, all the found tests are selected for execution.
+- You may disable or enable [Builder cache](#builder-cache) by `--builder-cache` option. By default, Builder cache is controlled by the [test configuration](#test-configuration).
 
-The selected tests are executed in an arbitrary order.
+**TODO** - just obvious questions: - why a path to github file and, especially, to builder file are not part of test configuration? - why builder cache can be additionally changed before test run but other settings (eg. timeout, stop on fail, etc.) can not?
 
-Every test is treated as failed if an error has been thrown. Otherwise the test is treated as passed.
+### Running Selective Tests
 
-### Selective Test Runs
+`--tests <testcase_pattern>` option of the [**impt test run**](./CommandsManual.md#test-run) command allows to select specific test files, test cases, test methods for running. The syntax of `<testcase_pattern>` is the following `[testFile][:testCase][.testMethod]`, where:
 
-The optional `testcase_pattern` allows you to execute a single test or a set of tests from one or several Test Cases. The syntax of the pattern is as follows: `[testFileName]:[testClass].[testMethod]`
+- `testFile` - name of a test file. Search patterns (like `*`) are allowed, so several files may be specified (**TODO** - check and confirm, what exact search patterns?). The specified file(s) will be selected from all files which correspond to the file names and/or patterns defined in the [test configuration](#test-configuration). If `testFile` is ommited, all files, which correspond to the file names and/or patterns defined in the [test configuration](#test-configuration), are assumed.
 
-where:
+- `testCase` - name of a test case. Should be fully qualified. Test cases with an identical name may exist in different test files, in this case all of them will be selected if the files are selected.
 
-* `testFileName` &mdash; the name of the Test Case file. A pattern to filter required files among all conforming to the [test file search pattern](#test-project-configuration).
-* `testClass` &mdash; the name of the Test Case class. **Note** Test Cases with identical names can exist in different files that belong to the same Test Project, all of them must be selected.
-* `testMethod` &mdash; a test method name
+- `testMethod` - name of a test method. Should be fully qualified. Test methods with an identical name may exist in different test cases, in this case all of them will be selected if the cases are selected.
+An internal class can play the role of a test case. To denote this use case, put `"."` at the end of the filter. For example, `"imptest test :Inner.TestClass."` executes all test methods from the *Inner.TestClass* class. **TODO** - I do not understand this statements about Inner class - check and update.
 
-#### Example
+**TODO** - check and update the syntax - it should be fully specified and clear.
 
-The test file `TestFile1.test.nut` contains:
+*Example:*
+
+A test file `TestFile1.test.nut` contains:
 
 ```squirrel
-class MyTestClass extends ImpTestCase {
+class MyTestCase extends ImpTestCase {
     function testMe() {...}
     function testMe_1() {...}
 }
 
-class MyTestClass_1 extends ImpTestCase {
+class MyTestCase_1 extends ImpTestCase {
     function testMe() {...}
     function testMe_1() {...}
 }
 ```
 
-The test file `TestFile2.test.nut` contains:
+A test file `TestFile2.test.nut` contains:
 
 ```
-class MyTestClass extends ImpTestCase {
+class MyTestCase extends ImpTestCase {
     function testMe() {...}
     function testMe_1() {...}
 }
 ```
 
 In this case:
+- `--tests TestFile1:MyTestClass.testMe` selects the `testMe()` method in the `MyTestCase` case of the `TestFile1.test.nut` file.
+- `--tests :MyTestClass.testMe` selects the `testMe()` method in the `MyTestCase` case from the both `TestFile1.test.nut` and `TestFile2.test.nut` files.
+- `--tests :MyTestClass_1` selects all test methods from the `MyTestCase_1` case of the `TestFile1.test.nut` file as it is the only file with the specified test case.
+- `--tests TestFile2` selects all test methods from the `TestFile2.test.nut` file.
+- `--tests :.testMe_1` selects the `testMe_1()` methods in all test cases from the both `TestFile1.test.nut` and `TestFile2.test.nut` files. **TODO** - it should be `--tests .testMe_1` - otherwise the syntax of the <testcase_pattern> is difficult to explain - update the syntax or the implementation ?
 
-- `imptest test TestFile1:MyTestClass.testMe` runs the *testMe()* method in the *MyTestClass* class of the `TestFile1.test.nut` file.
-- `imptest test :MyTestClass.testMe` runs the *testMe()* method in the *MyTestClass* class from the `TestFile1` __and__ `TestFile2.test.nut` file.
-- `imptest test :MyTestClass_1` runs all test methods from the *MyTestClass_1* class of the first file since it is the only file with the required class.
-- `imptest test TestFile2` runs all test methods from the `TestFile2.test.nut` file.
-- `imptest test :.testMe_1` runs the *testMe_1()* methods in all classes of all files.
+### Test Results
 
-**Note** Search patterns are allowed for test file names only. A test class and a test method **must be** fully qualified.
-
-**Note** If no colon is present in the testcase filter, it is assumed that only the pattern for a file name is specified.
-
-**Note** An internal class can play the role of a test case. To denote this use case, put `"."` at the end of the filter. For example, `"imptest test :Inner.TestClass."` executes all test methods from the *Inner.TestClass* class.
-
+Every test is treated as failed if an error has been thrown. Otherwise the test is treated as passed.
 
 
 ### Debug Mode
