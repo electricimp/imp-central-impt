@@ -184,7 +184,7 @@ Project File may affect commands called from the directory where the file is loc
 
 Test Configuration File is *.impt.test* file located in a directory. Different directories may contain different Test Configuration Files. One directory may contain not more than one Test Configuration File.
 
-Test Configuration File contains settings to run unit tests that are built with the [*impUnit*](https://github.com/electricimp/impUnit) test framework.
+Test Configuration File contains settings to run unit tests that are created with the [*impUnit*](https://github.com/electricimp/impUnit) test framework.
 
 Test Configuration File affects [Test Commands](#test-commands) only.
 
@@ -1036,13 +1036,13 @@ At the end of the command execution information about the tests configuration is
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --dg | -g | yes | yes | [Device Group Identifier](#device-group-identifier) of Device Group whose Devices are used for tests execution. |
-| --device-file | -x | no | yes | A path to an optional file with the device source code that is deployed along with the tests. A relative or absolute path can be used. |
-| --agent-file | -y | no | yes | A path to an optional file with the agent source code that is deployed along with the tests. A relative or absolute path can be used. |
+| --device-file | -x | no | yes | A path to an optional file with IMP device source code that is deployed along with the tests. A relative or absolute path can be used. |
+| --agent-file | -y | no | yes | A path to an optional file with IMP agent source code that is deployed along with the tests. A relative or absolute path can be used. |
 | --timeout | -t | no | yes | A timeout period (in seconds) after which the tests are interrupted and considered as failed. By default: 30 seconds. |
 | --stop-on-fail | -s | no | no | If *true* or no value: the tests execution is stopped after a test failure. If *false* value: the tests execution is not stopped after a failure. By default: *false* |
 | --allow-disconnect | -a | no | no | If *true* or no value: keep a test session alive when a device is temporary disconnected. If *false* value: a test session fails when a device is disconnected. By default: *false* |
 | --builder-cache | -e | no | no | If *true* or no value: cache external libraries in the local *.builder-cache* directory. If *false* value: do not cache external libraries. By default: *false* |
-| --test-file | -f | no | yes | Test file name or pattern. All files located in the current directory (and its subdirectories) which names match this pattern are considered as files with Test Cases. This option may be repeated several times to specify several names and/or patterns. By default: *"\*.test.nut" "tests/\*\*/\*.test.nut"* |
+| --test-file | -f | no | yes | Test file name or pattern. All files located in the current directory and all its subdirectories which names match the specified name or pattern are considered as files with test cases. This option may be repeated several times to specify several names and/or patterns. The values of the repeated option are combined by logical OR. By default: *"\*.test.nut" "tests/\*\*/\*.test.nut"* |
 | --confirmed | -q | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
@@ -1052,16 +1052,16 @@ At the end of the command execution information about the tests configuration is
 **impt test delete \[--github-config \[<github_credentials_file_name>]] \[--builder-config \[<builder_file_name>]] \[--confirmed] \[--debug] \[--help]**
 
 Deletes (if existed):
-- [Test Configuration File](#test-configuration-file) in the current directory
-- *Builder* cache (*.builder-cache* directory) in the current directory
-- the specified github credentials configuration file
-- the specified file with *Builder* variables
+- [Test Configuration File](#test-configuration-file) in the current directory.
+- *Builder* cache (*.builder-cache* directory) in the current directory.
+- the specified github credentials file.
+- the specified file with *Builder* variables.
 
 User is asked to confirm the operation (confirmed automatically with **--confirmed** option).
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --github-config | -i | no | no | A path to the github credentials configuration file that should be deleted. A relative or absolute path can be used. If the value of the option is not specified, *.impt.github-info* file in the current directory is assumed. |
+| --github-config | -i | no | no | A path to the github credentials file that should be deleted. A relative or absolute path can be used. If the value of the option is not specified, *.impt.github-info* file in the current directory is assumed. |
 | --builder-config | -j | no | no | A path to the file with *Builder* variables that should be deleted. A relative or absolute path can be used. If the value of the option is not specified, *.impt.builder* file in the current directory is assumed. |
 | --confirmed | -q | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
@@ -1071,13 +1071,13 @@ User is asked to confirm the operation (confirmed automatically with **--confirm
 
 **impt test github \[--github-config <github_credentials_file_name>] --user <github_username> --pwd <github_password> \[--confirmed] \[--debug] \[--help]**
 
-Creates or updates github credentials configuration file.
+Creates or updates github credentials file.
 
-User is asked to confirm the operation if the specified github credentials configuration file already exists (confirmed automatically with **--confirmed** option). If confirmed, the existed github credentials configuration file is overwritten.
+User is asked to confirm the operation if the specified github credentials file already exists (confirmed automatically with **--confirmed** option). If confirmed, the existed github credentials file is overwritten.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --github-config | -i | no | yes | A path to the github credentials configuration file. A relative or absolute path can be used. If the option is absent, *.impt.github-info* file in the current directory is assumed. |
+| --github-config | -i | no | yes | A path to the github credentials file. A relative or absolute path can be used. If the option is absent, *.impt.github-info* file in the current directory is assumed. |
 | --user | -u | yes | yes | GitHub username. |
 | --pwd | -w | yes | yes | GitHub password or personal access token. |
 | --confirmed | -q | no | no | Executes the operation w/o asking additional confirmation from user. |
@@ -1104,11 +1104,11 @@ Runs the tests specified by [Test Configuration File](#test-configuration-file) 
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --tests | -t | no | yes | A pattern for selective test runs, allows to execute a single test or a set of tests from one or several Test Cases. The syntax of the pattern: *\[testFileName]:\[testClass].\[testMethod]* If the option is missed all tests from all test files specified in [Test Configuration File](#test-configuration-file) are executed. |
-| --github-config | -i | no | no | A path to the github credentials configuration file. A relative or absolute path can be used. If the value of the option is not specified, *.impt.github-info* file in the current directory is assumed. |
+| --tests | -t | no | yes | A pattern to select the tests. Allows to to select specific test files, test cases, test methods for execution. The syntax of the pattern: *\[testFile]\[:testCase]\[.testMethod]* If the option is missed all tests from all test files specified in [Test Configuration File](#test-configuration-file) are executed. |
+| --github-config | -i | no | no | A path to the github credentials file. A relative or absolute path can be used. If the value of the option is not specified, *.impt.github-info* file in the current directory is assumed. |
 | --builder-config | -j | no | no | A path to the file with *Builder* variables. A relative or absolute path can be used. If the value of the option is not specified, *.impt.builder* file in the current directory is assumed. |
-| --builder-cache | -e | no | no | If *true* or no value: cache (if not cached yet) external libraries in the local *.builder-cache* directory and use them from the cache for this test run. If *false* value: do not use external libraries from the cache even if they are cached. If not specified, the behavior is defined by the corresponding settings in [Test Configuration File](#test-configuration-file) that was created by [**impt test create**](#test-create) command. |
-| --debug | -z | no | no | Displays debug info of the command execution. |
+| --builder-cache | -e | no | no | If *true* or no value: cache (if not cached yet) external libraries in the local *.builder-cache* directory and use them from the cache for this test run. If *false* value: do not use external libraries from the cache even if they are cached. If not specified, the behavior is defined by the corresponding setting in [Test Configuration File](#test-configuration-file) that was created by [**impt test create**](#test-create) command. |
+| --debug | -z | no | no | Runs the tests in the debug mode. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
 #### Test Update
@@ -1122,13 +1122,13 @@ At the end of the command execution information about the tests configuration is
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --dg | -g | no | yes | [Device Group Identifier](#device-group-identifier) of Device Group whose Devices are used for tests execution. |
-| --device-file | -x | no | no | A path to a file with the device source code that is deployed along with the tests. A relative or absolute path can be used. Specify this option w/o a value to remove this file from the test configuration. |
-| --agent-file | -y | no | no | A path to a file with the agent source code that is deployed along with the tests. A relative or absolute path can be used. Specify this option w/o a value to remove this file from the test configuration. |
+| --device-file | -x | no | no | A path to a file with IMP device source code that is deployed along with the tests. A relative or absolute path can be used. Specify this option w/o a value to remove this file from the test configuration. |
+| --agent-file | -y | no | no | A path to a file with IMP agent source code that is deployed along with the tests. A relative or absolute path can be used. Specify this option w/o a value to remove this file from the test configuration. |
 | --timeout | -t | no | yes | A timeout period (in seconds) after which the tests are interrupted and considered as failed. |
 | --stop-on-fail | -s | no | no | If *true* or no value: the tests execution is stopped after a test failure. If *false* value: the tests execution is not stopped after a failure. |
 | --allow-disconnect | -a | no | no | If *true* or no value: keep a test session alive when a device is temporary disconnected. If *false* value: a test session fails when a device is disconnected. |
 | --builder-cache | -e | no | no | If *true* or no value: cache external libraries in the local *.builder-cache* directory. If *false* value: do not cache external libraries. |
-| --test-file | -f | no | yes | Test file name or pattern. All files located in the current directory (and its subdirectories) which names match this pattern are considered as files with Test Cases. This option may be repeated several times to specify several names and/or patterns. |
+| --test-file | -f | no | yes | Test file name or pattern. All files located in the current directory and all its subdirectories which names match the specified name or pattern are considered as files with test cases. This option may be repeated several times to specify several names and/or patterns. The values of the repeated option are combined by logical OR. The specified values fully replace the existed setting. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
