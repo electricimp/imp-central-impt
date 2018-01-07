@@ -6,7 +6,7 @@ First of all, please read the root [readme file](./README.md) that covers all ba
 
 The full impt tool commands specification is described in the [impt Commands Manual](./CommandsManual.md).
 
-## The main differences to the previous [version](https://github.com/electricimp/impTest)
+## The main differences to the [previous version](https://github.com/electricimp/impTest)
 
 - impTest is working via the [Electric Imp impCentral&trade; API](https://apidoc.electricimp.com).
 - Model is replaced by the new impCentral API entity - Device Group.
@@ -486,7 +486,7 @@ For unauthenticated requests the GitHub API allows you to make [up to 60 request
 
 - Via environment variables - we strongly recommend this way due to the security reasons. You should specify two environment variables:
   - `GITHUB_USER`
-  - `GITHUB_TOKEN` (**TODO** - why there is token but in the file - password? need to check and allign
+  - `GITHUB_TOKEN` (**TODO** - can this be personal access token or password? maybe rename?)
 
 - Via github credentials file.
   - This file may be created or updated by [**impt test github**](./CommandsManual.md#test-github) command. You specifies GitHub's username and password and they are saved in the specified file. Note, the credentials are saved in a plain text.
@@ -511,17 +511,17 @@ To run the tests of your configured test project call [**impt test run**](./Comm
 
 **TODO** - just obvious questions: - why a path to github file and, especially, to builder file are not part of test configuration? - why builder cache can be additionally changed before test run but other settings (eg. timeout, stop on fail, etc.) can not?
 
-The selected tests are executed in an arbitrary order. (**TODO** tests? test cases? or test files?). The tests run on all devices which are currently assigned to the Device Group specified in the [test configuration](#test-configuration). First - all tests run on one device, then - on a second one, etc. (**TBD** correct?) The order of devices - **TBD** - maybe explain all the above using a test session term (?)
+The selected tests are executed in an arbitrary order. (**TODO** tests? test cases? or test files?). The tests run on all devices which are currently assigned to the Device Group specified in the [test configuration](#test-configuration). First - all tests run on one device, then - on a second one, etc. (**TODO** correct?) The order of devices - **TODO** - maybe explain all the above using a test session term (?)
 
 Every test is treated as failed if an error has been thrown. Otherwise the test is treated as passed.
-**TBD** - Explain about test-on-fail, timeout, allow-disconnect.
+**TODO** - Explain about test-on-fail, timeout, allow-disconnect.
 
 *Example:*  
 **TODO** - screenshots and explanations for a successfull test execution and several failed test executions
 
 ### Running Selective Tests
 
-`--tests <testcase_pattern>` option of the [**impt test run**](./CommandsManual.md#test-run) command allows to select specific test files, test cases, test methods for running. The syntax of `<testcase_pattern>` is the following `[testFile][:testCase][.testMethod]`, where:
+`--tests <testcase_pattern>` option of the [**impt test run**](./CommandsManual.md#test-run) command allows to select specific test files, test cases, test methods for execution. The syntax of `<testcase_pattern>` is the following `[testFile][:testCase][.testMethod]`, where:
 
 - `testFile` - name of a test file. Search patterns (like `*`) are allowed, so several files may be specified (**TODO** - check and confirm, what exact search patterns?). The specified file(s) will be selected from all files which correspond to the file names and/or patterns defined in the [test configuration](#test-configuration). If `testFile` is ommited, all files, which correspond to the file names and/or patterns defined in the [test configuration](#test-configuration), are assumed.
 
@@ -580,10 +580,22 @@ You may run the tests in the debug mode by specifying `--debug` option of the [*
 
 After the testing is finished you may want to clean-up different entities created for your testing.
 
-If you want to delete your test project, call [**impt test delete**](./CommandsManual.md#test-run) command from the test project home. It deletes [Test Configuration File](./CommandsManual.md#test-configuration-file), Builder cache directory (if exists), github credentials file (if additionally specified), Builder variables file (if additionally specified). **TODO** - what about ./build folder (created in debug mode)?
+If you want to delete your test project, call [**impt test delete**](./CommandsManual.md#test-run) command from the test project home. It deletes [Test Configuration File](./CommandsManual.md#test-configuration-file), Builder cache directory (if exists), github credentials file (if exists), Builder variables file (if exists). **TODO** - what about ./build folder (created in debug mode)?
+
+*Example:*  
+**TODO** - screenshot   
 
 If you want to fully delete the Device Group which you used for the testing, call [**impt dg delete**](./CommandsManual.md#dg-delete) command as `impt dg delete --dg <DEVICE_GROUP_IDENTIFIER> --builds --force`. It makes a full clean-up of all impCentral entities created during your testing - unassigns all devices from the Device Group, deletes all builds created for the Device Group, deletes the Device Group itself. **TODO** - what about adding this as an option to test delete command?
 
+*Example:*  
+**TODO** - screenshot   
+
 If you only want to unassign the devices from the Device Group, call [**impt dg unassign**](./CommandsManual.md#dg-unassign) or [**impt device unassign**](./CommandsManual.md#device-unassign) commands.
 
+*Example:*  
+**TODO** - screenshot   
+
 If you want to delete the Product, call [**impt product delete**](./CommandsManual.md#product-delete) command.
+
+*Example:*  
+**TODO** - screenshot   
