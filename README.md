@@ -7,7 +7,7 @@ The impt tool supersedes [build-cli](https://github.com/electricimp/build-cli) a
 This readme covers all basic and common aspects of the impt tool. Read it first. More details you can find in the following documentation:
 - [impt Development Guide](./DevelopmentGuide.md),
 - [impt Testing Guide](./TestingGuide.md),
-- Factory/Production Guide (**link TODO**),
+- [impt Production Guide](./ProductionGuide.md),
 - [impt Commands Manual](./CommandsManual.md).
 
 The impt tool is written in [Node.js](https://nodejs.org) and uses the [Electric Imp impCentral&trade; API JavaScript library](https://github.com/electricimp/imp-central-api).
@@ -44,7 +44,7 @@ There are two additional groups that include commands convenient for code develo
 
 For similar operations in different command groups the impt tool uses similar command names, like `create`, `update`, `delete`, `list`, `info`.
 
-The most of commands have optional arguments called options - `<options>`. Options may be written in any order. As a general rule, the same option should not be specified many times in the same command, but exceptions exist. Some options require values, some not. If option value has spaces it must be put into double quotes - `“option value with spaces”`. Every option has one letter [alias](./CommandsManual.md#list-of-aliases). The aliases are unique for a particular command but may be reused for different options in different commands. At the same time, the same option in different commands always has the same alias. The options and aliases are detailed in the [Commands Description](./CommandsManual.md#commands-description).
+The most of commands have optional arguments called options - `<options>`. Options may be written in any order. As a general rule, the same option should not be specified many times in the same command, but exceptions exist. Some options require values, some not. If option value has spaces it must be put into double quotes - `“option value with spaces”`. Every option has one letter [alias](./CommandsManual.md#list-of-aliases). The aliases are unique for a particular command but may be reused for different options in different commands. The same option in different commands always has the same alias. The options and aliases are detailed in the [Commands Description](./CommandsManual.md#commands-description).
 
 *Examples*  
 *The syntax and commands with options:*  
@@ -83,7 +83,7 @@ The tool's commands are designed to be "friendly" for processing by scripts.
 
 Interaction with a user is minimal. Only few commands, for example [delete entities](#entity-deletion) commands, ask a confirmation from user. But all these commands have `--confirmed` option (`-q` option alias). If it is specified, the command is executed without asking additional confirmation from user. Scripts can use this option.
 
-Output of a command execution contains one of the two predefined phrases - `IMPT COMMAND SUCCEEDS` or `IMPT COMMAND FAILS`. Scripts can parse a command's output to find these standard phrases to quickly realize does the command succeed or fail. If any command fails, `IMPT COMMAND FAILS` phrase is always on the last line of the command's output. If a command succeeds, `IMPT COMMAND SUCCEEDS` phrase is also on the last line of the output for the most of the commands. Logging-related commands may have additional `IMPT COMMAND SUCCEEDS` phrases in their output. If the [help option](#help) is specified for a command, it's output does not contain neither predefined phrase.
+Output of a command execution contains one of the two predefined phrases - `IMPT COMMAND SUCCEEDS` or `IMPT COMMAND FAILS`. Scripts can parse a command's output to find these standard phrases to quickly realize does the command succeed or fail. If any command fails, `IMPT COMMAND FAILS` phrase is always on the last line of the command's output. If a command succeeds, `IMPT COMMAND SUCCEEDS` phrase is also on the last line of the output for the most of the commands. Logging-related commands may have additional `IMPT COMMAND SUCCEEDS` phrases in their output. If the [help option](./CommandsManual.md#help-option) is specified for a command, it's output does not contain neither predefined phrase.
 
 *Example*  
 *A successful command execution:*  
@@ -167,7 +167,7 @@ But many other commands may be affected when called from a directory where [Proj
 
 Many impt tool commands have options which specify an impCentral API entity - a concrete Product, Device Group, Device, Deployment, etc. You can use an entity Id (Product Id, Device Group Id, etc.) that is always unique. But sometime it may be more convenient to use other attributes to specify an entity. For example, Product Name, Device Group Name, Device MAC address, Device agent Id, Build sha, Build tag, etc. The tool provides such a possibility. You can specify different attributes as an option value and the tool searches the specified value among different attributes.
 
-If you want to use this feature, please first read [here](./CommandsManual.md#entity-identification) the rules how the tool searches an entity and the lists of attributes acceptable for different entities. Command's options, to which the complex entity identification is applicable, are detailed in the [Commands Description](./CommandsManual.md#commands-description). Note, if more than one entity is found, then, depending on a particular command, that may be considered as a success (for all [Entity Listing](#entity-listing-and-owning) commands) or as a fail (for all other commands).
+If you want to use this feature, please first read [here](./CommandsManual.md#entity-identification) the rules how the tool searches an entity and the lists of attributes acceptable for different entities. Command's options, to which the complex entity identification is applicable, are detailed in the [Commands Description](./CommandsManual.md#commands-description). Note, if more than one entity is found, then, depending on a particular command, it may be considered as a success (for all [Entity Listing](#entity-listing-and-owning) commands) or as a fail (for all other commands).
 
 When it is hard to uniquely specify an entity without knowing the entity Id, use [Entity Listing](#entity-listing-and-owning) commands to list the entities basing on some attributes, choose the required entity, notice it's Id and use it in the required command.
 
@@ -181,7 +181,7 @@ When it is hard to uniquely specify an entity without knowing the entity Id, use
 
 ## Entity Listing and Owning
 
-Many groups of commands contain a command to list entities - list Products, list Device Groups, list Devices, etc. By default, such a command returns the list of all entities available to the current logged-in account. But the returned list may be filtered using the specified attributes - Filter Options - additional options of a list command. There are the common rules applicable to all list commands:
+Many groups of commands contain a command to list entities - [list Products](./CommandsManual.md#product-list), [list Device Groups](./CommandsManual.md#device-group-list), [list Devices](./CommandsManual.md#device-list), [list Builds](./CommandsManual.md#build-list), [list WebHooks](./CommandsManual.md#webhook-list). By default, such a command returns the list of all entities available to the current logged-in account. But the returned list may be filtered using the specified attributes - Filter Options - additional options of a list command. There are the common rules applicable to all list commands:
 - Every Filter Option may be repeated several times.
 - At first, all Filter Options with the same option name are combined by logical OR.
 - After that, all Filter Options with different option names are combined by logical AND.
