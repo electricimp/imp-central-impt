@@ -302,7 +302,7 @@ Asserts that a value is within some tolerance from an expected value.
 // OK
 this.assertClose(10, 9, 2);
 
-// Failure: Expected value: 10пїЅ0.5, got: 9
+// Failure: Expected value: 10±0.5, got: 9
 this.assertClose(10, 9, 0.5);
 ```
 
@@ -490,7 +490,7 @@ For unauthenticated requests the GitHub API allows you to make [up to 60 request
 
 - Via github credentials file.
   - This file may be created or updated by [**impt test github**](./CommandsManual.md#test-github) command. You specifies GitHub's username and password and they are saved in the specified file. Note, the credentials are saved in a plain text.
-  - You may have several github credentials files and they may be located in any places. You specifies a concrete github credentials file when you [run the tests](TODO link). If the specified file exists, the GitHub's credentials are taken from it. If the specified file does not exist, the GitHub's credentials are taken from the environment variables. (**TODO** - is this correct? check and update... and the default file in the test project home seems strange.)
+  - You may have several github credentials files and they may be located in any places. You specifies a concrete github credentials file when you [run the tests](#running-tests). If the specified file exists, the GitHub's credentials are taken from it. If the specified file does not exist, the GitHub's credentials are taken from the environment variables. (**TODO** - is this correct? check and update... and the default file in the test project home seems strange.)
 
 *Example:*  
 **TODO** - screenshot   
@@ -566,8 +566,6 @@ In this case:
 
 ### Debug Mode
 
-**TODO** - check if it works and correct
-
 You may run the tests in the debug mode by specifying `--debug` option of the [**impt test run**](./CommandsManual.md#test-delete) command. It may be useful for analyzing failures. In this mode:
 - All communications with the impCentral API are displayed.
 - All communications with the [impUnit](https://github.com/electricimp/impUnit) test framework are displayed.
@@ -580,7 +578,7 @@ You may run the tests in the debug mode by specifying `--debug` option of the [*
 
 After the testing is finished you may want to clean-up different entities created for your testing.
 
-If you want to delete your test project, call [**impt test delete**](./CommandsManual.md#test-run) command from the test project home. It deletes [Test Configuration File](./CommandsManual.md#test-configuration-file), Builder cache directory (if exists), github credentials file (if exists), Builder variables file (if exists). **TODO** - what about ./build folder (created in debug mode)?
+If you want to delete your test project, call [**impt test delete**](./CommandsManual.md#test-run) command from the test project home. It deletes [Test Configuration File](./CommandsManual.md#test-configuration-file), Builder cache directory (if exists), github credentials file (if exists), Builder variables file (if exists), `./build` folder created in debug mode (if exists).
 
 *Example:*  
 **TODO** - screenshot   
