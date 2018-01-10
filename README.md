@@ -12,6 +12,22 @@ This readme covers all basic and common aspects of the impt tool. Read it first.
 
 The impt tool is written in [Node.js](https://nodejs.org) and uses the [Electric Imp impCentral&trade; API JavaScript library](https://github.com/electricimp/imp-central-api).
 
+Table Of Contents:
+- [Installation](#installation)
+- [Syntax and Command Groups](#syntax-and-command-groups)
+- [Help](#help)
+- [Debug](#debug)
+- [Scripts Support](#scripts-support)
+- [Authentication](#authentication)
+- [Login Key](#login-key)
+- [Project](#project)
+- [Entity Identification](#entity-identification)
+- [Entity Listing and Owning](#entity-listing-and-owning)
+- [Entity Information](#entity-information)
+- [Entity Deletion](#entity-deletion)
+- [No Atomic Transaction](#no-atomic-transaction)
+- [License](#license)
+
 ## Installation
 
 [Node.js](https://nodejs.org/en/) is required. You can download the Node.js [pre-built binary](https://nodejs.org/en/download/) for your platform, or install Node.js via [package manager](https://nodejs.org/en/download/package-manager). Once `node` and `npm` are installed, you need to execute the following command to set up the *impt* tool:
