@@ -509,8 +509,6 @@ To run the tests of your configured test project call [**impt test run**](./Comm
 
 - You may run the tests in the [debug mode](#debug-mode) by specifying `--debug` option.
 
-**TODO** - just obvious questions: - why a path to github file and, especially, to builder file are not part of test configuration? - why builder cache can be additionally changed before test run but other settings (eg. timeout, stop on fail, etc.) can not?
-
 The selected tests are executed in an arbitrary order. (**TODO** tests? test cases? or test files?). The tests run on all devices which are currently assigned to the Device Group specified in the [test configuration](#test-configuration). First - all tests run on one device, then - on a second one, etc. (**TODO** correct?) The order of devices - **TODO** - maybe explain all the above using a test session term (?)
 
 Every test is treated as failed if an error has been thrown. Otherwise the test is treated as passed.
