@@ -1098,7 +1098,7 @@ User is asked to confirm the operation if the specified github credentials file 
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --github-config | -i | no | yes | A path to the github credentials file. A relative or absolute path can be used. |
+| --github-config | -i | yes | yes | A path to the github credentials file. A relative or absolute path can be used. |
 | --user | -u | yes | yes | GitHub username. |
 | --pwd | -w | yes | yes | GitHub password or personal access token. |
 | --confirmed | -q | no | no | Executes the operation w/o asking additional confirmation from user. |
