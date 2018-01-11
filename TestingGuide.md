@@ -521,16 +521,13 @@ Every test is treated as failed if an error has been thrown. Otherwise the test 
 
 ### Running Selective Tests
 
-`--tests <testcase_pattern>` option of the [**impt test run**](./CommandsManual.md#test-run) command allows to select specific test files, test cases, test methods for execution. The syntax of `<testcase_pattern>` is the following `[testFile][:testCase][.testMethod]`, where:
+`--tests <testcase_pattern>` option of the [**impt test run**](./CommandsManual.md#test-run) command allows to select specific test files, test cases, test methods for execution. The syntax of `<testcase_pattern>` is the following `[testFile][:testCase][::testMethod]`, where:
 
 - `testFile` - name of a test file. Search patterns (like `*`) are allowed, so several files may be specified (**TODO** - check and confirm, what exact search patterns?). The specified file(s) will be selected from all files which correspond to the file names and/or patterns defined in the [test configuration](#test-configuration). If `testFile` is ommited, all files, which correspond to the file names and/or patterns defined in the [test configuration](#test-configuration), are assumed.
 
 - `testCase` - name of a test case. Should be fully qualified. Test cases with an identical name may exist in different test files, in this case all of them will be selected if the files are selected.
 
 - `testMethod` - name of a test method. Should be fully qualified. Test methods with an identical name may exist in different test cases, in this case all of them will be selected if the cases are selected.
-An internal class can play the role of a test case. To denote this use case, put `"."` at the end of the filter. For example, `"imptest test :Inner.TestClass."` executes all test methods from the *Inner.TestClass* class. **TODO** - I do not understand this statements about Inner class - check and update.
-
-**TODO** - check the syntax - it should be fully specified and clear.
 
 *Example:*
 
@@ -558,11 +555,11 @@ class MyTestCase extends ImpTestCase {
 ```
 
 In this case:
-- `--tests TestFile1:MyTestClass.testMe` selects the `testMe()` method in the `MyTestCase` case of the `TestFile1.test.nut` file.
-- `--tests :MyTestClass.testMe` selects the `testMe()` method in the `MyTestCase` case from the both `TestFile1.test.nut` and `TestFile2.test.nut` files.
-- `--tests :MyTestClass_1` selects all test methods from the `MyTestCase_1` case of the `TestFile1.test.nut` file as it is the only file with the specified test case.
+- `--tests TestFile1:MyTestCase::testMe` selects the `testMe()` method in the `MyTestCase` case of the `TestFile1.test.nut` file.
+- `--tests :MyTestCase::testMe` selects the `testMe()` method in the `MyTestCase` case from the both `TestFile1.test.nut` and `TestFile2.test.nut` files.
+- `--tests :MyTestCase_1` selects all test methods from the `MyTestCase_1` case of the `TestFile1.test.nut` file as it is the only file with the specified test case.
 - `--tests TestFile2` selects all test methods from the `TestFile2.test.nut` file.
-- `--tests :.testMe_1` selects the `testMe_1()` methods in all test cases from the both `TestFile1.test.nut` and `TestFile2.test.nut` files. **TODO** - it should be `--tests .testMe_1` - otherwise the syntax of the <testcase_pattern> is difficult to explain - update the syntax or the implementation ?
+- `--tests ::testMe_1` selects the `testMe_1()` methods in all test cases from the both `TestFile1.test.nut` and `TestFile2.test.nut` files.
 
 ### Debug Mode
 
