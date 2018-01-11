@@ -547,7 +547,7 @@ class MyTestCase_1 extends ImpTestCase {
 
 A test file `TestFile2.test.nut` contains:
 
-```
+```squirrel
 class MyTestCase extends ImpTestCase {
     function testMe() {...}
     function testMe_1() {...}
