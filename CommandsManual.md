@@ -1,8 +1,6 @@
 # impt Commands Manual
 
-## General
-
-### List Of Commands
+List Of Commands:
 
 **[impt auth info](#auth-info)**  
 **[impt auth login](#auth-login)**  
@@ -69,6 +67,17 @@
 **[impt webhook info](#webhook-info)**  
 **[impt webhook list](#webhook-list)**  
 **[impt webhook update](#webhook-update)**  
+
+General Info:
+- [Command Syntax](#command-syntax)
+- [Help Option](#help-option)
+- [Entity Identification](#entity-identification)
+- [Device Group Type](#device-group-type)
+- [Auth File](#auth-file)
+- [Project File](#project-file)
+- [Test Configuration File](#test-configuration-file)
+- [List of Aliases](#list-of-aliases)
+- [Common Filter Options](#common-filter-options)
 
 ### Command Syntax
 
