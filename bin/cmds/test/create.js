@@ -40,11 +40,11 @@ exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.DEVICE_GROUP_IDENTIFIER] : {
             demandOption : true,
-            describe : 'Device Group Identifier of a group whose devices are used for tests execution.'
+            describe : 'Device Group Identifier of Device Group whose Devices are used for tests execution.'
         },
         [Options.DEVICE_FILE] : {
             demandOption : false,
-            describe : 'A path to an optional file with the device source code that is deployed along with the tests.' +
+            describe : 'A path to an optional file with IMP device source code that is deployed along with the tests.' +
                 ' A relative or absolute path can be used.',
             requiresArg : false,
             nargs: 0,
@@ -52,7 +52,7 @@ exports.builder = function (yargs) {
         },
         [Options.AGENT_FILE] : {
             demandOption : false,
-            describe : 'A path to an optional file with the agent source code that is deployed along with the tests.' +
+            describe : 'A path to an optional file with IMP agent source code that is deployed along with the tests.' +
                 ' A relative or absolute path can be used.',
             requiresArg : false,
             nargs: 0,
@@ -73,12 +73,20 @@ exports.builder = function (yargs) {
         [Options.BUILDER_CACHE] : {
             demandOption : false,
             describe : 'If true or no value: cache external libraries in the local .builder-cache directory.' +
-                ' If false value: do not cache external libraries.',
+                ' If false value: do not cache external libraries. If the local .builder-cache directory exists, it is cleaned up.',
             default : false
         },
         [Options.TEST_FILE] : {
             demandOption : false,
             default : ["*.test.nut", "tests/**/*.test.nut"]
+        },
+        [Options.GITHUB_CONFIG] : {
+            demandOption : false,
+            describe : 'A path to a github credentials file. A relative or absolute path can be used.'
+        },
+        [Options.BUILDER_CONFIG] : {
+            demandOption : false,
+            describe : 'A path to a file with Builder variables. A relative or absolute path can be used.'
         },
         [Options.CONFIRMED] : false,
         [Options.DEBUG] : false

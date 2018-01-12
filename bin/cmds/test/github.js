@@ -29,7 +29,7 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'github';
 const COMMAND_SECTION = 'test';
-const COMMAND_SHORT_DESCR = 'Creates or updates github credentials configuration file.';
+const COMMAND_SHORT_DESCR = 'Creates or updates github credentials file.';
 const COMMAND_DESCRIPTION = COMMAND_SHORT_DESCR;
 
 exports.command = COMMAND;
@@ -39,10 +39,8 @@ exports.describe = COMMAND_SHORT_DESCR;
 exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.GITHUB_CONFIG] : {
-            demandOption : false,
-            describe : 'A path to the github credentials configuration file.' +
-                ' A relative or absolute path can be used.' +
-                ' If the option is absent, .impt.github-info file in the current directory is assumed.'
+            demandOption : true,
+            describe : 'A path to the github credentials file. A relative or absolute path can be used.'
         },
         [Options.USER] : {
             demandOption : true,

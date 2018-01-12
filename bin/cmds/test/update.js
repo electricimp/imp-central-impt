@@ -41,23 +41,25 @@ exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.DEVICE_GROUP_IDENTIFIER] : {
             demandOption : false,
-            describe : 'Device Group Identifier of a group whose devices are used for tests execution.'
+            describe : 'Device Group Identifier of Device Group whose Devices are used for tests execution.'
         },
         [Options.DEVICE_FILE] : {
             demandOption : false,
-            describe : 'A path to a file with the device source code that is deployed along with the tests.' +
+            describe : 'A path to a file with IMP device source code that is deployed along with the tests.' +
                 ' A relative or absolute path can be used. Specify this option w/o a value to remove this file from the test configuration.',
             requiresArg : false,
             nargs: 0,
-            default : undefined
+            default : undefined,
+            _usage: '[<device_file>]'
         },
         [Options.AGENT_FILE] : {
             demandOption : false,
-            describe : 'A path to a file with the agent source code that is deployed along with the tests.' +
+            describe : 'A path to a file with IMP agent source code that is deployed along with the tests.' +
                 ' A relative or absolute path can be used. Specify this option w/o a value to remove this file from the test configuration.',
             requiresArg : false,
             nargs: 0,
-            default : undefined
+            default : undefined,
+            _usage: '[<agent_file>]'
         },
         [Options.TIMEOUT] : false,
         [Options.STOP_ON_FAIL] : false,
@@ -65,9 +67,32 @@ exports.builder = function (yargs) {
         [Options.BUILDER_CACHE] : {
             demandOption : false,
             describe : 'If true or no value: cache external libraries in the local .builder-cache directory.' +
-                ' If false value: do not cache external libraries.'
+                ' If false value: do not cache external libraries; in this case, if the local .builder-cache directory exists, it is cleaned up.'
         },
-        [Options.TEST_FILE] : false,
+        [Options.TEST_FILE] : {
+            demandOption : false,
+            describe : 'Test file name or pattern. All files located in the current directory and all its subdirectories' +
+                ' which names match the specified name or pattern are considered as files with test cases.' +
+                ' The specified values fully replace the existed setting.',
+        },
+        [Options.GITHUB_CONFIG] : {
+            demandOption : false,
+            describe : 'A path to a github credentials file. A relative or absolute path can be used.' +
+                ' Specify this option w/o a value to remove this file from the test configuration.',
+            requiresArg : false,
+            nargs: 0,
+            default : undefined,
+            _usage: '[<github_credentials_file_name>]'
+        },
+        [Options.BUILDER_CONFIG] : {
+            demandOption : false,
+            describe : 'A path to a file with Builder variables. A relative or absolute path can be used.' +
+                ' Specify this option w/o a value to remove this file from the test configuration.',
+            requiresArg : false,
+            nargs: 0,
+            default : undefined,
+            _usage: '[<builder_file_name>]'
+        },
         [Options.DEBUG] : false
     });
     return yargs

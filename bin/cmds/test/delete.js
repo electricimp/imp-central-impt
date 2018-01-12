@@ -26,12 +26,13 @@
 
 const Test = require('../../../lib/Test');
 const Options = require('../../../lib/util/Options');
+const Util = require('util');
 
 const COMMAND = 'delete';
 const COMMAND_SECTION = 'test';
-const COMMAND_SHORT_DESCR = 'Deletes Test Configuration and other settings files.';
-const COMMAND_DESCRIPTION = 'Deletes Test Configuration File in the current directory and, optionally,' +
-    ' Builder cache, Builder Config and github credentials configuration file.';
+const COMMAND_SHORT_DESCR = 'Deletes Test Configuration File.';
+const COMMAND_DESCRIPTION = 'Deletes Test Configuration File in the current directory.' +
+    ' Does nothing if there is no Test Configuration File in the current directory.';
 
 exports.command = COMMAND;
 
@@ -41,15 +42,28 @@ exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.GITHUB_CONFIG] : {
             demandOption : false,
-            describe : 'A path to the github credentials configuration file that should be deleted.' +
-                ' A relative or absolute path can be used. If the value of the option is not specified,' +
-                ' .impt.github-info file in the current directory is assumed.'
+            nargs: 0,
+            type : 'boolean',
+            requiresArg : false,
+            _usage: '',
+            describe : 'Also deletes the github credentials file referenced by Test Configuration File.'
         },
         [Options.BUILDER_CONFIG] : {
             demandOption : false,
-            describe : 'A path to the file with Builder variables that should be deleted.' +
-                ' A relative or absolute path can be used. If the value of the option is not specified,' +
-                ' .impt.builder file in the current directory is assumed.'
+            nargs: 0,
+            type : 'boolean',
+            requiresArg : false,
+            _usage: '',
+            describe : 'Also deletes the file with Builder variables referenced by Test Configuration File.'
+        },
+        [Options.ENTITIES] : {
+            demandOption : false,
+            describe: 'Also deletes the impCentral API entities (Device Group, Product, Deployments) referenced by Test Configuration File.'
+        },
+        [Options.ALL] : {
+            demandOption : false,
+            describe: Util.format('Includes --%s, --%s and --%s options.',
+                Options.GITHUB_CONFIG, Options.BUILDER_CONFIG, Options.ENTITIES)
         },
         [Options.CONFIRMED] : false,
         [Options.DEBUG] : false

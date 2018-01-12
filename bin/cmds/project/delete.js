@@ -43,7 +43,10 @@ exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({
-        [Options.ENTITIES] : false,
+        [Options.ENTITIES] : {
+            demandOption : false,
+            describe: 'Also deletes the impCentral API entities (Device Group, Product, Deployments) referenced by Project File.'
+        },
         [Options.FILES] : false,
         [Options.ALL] : {
             demandOption : false,

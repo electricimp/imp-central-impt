@@ -39,24 +39,7 @@ exports.describe = COMMAND_SHORT_DESCR;
 exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.TESTS] : false,
-        [Options.GITHUB_CONFIG] : {
-            demandOption : false,
-            describe : 'A path to the github credentials configuration file.' +
-                ' A relative or absolute path can be used. If the value of the option is not specified,' +
-                ' .impt.github-info file in the current directory is assumed.'
-        },
-        [Options.BUILDER_CONFIG] : {
-            demandOption : false,
-            describe : 'A path to the file with Builder variables. A relative or absolute path can be used.' +
-                ' If the value of the option is not specified, .impt.builder file in the current directory is assumed.'
-        },
-        [Options.BUILDER_CACHE] : {
-            demandOption : false,
-            describe : 'If true or no value: cache (if not cached yet) external libraries in the local .builder-cache directory and use them' +
-            	' from the cache for this test run. If false value: do not use external libraries from the cache even if they are cached.' +
-            	' If not specified, the behavior is defined by the corresponding settings in Test Configuration File' +
-            	' that was initialized/updated by impt test init command.'
-        },
+        [Options.CLEAR_CACHE] : false,
         [Options.DEBUG] : false
     });
     return yargs
