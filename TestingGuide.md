@@ -6,7 +6,15 @@ First of all, please read the root [readme file](./README.md) that covers all ba
 
 The full impt tool commands specification is described in the [impt Commands Manual](./CommandsManual.md).
 
-## The main differences to the [previous version](https://github.com/electricimp/impTest)
+Table Of Contents:
+- [What is New](#what-is-new)
+- [Overview](#overview)
+- [Writing Tests](#writing-tests)
+- [Using Tests](#using-tests)
+
+## What is New
+
+The main differences to the [previous version](https://github.com/electricimp/impTest):
 
 - impTest is working via the [Electric Imp impCentral&trade; API](https://apidoc.electricimp.com).
 - Model is replaced by the new impCentral API entity - Device Group.
@@ -55,7 +63,11 @@ Other impt commands may also be needed during a testing process. For example, co
 
 ### Test Session
 
-**TODO** - worth to explain what is it?
+**TODO**
+
+Test session is running of a set of tests from one test file on one device. That may be all tests from all test cases of the test file or a subset of all tests. Running the same set of tests on another device is another test session.
+
+Test session is considered failed if at least one test fails.
 
 ## Writing Tests
 
@@ -122,9 +134,46 @@ A test file is intended to test either IMP device or IMP agent side. The opposit
   - The file intended for IMP device should contain `.device` in the name, the file intended for IMP agent should contain `.agent` in the name.
   - The test file should contain `.test` in the name, the partner file must not contain that in the name.
   - For example, `"Test1.agent.test.nut"` (a test file with test cases for IMP agent side) and `"Test1.device.nut"` (the corresponding partner file with emulation of IMP device side).
-- If you use this feature, do not change the default value of the test file search pattern during [test configuration creation or updating](#test-configuration). **TODO** - that seems strange - need to double check
 
-Example of a test file / partner file pair can be found at [sample7](TODO link). **TODO** - do we have and mention samples at all?
+Note, it is enough that only the test file is selected for the run, i.e. satisfies the test file search pattern defined during [test configuration creation or updating](#test-configuration). The corresponding partner file will be added to the test session automatically.
+
+*Example of a test file / partner file pair:*
+
+Test file `"Test1.agent.test.nut"`:
+```squirrel
+class MyTestCase extends ImpTestCase {
+    _myVar = null;
+
+    function setUp() {
+        device.on("data", function(data) {
+            _myVar = data;
+        }.bindenv(this));
+    }
+
+    function testMe() {
+        local myFunc = null;
+        return Promise(function(ok, err) {
+            myFunc = function() {
+                if (_myVar == null) {
+                    imp.wakeup(1.0, myFunc);
+                } else if (_myVar == "Hello from IMP Device") {
+                    ok();
+                } else {
+                    err();
+                }
+            }.bindenv(this);
+            imp.wakeup(1.0, myFunc);
+        }.bindenv(this));
+    }
+}
+```
+
+The corresponding partner file `"Test1.device.nut"`:
+```squirrel
+imp.wakeup(5.0, function() {
+    agent.send("data", "Hello from IMP Device");
+});
+```
 
 ### Asynchronous Testing
 
@@ -194,7 +243,7 @@ this.assertEqual(
 );
 ```
 
-You create and manage the file with the [*Builder*](https://github.com/electricimp/Builder) variables manually. You may locate it anywhere. The file is specified when you [run the tests](#running-tests).
+You create and manage the file with the [*Builder*](https://github.com/electricimp/Builder) variables manually. You may locate it anywhere. The file is specified during [test configuration creation or updating](#test-configuration).
 
 #### Include From GitHub
 
@@ -208,7 +257,7 @@ There may be some limitations which you can overcome - see [here](#github-creden
 
 Builder cache is intended to improve the build time and reduce the number of requests to external resources. It is only possible to cache external libraries. Builder stores the cache in the `.builer-cache` folder inside the test project home. The cache is stored for up to 24 hours.
 
-Builder cache is disabled by default. It can be enabled during [test configuration creation or updating](#test-configuration). Also it is possible to specify whether the Builder cache should be enabled or disabled when you [run the tests](#running-tests).
+Builder cache is disabled by default. It can be enabled during [test configuration creation or updating](#test-configuration). Also it is possible to clear the cache when you [run the tests](#running-tests).
 
 ### External Commands
 
@@ -366,13 +415,9 @@ this.assertThrowsError(function () {
 
 ### Diagnostic Messages
 
-Return values other than `null` are displayed in the console when a test succeeds (**TODO** - I do not understand this - need to explain). This can be used to output diagnostic messages.
-
-Also, your tests may output informational messages by this way:
-
-```squirrel
-this.info(<message>);
-```
+There are two ways to display diagnostic/informational messages to the console from your tests:
+- call `this.info(<message>);` from a test method, as many times as you need/want.
+- call `return <return_value>;` from a test method. The returned value will be displayed, if not `null` and the test succeeds. 
 
 Examples of tests output are provided in the [running tests section](#running-tests).
 
@@ -421,8 +466,6 @@ class TestCase1 extends ImpTestCase {
 }
 ```
 
-**TODO** - do we want to reference other "samples" of tests?
-
 ## Using Tests
 
 ### Device Group
@@ -455,13 +498,17 @@ These are the main steps you should perform in order to prepare your devices and
 
 Before running the tests you should create test configuration for your test project - call [**impt test create**](./CommandsManual.md#test-create) command from the test project home. If [Test Configuration File](./CommandsManual.md#test-configuration-file) already exists in that directory, it will be deleted (if confirmed by you) and the new configuration will be created from scratch.
 
-The main configuration settings you should pay attention to:
+The configuration settings include:
 
 - `--dg` - identifier of impCentral [Device Group](#device-group). Your tests will run on all devices assigned to that Device Group. You may specify Device Group by it's Id or Name.
 
 - `--device-file`, `--agent-file` - IMP device / IMP agent source code which is deployed along with the tests. Usually, it is the source code of IMP library or other IMP code which you are planning to test and you specifies one of that options.
 
 - `--test-file` - test file name or pattern which specifies the test file(s) included into your test project. You may repeat this option several times and specify several file names and/or patterns. The values of the repeated option are combined by logical OR. There is a default pattern mentioned in the [command's spec](./CommandsManual.md#test-create).
+
+- `--github-config`- A path to a [github credentials file](#github-credentials). You may need to use it if your test files use [include from GitHub](#include-from-github).
+
+- `--builder-config`- A path to a file with [Builder variables](#builder-variables) You need it only if your tests use Builder variables.
 
 - `--timeout`, `--stop-on-fail`, `--allow-disconnect`, `--builder-cache` - other settings, their meaning and default values are described in the [command's spec](./CommandsManual.md#test-create).
 
@@ -480,39 +527,35 @@ You may display the current test configuration by calling [**impt test info**](.
 
 ### GitHub Credentials
 
-This is important if your test files use [include from GitHub](#include-from-github).
+It may be needed if your test files use [include from GitHub](#include-from-github).
 
-For unauthenticated requests the GitHub API allows you to make [up to 60 requests per hour](https://developer.github.com/v3/#rate-limiting). This may be not sufficient for intensive test running. To overcome the limitation you can provide GitHub's user credentials. There two ways to do this:
+For unauthenticated requests the GitHub API allows you to make [up to 60 requests per hour](https://developer.github.com/v3/#rate-limiting). This may be not sufficient for intensive test running. To overcome the limitation you can provide GitHub's user credentials. There are two ways to do this:
 
 - Via environment variables - we strongly recommend this way due to the security reasons. You should specify two environment variables:
-  - `GITHUB_USER`
-  - `GITHUB_TOKEN` (**TODO** - can this be personal access token or password? maybe rename?)
+  - `GITHUB_USER` - GitHub username.
+  - `GITHUB_TOKEN` - GitHub password or personal access token.
 
 - Via github credentials file.
   - This file may be created or updated by [**impt test github**](./CommandsManual.md#test-github) command. You specifies GitHub's username and password and they are saved in the specified file. Note, the credentials are saved in a plain text.
-  - You may have several github credentials files and they may be located in any places. You specifies a concrete github credentials file when you [run the tests](#running-tests). If the specified file exists, the GitHub's credentials are taken from it. If the specified file does not exist, the GitHub's credentials are taken from the environment variables. (**TODO** - is this correct? check and update... and the default file in the test project home seems strange.)
+  - You may have several github credentials files and they may be located in any places. You specifies a concrete github credentials file during [test configuration creation or updating](#test-configuration). If the specified file exists when you [run the tests](#running-tests), the GitHub's credentials are taken from it. If the specified file does not exist, the GitHub's credentials are taken from the environment variables if they are set.
 
 *Example:*  
 **TODO** - screenshot   
 
 ### Running Tests
 
-To run the tests of your configured test project call [**impt test run**](./CommandsManual.md#test-run) command from the test project home. By default, the tests will be executed according to your [test configuration](#test-configuration). You may want or need to specify additional settings in the test run command:
+To run the tests of your configured test project call [**impt test run**](./CommandsManual.md#test-run) command from the test project home. The tests will be executed according to your [test configuration](#test-configuration).
 
-- By default, the tool searches for all test files according to the file names and/or patterns specified in the [test configuration](#test-configuration). The search starts from the test project home and includes all subdirectories. The tool looks for all test cases in the found files. All test methods in all found test cases are considered as tests for execution. For a particular run you may select a subset of test files, test cases, test methods by specifying `--tests` option. See the details [here](#running-selective-tests).
-
-- If your test files use [include from GitHub](#include-from-github) and you use github credentials file to store [GitHub's credentials](#github-credentials), you should specify a path to that file as a value of `--github-config` option.
-
-- If your tests use [Builder variables](#builder-variables), you should specify a path to the file with Builder variables as a value of `--builder-config` option.
-
-- You may disable or enable [Builder cache](#builder-cache) by `--builder-cache` option. By default, Builder cache is controlled by the [test configuration](#test-configuration).
-
-- You may run the tests in the [debug mode](#debug-mode) by specifying `--debug` option.
+By default, the tool searches for all test files according to the file names and/or patterns specified in the [test configuration](#test-configuration). The search starts from the test project home and includes all subdirectories. The tool looks for all test cases in the found files. All test methods in all found test cases are considered as tests for execution. For a particular run you may select a subset of test files, test cases, test methods by specifying `--tests` option. See the details [here](#running-selective-tests).
 
 The selected tests are executed in an arbitrary order. (**TODO** tests? test cases? or test files?). The tests run on all devices which are currently assigned to the Device Group specified in the [test configuration](#test-configuration). First - all tests run on one device, then - on a second one, etc. (**TODO** correct?) The order of devices - **TODO** - maybe explain all the above using a test session term (?)
 
 Every test is treated as failed if an error has been thrown. Otherwise the test is treated as passed.
 **TODO** - Explain about test-on-fail, timeout, allow-disconnect.
+
+You may clear the [Builder cache](#builder-cache) by `--clear-cache` option. The cache, if existed, will be deleted before running the tests. And, if the Builder cache is enabled in the [test configuration](#test-configuration), it will be re-created during the tests running.
+
+You may run the tests in the [debug mode](#debug-mode) by specifying `--debug` option.
 
 *Example:*  
 **TODO** - screenshots and explanations for a successfull test execution and several failed test executions
@@ -521,11 +564,11 @@ Every test is treated as failed if an error has been thrown. Otherwise the test 
 
 `--tests <testcase_pattern>` option of the [**impt test run**](./CommandsManual.md#test-run) command allows to select specific test files, test cases, test methods for execution. The syntax of `<testcase_pattern>` is the following `[testFile][:testCase][::testMethod]`, where:
 
-- `testFile` - name of a test file. Search patterns (like `*`) are allowed, so several files may be specified (**TODO** - check and confirm, what exact search patterns?). The specified file(s) will be selected from all files which correspond to the file names and/or patterns defined in the [test configuration](#test-configuration). If `testFile` is ommited, all files, which correspond to the file names and/or patterns defined in the [test configuration](#test-configuration), are assumed.
+- `testFile` - name of a test file. May include a path. (**TODO**) May include [Regular Expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions) like `.*`, etc. The specified file(s) will be selected from all files which correspond to the file names and/or patterns defined in the [test configuration](#test-configuration). If `testFile` is ommited, all files, which correspond to the file names and/or patterns defined in the [test configuration](#test-configuration), are assumed.
 
-- `testCase` - name of a test case. Should be fully qualified. Test cases with an identical name may exist in different test files, in this case all of them will be selected if the files are selected.
+- `testCase` - name of a test case. Should be fully qualified. Test cases with an identical name may exist in different test files, in this situation all of them will be selected if the files are selected.
 
-- `testMethod` - name of a test method. Should be fully qualified. Test methods with an identical name may exist in different test cases, in this case all of them will be selected if the cases are selected.
+- `testMethod` - name of a test method. Should be fully qualified. Test methods with an identical name may exist in different test cases, in this situation all of them will be selected if the cases are selected.
 
 *Example:*
 
@@ -562,14 +605,16 @@ In this case:
 ### Debug Mode
 
 You may run the tests in the debug mode by specifying `--debug` option of the [**impt test run**](./CommandsManual.md#test-delete) command. It may be useful for analyzing failures. In this mode:
-- All communications with the impCentral API are displayed.
-- All communications with the [impUnit](https://github.com/electricimp/impUnit) test framework are displayed.
-- IMP device and IMP agent code are stored in the `./build` folder inside the test project home.
+- All communications with the [impCentral API](https://apidoc.electricimp.com) are displayed.
+- All communications with the [impUnit test framework](https://github.com/electricimp/impUnit) are displayed.
+- IMP device and IMP agent code of the running build are stored in the `./build` folder inside the test project home. (**TODO**)
 
 *Example:*  
 **TODO** - screenshot   
 
-### Clean-up
+### Cleaning Up
+
+**TODO**
 
 After the testing is finished you may want to clean-up different entities created for your testing.
 
