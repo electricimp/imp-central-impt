@@ -84,7 +84,12 @@ exports.builder = function (yargs) {
         .check(function (argv) {
             const options = new Options(argv);
             if (options.createFiles && options.renameFiles) {
-                return new Errors.CommandSyntaxError(UserInteractor.ERRORS.CMD_MUTUALLY_EXCLUSIVE_OPTIONS, Options.CREATE_FILES, Options.RENAME_FILES);
+                return new Errors.CommandSyntaxError(UserInteractor.ERRORS.CMD_MUTUALLY_EXCLUSIVE_OPTIONS,
+                    Options.CREATE_FILES, Options.RENAME_FILES);
+            }
+            if (options.renameFiles && !options.agentFile && !options.deviceFile) {
+                return new Errors.CommandSyntaxError(UserInteractor.ERRORS.CMD_COOPERATIVE_MULT_OPTIONS,
+                    Options.DEVICE_FILE, Options.AGENT_FILE, Options.RENAME_FILES);
             }
             return true;
         })
