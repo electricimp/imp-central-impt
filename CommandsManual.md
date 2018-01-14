@@ -1047,13 +1047,13 @@ At the end of the command execution information about the tests configuration is
 | --dg | -g | yes | yes | [Device Group Identifier](#device-group-identifier) of Device Group whose Devices are used for tests execution. |
 | --device-file | -x | no | yes | A path to an optional file with IMP device source code that is deployed along with the tests. A relative or absolute path can be used. |
 | --agent-file | -y | no | yes | A path to an optional file with IMP agent source code that is deployed along with the tests. A relative or absolute path can be used. |
-| --timeout | -t | no | yes | A timeout period (in seconds) after which the tests are interrupted and considered as failed. By default: 30 seconds. |
-| --stop-on-fail | -s | no | no | If *true* or no value: the tests execution is stopped after a test failure. If *false* value: the tests execution is not stopped after a failure. By default: *false* |
+| --timeout | -t | no | yes | A timeout period (in seconds) after which a test is interrupted and considered as failed. By default: 30 seconds. |
+| --stop-on-fail | -s | no | no | If *true* or no value: the whole tests execution is stopped after a test failure. If *false* value: the tests execution is not stopped after a failure. By default: *false* |
 | --allow-disconnect | -a | no | no | If *true* or no value: keep a test session alive when a device is temporary disconnected. If *false* value: a test session fails when a device is disconnected. By default: *false* |
 | --builder-cache | -e | no | no | If *true* or no value: cache external libraries in the local *.builder-cache* directory. If *false* value: do not cache external libraries. If the local *.builder-cache* directory exists, it is cleaned up. By default: *false* |
 | --test-file | -f | no | yes | Test file name or pattern. All files located in the current directory and all its subdirectories which names match the specified name or pattern are considered as files with test cases. This option may be repeated several times to specify several names and/or patterns. The values of the repeated option are combined by logical OR. By default: *"\*.test.nut" "tests/\*\*/\*.test.nut"* |
-| --github-config | -i | no | yes | A path to a github credentials file. A relative or absolute path can be used. |
-| --builder-config | -j | no | yes | A path to a file with *Builder* variables. A relative or absolute path can be used. |
+| --github-config | -i | no | yes | A path to a github credentials file. A relative or absolute path can be used. The specified file may not exist. |
+| --builder-config | -j | no | yes | A path to a file with *Builder* variables. A relative or absolute path can be used. The specified file may not exist. |
 | --confirmed | -q | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
@@ -1125,7 +1125,7 @@ Runs the tests specified by [Test Configuration File](#test-configuration-file) 
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --tests | -t | no | yes | A pattern to select the tests. Allows to select specific test files, test cases, test methods for execution. The syntax of the pattern: *\[testFile]\[:testCase]\[::testMethod]*, where *testFile* may include a path as well as [Regular Expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions). If the option is missed all tests from all test files specified in [Test Configuration File](#test-configuration-file) are executed. |
+| --tests | -t | no | yes | A pattern to select the tests. Allows to select specific test files, test cases, test methods for execution. The syntax of the pattern: *\[testFile]\[:testCase]\[::testMethod]*, where *testFile* may include a relative path as well as [Regular Expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions). If the option is missed all tests from all test files specified in [Test Configuration File](#test-configuration-file) are executed. |
 | --clear-cache | -e | no | no | Clears the local *.builder-cache* directory if it exists. |
 | --debug | -z | no | no | Runs the tests in the debug mode. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
@@ -1148,8 +1148,8 @@ At the end of the command execution information about the tests configuration is
 | --allow-disconnect | -a | no | no | If *true* or no value: keep a test session alive when a device is temporary disconnected. If *false* value: a test session fails when a device is disconnected. |
 | --builder-cache | -e | no | no | If *true* or no value: cache external libraries in the local *.builder-cache* directory. If *false* value: do not cache external libraries; in this case, if the local *.builder-cache* directory exists, it is cleaned up. |
 | --test-file | -f | no | yes | Test file name or pattern. All files located in the current directory and all its subdirectories which names match the specified name or pattern are considered as files with test cases. This option may be repeated several times to specify several names and/or patterns. The values of the repeated option are combined by logical OR. The specified values fully replace the existed setting. |
-| --github-config | -i | no | no | A path to a github credentials file. A relative or absolute path can be used. Specify this option w/o a value to remove this file from the test configuration. |
-| --builder-config | -j | no | no | A path to a file with *Builder* variables. A relative or absolute path can be used. Specify this option w/o a value to remove this file from the test configuration. |
+| --github-config | -i | no | no | A path to a github credentials file. A relative or absolute path can be used. The specified file may not exist. Specify this option w/o a value to remove a github credentials file from the test configuration. |
+| --builder-config | -j | no | no | A path to a file with *Builder* variables. A relative or absolute path can be used. The specified file may not exist. Specify this option w/o a value to remove a file with *Builder* variables from the test configuration. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
