@@ -20,7 +20,7 @@ Table Of Contents:
   - [A Test Case Example](#a-test-case-example)
 - [Using Tests](#using-tests)
   - [Device Group](#device-group)
-  - [test-configuration](#)
+  - [Test Configuration](#test-configuration)
   - [GitHub Credentials](#github-credentials)
   - [Running Tests](#running-tests)
   - [Running Selective Tests](#running-selective-tests)
