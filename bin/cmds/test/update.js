@@ -77,8 +77,8 @@ exports.builder = function (yargs) {
         },
         [Options.GITHUB_CONFIG] : {
             demandOption : false,
-            describe : 'A path to a github credentials file. A relative or absolute path can be used.' +
-                ' Specify this option w/o a value to remove this file from the test configuration.',
+            describe : 'A path to a github credentials file. A relative or absolute path can be used. The specified file may not exist.' +
+                ' Specify this option w/o a value to remove a github credentials file from the test configuration.',
             requiresArg : false,
             nargs: 0,
             default : undefined,
@@ -86,8 +86,8 @@ exports.builder = function (yargs) {
         },
         [Options.BUILDER_CONFIG] : {
             demandOption : false,
-            describe : 'A path to a file with Builder variables. A relative or absolute path can be used.' +
-                ' Specify this option w/o a value to remove this file from the test configuration.',
+            describe : 'A path to a file with Builder variables. A relative or absolute path can be used. The specified file may not exist.' +
+                ' Specify this option w/o a value to remove a file with Builder variables from the test configuration.',
             requiresArg : false,
             nargs: 0,
             default : undefined,
