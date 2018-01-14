@@ -10,7 +10,22 @@ Table Of Contents:
 - [What is New](#what-is-new)
 - [Overview](#overview)
 - [Writing Tests](#writing-tests)
+  - [Main Rules and Steps](#main-rules-and-steps)
+  - [Tests for Bi-directional Device-Agent Communication](#tests-for-bi-directional-device-agent-communication)
+  - [Asynchronous Testing](#asynchronous-testing)
+  - [Builder Usage](#builder-usage)
+  - [External Commands](#external-commands)
+  - [Assertions](#assertions)
+  - [Diagnostic Messages](#diagnostic-messages)
+  - [A Test Case Example](#a-test-case-example)
 - [Using Tests](#using-tests)
+  - [Device Group](#device-group)
+  - [test-configuration](#)
+  - [GitHub Credentials](#github-credentials)
+  - [Running Tests](#running-tests)
+  - [Running Selective Tests](#running-selective-tests)
+  - [Debug Mode](#debug-mode)
+  - [Cleaning Up](#cleaning-up)
 
 ## What is New
 
@@ -30,7 +45,6 @@ The main differences to the [previous version](https://github.com/electricimp/im
 This guide contains two main parts:
 - explanation of how to [write tests](#writing-tests).
 - explanation of how to [use tests: configure and run](#using-tests).
-**TODO**
 
 The main terms:
 
@@ -69,6 +83,8 @@ Test session is a run of a set of tests from one test file on one device. That m
 Test session is considered failed if at least one test fails.
 
 ## Writing Tests
+
+### Main Rules and Steps
 
 The main steps you need to perform in order to write tests:
 
@@ -558,9 +574,7 @@ Every test file (build) runs on all devices currently assigned to the Device Gro
 
 A build includes the selected set of test cases and tests from a selected test file. It may be all test cases with all tests or a subset of test cases / subset of tests as [defined](#running-selective-tests) by `--tests` option. The selected test cases are executed in an arbitrary order. The selected tests of a test case are executed in an arbitrary order.
 
-Every test is treated as failed if an error has been thrown. Otherwise the test is treated as passed. If at least one test in a test session fails, the test session is treated as failed.
-
-If the [test configuration](#test-configuration) has the `stop-on-fail` setting set to `true`, the whole tests execution is stopped after the first failed test. If a timeout occurs during a test, the whole tests execution is stopped irrespective of the `stop-on-fail` setting. The timeout is defined in the [test configuration](#test-configuration).
+Every test is treated as failed if an error has been thrown or a timeout, defined in the [test configuration](#test-configuration), occurs during the test execution. Otherwise the test is treated as passed. If at least one test in a test session fails, the test session is treated as failed. If the [test configuration](#test-configuration) has the `stop-on-fail` setting set to `true`, the whole tests execution is stopped after the first failed test.
 
 You may clear the [Builder cache](#builder-cache) by `--clear-cache` option. The cache, if existed, will be deleted before running the tests. And, if the Builder cache is enabled in the [test configuration](#test-configuration), it will be re-created during the tests running.
 
@@ -616,23 +630,21 @@ In this case:
 You may run the tests in the debug mode by specifying `--debug` option of the [**impt test run**](./CommandsManual.md#test-delete) command. It may be useful for analyzing failures. In this mode:
 - All communications with the [impCentral API](https://apidoc.electricimp.com) are displayed.
 - All communications with the [impUnit test framework](https://github.com/electricimp/impUnit) are displayed.
-- IMP device and IMP agent code of all the running builds are stored in the `./build` folder inside the test project home.
+- IMP device and IMP agent code of all the running builds are stored in the `.build` folder inside the test project home.
 
 *Example:*  
 **TODO** - screenshot   
 
 ### Cleaning Up
 
-**TODO**
+After the testing is finished you may want to clean-up different entities created during your testing.
 
-After the testing is finished you may want to clean-up different entities created for your testing.
-
-If you want to delete your test project, call [**impt test delete**](./CommandsManual.md#test-run) command from the test project home. It deletes [Test Configuration File](./CommandsManual.md#test-configuration-file), Builder cache directory (if exists), github credentials file (if exists), Builder variables file (if exists), `./build` folder created in debug mode (if exists).
+If you want to delete your test project, call [**impt test delete**](./CommandsManual.md#test-run) command from the test project home. It deletes [Test Configuration File](./CommandsManual.md#test-configuration-file), Builder cache directory and debug information. By specifying additional options you may delete the github credentials file, the file with Builder variables and impCentral API entities (Device Group, Deployments, Product) which were used or created during the testing. See the [command's spec](./CommandsManual.md#test-delete) for the details.
 
 *Example:*  
 **TODO** - screenshot   
 
-If you want to fully delete the Device Group which you used for the testing, call [**impt dg delete**](./CommandsManual.md#dg-delete) command as `impt dg delete --dg <DEVICE_GROUP_IDENTIFIER> --builds --force`. It makes a full clean-up of all impCentral entities created during your testing - unassigns all devices from the Device Group, deletes all builds created for the Device Group, deletes the Device Group itself. **TODO** - what about adding this as an option to test delete command?
+Alternatively, you may fully delete the Device Group which you used for the testing by calling the [**impt dg delete**](./CommandsManual.md#dg-delete) command as `impt dg delete --dg <DEVICE_GROUP_IDENTIFIER> --builds --force`. It makes a full clean-up of all impCentral entities created during your testing - unassigns all devices from the Device Group, deletes all builds created for the Device Group, deletes the Device Group itself.
 
 *Example:*  
 **TODO** - screenshot   
