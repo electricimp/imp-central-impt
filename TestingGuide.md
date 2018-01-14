@@ -30,6 +30,7 @@ The main differences to the [previous version](https://github.com/electricimp/im
 This guide contains two main parts:
 - explanation of how to [write tests](#writing-tests).
 - explanation of how to [use tests: configure and run](#using-tests).
+**TODO**
 
 The main terms:
 
@@ -63,9 +64,7 @@ Other impt commands may also be needed during a testing process. For example, co
 
 ### Test Session
 
-**TODO**
-
-Test session is running of a set of tests from one test file on one device. That may be all tests from all test cases of the test file or a subset of all tests. Running the same set of tests on another device is another test session.
+Test session is a run of a set of tests from one test file on one device. That may be all tests from all test cases of the test file or a subset of all tests in the test file. Running the same set of tests on another device is another test session.
 
 Test session is considered failed if at least one test fails.
 
@@ -83,20 +82,23 @@ The main steps you need to perform in order to write tests:
   - A file is treated as test file for IMP agent if `agent` is present in the file name. Otherwise, the file is treated as test file for IMP device.
   - By default, all test cases from a test file run either on IMP device or on IMP agent. If your test cases are intended to run on both the IMP device and its IMP agent, there is a way to organize this which is described [here](#tests-for-bi-directional-device-agent-communication).
   - A test configuration has a pattern for location and names of the test files included into the test project. You specifies this pattern during [test configuration creation or updating](#test-configuration). You should have this in mind when naming your test files.
+  - Note, the files are chosen for execution by the tool in an arbitrary order.
 
 3. Add test cases into your test files.
 
   - Test case is a class inherited from the *ImpTestCase* class defined by the [*impUnit*](https://github.com/electricimp/impUnit) framework.
   - A test file may have several test cases.
   - There are no rules for test case naming. But there is a feature of the [running selective tests](#running-selective-tests). You may have it in mind when naming your test cases. Test cases may have identical names if they are in different test files.
+  - Note, the test cases from one test file are chosen for execution by the tool in an arbitrary order.
 
 4. Add and implement test methods (tests) in your test cases.
 
   - Every test method name should start with `test`. There are no other rules for test method naming. But there is a feature of the [running selective tests](#running-selective-tests). You may have it in mind when naming your test methods. Test methods may have identical names if they are in different test cases.
   - A test case may have several test methods (tests).
   - Additionally, any test case may have *setUp()* and *tearDown()* methods:
-    - *setUp()* method may be used to perform the environment setup before execution the tests of the test case.
-    - *tearDown()* method may be used to clean-up the environment after execution the tests of the test case.
+    - if exists, *setUp()* is called by the tool before any other methods of the test case. It may be used to perform the environment setup before execution the tests of the test case.
+    - if exists, *tearDown()* is called by the tool after all other methods of the test case. It may be used to clean-up the environment after execution the tests of the test case.
+  - Note, all other test methods of one test case are chosen for execution by the tool in an arbitrary order. I.e. your tests should be independent and do not assume any particular order of execution.
 
 A test method may be designed as synchronous (by default) or [asynchronous](#asynchronous-testing).
 
@@ -417,7 +419,7 @@ this.assertThrowsError(function () {
 
 There are two ways to display diagnostic/informational messages to the console from your tests:
 - call `this.info(<message>);` from a test method, as many times as you need/want.
-- call `return <return_value>;` from a test method. The returned value will be displayed, if not `null` and the test succeeds. 
+- call `return <return_value>;` from a test method. The returned value will be displayed on the console, if not `null` and the test succeeds. 
 
 Examples of tests output are provided in the [running tests section](#running-tests).
 
@@ -484,6 +486,8 @@ These are the main steps you should perform in order to prepare your devices and
 
 2. Obtain Device Group. If you already have/know a Device Group, notice it's Id or Name. If you do not have a Device Group, create a new one by [**impt dg create**](./CommandsManual.md#device-group-create) command. You need to specify the Product when creating the Device Group.
 
+Theoretically, you may try to use Device Group of any [type](./CommandsManual#device-group-type). Practically, it is recommended to use Device Group of the *development* type.
+
 *Example:*  
 **TODO** - screenshot   
 
@@ -548,10 +552,15 @@ To run the tests of your configured test project call [**impt test run**](./Comm
 
 By default, the tool searches for all test files according to the file names and/or patterns specified in the [test configuration](#test-configuration). The search starts from the test project home and includes all subdirectories. The tool looks for all test cases in the found files. All test methods in all found test cases are considered as tests for execution. For a particular run you may select a subset of test files, test cases, test methods by specifying `--tests` option. See the details [here](#running-selective-tests).
 
-The selected tests are executed in an arbitrary order. (**TODO** tests? test cases? or test files?). The tests run on all devices which are currently assigned to the Device Group specified in the [test configuration](#test-configuration). First - all tests run on one device, then - on a second one, etc. (**TODO** correct?) The order of devices - **TODO** - maybe explain all the above using a test session term (?)
+Every selected test file is a source for build (Deployment). Finally, there are as many different builds as the number of the selected test files for execution. Test files (builds) run in an arbitrary order.
 
-Every test is treated as failed if an error has been thrown. Otherwise the test is treated as passed.
-**TODO** - Explain about test-on-fail, timeout, allow-disconnect.
+Every test file (build) runs on all devices currently assigned to the Device Group specified in the [test configuration](#test-configuration) one by one - on one device, then on the second one, etc. Devices are chosen in an arbitrary order. A test file (build) running on one device is called a test session. After the build finished on the last device, the next test file (build) starts running on the same set of devices, again one by one.
+
+A build includes the selected set of test cases and tests from a selected test file. It may be all test cases with all tests or a subset of test cases / subset of tests as [defined](#running-selective-tests) by `--tests` option. The selected test cases are executed in an arbitrary order. The selected tests of a test case are executed in an arbitrary order.
+
+Every test is treated as failed if an error has been thrown. Otherwise the test is treated as passed. If at least one test in a test session fails, the test session is treated as failed.
+
+If the [test configuration](#test-configuration) has the `stop-on-fail` setting set to `true`, the whole tests execution is stopped after the first failed test. If a timeout occurs during a test, the whole tests execution is stopped irrespective of the `stop-on-fail` setting. The timeout is defined in the [test configuration](#test-configuration).
 
 You may clear the [Builder cache](#builder-cache) by `--clear-cache` option. The cache, if existed, will be deleted before running the tests. And, if the Builder cache is enabled in the [test configuration](#test-configuration), it will be re-created during the tests running.
 
@@ -564,7 +573,7 @@ You may run the tests in the [debug mode](#debug-mode) by specifying `--debug` o
 
 `--tests <testcase_pattern>` option of the [**impt test run**](./CommandsManual.md#test-run) command allows to select specific test files, test cases, test methods for execution. The syntax of `<testcase_pattern>` is the following `[testFile][:testCase][::testMethod]`, where:
 
-- `testFile` - name of a test file. May include a path. (**TODO**) May include [Regular Expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions) like `.*`, etc. The specified file(s) will be selected from all files which correspond to the file names and/or patterns defined in the [test configuration](#test-configuration). If `testFile` is ommited, all files, which correspond to the file names and/or patterns defined in the [test configuration](#test-configuration), are assumed.
+- `testFile` - name of a test file. May include a relative path. May include [Regular Expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions) like `.*`, etc. The specified file(s) will be selected from all files which correspond to the file names and/or patterns defined in the [test configuration](#test-configuration). If `testFile` is ommited, all files, which correspond to the file names and/or patterns defined in the [test configuration](#test-configuration), are assumed.
 
 - `testCase` - name of a test case. Should be fully qualified. Test cases with an identical name may exist in different test files, in this situation all of them will be selected if the files are selected.
 
@@ -607,7 +616,7 @@ In this case:
 You may run the tests in the debug mode by specifying `--debug` option of the [**impt test run**](./CommandsManual.md#test-delete) command. It may be useful for analyzing failures. In this mode:
 - All communications with the [impCentral API](https://apidoc.electricimp.com) are displayed.
 - All communications with the [impUnit test framework](https://github.com/electricimp/impUnit) are displayed.
-- IMP device and IMP agent code of the running build are stored in the `./build` folder inside the test project home. (**TODO**)
+- IMP device and IMP agent code of all the running builds are stored in the `./build` folder inside the test project home.
 
 *Example:*  
 **TODO** - screenshot   
