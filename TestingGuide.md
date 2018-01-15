@@ -170,14 +170,14 @@ class MyTestCase extends ImpTestCase {
 
     function testMe() {
         local myFunc = null;
-        return Promise(function(ok, err) {
+        return Promise(function(resolve, reject) {
             myFunc = function() {
                 if (_myVar == null) {
                     imp.wakeup(1.0, myFunc);
                 } else if (_myVar == "Hello from IMP Device") {
-                    ok();
+                    resolve();
                 } else {
-                    err();
+                    reject();
                 }
             }.bindenv(this);
             imp.wakeup(1.0, myFunc);
@@ -203,7 +203,7 @@ A test method should return an instance of [Promise](https://github.com/electric
 
 ```squirrel
 function testSomethingAsynchronously() {
-    return Promise(function (resolve, reject){
+    return Promise(function (resolve, reject) {
         resolve("It's all good, man!");
     });
 }
@@ -433,9 +433,10 @@ this.assertThrowsError(function () {
 
 ### Diagnostic Messages
 
-There are two ways to display diagnostic/informational messages to the console from your tests:
+There are three ways to display diagnostic/informational messages to the console from your tests:
 - call `this.info(<message>);` from a test method, as many times as you need/want.
-- call `return <return_value>;` from a test method. The returned value will be displayed on the console, if not `null` and the test succeeds. 
+- for synchronous tests call `return <return_value>;` from a test method. The returned value will be displayed on the console, if not `null` and the test succeeds. 
+- for asynchronous tests call Promise resolution or rejection methods with a value `resolve(<return_value>);` or `reject(<return_value>);`. The returned value will be displayed on the console, if not `null`. 
 
 Examples of tests output are provided in the [running tests section](#running-tests).
 
@@ -448,7 +449,7 @@ The utility file `myFile.nut` contains the following code:
 // (optional) Async version, can also be synchronous
 
 function setUp() {
-    return Promise(function (resolve, reject){
+    return Promise(function (resolve, reject) {
         resolve("We're ready");
     }.bindenv(this));
 }
@@ -469,7 +470,7 @@ class TestCase1 extends ImpTestCase {
 
     // Async test method
     function testSomethingAsync() {
-        return Promise(function (resolve, reject){
+        return Promise(function (resolve, reject) {
             // Return in 2 seconds
             imp.wakeup(2 /* 2 seconds */, function() {
                 resolve("something useful");
