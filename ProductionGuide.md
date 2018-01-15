@@ -6,22 +6,34 @@ First of all, please read the root [readme file](./README.md) that covers all ba
 
 The full impt tool commands specification is described in the [impt Commands Manual](./CommandsManual.md).
 
+**TODO - not completed yet**
+
+**TODO - this guide should be carefully reviewed and maybe fully re-written by EI**
+
 Table Of Contents:
 - **TODO**
 
 ## Involved Entities
 
-These are the impCentral API entities which are involved into factory and production processes:
+There are several impCentral API entities which are involved into factory and production processes.
 
 ### Product
 
-Usually, you need one Product entity for your whole product. One Product may include all components for development, testing, factory, production, support of different versions of your product, etc.
+Usually, you need one Product entity for your whole product. One Product may include all software components needed for development, testing, factory, production, support of different versions of your product, etc.
 
 You can create Product by [**impt product create**](./CommandsManual.md#product-create) command.
 
 ### Device Group
 
-Device Group is, in fact, an entity which encapsulates a particular target and version of your application - a version under development, a version under testing, a factory firmware version, a version for production, etc.
+Device Group is, in fact, an entity which encapsulates a particular software component of your product - an application, a factory firmware. Different Device Groups may cover different versions of your software components - a version which is currently under development, a version which is currently under testing, different versions in production, etc. When a new software build (Deployment) is created it is intended to one and only one concrete Device Group.
+
+Device Group may be of different [types](./CommandsManual.md#device-group-type):
+- *development*, *pre-factory* and *pre-production* types of Device Group are used during [development process](./DevelopmentGuide.md).
+- *factory* and *production* types of Device Group are used during factory and production processes.
+
+describe the meaning of production DGs - versions...
+
+factory DG - production target
 
 ### Deployment
 
