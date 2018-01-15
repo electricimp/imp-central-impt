@@ -273,7 +273,7 @@ There may be some limitations which you can overcome - see [here](#github-creden
 
 #### Builder Cache
 
-Builder cache is intended to improve the build time and reduce the number of requests to external resources. It is only possible to cache external libraries. Builder stores the cache in the `.builer-cache` folder inside the test project home. The cache is stored for up to 24 hours.
+Builder cache is intended to improve the build time and reduce the number of requests to external resources. It is only possible to cache external libraries. Builder stores the cache in the `.builder-cache` folder inside the test project home. The cache is stored for up to 24 hours.
 
 Builder cache is disabled by default. It can be enabled during [test configuration creation or updating](#test-configuration). Also it is possible to clear the cache when you [run the tests](#running-tests).
 
