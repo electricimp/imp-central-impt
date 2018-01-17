@@ -214,7 +214,7 @@ Note, [**impt project delete**](./CommandsManual.md#project-delete) command neve
 
 1. Write the code of your IMP application in "myapp.device.nut" and "myapp.agent.nut" files.
 
-1. BlinkUp a device which you plan to use for your application debugging.
+1. [BlinkUp](https://developer.electricimp.com/blinkup) a device which you plan to use for your application debugging.
 
 1. List all your unassigned devices and find the needed one.  
   `impt device list --unassigned`  
@@ -240,12 +240,14 @@ Note, [**impt project delete**](./CommandsManual.md#project-delete) command neve
   
 ### Develop Factory Firmware
 
+Note, you need to have appropriate permissions to operate with the impCentral API entities related to pre-factory and pre-production processes.
+
 1. Create a new directory called, for example, "factory".
 
 1. Go to the new directory.
 
 1. Create a project for a [factory firmware](https://developer.electricimp.com/examples/factoryfirmware) which is linked to the existent Product "MyProduct": a new Device Group "MyPreFactoryDG" in that Product, a new Device Group "MyPreProductionDG" that will be a production target, empty files "factory.device.nut" and "factory.agent.nut", [Project File](./CommandsManual.md#project-file).   
-  `impt project create --product MyProduct --name MyPreFactoryDG --descr "Factory Firmware" --target MyPreProductionDG --create-target --device-file factory.device.nut --agent-file factory.agent.nut --create-files`  
+  `impt project create --pre-factory --product MyProduct --name MyPreFactoryDG --descr "Factory Firmware" --target MyPreProductionDG --create-target --device-file factory.device.nut --agent-file factory.agent.nut --create-files`  
   **TODO** screenshot - the same command with aliases  
 
 1. Copy your IMP application's build tagged as "MyRC1" to "MyPreProductionDG" Device Group. It will be a production code for devices blessed by your factory firmware. Attributes of the build are not copied.  
@@ -254,7 +256,7 @@ Note, [**impt project delete**](./CommandsManual.md#project-delete) command neve
 
 1. Write the code of your [factory firmware](https://developer.electricimp.com/examples/factoryfirmware) in "factory.device.nut" and "factory.agent.nut" files.
 
-1. BlinkUp a device which you plan to use as a pre-factory fixture device.
+1. [BlinkUp](https://developer.electricimp.com/blinkup) a device which you plan to use as a pre-factory fixture device.
 
 1. List all your unassigned devices and find the needed one.  
   `impt device list --unassigned`  
