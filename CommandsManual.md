@@ -558,8 +558,7 @@ Updates Name of the specified Device.
 
 **impt dg builds \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--unflag] \[--unflag-old] \[--remove] \[--confirmed] \[--debug] \[--help]**
 
-Updates and/or deletes builds (Deployments) of the specified Device Group.
-At the end of the command execution information about all Deployments of the Device Group is displayed (as by [**impt build list**](#build-list) command).
+Updates and/or deletes builds (Deployments) of the specified Device Group and displays information about all Deployments of the Device Group at the end of the command execution (as by [**impt build list**](#build-list) command).
 
 User is asked to confirm the operation if any Deployment is going to be deleted (confirmed automatically with **--confirmed** option).
 
@@ -586,7 +585,7 @@ Fails if Device Group with the specified Name already exists in the specified Pr
 | --dg-type | -y | no | yes | [Type](#device-group-type) of the Device Group. If not specified, *development* type is assumed. If the type value is invalid, the command fails. |
 | --product | -p | yes/[project](#project-file) | yes | [Product Identifier](#product-identifier) of the Product which the Device Group belongs to. If not specified, the Product referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
 | --descr | -s | no | yes | Description of the Device Group. |
-| --target | -t | no | yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the being created Device Group. May be specified for the being created Device Group of the [type](#device-group-type) *factory* or *pre-factory* only. The target Device Group must be of the [type](#device-group-type) *production* or *pre-production* correspondingly and belongs to the specified Product. Otherwise the command fails. |
+| --target | -t | no | yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the being created Device Group. Should be specified for the being created Device Group of the [type](#device-group-type) *factory* or *pre-factory* only. The target Device Group must be of the [type](#device-group-type) *production* or *pre-production* correspondingly and belongs to the specified Product. Otherwise the command fails. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
