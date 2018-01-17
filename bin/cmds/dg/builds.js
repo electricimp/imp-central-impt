@@ -30,7 +30,8 @@ const Options = require('../../../lib/util/Options');
 const COMMAND = 'builds';
 const COMMAND_SECTION = 'dg';
 const COMMAND_SHORT_DESCR = 'Updates/deletes builds of the specified Device Group.';
-const COMMAND_DESCRIPTION = 'Updates and/or deletes builds (Deployments) of the specified Device Group.';
+const COMMAND_DESCRIPTION = 'Updates and/or deletes builds (Deployments) of the specified Device Group' + 
+    ' and displays information about all Deployments of the Device Group at the end of the command execution.';
 
 exports.command = COMMAND;
 

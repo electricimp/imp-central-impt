@@ -62,7 +62,7 @@ exports.builder = function (yargs) {
         [Options.TARGET] : {
             demandOption : false,
             describe : Util.format('Device Group Identifier of the production target Device Group for the being created Device Group.' +
-                ' May be specified for the being created Device Group of the type %s or %s only.' +
+                ' Should be specified for the being created Device Group of the type %s or %s only.' +
                 ' The target Device Group must be of the type %s or %s correspondingly and belongs to the specified Product.',
                 Options.DG_TYPE_FACTORY, Options.DG_TYPE_PRE_FACTORY, Options.DG_TYPE_PRODUCTION, Options.DG_TYPE_PRE_PRODUCTION)
         },
