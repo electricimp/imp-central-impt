@@ -48,7 +48,4 @@ Yargs
         }
         process.exit(1);
     })
-    .check(function (argv) {
-        return Options.checkCommandArgs(argv);
-    })
     .argv

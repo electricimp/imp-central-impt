@@ -43,11 +43,13 @@ exports.builder = function (yargs) {
         [Options.PRODUCT_IDENTIFIER] : {
             demandOption : false,
             type : 'array',
+            elemType : 'string',
             describe : 'Lists Webhooks created for Device Groups which belong to the specified Product only.'
         },
         [Options.DEVICE_GROUP_IDENTIFIER] : {
             demandOption : false,
             type : 'array',
+            elemType : 'string',
             describe : 'Lists Webhooks created for the specified Device Group only.'
         },
         [Options.DEVICE_GROUP_TYPE] : {
@@ -57,18 +59,23 @@ exports.builder = function (yargs) {
         [Options.URL] : {
             demandOption : false,
             describe : 'Lists Webhooks with the specified target URL only.',
-            type : 'array'
+            type : 'array',
+            elemType : 'string'
         },
         [Options.EVENT] : {
             demandOption : false,
             describe : 'Lists Webhooks for the specified event only.',
-            type : 'array'
+            type : 'array',
+            elemType : 'string'
         },
         [Options.DEBUG] : false
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
         .options(options)
+        .check(function (argv) {
+            return Options.checkOptions(argv, options);
+        })
         .strict();
 };
 

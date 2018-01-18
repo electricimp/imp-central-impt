@@ -45,11 +45,13 @@ exports.builder = function (yargs) {
         [Options.PRODUCT_IDENTIFIER] : {
             demandOption : false,
             type : 'array',
+            elemType : 'string',
             describe : 'Lists builds deployed to Device Groups which belong to the specified Product only.'
         },
         [Options.DEVICE_GROUP_IDENTIFIER] : {
             demandOption : false,
             type : 'array',
+            elemType : 'string',
             describe : 'Lists builds deployed to the specified Device Group only.'
         },
         [Options.DEVICE_GROUP_TYPE] : {
@@ -59,6 +61,7 @@ exports.builder = function (yargs) {
         [Options.SHA] : {
             demandOption : false,
             type : 'array',
+            elemType : 'string',
             describe : 'Lists builds with the specified SHA only.'
         },
         [Options.TAG] : {
@@ -69,26 +72,28 @@ exports.builder = function (yargs) {
             demandOption : false,
             describe : 'Lists builds with the flagged attribute set to true only.',
             nargs: 0,
+            noFalseValue: true,
             _usage: ''
         },
-        [Options.UNFLAGGED] : false,
-        [Options.NON_ZOMBIE] : false,
-        [Options.ZOMBIE] : false,
+        [Options.UNFLAGGED] : {
+            demandOption : false,
+            noFalseValue: true
+        },
+        [Options.NON_ZOMBIE] : {
+            demandOption : false,
+            noFalseValue: true
+        },
+        [Options.ZOMBIE] : {
+            demandOption : false,
+            noFalseValue: true
+        },
         [Options.DEBUG] : false
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
         .options(options)
         .check(function (argv) {
-            const options = new Options(argv);
-            const wrongOption = options.flagged === false ?
-                Options.FLAGGED :
-                options.unflagged === false ?
-                    Options.UNFLAGGED : null;
-            if (wrongOption) {
-                return new Errors.CommandSyntaxError(UserInteractor.ERRORS.CMD_INCORRECT_VALUE, wrongOption, false);
-            }
-            return true;
+            return Options.checkOptions(argv, options);
         })
         .strict();
 };

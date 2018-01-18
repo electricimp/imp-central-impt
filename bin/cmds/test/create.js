@@ -60,6 +60,7 @@ exports.builder = function (yargs) {
         },
         [Options.TIMEOUT] : {
             demandOption : false,
+            positiveInteger : true,
             default : 30
         },
         [Options.STOP_ON_FAIL] : {
@@ -95,9 +96,7 @@ exports.builder = function (yargs) {
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
         .options(options)
         .check(function (argv) {
-            const options = new Options(argv);
-            const check = Options.checkPositiveInteger(options.timeout, Options.TIMEOUT);
-            return check === null ? true : check;
+            return Options.checkOptions(argv, options);
         })
         .strict();
 };

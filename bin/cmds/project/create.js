@@ -82,11 +82,11 @@ exports.builder = function (yargs) {
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
         .options(options)
         .check(function (argv) {
-            const options = new Options(argv);
-            if (options.preFactory && !options.target || !options.preFactory && options.target) {
+            const opts = new Options(argv);
+            if (opts.preFactory && !opts.target || !opts.preFactory && opts.target) {
                 return new Errors.CommandSyntaxError(UserInteractor.ERRORS.CMD_COOPERATIVE_OPTIONS, Options.PRE_FACTORY, Options.TARGET);
             }
-            return true;
+            return Options.checkOptions(argv, options);
         })
         .strict();
 };

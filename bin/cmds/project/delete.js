@@ -59,11 +59,7 @@ exports.builder = function (yargs) {
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
         .options(options)
         .check(function (argv) {
-            const options = new Options(argv);
-            if (options.product && options.deviceGroup) {
-                return new Errors.CommandSyntaxError(UserInteractor.ERRORS.CMD_MUTUALLY_EXCLUSIVE_OPTIONS, Options.PRODUCT, Options.DEVICE_GROUP);
-            }
-            return true;
+            return Options.checkOptions(argv, options);
         })
         .strict();
 };

@@ -73,17 +73,17 @@ exports.builder = function (yargs) {
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, formattedCommandOptions))
         .options(options)
         .check(function (argv) {
-            const options = new Options(argv);
-            if (!options.user && !options.loginKey) {
+            const opts = new Options(argv);
+            if (!opts.user && !opts.loginKey) {
                 return new Errors.CommandSyntaxError(UserInteractor.ERRORS.CMD_REQUIRED_OPTIONS, Options.USER, Options.LOGIN_KEY);
             }
-            if (options.user && options.loginKey) {
+            if (opts.user && opts.loginKey) {
                 return new Errors.CommandSyntaxError(UserInteractor.ERRORS.CMD_MUTUALLY_EXCLUSIVE_OPTIONS, Options.USER, Options.LOGIN_KEY);
             }
-            if (options.user && !options.password) {
+            if (opts.user && !opts.password) {
                 return new Errors.CommandSyntaxError(UserInteractor.ERRORS.CMD_REQUIRED_OPTION, Options.PASSWORD);
             }
-            return true;
+            return Options.checkOptions(argv, options);
         })
         .strict();
 };

@@ -42,11 +42,13 @@ exports.builder = function (yargs) {
         [Options.DEVICE_IDENTIFIER] : {
             demandOption : false,
             type : 'array',
+            elemType : 'string',
             describe : 'Device Identifier of the Device which logs will be added to the log stream.'
         },
         [Options.DEVICE_GROUP_IDENTIFIER] : {
             demandOption : false,
             type : 'array',
+            elemType : 'string',
             describe : Util.format('Device Group Identifier: Device Group Id or Device Group name.' +
                 ' Logs from all Devices assigned to the specified Device Groups will be added to the log stream.' +
                 ' --%s and --%s options are cumulative. If the both --%s and --%s options are not specified but there is' +
@@ -59,6 +61,9 @@ exports.builder = function (yargs) {
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
         .options(options)
+        .check(function (argv) {
+            return Options.checkOptions(argv, options);
+        })
         .strict();
 };
 

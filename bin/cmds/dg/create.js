@@ -72,12 +72,12 @@ exports.builder = function (yargs) {
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
         .options(options)
         .check(function (argv) {
-            const options = new Options(argv);
-            if (!options.target && Options.isProductionTargetRequired(options.deviceGroupType)) {
+            const opts = new Options(argv);
+            if (!opts.target && Options.isProductionTargetRequired(opts.deviceGroupType)) {
                 return new Errors.ImptError(UserInteractor.ERRORS.CMD_TARGET_REQUIRED,
-                    Options.TARGET, Options.getDeviceGroupTypeName(options.deviceGroupType));
+                    Options.TARGET, Options.getDeviceGroupTypeName(opts.deviceGroupType));
             }
-            return true;
+            return Options.checkOptions(argv, options);
         })
         .strict();
 };

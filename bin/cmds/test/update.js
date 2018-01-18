@@ -61,7 +61,10 @@ exports.builder = function (yargs) {
             default : undefined,
             _usage: '[<agent_file>]'
         },
-        [Options.TIMEOUT] : false,
+        [Options.TIMEOUT] : {
+            demandOption : false,
+            positiveInteger : true
+        },
         [Options.STOP_ON_FAIL] : false,
         [Options.ALLOW_DISCONNECT] : false,
         [Options.BUILDER_CACHE] : {
@@ -99,9 +102,7 @@ exports.builder = function (yargs) {
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
         .options(options)
         .check(function (argv) {
-            const options = new Options(argv);
-            const check = Options.checkPositiveInteger(options.timeout, Options.TIMEOUT);
-            return check === null ? true : check;
+            return Options.checkOptions(argv, options);
         })
         .strict();
 };

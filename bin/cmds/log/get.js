@@ -45,18 +45,21 @@ exports.builder = function (yargs) {
                 ' Project File in the current directory, then this Device is assumed' +
                 ' (if no Project File or the Device Group has zero or more than one Devices, the command fails).'
         },
-        [Options.PAGE_SIZE] : false,
-        [Options.PAGE_NUMBER] : false,
+        [Options.PAGE_SIZE] : {
+            demandOption : false,
+            positiveInteger : true
+        },
+        [Options.PAGE_NUMBER] : {
+            demandOption : false,
+            positiveInteger : true
+        },
         [Options.DEBUG] : false
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
         .options(options)
         .check(function (argv) {
-            const options = new Options(argv);
-            const check = Options.checkPositiveInteger(options.pageSize, Options.PAGE_SIZE) ||
-                Options.checkPositiveInteger(options.pageNumber, Options.PAGE_NUMBER);
-            return check === null ? true : check;
+            return Options.checkOptions(argv, options);
         })
         .strict();
 };

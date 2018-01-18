@@ -43,6 +43,7 @@ exports.builder = function (yargs) {
         [Options.PRODUCT_IDENTIFIER] : {
             demandOption : false,
             type : 'array',
+            elemType : 'string',
             describe : 'Lists Device Groups which belong to the specified Product only.'
         },
         [Options.DEVICE_GROUP_TYPE] : {
@@ -54,6 +55,9 @@ exports.builder = function (yargs) {
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
         .options(options)
+        .check(function (argv) {
+            return Options.checkOptions(argv, options);
+        })
         .strict();
 };
 

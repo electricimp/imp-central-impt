@@ -45,41 +45,42 @@ exports.builder = function (yargs) {
         [Options.PRODUCT_IDENTIFIER] : {
             demandOption : false,
             type : 'array',
+            elemType : 'string',
             describe : 'Lists Devices assigned to Device Groups which belong to the specified Product only.'
         },
         [Options.DEVICE_GROUP_IDENTIFIER] : {
             demandOption : false,
             type : 'array',
+            elemType : 'string',
             describe : 'Lists Devices assigned to the specified Device Group only.'
         },
         [Options.DEVICE_GROUP_TYPE] : {
             demandOption : false,
             describe : 'Lists Devices assigned to Device Groups of the specified type only.'
         },
-        [Options.UNASSIGNED] : false,
-        [Options.ASSIGNED] : false,
-        [Options.ONLINE] : false,
-        [Options.OFFLINE] : false,
+        [Options.UNASSIGNED] : {
+            demandOption : false,
+            noFalseValue: true
+        },
+        [Options.ASSIGNED] :  {
+            demandOption : false,
+            noFalseValue: true
+        },
+        [Options.ONLINE] :  {
+            demandOption : false,
+            noFalseValue: true
+        },
+        [Options.OFFLINE] :  {
+            demandOption : false,
+            noFalseValue: true
+        },
         [Options.DEBUG] : false
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
         .options(options)
         .check(function (argv) {
-            const options = new Options(argv);
-            const wrongOption = options.unassigned === false ?
-                Options.UNASSIGNED :
-                options.assigned === false ?
-                    Options.ASSIGNED : 
-                    options.online === false ?
-                        Options.ONLINE :
-                        options.offline === false ?
-                            Options.OFFLINE :
-                            null;
-            if (wrongOption) {
-                return new Errors.CommandSyntaxError(UserInteractor.ERRORS.CMD_INCORRECT_VALUE, wrongOption, false);
-            }
-            return true;
+            return Options.checkOptions(argv, options);
         })
         .strict();
 };
