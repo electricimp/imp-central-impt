@@ -12,8 +12,11 @@ Note, you need to have appropriate permissions to operate with the [impCentral A
 
 **TODO - this guide should be carefully reviewed and maybe fully re-written by EI. Screenshots may be added by those who can emulate factory process.**
 
-Table Of Contents: / Process
-- **TODO**
+In general, the impt tool may be involved into the following steps of your product development, manufacturing and production:
+- [Product creation](#product).
+- 
+
+You may use scripts on top of the impt tool commands to automate some of the operations.
 
 ## Product
 
@@ -95,7 +98,7 @@ You can list the devices currently assigned to your *production* Device Group, a
 
 ## Webhooks
 
-You may control your factory and production processes by using [Webhooks](https://developer.electricimp.com/manufacturing/webhooks). There are three types of Webhooks:
+You may control your factory, production and post-production activities by using [Webhooks](https://developer.electricimp.com/manufacturing/webhooks). There are three types of Webhooks:
 - *blessing* - it is called when a production device has been successfully blessed.
 - *blinkup* - it is called when an end-user successfully activates a production device using BlinkUp.
 - *deployment* - it is called when a new code is deployed to a Device Group.
@@ -115,9 +118,7 @@ impCentral API logging is supported for Factory BlinkUp Fixtures. You can use [L
 
 impCentral API logging is not supported for production devices. Use [other ways](https://developer.electricimp.com/resources/monitoringapplication/) to monitor the application's behavior on them.
 
-## Post-Production Activities
-
-### New Versions
+## New Versions
 
 You may develop new versions of your application. To deploy them on the production devices you can:
 - create a new build (Deployment) for your *production* Device Group by [**impt build copy**](./CommandsManual.md#build-copy) command,
@@ -133,10 +134,24 @@ Alternatively, you may want to switch not all but a subset of production devices
 
 [**impt dg reassign**](./CommandsManual.md#device-group-reassign) command reassigns all devices from one Device Group to another.
 
-### Unblessing
+## Unblessing
 
+You may unassign a device from *production* Device Group if you have unbound key for that. Specify that key as a value of `--unbound` option of the [**impt device unassign**](./CommandsManual.md#device-unassign) command. The device becomes unblessed.
 
- min-supported deployments, conditional restart, flagged
+*Example:*  
+`impt device unassign --device <device_id> --unbond <unbond_key>`  
 
+## Cleaning Up
 
+At some time you may want to clean up old and unused entities created during your factory or production processes - not needed Device Groups, old Deployments, obsolete Webhooks, etc. Pay attention to the following commands:
+- [**impt build cleanup**](./CommandsManual.md#build-cleanup)
+- [**impt dg builds**](./CommandsManual.md#device-group-builds)
+- [**impt dg delete**](./CommandsManual.md#device-group-delete)
+- [**impt webhook delete**](./CommandsManual.md#webhook-delete)
 
+Note, the [impCentral API](https://apidoc.electricimp.com/) provides the following features intended to protect important entities from unintentional deletion or other accidental damages - *flagged* Deployment, *min supported* Deployment, *conditional* restart and other.
+
+To delete the whole Product with all Device Groups and Deployments you can use [**impt product delete --builds --force**](./CommandsManual.md#product-delete) command.
+
+*Example:*  
+`impt product delete --product MyProduct --builds --force`  
