@@ -6,15 +6,25 @@ First of all, please read the root [readme file](./README.md) that covers all ba
 
 The full impt tool commands specification is described in the [impt Commands Manual](./CommandsManual.md).
 
-Note, you need to have appropriate permissions to operate with the [impCentral API](https://apidoc.electricimp.com/) entities related to factory and production processes.
-
-**TODO - not completed yet**
-
 **TODO - this guide should be carefully reviewed and maybe fully re-written by EI. Screenshots may be added by those who can emulate factory process.**
 
-In general, the impt tool may be involved into the following steps of your product development, manufacturing and production:
-- [Product creation](#product).
-- 
+Note, you need to have appropriate permissions to operate with the [impCentral API](https://apidoc.electricimp.com/) entities related to factory and production processes.
+
+In general, the impt tool may be used for the following operations during your product development, manufacturing and production:
+- [Product creation](#product)
+- Development process (covered by the [Development Guide](./DevelopmentGuide.md))
+- [Device Groups creation and management](#device-groups)
+  - [Production Device Groups](#production-device-groups)
+  - [Factory Device Groups](#factory-device-groups)
+- [Deployments creation](#deployments)
+- [Devices management](#devices)
+  - [Factory BlinkUp Fixtures](#factory-blinkup-fixtures)
+  - [Production Devices](#production-devices)
+  - [Unblessing production devices](#unblessing)
+- [Webhooks creation and management](#webhooks)
+- [Logging](#logging)
+- [New Versions creation](#new-versions)
+- [Cleaning Up](#cleaning-up)
 
 You may use scripts on top of the impt tool commands to automate some of the operations.
 
@@ -96,6 +106,13 @@ You can list the devices currently assigned to your *production* Device Group, a
 *Example:*  
 `impt device list --dg MyProductionDG`  
 
+### Unblessing
+
+You may unassign a device from *production* Device Group if you have unbound key for that. Specify that key as a value of `--unbound` option of the [**impt device unassign**](./CommandsManual.md#device-unassign) command. The device becomes unblessed.
+
+*Example:*  
+`impt device unassign --device <device_id> --unbond <unbond_key>`  
+
 ## Webhooks
 
 You may control your factory, production and post-production activities by using [Webhooks](https://developer.electricimp.com/manufacturing/webhooks). There are three types of Webhooks:
@@ -133,13 +150,6 @@ Alternatively, you may want to switch not all but a subset of production devices
 - and then reassign the needed production devices to the new Device Group by [**impt device assign**](./CommandsManual.md#device-assign) command.
 
 [**impt dg reassign**](./CommandsManual.md#device-group-reassign) command reassigns all devices from one Device Group to another.
-
-## Unblessing
-
-You may unassign a device from *production* Device Group if you have unbound key for that. Specify that key as a value of `--unbound` option of the [**impt device unassign**](./CommandsManual.md#device-unassign) command. The device becomes unblessed.
-
-*Example:*  
-`impt device unassign --device <device_id> --unbond <unbond_key>`  
 
 ## Cleaning Up
 
