@@ -58,22 +58,10 @@ exports.builder = function (yargs) {
             demandOption : false,
             describe : 'Lists Devices assigned to Device Groups of the specified type only.'
         },
-        [Options.UNASSIGNED] : {
-            demandOption : false,
-            noFalseValue: true
-        },
-        [Options.ASSIGNED] :  {
-            demandOption : false,
-            noFalseValue: true
-        },
-        [Options.ONLINE] :  {
-            demandOption : false,
-            noFalseValue: true
-        },
-        [Options.OFFLINE] :  {
-            demandOption : false,
-            noFalseValue: true
-        },
+        [Options.UNASSIGNED] : false,
+        [Options.ASSIGNED] : false,
+        [Options.ONLINE] : false,
+        [Options.OFFLINE] : false,
         [Options.DEBUG] : false
     });
     return yargs

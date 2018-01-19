@@ -42,8 +42,10 @@ exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.GITHUB_CONFIG] : {
             demandOption : false,
-            nargs: 0,
+            nargs : 0,
             type : 'boolean',
+            noValue : true,
+            default : undefined,
             requiresArg : false,
             _usage: '',
             describe : 'Also deletes the github credentials file referenced by Test Configuration File.'
@@ -52,6 +54,8 @@ exports.builder = function (yargs) {
             demandOption : false,
             nargs: 0,
             type : 'boolean',
+            noValue : true,
+            default : undefined,
             requiresArg : false,
             _usage: '',
             describe : 'Also deletes the file with Builder variables referenced by Test Configuration File.'

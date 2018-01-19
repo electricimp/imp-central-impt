@@ -72,21 +72,12 @@ exports.builder = function (yargs) {
             demandOption : false,
             describe : 'Lists builds with the flagged attribute set to true only.',
             nargs: 0,
-            noFalseValue: true,
+            noValue: true,
             _usage: ''
         },
-        [Options.UNFLAGGED] : {
-            demandOption : false,
-            noFalseValue: true
-        },
-        [Options.NON_ZOMBIE] : {
-            demandOption : false,
-            noFalseValue: true
-        },
-        [Options.ZOMBIE] : {
-            demandOption : false,
-            noFalseValue: true
-        },
+        [Options.UNFLAGGED] : false,
+        [Options.NON_ZOMBIE] : false,
+        [Options.ZOMBIE] : false,
         [Options.DEBUG] : false
     });
     return yargs

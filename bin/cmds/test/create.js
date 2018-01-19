@@ -46,16 +46,12 @@ exports.builder = function (yargs) {
             demandOption : false,
             describe : 'A path to an optional file with IMP device source code that is deployed along with the tests.' +
                 ' A relative or absolute path can be used.',
-            requiresArg : false,
-            nargs: 0,
             default : undefined
         },
         [Options.AGENT_FILE] : {
             demandOption : false,
             describe : 'A path to an optional file with IMP agent source code that is deployed along with the tests.' +
                 ' A relative or absolute path can be used.',
-            requiresArg : false,
-            nargs: 0,
             default : undefined
         },
         [Options.TIMEOUT] : {
