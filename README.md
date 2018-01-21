@@ -76,22 +76,142 @@ Every command has `--help` option (`-h` option alias). If it is specified, any o
 
 *Example*  
 *List all command groups:*  
-**TODO** screenshot, leave only 3-4 first groups in the output
+```
+impt --help
+
+Usage: impt <command> [options]
+
+Commands:
+  impt auth      Authentication commands.
+  impt build     Build manipulation commands.
+  impt device    Device manipulation commands.
+  impt dg        Device Group manipulation commands.
+  impt log       Logs manipulation commands.
+  impt loginkey  Login Key manipulation commands.
+  impt product   Product manipulation commands.
+  impt project   Project manipulation commands.
+  impt test      Test manipulation commands.
+  impt webhook   Webhook manipulation commands.
+
+Options:
+  --help, -h  Displays description of the command. Ignores any other options.
+                                                                       [boolean]
+```
 
 *Example*  
 *List all commands in one group:*  
-**TODO** screenshot
+```
+impt product --help
+
+Usage: impt product <command> [options]
+
+Product manipulation commands.
+
+Commands:
+  impt product create  Creates a new Product.
+  impt product delete  Deletes the specified Product.
+  impt product info    Displays information about the specified Product.
+  impt product list    Displays information about all or filtered Products.
+  impt product update  Updates the specified Product.
+
+Options:
+  --help, -h  Displays description of the command. Ignores any other options.
+                                                                       [boolean]
+```
 
 *Example*  
-*Display a command description:*  
-**TODO** screenshot for a command with few options
+*Display a command description:*
+```
+impt product create --help
+
+Usage: impt product create --name <product_name> [--descr <product_description>]
+[--debug] [--help]
+
+Creates a new Product. Fails if Product with the specified Name already exists.
+
+Options:
+  --help, -h   Displays description of the command. Ignores any other options.
+                                                                       [boolean]
+  --name, -n   Name of the Product. Must be unique among all Products owned by
+               the logged-in account.                        [string] [required]
+  --descr, -s  Description of the Product.                              [string]
+  --debug, -z  Displays debug info of the command execution.           [boolean]
+```
 
 ## Debug
 
 Every command has `--debug` option (`-z` option alias). If it is specified, the tool displays debug information of the command execution, including impCentral API requests and responses.
 
 *Example*:  
-**TODO** screenshot with not a huge output
+```
+impt product create --name TestProduct --descr "My test product" --debug
+Doing the request with options:
+{
+  "url": "https://api.electricimp.com/v5/products",
+  "method": "POST",
+  "headers": {
+    "Content-type": "application/vnd.api+json",
+    "Authorization": "[hidden]"
+  },
+  "json": true,
+  "qs": null,
+  "body": {
+    "data": {
+      "type": "product",
+      "attributes": {
+        "name": "TestProduct",
+        "description": "My test product"
+      }
+    }
+  },
+  "qsStringifyOptions": {
+    "arrayFormat": "repeat"
+  }
+}
+
+Response code: 201
+Response headers: {
+  "date": "Sun, 21 Jan 2018 21:40:22 GMT",
+  "content-type": "application/vnd.api+json",
+  "content-length": "477",
+  "connection": "close",
+  "server": "nginx/1.4.6 (Ubuntu)",
+  "content-language": "en",
+  "x-node": "api03",
+  "accept": "application/vnd.api+json",
+  "x-ratelimit-limit": "40",
+  "x-ratelimit-reset": "1",
+  "x-ratelimit-remaining": "39",
+  "strict-transport-security": "max-age=1209600"
+}
+Response body: {
+  "data": {
+    "type": "product",
+    "id": "91f2e41a-3c5c-00bf-1ddd-1c0a2fdbeadd",
+    "links": {
+      "self": "https://api.electricimp.com/v5/products/91f2e41a-3c5c-00bf-1ddd-1c0a2fdbeadd"
+    },
+    "attributes": {
+      "name": "TestProduct",
+      "description": "My test product",
+      "created_at": "2018-01-21T21:40:22.631Z",
+      "updated_at": "2018-01-21T21:40:22.631Z"
+    },
+    "relationships": {
+      "owner": {
+        "type": "account",
+        "id": "c1d61eef-d544-4d09-c9dc-d53e6742cae3"
+      },
+      "creator": {
+        "type": "account",
+        "id": "c1d61eef-d544-4d09-c9dc-d53e6742cae3"
+      }
+    }
+  }
+}
+Product "TestProduct" is created successfully.
+IMPT COMMAND SUCCEEDS
+```
 
 ## Scripts Support
 
@@ -103,11 +223,19 @@ Output of a command execution contains one of the two predefined phrases - `IMPT
 
 *Example*  
 *A successful command execution:*  
-**TODO** screenshot - success command with --confirmed option
+```
+impt product delete --product TestProduct --confirmed
+Product "TestProduct" is deleted successfully.
+IMPT COMMAND SUCCEEDS
+```
 
 *Example*  
 *A failed command execution:*  
-**TODO** screenshot - failed command
+```
+impt product delete --product TestProduct --confirmed
+ERROR: Product "TestProduct" is not found.
+IMPT COMMAND FAILS
+```
 
 ## Authentication
 
@@ -145,27 +273,57 @@ At any time you can get known the login status related to any directory. Call th
 
 *Example*  
 *Global login:*  
-**TODO** screenshot - impt auth login --user <user_id> --pwd <password>
+```
+impt auth login --user username --pwd password
+Global login is successful.
+IMPT COMMAND SUCCEEDS
+```
 
 *Example*  
 *Local login using a login key, specifying a endpoint, without storing the login key:*  
-**TODO** screenshot - impt auth login --local --lk <login_key_id> --temp --endpoint https://api.electricimp.com/v5
+```
+impt auth login --local --lk 7d8e6670aa285e9d --temp --endpoint https://api.electricimp.com/v5
+Local login is successful.
+IMPT COMMAND SUCCEEDS
+```
 
 *Example*  
 *Display login status:*  
-**TODO** screenshot - impt auth info
+```
+impt auth info
+Auth info:
+impCentral API endpoint:   https://api.electricimp.com/v5
+Auth file:                 Local
+Access token auto refresh: false
+Access token:              expires in 59 minutes
+Username:                  username
+Email:                     user@email.com
+Account id:                c1d61eef-d544-4d09-c8dc-d43e6742cae3
+IMPT COMMAND SUCCEEDS
+```
 
 *Example*  
 *Local logout:*  
-**TODO** screenshot - impt auth logout --local
+```
+impt auth logout --local
+Local logout is successful.
+IMPT COMMAND SUCCEEDS
+```
 
 ## Login Key
 
 The tool provides a set of [Login Key Manipulation Commands](./CommandsManual.md#login-key-manipulation-commands) which allows you to fully control the login keys of your account - list the existent login keys, create a new one, delete, etc. Of course, you need to be logged-in in order to use that commands. Some commands additionally requires the password.
 
 *Example*  
-*Login key list ? :*  
-**TODO** screenshot - login key command
+*Login key list:*  
+```
+impt loginkey list
+Login Key list (1 items):
+Login Key:
+  id:     7d8e6670aa285e9d
+  usages: 1
+IMPT COMMAND SUCCEEDS
+```
 
 ## Project
 
@@ -177,7 +335,11 @@ But many other commands may be affected when called from a directory where [Proj
 
 *Example*  
 *Unassign all Devices from Device Group. A Device Group is not specified in the command below. But the current directory contains Project File. All Devices are unassigned from the Device Group referenced by that Project File:*  
-**TODO** screenshot - impt dg unassign
+```
+impt dg unassign
+Devices assigned to Device Group "dfcde3bd-3d89-6c75-bf2a-a543c47e586b" are unassigned successfully.
+IMPT COMMAND SUCCEEDS
+```
 
 ## Entity Identification
 
@@ -189,11 +351,54 @@ When it is hard to uniquely specify an entity without knowing the entity Id, use
 
 *Example*  
 *An entity is found successfully:*  
-**TODO** screenshot - device by MAC ?
+```
+impt device info --device 0c:2a:69:05:0d:62
+Device:
+  id:                      234776801163a9ee
+  name:                    my device 1
+  agent_id:
+  agent_url:
+  device_online:           true
+  device_state_changed_at: 2018-01-21T22:08:53.017Z
+  agent_running:           false
+  agent_state_changed_at:
+  last_enrolled_at:        2018-01-19T14:15:39.247Z
+  imp_type:                imp001
+  ip_address:              93.80.11.190
+  mac_address:             0c:2a:69:05:0d:62
+  free_memory:             84720
+  rssi:                    -51
+  swversion:               1ae4c87 - release-36.13 - Wed Dec 20 10:52:30 2017 - production
+  plan_id:
+IMPT COMMAND SUCCEEDS
+```
 
 *Example*  
 *An entity is not unique, the command fails:*  
-**TODO** screenshot - build by tag but there are two deployments with this tag ?
+```
+impt build info --build MyRC1
+ERROR: Multiple Deployments "MyRC1" are found:
+Deployment:
+  id:           24aa0e91-ebc0-9198-090c-44cca8b977f3
+  sha:          4e7f3395e86658ab39a178f9fe4b8cd8244a8ade92cb5ae1bb2d758434174c05
+  tags:         MyRC1
+  flagged:      true
+  Device Group:
+    id:   da27eb09-61d7-100b-095e-47578bada966
+    type: pre-production
+    name: MyPreProductionDG
+Deployment:
+  id:           bf485681-37c3-a813-205a-e90e19b1a817
+  sha:          4e7f3395e86658ab39a178f9fe4b8cd8244a8ade92cb5ae1bb2d758434174c05
+  tags:         MyRC1
+  flagged:      true
+  Device Group:
+    id:   dfcde3bd-3d89-6c75-bf2a-a543c47e586b
+    type: development
+    name: MyDevDG
+Impossible to execute the command.
+IMPT COMMAND FAILS
+```
 
 ## Entity Listing and Owning
 
@@ -221,7 +426,36 @@ To display Account Id and email of the current logged-in account call the [auth 
 The most of command groups contain `info` command which displays information about the specified entity. Some of that commands have `--full` option (`-u` option alias). When it is specified, the command displays additional details about the related entities. For example, `impt product info --full` command displays the full structure of the Product: Details about every Device Group that belongs to the Product, about Devices assigned to the Device Groups and other.
 
 *Example*:  
-**TODO** screenshot - impt product info --full, not a huge output
+```
+impt product info --product MyProduct --full
+Product:
+  id:            c4e006ed-85b9-3513-fa99-0700333c3ad7
+  name:          MyProduct
+  description:
+  created_at:    2018-01-21T22:07:59.711Z
+  updated_at:    2018-01-21T22:07:59.711Z
+  Device Groups:
+    Device Group:
+      id:                       dfcde3bd-3d89-6c75-bf2a-a543c47e586b
+      type:                     development
+      name:                     MyDevDG
+      Current Deployment:
+        id:      bf485681-37c3-a813-205a-e90e19b1a817
+        sha:     4e7f3395e86658ab39a178f9fe4b8cd8244a8ade92cb5ae1bb2d758434174c05
+        tags:    MyRC1
+        flagged: true
+      Min supported Deployment:
+        id:  6dfda2e3-20c9-d6aa-259e-a25bff906af5
+        sha: a2a40343f62f172a873ecffd99e741e0cc2107b4c3bae38445baa31bec11d8b5
+      Devices:
+        Device:
+          id:            234776801163a9ee
+          name:          my device 1
+          mac_address:   0c:2a:69:05:0d:62
+          agent_id:      T1oUmIZ3At_N
+          device_online: true
+IMPT COMMAND SUCCEEDS
+```
 
 ## Entity Deletion
 
@@ -231,11 +465,36 @@ Also by default, every delete command asks a confirmation of the operation from 
 
 *Example*  
 *A failed delete command execution:*  
-**TODO** screenshot - failed delete something w/o --force, use --confirmed
+```
+impt dg delete --dg MyDevDG --confirmed
+ERROR: Flagged Deployments Exist: Cannot delete a devicegroup with flagged deployments; delete those first.
+IMPT COMMAND FAILS
+```
 
 *Example*  
 *A successful delete command execution:*  
-**TODO** screenshot - the same command succeeds with --force, now w/o --confirmed
+```
+impt dg delete --dg MyDevDG --force
+The following entities will be deleted:
+Device Group:
+  id:   dfcde3bd-3d89-6c75-bf2a-a543c47e586b
+  type: development
+  name: MyDevDG
+
+The following Deployments are marked "flagged" to prevent deleting. They will be modified by setting "flagged" attribute to false:
+Deployment:
+  id:      bf485681-37c3-a813-205a-e90e19b1a817
+  sha:     4e7f3395e86658ab39a178f9fe4b8cd8244a8ade92cb5ae1bb2d758434174c05
+  tags:    MyRC1
+  flagged: true
+
+Are you sure you want to continue?
+Enter 'y' (yes) or 'n' (no): y
+
+Deployment "bf485681-37c3-a813-205a-e90e19b1a817" is updated successfully.
+Device Group "MyDevDG" is deleted successfully.
+IMPT COMMAND SUCCEEDS
+```
 
 ## No Atomic Transaction
 

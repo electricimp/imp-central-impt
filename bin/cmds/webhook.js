@@ -28,7 +28,7 @@ const Options = require('../../lib/util/Options');
 const UserInteractor = require('../../lib/util/UserInteractor');
 
 const COMMAND = 'webhook';
-const COMMAND_DESCRIPTION = 'Webhook Manipulation Commands.';
+const COMMAND_DESCRIPTION = 'Webhook manipulation commands.';
 
 exports.command = COMMAND;
 

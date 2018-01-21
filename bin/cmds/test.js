@@ -28,7 +28,7 @@ const Options = require('../../lib/util/Options');
 const UserInteractor = require('../../lib/util/UserInteractor');
 
 const COMMAND = 'test';
-const COMMAND_DESCRIPTION = 'Test Manipulation Commands.';
+const COMMAND_DESCRIPTION = 'Test manipulation commands.';
 
 exports.command = COMMAND;
 
