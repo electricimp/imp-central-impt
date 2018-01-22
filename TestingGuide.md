@@ -499,19 +499,31 @@ These are the main steps you should perform in order to prepare your devices and
 1. Obtain impCentral Product. If you already have/know a Product, notice it's Id or Name. If you do not have a Product, create a new one by [**impt product create**](./CommandsManual.md#product-create) command.
 
 *Example:*  
-**TODO** - screenshot   
+```
+> impt product create -n MyTestProduct
+Product "MyTestProduct" is created successfully.
+IMPT COMMAND SUCCEEDS
+```
 
 2. Obtain Device Group. If you already have/know a Device Group, notice it's Id or Name. If you do not have a Device Group, create a new one by [**impt dg create**](./CommandsManual.md#device-group-create) command. You need to specify the Product when creating the Device Group.
 
 Theoretically, you may try to use Device Group of any [type](./CommandsManual#device-group-type). Practically, it is recommended to use Device Group of the *development* type.
 
 *Example:*  
-**TODO** - screenshot   
+```
+> impt dg create -n MyTestDG -p MyTestProduct
+Device Group "MyTestDG" is created successfully.
+IMPT COMMAND SUCCEEDS
+```
 
 3. Assign one or several devices, on which you plan to run your tests, to the Device Group by [**impt device assign**](./CommandsManual.md#device-assign) command.
 
 *Example:*  
-**TODO** - screenshot   
+```
+> impt device assign -d myDevice1 -g MyTestDG
+Device "myDevice1" is assigned successfully to Device Group "MyTestDG".
+IMPT COMMAND SUCCEEDS
+```
 
 4. Specify the Device Group during [test configuration creation](#test-configuration). Your tests will run on all devices assigned to the Device Group. Note, you can always change the Device Group in the test configuration.
 
@@ -534,17 +546,91 @@ The configuration settings include:
 - `--timeout`, `--stop-on-fail`, `--allow-disconnect`, `--builder-cache` - other settings, their meaning and default values are described in the [command's spec](./CommandsManual.md#test-create).
 
 *Example:*  
-**TODO** - screenshot   
+```
+> impt test create -g MyTestDG -y MyLibrary.agent.lib.nut
+Test Configuration File is created successfully.
+Test Configuration info:
+Test files:       *.test.nut, tests/**/*.test.nut
+Agent file:       MyLibrary.agent.lib.nut
+Stop on failure:  false
+Timeout:          30
+Allow disconnect: false
+Builder cache:    false
+Device Group:
+  id:      e4bf84dd-7cc6-147e-9b42-b08812912b99
+  type:    development
+  name:    MyTestDG
+  Product:
+    id:   a83ecc00-cb39-d950-9a60-96694403ab9d
+    name: MyTestProduct
+  Devices:
+    Device:
+      id:            234776801163a9ee
+      name:          myDevice1
+      mac_address:   0c:2a:69:05:0d:62
+      agent_id:      T1oUmIZ3At_N
+      device_online: true
+IMPT COMMAND SUCCEEDS
+```
 
 You may update the test configuration by calling [**impt test update**](./CommandsManual.md#test-update) command. The existing [Test Configuration File](./CommandsManual.md#test-configuration-file) will be updated by the new specified settings. Note, the newly specified `--test-file` option value(s) totally replaces the existed setting.
 
 *Example:*  
-**TODO** - screenshot   
+```
+> impt test update -t 60 -e true
+Test Configuration File is updated successfully.
+Test Configuration info:
+Test files:       *.test.nut, tests/**/*.test.nut
+Agent file:       MyLibrary.agent.lib.nut
+Stop on failure:  false
+Timeout:          60
+Allow disconnect: false
+Builder cache:    true
+Device Group:
+  id:      e4bf84dd-7cc6-147e-9b42-b08812912b99
+  type:    development
+  name:    MyTestDG
+  Product:
+    id:   a83ecc00-cb39-d950-9a60-96694403ab9d
+    name: MyTestProduct
+  Devices:
+    Device:
+      id:            234776801163a9ee
+      name:          myDevice1
+      mac_address:   0c:2a:69:05:0d:62
+      agent_id:      T1oUmIZ3At_N
+      device_online: true
+IMPT COMMAND SUCCEEDS
+```
 
 You may display the current test configuration by calling [**impt test info**](./CommandsManual.md#test-info) command.
 
 *Example:*  
-**TODO** - screenshot   
+```
+> impt test info
+Test Configuration info:
+Test files:       *.test.nut, tests/**/*.test.nut
+Agent file:       MyLibrary.agent.lib.nut
+Stop on failure:  false
+Timeout:          60
+Allow disconnect: false
+Builder cache:    true
+Device Group:
+  id:      e4bf84dd-7cc6-147e-9b42-b08812912b99
+  type:    development
+  name:    MyTestDG
+  Product:
+    id:   a83ecc00-cb39-d950-9a60-96694403ab9d
+    name: MyTestProduct
+  Devices:
+    Device:
+      id:            234776801163a9ee
+      name:          myDevice1
+      mac_address:   0c:2a:69:05:0d:62
+      agent_id:      T1oUmIZ3At_N
+      device_online: true
+IMPT COMMAND SUCCEEDS
+```
 
 ### GitHub Credentials
 
@@ -561,7 +647,11 @@ For unauthenticated requests the GitHub API allows you to make [up to 60 request
   - You may have several github credentials files and they may be located in any places. You specifies a concrete github credentials file during [test configuration creation or updating](#test-configuration). If the specified file exists when you [run the tests](#running-tests), the GitHub's credentials are taken from it. If the specified file does not exist, the GitHub's credentials are taken from the environment variables if they are set.
 
 *Example:*  
-**TODO** - screenshot   
+```
+> impt test github -i github.conf -u github_username -w github_password
+GitHub credentials Configuration File is created successfully.
+IMPT COMMAND SUCCEEDS
+```
 
 ### Running Tests
 
@@ -582,7 +672,56 @@ You may clear the [Builder cache](#builder-cache) by `--clear-cache` option. The
 You may run the tests in the [debug mode](#debug-mode) by specifying `--debug` option.
 
 *Example:*  
-**TODO** - screenshots and explanations for a successfull test execution and several failed test executions
+```
+impt test run
+[info] Started at 22 Jan 2018 22:47:04 GMT+0300
+[+0.01/0.01s info] Found 2 test files:
+        tests/TestFile1.test.nut
+        tests/TestFile2.test.nut
+[+0.02/0.00s info] Using agent source file: MyLibrary.agent.lib.nut
+[+0.02/0.00s info] Have no device source file, using blank
+[+0.63/0.61s info] Using device test file tests/TestFile1.test.nut
+[+0.66/0.03s info] Using DeviceGroup MyTestDG [e4bf84dd-7cc6-147e-9b42-b08812912b99]
+Deployment "2587b907-afa7-8c72-a4a5-a8f0407018b5" is created successfully.
+[+1.83/1.17s info] Created deployment: 2587b907-afa7-8c72-a4a5-a8f0407018b5
+
+[+1.83/0.00s info] Starting test session eight-inside
+[+1.83/0.00s info] Using device myDevice1 [234776801163a9ee] (1/1)
+[+1.83/0.00s info] Using device test file tests/TestFile1.test.nut
+Restart request for Device "234776801163a9ee" is successful.
+[+5.00/3.17s info] Device code space usage: 16.8%
+[+9.12/4.12s test] MyTestCase_1::testMe()
+[+9.13/0.00s test] Success
+[+9.13/0.00s test] MyTestCase_1::testMe_1()
+[+9.56/0.43s test] Failure: Failed to assert that condition is true
+[+9.56/0.00s test] MyTestCase::testMe()
+[+9.56/0.00s test] Success
+[+9.57/0.00s test] MyTestCase::testMe_1()
+[+9.57/0.01s test] Success
+[+9.57/0.00s test] Tests: 4, Assertions: 4, Failures: 1
+[+9.58/0.00s info] Session eight-inside failed
+[+9.58/0.00s info] Using device test file tests/TestFile2.test.nut
+[+9.61/0.03s info] Using DeviceGroup MyTestDG [e4bf84dd-7cc6-147e-9b42-b08812912b99]
+Deployment "3c0ef686-6200-59e1-cc39-ec8ca788a482" is created successfully.
+[+10.70/1.09s info] Created deployment: 3c0ef686-6200-59e1-cc39-ec8ca788a482
+
+[+10.70/0.00s info] Starting test session round-angle
+[+10.70/0.00s info] Using device myDevice1 [234776801163a9ee] (1/1)
+[+10.70/0.00s info] Using device test file tests/TestFile2.test.nut
+Restart request for Device "234776801163a9ee" is successful.
+[+14.71/4.01s info] Device code space usage: 16.8%
+[+18.78/4.07s test] MyTestCase::setUp()
+[+18.78/0.00s test] Success: We're ready
+[+18.78/0.00s test] MyTestCase::testMe_1()
+[+18.78/0.00s test] Success
+[+19.23/0.45s test] MyTestCase::testMe()
+[+19.23/0.01s test] Failure: Expected value: 1, got: 10
+[+19.23/0.00s test] Tests: 2, Assertions: 2, Failures: 1
+[+19.24/0.00s info] Session round-angle failed
+
+[+19.24/0.00s info] Testing failed
+IMPT COMMAND SUCCEEDS
+```
 
 ### Running Selective Tests
 
@@ -634,7 +773,98 @@ You may run the tests in the debug mode by specifying `--debug` option of the [*
 - IMP device and IMP agent code of all the running builds are stored in the `.build` folder inside the test project home.
 
 *Example:*  
-**TODO** - screenshot   
+```
+> impt test run -t TestFile1:MyTestCase::testMe -z
+...
+[info] Started at 22 Jan 2018 22:49:25 GMT+0300
+[debug:TestHelper] Skipping found test tests/TestFile2.test.nut
+[debug:TestHelper] Test files found: [ { name: 'tests/TestFile1.test.nut',
+    path: 'C:\\impt\\test\\tests\\TestFile1.test.nut',
+    type: 'device' } ]
+[+0.02/0.02s info] Found 1 test file:
+        tests/TestFile1.test.nut
+[debug:TestHelper] Agent source code file path: MyLibrary.agent.lib.nut
+[+0.03/0.00s info] Using agent source file: MyLibrary.agent.lib.nut
+[+0.03/0.00s info] Have no device source file, using blank
+...
+[+1.16/1.13s info] Using device test file tests/TestFile1.test.nut
+[debug:TestHelper] Agent code size: 53 bytes
+[debug:TestHelper] Device code size: 22207 bytes
+[+1.19/0.04s info] Using DeviceGroup MyTestDG [e4bf84dd-7cc6-147e-9b42-b08812912b99]
+...
+Deployment "e46e138c-9053-db40-e9de-f299e7c2908e" is created successfully.
+[+3.04/1.85s info] Created deployment: e46e138c-9053-db40-e9de-f299e7c2908e
+
+[+3.04/0.00s info] Starting test session paint-influence
+[+3.05/0.00s info] Using device myDevice1 [234776801163a9ee] (1/1)
+[+3.05/0.00s info] Using device test file tests/TestFile1.test.nut
+[debug:TestHelper] Agent code size: 53 bytes
+[debug:TestHelper] Device code size: 22207 bytes
+[debug:TestWatchdog] Watchdog "session-start" started
+...
+Doing the request with options:
+{
+  "url": "https://api.electricimp.com/v5/devices/234776801163a9ee/restart",
+  "method": "POST",
+  "headers": {
+    "Content-type": "application/vnd.api+json",
+    "Authorization": "[hidden]"
+  },
+  "json": true,
+  "qs": null,
+  "body": null,
+  "qsStringifyOptions": {
+    "arrayFormat": "repeat"
+  }
+}
+
+Response code: 204
+Response headers: {
+  "date": "Mon, 22 Jan 2018 19:49:30 GMT",
+  "connection": "close",
+  "server": "nginx/1.4.6 (Ubuntu)",
+  "content-language": "en",
+  "x-node": "api04",
+  "accept": "application/vnd.api+json",
+  "x-ratelimit-limit": "40",
+  "x-ratelimit-reset": "1",
+  "x-ratelimit-remaining": "39",
+  "strict-transport-security": "max-age=1209600"
+}
+Response body: undefined
+Restart request for Device "234776801163a9ee" is successful.
+[debug:TestSession] Device restarted
+[debug:TestLogsParser] Log line received: {"device_id":"234776801163a9ee","ts":"2018-01-22T19:49:30.423Z","log_type":"development","type":"status","msg":"Agent restarted: reload."}
+[debug:TestLogsParser] Log line received: {"device_id":"234776801163a9ee","ts":"2018-01-22T19:49:30.673Z","log_type":"development","type":"status","msg":"Agent restarted: new_bytecode_version."}
+[debug:TestLogsParser] Log line received: {"device_id":"234776801163a9ee","ts":"2018-01-22T19:49:30.667Z","log_type":"development","type":"status","msg":"Downloading new code; 16.83% program storage used"}
+[+6.35/3.30s info] Device code space usage: 16.8%
+[debug:TestLogsParser] Log line received: {"device_id":"234776801163a9ee","ts":"2018-01-22T19:49:34.917Z","log_type":"development","type":"server.log","msg":"{\"type\":\"SESSION_START\",\"__IMPUNIT__\":1,\"session\":\"paint-influence\",\"message\":\"\"}"}
+[debug:TestWatchdog] Watchdog "test-messages" stopped
+[debug:TestWatchdog] Watchdog "test-messages" started
+[debug:TestWatchdog] Watchdog "session-start" stopped
+[debug:TestLogsParser] Log line received: {"device_id":"234776801163a9ee","ts":"2018-01-22T19:49:34.937Z","log_type":"development","type":"server.log","msg":"{\"type\":\"DEBUG\",\"__IMPUNIT__\":1,\"session\":\"paint-influence\",\"message\":{\"testCasesFound\":{\"MyTestCase\":{\"tests\":[\"testMe\"],\"tearDown\":false,\"setUp\":false}}}}"}
+[debug:TestWatchdog] Watchdog "test-messages" stopped
+[debug:TestWatchdog] Watchdog "test-messages" started
+[debug:TestLogsParser] Log line received: {"device_id":"234776801163a9ee","ts":"2018-01-22T19:49:34.951Z","log_type":"development","type":"server.log","msg":"{\"type\":\"TEST_START\",\"__IMPUNIT__\":1,\"session\":\"paint-influence\",\"message\":\"MyTestCase::testMe()\"}"}
+[debug:TestWatchdog] Watchdog "test-messages" stopped
+[debug:TestWatchdog] Watchdog "test-messages" started
+[+10.50/4.15s test] MyTestCase::testMe()
+[debug:TestLogsParser] Log line received: {"device_id":"234776801163a9ee","ts":"2018-01-22T19:49:34.962Z","log_type":"development","type":"server.log","msg":"{\"type\":\"TEST_OK\",\"__IMPUNIT__\":1,\"session\":\"paint-influence\",\"message\":null}"}
+[debug:TestWatchdog] Watchdog "test-messages" stopped
+[debug:TestWatchdog] Watchdog "test-messages" started
+[+10.50/0.00s test] Success
+[debug:TestLogsParser] Log line received: {"device_id":"234776801163a9ee","ts":"2018-01-22T19:49:34.976Z","log_type":"development","type":"server.log","msg":"{\"type\":\"SESSION_RESULT\",\"__IMPUNIT__\":1,\"session\":\"paint-influence\",\"message\":{\"assertions\":1,\"failures\":0,\"tests\":1}}"}
+[debug:TestWatchdog] Watchdog "test-messages" stopped
+[debug:TestWatchdog] Watchdog "test-messages" started
+[debug:TestWatchdog] Watchdog "test-messages" stopped
+[+10.51/0.01s info] Tests: 1, Assertions: 1, Failures: 0
+[+10.51/0.00s info] Session paint-influence succeeded
+[debug:TestWatchdog] Watchdog "session-start" stopped
+[debug:TestWatchdog] Watchdog "test-messages" stopped
+
+[+10.51/0.00s info] Testing succeeded
+IMPT COMMAND SUCCEEDS
+```
 
 ### Cleaning Up
 
@@ -643,19 +873,163 @@ After the testing is finished you may want to clean-up different entities create
 If you want to delete your test project, call [**impt test delete**](./CommandsManual.md#test-run) command from the test project home. It deletes [Test Configuration File](./CommandsManual.md#test-configuration-file), Builder cache directory and debug information. By specifying additional options you may delete the github credentials file, the file with Builder variables and impCentral API entities (Device Group, Deployments, Product) which were used or created during the testing. See the [command's spec](./CommandsManual.md#test-delete) for the details.
 
 *Example:*  
-**TODO** - screenshot   
+```
+> impt test delete -a
+The following entities will be deleted:
+Product:
+  id:   a83ecc00-cb39-d950-9a60-96694403ab9d
+  name: MyTestProduct
+Device Group:
+  id:   e4bf84dd-7cc6-147e-9b42-b08812912b99
+  type: development
+  name: MyTestDG
+Deployment:
+  id:  e46e138c-9053-db40-e9de-f299e7c2908e
+  sha: 6b2c3c2f7eb406dd0aa035ac4b7544cff6fa5b2eebf2c2317bcca8a30d5545da
+Deployment:
+  id:  f44511f9-f1a0-a892-a4b8-53f48880d6c7
+  sha: c56bd6d4723170c8022401461036fff2c2a86f9dc43e84613c42068abd667c6c
+Deployment:
+  id:  3c0ef686-6200-59e1-cc39-ec8ca788a482
+  sha: 2f45a6f13ffa6e1ef201429583f9d758da0b6cb9939e663bb278f7270f036220
+
+The following Devices will be unassigned from Device Groups:
+Device:
+  id:            234776801163a9ee
+  name:          myDevice1
+  mac_address:   0c:2a:69:05:0d:62
+  agent_id:      T1oUmIZ3At_N
+  device_online: true
+
+Debug mode temporary .build directory will be deleted.
+GitHub credentials Configuration File github.conf will be deleted.
+Test Configuration File in the current directory will be deleted.
+Are you sure you want to continue?
+Enter 'y' (yes) or 'n' (no): y
+
+Device "234776801163a9ee" is unassigned successfully.
+Device Group "e4bf84dd-7cc6-147e-9b42-b08812912b99" is deleted successfully.
+Product "a83ecc00-cb39-d950-9a60-96694403ab9d" is deleted successfully.
+Deployment "e46e138c-9053-db40-e9de-f299e7c2908e" is deleted successfully.
+Deployment "3c0ef686-6200-59e1-cc39-ec8ca788a482" is deleted successfully.
+Deployment "f44511f9-f1a0-a892-a4b8-53f48880d6c7" is deleted successfully.
+Debug mode temporary .build directory is deleted successfully.
+GitHub credentials Configuration is deleted successfully.
+Test Configuration is deleted successfully.
+IMPT COMMAND SUCCEEDS
+```
 
 Alternatively, you may fully delete the Device Group which you used for the testing by calling the [**impt dg delete**](./CommandsManual.md#dg-delete) command as `impt dg delete --dg <DEVICE_GROUP_IDENTIFIER> --builds --force`. It makes a full clean-up of all impCentral entities created during your testing - unassigns all devices from the Device Group, deletes all builds created for the Device Group, deletes the Device Group itself.
 
 *Example:*  
-**TODO** - screenshot   
+```
+> impt dg delete -g MyTestDG -b -f
+The following entities will be deleted:
+Device Group:
+  id:   e4bf84dd-7cc6-147e-9b42-b08812912b99
+  type: development
+  name: MyTestDG
+Deployment:
+  id:  e46e138c-9053-db40-e9de-f299e7c2908e
+  sha: 6b2c3c2f7eb406dd0aa035ac4b7544cff6fa5b2eebf2c2317bcca8a30d5545da
+Deployment:
+  id:  f44511f9-f1a0-a892-a4b8-53f48880d6c7
+  sha: c56bd6d4723170c8022401461036fff2c2a86f9dc43e84613c42068abd667c6c
+Deployment:
+  id:  3c0ef686-6200-59e1-cc39-ec8ca788a482
+  sha: 2f45a6f13ffa6e1ef201429583f9d758da0b6cb9939e663bb278f7270f036220
+Deployment:
+  id:  2587b907-afa7-8c72-a4a5-a8f0407018b5
+  sha: 5ba4c9b3642852f6536b3d2c09bf37e6eb8d715208cf62d130071b08136a134c
+Deployment:
+  id:  ac59bd97-d436-12c6-f7e0-ee66b3043b59
+  sha: f807b6758c0dc9f2f7c76d7c6f9cf58b8ff04edfedccdf66a75c2ffddc19f7d1
+
+The following Devices will be unassigned from Device Groups:
+Device:
+  id:            234776801163a9ee
+  name:          myDevice1
+  mac_address:   0c:2a:69:05:0d:62
+  agent_id:      T1oUmIZ3At_N
+  device_online: true
+
+Are you sure you want to continue?
+Enter 'y' (yes) or 'n' (no): y
+
+Device "234776801163a9ee" is unassigned successfully.
+Device Group "e4bf84dd-7cc6-147e-9b42-b08812912b99" is deleted successfully.
+Deployment "e46e138c-9053-db40-e9de-f299e7c2908e" is deleted successfully.
+Deployment "3c0ef686-6200-59e1-cc39-ec8ca788a482" is deleted successfully.
+Deployment "f44511f9-f1a0-a892-a4b8-53f48880d6c7" is deleted successfully.
+IMPT COMMAND SUCCEEDS
+```
 
 If you only want to unassign the devices from the Device Group, call [**impt dg unassign**](./CommandsManual.md#dg-unassign) or [**impt device unassign**](./CommandsManual.md#device-unassign) commands.
 
 *Example:*  
-**TODO** - screenshot   
+```
+> impt dg unassign -g MyTestDG
+The following Devices are unassigned successfully from Device Group "MyTestDG":
+Device:
+  id:            234776801163a9ee
+  name:          myDevice1
+  mac_address:   0c:2a:69:05:0d:62
+  agent_id:      T1oUmIZ3At_N
+  device_online: true
+IMPT COMMAND SUCCEEDS
+```
+
+```
+> impt device unassign -d myDevice1
+Device "myDevice1" is unassigned successfully.
+IMPT COMMAND SUCCEEDS
+```
 
 If you want to delete the Product, call [**impt product delete**](./CommandsManual.md#product-delete) command.
 
 *Example:*  
-**TODO** - screenshot   
+```
+> impt product delete -p MyTestProduct -b -f
+The following entities will be deleted:
+Product:
+  id:   a83ecc00-cb39-d950-9a60-96694403ab9d
+  name: MyTestProduct
+Device Group:
+  id:   e4bf84dd-7cc6-147e-9b42-b08812912b99
+  type: development
+  name: MyTestDG
+Deployment:
+  id:  e46e138c-9053-db40-e9de-f299e7c2908e
+  sha: 6b2c3c2f7eb406dd0aa035ac4b7544cff6fa5b2eebf2c2317bcca8a30d5545da
+Deployment:
+  id:  f44511f9-f1a0-a892-a4b8-53f48880d6c7
+  sha: c56bd6d4723170c8022401461036fff2c2a86f9dc43e84613c42068abd667c6c
+Deployment:
+  id:  3c0ef686-6200-59e1-cc39-ec8ca788a482
+  sha: 2f45a6f13ffa6e1ef201429583f9d758da0b6cb9939e663bb278f7270f036220
+Deployment:
+  id:  2587b907-afa7-8c72-a4a5-a8f0407018b5
+  sha: 5ba4c9b3642852f6536b3d2c09bf37e6eb8d715208cf62d130071b08136a134c
+Deployment:
+  id:  ac59bd97-d436-12c6-f7e0-ee66b3043b59
+  sha: f807b6758c0dc9f2f7c76d7c6f9cf58b8ff04edfedccdf66a75c2ffddc19f7d1
+
+The following Devices will be unassigned from Device Groups:
+Device:
+  id:            234776801163a9ee
+  name:          myDevice1
+  mac_address:   0c:2a:69:05:0d:62
+  agent_id:      T1oUmIZ3At_N
+  device_online: true
+
+Are you sure you want to continue?
+Enter 'y' (yes) or 'n' (no): y
+
+Device "234776801163a9ee" is unassigned successfully.
+Device Group "e4bf84dd-7cc6-147e-9b42-b08812912b99" is deleted successfully.
+Product "a83ecc00-cb39-d950-9a60-96694403ab9d" is deleted successfully.
+Deployment "e46e138c-9053-db40-e9de-f299e7c2908e" is deleted successfully.
+Deployment "3c0ef686-6200-59e1-cc39-ec8ca788a482" is deleted successfully.
+Deployment "f44511f9-f1a0-a892-a4b8-53f48880d6c7" is deleted successfully.
+IMPT COMMAND SUCCEEDS
+```
