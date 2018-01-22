@@ -379,7 +379,8 @@ Device:
   agent_id:      T1oUmIZ3At_N
   device_online: true
 
-The following Deployments are marked "flagged" to prevent deleting. They will be modified by setting "flagged" attribute to false:
+The following Deployments are marked "flagged" to prevent deleting. They will be modified 
+by setting "flagged" attribute to false:
 Deployment:
   id:      8b59afb0-32c6-1221-fdf8-fc5bf38ed155
   sha:     f4756c7578aa69910a8857d8ec08ff15bc2d7e1a8fc8007caf98e3ea9fca07a3
@@ -526,7 +527,8 @@ Note, you need to have appropriate permissions to operate with the impCentral AP
 1. Create a project for a [factory firmware](https://developer.electricimp.com/examples/factoryfirmware) which is linked to the existent Product "MyProduct": a new Device Group "MyPreFactoryDG" in that Product, a new Device Group "MyPreProductionDG" that will be a production target, empty files "factory.device.nut" and "factory.agent.nut", [Project File](./CommandsManual.md#project-file).   
   `impt project create --pre-factory --product MyProduct --name MyPreFactoryDG --descr "Factory Firmware" --target MyPreProductionDG --create-target --device-file factory.device.nut --agent-file factory.agent.nut --create-files`  
 ```
-> impt project create -f -p MyProduct -n MyPreFactoryDG -s "Factory Firmware" -t MyPreProductionDG -j -x factory.device.nut -y factory.agent.nut -c
+> impt project create -f -p MyProduct -n MyPreFactoryDG -s "Factory Firmware" -t MyPreProductionDG -j
+-x factory.device.nut -y factory.agent.nut -c
 Device Group "MyPreProductionDG" is created successfully.
 Device Group "MyPreFactoryDG" is created successfully.
 Device source file "factory.device.nut" is created successfully.
@@ -955,7 +957,8 @@ Device:
   agent_id:      T1oUmIZ3At_N
   device_online: true
 
-The following Deployments are marked "flagged" to prevent deleting. They will be modified by setting "flagged" attribute to false:
+The following Deployments are marked "flagged" to prevent deleting. They will be modified 
+by setting "flagged" attribute to false:
 Deployment:
   id:      e0059ee6-2483-4ab1-50eb-e693e62155b7
   sha:     f4756c7578aa69910a8857d8ec08ff15bc2d7e1a8fc8007caf98e3ea9fca07a3
