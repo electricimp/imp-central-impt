@@ -80,7 +80,7 @@ exports.builder = function (yargs) {
             if (opts.user && opts.loginKey) {
                 return new Errors.CommandSyntaxError(UserInteractor.ERRORS.CMD_MUTUALLY_EXCLUSIVE_OPTIONS, Options.USER, Options.LOGIN_KEY);
             }
-            if (opts.user && !opts.password) {
+            if (opts.user && opts.password === undefined) {
                 return new Errors.CommandSyntaxError(UserInteractor.ERRORS.CMD_REQUIRED_OPTION, Options.PASSWORD);
             }
             return Options.checkOptions(argv, options);

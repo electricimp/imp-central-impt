@@ -39,7 +39,12 @@ exports.describe = COMMAND_SHORT_DESCR;
 exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.DEVICE_IDENTIFIER] : true,
-        [Options.NAME] : { demandOption : true, describe : 'New Name of the Device.', _usage : '<device_name>' },
+        [Options.NAME] : {
+            demandOption : true,
+            describe : 'New Name of the Device.',
+            requiresArg : false,
+            _usage : '<device_name>'
+        },
         [Options.DEBUG] : false
     });
     return yargs
