@@ -24,6 +24,7 @@
 
 'use strict';
 
+const Util = require('util');
 const Build = require('../../../lib/Build');
 const Options = require('../../../lib/util/Options');
 
@@ -41,15 +42,17 @@ exports.builder = function (yargs) {
         [Options.BUILD_IDENTIFIER] : false,
         [Options.DEVICE_FILE] : {
             demandOption : false,
-            describe : 'Name of a file to where download the source code for IMP device.' +
-                ' If not specified, the file referenced by Project File in the current directory is assumed' +
-                ' (if no Project File, the command fails).'
+            describe : Util.format('Name of a file to where download the source code for IMP device.' +
+                ' If not specified, the file referenced by Project File in the current directory is assumed;' +
+                ' if no Project File and --%s option is not specified, the command fails.',
+                Options.AGENT_ONLY)
         },
         [Options.AGENT_FILE] : {
             demandOption : false,
-            describe : 'Name of a file to where download the source code for IMP agent.' +
-                ' If not specified, the file referenced by Project File in the current directory is assumed' +
-                ' (if no Project File, the command fails).'
+            describe : Util.format('Name of a file to where download the source code for IMP agent.' +
+                ' If not specified, the file referenced by Project File in the current directory is assumed;' +
+                ' if no Project File and --%s option is not specified, the command fails.',
+                Options.DEVICE_ONLY)
         },
         [Options.DEVICE_ONLY] : false,
         [Options.AGENT_ONLY] : false,
