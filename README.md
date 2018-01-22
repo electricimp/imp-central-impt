@@ -64,8 +64,7 @@ The most of commands have optional arguments called options - `<options>`. Optio
 
 Every option has one letter [alias](./CommandsManual.md#list-of-aliases). The aliases are unique for a particular command but may be reused for different options in different commands. The same option in different commands always has the same alias. The options and aliases are detailed in the [Commands Description](./CommandsManual.md#commands-description).
 
-*Examples*  
-*The syntax and commands with options:*  
+*Example - The syntax and commands with options:*  
 `impt product create --name TestProduct --descr "My test product"`  
 `impt product update --product TestProduct -s ""`  
 `impt dg create --name "TestDG" -y development -p TestProduct`  
