@@ -39,7 +39,7 @@ The main link from Project to impCentral API is Device Group. Project relates to
 
 Indirectly, Project relates to other impCentral API entities as well. For example, Product which includes the Device Group, the latest Deployment of the Device Group, Devices assigned to the Device Group.
 
-Project always relates to two files - with IMP device source code and IMP agent source code. It is assumed the files are located in the same directory with [Project File](./CommandsManual.md#project-file). At any time Project may be updated to link other file(s). Anyone or the both files may not exist in reality. The most of project-related operations still work in this case. But the both files are always required if you want to deploy a new build - a file may be empty but it should exist.
+Project always relates to two files - with IMP device source code and IMP agent source code. It is assumed the files are located in the same directory with [Project File](./CommandsManual.md#project-file). At any time Project may be updated to link other file(s). Anyone or the both files may not exist in reality. All project-related operations still work in this case. When you ask to deploy a new build and one or the both files do not exist, the Deployment is created with empty corresponding source code.
 
 When you call impt commands from a directory with [Project File](./CommandsManual.md#project-file) all the related entities (Device Group, Product, Deployment, Devices, files) are assumed by default. I.e. you may not specify them explicitly in the corresponding commands. 
 
