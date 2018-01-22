@@ -69,7 +69,7 @@ Every option has one letter [alias](./CommandsManual.md#list-of-aliases). The al
 `impt product create --name TestProduct --descr "My test product"`  
 `impt product update --product TestProduct -s ""`  
 `impt dg create --name "TestDG" -y development -p TestProduct`  
-`impt device assign -g TestDG -d "myDevice1"`  
+`impt device assign -g TestDG -d myDevice1`  
 
 ## Help
 
@@ -80,7 +80,7 @@ Every command has `--help` option (`-h` option alias). If it is specified, any o
 *Example*  
 *List all command groups:*  
 ```
-impt --help
+> impt --help
 
 Usage: impt <command> [options]
 
@@ -104,7 +104,7 @@ Options:
 *Example*  
 *List all commands in one group:*  
 ```
-impt product --help
+> impt product --help
 
 Usage: impt product <command> [options]
 
@@ -125,7 +125,7 @@ Options:
 *Example*  
 *Display a command description:*
 ```
-impt product create --help
+> impt product create --help
 
 Usage: impt product create --name <product_name> [--descr <product_description>]
 [--debug] [--help]
@@ -147,7 +147,7 @@ Every command has `--debug` option (`-z` option alias). If it is specified, the 
 
 *Example*:  
 ```
-impt product create --name TestProduct --descr "My test product" --debug
+> impt product create --name TestProduct --descr "My test product" --debug
 Doing the request with options:
 {
   "url": "https://api.electricimp.com/v5/products",
@@ -203,11 +203,11 @@ Response body: {
     "relationships": {
       "owner": {
         "type": "account",
-        "id": "c1d61eef-d544-4d09-c9dc-d53e6742cae3"
+        "id": "c1d61eef-d544-4d09-c8dc-d43e6742cae3"
       },
       "creator": {
         "type": "account",
-        "id": "c1d61eef-d544-4d09-c9dc-d53e6742cae3"
+        "id": "c1d61eef-d544-4d09-c8dc-d43e6742cae3"
       }
     }
   }
@@ -227,7 +227,7 @@ Output of a command execution contains one of the two predefined phrases - `IMPT
 *Example*  
 *A successful command execution:*  
 ```
-impt product delete --product TestProduct --confirmed
+> impt product delete --product TestProduct --confirmed
 Product "TestProduct" is deleted successfully.
 IMPT COMMAND SUCCEEDS
 ```
@@ -235,7 +235,7 @@ IMPT COMMAND SUCCEEDS
 *Example*  
 *A failed command execution:*  
 ```
-impt product delete --product TestProduct --confirmed
+> impt product delete --product TestProduct --confirmed
 ERROR: Product "TestProduct" is not found.
 IMPT COMMAND FAILS
 ```
@@ -277,7 +277,7 @@ At any time you can get known the login status related to any directory. Call th
 *Example*  
 *Global login:*  
 ```
-impt auth login --user username --pwd password
+> impt auth login --user username --pwd password
 Global login is successful.
 IMPT COMMAND SUCCEEDS
 ```
@@ -285,7 +285,7 @@ IMPT COMMAND SUCCEEDS
 *Example*  
 *Local login using a login key, specifying a endpoint, without storing the login key:*  
 ```
-impt auth login --local --lk 7d8e6670aa285e9d --temp --endpoint https://api.electricimp.com/v5
+> impt auth login --local --lk 7d8e6670aa285e9d --temp --endpoint https://api.electricimp.com/v5
 Local login is successful.
 IMPT COMMAND SUCCEEDS
 ```
@@ -293,7 +293,7 @@ IMPT COMMAND SUCCEEDS
 *Example*  
 *Display login status:*  
 ```
-impt auth info
+> impt auth info
 Auth info:
 impCentral API endpoint:   https://api.electricimp.com/v5
 Auth file:                 Local
@@ -308,7 +308,7 @@ IMPT COMMAND SUCCEEDS
 *Example*  
 *Local logout:*  
 ```
-impt auth logout --local
+> impt auth logout --local
 Local logout is successful.
 IMPT COMMAND SUCCEEDS
 ```
@@ -320,7 +320,7 @@ The tool provides a set of [Login Key Manipulation Commands](./CommandsManual.md
 *Example*  
 *Login key list:*  
 ```
-impt loginkey list
+> impt loginkey list
 Login Key list (1 items):
 Login Key:
   id:     7d8e6670aa285e9d
@@ -339,7 +339,7 @@ But many other commands may be affected when called from a directory where [Proj
 *Example*  
 *Unassign all Devices from Device Group. A Device Group is not specified in the command below. But the current directory contains Project File. All Devices are unassigned from the Device Group referenced by that Project File:*  
 ```
-impt dg unassign
+> impt dg unassign
 Devices assigned to Device Group "dfcde3bd-3d89-6c75-bf2a-a543c47e586b" are unassigned successfully.
 IMPT COMMAND SUCCEEDS
 ```
@@ -355,7 +355,7 @@ When it is hard to uniquely specify an entity without knowing the entity Id, use
 *Example*  
 *An entity is found successfully:*  
 ```
-impt device info --device 0c:2a:69:05:0d:62
+> impt device info --device 0c:2a:69:05:0d:62
 Device:
   id:                      234776801163a9ee
   name:                    my device 1
@@ -379,7 +379,7 @@ IMPT COMMAND SUCCEEDS
 *Example*  
 *An entity is not unique, the command fails:*  
 ```
-impt build info --build MyRC1
+> impt build info --build MyRC1
 ERROR: Multiple Deployments "MyRC1" are found:
 Deployment:
   id:           24aa0e91-ebc0-9198-090c-44cca8b977f3
@@ -419,9 +419,76 @@ As a general rule, if an entity is owned by the current logged-in account, infor
 To display Account Id and email of the current logged-in account call the [auth info command](./CommandsManual.md#auth-info) - `impt auth info`.
 
 *Example*:  
-**TODO** screenshot - a complex list command, with AND and OR, with Owner details, with not a huge output
+```
+> impt dg list --owner user@email.com --dg-type pre-factory --dg-type pre-production --dg-type factory
+Device Group list (3 items):
+Device Group:
+  id:      3fad5031-8b4e-da7a-dee3-df410e06bb5f
+  type:    pre-factory
+  name:    MyPreFactoryDG
+  Product:
+    id:   c4e006ed-85b9-3513-fa99-0700333c3ad7
+    name: MyProduct
+  Owner:
+    id:    c1d61eef-d544-4d09-c8dc-d43e6742cae3
+    email: user@email.com
+Device Group:
+  id:      da27eb09-61d7-100b-095e-47578bada966
+  type:    pre-production
+  name:    MyPreProductionDG
+  Product:
+    id:   c4e006ed-85b9-3513-fa99-0700333c3ad7
+    name: MyProduct
+  Owner:
+    id:    c1d61eef-d544-4d09-c8dc-d43e6742cae3
+    email: user@email.com
+Device Group:
+  id:      b26aae4c-92d7-7e60-7c71-3fe2486e352f
+  type:    factory
+  name:    MyFactoryDG
+  Product:
+    id:   ffa85f81-83a7-ae85-d571-8875b3bd29d6
+    name: MyFactoryProduct
+  Owner:
+    id:    c1d61eef-d544-4d09-c8dc-d43e6742cae3
+    email: user@email.com
+IMPT COMMAND SUCCEEDS
+```
 
 *Example*:  
+```
+> impt dg list --owner me --product MyProduct --product TestProduct
+Device Group list (4 items):
+Device Group:
+  id:      bbe4605c-6464-ad89-7745-78579c4705f7
+  type:    development
+  name:    MyDevDG
+  Product:
+    id:   c4e006ed-85b9-3513-fa99-0700333c3ad7
+    name: MyProduct
+Device Group:
+  id:      3fad5031-8b4e-da7a-dee3-df410e06bb5f
+  type:    pre-factory
+  name:    MyPreFactoryDG
+  Product:
+    id:   c4e006ed-85b9-3513-fa99-0700333c3ad7
+    name: MyProduct
+Device Group:
+  id:      da27eb09-61d7-100b-095e-47578bada966
+  type:    pre-production
+  name:    MyPreProductionDG
+  Product:
+    id:   c4e006ed-85b9-3513-fa99-0700333c3ad7
+    name: MyProduct
+Device Group:
+  id:      3667ed96-12cd-ea20-9c09-0b2f32d1f73b
+  type:    development
+  name:    TestDG
+  Product:
+    id:   2390fed8-d14c-cd55-2176-30e370b23519
+    name: TestProduct
+IMPT COMMAND SUCCEEDS
+```
 **TODO** screenshot - another list command, with --owner me and some other filters, with not a huge output
 
 ## Entity Information
@@ -430,7 +497,7 @@ The most of command groups contain `info` command which displays information abo
 
 *Example*:  
 ```
-impt product info --product MyProduct --full
+> impt product info --product MyProduct --full
 Product:
   id:            c4e006ed-85b9-3513-fa99-0700333c3ad7
   name:          MyProduct
@@ -469,7 +536,7 @@ Also by default, every delete command asks a confirmation of the operation from 
 *Example*  
 *A failed delete command execution:*  
 ```
-impt dg delete --dg MyDevDG --confirmed
+> impt dg delete --dg MyDevDG --confirmed
 ERROR: Flagged Deployments Exist: Cannot delete a devicegroup with flagged deployments; delete those first.
 IMPT COMMAND FAILS
 ```
@@ -477,14 +544,15 @@ IMPT COMMAND FAILS
 *Example*  
 *A successful delete command execution:*  
 ```
-impt dg delete --dg MyDevDG --force
+> impt dg delete --dg MyDevDG --force
 The following entities will be deleted:
 Device Group:
   id:   dfcde3bd-3d89-6c75-bf2a-a543c47e586b
   type: development
   name: MyDevDG
 
-The following Deployments are marked "flagged" to prevent deleting. They will be modified by setting "flagged" attribute to false:
+The following Deployments are marked "flagged" to prevent deleting. They will be modified 
+by setting "flagged" attribute to false:
 Deployment:
   id:      bf485681-37c3-a813-205a-e90e19b1a817
   sha:     4e7f3395e86658ab39a178f9fe4b8cd8244a8ade92cb5ae1bb2d758434174c05
