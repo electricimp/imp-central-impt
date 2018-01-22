@@ -77,8 +77,7 @@ Every command has `--help` option (`-h` option alias). If it is specified, any o
 
 [Help option](./CommandsManual.md#help-option) is also applicable to a not fully specified command. It may be used to list all available command groups or to list all commands available in one group.
 
-*Example*  
-*List all command groups:*  
+*Example - List all command groups:*  
 ```
 > impt --help
 
@@ -101,8 +100,7 @@ Options:
                                                                        [boolean]
 ```
 
-*Example*  
-*List all commands in one group:*  
+*Example - List all commands in one group:*  
 ```
 > impt product --help
 
@@ -122,8 +120,7 @@ Options:
                                                                        [boolean]
 ```
 
-*Example*  
-*Display a command description:*
+*Example - Display a command description:*
 ```
 > impt product create --help
 
@@ -224,16 +221,14 @@ Interaction with a user is minimal. Only few commands, for example [delete entit
 
 Output of a command execution contains one of the two predefined phrases - `IMPT COMMAND SUCCEEDS` or `IMPT COMMAND FAILS`. Scripts can parse a command's output to find these standard phrases to quickly realize does the command succeed or fail. If any command fails, `IMPT COMMAND FAILS` phrase is always on the last line of the command's output. If a command succeeds, `IMPT COMMAND SUCCEEDS` phrase is also on the last line of the output for the most of the commands. Logging-related commands may have additional `IMPT COMMAND SUCCEEDS` phrases in their output. If the [help option](./CommandsManual.md#help-option) is specified for a command, it's output does not contain neither predefined phrase.
 
-*Example*  
-*A successful command execution:*  
+*Example - A successful command execution:*  
 ```
 > impt product delete --product TestProduct --confirmed
 Product "TestProduct" is deleted successfully.
 IMPT COMMAND SUCCEEDS
 ```
 
-*Example*  
-*A failed command execution:*  
+*Example - A failed command execution:*  
 ```
 > impt product delete --product TestProduct --confirmed
 ERROR: Product "TestProduct" is not found.
@@ -274,24 +269,21 @@ Summary of the **impt command execution context**:
 
 At any time you can get known the login status related to any directory. Call the [auth info command](./CommandsManual.md#auth-info) from the required directory - `impt auth info`. The returned information includes a type of the login applicable to the current directory, access token status, your account Id and other details.
 
-*Example*  
-*Global login:*  
+*Example - Global login:*  
 ```
 > impt auth login --user username --pwd password
 Global login is successful.
 IMPT COMMAND SUCCEEDS
 ```
 
-*Example*  
-*Local login using a login key, specifying a endpoint, without storing the login key:*  
+*Example - Local login using a login key, specifying a endpoint, without storing the login key:*  
 ```
 > impt auth login --local --lk 7d8e6670aa285e9d --temp --endpoint https://api.electricimp.com/v5
 Local login is successful.
 IMPT COMMAND SUCCEEDS
 ```
 
-*Example*  
-*Display login status:*  
+*Example - Display login status:*  
 ```
 > impt auth info
 Auth info:
@@ -305,8 +297,7 @@ Account id:                c1d61eef-d544-4d09-c8dc-d43e6742cae3
 IMPT COMMAND SUCCEEDS
 ```
 
-*Example*  
-*Local logout:*  
+*Example - Local logout:*  
 ```
 > impt auth logout --local
 Local logout is successful.
@@ -317,8 +308,7 @@ IMPT COMMAND SUCCEEDS
 
 The tool provides a set of [Login Key Manipulation Commands](./CommandsManual.md#login-key-manipulation-commands) which allows you to fully control the login keys of your account - list the existent login keys, create a new one, delete, etc. Of course, you need to be logged-in in order to use that commands. Some commands additionally requires the password.
 
-*Example*  
-*Login key list:*  
+*Example - Login key list:*  
 ```
 > impt loginkey list
 Login Key list (1 items):
@@ -336,11 +326,22 @@ Project is intended for developers and described in details in the [Development 
 
 But many other commands may be affected when called from a directory where [Project File](./CommandsManual.md#project-file) is located. Product, Device Group, Devices, Deployment referenced by the Project File may be assumed by a command when they are not specified in the command's options explicitly. If you want to avoid that, always specify the mandatory options of the commands. All such options are detailed in the [Commands Description](./CommandsManual.md#commands-description).
 
-*Example*  
-*Unassign all Devices from Device Group. A Device Group is not specified in the command below. But the current directory contains Project File. All Devices are unassigned from the Device Group referenced by that Project File:*  
+*Example - Unassign all Devices from Device Group. A Device Group is not specified in the command below. But the current directory contains Project File. All Devices are unassigned from the Device Group referenced by that Project File:*  
 ```
 > impt dg unassign
-Devices assigned to Device Group "dfcde3bd-3d89-6c75-bf2a-a543c47e586b" are unassigned successfully.
+The following Devices are unassigned successfully from Device Group "dfcde3bd-3d89-6c75-bf2a-a543c47e586b":
+Device:
+  id:            234776801163a9ee
+  name:          myDevice1
+  mac_address:   0c:2a:69:05:0d:62
+  agent_id:      T1oUmIZ3At_N
+  device_online: true
+Device:
+  id:            23522f6938a609ee
+  name:          myDevice2
+  mac_address:   0c:2a:69:03:ea:f0
+  agent_id:      5t0B6z6c4nHF
+  device_online: true
 IMPT COMMAND SUCCEEDS
 ```
 
@@ -352,13 +353,12 @@ If you want to use this feature, please first read [here](./CommandsManual.md#en
 
 When it is hard to uniquely specify an entity without knowing the entity Id, use [Entity Listing](#entity-listing-and-owning) commands to list the entities basing on some attributes, choose the required entity, notice it's Id and use it in the required command.
 
-*Example*  
-*An entity is found successfully:*  
+*Example - An entity is found successfully:*  
 ```
 > impt device info --device 0c:2a:69:05:0d:62
 Device:
   id:                      234776801163a9ee
-  name:                    my device 1
+  name:                    myDevice1
   agent_id:
   agent_url:
   device_online:           true
@@ -376,8 +376,7 @@ Device:
 IMPT COMMAND SUCCEEDS
 ```
 
-*Example*  
-*An entity is not unique, the command fails:*  
+*Example - An entity is not unique, the command fails:*  
 ```
 > impt build info --build MyRC1
 ERROR: Multiple Deployments "MyRC1" are found:
@@ -418,24 +417,40 @@ As a general rule, if an entity is owned by the current logged-in account, infor
 
 To display Account Id and email of the current logged-in account call the [auth info command](./CommandsManual.md#auth-info) - `impt auth info`.
 
-*Example*:  
+*Example - Listing all Products owned by me and my collaborators*:  
 ```
-> impt dg list --owner user@email.com --dg-type pre-factory --dg-type pre-production --dg-type factory
-Device Group list (3 items):
+> impt product list
+impt product list
+Product list (4 items):
+Product:
+  id:   30f19176-2b38-838d-62fd-38f5f3602ea4
+  name: MyProduct
+Product:
+  id:    c4e006ed-85b9-3513-fa99-0700333c3ad7
+  name:  MyProduct
+  Owner:
+    id:    c1d61eef-d544-4d09-c8dc-d43e6742cae3
+    email: user@email.com
+Product:
+  id:   885dfd24-e8f6-0621-32fc-556d24ed4cab
+  name: SmartFridge
+Product:
+  id:    2390fed8-d14c-cd55-2176-30e370b23519
+  name:  TestProduct
+  Owner:
+    id:    c1d61eef-d544-4d09-c8dc-d43e6742cae3
+    email: user@email.com
+IMPT COMMAND SUCCEEDS
+```
+
+*Example - Listing all factory fixture Device Groups owned by the specified account*:  
+```
+> impt dg list --owner user@email.com --dg-type pre-factory --dg-type factory
+Device Group list (2 items):
 Device Group:
   id:      3fad5031-8b4e-da7a-dee3-df410e06bb5f
   type:    pre-factory
   name:    MyPreFactoryDG
-  Product:
-    id:   c4e006ed-85b9-3513-fa99-0700333c3ad7
-    name: MyProduct
-  Owner:
-    id:    c1d61eef-d544-4d09-c8dc-d43e6742cae3
-    email: user@email.com
-Device Group:
-  id:      da27eb09-61d7-100b-095e-47578bada966
-  type:    pre-production
-  name:    MyPreProductionDG
   Product:
     id:   c4e006ed-85b9-3513-fa99-0700333c3ad7
     name: MyProduct
@@ -455,7 +470,7 @@ Device Group:
 IMPT COMMAND SUCCEEDS
 ```
 
-*Example*:  
+*Example - Listing all Device Groups owned by me and belonged to the specified Products*:  
 ```
 > impt dg list --owner me --product MyProduct --product TestProduct
 Device Group list (4 items):
@@ -489,7 +504,6 @@ Device Group:
     name: TestProduct
 IMPT COMMAND SUCCEEDS
 ```
-**TODO** screenshot - another list command, with --owner me and some other filters, with not a huge output
 
 ## Entity Information
 
@@ -520,7 +534,7 @@ Product:
       Devices:
         Device:
           id:            234776801163a9ee
-          name:          my device 1
+          name:          myDevice1
           mac_address:   0c:2a:69:05:0d:62
           agent_id:      T1oUmIZ3At_N
           device_online: true
@@ -533,16 +547,14 @@ By default, the commands which delete impCentral entities (like Product, Device 
 
 Also by default, every delete command asks a confirmation of the operation from user. Before that the command lists all the entities which are going to be deleted or updated. If you specify the `--confirmed` option (`-q` option alias), the operation is executed without asking additional confirmation from user.
 
-*Example*  
-*A failed delete command execution:*  
+*Example - A failed delete command execution:*  
 ```
 > impt dg delete --dg MyDevDG --confirmed
 ERROR: Flagged Deployments Exist: Cannot delete a devicegroup with flagged deployments; delete those first.
 IMPT COMMAND FAILS
 ```
 
-*Example*  
-*A successful delete command execution:*  
+*Example - A successful delete command execution:*  
 ```
 > impt dg delete --dg MyDevDG --force
 The following entities will be deleted:
