@@ -938,12 +938,6 @@ Deployment:
 Deployment:
   id:  3c0ef686-6200-59e1-cc39-ec8ca788a482
   sha: 2f45a6f13ffa6e1ef201429583f9d758da0b6cb9939e663bb278f7270f036220
-Deployment:
-  id:  2587b907-afa7-8c72-a4a5-a8f0407018b5
-  sha: 5ba4c9b3642852f6536b3d2c09bf37e6eb8d715208cf62d130071b08136a134c
-Deployment:
-  id:  ac59bd97-d436-12c6-f7e0-ee66b3043b59
-  sha: f807b6758c0dc9f2f7c76d7c6f9cf58b8ff04edfedccdf66a75c2ffddc19f7d1
 
 The following Devices will be unassigned from Device Groups:
 Device:
@@ -1007,12 +1001,6 @@ Deployment:
 Deployment:
   id:  3c0ef686-6200-59e1-cc39-ec8ca788a482
   sha: 2f45a6f13ffa6e1ef201429583f9d758da0b6cb9939e663bb278f7270f036220
-Deployment:
-  id:  2587b907-afa7-8c72-a4a5-a8f0407018b5
-  sha: 5ba4c9b3642852f6536b3d2c09bf37e6eb8d715208cf62d130071b08136a134c
-Deployment:
-  id:  ac59bd97-d436-12c6-f7e0-ee66b3043b59
-  sha: f807b6758c0dc9f2f7c76d7c6f9cf58b8ff04edfedccdf66a75c2ffddc19f7d1
 
 The following Devices will be unassigned from Device Groups:
 Device:
