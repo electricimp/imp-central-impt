@@ -673,7 +673,7 @@ You may run the tests in the [debug mode](#debug-mode) by specifying `--debug` o
 
 *Example:*  
 ```
-impt test run
+> impt test run
 [info] Started at 22 Jan 2018 22:47:04 GMT+0300
 [+0.01/0.01s info] Found 2 test files:
         tests/TestFile1.test.nut
@@ -819,18 +819,6 @@ Doing the request with options:
 }
 
 Response code: 204
-Response headers: {
-  "date": "Mon, 22 Jan 2018 19:49:30 GMT",
-  "connection": "close",
-  "server": "nginx/1.4.6 (Ubuntu)",
-  "content-language": "en",
-  "x-node": "api04",
-  "accept": "application/vnd.api+json",
-  "x-ratelimit-limit": "40",
-  "x-ratelimit-reset": "1",
-  "x-ratelimit-remaining": "39",
-  "strict-transport-security": "max-age=1209600"
-}
 Response body: undefined
 Restart request for Device "234776801163a9ee" is successful.
 [debug:TestSession] Device restarted
