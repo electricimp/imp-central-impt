@@ -91,7 +91,7 @@ One **option** has the following format:
 **--<option_name> [<option_value>]** or **-<option_alias> [<option_value>]**, where:
 - **<option_name>** - is unique across a particular command. For a user convenience many of the option names are reused across different commands.
 - **<option_alias>** - a one letter alias for the option. Unique across all option aliases for a particular command. The same option name in different commands always has the same alias.
-- **<option_value>** - a value of the option. Not all options require value. If option value has spaces it must be put into double quotes (“”).
+- **<option_value>** - a value of the option. Not all options require value. If option value has spaces or is empty it must be put into double quotes (“”).
 
 All commands and options are case sensitive.
 
@@ -323,17 +323,15 @@ User is asked to confirm the operation (confirmed automatically with **--confirm
 **impt build deploy \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--device-file <device_file>] \[--agent-file <agent_file>] \[--descr <build_description>] \[--origin \<origin>] \[--tag \<tag>] \[--flagged \[true|false]] \[--debug] \[--help]**
 
 Creates a build (Deployment) from the specified source files, with Description (if specified) and attributes (if
-specified) and deploys it to all Devices of the specified Device Group.
+specified) and deploys it to all Devices of the specified Device Group. Fails if the specified Device Group does not exist.
 
-Fails if one or both of the specified source files do not exist or the specified Device Group does not exist.
-
-The new build is not ran until the Devices are rebooted. To run it call **[impt dg restart](#device-group-restart)** or **[impt device restart](#device-restart)** command.
+The new build is not run until the Devices are rebooted. To run it call **[impt dg restart](#device-group-restart)** or **[impt device restart](#device-restart)** command.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
-| --device-file | -x | yes/[project](#project-file) | yes | Name of a file which contains a source code for IMP device. If not specified, the file referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
-| --agent-file | -y | yes/[project](#project-file) | yes | Name of a file which contains a source code for IMP agent. If not specified, the file referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| --device-file | -x | no | yes | Name of a file which contains a source code for IMP device. If not specified, the file referenced by [Project File](#project-file) in the current directory is assumed; if no Project File, empty code is assumed. If the specified file does not exist, empty code is assumed. |
+| --agent-file | -y | no | yes | Name of a file which contains a source code for IMP agent. If not specified, the file referenced by [Project File](#project-file) in the current directory is assumed; if no Project File, empty code is assumed. If the specified file does not exist, empty code is assumed. |
 | --descr | -s | no | yes | Description of the build (Deployment). |
 | --origin | -o | no | yes | A free-form key to store the source of the code. |
 | --tag | -t | no | yes | A tag applied to this build (Deployment). This option may be repeated several times to apply several tags. |
@@ -352,8 +350,8 @@ User is asked to confirm the operation if the files with the specified names alr
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --build | -b | yes/[project](#project-file) | yes | [Build Identifier](#build-identifier). If not specified, the most recent Deployment for the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
-| --device-file | -x | yes/[project](#project-file) | yes | Name of a file to where download the source code for IMP device. If not specified, the file referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
-| --agent-file | -y | yes/[project](#project-file) | yes | Name of a file to where download the source code for IMP agent. If not specified, the file referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| --device-file | -x | no | yes | Name of a file to where download the source code for IMP device. If not specified, the file referenced by [Project File](#project-file) in the current directory is assumed; if no Project File and **--agent-only** option is not specified, the command fails. |
+| --agent-file | -y | no | yes | Name of a file to where download the source code for IMP agent. If not specified, the file referenced by [Project File](#project-file) in the current directory is assumed; if no Project File and **--device-only** option is not specified, the command fails. |
 | --device-only | -i | no | yes | Downloads the source code for IMP device only. |
 | --agent-only | -j | no | yes | Downloads the source code for IMP agent only. |
 | --confirmed | -q | no | no | Executes the operation w/o asking additional confirmation from user. |
@@ -400,18 +398,17 @@ The returned list of the builds may be filtered. Filtering is possible by any co
 
 **impt build run \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--device-file <device_file>] \[--agent-file <agent_file>] \[--descr <build_description>] \[--origin \<origin>] \[--tag \<tag>] \[--flagged \[true|false]] \[--conditional] \[--log] \[--debug] \[--help]**
 
-Creates, deploys and runs a build (Deployment). Optionally, displays logs of the running build.
+Creates, deploys and runs a build (Deployment). Optionally, displays logs of the running build. Fails if the specified Device Group does not exist.
 
 It behaves exactly like **[impt build deploy](#build-deploy)** command followed by **[impt dg restart](#device-group-restart)** command and, optionally, by **[impt log stream](#log-stream)** command.
 
-Fails if one or both of the specified source files do not exist or the specified Device Group does not exist.
 Informs user if the specified Device Group does not have assigned Devices, in this case the Deployment is created anyway.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
-| --device-file | -x | yes/[project](#project-file) | yes | Name of a file which contains a source code for IMP device. If not specified, the file referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
-| --agent-file | -y | yes/[project](#project-file) | yes | Name of a file which contains a source code for IMP agent. If not specified, the file referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
+| --device-file | -x | no | yes | Name of a file which contains a source code for IMP device. If not specified, the file referenced by [Project File](#project-file) in the current directory is assumed; if no Project File, empty code is assumed. If the specified file does not exist, empty code is assumed. |
+| --agent-file | -y | no | yes | Name of a file which contains a source code for IMP agent. If not specified, the file referenced by [Project File](#project-file) in the current directory is assumed; if no Project File, empty code is assumed. If the specified file does not exist, empty code is assumed. |
 | --descr | -s | no | yes | Description of the build (Deployment). |
 | --origin | -o | no | yes | A free-form key to store the source of the code. |
 | --tag | -t | no | yes | A tag applied to this build (Deployment). This option may be repeated several times to apply several tags. |
