@@ -24,31 +24,41 @@
 
 'use strict';
 
-const Auth = require('../../../lib/Auth');
+const DeviceGroup = require('../../../lib/DeviceGroup');
 const Options = require('../../../lib/util/Options');
 
-const COMMAND = 'logout';
-const COMMAND_SECTION = 'project';
-const COMMAND_DESCRIPTION = 'Deletes local Auth File in the current directory';
+const COMMAND = 'builds';
+const COMMAND_SECTION = 'dg';
+const COMMAND_SHORT_DESCR = 'Updates/deletes builds of the specified Device Group.';
+const COMMAND_DESCRIPTION = 'Updates and/or deletes builds (Deployments) of the specified Device Group' + 
+    ' and displays information about all Deployments of the Device Group at the end of the command execution.';
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({
+        [Options.DEVICE_GROUP_IDENTIFIER] : false,
+        [Options.UNFLAG] : {
+            demandOption : false,
+            describe : 'Set "flagged" attribute to false in all Deployments of the specified Device Group.'
+        },
+        [Options.UNFLAG_OLD] : false,
+        [Options.REMOVE] : false,
+        [Options.CONFIRMED] : false,
         [Options.DEBUG] : false
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
         .options(options)
+        .check(function (argv) {
+            return Options.checkOptions(argv, options);
+        })
         .strict();
 };
 
 exports.handler = function (argv) {
-    if (!Options.checkCommandArgs(argv)) {
-        return;
-    }
     const options = new Options(argv);
-    new Auth(options, false).logout();
+    new DeviceGroup(options).builds(options);
 };

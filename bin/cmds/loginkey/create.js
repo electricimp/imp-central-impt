@@ -24,38 +24,34 @@
 
 'use strict';
 
-const Auth = require('../../lib/Auth');
-const Options = require('../../lib/util/Options');
+const LoginKey = require('../../../lib/LoginKey');
+const Options = require('../../../lib/util/Options');
 
-const COMMAND = 'login';
-const COMMAND_DESCRIPTION = 'Global login to impCentral CLI';
-const COMMAND_OPTIONS = '[--endpoint <endpoint_url>] (--user <user_id> --pwd <password> | --login-key <login_key>) [--debug] [--help]';
+const COMMAND = 'create';
+const COMMAND_SECTION = 'loginkey';
+const COMMAND_SHORT_DESCR = 'Creates a new Login Key.';
+const COMMAND_DESCRIPTION = 'Creates a new Login Key for the currently logged-in account.';
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({
-        [Options.ENDPOINT] : false,
-        [Options.USER] : false,
-        [Options.PASSWORD] : false,
-        [Options.LOGIN_KEY] : false,
+        [Options.PASSWORD] : true,
+        [Options.DESCRIPTION] : { demandOption : false, describe : 'Description of the Login Key.', _usage : '<login_key_description>' },
         [Options.DEBUG] : false
     });
     return yargs
-        .usage(Options.getUsage(null, COMMAND, COMMAND_DESCRIPTION, COMMAND_OPTIONS))
+        .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
         .options(options)
+        .check(function (argv) {
+            return Options.checkOptions(argv, options);
+        })
         .strict();
 };
 
 exports.handler = function (argv) {
-    if (!Options.checkCommandArgs(argv, 1)) {
-        return;
-    }
     const options = new Options(argv);
-    if (!Options.checkLoginParameters(options)) {
-        return;
-    }
-    new Auth(options, true).login(options);
+    new LoginKey(options).create(options);
 };

@@ -29,28 +29,29 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'unassign';
 const COMMAND_SECTION = 'device';
-const COMMAND_DESCRIPTION = 'Removes the specified Device(s) from the specified Device Group';
+const COMMAND_SHORT_DESCR = 'Unassigns the specified Device.';
+const COMMAND_DESCRIPTION = 'Unassigns the specified Device. Does nothing if the Device already unassigned.';
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({
-        [Options.DEVICE_IDENTIFIER] : false,
-        [Options.DEVICE_GROUP_IDENTIFIER] : false,
+        [Options.DEVICE_IDENTIFIER] : true,
+        [Options.UNBOND] : false,
         [Options.DEBUG] : false
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
         .options(options)
+        .check(function (argv) {
+            return Options.checkOptions(argv, options);
+        })
         .strict();
 };
 
 exports.handler = function (argv) {
-    if (!Options.checkCommandArgs(argv)) {
-        return;
-    }
     const options = new Options(argv);
     new Device(options).unassign(options);
 };

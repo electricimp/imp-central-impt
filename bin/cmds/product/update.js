@@ -29,29 +29,38 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'update';
 const COMMAND_SECTION = 'product';
-const COMMAND_DESCRIPTION = 'Updates the specified Product by a new Name and/or Description';
+const COMMAND_SHORT_DESCR = 'Updates the specified Product.';
+const COMMAND_DESCRIPTION = 'Updates the specified Product by a new Name and/or Description. Fails if the specified Product does not exist.';
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.PRODUCT_IDENTIFIER] : false,
-        [Options.NAME] : { demandOption : false, describe : 'New Product name', _usage : '<product_name>' },
-        [Options.DESCRIPTION] : { demandOption : false, describe : 'New Product description', _usage : '<product_description>' },
+        [Options.NAME] : {
+            demandOption : false,
+            describe : 'New Name of the Product. Must be unique among all Products owned by a particular Account.',
+            _usage : '<product_name>'
+        },
+        [Options.DESCRIPTION] : {
+            demandOption : false,
+            describe : 'Description of the Product.',
+            _usage : '<product_description>'
+        },
         [Options.DEBUG] : false
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
         .options(options)
+        .check(function (argv) {
+            return Options.checkOptions(argv, options);
+        })
         .strict();
 };
 
 exports.handler = function (argv) {
-    if (!Options.checkCommandArgs(argv)) {
-        return;
-    }
     const options = new Options(argv);
     new Product(options).update(options);
 };

@@ -26,34 +26,48 @@
 
 const Log = require('../../../lib/Log');
 const Options = require('../../../lib/util/Options');
+const Util = require('util');
 
 const COMMAND = 'stream';
 const COMMAND_SECTION = 'log';
-const COMMAND_DESCRIPTION = 'Displays logs from the specified Devices in real-time';
+const COMMAND_SHORT_DESCR = 'Displays logs from the specified Devices in real-time.';
+const COMMAND_DESCRIPTION = 'Creates a log stream and displays logs from the specified Devices in real-time.';
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({
-        [Options.DEVICE_IDENTIFIER] : false,
-        [Options.DEVICE_GROUP_IDENTIFIER] : false,
+        [Options.DEVICE_IDENTIFIER] : {
+            demandOption : false,
+            type : 'array',
+            elemType : 'string',
+            describe : 'Device Identifier of the Device which logs will be added to the log stream.'
+        },
+        [Options.DEVICE_GROUP_IDENTIFIER] : {
+            demandOption : false,
+            type : 'array',
+            elemType : 'string',
+            describe : Util.format('Device Group Identifier: Device Group Id or Device Group name.' +
+                ' Logs from all Devices assigned to the specified Device Groups will be added to the log stream.' +
+                ' --%s and --%s options are cumulative. If the both --%s and --%s options are not specified but there is' +
+                ' Project File in the current directory, all Devices assigned to the Device Group referenced by the Project File are assumed.',
+                Options.DEVICE_IDENTIFIER, Options.DEVICE_GROUP_IDENTIFIER, Options.DEVICE_IDENTIFIER, Options.DEVICE_GROUP_IDENTIFIER)
+        },
         [Options.DEBUG] : false
     });
-    options[Options.DEVICE_IDENTIFIER].type = 'array';
-    options[Options.DEVICE_GROUP_IDENTIFIER].type = 'array';
 
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
         .options(options)
+        .check(function (argv) {
+            return Options.checkOptions(argv, options);
+        })
         .strict();
 };
 
 exports.handler = function (argv) {
-    if (!Options.checkCommandArgs(argv)) {
-        return;
-    }
     const options = new Options(argv);
     new Log(options).stream(options);
 };

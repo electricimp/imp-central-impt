@@ -26,36 +26,70 @@
 
 const Build = require('../../../lib/Build');
 const Options = require('../../../lib/util/Options');
+const Errors = require('../../../lib/util/Errors');
+const UserInteractor = require('../../../lib/util/UserInteractor');
 
 const COMMAND = 'list';
 const COMMAND_SECTION = 'build';
-const COMMAND_DESCRIPTION = 'Displays info about all or filtered Builds (Deployments) available for a user';
+const COMMAND_SHORT_DESCR = 'Displays information about all or filtered builds.';
+const COMMAND_DESCRIPTION = 'Displays information about all builds (Deployments) available to the current logged-in account.';
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
+    const entityType = 'Builds';
     const options = Options.getOptions({
-        [Options.PRODUCT_ID] : { demandOption : false, describeFormatArgs : ['Builds'] },
-        [Options.PRODUCT_NAME] : { demandOption : false, describeFormatArgs : ['Builds'] },
-        [Options.DEVICE_GROUP_ID] : { demandOption : false, describeFormatArgs : ['Builds'] },
-        [Options.DEVICE_GROUP_NAME] : { demandOption : false, describeFormatArgs : ['Builds'] },
-        [Options.SHA] : { demandOption : false, describe : 'List Builds with the specified Deployment SHA' },
-        [Options.TAG] : { demandOption : false, describe : 'List Builds with the specified Deployment tag' },
-        [Options.FLAGGED] : { demandOption : false, describe : 'List Builds with the specified flagged marker' },
+        [Options.OWNER] : { demandOption : false, describeFormatArgs : [ entityType ] },
+        [Options.PRODUCT_IDENTIFIER] : {
+            demandOption : false,
+            type : 'array',
+            elemType : 'string',
+            describe : 'Lists builds deployed to Device Groups which belong to the specified Product only.'
+        },
+        [Options.DEVICE_GROUP_IDENTIFIER] : {
+            demandOption : false,
+            type : 'array',
+            elemType : 'string',
+            describe : 'Lists builds deployed to the specified Device Group only.'
+        },
+        [Options.DEVICE_GROUP_TYPE] : {
+            demandOption : false,
+            describe : 'Lists builds deployed to Device Groups of the specified type only.'
+        },
+        [Options.SHA] : {
+            demandOption : false,
+            type : 'array',
+            elemType : 'string',
+            describe : 'Lists builds with the specified SHA only.'
+        },
+        [Options.TAG] : {
+            demandOption : false,
+            describe : 'Lists builds with the specified tag only.'
+        },
+        [Options.FLAGGED] : {
+            demandOption : false,
+            describe : 'Lists builds with the flagged attribute set to true only.',
+            nargs: 0,
+            noValue: true,
+            _usage: ''
+        },
+        [Options.UNFLAGGED] : false,
+        [Options.NON_ZOMBIE] : false,
+        [Options.ZOMBIE] : false,
         [Options.DEBUG] : false
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
         .options(options)
+        .check(function (argv) {
+            return Options.checkOptions(argv, options);
+        })
         .strict();
 };
 
 exports.handler = function (argv) {
-    if (!Options.checkCommandArgs(argv)) {
-        return;
-    }
     const options = new Options(argv);
     new Build(options).list(options);
 };

@@ -29,28 +29,33 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'delete';
 const COMMAND_SECTION = 'build';
-const COMMAND_DESCRIPTION = 'Deletes the specified Build';
+const COMMAND_SHORT_DESCR = 'Deletes the specified build.';
+const COMMAND_DESCRIPTION = 'Deletes the specified build (Deployment).';
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({
-        [Options.BUILD_IDENTIFIER] : true,
+        [Options.BUILD_IDENTIFIER] : {
+            demandOption : true,
+            describe : 'Build Identifier: Deployment Id, sha, tag or origin.'
+        },
         [Options.FORCE] : false,
+        [Options.CONFIRMED] : false,
         [Options.DEBUG] : false
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
         .options(options)
+        .check(function (argv) {
+            return Options.checkOptions(argv, options);
+        })
         .strict();
 };
 
 exports.handler = function (argv) {
-    if (!Options.checkCommandArgs(argv)) {
-        return;
-    }
     const options = new Options(argv);
     new Build(options).delete(options);
 };

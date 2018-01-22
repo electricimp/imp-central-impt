@@ -29,34 +29,54 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'run';
 const COMMAND_SECTION = 'build';
-const COMMAND_DESCRIPTION = 'Creates, deploys and runs a build. Optionally, displays logs of the running build';
+const COMMAND_SHORT_DESCR = 'Creates, deploys and runs a build.';
+const COMMAND_DESCRIPTION = 'Creates, deploys and runs a build (Deployment). Optionally, displays logs of the running build.' +
+    ' Fails if the specified Device Group does not exist.';
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.DEVICE_GROUP_IDENTIFIER] : false,
-        [Options.DEVICE_FILE] : false,
-        [Options.AGENT_FILE] : false,
-        [Options.DESCRIPTION] : { demandOption : false, describe : 'Description of the Deployment', _usage : '<build_description>' },
+        [Options.DEVICE_FILE] : {
+            demandOption : false,
+            describe : 'Name of a file which contains a source code for IMP device.' +
+                ' If not specified, the file referenced by Project File in the current directory is assumed;' +
+                ' if no Project File, empty code is assumed. If the specified file does not exist, empty code is assumed.'
+        },
+        [Options.AGENT_FILE] : {
+            demandOption : false,
+            describe : 'Name of a file which contains a source code for IMP agent.' +
+                ' If not specified, the file referenced by Project File in the current directory is assumed;' +
+                ' if no Project File, empty code is assumed. If the specified file does not exist, empty code is assumed.'
+        },
+        [Options.DESCRIPTION] : {
+            demandOption : false,
+            describe : 'Description of the build (Deployment).',
+            _usage : '<build_description>'
+        },
         [Options.ORIGIN] : false,
         [Options.TAG] : false,
         [Options.FLAGGED] : false,
+        [Options.CONDITIONAL] : {
+            demandOption : false,
+            describe : 'Conditional restart of Devices assigned to the specified Device Group instead of a normal restart.'
+        },
         [Options.LOG] : false,
         [Options.DEBUG] : false
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
         .options(options)
+        .check(function (argv) {
+            return Options.checkOptions(argv, options);
+        })
         .strict();
 };
 
 exports.handler = function (argv) {
-    if (!Options.checkCommandArgs(argv)) {
-        return;
-    }
     const options = new Options(argv);
     new Build(options).run(options);
 };

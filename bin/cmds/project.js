@@ -25,9 +25,10 @@
 'use strict';
 
 const Options = require('../../lib/util/Options');
+const UserInteractor = require('../../lib/util/UserInteractor');
 
-const COMMAND = 'project <command>';
-const COMMAND_DESCRIPTION = 'Project manipulation commands';
+const COMMAND = 'project';
+const COMMAND_DESCRIPTION = 'Project manipulation commands.';
 
 exports.command = COMMAND;
 
@@ -36,7 +37,7 @@ exports.describe = COMMAND_DESCRIPTION;
 exports.builder = function (yargs) {
     return yargs
         .commandDir('project')
-        .demandCommand(1, 'Please specify a valid command')
+        .demandCommand(1, UserInteractor.ERRORS.CMD_UNKNOWN)
         .strict()
-        .usage(Options.getUsage(null, COMMAND, COMMAND_DESCRIPTION));
+        .usage(Options.getCommandGroupUsage(COMMAND, COMMAND_DESCRIPTION));
 };

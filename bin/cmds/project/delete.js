@@ -24,36 +24,47 @@
 
 'use strict';
 
+const Util = require('util');
 const Project = require('../../../lib/Project');
 const Options = require('../../../lib/util/Options');
+const Errors = require('../../../lib/util/Errors');
+const UserInteractor = require('../../../lib/util/UserInteractor');
 
 const COMMAND = 'delete';
 const COMMAND_SECTION = 'project';
-const COMMAND_DESCRIPTION = 'Deletes the current project';
+const COMMAND_SHORT_DESCR = 'Deletes Project File and related entities.';
+const COMMAND_DESCRIPTION = 'Deletes Project File in the current directory and, optionally,' +
+    ' the impCentral API entities (Device Group, Product, Deployments) related to the project, and, optionally,' +
+    ' the local source files. Does nothing if there is no Project File in the current directory.';
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({
-        [Options.PRODUCT] : { demandOption : false, isProjectOption : true },
+        [Options.ENTITIES] : {
+            demandOption : false,
+            describe: 'Also deletes the impCentral API entities (Device Group, Product, Deployments) referenced by Project File.'
+        },
         [Options.FILES] : false,
-        [Options.LOGOUT] : false,
-        [Options.ALL] : false,
-        [Options.FORCE] : false,
+        [Options.ALL] : {
+            demandOption : false,
+            describe : Util.format('Includes --%s and --%s options.', Options.ENTITIES, Options.FILES)
+        },
+        [Options.CONFIRMED] : false,
         [Options.DEBUG] : false
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
         .options(options)
+        .check(function (argv) {
+            return Options.checkOptions(argv, options);
+        })
         .strict();
 };
 
 exports.handler = function (argv) {
-    if (!Options.checkCommandArgs(argv)) {
-        return;
-    }
     const options = new Options(argv);
     new Project(options).delete(options);
 };

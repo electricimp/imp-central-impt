@@ -29,11 +29,12 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'info';
 const COMMAND_SECTION = 'build';
-const COMMAND_DESCRIPTION = 'Displays information about the specified build';
+const COMMAND_SHORT_DESCR = 'Displays information about the specified build.';
+const COMMAND_DESCRIPTION = 'Displays information about the specified build (Deployment).';
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({
@@ -43,13 +44,13 @@ exports.builder = function (yargs) {
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
         .options(options)
+        .check(function (argv) {
+            return Options.checkOptions(argv, options);
+        })
         .strict();
 };
 
 exports.handler = function (argv) {
-    if (!Options.checkCommandArgs(argv)) {
-        return;
-    }
     const options = new Options(argv);
     new Build(options).info(options);
 };

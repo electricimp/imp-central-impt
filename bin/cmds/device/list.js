@@ -26,37 +26,54 @@
 
 const Device = require('../../../lib/Device');
 const Options = require('../../../lib/util/Options');
+const Errors = require('../../../lib/util/Errors');
+const UserInteractor = require('../../../lib/util/UserInteractor');
 
 const COMMAND = 'list';
 const COMMAND_SECTION = 'device';
-const COMMAND_DESCRIPTION = 'Displays info about all or filtered Devices available for a user';
+const COMMAND_SHORT_DESCR = 'Displays information about all or filtered Devices.';
+const COMMAND_DESCRIPTION = 'Displays information about all Devices available to the current logged-in account.';
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
+    const entityType = 'Devices';
     const options = Options.getOptions({
+        [Options.OWNER] : { demandOption : false, describeFormatArgs : [ entityType ] },
+        [Options.PRODUCT_IDENTIFIER] : {
+            demandOption : false,
+            type : 'array',
+            elemType : 'string',
+            describe : 'Lists Devices assigned to Device Groups which belong to the specified Product only.'
+        },
+        [Options.DEVICE_GROUP_IDENTIFIER] : {
+            demandOption : false,
+            type : 'array',
+            elemType : 'string',
+            describe : 'Lists Devices assigned to the specified Device Group only.'
+        },
+        [Options.DEVICE_GROUP_TYPE] : {
+            demandOption : false,
+            describe : 'Lists Devices assigned to Device Groups of the specified type only.'
+        },
         [Options.UNASSIGNED] : false,
         [Options.ASSIGNED] : false,
         [Options.ONLINE] : false,
         [Options.OFFLINE] : false,
-        [Options.PRODUCT_ID] : { demandOption : false, describeFormatArgs : ['Devices'] },
-        [Options.PRODUCT_NAME] : { demandOption : false, describeFormatArgs : ['Devices'] },
-        [Options.DEVICE_GROUP_ID] : { demandOption : false, describeFormatArgs : ['Devices'] },
-        [Options.DEVICE_GROUP_NAME] : { demandOption : false, describeFormatArgs : ['Devices'] },
         [Options.DEBUG] : false
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
         .options(options)
+        .check(function (argv) {
+            return Options.checkOptions(argv, options);
+        })
         .strict();
 };
 
 exports.handler = function (argv) {
-    if (!Options.checkCommandArgs(argv)) {
-        return;
-    }
     const options = new Options(argv);
     new Device(options).list(options);
 };

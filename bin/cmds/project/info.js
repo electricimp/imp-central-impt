@@ -29,26 +29,34 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'info';
 const COMMAND_SECTION = 'project';
-const COMMAND_DESCRIPTION = 'Displays info about the current project';
+const COMMAND_SHORT_DESCR = 'Displays information about the project.';
+const COMMAND_DESCRIPTION = 'Displays information about the project.' +
+    ' Fails if there is no Project File in the current directory.' +
+    ' With every call the latest actual information is obtained using impCentral API.';
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({
+        [Options.FULL] : {
+            demandOption : false,
+            describe : 'Displays additional information.' +
+                ' Full details about the corresponding Device Group, authentication status applicable to the current directory.'
+        },
         [Options.DEBUG] : false
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
         .options(options)
+        .check(function (argv) {
+            return Options.checkOptions(argv, options);
+        })
         .strict();
 };
 
 exports.handler = function (argv) {
-    if (!Options.checkCommandArgs(argv)) {
-        return;
-    }
     const options = new Options(argv);
-    new Project(options).info();
+    new Project(options).info(options);
 };

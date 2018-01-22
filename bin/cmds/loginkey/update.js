@@ -24,30 +24,35 @@
 
 'use strict';
 
-const Auth = require('../../lib/Auth');
-const Options = require('../../lib/util/Options');
+const LoginKey = require('../../../lib/LoginKey');
+const Options = require('../../../lib/util/Options');
 
-const COMMAND = 'logout';
-const COMMAND_DESCRIPTION = 'Deletes global Auth File';
+const COMMAND = 'update';
+const COMMAND_SECTION = 'loginkey';
+const COMMAND_SHORT_DESCR = 'Updates the Description of the specified Login Key.';
+const COMMAND_DESCRIPTION = COMMAND_SHORT_DESCR;
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({
+        [Options.LOGIN_KEY] : true,
+        [Options.PASSWORD] : true,
+        [Options.DESCRIPTION] : { demandOption : true, describe : 'New Description of the Login Key.', _usage : '<login_key_description>' },
         [Options.DEBUG] : false
     });
     return yargs
-        .usage(Options.getUsage(null, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
+        .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
         .options(options)
+        .check(function (argv) {
+            return Options.checkOptions(argv, options);
+        })
         .strict();
 };
 
 exports.handler = function (argv) {
-    if (!Options.checkCommandArgs(argv, 1)) {
-        return;
-    }
     const options = new Options(argv);
-    new Auth(options, true).logout();
+    new LoginKey(options).update(options);
 };

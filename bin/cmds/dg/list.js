@@ -29,28 +29,39 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'list';
 const COMMAND_SECTION = 'dg';
-const COMMAND_DESCRIPTION = 'Displays info about all or filtered Device Groups available for a user';
+const COMMAND_SHORT_DESCR = 'Displays information about all or filtered Device Groups.';
+const COMMAND_DESCRIPTION = 'Displays information about all Device Groups available to the current logged-in account.';
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
+    const entityType = 'Device Groups';
     const options = Options.getOptions({
-        [Options.PRODUCT_ID] : { demandOption : false, describeFormatArgs : ['Device Groups'] },
-        [Options.PRODUCT_NAME] : { demandOption : false, describeFormatArgs : ['Device Groups'] },
+        [Options.OWNER] : { demandOption : false, describeFormatArgs : [ entityType ] },
+        [Options.PRODUCT_IDENTIFIER] : {
+            demandOption : false,
+            type : 'array',
+            elemType : 'string',
+            describe : 'Lists Device Groups which belong to the specified Product only.'
+        },
+        [Options.DEVICE_GROUP_TYPE] : {
+            demandOption : false,
+            describe : 'Lists Device Groups of the specified type only.',
+        },
         [Options.DEBUG] : false
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
         .options(options)
+        .check(function (argv) {
+            return Options.checkOptions(argv, options);
+        })
         .strict();
 };
 
 exports.handler = function (argv) {
-    if (!Options.checkCommandArgs(argv)) {
-        return;
-    }
     const options = new Options(argv);
     new DeviceGroup(options).list(options);
 };

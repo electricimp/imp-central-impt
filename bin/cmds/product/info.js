@@ -29,27 +29,33 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'info';
 const COMMAND_SECTION = 'product';
-const COMMAND_DESCRIPTION = 'Displays info about the specified Product';
+const COMMAND_SHORT_DESCR = 'Displays information about the specified Product.';
+const COMMAND_DESCRIPTION = COMMAND_SHORT_DESCR;
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.PRODUCT_IDENTIFIER] : false,
+        [Options.FULL] : {
+            demandOption : false,
+            describe : 'Displays additional information.' +
+                ' Details about every Device Group that belongs to the Product, Devices assigned to every Device Group and other.'
+        },
         [Options.DEBUG] : false
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
         .options(options)
+        .check(function (argv) {
+            return Options.checkOptions(argv, options);
+        })
         .strict();
 };
 
 exports.handler = function (argv) {
-    if (!Options.checkCommandArgs(argv)) {
-        return;
-    }
     const options = new Options(argv);
     new Product(options).info(options);
 };

@@ -29,28 +29,34 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'delete';
 const COMMAND_SECTION = 'dg';
-const COMMAND_DESCRIPTION = 'Deletes the specified Device Group. All Devices which belonged to this Device Group become unassigned';
+const COMMAND_SHORT_DESCR = 'Deletes the specified Device Group.';
+const COMMAND_DESCRIPTION = 'Deletes the specified Device Group and, optionally, all the related builds (Deployments).';
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.DEVICE_GROUP_IDENTIFIER] : false,
+        [Options.BUILDS] : {
+            demandOption : false,
+            describe : 'Additionally deletes all Deployments related to the Device Group.',
+        },
         [Options.FORCE] : false,
+        [Options.CONFIRMED] : false,
         [Options.DEBUG] : false
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
         .options(options)
+        .check(function (argv) {
+            return Options.checkOptions(argv, options);
+        })
         .strict();
 };
 
 exports.handler = function (argv) {
-    if (!Options.checkCommandArgs(argv)) {
-        return;
-    }
     const options = new Options(argv);
     new DeviceGroup(options).delete(options);
 };

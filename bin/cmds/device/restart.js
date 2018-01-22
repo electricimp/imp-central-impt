@@ -29,27 +29,34 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'restart';
 const COMMAND_SECTION = 'device';
-const COMMAND_DESCRIPTION = 'Reboots the specified Device';
+const COMMAND_SHORT_DESCR = 'Reboots the specified Device.';
+const COMMAND_DESCRIPTION = 'Reboots the specified Device and, optionally, starts displaying logs from it.';
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.DEVICE_IDENTIFIER] : true,
+        [Options.CONDITIONAL] : false,
+        [Options.LOG] : {
+            demandOption : false,
+            describe : 'Starts displaying logs from the specified Device (see impt log stream command description).' +
+                ' To stop displaying the logs press <Ctrl-C>.'
+        },
         [Options.DEBUG] : false
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
         .options(options)
+        .check(function (argv) {
+            return Options.checkOptions(argv, options);
+        })
         .strict();
 };
 
 exports.handler = function (argv) {
-    if (!Options.checkCommandArgs(argv)) {
-        return;
-    }
     const options = new Options(argv);
     new Device(options).restart(options);
 };
