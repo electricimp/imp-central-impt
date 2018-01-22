@@ -60,13 +60,16 @@ There are two additional groups that include commands convenient for code develo
 
 For similar operations in different command groups the impt tool uses similar command names, like `create`, `update`, `delete`, `list`, `info`.
 
-The most of commands have optional arguments called options - `<options>`. Options may be written in any order. As a general rule, the same option should not be specified many times in the same command, but exceptions exist. Some options require values, some not. If option value has spaces it must be put into double quotes - `“option value with spaces”`. Every option has one letter [alias](./CommandsManual.md#list-of-aliases). The aliases are unique for a particular command but may be reused for different options in different commands. The same option in different commands always has the same alias. The options and aliases are detailed in the [Commands Description](./CommandsManual.md#commands-description).
+The most of commands have optional arguments called options - `<options>`. Options may be written in any order. As a general rule, the same option should not be specified many times in the same command, but exceptions exist. Some options require values, some not. If option value has spaces it must be put into double quotes - `“option value with spaces”`. Some options may accept an empty value, it should be specified as `“”`.
+
+Every option has one letter [alias](./CommandsManual.md#list-of-aliases). The aliases are unique for a particular command but may be reused for different options in different commands. The same option in different commands always has the same alias. The options and aliases are detailed in the [Commands Description](./CommandsManual.md#commands-description).
 
 *Examples*  
 *The syntax and commands with options:*  
 `impt product create --name TestProduct --descr "My test product"`  
+`impt product update --product TestProduct -s ""`  
 `impt dg create --name "TestDG" -y development -p TestProduct`  
-`impt device assign -g TestDG -d "my device 1"`  
+`impt device assign -g TestDG -d "myDevice1"`  
 
 ## Help
 
