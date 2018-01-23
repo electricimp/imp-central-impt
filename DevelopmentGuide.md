@@ -65,7 +65,7 @@ It creates Project which relates to already existent Device Group, just links it
 
 *Example*  
 ```
-> impt project link -g MyDG
+> impt project link --dg MyDG
 Device source file "device.nut" is created successfully.
 Agent source file "agent.nut" is created successfully.
 Project is linked successfully.
@@ -106,7 +106,7 @@ The source files can be specified directly - using `--device-file <device_file>`
 
 *Example*  
 ```
-> impt project create -p MyProduct -n MyDG
+> impt project create --product MyProduct --name MyDG
 Device Group "MyDG" is created successfully.
 Device source file "device.nut" is created successfully.
 Agent source file "agent.nut" is created successfully.
@@ -138,7 +138,7 @@ Note, you can update other impCentral API entities related to your Project by us
 
 *Example - Update Description of the project's Device Group, change the linked device source file to "device1.nut"*  
 ```
-> impt project update -s "New description of my DG" -x device1.nut
+> impt project update --descr "New description of my DG" --device-file device1.nut
 Device Group "27f8ee81-59cd-a9ad-d2a4-e430e4e19ae9" is updated successfully.
 Device source file "device1.nut" is created successfully.
 Project is updated successfully.
@@ -173,14 +173,14 @@ Usually, it is enough to have one device added to your Project for development/d
 
 *Example*  
 ```
-> impt device assign -d myDevice1
+> impt device assign --device myDevice1
 Device "myDevice1" is assigned successfully to Device Group "27f8ee81-59cd-a9ad-d2a4-e430e4e19ae9".
 IMPT COMMAND SUCCEEDS
 ```
 
 *Example*  
 ```
-> impt dg reassign -f TestDG
+> impt dg reassign --from TestDG
 The following Devices assigned to Device Group "TestDG" are reassigned successfully to Device Group 
 "27f8ee81-59cd-a9ad-d2a4-e430e4e19ae9":
 Device:
@@ -202,7 +202,7 @@ Alternatively, you can use [**impt build run**](./CommandsManual.md#build-run) c
 
 *Example - Create a new flagged Deployment with Description and tag*  
 ```
-> impt build deploy -s "my new build" -t TAG1 -f
+> impt build deploy --descr "my new build" --tag TAG1 --flagged
 Deployment "b3cd81d0-0be3-b7a3-f15c-df2ded28a154" is created successfully.
 IMPT COMMAND SUCCEEDS
 ```
@@ -234,7 +234,7 @@ Note, a limited number of log entries are kept by impCentral API for a limited p
 
 *Example*  
 ```
-> impt log get -s 5
+> impt log get --page-size 5
 2018-01-22T18:33:59.537Z [agent.log] { "measureTime": "1516646039", "data": 8 }
 2018-01-22T18:33:59.536Z [agent.log] Data published successfully:
 2018-01-22T18:33:49.321Z [agent.log] { "measureTime": "1516646028", "data": 7 }
@@ -295,7 +295,7 @@ Use [**impt product info**](./CommandsManual.md#product-info) command with the o
 
 *Example*  
 ```
-> impt project info -u
+> impt project info --full
 Project info:
 Device file:  device.nut
 Agent file:   agent.nut
@@ -355,7 +355,7 @@ Note, [**impt project delete**](./CommandsManual.md#project-delete) command neve
 
 *Example - Delete everything*  
 ```
-> impt project delete -a
+> impt project delete --all
 The following entities will be deleted:
 Device Group:
   id:   27f8ee81-59cd-a9ad-d2a4-e430e4e19ae9
