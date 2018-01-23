@@ -500,7 +500,7 @@ These are the main steps you should perform in order to prepare your devices and
 
 *Example:*  
 ```
-> impt product create -n MyTestProduct
+> impt product create --name MyTestProduct
 Product "MyTestProduct" is created successfully.
 IMPT COMMAND SUCCEEDS
 ```
@@ -511,7 +511,7 @@ Theoretically, you may try to use Device Group of any [type](./CommandsManual#de
 
 *Example:*  
 ```
-> impt dg create -n MyTestDG -p MyTestProduct
+> impt dg create --name MyTestDG --product MyTestProduct
 Device Group "MyTestDG" is created successfully.
 IMPT COMMAND SUCCEEDS
 ```
@@ -520,7 +520,7 @@ IMPT COMMAND SUCCEEDS
 
 *Example:*  
 ```
-> impt device assign -d myDevice1 -g MyTestDG
+> impt device assign --device myDevice1 --dg MyTestDG
 Device "myDevice1" is assigned successfully to Device Group "MyTestDG".
 IMPT COMMAND SUCCEEDS
 ```
@@ -547,7 +547,7 @@ The configuration settings include:
 
 *Example:*  
 ```
-> impt test create -g MyTestDG -y MyLibrary.agent.lib.nut
+> impt test create --dg MyTestDG --agent-file MyLibrary.agent.lib.nut
 Test Configuration File is created successfully.
 Test Configuration info:
 Test files:       *.test.nut, tests/**/*.test.nut
@@ -577,7 +577,7 @@ You may update the test configuration by calling [**impt test update**](./Comman
 
 *Example:*  
 ```
-> impt test update -t 60 -e true
+> impt test update --timeout 60 --builder-cache true
 Test Configuration File is updated successfully.
 Test Configuration info:
 Test files:       *.test.nut, tests/**/*.test.nut
@@ -648,7 +648,7 @@ For unauthenticated requests the GitHub API allows you to make [up to 60 request
 
 *Example:*  
 ```
-> impt test github -i github.conf -u github_username -w github_password
+> impt test github --github-config github.conf --user github_username --pwd github_password
 GitHub credentials Configuration File is created successfully.
 IMPT COMMAND SUCCEEDS
 ```
@@ -774,7 +774,7 @@ You may run the tests in the debug mode by specifying `--debug` option of the [*
 
 *Example:*  
 ```
-> impt test run -t TestFile1:MyTestCase::testMe -z
+> impt test run --tests TestFile1:MyTestCase::testMe --debug
 ...
 [info] Started at 22 Jan 2018 22:49:25 GMT+0300
 [debug:TestHelper] Skipping found test tests/TestFile2.test.nut
@@ -862,7 +862,7 @@ If you want to delete your test project, call [**impt test delete**](./CommandsM
 
 *Example:*  
 ```
-> impt test delete -a
+> impt test delete --all
 The following entities will be deleted:
 Product:
   id:   a83ecc00-cb39-d950-9a60-96694403ab9d
@@ -911,7 +911,7 @@ Alternatively, you may fully delete the Device Group which you used for the test
 
 *Example:*  
 ```
-> impt dg delete -g MyTestDG -b -f
+> impt dg delete --dg MyTestDG --builds --force
 The following entities will be deleted:
 Device Group:
   id:   e4bf84dd-7cc6-147e-9b42-b08812912b99
@@ -950,7 +950,7 @@ If you only want to unassign the devices from the Device Group, call [**impt dg 
 
 *Example:*  
 ```
-> impt dg unassign -g MyTestDG
+> impt dg unassign --dg MyTestDG
 The following Devices are unassigned successfully from Device Group "MyTestDG":
 Device:
   id:            234776801163a9ee
@@ -962,7 +962,7 @@ IMPT COMMAND SUCCEEDS
 ```
 
 ```
-> impt device unassign -d myDevice1
+> impt device unassign --device myDevice1
 Device "myDevice1" is unassigned successfully.
 IMPT COMMAND SUCCEEDS
 ```
@@ -971,7 +971,7 @@ If you want to delete the Product, call [**impt product delete**](./CommandsManu
 
 *Example:*  
 ```
-> impt product delete -p MyTestProduct -b -f
+> impt product delete --product MyTestProduct --builds --force
 The following entities will be deleted:
 Product:
   id:   a83ecc00-cb39-d950-9a60-96694403ab9d
