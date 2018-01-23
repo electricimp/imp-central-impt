@@ -32,7 +32,7 @@ const COMMAND_SECTION = 'build';
 const COMMAND_SHORT_DESCR = 'Creates and deploys a build.';
 const COMMAND_DESCRIPTION = 'Creates a build (Deployment) from the specified source files,' +
     ' with Description (if specified) and attributes (if specified) and deploys it to all Devices' +
-    ' of the specified Device Group. Fails if the specified Device Group does not exist.';
+    ' of the specified Device Group.';
 
 exports.command = COMMAND;
 
@@ -45,13 +45,13 @@ exports.builder = function (yargs) {
             demandOption : false,
             describe : 'Name of a file which contains a source code for IMP device.' +
                 ' If not specified, the file referenced by Project File in the current directory is assumed;' +
-                ' if no Project File, empty code is assumed. If the specified file does not exist, empty code is assumed.'
+                ' if no Project File, empty code is assumed. If the specified file does not exist, the command fails.'
         },
         [Options.AGENT_FILE] : {
             demandOption : false,
             describe : 'Name of a file which contains a source code for IMP agent.' +
                 ' If not specified, the file referenced by Project File in the current directory is assumed;' +
-                ' if no Project File, empty code is assumed. If the specified file does not exist, empty code is assumed.'
+                ' if no Project File, empty code is assumed. If the specified file does not exist, the command fails.'
         },
         [Options.DESCRIPTION] : {
             demandOption : false,

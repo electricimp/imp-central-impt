@@ -1247,7 +1247,7 @@ Fails if the specified Webhook does not exist.
 | -o | --owner, --origin, --unflag-old  |
 | -p | --product  |
 | -q | --confirmed  |
-| -r | --create-target, --remove-tag, --rename-files, --remove  |
+| -r | --create-target, --remove-tag, --remove  |
 | -s | --descr, --sha, --page-size, --stop-on-fail  |
 | -t | --tag, --timeout, --temp, --target, --to, --tests  |
 | -u | --user, --full, --unflagged, --unflag, --unassigned, --unbond, --url  |

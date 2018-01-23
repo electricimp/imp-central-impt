@@ -41,15 +41,14 @@ exports.builder = function (yargs) {
         [Options.DEVICE_GROUP_IDENTIFIER] : true,
         [Options.DEVICE_FILE] :  {
             demandOption : false,
-            describe: 'Name of a file for IMP device source code.',
+            describe: 'Name of a file for IMP device source code. If the file does not exist, empty file is created.',
             default: 'device.nut'
         },
         [Options.AGENT_FILE] : {
             demandOption : false,
-            describe: 'Name of a file for IMP agent source code.',
+            describe: 'Name of a file for IMP agent source code. If the file does not exist, empty file is created.',
             default: 'agent.nut'
         },
-        [Options.CREATE_FILES] : false,
         [Options.CONFIRMED] : false,
         [Options.DEBUG] : false
     });

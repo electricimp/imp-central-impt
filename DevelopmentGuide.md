@@ -140,7 +140,7 @@ Note, you can update other impCentral API entities related to your Project by us
 ```
 > impt project update -s "New description of my DG" -x device1.nut
 Device Group "27f8ee81-59cd-a9ad-d2a4-e430e4e19ae9" is updated successfully.
-Device source file "device.nut" is renamed successfully to "device1.nut". ???
+Device source file "device1.nut" is created successfully.
 Project is updated successfully.
 Project info:
 Device file:  device1.nut
