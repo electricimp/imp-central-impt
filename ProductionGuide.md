@@ -1,16 +1,14 @@
-# impt Production Guide
+# impt Production Guide #
 
-This additional guide is intended for those who use the impt tool in [factory and production processes](https://developer.electricimp.com/manufacturing).
+This additional guide is intended for those who use *impt* with [factory and production processes](https://developer.electricimp.com/manufacturing).
 
-First of all, please read the root [readme file](./README.md) that covers all basic and common aspects of the impt tool.
+First of all, please read the main [Read Me file](./README.md), which covers all of *impt*’s basic usage and common components.
 
-The full impt tool commands specification is described in the [impt Commands Manual](./CommandsManual.md).
+The full *impt* tool command specification is described in the [Commands Manual](./CommandsManual.md).
 
-**TODO - this guide should be carefully reviewed and maybe fully re-written by EI. Screenshots may be added by those who can emulate factory process.**
+**Note** You need to have appropriate permission to make use of [impCentral™ API](https://apidoc.electricimp.com/) entities and endpoints related to the production process.
 
-Note, you need to have appropriate permissions to operate with the [impCentral API](https://apidoc.electricimp.com/) entities related to factory and production processes.
-
-In general, the impt tool may be used for the following operations during your product development, manufacturing and production:
+In general, *impt* may be used for the following operations during your product development, manufacturing and production:
 - [Product creation](#product)
 - Development process (covered by the [Development Guide](./DevelopmentGuide.md))
 - [Device Groups creation and management](#device-groups)
@@ -26,142 +24,180 @@ In general, the impt tool may be used for the following operations during your p
 - [New Versions creation](#new-versions)
 - [Cleaning Up](#cleaning-up)
 
-You may use scripts on top of the impt tool commands to automate some of the operations.
+You may use scripts on top of *impt* commands to automate some of the operations.
 
-## Product
+## Product ##
 
-Usually, you need one Product entity for your whole product. One Product may include all software components needed for development, testing, factory, production, support of different versions of your product, etc.
+Typically, you have one Product entity per actual product. A single Product may include all of the software components needed for development, testing, factory operation, device end-user and support of all the different versions of your product.
 
-You can create Product by [**impt product create**](./CommandsManual.md#product-create) command.
+You can create a Product with the [`impt product create`](./CommandsManual.md#product-create) command:
 
-*Example:*  
-`impt product create --name MyProduct --descr "My product"`  
+```
+impt product create --name MyProduct --descr "My product"
+```
 
-## Device Groups
+## Device Groups ##
 
-Device Group is, in fact, an entity which encapsulates a particular software component of your product - an application, a factory firmware. Different Device Groups may cover different versions of your software components - a version which is currently under development, a version which is currently under testing, different versions in production, etc. When a new software build (Deployment) is created it is intended to one and only one concrete Device Group.
+A Device Group encapsulates a particular software component of your product: test code, an application, factory firmware, etc. Different Device Groups may cover different versions of your software components: a version which is currently under development, a version which is currently under testing, different versions in production, etc. When a new software build (Deployment) is created, it is assigned to one and only one Device Group.
 
-Device Group may be of different [types](./CommandsManual.md#device-group-type):
+Device Groups may be of different [types](./CommandsManual.md#device-group-type):
 - *development*, *pre-factory* and *pre-production* Device Groups are used during [development process](./DevelopmentGuide.md).
-- *factory* and *production* Device Groups are used during factory and production processes.
+- *factory* and *production* Device Groups are used during the production process.
 
-### Production Device Groups
+### Production Device Groups ###
 
-Your production devices, which are utilized by end users, are combined in one or several Device Groups of *production* type. Different *production* Device Groups of the same Product may be used to encapsulate and manage different versions or flavors of your application.
+Your production devices, which are utilized by end-users, are organized into one or more Device Groups of the *Production* type. Different Production Device Groups within the same Product may be used to encapsulate and manage different versions or flavors of your application.
 
-You can create *production* Device Group by [**impt dg create --dg-type production**](./CommandsManual.md#device-group-create) command.
+You can create a Production Device Group with the [`impt dg create --dg-type production`](./CommandsManual.md#device-group-create) command.
 
-Pay attention, *production* Device Group has *load-code-after-blessing* attribute - it defines when your application is loaded to the production devices - in your factory or when an end-user activates a device. When a new *production* Device Group is created this attribute always has the value *true*. To change the attribute you can use `--load-code-after-blessing` option of [**impt dg update**](./CommandsManual.md#device-group-update) command.
+Production Device Groups have an attribute called *load-code-after-blessing*. This defines when your application is loaded onto production devices: in your factory or when an end-user activates a device using BlinkUp™. When a new Production Device Group is created this attribute always has the value `true`. To change the attribute you can use the `--load-code-after-blessing` option of the [`impt dg update`](./CommandsManual.md#device-group-update) command:
 
-*Example:*  
-`impt dg create --name MyProductionDG --descr "Production Device Group for application" --dg-type production --product MyProduct`  
-`impt dg update --dg MyProductionDG --load-code-after-blessing false`  
+```
+impt dg create --name MyProductionDG --descr "Production Device Group for application" 
+    --dg-type production --product MyProduct
+impt dg update --dg MyProductionDG --load-code-after-blessing false
+```
 
-### Factory Device Groups
+### Factory Device Groups ###
 
-For your [factory process](https://developer.electricimp.com/manufacturing/factoryprocessinanutshell) you need [Factory BlinkUp Fixtures](https://developer.electricimp.com/manufacturing/blinkupfixture_simple) - devices which make factory BlinkUp and blessing of your production devices. Factory BlinkUp Fixtures are combined in one or several Device Groups of *factory* type. Different *factory* Device Groups of the same Product may be used to BlinkUp and bless different versions or flavors of your production devices.
+For your [factory process](https://developer.electricimp.com/manufacturing/factoryprocessinanutshell) you need [Factory BlinkUp Fixtures](https://developer.electricimp.com/manufacturing/blinkupfixture_simple), devices which configure your devices under test (DUTs) on the assembly line for Internet access. Factory BlinkUp Fixtures are combined in one or more Device Groups of the *Factory* type. Different Factory Device Groups within the same Product may be used to configure different versions or flavors of your DUTs.
 
-You can create *factory* Device Group by [**impt dg create --dg-type factory**](./CommandsManual.md#device-group-create) command.
+You can create Factory Device Group with the [`impt dg create --dg-type factory`](./CommandsManual.md#device-group-create) command.
 
-Device Group of *factory* type should have a reference to a Device Group of *production* type of the same Product. It is a production target of your Factory BlinkUp Fixtures and you should specify it by `--target` option during *factory* Device Group creation.
+Each Factory Device Group references a single Production Device Group within the same Product. This is the Factory Device Group’s *target* and this the Production Device Group to which DUTs will automatically be assigned once they have been blessed. You specify a Factory Device Group’s target by using the `--target` option during Factory Device Group creation:
+ 
+```
+impt dg create --name MyFactoryDG --descr "Factory Device Group for factory firmware" 
+    --dg-type factory --product MyProduct --target MyProductionDG
+``` 
 
-*Example:*  
-`impt dg create --name MyFactoryDG --descr "Factory Device Group for factory firmware" --dg-type factory --product MyProduct --target MyProductionDG`  
+## Deployments ##
 
-## Deployments
+A Deployment is a build which belongs to a concrete Device Group and runs on all devices assigned to the Device Group.
 
-Deployment is a build which belongs to a concrete Device Group and runs on all devices assigned to the Device Group.
+To start production you need at least two builds:
 
-To start a production you need at least two builds:
-- application which will run on production devices,
-- [factory firmware](https://developer.electricimp.com/examples/factoryfirmware) which will run on Factory BlinkUp Fixtures (and on production devices before their blessing).
+- Application firmware which will run on production devices.
+- [Factory firmware](https://developer.electricimp.com/examples/factoryfirmware) which will run on Factory BlinkUp Fixtures (and on DUTs before their blessing).
 
-Later, you may have more builds - for different versions or flavors of your application or factory firmware.
+Later, you may have more builds for different versions or flavors of your application or factory firmware.
 
-This guide assumes you have already developed and tested your application and factory firmware and there are ready for production Deployments which belong to *development* and *pre-factory* Device Groups of your Product. For example, see the [impt Development Guide](./DevelopmentGuide.md).
+This guide assumes you have already developed and tested your application and factory firmware and these are ready for production. Deployments which belong to *development* and *pre-factory* Device Groups of your Product. For example, see the [impt Development Guide](./DevelopmentGuide.md).
 
-You can copy a ready build to a new Deployment which belongs to your *factory* or *production* Device Group by [**impt build copy**](./CommandsManual.md#build-copy) command. It can be copied with or without the original build attributes.
+You can copy a ready build to a new Deployment with the [`impt build copy`](./CommandsManual.md#build-copy) command. It can be copied with or without the original build attributes.
 
-*Example:*  
-`impt build copy --build MyRC1 --dg MyProductionDG`  
-`impt build copy --build MyFactoryRC1 --dg MyFactoryDG`  
+#### Examples ####
 
-## Devices
+```
+impt build copy --build MyRC1 --dg MyProductionDG
+```
 
-### Factory BlinkUp Fixtures
+```  
+impt build copy --build MyFactoryRC1 --dg MyFactoryDG
+```
 
-Usually you need as many [Factory BlinkUp Fixtures](https://developer.electricimp.com/manufacturing/blinkupfixture_simple) as the number of parallel factory lines you have.
+## Devices ##
 
-In order to connect your Factory BlinkUp Fixtures to the factory's WiFi network you may [BlinkUp](https://developer.electricimp.com/blinkup) them as usual development devices. And after that, assign them to your *factory* Device Group by [**impt device assign**](./CommandsManual.md#device-assign) command. You can specify a device in the command by its Id, Name, MAC, IMP Agent Id.
+### Factory BlinkUp Fixtures ###
 
-*Example:*  
-`impt device assign --device <device_id> --dg MyFactoryDG`  
+Usually you need as many [Factory BlinkUp Fixtures](https://developer.electricimp.com/manufacturing/blinkupfixture_simple) as the number of assembly lines you have.
 
-### Production Devices
+In order to connect your Factory BlinkUp Fixtures to the factory’s WiFi network, use the Electric Imp mobile app as usual and then assign them to Factory Device Group(s) with the [`impt device assign`](./CommandsManual.md#device-assign) command. You can specify a device in the command by its ID, name, MAC address or Agent ID.
 
-It is not possible to directly assign a new assembled production device to a *production* Device Group. The device is automatically assigned after successful [blessing during the factory process](https://developer.electricimp.com/manufacturing/factoryguide). But you can directly reassign any number of devices from one *production* Device Group to another *production* Device Group of the same Product.
+#### Example ####
 
-You can list the devices currently assigned to your *production* Device Group, as well as to any other Device Group or unassigned devices, by [**impt device list**](./CommandsManual.md#device-list) command. Use Filter Options of the command to filter the devices.
+```
+impt device assign --device <device_id> --dg MyFactoryDG
+```  
 
-*Example:*  
-`impt device list --dg MyProductionDG`  
+### Devices Under Test (DUTs) ###
 
-### Unblessing
+It is not possible to assign a newly assembled device to a Production Device Group manually. The device is automatically assigned after [successful blessing](https://developer.electricimp.com/manufacturing/factoryguide). You can manually reassign any number of devices from one Production* Device Group to another such group in the same Product.
 
-You may unassign a device from *production* Device Group if you have unbound key for that. Specify that key as a value of `--unbound` option of the [**impt device unassign**](./CommandsManual.md#device-unassign) command. The device becomes unblessed.
+You can list the devices currently assigned to a Production Device Group (or any other Device Group, or any unassigned devices) with the  [`impt device list`](./CommandsManual.md#device-list) command. Use the command’s filter options to get device list subsets:
 
-*Example:*  
-`impt device unassign --device <device_id> --unbond <unbond_key>`  
+```
+impt device list --dg MyProductionDG
+```
 
-## Webhooks
+### Unblessing ##
 
-You may control your factory, production and post-production activities by using [Webhooks](https://developer.electricimp.com/manufacturing/webhooks). There are three types of Webhooks:
-- *blessing* - it is called when a production device has been successfully blessed.
-- *blinkup* - it is called when an end-user successfully activates a production device using BlinkUp.
-- *deployment* - it is called when a new code is deployed to a Device Group.
+You may remove a production device from a Production Device Group if you have access to your account’s unblessing key. Specify that key as the value of the `--unbound` option of the [`impt device unassign`](./CommandsManual.md#device-unassign) command. The device is unblessed and can be used for development.
 
-You can create Webhook by [**impt webhook create**](./CommandsManual.md#webhook-create) command.
+#### Example ####
 
-*Example:*  
-`impt webhook create --dg MyProductionDG --url <webhook_url> --event blessing --mime json`  
-`impt webhook create --dg MyProductionDG --url <webhook_url> --event blinkup --mime urlencoded`  
+```
+impt device unassign --device <device_id> --unbond <unbond_key>
+```
 
-## Logging
+## Webhooks ##
 
-impCentral API logging is supported for Factory BlinkUp Fixtures. You can use [Log Manipulation Commands](./CommandsManual.md#log-manipulation-commands) for them.
+You may use [Webhooks](https://developer.electricimp.com/manufacturing/webhooks) to monitor your factory, production and post-production activities. There are three types of Webhooks:
 
-*Example:*  
-`impt log get -device <device_id>`  
+- **blessing** &mdash; Called when a DUT has been successfully blessed.
+- **blinkup** &mdash; Called when an end-user successfully activates a production device using BlinkUp.
+- **deployment** &mdash; Called when new code is deployed to a Device Group.
 
-impCentral API logging is not supported for production devices. Use [other ways](https://developer.electricimp.com/resources/monitoringapplication/) to monitor the application's behavior on them.
+You can create Webhook using the [`impt webhook create`](./CommandsManual.md#webhook-create) command.
 
-## New Versions
+#### Examples ####
+ 
+```
+impt webhook create --dg MyProductionDG --url <webhook_url> --event blessing --mime json
+```
 
-You may develop new versions of your application. To deploy them on the production devices you can:
-- create a new build (Deployment) for your *production* Device Group by [**impt build copy**](./CommandsManual.md#build-copy) command,
-- and then restart the devices in the *production* Device Group, for example by [**impt dg restart**](./CommandsManual.md#device-group-restart) command.
+```
+impt webhook create --dg MyProductionDG --url <webhook_url> --event blinkup --mime urlencoded
+```
 
-*Example:*  
-`impt build copy --build MyRC2 --dg MyProductionDG`  
-`impt dg restart --dg MyProductionDG`  
+## Logging ##
 
-Alternatively, you may want to switch not all but a subset of production devices to the new version or flavor of your application. For this purpose you can:
-- create a new *production* Device Group by [**impt dg create --dg-type production**](./CommandsManual.md#device-group-create) command,
-- and then reassign the needed production devices to the new Device Group by [**impt device assign**](./CommandsManual.md#device-assign) command.
+impCentral API logging is supported for Factory BlinkUp Fixtures. You can use [Log Manipulation Commands](./CommandsManual.md#log-manipulation-commands) to view them.
 
-[**impt dg reassign**](./CommandsManual.md#device-group-reassign) command reassigns all devices from one Device Group to another.
+#### Example ####  
 
-## Cleaning Up
+```
+impt log get -device <device_id>
+```
 
-At some time you may want to clean up old and unused entities created during your factory or production processes - not needed Device Groups, old Deployments, obsolete Webhooks, etc. Pay attention to the following commands:
-- [**impt build cleanup**](./CommandsManual.md#build-cleanup)
-- [**impt dg builds**](./CommandsManual.md#device-group-builds)
-- [**impt dg delete**](./CommandsManual.md#device-group-delete)
-- [**impt webhook delete**](./CommandsManual.md#webhook-delete)
+impCentral API logging is not supported for production devices.
 
-Note, the [impCentral API](https://apidoc.electricimp.com/) provides the following features intended to protect important entities from unintentional deletion or other accidental damages - *flagged* Deployment, *min supported* Deployment, *conditional* restart and other.
+## New Versions ##
 
-To delete the whole Product with all Device Groups and Deployments you can use [**impt product delete --builds --force**](./CommandsManual.md#product-delete) command.
+You may develop new versions of your application. To deploy them to production devices, you can
 
-*Example:*  
-`impt product delete --product MyProduct --builds --force`  
+1. Create a new build (Deployment) for your Production Device Group with [`impt build copy`](./CommandsManual.md#build-copy).
+2. Restart the devices in the Production* Device Group, for example, with [`impt dg restart`](./CommandsManual.md#device-group-restart).
+
+#### Example ####
+ 
+```
+impt build copy --build MyRC2 --dg MyProductionDG
+impt dg restart --dg MyProductionDG
+```
+
+Alternatively, you may want to switch not all but a subset of production devices to the new version or flavor of your application. For this purpose you:
+
+1. Create a new Production* Device Group with [`impt dg create --dg-type production`](./CommandsManual.md#device-group-create).
+2. Reassign the chosen production devices to the new Device Group with [`impt device assign`](./CommandsManual.md#device-assign).
+
+The [`impt dg reassign`](./CommandsManual.md#device-group-reassign) command reassigns all devices from one Device Group to another.
+
+## Cleaning Up ##
+
+if at any time you want to clean up old and unused entities created during production &mdash; unneeded Device Groups, old Deployments, obsolete Webhooks, etc. &mdash; use the following commands:
+
+- [`impt build cleanup`](./CommandsManual.md#build-cleanup)
+- [`impt dg builds`](./CommandsManual.md#device-group-builds)
+- [`impt dg delete`](./CommandsManual.md#device-group-delete)
+- [`impt webhook delete`](./CommandsManual.md#webhook-delete)
+
+**Note** The [impCentral API](https://apidoc.electricimp.com/) provides the following features intended to protect important entities from unintentional deletion or other accidental damages: *flagged* Deployment, *min supported* Deployment, *conditional* restart and other.
+
+To delete the whole Product with all Device Groups and Deployments you can use [`impt product delete --builds --force`](./CommandsManual.md#product-delete).
+
+#### Example ####
+
+```
+impt product delete --product MyProduct --builds --force
+```
