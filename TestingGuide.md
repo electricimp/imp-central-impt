@@ -1,13 +1,14 @@
-# impt Testing Guide
+# impt Testing Guide #
 
-This additional guide is intended for developers and testers who use the impt tool to test IMP libraries or other IMP code by unit tests which are created with the [*impUnit*](https://github.com/electricimp/impUnit) test framework. The impt tool supersedes the [previous version of impTest](https://github.com/electricimp/impTest) and includes it as a part of the impt now.
+This additional guide is intended for developers and testers who use *impt* to test Squirrel libraries and code with unit tests which are created using the [*impUnit*](https://github.com/electricimp/impUnit) test framework. *impt* supersedes the [previous version of *impTest*](https://github.com/electricimp/impTest) by integrating a new version of the *impTest* code.
 
-First of all, please read the root [readme file](./README.md) that covers all basic and common aspects of the impt tool.
+Please read the main [Read Me file](./README.md) first as it covers all the basic *impt* usage and its common components.
 
-The full impt tool commands specification is described in the [impt Commands Manual](./CommandsManual.md).
+The full *impt* tool commands specification is described in the [*impt* Commands Manual](./CommandsManual.md).
 
-Table Of Contents:
-- [What is New](#what-is-new)
+## Contents ##
+
+- [What’s New](#what-is-new)
 - [Overview](#overview)
 - [Writing Tests](#writing-tests)
   - [Main Rules and Steps](#main-rules-and-steps)
@@ -27,106 +28,96 @@ Table Of Contents:
   - [Debug Mode](#debug-mode)
   - [Cleaning Up](#cleaning-up)
 
-## What is New
+## What’s New ##
 
-The main differences to the [previous version](https://github.com/electricimp/impTest):
+The main differences between *impt* and the legacy tool, [*impTest*](https://github.com/electricimp/impTest):
 
-- impTest is working via the [Electric Imp impCentral&trade; API](https://apidoc.electricimp.com).
-- Model is replaced by the new impCentral API entity - Device Group.
-- individual Devices are not specified. All Devices assigned to the specified Device Group are used for tests running.
-- impTest is a part of the impt tool.
-- impTest does not have a separate installation. It is installed as a part ot the impt tool.
-- impTest does not have a separate authentication. The impt tool's authentication is used.
-- impTest commands are re-designed and follows the general syntax and design of the impt tool commands.
-- impTest commands are less interactive, all settings are specified as command's options.
+- *impTest* is now integrated into *impt*.
+- *impt* uses the [impCentral™ API](https://apidoc.electricimp.com).
+- Individual devices are no longer specified. All Devices assigned to the specified Device Group are used for tests.
+- *impTest* commands have been re-designed and follow the general syntax and design of *impt* commands.
+- *impTest* commands are less interactive &mdash; all settings are now specified as command options.
 
-## Overview
+## Overview ##
 
 This guide contains two main parts:
-- explanation of how to [write tests](#writing-tests).
-- explanation of how to [use tests: configure and run](#using-tests).
 
-The main terms:
+- How to [write tests](#writing-tests).
+- How to [use tests](#using-tests).
 
-### Test File, Test Case, Test Method
+### Terminology ###
 
-Test file is a file with test cases.
+A ‘test file’ is a file containing ‘test cases’.
 
-Test case is a class inherited from the *ImpTestCase* class defined by the [*impUnit*](https://github.com/electricimp/impUnit) framework. There can be several test cases in a test file. 
+A test case is a class inheriting from the *ImpTestCase* class defined by the [*impUnit*](https://github.com/electricimp/impUnit) framework. There can be several test cases in a test file.
 
-Test method (or simply called a test) is a method of test case. It is prefixed by *test*, eg. *testEverythingOk()*. There can be several test methods (tests) in a test case.
+A ‘test method’ (or simply called a ‘test’) is one of a test case’s methods. It should be prefixed by *test*, eg. *testEverythingOk()*. There can be several test methods (tests) in a test case.
 
 Every test may be uniquely identified or specified by the corresponding test file name, test case name and test method name.
 
-### Test Project, Test Configuration, Test Project Home
+A ‘test project’ is an entity which combines test files intended to test a Squirrel library or other Squirrel code. Each test project is defined by one ‘test configuration’, which is embodied in a [‘test configuration file’](./CommandsManual.md#test-configuration-file). A test configuration indicates the test files which are part of the test project; the Device Group to which test devices are assigned and the compile test code deployed; the source file(s) with the Squirrel code which is going to be tested; and other settings required to build and run the tests.
 
-Test project is an artificial entity which combines test files intended to test an IMP library or other IMP code. One test project is defined by one test configuration.
+There must be only one [test configuration file](./CommandsManual.md#test-configuration-file) in a directory. Sub-directories may contain test configuration files too but this is not recommended.
 
-Test configuration is represented by [Test Configuration File](./CommandsManual.md#test-configuration-file). It defines the test files which are included into the test project, impCentral Device Group which is used to run the tests, source file(s) with the IMP library/code which is going to be tested and other settings required for the tests building and running.
+The ‘test home’ is the directory where the [test configuration file](./CommandsManual.md#test-configuration-file) is located. All of the files located in the test home and all of its sub-directories are considered as test files belonging to the corresponding test project if their names match the patterns specified in the test configuration.
 
-There may be one and only one [Test Configuration File](./CommandsManual.md#test-configuration-file) in a directory. Subdirectories may contain Test Configuration Files as well but it is not recommended.
+**Note** The test project entity has no any relation to the development Project entity described in the [*impt* Development Guide](./DevelopmentGuide.md). A [Project file](./CommandsManual.md#project-file) and a [test configuration file](./CommandsManual.md#test-configuration-file) may coexist in the same directory.
 
-Test home is a directory where [Test Configuration File](./CommandsManual.md#test-configuration-file) exists. All files located in the test project home and all its subdirectories are considered as test files of the corresponding test project if their names match the patterns specified in the test configuration.
+A ‘test session’ is a run of a set of tests from one test file on one device. That may include all of the tests from all of the test cases from the test file, or a subset of all the tests in the test file. Running the same set of tests on another device is another test session.
 
-Note, test project has no any relation to development Project described in the [impt Development Guide](./DevelopmentGuide.md). Both [Project File](./CommandsManual.md#project-file) and [Test Configuration File](./CommandsManual.md#test-configuration-file) may coexist fully independently in a one directory.
+A test session is considered failed if at least one test fails.
 
-### Test Commands
+### Test Commands ###
 
-The impt tool has a dedicated group of commands which operate with test projects - [Test Commands](./CommandsManual.md#test-commands). For a particular test project the commands should be called from the test project home.
+The *impt* tool has a dedicated set of commands which operate with test projects, called [Test Commands](./CommandsManual.md#test-commands). For a particular test project, the commands should be called from the test home.
 
-Other impt commands may also be needed during a testing process. For example, commands to assign devices to Device Group.
+Other *impt* commands may also be needed during testing, such as commands to assign devices to Device Group.
 
-### Test Session
+## Writing Tests ##
 
-Test session is a run of a set of tests from one test file on one device. That may be all tests from all test cases of the test file or a subset of all tests in the test file. Running the same set of tests on another device is another test session.
+### Main Rules and Steps ###
 
-Test session is considered failed if at least one test fails.
+You need to perform the following steps to write your tests:
 
-## Writing Tests
+1. Define the structure of your test files and test cases. This depends entirely on the design of your tests and on the functionality you are testing.
 
-### Main Rules and Steps
+  - You may combine all test cases in one test file or divide them into different test files.
+  - You may combine all test files in one directory, or put some or all files into sub-directories. A test project can include test files from the test project home and all its sub-directories.
 
-The main steps you need to perform in order to write tests:
+2. Define the names of your test files. In general, a test file may have any name but should follow a few rules:
 
-1. Define a structure of your test files and test cases. It fully depends on design of your tests and on the functionality you are testing.
+  - A file is treated as test file for agent code if `agent` is present in the file name. Otherwise, the file is treated as test file for device code.
+  - By default, all test cases from a test file run either on a device *or* an agent. If your test cases are intended to run on *both* the device and its agent, use the approach described [here](#tests-for-bi-directional-device-agent-communication).
+  - A test configuration has a pattern for location and the names of the test files included in the test project. You specify this pattern during [test configuration creation or updating](#test-configuration). You should have this in mind when you name your test files.
+  - The files are chosen for execution by the tool in an arbitrary order.
 
-  - You may combine all test cases in one test file or divide them by different test files.
-  - You may combine all test files in one directory or put some or all files into subdirectories. A test project can include test files from the test project home and all it's subdirectories.
+3. Add test cases to your test files.
 
-2. Define names of your test files. In general, a test file may have any name but should follow few rules:
-
-  - A file is treated as test file for IMP agent if `agent` is present in the file name. Otherwise, the file is treated as test file for IMP device.
-  - By default, all test cases from a test file run either on IMP device or on IMP agent. If your test cases are intended to run on both the IMP device and its IMP agent, there is a way to organize this which is described [here](#tests-for-bi-directional-device-agent-communication).
-  - A test configuration has a pattern for location and names of the test files included into the test project. You specifies this pattern during [test configuration creation or updating](#test-configuration). You should have this in mind when naming your test files.
-  - Note, the files are chosen for execution by the tool in an arbitrary order.
-
-3. Add test cases into your test files.
-
-  - Test case is a class inherited from the *ImpTestCase* class defined by the [*impUnit*](https://github.com/electricimp/impUnit) framework.
+  - A test case is a class derived from the *ImpTestCase* class defined by the [*impUnit*](https://github.com/electricimp/impUnit) framework.
   - A test file may have several test cases.
-  - There are no rules for test case naming. But there is a feature of the [running selective tests](#running-selective-tests). You may have it in mind when naming your test cases. Test cases may have identical names if they are in different test files.
-  - Note, the test cases from one test file are chosen for execution by the tool in an arbitrary order.
+  - There are no rules for test case naming. Test cases may have identical names if they are in different test files. But bear in mind that [running selective tests](#running-selective-tests) can have an impact on test case naming.
+  - The test cases from one test file are chosen for execution by the tool in an arbitrary order.
 
-4. Add and implement test methods (tests) in your test cases.
+4. Add test methods (tests) to your test cases.
 
-  - Every test method name should start with `test`. There are no other rules for test method naming. But there is a feature of the [running selective tests](#running-selective-tests). You may have it in mind when naming your test methods. Test methods may have identical names if they are in different test cases.
+  - Every test method name should start with *test*. Test methods may have identical names if they are in different test cases. There are no other rules for test method naming, but bear in mind that [running selective tests](#running-selective-tests) can have an impact on test method naming.
   - A test case may have several test methods (tests).
   - Additionally, any test case may have *setUp()* and *tearDown()* methods:
-    - if exists, *setUp()* is called by the tool before any other methods of the test case. It may be used to perform the environment setup before execution the tests of the test case.
-    - if exists, *tearDown()* is called by the tool after all other methods of the test case. It may be used to clean-up the environment after execution the tests of the test case.
-  - Note, all other test methods of one test case are chosen for execution by the tool in an arbitrary order. I.e. your tests should be independent and do not assume any particular order of execution.
+    - If it exists, *setUp()* is called by the tool before any other methods in the test case. It may be used to perform environment setup before test execution.
+    - If it exists, *tearDown()* is called by the tool after all other methods in the test case. It may be used to clean the environment after test execution.
+  - All other test methods than *setUp()* and *tearDown()* in one test case are chosen for execution by the tool in an arbitrary order, ie. your tests should be independent and not assume any particular order of execution.
 
-A test method may be designed as synchronous (by default) or [asynchronous](#asynchronous-testing).
+A test method may be run synchronously (the default) or [asynchronously](#asynchronous-testing).
 
-You can use [*Builder*](https://github.com/electricimp/Builder) language in your tests. See more details [here](#builder-usage).
+You can use the [*Builder*](https://github.com/electricimp/Builder) language in your tests; details [here](#builder-usage).
 
-A test file must not contain any `#require` statement. Instead, an [include from GitHub](#include-from-github) should be used.
+A test file must not contain any `#require` statements. Instead, an [include from GitHub](#include-from-github) should be used.
 
-The tests may call external (a host operating system) commands. See more details [here](#external-commands).
+The tests may call external (eg. a host operating system) commands; details [here](#external-commands).
 
 [Assertions](#assertions) and [diagnostic messages](#diagnostic-messages) are available in your tests.
 
-*Example of a simple Test Case:*
+#### Example ####
 
 ```squirrel
 class MyTestCase extends ImpTestCase {
@@ -140,22 +131,24 @@ class MyTestCase extends ImpTestCase {
 }
 ```
 
-### Tests for Bi-directional Device-Agent Communication
+### Tests for Bi-directional Device-Agent Communication ###
 
-It is possible to test an interaction between IMP device and IMP agent by emulating one of the sides of the interaction.
+It is possible to test an interaction between device and agent by emulating one side of the interaction.
 
-A test file is intended to test either IMP device or IMP agent side. The opposite side is emulated by a partner file. There are several rules:
-- A partner file must not contain any test cases. It should contain the IMP code needed for the emulation of interaction only.
+A test file is intended to test either device or agent code, so the opposite side is emulated by a partner file. There are several rules for these:
+
+- A partner file must not contain any test cases. It should only contain the Squirrel code needed to emulate the interaction.
 - The test file and the partner file should be located in the same directory.
 - The test file and the partner file should have similar names according to the following pattern: `TestFileName.(agent|device)[.test].nut`:
   - The both files should have the same `TestFileName` prefix and the same `.nut` suffix.
-  - The file intended for IMP device should contain `.device` in the name, the file intended for IMP agent should contain `.agent` in the name.
-  - The test file should contain `.test` in the name, the partner file must not contain that in the name.
-  - For example, `"Test1.agent.test.nut"` (a test file with test cases for IMP agent side) and `"Test1.device.nut"` (the corresponding partner file with emulation of IMP device side).
+  - The file intended for the device should contain `.device` in the name; the file intended for the agent should contain `.agent` in the name.
+  - The test file should contain `.test` in the name, but the partner file must not contain that in the name.
 
-Note, it is enough that only the test file is selected for the run, i.e. satisfies the test file search pattern defined during [test configuration creation or updating](#test-configuration). The corresponding partner file will be added to the test session automatically.
+For example, `"Test1.agent.test.nut"` (a test file with test cases for agent code) and `"Test1.device.nut"` (the corresponding partner file with emulation of the device side).
 
-*Example of a test file / partner file pair:*
+**Note** It is sufficient that only the test file is selected for the run, ie. it satisfies the test file search pattern defined during [test configuration creation or updating](#test-configuration). The corresponding partner file will be added to the test session automatically.
+
+#### Example ####
 
 Test file `"Test1.agent.test.nut"`:
 ```squirrel
@@ -174,7 +167,7 @@ class MyTestCase extends ImpTestCase {
             myFunc = function() {
                 if (_myVar == null) {
                     imp.wakeup(1.0, myFunc);
-                } else if (_myVar == "Hello from IMP Device") {
+                } else if (_myVar == "Hello from the device") {
                     resolve();
                 } else {
                     reject();
@@ -189,17 +182,17 @@ class MyTestCase extends ImpTestCase {
 The corresponding partner file `"Test1.device.nut"`:
 ```squirrel
 imp.wakeup(5.0, function() {
-    agent.send("data", "Hello from IMP Device");
+    agent.send("data", "Hello from the dDevice");
 });
 ```
 
-### Asynchronous Testing
+### Asynchronous Testing ###
 
-Every test method, including *setUp()* and *tearDown()*, can be either synchronous (by default) or asynchronous.
+Every test method, including *setUp()* and *tearDown()*, can be run either synchronously (the default) or asynchronously.
 
-A test method should return an instance of [Promise](https://github.com/electricimp/Promise) to notify that it needs to do some work asynchronously. The resolution of the Promise indicates that the test has been passed successfully. The rejection of the Promise denotes a failure.
+Test methods should return an instance of the [Promise](https://github.com/electricimp/Promise) class if it needs to do some work asynchronously. The resolution of the Promise indicates that the test has been passed. The rejection of the Promise denotes a failure.
 
-*Example:*
+#### Example ####
 
 ```squirrel
 function testSomethingAsynchronously() {
@@ -209,13 +202,11 @@ function testSomethingAsynchronously() {
 }
 ```
 
-### Builder Usage
+### Builder Usage ###
 
-#### Builder Language
+#### The Builder Language ####
 
-You can use [*Builder*](https://github.com/electricimp/Builder) language in your tests. It combines a preprocessor with an expression language and advanced imports.
-
-*Example:*
+You can use the [*Builder*](https://github.com/electricimp/Builder) language in your tests. It combines a preprocessor with an expression language and advanced imports. For example:
 
 ```squirrel
 @set assertText = "Failed to assert that values are"
@@ -229,7 +220,7 @@ this.assertEqual(
     );
 ```
 
-[*\_\_FILE\_\_* and *\_\_LINE\_\_*](https://github.com/electricimp/Builder#variables) variables are defined in the [Builder](https://github.com/electricimp/Builder), they can be useful for debugging information:
+[*\_\_FILE\_\_* and *\_\_LINE\_\_*](https://github.com/electricimp/Builder#variables) variables are defined by [*Builder*](https://github.com/electricimp/Builder). They can be useful for debugging:
 
 ```squirrel
 this.assertEqual(
@@ -241,16 +232,16 @@ this.assertEqual(
 );
 ```
 
-#### Builder Variables
+#### Builder Variables ####
 
-It is possible to define and propagate [custom variables](https://github.com/electricimp/Builder#variables) through a separate configuration file. The syntax of this file is like this:
+It is possible to define and propagate [custom variables](https://github.com/electricimp/Builder#variables) through a separate configuration file. The syntax of this file is:
 
 ```
 { "pollServer": "http://example.com",
   "expectedAnswer": "data ready" }
 ```
 
-It allows the [*Builder*](https://github.com/electricimp/Builder) to process your custom variables used in the source code:
+This allows [*Builder*](https://github.com/electricimp/Builder) to process custom variables used in the source code:
 
 ```squirrel
 local response = http.get("@{pollServer}", {}).sendsync();
@@ -261,23 +252,21 @@ this.assertEqual(
 );
 ```
 
-You create and manage the file with the [*Builder*](https://github.com/electricimp/Builder) variables manually. You may locate it anywhere. The file is specified during [test configuration creation or updating](#test-configuration).
+You create and manage the file containing your [*Builder*](https://github.com/electricimp/Builder) variables manually. You may locate it anywhere. The file is specified during [test configuration](#test-configuration).
 
-#### Include From GitHub
+#### Include From GitHub ####
 
-Source code / libraries from GitHub may be included in your test files by using the [Builder's include statement](https://github.com/electricimp/Builder#from-github). You should use it instead of the `#require` statement.
+Source code and libraries from GitHub may be included in your test files by using [*Builder*’s `@include` statement](https://github.com/electricimp/Builder#from-github), which you should use instead of the `#require` statement.
 
 For example: `#require "messagemanager.class.nut:2.0.0"` should be replaced with `@include "github:electricimp/MessageManager/MessageManager.class.nut@v2.0.0"`.
 
-There may be some limitations which you can overcome - see [here](#github-credentials).
+#### Builder Cache ####
 
-#### Builder Cache
+*Builder*’s cache is designed to improve the build time and reduce the number of requests issued to external resources. It is only possible to cache external libraries. *Builder* stores the cache in the `.builder-cache` sub-directory inside the test project directory. The cache is maintained for up to 24 hours.
 
-Builder cache is intended to improve the build time and reduce the number of requests to external resources. It is only possible to cache external libraries. Builder stores the cache in the `.builder-cache` folder inside the test project home. The cache is stored for up to 24 hours.
+Cacheing is disabled by default. It can be enabled during [test configuration](#test-configuration). It is possible to clear the cache when you [run the tests](#running-tests).
 
-Builder cache is disabled by default. It can be enabled during [test configuration creation or updating](#test-configuration). Also it is possible to clear the cache when you [run the tests](#running-tests).
-
-### External Commands
+### External Commands ###
 
 A test can call a host operating system command as follows:
 
@@ -287,19 +276,19 @@ this.runCommand("echo 123");
 // The host operating system command `echo 123` is executed
 ```
 
-If the execution timeout (specified during [test configuration creation or updating](#test-configuration)) or the external command exits with a status code other than 0, the test session fails.
+If the execution times out (specified during [test configuration](#test-configuration)) or the external command exits with a status code other than 0, the test session fails.
 
-### Assertions
+### Assertions ###
 
 The following assertions are available in tests:
 
-#### assertTrue()
+#### assertTrue() ####
 
 `this.assertTrue(condition, [message]);`
 
 Asserts that the condition is truthful.
 
-*Example:*
+**Example**
 
 ```squirrel
 // OK
@@ -309,13 +298,13 @@ this.assertTrue(1 == 1);
 this.assertTrue(1 == 2);
 ```
 
-#### assertEqual()
+#### assertEqual() ####
 
 `this.assertEqual(expected, actual, [message])`
 
 Asserts that two values are equal.
 
-*Example:*
+**Example**
 
 ```squirrel
 // OK
@@ -325,13 +314,13 @@ this.assertEqual(1000 * 0.01, 100 * 0.1);
 this.assertEqual(1, 2);
 ```
 
-#### assertGreater()
+#### assertGreater() ####
 
 `this.assertGreater(actual, cmp, [message])`
 
 Asserts that a value is greater than some other value.
 
-*Example:*
+**Example**
 
 ```squirrel
 // OK
@@ -341,13 +330,13 @@ this.assertGreater(1, 0);
 this.assertGreater(1, 2);
 ```
 
-#### assertLess()
+#### assertLess() ####
 
 `this.assertLess(actual, cmp, [message])`
 
 Asserts that a value is less than some other value.
 
-*Example:*
+**Example**
 
 ```squirrel
 // OK
@@ -357,13 +346,13 @@ this.assertLess(0, 1);
 this.assertLess(2, 2);
 ```
 
-#### assertClose()
+#### assertClose() ####
 
 `this.assertClose(expected, actual, maxDiff, [message])`
 
-Asserts that a value is within some tolerance from an expected value.
+Asserts that a value is within range of an expected value.
 
-*Example:*
+**Example**
 
 ```squirrel
 // OK
@@ -373,13 +362,13 @@ this.assertClose(10, 9, 2);
 this.assertClose(10, 9, 0.5);
 ```
 
-#### assertDeepEqual()
+#### assertDeepEqual() ####
 
 `this.assertDeepEqual(expected, actual, [message])`
 
 Performs a deep comparison of tables, arrays and classes.
 
-*Example:*
+**Example**
 
 ```squirrel
 // OK
@@ -395,13 +384,13 @@ this.assertDeepEqual({"a" : { "b" : 1 }}, {"a" : { "b" : 1, "c": 2 }});
 this.assertDeepEqual({"a" : { "b" : 1 }}, {"a" : { "b" : 0 }});
 ```
 
-#### assertBetween()
+#### assertBetween() ####
 
 `this.assertBetween(actual, from, to, [message])`
 
 Asserts that a value belongs to the range from _from_ to _to_.
 
-*Example:*
+**Example**
 
 ```squirrel
 // OK
@@ -411,13 +400,13 @@ this.assertBetween(10, 9, 11);
 this.assertBetween(10, 11, 12);
 ```
 
-#### assertThrowsError
+#### assertThrowsError ####
 
 `this.assertThrowsError(func, ctx, [args = []], [message])`
 
-Asserts that the _func_ function throws an error when it is called with the _args_ arguments and the _ctx_ context. Returns an error thrown by _func_.
+Asserts that the function _func_ throws an error when it is called with the arguments _args_ and the context _ctx_. Returns an error thrown by _func_.
 
-*Example:*
+**Example**
 
 ```squirrel
 // OK, returns "abc"
@@ -431,23 +420,22 @@ this.assertThrowsError(function () {
 }, this);
 ```
 
-### Diagnostic Messages
+### Diagnostic Messages ###
 
-There are three ways to display diagnostic/informational messages to the console from your tests:
-- call `this.info(<message>);` from a test method, as many times as you need/want.
-- for synchronous tests call `return <return_value>;` from a test method. The returned value will be displayed on the console, if not `null` and the test succeeds. 
-- for asynchronous tests call Promise resolution or rejection methods with a value `resolve(<return_value>);` or `reject(<return_value>);`. The returned value will be displayed on the console, if not `null`. 
+There are three ways to display diagnostic messages in the console from your tests:
 
-Examples of tests output are provided in the [running tests section](#running-tests).
+- Call `this.info(<message>);` from a test method, as many times as you need.
+- For synchronous tests, call `return <return_value>;` from a test method. The returned value will be displayed in the console, if not `null` and the test succeeds.
+- For asynchronous tests, call Promise resolution or rejection methods with a value `resolve(<return_value>);` or `reject(<return_value>);`. The returned value will be displayed on the console, if not `null`.
 
-### A Test Case Example
+Examples of tests output are provided in the [section on running tests](#running-tests).
+
+### A Test Case Example ###
 
 The utility file `myFile.nut` contains the following code:
 
 ```squirrel
-
 // (optional) Async version, can also be synchronous
-
 function setUp() {
     return Promise(function (resolve, reject) {
         resolve("We're ready");
@@ -485,67 +473,64 @@ class TestCase1 extends ImpTestCase {
 }
 ```
 
-## Using Tests
+## Using Tests ##
 
-### Device Group
+### Device Group ###
 
-To run your tests you need to:
-- have IMP device(s) blinked-up to your account.
-- have impCentral Device Group.
-- assign the needed device(s) to that Device Group.
+To run your tests you need to have one or more devices added to your account which can be assigned to a Device Group.
 
-These are the main steps you should perform in order to prepare your devices and Device Group for testing:
+These are the tasks you should perform in order to prepare your devices for testing:
 
-1. Obtain impCentral Product. If you already have/know a Product, notice it's Id or Name. If you do not have a Product, create a new one by [**impt product create**](./CommandsManual.md#product-create) command.
+1. Prepare a Product. If you already have a Product, note its ID or name. If you do not have a Product, create a new one with [`impt product create`](./CommandsManual.md#product-create):
 
-*Example:*  
 ```
 > impt product create --name MyTestProduct
 Product "MyTestProduct" is created successfully.
 IMPT COMMAND SUCCEEDS
 ```
 
-2. Obtain Device Group. If you already have/know a Device Group, notice it's Id or Name. If you do not have a Device Group, create a new one by [**impt dg create**](./CommandsManual.md#device-group-create) command. You need to specify the Product when creating the Device Group.
+2. Prepare a Device Group. If you already have a Device Group, note its ID or name. If you do not have a Device Group, create a new one with [`impt dg create`](./CommandsManual.md#device-group-create). You need to specify the Product when creating the Device Group.
 
-Theoretically, you may try to use Device Group of any [type](./CommandsManual#device-group-type). Practically, it is recommended to use Device Group of the *development* type.
+  You may use a Device Group of any [type](./CommandsManual#device-group-type), but it is recommended that you use a Development Device Group.
 
-*Example:*  
-```
-> impt dg create --name MyTestDG --product MyTestProduct
-Device Group "MyTestDG" is created successfully.
-IMPT COMMAND SUCCEEDS
-```
+  ```
+  > impt dg create --name MyTestDG --product MyTestProduct
+  Device Group "MyTestDG" is created successfully.
+  IMPT COMMAND SUCCEEDS
+  ```
 
-3. Assign one or several devices, on which you plan to run your tests, to the Device Group by [**impt device assign**](./CommandsManual.md#device-assign) command.
+3. Assign one or more devices on which you plan to run your tests to the Device Group using [`impt device assign`](./CommandsManual.md#device-assign).
 
-*Example:*  
-```
-> impt device assign --device myDevice1 --dg MyTestDG
-Device "myDevice1" is assigned successfully to Device Group "MyTestDG".
-IMPT COMMAND SUCCEEDS
-```
+    **Example**
 
-4. Specify the Device Group during [test configuration creation](#test-configuration). Your tests will run on all devices assigned to the Device Group. Note, you can always change the Device Group in the test configuration.
+    ```
+    > impt device assign --device myDevice1 --dg MyTestDG
+    Device "myDevice1" is assigned successfully to Device Group "MyTestDG".
+    IMPT COMMAND SUCCEEDS
+    ```
 
-### Test Configuration
+4. Specify the Device Group during [test configuration](#test-configuration). Your tests will run on all the devices assigned to the Device Group. You can always change the Device Group in the test configuration.
 
-Before running the tests you should create test configuration for your test project - call [**impt test create**](./CommandsManual.md#test-create) command from the test project home. If [Test Configuration File](./CommandsManual.md#test-configuration-file) already exists in that directory, it will be deleted (if confirmed by you) and the new configuration will be created from scratch.
+### Test Configuration ###
+
+Before running the tests you should create a test configuration for your test project: call [`impt test create`](./CommandsManual.md#test-create) from the test project home directory. If a [Test Configuration File](./CommandsManual.md#test-configuration-file) already exists in that directory, it will be deleted (if confirmed by you) and the new configuration will be created from scratch.
 
 The configuration settings include:
 
-- `--dg` - identifier of impCentral [Device Group](#device-group). Your tests will run on all devices assigned to that Device Group. You may specify Device Group by it's Id or Name.
+- `--dg` &mdash; the Device Group identifier. Your tests will run on all of the devices assigned to that Device Group. You may specify the Device Group by its ID or its name.
 
-- `--device-file`, `--agent-file` - IMP device / IMP agent source code which is deployed along with the tests. Usually, it is the source code of IMP library or other IMP code which you are planning to test and you specifies one of that options.
+- `--device-file`, `--agent-file` &mdash; The device and agent source code which is deployed along with the tests. Usually, it is the source code of a library or other Squirrel which you are planning to test.
 
-- `--test-file` - test file name or pattern which specifies the test file(s) included into your test project. You may repeat this option several times and specify several file names and/or patterns. The values of the repeated option are combined by logical OR. There is a default pattern mentioned in the [command's spec](./CommandsManual.md#test-create).
+- `--test-file` &mdash; The test file name or the pattern which specifies the test file(s) included into your test project. You may repeat this option to specify several file names and/or patterns. The values of the repeated option are combined by logical OR. The default pattern is detailed in the [command’s spec](./CommandsManual.md#test-create).
 
-- `--github-config`- A path to a [github credentials file](#github-credentials). You may need to use it if your test files use [include from GitHub](#include-from-github).
+- `--github-config` &mdash; A path to a [GitHub credentials file](#github-credentials). You may need to use it if your test files use [include from GitHub](#include-from-github).
 
-- `--builder-config`- A path to a file with [Builder variables](#builder-variables) You need it only if your tests use Builder variables.
+- `--builder-config` &mdash; A path to a file containing [*Builder* variables](#builder-variables). You only need it if your tests use *Builder* variables.
 
-- `--timeout`, `--stop-on-fail`, `--allow-disconnect`, `--builder-cache` - other settings, their meaning and default values are described in the [command's spec](./CommandsManual.md#test-create).
+- `--timeout`, `--stop-on-fail`, `--allow-disconnect`, `--builder-cache` &mdash; Other settings, their meaning and default values are described in the [command’s spec](./CommandsManual.md#test-create).
 
-*Example:*  
+**Example**
+
 ```
 > impt test create --dg MyTestDG --agent-file MyLibrary.agent.lib.nut
 Test Configuration File is created successfully.
@@ -573,9 +558,12 @@ Device Group:
 IMPT COMMAND SUCCEEDS
 ```
 
-You may update the test configuration by calling [**impt test update**](./CommandsManual.md#test-update) command. The existing [Test Configuration File](./CommandsManual.md#test-configuration-file) will be updated by the new specified settings. Note, the newly specified `--test-file` option value(s) totally replaces the existed setting.
+#### Updating the Configuration ####
 
-*Example:*  
+You may update the test configuration by calling [`impt test update`](./CommandsManual.md#test-update). The existing [Test Configuration File](./CommandsManual.md#test-configuration-file) will be updated with the new settings. Newly specified `--test-file` option value(s) completely replace any existing setting.
+
+**Example**
+
 ```
 > impt test update --timeout 60 --builder-cache true
 Test Configuration File is updated successfully.
@@ -603,9 +591,10 @@ Device Group:
 IMPT COMMAND SUCCEEDS
 ```
 
-You may display the current test configuration by calling [**impt test info**](./CommandsManual.md#test-info) command.
+You may display the current test configuration by calling [`impt test info`](./CommandsManual.md#test-info).
 
-*Example:*  
+**Example**
+
 ```
 > impt test info
 Test Configuration info:
@@ -632,46 +621,47 @@ Device Group:
 IMPT COMMAND SUCCEEDS
 ```
 
-### GitHub Credentials
+### GitHub Credentials ###
 
-It may be needed if your test files use [include from GitHub](#include-from-github).
+These may be needed if your test files [include code from GitHub](#include-from-github).
 
-For unauthenticated requests the GitHub API allows you to make [up to 60 requests per hour](https://developer.github.com/v3/#rate-limiting). This may be not sufficient for intensive test running. To overcome the limitation you can provide GitHub's user credentials. There are two ways to do this:
+For unauthenticated requests, the GitHub API allows you to make [up to 60 requests per hour](https://developer.github.com/v3/#rate-limiting). This may be not sufficient for intensive testing. To overcome this limitation, you can provide GitHub account credentials. There are two ways to do this:
 
-- Via environment variables - we strongly recommend this way due to the security reasons. You should specify two environment variables:
-  - `GITHUB_USER` - GitHub username.
-  - `GITHUB_TOKEN` - GitHub password or personal access token.
+- Via environment variables &mdash; **We strongly recommend this way for security reasons**. You should specify two environment variables:
+  - `GITHUB_USER` &mdash; A GitHub account username.
+  - `GITHUB_TOKEN` &mdash; A GitHub account password or personal access token.
 
-- Via github credentials file.
-  - This file may be created or updated by [**impt test github**](./CommandsManual.md#test-github) command. You specifies GitHub's username and password and they are saved in the specified file. Note, the credentials are saved in a plain text.
-  - You may have several github credentials files and they may be located in any places. You specifies a concrete github credentials file during [test configuration creation or updating](#test-configuration). If the specified file exists when you [run the tests](#running-tests), the GitHub's credentials are taken from it. If the specified file does not exist, the GitHub's credentials are taken from the environment variables if they are set.
+- Via a GitHub credentials file.
+  - This file may be created or updated with [`impt test github`](./CommandsManual.md#test-github). You specify a GitHub username and password, and they are saved in the specified file. **Important** The credentials are stored in a plain text.
+  - You may have several GitHub credential files and they may be located in any place. You specify a concrete GitHub credentials file during [test configuration](#test-configuration). If the specified file exists when you [run the tests](#running-tests), the GitHub credentials are taken from it. If the specified file does not exist, the GitHub credentials are taken from the environment variables, if they are set.
 
-*Example:*  
+**Example**
+
 ```
-> impt test github --github-config github.conf --user github_username --pwd github_password
+> impt test github --github-config github.conf --user github_username
+    --pwd github_password
 GitHub credentials Configuration File is created successfully.
 IMPT COMMAND SUCCEEDS
 ```
 
-### Running Tests
+### Running Tests ###
 
-To run the tests of your configured test project call [**impt test run**](./CommandsManual.md#test-run) command from the test project home. The tests will be executed according to your [test configuration](#test-configuration).
+To run your configured test project’s tests, call [`impt test run`](./CommandsManual.md#test-run) from the test project home directory. The tests will be executed according to your [test configuration](#test-configuration) file.
 
-By default, the tool searches for all test files according to the file names and/or patterns specified in the [test configuration](#test-configuration). The search starts from the test project home and includes all subdirectories. The tool looks for all test cases in the found files. All test methods in all found test cases are considered as tests for execution. For a particular run you may select a subset of test files, test cases, test methods by specifying `--tests` option. See the details [here](#running-selective-tests).
+By default, the tool searches for all test files according to the file names and/or patterns specified in the [test configuration](#test-configuration) file. The search starts from the test project home directory and includes all sub-directories. The tool looks for all test cases in the files it discovers. All test methods in all located test cases are considered as viable tests for execution. For a particular run, you may select a subset of test files, test cases and test methods by specifying the `--tests` option; see [here](#running-selective-tests) for more details.
 
-Every selected test file is a source for build (Deployment). Finally, there are as many different builds as the number of the selected test files for execution. Test files (builds) run in an arbitrary order.
+Every selected test file is a source for building and deploying code, so there will be as many different builds as there are selected test files for execution. Test files (builds) run in an arbitrary order.
 
-Every test file (build) runs on all devices currently assigned to the Device Group specified in the [test configuration](#test-configuration) one by one - on one device, then on the second one, etc. Devices are chosen in an arbitrary order. A test file (build) running on one device is called a test session. After the build finished on the last device, the next test file (build) starts running on the same set of devices, again one by one.
+Every test file (build) runs on all devices currently assigned to the Device Group specified in the [test configuration](#test-configuration) file one by one sequentially. Devices are chosen in an arbitrary order. A test file (build) running on one device is called a ‘test session’. When the build completes on the last device, the next test file (build) starts running on the same set of devices, again one after the other.
 
-A build includes the selected set of test cases and tests from a selected test file. It may be all test cases with all tests or a subset of test cases / subset of tests as [defined](#running-selective-tests) by `--tests` option. The selected test cases are executed in an arbitrary order. The selected tests of a test case are executed in an arbitrary order.
+Every test is treated as failed if an error is thrown or a timeout, as defined in the [test configuration](#test-configuration) file, occurs during the test execution. Otherwise the test is treated as passed. If at least one test in a test session fails, the test session is treated as failed. If the [test configuration](#test-configuration) has the `stop-on-fail` setting set to `true`, test execution ends after the first failed test.
 
-Every test is treated as failed if an error has been thrown or a timeout, defined in the [test configuration](#test-configuration), occurs during the test execution. Otherwise the test is treated as passed. If at least one test in a test session fails, the test session is treated as failed. If the [test configuration](#test-configuration) has the `stop-on-fail` setting set to `true`, the whole tests execution is stopped after the first failed test.
+You may clear the [*Builder* cache](#builder-cache) before the tests starts by setting the `--clear-cache` option. If the *Builder* cache is enabled in the [test configuration](#test-configuration) file, it will then be re-created during the test run.
 
-You may clear the [Builder cache](#builder-cache) by `--clear-cache` option. The cache, if existed, will be deleted before running the tests. And, if the Builder cache is enabled in the [test configuration](#test-configuration), it will be re-created during the tests running.
+You may run the tests in [debug mode](#debug-mode) by specifying the `--debug` option.
 
-You may run the tests in the [debug mode](#debug-mode) by specifying `--debug` option.
+**Example**
 
-*Example:*  
 ```
 > impt test run
 [info] Started at 22 Jan 2018 22:47:04 GMT+0300
@@ -723,17 +713,17 @@ Restart request for Device "234776801163a9ee" is successful.
 IMPT COMMAND SUCCEEDS
 ```
 
-### Running Selective Tests
+### Running Selective Tests ###
 
-`--tests <testcase_pattern>` option of the [**impt test run**](./CommandsManual.md#test-run) command allows to select specific test files, test cases, test methods for execution. The syntax of `<testcase_pattern>` is the following `[testFile][:testCase][::testMethod]`, where:
+The `--tests <testcase_pattern>` option of the [`impt test run`](./CommandsManual.md#test-run) command allows you to select specific test files, test cases and test methods for execution. The syntax of `<testcase_pattern>` is the `[testFile][:testCase][::testMethod]`, where:
 
-- `testFile` - name of a test file. May include a relative path. May include [Regular Expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions) like `.*`, etc. The specified file(s) will be selected from all files which correspond to the file names and/or patterns defined in the [test configuration](#test-configuration). If `testFile` is ommited, all files, which correspond to the file names and/or patterns defined in the [test configuration](#test-configuration), are assumed.
+- `testFile` is the name of a test file. May include a relative path. May include [regular expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions) like `.*`, etc. The specified file(s) will be selected from all files which correspond to the file names and/or patterns defined in the [test configuration](#test-configuration). If `testFile` is omitted, all files which correspond to the file name or patterns defined in the [test configuration](#test-configuration), are assumed.
 
-- `testCase` - name of a test case. Should be fully qualified. Test cases with an identical name may exist in different test files, in this situation all of them will be selected if the files are selected.
+- `testCase` is the name of a test case. Should be fully qualified. Test cases with an identical name may exist in different test files; in this situation all of them will be selected if the files are selected.
 
-- `testMethod` - name of a test method. Should be fully qualified. Test methods with an identical name may exist in different test cases, in this situation all of them will be selected if the cases are selected.
+- `testMethod` is the name of a test method. Should be fully qualified. Test methods with an identical name may exist in different test cases; in this situation all of them will be selected if the cases are selected.
 
-*Example:*
+**Example**
 
 A test file `TestFile1.test.nut` contains:
 
@@ -758,21 +748,24 @@ class MyTestCase extends ImpTestCase {
 }
 ```
 
-In this case:
-- `--tests TestFile1:MyTestCase::testMe` selects the `testMe()` method in the `MyTestCase` case of the `TestFile1.test.nut` file.
-- `--tests :MyTestCase::testMe` selects the `testMe()` method in the `MyTestCase` case from the both `TestFile1.test.nut` and `TestFile2.test.nut` files.
-- `--tests :MyTestCase_1` selects all test methods from the `MyTestCase_1` case of the `TestFile1.test.nut` file as it is the only file with the specified test case.
-- `--tests TestFile2` selects all test methods from the `TestFile2.test.nut` file.
-- `--tests ::testMe_1` selects the `testMe_1()` methods in all test cases from the both `TestFile1.test.nut` and `TestFile2.test.nut` files.
+In this example:
 
-### Debug Mode
+- `--tests TestFile1:MyTestCase::testMe` selects the *testMe()* method in the MyTestCase case from the `TestFile1.test.nut` file.
+- `--tests :MyTestCase::testMe` selects the *testMe()* method in the MyTestCase case from both `TestFile1.test.nut` and `TestFile2.test.nut`.
+- `--tests :MyTestCase_1` selects all the test methods from the MyTestCase_1 case from the `TestFile1.test.nut` file as it is the only file containing the specified test case.
+- `--tests TestFile2` selects all the test methods from the `TestFile2.test.nut` file.
+- `--tests ::testMe_1` selects the *testMe_1()* methods in all test cases from both `TestFile1.test.nut` and `TestFile2.test.nut`.
 
-You may run the tests in the debug mode by specifying `--debug` option of the [**impt test run**](./CommandsManual.md#test-delete) command. It may be useful for analyzing failures. In this mode:
-- All communications with the [impCentral API](https://apidoc.electricimp.com) are displayed.
-- All communications with the [impUnit test framework](https://github.com/electricimp/impUnit) are displayed.
-- IMP device and IMP agent code of all the running builds are stored in the `.build` folder inside the test project home.
+### Debug Mode ###
 
-*Example:*  
+You may run your tests in debug mode by specifying the `--debug` option of the [`impt test run`](./CommandsManual.md#test-delete) command. In this mode:
+
+- All communications with the [impCentral API](https://apidoc.electricimp.com) are displayed in the console.
+- All communications with the [*impUnit* test framework](https://github.com/electricimp/impUnit) are displayed in the console.
+- Device and agent code for all the running builds are placed in the `.build` folder inside the test project directory.
+
+**Example**
+
 ```
 > impt test run --tests TestFile1:MyTestCase::testMe --debug
 ...
@@ -854,13 +847,12 @@ Restart request for Device "234776801163a9ee" is successful.
 IMPT COMMAND SUCCEEDS
 ```
 
-### Cleaning Up
+### Cleaning Up ###
 
-After the testing is finished you may want to clean-up different entities created during your testing.
+After testing is complete, you may want to clean the various entities created during testing. If you want to delete your test project, call [`impt test delete`](./CommandsManual.md#test-run) from the test project directory. This deletes the [test configuration file](./CommandsManual.md#test-configuration-file), the *Builder* cache directory and any debug information. By specifying additional options you may also delete the GitHub credentials file, any file containing *Builder* variables, and impCentral API entities (Device Group, Deployments, Product) which were used or created during testing. Please see the [delete command’s spec](./CommandsManual.md#test-delete) for more information.
 
-If you want to delete your test project, call [**impt test delete**](./CommandsManual.md#test-run) command from the test project home. It deletes [Test Configuration File](./CommandsManual.md#test-configuration-file), Builder cache directory and debug information. By specifying additional options you may delete the github credentials file, the file with Builder variables and impCentral API entities (Device Group, Deployments, Product) which were used or created during the testing. See the [command's spec](./CommandsManual.md#test-delete) for the details.
+**Example**
 
-*Example:*  
 ```
 > impt test delete --all
 The following entities will be deleted:
@@ -907,9 +899,10 @@ Test Configuration is deleted successfully.
 IMPT COMMAND SUCCEEDS
 ```
 
-Alternatively, you may fully delete the Device Group which you used for the testing by calling the [**impt dg delete**](./CommandsManual.md#dg-delete) command as `impt dg delete --dg <DEVICE_GROUP_IDENTIFIER> --builds --force`. It makes a full clean-up of all impCentral entities created during your testing - unassigns all devices from the Device Group, deletes all builds created for the Device Group, deletes the Device Group itself.
+Alternatively, you may fully delete the Device Group which you used for the testing by calling `impt dg delete --dg <DEVICE_GROUP_IDENTIFIER> --builds --force`. This fully cleans all of the impCentral entities created during testing, unassigns all devices from the Device Group, deletes all builds created for the Device Group, and deletes the Device Group itself.
 
-*Example:*  
+**Example**
+
 ```
 > impt dg delete --dg MyTestDG --builds --force
 The following entities will be deleted:
@@ -946,9 +939,10 @@ Deployment "f44511f9-f1a0-a892-a4b8-53f48880d6c7" is deleted successfully.
 IMPT COMMAND SUCCEEDS
 ```
 
-If you only want to unassign the devices from the Device Group, call [**impt dg unassign**](./CommandsManual.md#dg-unassign) or [**impt device unassign**](./CommandsManual.md#device-unassign) commands.
+If you only want to unassign the devices from the testing Device Group, use [`impt dg unassign`](./CommandsManual.md#dg-unassign) or [`impt device unassign`](./CommandsManual.md#device-unassign).
 
-*Example:*  
+**Example**
+
 ```
 > impt dg unassign --dg MyTestDG
 The following Devices are unassigned successfully from Device Group "MyTestDG":
@@ -967,9 +961,10 @@ Device "myDevice1" is unassigned successfully.
 IMPT COMMAND SUCCEEDS
 ```
 
-If you want to delete the Product, call [**impt product delete**](./CommandsManual.md#product-delete) command.
+If you want to delete the Product, use [`impt product delete`](./CommandsManual.md#product-delete).
 
-*Example:*  
+**Example**
+
 ```
 > impt product delete --product MyTestProduct --builds --force
 The following entities will be deleted:
