@@ -1,69 +1,71 @@
-# impt Development Guide
+# impt Development Guide #
 
-This additional guide is intended for developers who use the impt tool to develop IMP applications and/or [factory firmware](https://developer.electricimp.com/examples/factoryfirmware).
+This additional guide is intended for developers who use *impt* to develop Electric Imp application and/or [factory firmware](https://developer.electricimp.com/examples/factoryfirmware).
 
-First of all, please read the root [readme file](./README.md) that covers all basic and common aspects of the impt tool.
+Please read the main [Read Me file](./README.md) first: it covers *impt* basic usage and common components.
 
-The full impt tool commands specification is described in the [impt Commands Manual](./CommandsManual.md).
+The full *impt* commands specification is described in the [*impt* Commands Manual](./CommandsManual.md).
 
-Table Of Contents:
-- [Project](#project)
-- [Development Operations](#development-operations)
+## Contents ##
+
+- [Projects](#projects)
+- [Development Tasks](#development-tasks)
   - [Project Creation](#project-creation)
-  - [Project Updating](#project-updating)
+  - [Updating Projects](#updating-projects)
   - [Device Manipulation](#device-manipulation)
-  - [Build Creation and Running](#build-creation-and-running)
+  - [Creating and Running Builds](#creating-and-running-builds)
   - [Logging](#logging)
   - [Project Info](#project-info)
-  - [Project Sharing](#project-sharing)
-  - [Project Deletion](#project-deletion)
-- [Typical Usecase](#typical-usecase)
-  - [Develop IMP Application](#develop-imp-application)
+  - [Sharing Projects](#sharing-projects)
+  - [Deleting a Project](#deleting-a-project)
+- [Typical Use-cases](#typical-use-cases)
+  - [Develop Application Firmware](#develop-application-firmware)
   - [Develop Factory Firmware](#develop-factory-firmware)
-  - [Cleanup](#cleanup)
+  - [Clean-up](#clean-up)
 
-## Project
+## Projects ##
 
-Project is an artificial entity intended to help developers to align their work with the impCentral API. It:
-- links files with IMP device and agent source code to a Device Group.
-- simplifies calling of many impt commands.
-- allows to easy share and/or move your project between users and/or computers.
+A Project is an artificial entity intended to help developers manage their work with the impCentral API. It:
 
-Note, Project is not mandatory for a development process. You can do the same actions without using Project. Project just simplifies some of the actions.
+- Uploads  device and agent source code files to a Device Group.
+- Simplifies the calling of many *impt* commands.
+- Allows you to easily share and/or move your project between users and/or computers.
 
-One Project is encapsulated in one directory. A directory represents a project if [Project File](./CommandsManual.md#project-file) is located in the directory. There may be one and only one [Project File](./CommandsManual.md#project-file) in a directory. All directories/Projects are independent. A subdirectory may contain a totally different Project, etc.
+**Note** Using Projects is not mandatory for the development process. You can perform the same actions without using Projects. Projects just simplifies some of the actions.
 
-The main link from Project to impCentral API is Device Group. Project relates to one and only one Device Group. It is specified during Project creation and cannot be changed to another Device Group after that (Project re-creation should be used for that). Only two [types](./CommandsManual.md#device-group-type) of Device Group are supported by Project:
-- *development* - for IMP application.
-- *pre-factory* - for [factory firmware](https://developer.electricimp.com/examples/factoryfirmware).
+One Project is encapsulated in one directory. A directory represents a project if it contains a [Project File](./CommandsManual.md#project-file). There may be one and only one [Project File](./CommandsManual.md#project-file) in a directory. All directories/Projects are independent. A subdirectory may contain a totally different Project.
 
-Indirectly, Project relates to other impCentral API entities as well. For example, Product which includes the Device Group, the latest Deployment of the Device Group, Devices assigned to the Device Group.
+Each Project references a single Device Group which is specified during Project creation and cannot be changed (re-create the Project instead). Only two [types](./CommandsManual.md#device-group-type) of Device Group are supported by a Project:
 
-Project always relates to two files - with IMP device source code and IMP agent source code. It is assumed the files are located in the same directory with [Project File](./CommandsManual.md#project-file). At any time Project may be updated to link other file(s). Anyone or the both files may not exist in reality. The most of project-related operations still work in this case. But the both files are always required if you want to deploy a new build - a file may be empty but it should exist.
+- *Development* &mdash; for application firmware.
+- *Pre-factory* &mdash; for [factory firmware](https://developer.electricimp.com/examples/factoryfirmware).
 
-When you call impt commands from a directory with [Project File](./CommandsManual.md#project-file) all the related entities (Device Group, Product, Deployment, Devices, files) are assumed by default. I.e. you may not specify them explicitly in the corresponding commands. 
+Indirectly, a Project relates to other impCentral API entities. For example, the Product which includes the Project’s Device Group, the latest Deployment to the Device Group, and Devices assigned to the Device Group.
 
-Note, the impt tool, as well as impCentral API, does not provide any source code version control or software configuration management functionality. That may be done by other appropriate tools. The impt Project just links the source files to impCentral API entities.
+Projects always relate two files, one containing device source code, the other with agent source code. It is assumed the files are located in the same directory as the [Project File](./CommandsManual.md#project-file). At any time, the Project may be updated to reference other files. Any one or both files may not exist in reality. Most project-related operations still work in this case, but device *and* agent files are always required if you want to deploy a new build. Either of these files may be empty but it should exist.
 
-For Project management the impt tool includes a special group of commands - [Project Manipulation Commands](./CommandsManual.md#project-manipulation-commands).
+When you call *impt* commands from a directory with a [Project File](./CommandsManual.md#project-file), all the related entities (Device Group, Product, Deployment, Devices, files) are assumed by default, ie. you need not specify them explicitly in the corresponding commands.
 
-## Development Operations
+**Note** *impt*, like impCentral API, does not provide any source code version control or software configuration management functionality. That may be done by other appropriate tools. The Project simply links the source files to impCentral API entities.
 
-It is assumed that all commands are called from the directory where your Project is located.
+For Project management, *impt* includes [Project Manipulation Commands](./CommandsManual.md#project-manipulation-commands).
 
-### Project Creation
+## Development Tasks ##
 
-Project creation is a creation of [Project File](./CommandsManual.md#project-file) in a directory from where a project creation command is called. If the directory already contains [Project File](./CommandsManual.md#project-file), it is overwritten after confirmation from a user, i.e. you can quickly create a new Project at the place of the previous one. In some cases it may be convenient. But in a general case it is recommended to [explicitly delete](#project-deletion) the previous Project.
+The following documentation assumes that all commands are called from the directory where your Project is located.
 
-There are two ways to create Project - [base on an existing Device Group](#link-device-group) or [create a new one](#create-new-device-group).
+### Project Creation ###
 
-#### Link Device Group
+Project creation centers on the creation of [Project File](./CommandsManual.md#project-file) in the directory from where the project creation command is called. If the directory already contains a [Project File](./CommandsManual.md#project-file), this is overwritten after confirmation from the user. However, we recommended that you [explicitly delete](#project-deletion) the previous Project.
 
-By [**impt project link**](./CommandsManual.md#project-link) command.
+There are two ways to create Project: [base it on an existing Device Group](#link-a-device-group) or [create a new one from scratch](#create-a-new-device-group).
 
-It creates Project which relates to already existent Device Group, just links it to the source files. The source files can be specified directly - using `--device-file <device_file>` and `--agent-file <agent_file>` options. Or the default names can be used. If the specified file(s) does not exist, the command creates the empty file(s).
+#### Link a Device Group ####
 
-*Example*  
+Use the [`impt project link`](./CommandsManual.md#project-link) command. This creates a Project which relates to the already existing Device Group; it just links it to the source files. The source files can be specified directly using the `--device-file <device_file>` and `--agent-file <agent_file>` options. Or the default names can be used. If a specified file does not exist, the command creates a suitably named empty file.
+
+#### Example ####
+
 ```
 > impt project link --dg MyDG
 Device source file "device.nut" is created successfully.
@@ -86,25 +88,24 @@ Device Group:
 IMPT COMMAND SUCCEEDS
 ```
 
-#### Create New Device Group
+#### Create a New Device Group ####
 
-By [**impt project create**](./CommandsManual.md#project-create) command.
+Use the [`impt project creat`](./CommandsManual.md#project-create) command. This creates a new Device Group and a Project which relates to that Device Group. The Device Group should belong to a Product:
 
-It creates new Device Group and Project which relates to that Device Group. The Device Group should belong to a Product:
-- if you already have/know the Product, specify its Id or Name as a value of `--product <PRODUCT_IDENTIFIER>` option.
-- if you want/need to create a new Product, specify Name of the new Product as a value of `--product <PRODUCT_IDENTIFIER>` option and specify `--create-product` option.
+- If you already have the Product, specify its ID or name as a value of the `--product <PRODUCT_IDENTIFIER>` option.
+- If you want to create a new Product, specify its name as a value of the `--product <PRODUCT_IDENTIFIER>` option and use the `--create-product` option.
 
-By default it is assumed the new Project is going to be used for IMP application development and the new Device Group is of the [type](./CommandsManual.md#device-group-type) *development*.
+By default, it is assumed that the new Project is going to be used for application firmware development, so the new Device Group is a Development Device Group. If you create the Project for [factory firmware](https://developer.electricimp.com/examples/factoryfirmware) development, specify the `--pre-factory` option to create a Pre-factory Device Group. In this case, you also need to specify a production target Device Group which should be of the *Pre-production* [type](./CommandsManual.md#device-group-type) and belong to the same Product:
 
-If you create Project for [factory firmware](https://developer.electricimp.com/examples/factoryfirmware) development, specify `--pre-factory` option. In this case you need to additionally specify a production target Device Group which should be of the [type](./CommandsManual.md#device-group-type) *pre-production* and belong to the same Product:
-- if you already have/know the production target Device Group, specify its Id or Name as a value of `--target <DEVICE_GROUP_IDENTIFIER>` option.
-- if you want/need to create a new production target Device Group, specify Name of the new Device Group as a value of `--target <DEVICE_GROUP_IDENTIFIER>` option and specify `--create-target` option.
+- If you already have the target Device Group, specify its ID or name as a value of the `--target <DEVICE_GROUP_IDENTIFIER>` option.
+- If you need to create a new target Device Group, specify its name as a value of the `--target <DEVICE_GROUP_IDENTIFIER>` option and use the `--create-target` option.
 
-Alternatively, you can pre-create the required impCentral API entities using other impt commands, before creation or linking a new Project. For example, use [**impt product create**](./CommandsManual.md#product-create) command to pre-create the Product, use [**impt dg create**](./CommandsManual.md#device-group-create) command to pre-create the production target Device Group and/or the project's Device Group itself.
+Alternatively, you can pre-create the required impCentral API entities using other *impt* commands. For example, use [`impt product create`](./CommandsManual.md#product-create) command to create the Product, and [`impt dg create`](./CommandsManual.md#device-group-create) command to create the production target Device Group and/or the Project's Device Group itself.
 
-The source files can be specified directly - using `--device-file <device_file>` and `--agent-file <agent_file>` options. Or the default names can be used. If the specified file(s) does not exist, the command creates the empty file(s).
+The source code files can be specified directly using the `--device-file <device_file>` and `--agent-file <agent_file>` options. Or the default names can be used. If a specified file does not exist, the command creates it as an empty file.
 
-*Example*  
+#### Example ####
+
 ```
 > impt project create --product MyProduct --name MyDG
 Device Group "MyDG" is created successfully.
@@ -128,15 +129,19 @@ Device Group:
 IMPT COMMAND SUCCEEDS
 ```
 
-### Project Updating
+### Updating Projects ####
 
-At any time you can update your Project by [**impt project update**](./CommandsManual.md#project-update) command. The following can be updated:
-- the project's Device Group Name and Description, the production target Device Group. The same can be done by [**impt dg update**](./CommandsManual.md#device-group-update) command as well.
-- change the source files which are linked to the Project.
+You can update your Project at any time with the [`impt project update`](./CommandsManual.md#project-update) command. The following can be updated:
 
-Note, you can update other impCentral API entities related to your Project by using other impt commands. For example, use [**impt product update**](./CommandsManual.md#product-update) command to change Name and Description of the related Product.
+- The project’s Device Group name and description, and the production target. The same can be done with the [`impt dg update`](./CommandsManual.md#device-group-update) command.
+- Change the source files which are linked to the Project.
 
-*Example - Update Description of the project's Device Group, change the linked device source file to "device1.nut"*  
+**Note** You can update other impCentral API entities related to your Project by using other *impt* commands. For example, use [`impt product update`](./CommandsManual.md#product-update) to change the name and/or description of the related Product.
+
+#### Example ####
+
+**Update the description of the Project’s Device Group, change the linked device source file to "device1.nut"**
+
 ```
 > impt project update --descr "New description of my DG" --device-file device1.nut
 Device Group "27f8ee81-59cd-a9ad-d2a4-e430e4e19ae9" is updated successfully.
@@ -159,29 +164,28 @@ Device Group:
 IMPT COMMAND SUCCEEDS
 ```
 
-### Device Manipulation
+### Device Manipulation ###
 
-At any time you can easily add or remove devices to/from your Project. That means assigning/unassigning Devices to/from the project's Device Group. You just need to know an identifier of the required Device - either Device Id, or Device Name, or MAC address, or IMP Agent Id.
-- use [**impt device assign --device <DEVICE_IDENTIFIER>**](./CommandsManual.md#device-assign) command to add the specified Device to your Project.
-- use [**impt dg reassign --from <DEVICE_GROUP_IDENTIFIER>**](./CommandsManual.md#device-group-reassign) command to add all Devices from the specified (by Id or Name) Device Group to your Project.
-- use [**impt device unassign --device <DEVICE_IDENTIFIER>**](./CommandsManual.md#device-unassign) command to remove the specified Device from your Project.
-- use [**impt dg unassign**](./CommandsManual.md#device-group-unassign) command to remove all Devices from your Project (the project's Device Group).
+You can add or remove devices to or from your Project at any time. That means assigning/unassigning devices to/from the Project’s Device Group. You just need to know an identifier of the required device: device ID, name or MAC address, or its Agent ID.
 
-If you do not remember an identifier of the required Device, you can use [**impt device list**](./CommandsManual.md#device-list) command to find it.
+- Use [`impt device assign --device <DEVICE_IDENTIFIER>`](./CommandsManual.md#device-assign) to add the specified device to your Project.
+- Use [`impt dg reassign --from <DEVICE_GROUP_IDENTIFIER>`](./CommandsManual.md#device-group-reassign) to add all the devices from the specified (by ID or name) Device Group to your Project.
+- Use [`impt device unassign --device <DEVICE_IDENTIFIER>`](./CommandsManual.md#device-unassign) to remove the specified device from your Project.
+- Use [`impt dg unassign`](./CommandsManual.md#device-group-unassign) command to remove all the devices from your Project (ie. the Project’s Device Group).
 
-Usually, it is enough to have one device added to your Project for development/debugging purpose.
+You can use [`impt device list`](./CommandsManual.md#device-list) to find an identifier for the required device.
 
-*Example*  
+#### Examples ####
+
 ```
 > impt device assign --device myDevice1
 Device "myDevice1" is assigned successfully to Device Group "27f8ee81-59cd-a9ad-d2a4-e430e4e19ae9".
 IMPT COMMAND SUCCEEDS
 ```
 
-*Example*  
 ```
 > impt dg reassign --from TestDG
-The following Devices assigned to Device Group "TestDG" are reassigned successfully to Device Group 
+The following Devices assigned to Device Group "TestDG" are reassigned successfully to Device Group
 "27f8ee81-59cd-a9ad-d2a4-e430e4e19ae9":
 Device:
   id:            23522f6938a609ee
@@ -192,22 +196,27 @@ Device:
 IMPT COMMAND SUCCEEDS
 ```
 
-### Build Creation and Running
+### Creating and Running Builds ###
 
-To create a new build (Deployment) without running it immediately use [**impt build deploy**](./CommandsManual.md#build-deploy) command. By default the Deployment will be created from the source files referenced by your Project. When you want/need to run the newly created Deployment:
-- use [**impt device restart --device <DEVICE_IDENTIFIER>**](./CommandsManual.md#device-restart) command to run the new build on a concrete device.
-- use [**impt dg restart**](./CommandsManual.md#device-group-restart) command to run the new build on all Devices of your Project (the project's Device Group).
+To create a new build (Deployment) without running it immediately, use [`impt build deploy`](./CommandsManual.md#build-deploy). By default, the Deployment will be created from the source files referenced by your Project. When you want to run the newly created Deployment:
 
-Alternatively, you can use [**impt build run**](./CommandsManual.md#build-run) command. It behaves exactly like [**impt build deploy**](./CommandsManual.md#build-deploy) command followed by [**impt dg restart**](./CommandsManual.md#device-group-restart) command.
+- Use [`impt device restart --device <DEVICE_IDENTIFIER>`](./CommandsManual.md#device-restart) to run the new build on a specific device.
+- Use [`impt dg restart`](./CommandsManual.md#device-group-restart) to run the new build on all the Project’s devices.
 
-*Example - Create a new flagged Deployment with Description and tag*  
+Alternatively, you can use [`impt build run`](./CommandsManual.md#build-run). This behaves exactly like the [`impt build deploy`](./CommandsManual.md#build-deploy) command followed by [`impt dg restart`](./CommandsManual.md#device-group-restart).
+
+#### Example ####
+
+**Create a new flagged Deployment with description and tag**
+
 ```
 > impt build deploy --descr "my new build" --tag TAG1 --flagged
 Deployment "b3cd81d0-0be3-b7a3-f15c-df2ded28a154" is created successfully.
 IMPT COMMAND SUCCEEDS
 ```
 
-*Example - Run the new Deployment*  
+**Run the new Deployment**
+
 ```
 > impt dg restart
 Restart request for Devices assigned to Device Group "27f8ee81-59cd-a9ad-d2a4-e430e4e19ae9" is successful:
@@ -220,19 +229,20 @@ Device:
 IMPT COMMAND SUCCEEDS
 ```
 
-### Logging
+### Logging ###
 
-impCentral API provides two types of logs:
+The impCentral API provides two types of logs:
 
-#### Historical Logs
+#### Historical Logs ####
 
-To display historical logs for a device use [**impt log get**](./CommandsManual.md#log-get) command. You do not need to specify an identifier of the device if there is only one device added to your Project (assigned to the project's Device Group).
+To display historical logs for a device, use [`impt log get`](./CommandsManual.md#log-get). You do not need to specify a device identifier if there is only one device in your Project (ie. assigned to the Project’s Device Group).
 
-The log entries are displayed by pages. The page size may be specified in the command. By default, all pages are displayed one by one, starting from the most recent log entry and pausing after every page. To display the next page - press *\<Enter>*. To stop displaying - press *\<Ctrl-C>*. Alternatively, the command allows to specify a page number to display. In this case, only the specified page is displayed and the command finishes.
+The log entries are displayed in pages. The page size may be specified in the command. By default, all pages are displayed one by one, starting from the most recent log entry and pausing after every page. To display the next page, press *\<Enter>*. To stop displaying,  press *\<Ctrl-C>*. Alternatively, the command allows you to specify a page number to display. In this case, only the specified page is displayed and the command finishes.
 
-Note, a limited number of log entries are kept by impCentral API for a limited period of time.
+**Note** A limited number of log entries are kept by impCentral API for a limited period of time.
 
-*Example*  
+#### Example ####
+
 ```
 > impt log get --page-size 5
 2018-01-22T18:33:59.537Z [agent.log] { "measureTime": "1516646039", "data": 8 }
@@ -255,23 +265,27 @@ Press <Enter> to see more logs or <Ctrl-C> to exit.
 IMPT COMMAND SUCCEEDS
 ```
 
-#### Real-time Logs
+#### Real-time Logs ####
 
-impCentral API allows to get log entries from device(s) in real-time as a log stream. Several devices may be added to one log stream but there is a limit on a number of devices. Also, there is a limit on the number of log streams per one account. The both limits are controlled by the impCentral API, not by the impt tool.
+The impCentral API will stream log entries from device(s) in real time. Devices may be added to one log stream but there is a limit on the number of devices. There is also a limit on the number of log streams per account. The both limits are controlled by the impCentral API, not by *impt*.
 
-The impt tool provides several commands which start displaying real-time logs:
-- the most universal command is [**impt log stream**](./CommandsManual.md#log-stream). You can specify several concrete Devices and/or Device Groups, all the devices are added into new log stream and logs displaying is started. If you do not specify any Device or Device Group, all Devices assigned to your project's Device Group are added to the log stream.
-- [**impt build run**](./CommandsManual.md#build-run) command with the option `--log` adds all Devices of the Device Group, for which the new Deployment is created, into new log stream and logs displaying is started.
-- [**impt dg restart**](./CommandsManual.md#device-group-restart) command with the option `--log` adds all Devices of the rebooted Device Group into new log stream and logs displaying is started.
-- [**impt device restart --device <DEVICE_IDENTIFIER>**](./CommandsManual.md#device-restart) command with the option `--log` adds the specified Device into new log stream and logs displaying is started.
+*impt* provides several commands which start displaying real-time logs:
 
-If the total number of devices requested for adding to one log stream exceeds the limit of devices per stream, not all of them are really added. You may check the command's output to see which devices are added and which are not.
+- The most universal command is [`impt log stream`](./CommandsManual.md#log-stream). You can specify several devices and/or Device Groups, and all of the devices are added to the new log stream, which is then started. If you do not specify any devices or Device Groups, all devices assigned to your Project’s Device Group are added to the log stream.
+- [`impt build run`](./CommandsManual.md#build-run) with the option `--log` adds all the devices of the Device Group, for which the new Deployment is created, to a new log stream, which is then started.
+- [`impt dg restart`](./CommandsManual.md#device-group-restart) with the option `--log` adds all the devices of the rebooted Device Group to a new log stream, which is then started.
+- [`impt device restart --device <DEVICE_IDENTIFIER>`](./CommandsManual.md#device-restart) with the option `--log` adds the specified device to a new log stream, which is then started.
 
-While the logs are being streamed no one command can be called. To stop displaying the logs press *\<Ctrl-C>*. Also, the log stream may be closed by the impCentral API. For example, when a new log stream is requested by the same account and that exceeds the limit of opened streams.
+If the total number of devices to be added to a log stream exceeds the per-stream limit, not all of them will be added. Check the command’s output to see which devices were added and which were not.
 
-Every above command always creates a new log stream. In case impCentral API allows to have only one opened log stream per account, then it means every successful execution of the new command automatically closes the previous log stream, which was working in another impt tool instance or in the impCentral IDE. Starting a log in the impCentral IDE closes the log stream opened in the impt tool.
+While the logs are being streamed, no other command can be called. To stop displaying the logs, press *\<Ctrl-C>*. The log stream may be closed by the impCentral API: for example, when a new log stream is requested by the same account and that exceeds the limit of opened streams.
 
-*Example - Logging is started for a Device from the project's Device Group*  
+Every command listed above always creates a new log stream. The impCentral API currently permits only one log stream per account, so every successful execution of the above commands automatically closes the previous log stream, whether established by *impt* or even the impCentral UI. Starting a log in impCentral closes a log stream opened in *impt*.
+
+#### Example ####
+
+**Logging is started for a device from the Project’s Device Group**
+
 ```
 > impt log stream
 Log stream for Device(s) 234776801163a9ee is opened.
@@ -287,13 +301,14 @@ Press <Ctrl-C> to exit.
 IMPT COMMAND SUCCEEDS
 ```
 
-### Project Info
+### Project Info ###
 
-At any time you can get known the actual status of your Project configuration - the related Device Group, Product, the linked source files, etc. - by [**impt project info**](./CommandsManual.md#project-info) command. Additional option `--full` provides you even more details. For example, information about Devices added to your Project, the login status related to the directory with your Project - like by [**impt auth info**](./CommandsManual.md#auth-info) command.
+You can get the status of your Project configuration &mdash; the related Device Group, Product, the linked source files, etc. &mdash; with [`impt project info`](./CommandsManual.md#project-info). The option `--full` provides you even more details: for example, information about devices added to your Project, the login status of to the directory with your Project (as per [`impt auth info`](./CommandsManual.md#auth-info)).
 
-Use [**impt product info**](./CommandsManual.md#product-info) command with the option `--full` to review the full structure of the Product related by your Project.
+Use [`impt product info`](./CommandsManual.md#product-info with the option `--full` to review the full structure of the Product related by your Project.
 
-*Example*  
+#### Example ####
+
 ```
 > impt project info --full
 Project info:
@@ -336,24 +351,26 @@ Account id:                c1d61eef-d544-4d09-c8dc-d43e6742cae3
 IMPT COMMAND SUCCEEDS
 ```
 
-### Project Sharing
+### Sharing Projects ###
 
-Your Project can be easily shared, copied or moved, if required by your. For example, copied from one computer to another. Just copy the whole directory with your Project - with [Project File](./CommandsManual.md#project-file) and the linked source files - and continue use the impt tool commands from the new directory.
+Your Project can be easily shared, copied or moved: just copy the whole directory containing the [Project File](./CommandsManual.md#project-file) and the linked source files, and continue using *impt* from the new directory.
 
-Note, the directory with your Project can also include [Local Auth File](./CommandsManual.md#local-auth-file). If you do not want to share/copy it, exclude it from copying.
+**Note** The Project directory may also include a [Local Auth File](./CommandsManual.md#local-auth-file), which you may not wish to share. If you do want to share or copy the authentication information along with your Project, but the directory does not include a [Local Auth File](./CommandsManual.md#local-auth-file) (ie. you use global login), call [`impt auth login`](./CommandsManual.md#auth-login) with the option `--local` and with the same credentials and endpoint as you used for global login. A [Local Auth File](./CommandsManual.md#local-auth-file) will be created and you will be able to copy it alongside the other Project files.
 
-On the contrary, if you want to share/copy the authentication information along with your Project but the directory does not include [Local Auth File](./CommandsManual.md#local-auth-file) (i.e. you use global login), call [**impt auth login**](./CommandsManual.md#auth-login) command with the option `--local` and with the same credentials and endpoint as you used for global login, [Local Auth File](./CommandsManual.md#local-auth-file) will be created and you will be able to copy it as well.
-
-### Project Deletion
+### Deleting a Project ###
 
 There are several levels of Project deletion:
-- [**impt project delete**](./CommandsManual.md#project-delete) command without additional options deletes [Project File](./CommandsManual.md#project-file) only. I.e. simply removes a link between Device Group and the source files. The same effect happens when you [create new Project](#project-creation) at the place of the previous one that overwrites the previous [Project File](./CommandsManual.md#project-file).
-- [**impt project delete**](./CommandsManual.md#project-delete) command with the option `--files` additionally deletes the linked source files. The same effect happens when you manually remove the directory with your Project.
-- [**impt project delete**](./CommandsManual.md#project-delete) command with the option `--entities` additionally deletes the related impCentral API entities - Device Group(s), Product, Deployments, etc. See [the command specification](./CommandsManual.md#project-delete) for more details and explanation. Use this option, for example, when you want/need to cleanup all the entities after your temporal or test project activities.
 
-Note, [**impt project delete**](./CommandsManual.md#project-delete) command never deletes [Local Auth File](./CommandsManual.md#local-auth-file), if it exists in the directory with your Project. Use [**impt auth logout --local**](./CommandsManual.md#auth-login) command to delete [Local Auth File](./CommandsManual.md#local-auth-file) or remove it manually.
+- [`impt project delete`](./CommandsManual.md#project-delete) without additional options deletes the [Project File](./CommandsManual.md#project-file) only, ie. it simply removes the link between the Device Group and the source files. The same effect occurs when you [create a new Project](#project-creation) in the same directory to overwrite the previous [Project File](./CommandsManual.md#project-file).
+- [`impt project delete`](./CommandsManual.md#project-delete) with the option `--files` will also delete the linked source files. This is equivalent to manually deleting the Project directory.
+- [`impt project delete`](./CommandsManual.md#project-delete) with the option `--entities` will also delete the related impCentral API entities. See [the command specification](./CommandsManual.md#project-delete) for more details and an explanation. Use this option when, for example, you want to clean all the entities after working on a temporary test project.
 
-*Example - Delete everything*  
+**Note** [`impt project delete`](./CommandsManual.md#project-delete) never deletes the [Local Auth File](./CommandsManual.md#local-auth-file), if it exists in the Project directory. Use [`impt auth logout --local`](./CommandsManual.md#auth-login) to delete the [Local Auth File](./CommandsManual.md#local-auth-file) or remove it manually.
+
+#### Example ####
+
+**Delete everything**
+
 ```
 > impt project delete --all
 The following entities will be deleted:
@@ -381,7 +398,7 @@ Device:
   agent_id:      T1oUmIZ3At_N
   device_online: true
 
-The following Deployments are marked "flagged" to prevent deleting. They will be modified 
+The following Deployments are marked "flagged" to prevent deleting. They will be modified
 by setting "flagged" attribute to false:
 Deployment:
   id:      8b59afb0-32c6-1221-fdf8-fc5bf38ed155
@@ -407,11 +424,11 @@ Project is deleted successfully.
 IMPT COMMAND SUCCEEDS
 ```
 
-## Typical Usecase
+## Typical Use-cases ##
 
-### Develop IMP Application
+### Develop Application Firmware ###
 
-1. Login to impCentral API using global login ([Global Auth File](./CommandsManual.md#global-auth-file))  
+1. Log in to the impCentral API using global login (a [Global Auth File](./CommandsManual.md#global-auth-file))
 
 ```
 > impt auth login --user username --pwd password
@@ -419,14 +436,23 @@ Global login is successful.
 IMPT COMMAND SUCCEEDS
 ```
 
-2. Create a new directory called, for example, "dev".
+2. Create a new directory called, for example, `dev`.
+
+```
+> mkdir dev
+```
 
 3. Go to the new directory.
 
-4. Create a project for an IMP application: a new Product "MyProduct", a new Device Group "MyDevDG" in that Product, empty files "myapp.device.nut" and "myapp.agent.nut", [Project File](./CommandsManual.md#project-file).   
+```
+> cd dev
+```
+
+4. Create a Project based on a new Product “MyProduct”, a new Device Group “MyDevDG”, empty files `myapp.device.nut` and `myapp.agent.nut`, and a [Project File](./CommandsManual.md#project-file).
 
 ```
-> impt project create --product MyProduct --create-product --name MyDevDG --descr "IMP Application" --device-file myapp.device.nut --agent-file myapp.agent.nut
+> impt project create --product MyProduct --create-product --name MyDevDG
+    --descr "imp Application Firmware" --device-file myapp.device.nut --agent-file myapp.agent.nut
 Product "MyProduct" is created successfully.
 Device Group "MyDevDG" is created successfully.
 Device source file "myapp.device.nut" is created successfully.
@@ -439,7 +465,7 @@ Device Group:
   id:          c675ad8a-9d88-1d0f-e017-4a8c71bb0fd5
   type:        development
   name:        MyDevDG
-  description: IMP Application
+  description: imp Application Firmware
   region:
   created_at:  2018-01-22T17:56:27.973Z
   updated_at:  2018-01-22T17:56:27.973Z
@@ -449,11 +475,11 @@ Device Group:
 IMPT COMMAND SUCCEEDS
 ```
 
-5. Write the code of your IMP application in "myapp.device.nut" and "myapp.agent.nut" files.
+5. Add your Squirrel code to your two source files.
 
-6. [BlinkUp](https://developer.electricimp.com/blinkup) a device which you plan to use for your application debugging.
+6. Add a development device to your Electric Imp account.
 
-7. List all your unassigned devices and find the needed one.  
+7. List your unassigned devices to find the new device.
 
 ```
 > impt device list --unassigned
@@ -471,7 +497,7 @@ Device:
 IMPT COMMAND SUCCEEDS
 ```
 
-8. Add the needed device to your project. You can specify the device by its Id, Name, MAC, IMP Agent Id.  
+8. Add the device to your Project. You can specify the device by its ID, name, MAC or Agent ID.
 
 ```
 > impt device assign --device myDevice1
@@ -479,7 +505,7 @@ Device "myDevice1" is assigned successfully to Device Group "c675ad8a-9d88-1d0f-
 IMPT COMMAND SUCCEEDS
 ```
 
-9. Create a new build, run it and start the logs of your application.  
+9. Create a new build, run it and start logging.
 
 ```
 > impt build run --log
@@ -503,33 +529,34 @@ Press <Ctrl-C> to exit.
 [234776801163a9ee] 2018-01-22T18:11:54.329Z [agent.log] Data published successfully:
 [234776801163a9ee] 2018-01-22T18:11:54.329Z [agent.log] { "measureTime": "1516644713", "data": 3 }
 ```
-  
+
 10. Review how your application is working.
 
-11. Stop the logging by pressing *\<Ctrl-C>*.  
+11. Stop the logging by pressing *\<Ctrl-C>*.
 
-12. If needed, update your code, create and run a new build by the same command as above.
+12. If needed, update your code, create and run a new build by using the same command in Step 9.
 
-13. When you satisfied by your code, mark the latest build by a tag, for example, "MyRC1" and set *flagged* attribute to `true` (it saves the build from unintentional deletion).  
+13. When you are satisfied with your code, mark the latest build by a tag &mdash; for example, "MyRC1" &mdash; and set the *flagged* attribute to `true` (this protects it from accidental deletion).
 
 ```
 > impt build update --descr "My Release Candidate 1" --tag MyRC1 --flagged
 Deployment "e0059ee6-2483-4ab1-50eb-e693e62155b7" is updated successfully.
 IMPT COMMAND SUCCEEDS
 ```
-  
-### Develop Factory Firmware
 
-Note, you need to have appropriate permissions to operate with the impCentral API entities related to pre-factory and pre-production processes.
+### Develop Factory Firmware ###
 
-1. Create a new directory called, for example, "factory".
+**Note** You need to have appropriate permission to make use of the impCentral API entities related to pre-production processes.
+
+1. Create a new directory called, for example, `factory`.
 
 2. Go to the new directory.
 
-3. Create a project for a [factory firmware](https://developer.electricimp.com/examples/factoryfirmware) which is linked to the existent Product "MyProduct": a new Device Group "MyPreFactoryDG" in that Product, a new Device Group "MyPreProductionDG" that will be a production target, empty files "factory.device.nut" and "factory.agent.nut", [Project File](./CommandsManual.md#project-file).   
+3. Create a Project for [factory firmware](https://developer.electricimp.com/examples/factoryfirmware) which is linked to the existing Product "MyProduct"; create new Device Groups "MyPreFactoryDG" and "MyPreProductionDG" in that Product, and empty files `factory.device.nut` and `factory.agent.nut`, and a [Project File](./CommandsManual.md#project-file).
 
 ```
-> impt project create --pre-factory --product MyProduct --name MyPreFactoryDG --descr "Factory Firmware" --target MyPreProductionDG --create-target --device-file factory.device.nut --agent-file factory.agent.nut
+> impt project create --pre-factory --product MyProduct --name MyPreFactoryDG --descr "Factory Firmware"
+    --target MyPreProductionDG --create-target --device-file factory.device.nut --agent-file factory.agent.nut
 Device Group "MyPreProductionDG" is created successfully.
 Device Group "MyPreFactoryDG" is created successfully.
 Device source file "factory.device.nut" is created successfully.
@@ -556,7 +583,7 @@ Device Group:
 IMPT COMMAND SUCCEEDS
 ```
 
-4. Copy your IMP application's build tagged as "MyRC1" to "MyPreProductionDG" Device Group. It will be a production code for devices blessed by your factory firmware. Attributes of the build are not copied.  
+4. Copy your application’s build tagged as “MyRC1” to the “MyPreProductionDG” Device Group. “MyRC1” contains the code for devices blessed by your factory firmware. Build attributes are not copied.
 
 ```
 > impt build copy --build MyRC1 --dg MyPreProductionDG
@@ -565,11 +592,11 @@ Deployment "MyRC1" is copied successfully to Deployment "a0e8e599-c6c5-62c0-2a88
 IMPT COMMAND SUCCEEDS
 ```
 
-5. Write the code of your [factory firmware](https://developer.electricimp.com/examples/factoryfirmware) in "factory.device.nut" and "factory.agent.nut" files.
+5. Write your [factory firmware](https://developer.electricimp.com/examples/factoryfirmware) using the Project’s source code files.
 
-6. [BlinkUp](https://developer.electricimp.com/blinkup) a device which you plan to use as a pre-factory fixture device.
+6. Add your test factory BlinkUp fixture to your Electric Imp account as if it were a development device.
 
-7. List all your unassigned devices and find the needed one.  
+7. List all of your unassigned devices and find the test fixture.
 
 ```
 > impt device list --unassigned
@@ -587,7 +614,7 @@ Device:
 IMPT COMMAND SUCCEEDS
 ```
 
-8. Add the needed device to your project. You can specify the device by its Id, Name, MAC, IMP Agent Id.  
+8. Add the test fixture to your project. You can specify the device by its ID, Name, MAC or Agent ID.
 
 ```
 > impt device assign --device 5000d8c46a56cfca
@@ -595,7 +622,7 @@ Device "5000d8c46a56cfca" is assigned successfully to Device Group "71c3be05-a7d
 IMPT COMMAND SUCCEEDS
 ```
 
-9. Create a new build, run it and start the logs of your factory firmware part that runs on the pre-factory fixture device.  
+9. Create a new factory firmware build, run it and start logging.
 
 ```
 > impt build run --log
@@ -613,30 +640,30 @@ IMPT COMMAND SUCCEEDS
 
 Press <Ctrl-C> to exit.
 ```
-  
-10. BlinkUp, test and bless your pre-production devices by your pre-factory fixture device.
 
-11. Stop the logging by pressing *\<Ctrl-C>*.  
+10. Use the fixture to configure test DUTs. They will connect, and download and run the factory firmware which will test-bless them if they pass your hardware tests.
 
-12. If needed, update your factory firmware code, create and run a new build by the same command as above.
+11. Stop the logging by pressing *\<Ctrl-C>*.
 
-13. When you satisfied by your factory firmware code, mark the latest build by a tag, for example, "MyFactoryRC1" and set *flagged* attribute to `true` (it saves the build from unintentional deletion).  
+12. If needed, update your factory firmware code, and create and run a new build by using the command in Step 9.
+
+13. When you are satisfied with your factory firmware, mark the latest build by a tag, eg. “MyFactoryRC1”, and set its *flagged* attribute to `true` (this protects it from accidental deletion).
 
 ```
 > impt build update --descr "My Factory Firmware Release Candidate 1" --tag MyFactoryRC1 --flagged
 Deployment "4a7339e4-1f7c-3caa-2ce5-15c367df9a3f" is updated successfully.
 IMPT COMMAND SUCCEEDS
 ```
-  
-### Cleanup
 
-#### Go To Production
+### Clean-up ###
 
-If your development is planned for production you may want/need to keep the impCentral API entities your created, especially the final builds, but still do some minimal cleanup after your development activities.
+#### Go To Production ####
 
-1. Go to the "factory" directory.  
+If you are developing production firmware, you may want to keep the impCentral API entities your created, especially the final builds, but still do some minimal clean-up after your development activities are complete.
 
-2. Delete all unnecessary builds of your factory firmware code, *flagged* builds will not be deleted.  
+1. Go to the `factory` directory.
+
+2. Delete all unnecessary builds of your factory firmware code (*flagged* builds will not be deleted).
 
 ```
 > impt dg builds --remove
@@ -673,7 +700,7 @@ Deployment:
 IMPT COMMAND SUCCEEDS
 ```
 
-3. Unassign your pre-factory fixture device in order to reuse it in your other projects.  
+3. Unassign your pre-factory fixture device in order to reuse it in your other Projects.
 
 ```
 > impt dg unassign
@@ -687,7 +714,7 @@ Device:
 IMPT COMMAND SUCCEEDS
 ```
 
-4. Unassign your pre-production devices in order to reuse them in your other projects.  
+4. Unassign your pre-production devices in order to reuse them in your other Projects.
 
 ```
 > impt dg unassign --dg MyPreProductionDG
@@ -699,7 +726,7 @@ Device:
 IMPT COMMAND SUCCEEDS
 ```
 
-5. If you want, delete your factory firmware project and the source files in this directory. The impCentral API entities will not be deleted, the source files you may keep in your version control / software configuration management tool.  
+5. If you want, delete your factory firmware Project and the source files in this directory. The impCentral API entities will not be deleted; the source files you may keep in your version control or software configuration management tool.
 
 ```
 > impt project delete --files
@@ -715,9 +742,9 @@ Project is deleted successfully.
 IMPT COMMAND SUCCEEDS
 ```
 
-6. Go to the "dev" directory.
+6. Go to the `dev` directory.
 
-7. Delete all unnecessary builds of your IMP application code, *flagged* builds will not be deleted.  
+7. Delete all unnecessary builds of your application firmare (*flagged* builds will not be deleted).
 
 ```
 > impt dg builds --remove
@@ -762,7 +789,7 @@ Deployment:
 IMPT COMMAND SUCCEEDS
 ```
 
-8. Unassign your device which you used for the application testing.  
+8. Unassign the development device which you used for application testing.
 
 ```
 > impt dg unassign
@@ -776,7 +803,7 @@ Device:
 IMPT COMMAND SUCCEEDS
 ```
 
-9. Display and review the full structure of your Product.  
+9. Display and review the full structure of your Product.
 
 ```
 > impt product info --full
@@ -833,7 +860,7 @@ Product:
 IMPT COMMAND SUCCEEDS
 ```
 
-10. If you want, delete your IMP application project and the source files in this directory. The impCentral API entities will not be deleted, the source files you may keep in your version control / software configuration management tool.  
+10. If you want, delete your application Project and the source files in this directory. The impCentral API entities will not be deleted; the source files you may keep in your version control or software configuration management tool.
 
 ```
 > impt project delete --files
@@ -849,9 +876,9 @@ Project is deleted successfully.
 IMPT COMMAND SUCCEEDS
 ```
 
-11. If you want, delete the "dev" and the "factory" directories.  
+11. If you want, delete the `dev` and `factory` directories.
 
-12. If you want, logout from impCentral API.  
+12. If you want, log out from the impCentral API.
 
 ```
 > impt auth logout
@@ -859,15 +886,15 @@ Global logout is successful.
 IMPT COMMAND SUCCEEDS
 ```
 
-The impt tool usage for factory and production processes is described in the [impt Production Guide](./ProductionGuide.md).
+The *impt* usage for factory and production processes is described in the [impt Production Guide](./ProductionGuide.md).
 
-#### Total Cleanup
+#### Full Clean-up ####
 
-If your development was just to try, test or any other temporal purpose you may want to fully cleanup all your development activities, including all impCentral API entities you created.
+If your development work was temporary, you may want to fully clean all of your development activities, including all the impCentral API entities you created.
 
-1. Go to the "factory" directory.  
+1. Go to the `factory` directory.
 
-2. Delete your factory firmware project, the source files and all impCentral API entities. "MyPreFactoryDG" and "MyPreProductionDG" Device Groups and all their builds (including *flagged*) will be deleted, the devices will be unassigned from them. "MyProduct" Product will not be deleted as you still have another project (Device Group) related to it.  
+2. Delete your factory firmware Project, the source files and all impCentral API entities: the “MyPreFactoryDG” and “MyPreProductionDG” Device Groups and all their builds (including *flagged* ones) will be deleted, and the devices will be unassigned from them. The “MyProduct” Product will not be deleted as you still have another Project (ie. a Device Group) related to it.
 
 ```
 > impt project delete --all
@@ -900,7 +927,7 @@ Device:
   agent_id:      mRu9cePbSCJY
   device_online: true
 
-The following Deployments are marked "flagged" to prevent deleting. They will be modified 
+The following Deployments are marked "flagged" to prevent deleting. They will be modified
 by setting "flagged" attribute to false:
 Deployment:
   id:      4a7339e4-1f7c-3caa-2ce5-15c367df9a3f
@@ -927,9 +954,9 @@ Project is deleted successfully.
 IMPT COMMAND SUCCEEDS
 ```
 
-3. Go to the "dev" directory.
+3. Go to the `dev` directory.
 
-4. Delete your IMP application project, the source files and all impCentral API entities. "MyDevDG" Device Group and all its builds (including *flagged*) will be deleted, the devices will be unassigned from it. "MyProduct" Product will be deleted.  
+4. Delete your application Project, the source files and all impCentral API entities. The “MyDevDG” Device Group and all its builds (including *flagged* ones) will be deleted, and its devices will be unassigned from it. “MyProduct” will be deleted.
 
 ```
 > impt project delete --all
@@ -958,7 +985,7 @@ Device:
   agent_id:      T1oUmIZ3At_N
   device_online: true
 
-The following Deployments are marked "flagged" to prevent deleting. They will be modified 
+The following Deployments are marked "flagged" to prevent deleting. They will be modified
 by setting "flagged" attribute to false:
 Deployment:
   id:      e0059ee6-2483-4ab1-50eb-e693e62155b7
@@ -984,9 +1011,9 @@ Project is deleted successfully.
 IMPT COMMAND SUCCEEDS
 ```
 
-5. If you want, delete the "dev" and the "factory" directories.  
+5. If you want, delete the `dev` and `factory` directories.
 
-6. If you want, logout from impCentral API.  
+6. If you want, log out from impCentral API.
 
 ```
 > impt auth logout
