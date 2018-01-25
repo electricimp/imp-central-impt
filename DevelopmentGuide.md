@@ -90,7 +90,7 @@ IMPT COMMAND SUCCEEDS
 
 #### Create a New Device Group ####
 
-Use the [`impt project creat`](./CommandsManual.md#project-create) command. This creates a new Device Group and a Project which relates to that Device Group. The Device Group should belong to a Product:
+Use the [`impt project create`](./CommandsManual.md#project-create) command. This creates a new Device Group and a Project which relates to that Device Group. The Device Group should belong to a Product:
 
 - If you already have the Product, specify its ID or name as a value of the `--product <PRODUCT_IDENTIFIER>` option.
 - If you want to create a new Product, specify its name as a value of the `--product <PRODUCT_IDENTIFIER>` option and use the `--create-product` option.
