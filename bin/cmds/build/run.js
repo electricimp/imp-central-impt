@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright 2017 Electric Imp
+// Copyright 2018 Electric Imp
 //
 // SPDX-License-Identifier: MIT
 //
@@ -30,8 +30,7 @@ const Options = require('../../../lib/util/Options');
 const COMMAND = 'run';
 const COMMAND_SECTION = 'build';
 const COMMAND_SHORT_DESCR = 'Creates, deploys and runs a build.';
-const COMMAND_DESCRIPTION = 'Creates, deploys and runs a build (Deployment). Optionally, displays logs of the running build.' +
-    ' Fails if the specified Device Group does not exist.';
+const COMMAND_DESCRIPTION = 'Creates, deploys and runs a build (Deployment). Optionally, displays logs of the running build.';
 
 exports.command = COMMAND;
 
@@ -44,13 +43,13 @@ exports.builder = function (yargs) {
             demandOption : false,
             describe : 'Name of a file which contains a source code for IMP device.' +
                 ' If not specified, the file referenced by Project File in the current directory is assumed;' +
-                ' if no Project File, empty code is assumed. If the specified file does not exist, empty code is assumed.'
+                ' if no Project File, empty code is assumed. If the specified file does not exist, the command fails.'
         },
         [Options.AGENT_FILE] : {
             demandOption : false,
             describe : 'Name of a file which contains a source code for IMP agent.' +
                 ' If not specified, the file referenced by Project File in the current directory is assumed;' +
-                ' if no Project File, empty code is assumed. If the specified file does not exist, empty code is assumed.'
+                ' if no Project File, empty code is assumed. If the specified file does not exist, the command fails.'
         },
         [Options.DESCRIPTION] : {
             demandOption : false,

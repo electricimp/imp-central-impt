@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright 2017 Electric Imp
+// Copyright 2018 Electric Imp
 //
 // SPDX-License-Identifier: MIT
 //
@@ -54,19 +54,11 @@ exports.builder = function (yargs) {
         },
         [Options.DEVICE_FILE] :  {
             demandOption : false,
-            describe: 'New name of a file for IMP device source code.'
+            describe: 'New name of a file for IMP device source code. If the file does not exist, empty file is created.'
         },
         [Options.AGENT_FILE] : {
             demandOption : false,
-            describe: 'New name of a file for IMP agent source code.'
-        },
-        [Options.RENAME_FILES] : false,
-        [Options.CREATE_FILES] : {
-            demandOption : false,
-            describe : Util.format('Creates empty file(s) if the file(s) referenced by Project File' +
-                ' as the file(s) with IMP device/agent source code do not exist.' +
-                ' Should not be specified together with --%s option.',
-                Options.RENAME_FILES)
+            describe: 'New name of a file for IMP agent source code. If the file does not exist, empty file is created.'
         },
         [Options.TARGET] : {
             demandOption : false,
@@ -82,15 +74,6 @@ exports.builder = function (yargs) {
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
         .options(options)
         .check(function (argv) {
-            const opts = new Options(argv);
-            if (opts.createFiles && opts.renameFiles) {
-                return new Errors.CommandSyntaxError(UserInteractor.ERRORS.CMD_MUTUALLY_EXCLUSIVE_OPTIONS,
-                    Options.CREATE_FILES, Options.RENAME_FILES);
-            }
-            if (opts.renameFiles && !opts.agentFile && !opts.deviceFile) {
-                return new Errors.CommandSyntaxError(UserInteractor.ERRORS.CMD_COOPERATIVE_MULT_OPTIONS,
-                    Options.DEVICE_FILE, Options.AGENT_FILE, Options.RENAME_FILES);
-            }
             return Options.checkOptions(argv, options);
         })
         .strict();

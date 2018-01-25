@@ -323,15 +323,17 @@ User is asked to confirm the operation (confirmed automatically with **--confirm
 **impt build deploy \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--device-file <device_file>] \[--agent-file <agent_file>] \[--descr <build_description>] \[--origin \<origin>] \[--tag \<tag>] \[--flagged \[true|false]] \[--debug] \[--help]**
 
 Creates a build (Deployment) from the specified source files, with Description (if specified) and attributes (if
-specified) and deploys it to all Devices of the specified Device Group. Fails if the specified Device Group does not exist.
+specified) and deploys it to all Devices of the specified Device Group.
+
+Fails if one or both of the specified source files do not exist or the specified Device Group does not exist.
 
 The new build is not run until the Devices are rebooted. To run it call **[impt dg restart](#device-group-restart)** or **[impt device restart](#device-restart)** command.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
-| --device-file | -x | no | yes | Name of a file which contains a source code for IMP device. If not specified, the file referenced by [Project File](#project-file) in the current directory is assumed; if no Project File, empty code is assumed. If the specified file does not exist, empty code is assumed. |
-| --agent-file | -y | no | yes | Name of a file which contains a source code for IMP agent. If not specified, the file referenced by [Project File](#project-file) in the current directory is assumed; if no Project File, empty code is assumed. If the specified file does not exist, empty code is assumed. |
+| --device-file | -x | no | yes | Name of a file which contains a source code for IMP device. If not specified, the file referenced by [Project File](#project-file) in the current directory is assumed; if no Project File, empty code is assumed. If the specified file does not exist, the command fails. |
+| --agent-file | -y | no | yes | Name of a file which contains a source code for IMP agent. If not specified, the file referenced by [Project File](#project-file) in the current directory is assumed; if no Project File, empty code is assumed. If the specified file does not exist, the command fails. |
 | --descr | -s | no | yes | Description of the build (Deployment). |
 | --origin | -o | no | yes | A free-form key to store the source of the code. |
 | --tag | -t | no | yes | A tag applied to this build (Deployment). This option may be repeated several times to apply several tags. |
@@ -398,17 +400,17 @@ The returned list of the builds may be filtered. Filtering is possible by any co
 
 **impt build run \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--device-file <device_file>] \[--agent-file <agent_file>] \[--descr <build_description>] \[--origin \<origin>] \[--tag \<tag>] \[--flagged \[true|false]] \[--conditional] \[--log] \[--debug] \[--help]**
 
-Creates, deploys and runs a build (Deployment). Optionally, displays logs of the running build. Fails if the specified Device Group does not exist.
+Creates, deploys and runs a build (Deployment). Optionally, displays logs of the running build.
 
 It behaves exactly like **[impt build deploy](#build-deploy)** command followed by **[impt dg restart](#device-group-restart)** command and, optionally, by **[impt log stream](#log-stream)** command.
 
-Informs user if the specified Device Group does not have assigned Devices, in this case the Deployment is created anyway.
+Fails if one or both of the specified source files do not exist or the specified Device Group does not exist. Informs user if the specified Device Group does not have assigned Devices, in this case the Deployment is created anyway.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --dg | -g | yes/[project](#project-file) | yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if no Project File, the command fails). |
-| --device-file | -x | no | yes | Name of a file which contains a source code for IMP device. If not specified, the file referenced by [Project File](#project-file) in the current directory is assumed; if no Project File, empty code is assumed. If the specified file does not exist, empty code is assumed. |
-| --agent-file | -y | no | yes | Name of a file which contains a source code for IMP agent. If not specified, the file referenced by [Project File](#project-file) in the current directory is assumed; if no Project File, empty code is assumed. If the specified file does not exist, empty code is assumed. |
+| --device-file | -x | no | yes | Name of a file which contains a source code for IMP device. If not specified, the file referenced by [Project File](#project-file) in the current directory is assumed; if no Project File, empty code is assumed. If the specified file does not exist, the command fails. |
+| --agent-file | -y | no | yes | Name of a file which contains a source code for IMP agent. If not specified, the file referenced by [Project File](#project-file) in the current directory is assumed; if no Project File, empty code is assumed. If the specified file does not exist, the command fails. |
 | --descr | -s | no | yes | Description of the build (Deployment). |
 | --origin | -o | no | yes | A free-form key to store the source of the code. |
 | --tag | -t | no | yes | A tag applied to this build (Deployment). This option may be repeated several times to apply several tags. |
@@ -901,7 +903,7 @@ Fails if the specified Product does not exist.
 
 #### Project Create
 
-**impt project create --product <PRODUCT_IDENTIFIER> \[--create-product] --name <device_group_name> \[--descr <device_group_description>] \[--device-file <device_file>] \[--agent-file <agent_file>] \[--create-files] \[--pre-factory] \[--target <DEVICE_GROUP_IDENTIFIER>] \[--create-target] \[--confirmed] \[--debug] \[--help]**
+**impt project create --product <PRODUCT_IDENTIFIER> \[--create-product] --name <device_group_name> \[--descr <device_group_description>] \[--device-file <device_file>] \[--agent-file <agent_file>] \[--pre-factory] \[--target <DEVICE_GROUP_IDENTIFIER>] \[--create-target] \[--confirmed] \[--debug] \[--help]**
 
 Creates a new Device Group for the specified Product and creates new [Project File](#project-file) in the current directory by linking it to the new Device Group.
 
@@ -919,15 +921,14 @@ At the end of the command execution information about the project is displayed (
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --product | -p | yes | yes | [Product Identifier](#product-identifier). |
-| --create-product | -i | no | no | If the Product specified by **--product** option does not exist, it is created. In this case, the value of **--product** option is considered as a Name of the new Product. If the Product specified by **--product** option exists, **--create-product** option is ignored. |
+| --create-product | -c | no | no | If the Product specified by **--product** option does not exist, it is created. In this case, the value of **--product** option is considered as a Name of the new Product. If the Product specified by **--product** option exists, **--create-product** option is ignored. |
 | --name | -n | yes | yes | Name of the new Device Group. Must be unique among all Device Groups in the specified Product. |
 | --descr | -s | no | yes | Description of the Device Group. |
-| --device-file | -x | no | yes | Name of a file for IMP device source code. Default value: *device.nut* |
-| --agent-file | -y | no | yes | Name of a file for IMP agent source code. Default value: *agent.nut* |
-| --create-files | -c | no | no | Creates empty file(s) if the file(s) referenced by [Project File](#project-file) as the file(s) with IMP device/agent source code do not exist. |
+| --device-file | -x | no | yes | Name of a file for IMP device source code. Default value: *device.nut*. If the file does not exist, empty file is created. |
+| --agent-file | -y | no | yes | Name of a file for IMP agent source code. Default value: *agent.nut*. If the file does not exist, empty file is created. |
 | --pre-factory | -f | no | no | If not specified, the new Device Group is of the [type](#device-group-type) *development*. If specified, the new Device Group is of the [type](#device-group-type) *pre-factory*. |
 | --target | -t | no | yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the being created Device Group. May be specified if and only if **--pre-factory** option is specified. The specified target Device Group must be of the [type](#device-group-type) *pre-production* and belongs to the specified Product. Otherwise the command fails. |
-| --create-target | -j | no | no | If the Device Group specified by **--target** option does not exist, it is created. In this case, the value of **--target** option is considered as a Name of the new Device Group. If **--target** option is not specified or the Device Group specified by **--target** option exists, **--create-target** option is ignored. |
+| --create-target | -r | no | no | If the Device Group specified by **--target** option does not exist, it is created. In this case, the value of **--target** option is considered as a Name of the new Device Group. If **--target** option is not specified or the Device Group specified by **--target** option exists, **--create-target** option is ignored. |
 | --confirmed | -q | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
@@ -979,7 +980,7 @@ Informs user if the Device Group referenced by [Project File](#project-file) doe
 
 #### Project Link
 
-**impt project link --dg <DEVICE_GROUP_IDENTIFIER> \[--device-file <device_file>] \[--agent-file <agent_file>] \[--create-files] \[--confirmed] \[--debug] \[--help]**
+**impt project link --dg <DEVICE_GROUP_IDENTIFIER> \[--device-file <device_file>] \[--agent-file <agent_file>] \[--confirmed] \[--debug] \[--help]**
 
 Creates new [Project File](#project-file) in the current directory by linking it to the specified Device Group.
 
@@ -996,16 +997,15 @@ At the end of the command execution information about the project is displayed (
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --dg | -g | yes | yes | [Device Group Identifier](#device-group-identifier). |
-| --device-file | -x | no | yes | Name of a file for IMP device source code. Default value: *device.nut* |
-| --agent-file | -y | no | yes | Name of a file for IMP agent source code. Default value: *agent.nut* |
-| --create-files | -c | no | no | Creates empty file(s) if the file(s) referenced by [Project File](#project-file) as the file(s) with IMP device/agent source code do not exist. |
+| --device-file | -x | no | yes | Name of a file for IMP device source code. Default value: *device.nut*. If the file does not exist, empty file is created. |
+| --agent-file | -y | no | yes | Name of a file for IMP agent source code. Default value: *agent.nut*. If the file does not exist, empty file is created. |
 | --confirmed | -q | no | no | Executes the operation w/o asking additional confirmation from user. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
 
 #### Project Update
 
-**impt project update \[--name <device_group_name>] \[--descr <device_group_description>] \[--device-file <device_file>] \[--agent-file <agent_file>] \[--rename-files] \[--create-files] \[--target <DEVICE_GROUP_IDENTIFIER>] \[--debug] \[--help]**
+**impt project update \[--name <device_group_name>] \[--descr <device_group_description>] \[--device-file <device_file>] \[--agent-file <agent_file>] \[--target <DEVICE_GROUP_IDENTIFIER>] \[--debug] \[--help]**
 
 Updates the project settings and/or Name, Description, production target of the Device Group referenced by [Project File](#project-file).
 Fails if there is no [Project File](#project-file) in the current directory.
@@ -1018,10 +1018,8 @@ At the end of the command execution information about the project is displayed (
 | --- | --- | --- | --- | --- |
 | --name | -n | no | yes | New Name of the Device Group referenced by [Project File](#project-file). Must be unique among all Device Groups in the Product. |
 | --descr | -s | no | yes | New Description of the Device Group referenced by [Project File](#project-file). |
-| --device-file | -x | no | yes | New name of a file for IMP device source code. |
-| --agent-file | -y | no | yes | New name of a file for IMP agent source code. |
-| --rename-files | -r | no | no | Renames file(s) (if existed) which were referenced by [Project File](#project-file) as the file(s) with IMP device/agent source code to the new name(s) specified by **--device-file**, **--agent-file** options. Should not be specified together with **--create-files** option. |
-| --create-files | -c | no | no | Creates empty file(s) if the file(s) referenced by [Project File](#project-file) as the file(s) with IMP device/agent source code do not exist. Should not be specified together with **--rename-files** option. |
+| --device-file | -x | no | yes | New name of a file for IMP device source code. If the file does not exist, empty file is created. |
+| --agent-file | -y | no | yes | New name of a file for IMP agent source code. If the file does not exist, empty file is created. |
 | --target | -t | no | yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the Device Group referenced by [Project File](#project-file). May be specified if the Device Group referenced by [Project File](#project-file) is of the [type](#device-group-type) *pre-factory* only. The specified target Device Group must be of the [type](#device-group-type) *pre-production* and belongs to the same Product as the Device Group referenced by [Project File](#project-file). Otherwise the command fails. |
 | --debug | -z | no | no | Displays debug info of the command execution. |
 | --help | -h | no | no | Displays description of the command. Ignores any other options. |
@@ -1234,14 +1232,14 @@ Fails if the specified Webhook does not exist.
 | --- | --- |
 | -a | --all, --assigned, --allow-disconnect  |
 | -b | --build, --builds  |
-| -c | --create-files, --conditional  |
+| -c | --create-product, --conditional  |
 | -d | --device  |
 | -e | --endpoint, --entities, --event, --builder-cache, --clear-cache  |
 | -f | --force, --files, --pre-factory, --from, --flagged, --offline, --test-file  |
 | -g | --dg  |
 | -h | --help  |
-| -i | --device-only, --create-product, --github-config  |
-| -j | --agent-only, --create-target, --builder-config  |
+| -i | --device-only, --github-config  |
+| -j | --agent-only, --builder-config  |
 | -k | --lk  |
 | -l | --log, --local, --load-code-after-blessing  |
 | -m | --min-supported-deployment, --mime, --zombie  |
@@ -1249,7 +1247,7 @@ Fails if the specified Webhook does not exist.
 | -o | --owner, --origin, --unflag-old  |
 | -p | --product  |
 | -q | --confirmed  |
-| -r | --remove-tag, --rename-files, --remove  |
+| -r | --create-target, --remove-tag, --remove  |
 | -s | --descr, --sha, --page-size, --stop-on-fail  |
 | -t | --tag, --timeout, --temp, --target, --to, --tests  |
 | -u | --user, --full, --unflagged, --unflag, --unassigned, --unbond, --url  |

@@ -30,7 +30,7 @@ Table Of Contents:
 
 ## Installation
 
-[Node.js](https://nodejs.org/en/) is required. You can download the Node.js [pre-built binary](https://nodejs.org/en/download/) for your platform, or install Node.js via [package manager](https://nodejs.org/en/download/package-manager). Once `node` and `npm` are installed, you need to execute the following command to set up the *impt* tool:
+[Node.js](https://nodejs.org/en/) version 8 or higher is required. You can download the Node.js [pre-built binary](https://nodejs.org/en/download/) for your platform, or install Node.js via [package manager](https://nodejs.org/en/download/package-manager). Once `node` and `npm` are installed, you need to execute the following command to set up the *impt* tool:
 
 ```bash
 npm install -g imp-central-impt
