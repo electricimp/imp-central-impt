@@ -86,15 +86,15 @@ You need to perform the following steps to write your tests:
 
 2. Define the names of your test files. In general, a test file may have any name but should follow a few rules:
 
-  - A file is treated as test file for agent code if `agent` is present in the file name. Otherwise, the file is treated as test file for device code.
-  - By default, all test cases from a test file run either on a device *or* an agent. If your test cases are intended to run on *both* the device and its agent, use the approach described [here](#tests-for-bi-directional-device-agent-communication).
-  - A test configuration has a pattern for location and the names of the test files included in the test project. You specify this pattern during [test configuration creation or updating](#test-configuration). You should have this in mind when you name your test files.
+  - A file is assumed to contain agent code if `agent` is present in its file name, otherwise it is assumed to contain device code.
+  - By default, all the test cases in a test file run either on a device *or* an agent. If your test cases are intended to run on *both* device and agent, please use the approach described [here](#tests-for-bi-directional-device-agent-communication).
+  - A test configuration has a pattern for the location and the names of the test files included in the test project. You specify this pattern during [test configuration](#test-configuration). You should have this pattern in mind when you name your test files.
   - The files are chosen for execution by the tool in an arbitrary order.
 
 3. Add test cases to your test files.
 
   - A test case is a class derived from the *ImpTestCase* class defined by the [*impUnit*](https://github.com/electricimp/impUnit) framework.
-  - A test file may have several test cases.
+  - A test file may have more than one test case.
   - There are no rules for test case naming. Test cases may have identical names if they are in different test files. But bear in mind that [running selective tests](#running-selective-tests) can have an impact on test case naming.
   - The test cases from one test file are chosen for execution by the tool in an arbitrary order.
 
@@ -105,19 +105,19 @@ You need to perform the following steps to write your tests:
   - Additionally, any test case may have *setUp()* and *tearDown()* methods:
     - If it exists, *setUp()* is called by the tool before any other methods in the test case. It may be used to perform environment setup before test execution.
     - If it exists, *tearDown()* is called by the tool after all other methods in the test case. It may be used to clean the environment after test execution.
-  - All other test methods than *setUp()* and *tearDown()* in one test case are chosen for execution by the tool in an arbitrary order, ie. your tests should be independent and not assume any particular order of execution.
+  - All test methods other than *setUp()* and *tearDown()* in one test case are chosen for execution by the tool in an arbitrary order, ie. your tests should be independent and not assume any particular order of execution.
 
 A test method may be run synchronously (the default) or [asynchronously](#asynchronous-testing).
 
-You can use the [*Builder*](https://github.com/electricimp/Builder) language in your tests; details [here](#builder-usage).
+You can use the [*Builder*](https://github.com/electricimp/Builder) language in your tests; please find further details [here](#builder-usage).
 
-A test file must not contain any `#require` statements. Instead, an [include from GitHub](#include-from-github) should be used.
+A test file **must not** contain any `#require` statements. Instead, an [include from GitHub](#include-from-github) should be used.
 
-The tests may call external (eg. a host operating system) commands; details [here](#external-commands).
+Tests may call external (eg. a host operating system) commands; please find further details [here](#external-commands).
 
-[Assertions](#assertions) and [diagnostic messages](#diagnostic-messages) are available in your tests.
+[Assertions](#assertions) and [diagnostic messages](#diagnostic-messages) are also available for your tests.
 
-#### Example ####
+**Example**
 
 ```squirrel
 class MyTestCase extends ImpTestCase {
@@ -135,20 +135,20 @@ class MyTestCase extends ImpTestCase {
 
 It is possible to test an interaction between device and agent by emulating one side of the interaction.
 
-A test file is intended to test either device or agent code, so the opposite side is emulated by a partner file. There are several rules for these:
+A test file is intended to test either device or agent code, so the opposite side is emulated by code stored in a ‘partner file’. There are several rules for these:
 
-- A partner file must not contain any test cases. It should only contain the Squirrel code needed to emulate the interaction.
+- A partner file must not contain any test cases. It should only contain the Squirrel code needed to emulate the interaction, eg. the **agent.on()** code that handles messages sent by **device.send()** in your agent code tests.
 - The test file and the partner file should be located in the same directory.
 - The test file and the partner file should have similar names according to the following pattern: `TestFileName.(agent|device)[.test].nut`:
   - The both files should have the same `TestFileName` prefix and the same `.nut` suffix.
   - The file intended for the device should contain `.device` in the name; the file intended for the agent should contain `.agent` in the name.
-  - The test file should contain `.test` in the name, but the partner file must not contain that in the name.
+  - The test file should contain `.test` in the name; the partner file must not contain `.test` in the name.
 
-For example, `"Test1.agent.test.nut"` (a test file with test cases for agent code) and `"Test1.device.nut"` (the corresponding partner file with emulation of the device side).
+For example, `"Test1.agent.test.nut"` (a test file with test cases for agent code) would be partnered with  `"Test1.device.nut"` (the corresponding partner file with emulation of the device side of the interaction).
 
-**Note** It is sufficient that only the test file is selected for the run, ie. it satisfies the test file search pattern defined during [test configuration creation or updating](#test-configuration). The corresponding partner file will be added to the test session automatically.
+**Note** It is sufficient that only the test file is selected for the run, ie. it satisfies the test file search pattern defined during [test configuration](#test-configuration). The corresponding partner file will be added to the test session automatically.
 
-#### Example ####
+**Example**
 
 Test file `"Test1.agent.test.nut"`:
 ```squirrel
@@ -192,7 +192,7 @@ Every test method, including *setUp()* and *tearDown()*, can be run either synch
 
 Test methods should return an instance of the [Promise](https://github.com/electricimp/Promise) class if it needs to do some work asynchronously. The resolution of the Promise indicates that the test has been passed. The rejection of the Promise denotes a failure.
 
-#### Example ####
+**Example**
 
 ```squirrel
 function testSomethingAsynchronously() {
@@ -262,7 +262,7 @@ For example: `#require "messagemanager.class.nut:2.0.0"` should be replaced with
 
 #### Builder Cache ####
 
-*Builder*’s cache is designed to improve the build time and reduce the number of requests issued to external resources. It is only possible to cache external libraries. *Builder* stores the cache in the `.builder-cache` sub-directory inside the test project directory. The cache is maintained for up to 24 hours.
+*Builder*’s cache is designed to improve the build time and reduce the number of requests issued to external resources. It is only possible to cache external libraries. *Builder* stores the cache in the `.builder-cache` sub-directory inside the test project directory. The cache is maintained for up to 24 hours to prevent library code from becoming stale.
 
 Cacheing is disabled by default. It can be enabled during [test configuration](#test-configuration). It is possible to clear the cache when you [run the tests](#running-tests).
 
@@ -350,7 +350,7 @@ this.assertLess(2, 2);
 
 `this.assertClose(expected, actual, maxDiff, [message])`
 
-Asserts that a value is within range of an expected value.
+Asserts that a value is within a specified range of an expected value.
 
 **Example**
 
@@ -425,8 +425,8 @@ this.assertThrowsError(function () {
 There are three ways to display diagnostic messages in the console from your tests:
 
 - Call `this.info(<message>);` from a test method, as many times as you need.
-- For synchronous tests, call `return <return_value>;` from a test method. The returned value will be displayed in the console, if not `null` and the test succeeds.
-- For asynchronous tests, call Promise resolution or rejection methods with a value `resolve(<return_value>);` or `reject(<return_value>);`. The returned value will be displayed on the console, if not `null`.
+- For synchronous tests, call `return <return_value>;` from a test method. The returned value will be displayed in the console, provided it is not `null` and the test succeeds.
+- For asynchronous tests, call Promise resolution or rejection methods with a value `resolve(<return_value>);` or `reject(<return_value>);`. The returned value will be displayed on the console, provided it is not `null`.
 
 Examples of tests output are provided in the [section on running tests](#running-tests).
 
@@ -443,7 +443,7 @@ function setUp() {
 }
 ```
 
-The Test Case code is as follows:
+The test case code is as follows:
 
 ```squirrel
 class TestCase1 extends ImpTestCase {
