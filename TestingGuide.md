@@ -8,7 +8,7 @@ The full *impt* tool commands specification is described in the [*impt* Commands
 
 ## Contents ##
 
-- [What’s New](#what-is-new)
+- [What’s New](#whats-new)
 - [Overview](#overview)
 - [Writing Tests](#writing-tests)
   - [Main Rules and Steps](#main-rules-and-steps)
