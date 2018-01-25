@@ -27,7 +27,7 @@ This guide covers the basic and common usage of *impt*, and should be read first
 - [Entity Listing and Owning](#entity-listing-and-ownership)
 - [Entity Information](#entity-information)
 - [Entity Deletion](#entity-deletion)
-- [No Atomic Transaction](#no-atomic-transaction)
+- [Non-atomic Transactions](#non-atomic-transactions)
 - [License](#license)
 
 ## Installation ##
@@ -634,7 +634,7 @@ Device Group "MyDevDG" is deleted successfully.
 IMPT COMMAND SUCCEEDS
 ```
 
-## No Atomic Transaction ##
+## Non-atomic Transactions ##
 
 Many *impt* commands combine several impCentral API requests which change impCentral API entities (like update, delete, etc.) to perform one operation. *impt* does its best to pre-check all conditions before starting every operation. At the same time, it does not guarantee an operation is atomic. It is always possible that the first impCentral API update request succeeds but the next one fails, if the connection is lost, for example. In this case, the operation is partially completed, *impt* does not restore the original state of already changed entities, and the command reports a failure. You can check an actual state of any impCentral entity using [entity information](#entity-information) commands.
 
