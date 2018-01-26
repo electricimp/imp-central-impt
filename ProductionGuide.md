@@ -116,7 +116,7 @@ impt device list --dg MyProductionDG
 
 ### Unblessing ###
 
-You may remove a production device from a Production Device Group only if you have access to your account’s unblessing key. Specify that key as the value of the `--unbound` option of the [`impt device unassign`](./CommandsManual.md#device-unassign) command. The device is unblessed and unassigned, and can then be used for development.
+You may remove a production device from a Production Device Group only if you have access to your account’s unblessing key. Specify that key as the value of the `--unbond` option of the [`impt device unassign`](./CommandsManual.md#device-unassign) command. The device is unblessed and unassigned, and can then be used for development.
 
 **Example**
 
