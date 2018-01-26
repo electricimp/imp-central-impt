@@ -2,7 +2,7 @@
 
 List Of Commands:
 
-**[impt auth info](#auth-info)**  
+`[impt auth info](#auth-info)` 
 **[impt auth login](#auth-login)**  
 **[impt auth logout](#auth-logout)**  
 
