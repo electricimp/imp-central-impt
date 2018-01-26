@@ -644,4 +644,4 @@ Many *impt* commands combine several impCentral API requests which change impCen
 
 ## License ##
 
-The impt tool is licensed under the [MIT License](./LICENSE)
+*impt* is licensed under the [MIT License](./LICENSE)
