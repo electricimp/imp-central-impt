@@ -20,7 +20,7 @@ The full *impt* tool commands specification is described in the [*impt* Commands
   - [Diagnostic Messages](#diagnostic-messages)
   - [A Test Case Example](#a-test-case-example)
 - [Using Tests](#using-tests)
-  - [Device Group](#device-group)
+  - [Test Device Group](#test-device-group)
   - [Test Configuration](#test-configuration)
   - [GitHub Credentials](#github-credentials)
   - [Running Tests](#running-tests)
@@ -475,11 +475,9 @@ class TestCase1 extends ImpTestCase {
 
 ## Using Tests ##
 
-### Device Group ###
+### Test Device Group ###
 
-To run your tests you need to have one or more devices added to your account which can be assigned to a Device Group.
-
-These are the tasks you should perform in order to prepare your devices for testing:
+To run your tests you need to have one or more devices associated with your account and assigned to the Device Group to which your tests will be deployed. These then are the tasks you should perform in order to prepare your devices for testing:
 
 1. Prepare a Product. If you already have a Product, note its ID or name. If you do not have a Product, create a new one with [`impt product create`](./CommandsManual.md#product-create):
 
@@ -490,14 +488,13 @@ IMPT COMMAND SUCCEEDS
 ```
 
 2. Prepare a Device Group. If you already have a Device Group, note its ID or name. If you do not have a Device Group, create a new one with [`impt dg create`](./CommandsManual.md#device-group-create). You need to specify the Product when creating the Device Group.
+    You may use a Device Group of any [type](./CommandsManual#device-group-type), but it is recommended that you use a Development Device Group.
 
-  You may use a Device Group of any [type](./CommandsManual#device-group-type), but it is recommended that you use a Development Device Group.
-
-  ```
-  > impt dg create --name MyTestDG --product MyTestProduct
-  Device Group "MyTestDG" is created successfully.
-  IMPT COMMAND SUCCEEDS
-  ```
+    ```
+    > impt dg create --name MyTestDG --product MyTestProduct
+    Device Group "MyTestDG" is created successfully.
+    IMPT COMMAND SUCCEEDS
+    ```
 
 3. Assign one or more devices on which you plan to run your tests to the Device Group using [`impt device assign`](./CommandsManual.md#device-assign).
 
@@ -509,11 +506,11 @@ IMPT COMMAND SUCCEEDS
     IMPT COMMAND SUCCEEDS
     ```
 
-4. Specify the Device Group during [test configuration](#test-configuration). Your tests will run on all the devices assigned to the Device Group. You can always change the Device Group in the test configuration.
+4. Specify the Device Group during [test configuration](#test-configuration). Your tests will run on all the devices assigned to the Device Group. If you need to, you can change the Device Group in the test configuration.
 
 ### Test Configuration ###
 
-Before running the tests you should create a test configuration for your test project: call [`impt test create`](./CommandsManual.md#test-create) from the test project home directory. If a [Test Configuration File](./CommandsManual.md#test-configuration-file) already exists in that directory, it will be deleted (if confirmed by you) and the new configuration will be created from scratch.
+Before running the tests you should create a test configuration for your test project: call [`impt test create`](./CommandsManual.md#test-create) from the test home. If a [test configuration file](./CommandsManual.md#test-configuration-file) already exists in that directory, it will be deleted (if confirmed by you) and the new configuration will be created from scratch in its place.
 
 The configuration settings include:
 
@@ -521,7 +518,7 @@ The configuration settings include:
 
 - `--device-file`, `--agent-file` &mdash; The device and agent source code which is deployed along with the tests. Usually, it is the source code of a library or other Squirrel which you are planning to test.
 
-- `--test-file` &mdash; The test file name or the pattern which specifies the test file(s) included into your test project. You may repeat this option to specify several file names and/or patterns. The values of the repeated option are combined by logical OR. The default pattern is detailed in the [command’s spec](./CommandsManual.md#test-create).
+- `--test-file` &mdash; The test file name or the pattern which specifies the test file(s) included in your test project. You may repeat this option to specify several file names and/or patterns. The values of the repeated option are combined by logical OR. The default pattern is detailed in the [command’s spec](./CommandsManual.md#test-create).
 
 - `--github-config` &mdash; A path to a [GitHub credentials file](#github-credentials). You may need to use it if your test files use [include from GitHub](#include-from-github).
 
@@ -560,7 +557,7 @@ IMPT COMMAND SUCCEEDS
 
 #### Updating the Configuration ####
 
-You may update the test configuration by calling [`impt test update`](./CommandsManual.md#test-update). The existing [Test Configuration File](./CommandsManual.md#test-configuration-file) will be updated with the new settings. Newly specified `--test-file` option value(s) completely replace any existing setting.
+You may update the test configuration by calling [`impt test update`](./CommandsManual.md#test-update). The existing [test configuration file](./CommandsManual.md#test-configuration-file) will be updated with the new settings. The new `--test-file` option value(s) completely replace any existing setting.
 
 **Example**
 
@@ -591,7 +588,7 @@ Device Group:
 IMPT COMMAND SUCCEEDS
 ```
 
-You may display the current test configuration by calling [`impt test info`](./CommandsManual.md#test-info).
+You may also display the current test configuration by calling [`impt test info`](./CommandsManual.md#test-info).
 
 **Example**
 
@@ -625,9 +622,9 @@ IMPT COMMAND SUCCEEDS
 
 These may be needed if your test files [include code from GitHub](#include-from-github).
 
-For unauthenticated requests, the GitHub API allows you to make [up to 60 requests per hour](https://developer.github.com/v3/#rate-limiting). This may be not sufficient for intensive testing. To overcome this limitation, you can provide GitHub account credentials. There are two ways to do this:
+For unauthenticated requests, the GitHub API allows you to make [up to 60 requests per hour](https://developer.github.com/v3/#rate-limiting), but this may be not sufficient for intensive testing. To overcome this limit, you can provide GitHub account credentials. There are two ways to do this:
 
-- Via environment variables &mdash; **We strongly recommend this way for security reasons**. You should specify two environment variables:
+- Via environment variables **We strongly recommend this way for security reasons** &mdash; You should specify two environment variables:
   - `GITHUB_USER` &mdash; A GitHub account username.
   - `GITHUB_TOKEN` &mdash; A GitHub account password or personal access token.
 
@@ -646,13 +643,13 @@ IMPT COMMAND SUCCEEDS
 
 ### Running Tests ###
 
-To run your configured test project’s tests, call [`impt test run`](./CommandsManual.md#test-run) from the test project home directory. The tests will be executed according to your [test configuration](#test-configuration) file.
+To run your configured test project’s tests, call [`impt test run`](./CommandsManual.md#test-run) from the test home. The tests will be executed according to your [test configuration](#test-configuration) file.
 
-By default, the tool searches for all test files according to the file names and/or patterns specified in the [test configuration](#test-configuration) file. The search starts from the test project home directory and includes all sub-directories. The tool looks for all test cases in the files it discovers. All test methods in all located test cases are considered as viable tests for execution. For a particular run, you may select a subset of test files, test cases and test methods by specifying the `--tests` option; see [here](#running-selective-tests) for more details.
+By default, the tool searches for all test files according to the file names and/or patterns specified in the [test configuration](#test-configuration) file. The search starts from the test home and includes all sub-directories. The tool looks for all test cases in the files it discovers. All test methods in all located test cases are considered as viable tests for execution. For a particular run, you may select a subset of test files, test cases and test methods by specifying the `--tests` option; see [here](#running-selective-tests) for more details.
 
 Every selected test file is a source for building and deploying code, so there will be as many different builds as there are selected test files for execution. Test files (builds) run in an arbitrary order.
 
-Every test file (build) runs on all devices currently assigned to the Device Group specified in the [test configuration](#test-configuration) file one by one sequentially. Devices are chosen in an arbitrary order. A test file (build) running on one device is called a ‘test session’. When the build completes on the last device, the next test file (build) starts running on the same set of devices, again one after the other.
+Every test file (build) runs on all devices currently assigned to the Device Group specified in the [test configuration](#test-configuration) file one by one: no device is run until the previous device has completed testing. Devices are chosen in an arbitrary order. A test file (build) running on one device is called a test session. When the build completes on the last device, the next test file (build) starts running on the same set of devices, again one after the other.
 
 Every test is treated as failed if an error is thrown or a timeout, as defined in the [test configuration](#test-configuration) file, occurs during the test execution. Otherwise the test is treated as passed. If at least one test in a test session fails, the test session is treated as failed. If the [test configuration](#test-configuration) has the `stop-on-fail` setting set to `true`, test execution ends after the first failed test.
 
@@ -717,7 +714,7 @@ IMPT COMMAND SUCCEEDS
 
 The `--tests <testcase_pattern>` option of the [`impt test run`](./CommandsManual.md#test-run) command allows you to select specific test files, test cases and test methods for execution. The syntax of `<testcase_pattern>` is the `[testFile][:testCase][::testMethod]`, where:
 
-- `testFile` is the name of a test file. May include a relative path. May include [regular expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions) like `.*`, etc. The specified file(s) will be selected from all files which correspond to the file names and/or patterns defined in the [test configuration](#test-configuration). If `testFile` is omitted, all files which correspond to the file name or patterns defined in the [test configuration](#test-configuration), are assumed.
+- `testFile` is the name of a test file. May include a relative path. May include [regular expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions) like `.*`, etc. The specified file(s) will be selected from all files which correspond to the file names and/or patterns defined in the [test configuration](#test-configuration). If `testFile` is omitted, all files which correspond to the file name or patterns defined in the [test configuration](#test-configuration) are selected.
 
 - `testCase` is the name of a test case. Should be fully qualified. Test cases with an identical name may exist in different test files; in this situation all of them will be selected if the files are selected.
 
@@ -762,7 +759,7 @@ You may run your tests in debug mode by specifying the `--debug` option of the [
 
 - All communications with the [impCentral API](https://apidoc.electricimp.com) are displayed in the console.
 - All communications with the [*impUnit* test framework](https://github.com/electricimp/impUnit) are displayed in the console.
-- Device and agent code for all the running builds are placed in the `.build` folder inside the test project directory.
+- Device and agent code for all the running builds are placed in the `.build` folder inside the test home.
 
 **Example**
 
@@ -849,7 +846,7 @@ IMPT COMMAND SUCCEEDS
 
 ### Cleaning Up ###
 
-After testing is complete, you may want to clean the various entities created during testing. If you want to delete your test project, call [`impt test delete`](./CommandsManual.md#test-run) from the test project directory. This deletes the [test configuration file](./CommandsManual.md#test-configuration-file), the *Builder* cache directory and any debug information. By specifying additional options you may also delete the GitHub credentials file, any file containing *Builder* variables, and impCentral API entities (Device Group, Deployments, Product) which were used or created during testing. Please see the [delete command’s spec](./CommandsManual.md#test-delete) for more information.
+After testing is complete, you may want to clean the various entities created during testing. If you want to delete your test project, call [`impt test delete`](./CommandsManual.md#test-run) from the test home. This deletes the [test configuration file](./CommandsManual.md#test-configuration-file), the *Builder* cache directory and any debug information. By specifying additional options you may also delete the GitHub credentials file, any file containing *Builder* variables, and impCentral API entities (Device Group, Deployments, Product) which were used or created during testing. Please see the [delete command’s spec](./CommandsManual.md#test-delete) for more information.
 
 **Example**
 
