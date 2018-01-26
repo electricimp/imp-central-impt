@@ -17,7 +17,7 @@ The full *impt* tool command specification is described in the [Commands Manual]
 - [Deployment creation](#deployments)
 - [Device management](#devices)
   - [Factory BlinkUp Fixtures](#factory-blinkup-fixtures)
-  - [Devices Under Test (DUTs)](#production-devices)
+  - [Devices Under Test (DUTs)](#devices-under-test-duts)
   - [Unblessing production devices](#unblessing)
 - [Webhooks creation and management](#webhooks)
 - [Logging](#logging)
