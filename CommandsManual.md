@@ -3,7 +3,9 @@
 ## List of Commands ##
 
 **[impt auth info](#auth-info)**
+
 **[impt auth login](#auth-login)**
+
 **[impt auth logout](#auth-logout)**
 
 **[impt build cleanup](#build-cleanup)**
