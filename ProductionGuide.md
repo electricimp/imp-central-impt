@@ -11,14 +11,13 @@ The full *impt* tool command specification is described in the [Commands Manual]
 ## Contents ##
 
 - [Product creation](#product)
-- Development process (covered by the [Development Guide](./DevelopmentGuide.md))
-- [Device Groups creation and management](#device-groups)
+- [Device Group creation and management](#device-groups)
   - [Production Device Groups](#production-device-groups)
   - [Factory Device Groups](#factory-device-groups)
-- [Deployments creation](#deployments)
-- [Devices management](#devices)
+- [Deployment creation](#deployments)
+- [Device management](#devices)
   - [Factory BlinkUp Fixtures](#factory-blinkup-fixtures)
-  - [Production Devices](#production-devices)
+  - [Devices Under Test (DUTs)](#production-devices)
   - [Unblessing production devices](#unblessing)
 - [Webhooks creation and management](#webhooks)
 - [Logging](#logging)
