@@ -6,10 +6,10 @@
 
 This guide covers the basic and common usage of *impt*, and should be read first. Depending on your primary activity, you can then find further information in the following documentation:
 
-- [*impt* Development Guide](./DevelopmentGuide.md),
-- [*impt* Testing Guide](./TestingGuide.md),
-- [*impt* Production Guide](./ProductionGuide.md),
-- [*impt* Commands Manual](./CommandsManual.md).
+- [*impt* Development Guide](./DevelopmentGuide.md)
+- [*impt* Testing Guide](./TestingGuide.md)
+- [*impt* Production Guide](./ProductionGuide.md)
+- [*impt* Commands Manual](./CommandsManual.md)
 
 *impt* is written in [Node.js](https://nodejs.org) and uses [Electric Imp’s impCentral API JavaScript library](https://github.com/electricimp/imp-central-api).
 
