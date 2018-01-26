@@ -1,6 +1,6 @@
 # impt #
 
-*impt* is a command line tool which allows you to interact with the [Electric Imp impCloud™ via the impCentral™ API](https://apidoc.electricimp.com) for the development, testing and deployment of application and factory code, and device and product management.
+*impt* is a command line tool which allows you to interact with the [Electric Imp impCloud™ via the impCentral™ API](https://apidoc.electricimp.com) for the development, testing and deployment of application and factory code, and for device and product management.
 
 *impt* replaces the [*build-cli*](https://github.com/electricimp/build-cli) and [*impTest*](https://github.com/electricimp/impTest) tools, and provides additional functionality.
 
@@ -22,7 +22,7 @@ This guide covers the basic and common usage of *impt*, and should be read first
 - [Scripts Support](#script-support)
 - [Authentication](#authentication)
 - [Login Key](#login-key)
-- [Project](#project)
+- [Projects](#projects)
 - [Entity Identification](#entity-identification)
 - [Entity Listing and Owning](#entity-listing-and-ownership)
 - [Entity Information](#entity-information)
@@ -53,7 +53,7 @@ The commands are logically divided into groups. Most of the groups directly map 
 - [Product Manipulation Commands](./CommandsManual.md#product-manipulation-commands) &mdash; `impt product <command_name> [<options>]`
 - [Device Group Manipulation Commands](./CommandsManual.md#device-group-manipulation-commands) &mdash; `impt dg <command_name> [<options>]`
 - [Device Manipulation Commands](./CommandsManual.md#device-manipulation-commands) &mdash; `impt device <command_name> [<options>]`
-- [Build (Deployment) Manipulation Commands](./CommandsManual.md#build-manipulation-commands)&mdash; `impt build <command_name> [<options>]`
+- [Build (Deployment) Manipulation Commands](./CommandsManual.md#build-manipulation-commands) &mdash; `impt build <command_name> [<options>]`
 - [Log Manipulation Commands](./CommandsManual.md#log-manipulation-commands) &mdash; `impt log <command_name> [<options>]`
 - [Webhook Manipulation Commands](./CommandsManual.md#webhook-manipulation-commands) &mdash; `impt webhook <command_name> [<options>]`
 - [Login Key Manipulation Commands](./CommandsManual.md#login-key-manipulation-commands) &mdash; `impt loginkey <command_name> [<options>]`
@@ -69,11 +69,11 @@ There are two additional groups that include commands for code development and t
 
 For similar operations in different command groups *impt* uses similar command names, like `create`, `update`, `delete`, `list` and `info`.
 
-The most of commands have optional arguments: `--<options>`. Options may be written in any order. As a general rule, the same option should not be specified multiple times in the same command, but exceptions exist. Some options require values, some do not. If an option value contains spaces it must be placed between double quotes, eg. `--<option> "option value with spaces"`. Some options may accept an empty value, it should be specified as `--<option> ""`.
+The most of commands have optional arguments: `--<options>`. Options may be written in any order. As a general rule, the same option should not be specified multiple times in the same command, but exceptions exist. Some options require values, some do not. If an option value contains spaces it must be placed between double quotes, eg. `--<option> "option value with spaces"`. Some options may accept an empty value, which should be specified as `--<option> ""`.
 
 Every option has a one letter [alias](./CommandsManual.md#list-of-aliases). The aliases are unique for a particular command but may be reused for different options in different commands. The same option in different commands always has the same alias. The options and aliases are detailed in the [Commands Description](./CommandsManual.md#commands-description).
 
-#### Examples ####
+**Examples**
 
 ```
 impt product create --name TestProduct --descr "My test product"
@@ -93,11 +93,11 @@ impt device assign -g TestDG -d myDevice1
 
 ## Help ##
 
-Every command has a `--help` option (alias: `-h`). If it is specified, any other specified options are ignored. The command is not executed but the tool displays full description of the command &mdash; the format, explanation, options.
+Every command has a `--help` option (alias: `-h`). If it is specified, any other specified options are ignored. The command is not executed but the tool displays full description of the command &mdash; the format, explanation and options.
 
-[The help option](./CommandsManual.md#help-option) is also applicable to a not fully specified command. It may be used to list all available command groups or to list all commands available in one group.
+The [help option](./CommandsManual.md#help-option) is also applicable to a partially specified command, and may be used to list all available command groups or to list all commands available in one group.
 
-#### Examples ####
+**Examples**
 
 **List all command groups**
 
@@ -167,7 +167,7 @@ Options:
 
 Every command has a `--debug` option (alias: `-z`). If it is specified, the tool displays debug information from the command being executed, including impCentral API requests and responses.
 
-#### Example ####
+**Example**
 
 ```
 > impt product create --name TestProduct --descr "My test product" --debug
@@ -243,11 +243,11 @@ IMPT COMMAND SUCCEEDS
 
 The tool’s commands are designed to enable friendly processing by scripts.
 
-Interaction with a user is minimal. Only a few commands, for example [delete entity](#entity-deletion) commands, ask for a confirmation from the user. But all these commands support the `--confirmed` option (alias: `-q`). If this option is specified, the command is executed without requiring confirmation from the user. Scripts can use this option.
+Interaction with a user is minimal. Only a few commands, such as [delete](#entity-deletion), ask for a confirmation from the user. But all of these commands support the `--confirmed` option (alias: `-q`). If this option is specified, the command is executed without requiring confirmation from the user. Scripts can use this option.
 
 A command’s execution output contains one of the two predefined phrases: `IMPT COMMAND SUCCEEDS` or `IMPT COMMAND FAILS`. Scripts can parse a command’s output to find these standard phrases to detect whether the commmand succeeded or failed. If any command fails, `IMPT COMMAND FAILS` is always the last line of the command’s output. If a command succeeds, `IMPT COMMAND SUCCEEDS` phrase is the last line of the output for the most of the commands. Logging-related commands may have additional `IMPT COMMAND SUCCEEDS` phrases in their output. If the [help option](./CommandsManual.md#help-option) is specified for a command, its output does not contain either predefined phrase.
 
-#### Example ####
+**Example**
 
 **A successful command execution**
 
@@ -267,41 +267,43 @@ IMPT COMMAND FAILS
 
 ## Authentication ##
 
-Calls to the impCentral API need to be authenticated. *impt* provides the the [login command](./CommandsManual.md#auth-login) for this purpose. It can be used in either of two ways:
+Calls to the impCentral API need to be authenticated. *impt* provides the [login command](./CommandsManual.md#auth-login) for this purpose. It can be used in either of two ways:
 
 - Using an account identifier (an email address or a username) and password: `impt auth login --user <user_id> --pwd <password>`
 - Using a [login key](#login-key): `impt auth login --lk <login_key>`
 
-The tool takes care of obtaining an access token and refreshing it using an obtained refresh token or a provided login key. Typically, you need onlu log in once and can continue using the tool while the refresh token or login key remains valid (ie. not deleted by you). For this purpose, the tool stores the access token and the refresh token/login key in the [Auth File](./CommandsManual.md#auth-file).
+The tool takes care of obtaining an access token and refreshing it using an obtained refresh token or a provided login key. Typically, you need only log in once and can continue using the tool while the refresh token or login key remains valid (ie. not deleted by you). For this purpose, the tool stores the access token and the refresh token/login key in an [auth file](./CommandsManual.md#auth-file).
 
 *impt* never stores an account identifier and password. If you do not want the tool to store a refresh token/login key, use the [login command’s](./CommandsManual.md#auth-login) `--temp` option. In this case you will not be able to work with the impCentral API after the access token has expired (usually one hour after issue), and you will have to log in again to continue.
 
-At any time, you can call the [logout command](./CommandsManual.md#auth-logout), `impt auth logout`, to delete the [Auth File](./CommandsManual.md#auth-file). Usually you will not be able to work with the impCentral API after logging out and will have to log in again to continue working, but see the explanation about global and local login/logout below.
+At any time, you can call the [logout command](./CommandsManual.md#auth-logout), `impt auth logout`, to delete the [auth file](./CommandsManual.md#auth-file). Usually you will not be able to work with the impCentral API after logging out and will have to log in again to continue working, but see the explanation about global and local login/logout below.
 
-You do not need to use the logout command if you want just to re-login using other credentials. A new login command overwrites the [Auth File](./CommandsManual.md#auth-file), if it exists and the operation is confirmed by the user.
+You do not need to use the logout command if you want just to re-login using other credentials. A new login command overwrites the [auth file](./CommandsManual.md#auth-file), if it exists and the operation is confirmed by the user.
 
 During login, you can specify an alternative impCentral API endpoint using the [login command’s](./CommandsManual.md#auth-login) `--endpoint` option (alias: `-e`). You may need this if you work with a Private impCloud. The default endpoint is `https://api.electricimp.com/v5`.
 
+### Global and Local Authentication ###
+
 There are two types of login: global and local.
 
-- Global login is the default one. It is sufficient to use if you always work on behalf of the same user with the same impCentral
-API endpoint. A [Global Auth File](./CommandsManual.md#global-auth-file) &mdash; only one per *impt* installation &mdash; is created for the global login. Every *impt* command is executed in the context of the global login when a local login is not applicable.
+- Global login is the default. It is sufficient to use if you always work on behalf of the same user with the same impCentral
+API endpoint. A [global auth file](./CommandsManual.md#global-auth-file) &mdash; only one per *impt* installation &mdash; is created for the global login. Every *impt* command is executed in the context of the global login when a local login is not applicable.
 
-- Local login works for a particular directory. It may be convenient if you often work on behalf of different users or use different impCentral API endpoints. In this case, you may choose a directory and in this directory call the [login command](./CommandsManual.md#auth-login) with the `--local` option (alias: `-l`). If the authentication is successful, a [Local Auth File](./CommandsManual.md#local-auth-file) is created in the directory. After that, every *impt* command called from this directory is executed in the context of the local login.
+- Local login works for a particular directory. It may be convenient if you often work on behalf of different users or use different impCentral API endpoints. In this case, you may choose a directory and in this directory call the [login command](./CommandsManual.md#auth-login) with the `--local` option (alias: `-l`). If the authentication is successful, a [local auth file](./CommandsManual.md#local-auth-file) is created in the directory. After that, every *impt* command called from this directory is executed in the context of the local login.
 
-There can be only one [Local Auth File](./CommandsManual.md#local-auth-file) in a directory, but any number of directories with local Auth Files, ie. any number of local logins. And all of them are independent of each other and of the [Global Auth File](./CommandsManual.md#global-auth-file). You do not need to have the global login in order to use local logins. Note, that local Auth File affects the current directory only and does not affect any subdirectories &dmash; they may or may not contain their own local Auth Files.
+There can be only one [local auth file](./CommandsManual.md#local-auth-file) in a directory, but any number of directories with local auth files, ie. any number of local logins. And all of them are independent of each other and of the [global auth file](./CommandsManual.md#global-auth-file). You do not need to have the global login in order to use local logins. Note, that local auth file affects the current directory only and does not affect any sub-directories &mdash; they may or may not contain their own local auth files.
 
-If you run the [logout command](./CommandsManual.md#auth-logout) with the `--local` option, it deletes the [Local Auth File](./CommandsManual.md#local-auth-file), if it exists in the current directory. After that, any subsequent command called from this directory will be executed in the context of the global login. Calling the [logout command](./CommandsManual.md#auth-logout) without the `--local` option deletes the [Global Auth File](./CommandsManual.md#global-auth-file).
+If you run the [logout command](./CommandsManual.md#auth-logout) with the `--local` option, it deletes the [local auth file](./CommandsManual.md#local-auth-file), if it exists in the current directory. After that, any subsequent command called from this directory will be executed in the context of the global login. Calling the [logout command](./CommandsManual.md#auth-logout) without the `--local` option deletes the [global auth file](./CommandsManual.md#global-auth-file).
 
-### Summary of the impt Command Execution Context ###
+### Summary of the *impt* Command Execution Context ###
 
-- If the current directory contains an Auth File, this file is considered the [Local Auth File](./CommandsManual.md#local-auth-file) and a command called from this directory is executed in the context of the local login defined by this file.
-- Otherwise, if [Global Auth File](./CommandsManual.md#global-auth-file) exists, a command is executed in the context of the global login defined by that file.
+- If the current directory contains an auth file, this file is considered the [local auth file](./CommandsManual.md#local-auth-file) and a command called from this directory is executed in the context of the local login defined by this file.
+- Otherwise, if a [global auth file](./CommandsManual.md#global-auth-file) exists, a command is executed in the context of the global login defined by that file.
 - Otherwise, a command fails (global or local login is required).
 
-At any time you can get known the login status related to any directory. Call the [auth info command](./CommandsManual.md#auth-info) from the required directory: `impt auth info`. The returned information includes a type of the login applicable to the current directory, access token status, your account ID and other details.
+At any time you can get known the login status related to any directory. Call the [`impt auth info`](./CommandsManual.md#auth-info) from the required directory. The returned information includes a type of the login applicable to the current directory, access token status, your account ID and other details.
 
-#### Examples ####
+**Examples**
 
 **Global login**
 
@@ -344,9 +346,9 @@ IMPT COMMAND SUCCEEDS
 
 ## Login Keys ##
 
-*impt* provides a set of [Login Key Manipulation Commands](./CommandsManual.md#login-key-manipulation-commands) which allows you to fully control your account’s login keys: list the existent login keys, create a new one, delete one, etc. You must be logged in in order to use the command, which may additionally requires your password.
+*impt* provides a set of [Login Key manipulation commands](./CommandsManual.md#login-key-manipulation-commands) which allows you to fully control your account’s login keys: list the existent login keys, create a new one, delete one, etc. You must be logged in in order to use the command, which may additionally requires your password.
 
-#### Example ####
+**Example**
 
 ```
 > impt loginkey list
@@ -357,15 +359,17 @@ Login Key:
 IMPT COMMAND SUCCEEDS
 ```
 
-## Project ##
+## Projects ##
 
-A Project is an artificial entity introduced to help developers manager their work with the impCentral API. A Project is any directory containing a [Project File](./CommandsManual.md#project-file). A Project relates to one and only one Device Group.
+A Project is an *impt* entity introduced to help developers manage their work. A Project is any directory containing a [project File](./CommandsManual.md#project-file). A Project references just one Device Group.
 
-Projects are intended for developers and are described in detail in the [Development Guide](./DevelopmentGuide.md). The tool provides a set of [Project Manipulation Commands](./CommandsManual.md#project-manipulation-commands). However, many other commands are affected when called from a directory where a [Project File](./CommandsManual.md#project-file) is located. Product, Device Group, Devices, Deployment referenced by the Project File may be assumed by a command when they are not specified in the command’s options explicitly. If you want to avoid that, always specify the mandatory options of the commands. All such options are detailed in the [Commands Description](./CommandsManual.md#commands-description).
+Projects are intended for developers and are described in detail in the [*impt* Development Guide](./DevelopmentGuide.md). The tool provides a set of [Project manipulation commands](./CommandsManual.md#project-manipulation-commands). However, many other commands are affected when called from a directory where a [Project file](./CommandsManual.md#project-file) is located. Product, Device Group, Devices, Deployment referenced by the Project file may be assumed by a command when they are not specified in the command’s options explicitly. If you want to avoid that, always specify the mandatory options of the commands. All such options are detailed in the [commands description](./CommandsManual.md#commands-description).
 
-#### Example ####
+**Example**
 
-**Unassign all Devices from Device Group** A Device Group is not specified in the command below, but the current directory contains a Project File. All Devices are unassigned from the Device Group referenced by that Project File.
+**Unassign all Devices from Device Group** 
+
+A Device Group is not specified in the command below, but the current directory contains a Project File. All Devices are unassigned from the Device Group referenced by that Project File.
 
 ```
 > impt dg unassign
@@ -387,13 +391,13 @@ IMPT COMMAND SUCCEEDS
 
 ## Entity Identification ##
 
-Many *impt* commands have options which specify an impCentral API entity &mdash; a concrete Product, Device Group, Device or Deployment, etc. You can use an entity ID (Product ID, Device Group ID, etc.) as that is always unique. But sometime it may be more convenient to use other attributes to specify an entity. For example, Product Name, Device Group Name, Device MAC address, Device agent ID, Build SHA, Build tag, etc. *impt* allows you to do this. You can specify different attributes as an option value and the tool searches for the specified value among different attributes.
+Many *impt* commands have options which specify an impCentral API entity &mdash; a concrete Product, Device Group, Device or Deployment, etc. You can use an entity ID (Product ID, Device Group ID, etc.) as that is always unique. But sometime it may be more convenient to use other attributes to specify an entity. For example, Product name, Device Group name, device MAC address, device agent ID, build SHA, build tag, etc. *impt* allows you to do this. You can specify different attributes as an option value and the tool searches for the specified value among different attributes.
 
 If you want to use this feature, please read the [Commands Manual](./CommandsManual.md#entity-identification) first. It contains the rules governing how the tool searches an entity, and the lists of attributes acceptable for different entities. Command options, to which the complex entity identification is applicable, are detailed in the [Commands Description](./CommandsManual.md#commands-description). Note that if more than one entity is found, then, depending on a particular command, it may be considered as a success (for all [Entity Listing](#entity-listing-and-owning) commands) or as a fail (for all other commands).
 
-When it is hard to uniquely specify an entity without knowing the entity ID, use [Entity Listing](#entity-listing-and-owning) commands to list the entities basing on some attributes, choose the required entity and use its entity ID in the required command.
+When it is hard to uniquely specify an entity without knowing the entity ID, use [entity listing](#entity-listing-and-owning) commands to view the entities basing on some attributes, choose the required entity and use its entity ID in the required command.
 
-#### Examples ####
+**Examples**
 
 **An entity is found successfully**
 
@@ -419,7 +423,7 @@ Device:
 IMPT COMMAND SUCCEEDS
 ```
 
-**An entity is not unique, the command fails**
+**An entity is not unique, so the command fails**
 
 ```
 > impt build info --build MyRC1
@@ -448,21 +452,21 @@ IMPT COMMAND FAILS
 
 ## Entity Listing and Ownership ##
 
-Many groups of commands contain a command to list entities: [Products](./CommandsManual.md#product-list), [Device Groups](./CommandsManual.md#device-group-list), [Devices](./CommandsManual.md#device-list), [Builds](./CommandsManual.md#build-list) and [WebHooks](./CommandsManual.md#webhook-list). By default, such a command returns the list of all entities available to the current logged-in account. But the returned list may be filtered using filter options. These are the common rules applicable to all list commands:
+Many groups of commands contain a command to list entities: [Products](./CommandsManual.md#product-list), [Device Groups](./CommandsManual.md#device-group-list), [Devices](./CommandsManual.md#device-list), [Builds](./CommandsManual.md#build-list) and [WebHooks](./CommandsManual.md#webhook-list). By default, such a command returns the list of all entities available to the current (ie. logged in) account. But the returned list may be filtered using filter options. These are the common rules applicable to all list commands:
 
 - Every filter option may be repeated several times.
 - At first, all filter options with the same name are combined by logical OR.
 - After that, all filter options with different names are combined by logical AND.
 
-Some filter options have the same name and meaning across list commands. They are summarized [here](./CommandsManual.md#common-filter-options). At the same time, a particular command may have specific filter options too. Filter options applicable to every concrete list command are detailed in the [Commands Description](./CommandsManual.md#commands-description).
+Some filter options have the same name and meaning across list commands. They are summarized [here](./CommandsManual.md#common-filter-options). A particular command may have specific filter options too. Filter options applicable to every concrete list command are detailed in the [Commands Description](./CommandsManual.md#commands-description).
 
-**Note** For some list commands, the default returned list includes entities owned by the logged-in account as well as entities owned by collaborators. For other list commands, only the entities owned by the current account are returned. This is impCentral API-specific behavior not controlled by *impt*. But you can always specify a concrete Account ID, email or username as a value of the `--owner <value>` filter option (alias: `-o`) and get the entities owned by that account, if they are available to you as to a collaborator. Also, you can always specify the `--owner me` Filter Option and get the entities owned by you only.
+**Note** For some list commands, the default returned list includes entities owned by the current account as well as entities owned by collaborators. For other list commands, only the entities owned by the current account are returned. This is impCentral API-specific behavior not controlled by *impt*. But you can always specify a concrete Account ID, email or username as a value of the `--owner <value>` filter option (alias: `-o`) and get the entities owned by that account, if they are available to you as to a collaborator. Also, you can always specify the `--owner me` Filter Option and get the entities owned by you only.
 
 As a general rule, if an entity is owned by the current logged-in account, information about Owner is not displayed. If an entity is owned by another account, then Account ID and email of the Owner are displayed for the entity. This rule applies to all *impt* commands which display details of an entity: entity listing, [entity information](#entity-information) and other.
 
-To display the Account ID and email of the current logged-in account, call the [auth info command](./CommandsManual.md#auth-info): `impt auth info`.
+To display the Account ID and email of the current account, use [`impt auth info`](./CommandsManual.md#auth-info).
 
-#### Example ####
+**Example**
 
 **List all Products owned by me and my collaborators**
 
@@ -491,7 +495,7 @@ Product:
 IMPT COMMAND SUCCEEDS
 ```
 
-**List all factory fixture Device Groups owned by the specified account**
+**List all Factory Device Groups owned by the specified account**
 
 ```
 > impt dg list --owner user@email.com --dg-type pre-factory --dg-type factory
@@ -559,7 +563,7 @@ IMPT COMMAND SUCCEEDS
 
 Most command groups contain the `info` command, which displays information about the specified entity. Some of that commands have a `--full` option (alias: `-u`). When it is specified, the command displays additional details about the related entities. For example, `impt product info --full` displays the full structure of the Product: details about every Device Group that belongs to the Product, and about devices assigned to the Device Groups.
 
-#### Example ####
+**Example**
 
 ```
 > impt product info --product MyProduct --full
@@ -598,7 +602,7 @@ By default, commands which delete impCentral entities (eg. Product, Device Group
 
 By default, every delete command asks a confirmation of the operation from user. Before that the command lists all the entities which are to be deleted or updated. If you specify the `--confirmed` option (alias: `-q`), the operation is executed without requesting confirmation from the user.
 
-#### Example ####
+**Example**
 
 **A failed delete command execution**
 
