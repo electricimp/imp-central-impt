@@ -44,7 +44,7 @@ Device Groups may be of different [types](./CommandsManual.md#device-group-type)
 
 ### Production Device Groups ###
 
-Your production devices, which are utilized by end-users, are organized into one or more Device Groups of the *Production* type. Different Production Device Groups within the same Product may be used to encapsulate and manage different versions or flavors of your application. Production devices are units have have been blessed; up until that point they are referred to as devices under test (DUTs). 
+Your production devices, which are utilized by end-users, are organized into one or more Device Groups of the *production* type. Different Production Device Groups within the same Product may be used to encapsulate and manage different versions or flavors of your application. Production devices are units that have been blessed; up until that point they are referred to as devices under test (DUTs). 
 
 You can create a Production Device Group with [`impt dg create --dg-type production`](./CommandsManual.md#device-group-create).
 
@@ -58,7 +58,7 @@ impt dg update --dg MyProductionDG --load-code-after-blessing false
 
 ### Factory Device Groups ###
 
-For your [factory setup](https://developer.electricimp.com/manufacturing/factoryprocessinanutshell) you need one or more [factory BlinkUp fixtures](https://developer.electricimp.com/manufacturing/blinkupfixture_simple). These are imp-enabled devices which configure your DUTs on the assembly line for Internet access. Factory BlinkUp Fixtures are combined in one or more Device Groups of the *Factory* type. Different Factory Device Groups within the same Product may be used to configure different versions or flavors of your DUTs.
+For your [factory setup](https://developer.electricimp.com/manufacturing/factoryprocessinanutshell) you need one or more [factory BlinkUp fixtures](https://developer.electricimp.com/manufacturing/blinkupfixture_simple). These are imp-enabled devices which configure your DUTs on the assembly line for Internet access. Factory BlinkUp Fixtures are combined in one or more Device Groups of the *factory* type. Different Factory Device Groups within the same Product may be used to configure different versions or flavors of your DUTs.
 
 You can create Factory Device Group with the [`impt dg create --dg-type factory`](./CommandsManual.md#device-group-create) command.
 
@@ -80,8 +80,6 @@ Later, you may have more builds for different versions or flavors of your applic
 
 This guide assumes you have already developed and tested your application and factory firmware, and that these are ready for production. These will exits as Deployments made to *development* and *pre-factory* Device Groups of your Product. You can copy an existing build to a new Deployment with [`impt build copy`](./CommandsManual.md#build-copy). It can be copied with or without the original build attributes.
 
-**Examples**
-
 ```
 impt build copy --build MyRC1 --dg MyProductionDG
 ```
@@ -97,8 +95,6 @@ impt build copy --build MyFactoryRC1 --dg MyFactoryDG
 Usually you need as many [Factory BlinkUp Fixtures](https://developer.electricimp.com/manufacturing/blinkupfixture_simple) as you have assembly lines.
 
 In order to connect your Factory BlinkUp Fixtures to the factory’s WiFi network, use the Electric Imp mobile app as usual and then assign them to Factory Device Group(s) with [`impt device assign`](./CommandsManual.md#device-assign). You can specify a device in the command by its ID, name, MAC address or agent ID.
-
-**Example**
 
 ```
 impt device assign --device <device_id> --dg MyFactoryDG
@@ -118,8 +114,6 @@ impt device list --dg MyProductionDG
 
 You may remove a production device from a Production Device Group only if you have access to your account’s unblessing key. Specify that key as the value of the `--unbond` option of the [`impt device unassign`](./CommandsManual.md#device-unassign) command. The device is unblessed and unassigned, and can then be used for development.
 
-**Example**
-
 ```
 impt device unassign --device <device_id> --unbond <unbond_key>
 ```
@@ -134,8 +128,6 @@ You may use [Webhooks](https://developer.electricimp.com/manufacturing/webhooks)
 
 You can create Webhook using [`impt webhook create`](./CommandsManual.md#webhook-create).
 
-**Examples**
- 
 ```
 impt webhook create --dg MyProductionDG --url <webhook_url> --event blessing --mime json
 ```
@@ -147,8 +139,6 @@ impt webhook create --dg MyProductionDG --url <webhook_url> --event blinkup --mi
 ## Logging ##
 
 The impCentral API supports logging for Factory BlinkUp Fixtures. You can use [Log Manipulation Commands](./CommandsManual.md#log-manipulation-commands) to view them.
-
-**Example**  
 
 ```
 impt log get -device <device_id>
@@ -163,8 +153,6 @@ You may develop new versions of your application. To deploy them to production d
 1. Create a new build (Deployment) for your Production Device Group with [`impt build copy`](./CommandsManual.md#build-copy).
 2. Restart the devices in the Production Device Group, for example, with [`impt dg restart`](./CommandsManual.md#device-group-restart).
 
-**Example**
- 
 ```
 impt build copy --build MyRC2 --dg MyProductionDG
 impt dg restart --dg MyProductionDG
