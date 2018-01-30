@@ -76,7 +76,7 @@
 - [Device Group Type](#device-group-type)
 - [auth files](#auth-files)
 - [Project Files](#project-files)
-- [Test Configuration Files](#test-configuration-files)
+- [test configuration files](#test-configuration-files)
 - [List of Aliases](#list-of-aliases)
 - [Common Filter Options](#common-filter-options)
 
@@ -209,7 +209,7 @@ Each Project file contains settings for a Project, an *impt* entity which links 
 
 A Project file may affect commands called from the directory where the file is located. Product, Device Group, Devices, Deployment, source files referenced by Project file may be assumed by a command when they are not specified explicitly.
 
-### Test Configuration Files ###
+### test configuration files ###
 
 A test configuration file is a `*.impt.test` file located in a directory. Different directories may contain different test configuration files. One directory must contain only one test configuration file.
 
@@ -479,7 +479,7 @@ Fails if the specified Device Group does not exist.
 
 The user is asked to confirm the operation if the specified Device is already assigned to another Device Group. If the operation is confirmed (confirmed automatically with the `--confirmed` option), the Device is reassigned to the new Device Group.
 
-The operation may fail for some combinations of the Device Group [types](#device-group-type), for some models of IMP devices, for reassigning between the Products, etc.
+The operation may fail for some combinations of the Device Group [types](#device-group-type), for some models of devices, for reassigning between the Products, etc.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
@@ -609,9 +609,9 @@ The user is asked to confirm the operation if any Deployment is going to be dele
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --dg | -g | Yes/[project](#project-file) | Yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if No Project File, the command fails) |
-| --unflag | -u | No | No | Set *"flagged"* attribute to *false* in all Deployments of the specified Device Group |
-| --unflag-old | -o | No | No | Set *"flagged"* attribute to *false* in all Deployments of the specified Device Group which are older than *min_supported_deployment* (see the impCentral API spec) |
-| --remove | -r | No | No | Deletes all Deployments of the specified Device Group which are older than *min_supported_deployment* (see the impCentral API spec) and have *"flagged"* attribute set to *false*. This option works after `--unflag`/`--unflag-old` options |
+| --unflag | -u | No | No | Set *"flagged"* attribute to `false` in all Deployments of the specified Device Group |
+| --unflag-old | -o | No | No | Set *"flagged"* attribute to `false` in all Deployments of the specified Device Group which are older than *min_supported_deployment* (see the impCentral API spec) |
+| --remove | -r | No | No | Deletes all Deployments of the specified Device Group which are older than *min_supported_deployment* (see the impCentral API spec) and have *"flagged"* attribute set to `false`. This option works after `--unflag`/`--unflag-old` options |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
@@ -647,7 +647,7 @@ The command fails if the Device Group is the production target of another Device
 
 Also, the command fails when `--force` option is not specified and:
 - there are Devices assigned to this Device Group. Use either `--force` option, or [`impt dg unassign`](#device-group-unassign) / [`impt dg reassign`](#device-group-reassign) commands to unassign the Devices from this Device Group,
-- or the Device Group has any Deployments with *"flagged"* attribute set to *true*. Use either `--force` option, or [`impt build update`](#build-update) command to update that attribute.
+- or the Device Group has any Deployments with *"flagged"* attribute set to `true`. Use either `--force` option, or [`impt build update`](#build-update) command to update that attribute.
 
 The user is asked to confirm the operation (confirmed automatically with the `--confirmed` option).
 
@@ -655,7 +655,7 @@ The user is asked to confirm the operation (confirmed automatically with the `--
 | --- | --- | --- | --- | --- |
 | --dg | -g | Yes/[project](#project-file) | Yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if No Project File, the command fails) |
 | --builds | -b | No | No | Additionally deletes all Deployments related to the Device Group |
-| --force | -f | No | No | Unassigns all Devices of the Device Group, as by [`impt dg unassign`](#device-group-unassign). Set *"flagged"* attribute to *false* in all Deployments of the Device Group |
+| --force | -f | No | No | Unassigns all Devices of the Device Group, as by [`impt dg unassign`](#device-group-unassign). Set *"flagged"* attribute to `false` in all Deployments of the Device Group |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
@@ -703,7 +703,7 @@ impt dg reassign --from <DEVICE_GROUP_IDENTIFIER> [--to <DEVICE_GROUP_IDENTIFIER
 Reassigns all Devices from one Device Group to another.
 Fails if any of the specified Device Groups does not exist.
 
-The operation may fail for some combinations of the Device Group [types](#device-group-type), for some models of IMP devices, for reassigning between the Products, etc.
+The operation may fail for some combinations of the Device Group [types](#device-group-type), for some models of devices, for reassigning between the Products, etc.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
@@ -760,7 +760,7 @@ Fails if the specified Device Group does not exist.
 | --name | -n | No | Yes | New Name of the Device Group. Must be unique among all Device Groups in the Product |
 | --descr | -s | No | Yes | Description of the Device Group |
 | --target | -t | No | Yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the being updated Device Group. May be specified for the being updated Device Group of the [type](#device-group-type) *factory* or *pre-factory* only. The target Device Group must be of the [type](#device-group-type) *production* or *pre-production* correspondingly and belongs to the same Product as the being updated Device Group. Otherwise the command fails |
-| --load-code-after-blessing | -l | No | No | Applicable to Device Group of the [type](#device-group-type) *production* or *pre-production* only. If *true* or No value, production code is immediately loaded by the device after blessing. If *false*, production code will be loaded the next time the device connects as part of BlinkUp, whether successful or not. Note, the newly created production Device Group always has this option *true* |
+| --load-code-after-blessing | -l | No | No | Applicable to Device Group of the [type](#device-group-type) *production* or *pre-production* only. If `true` or No value, production code is immediately loaded by the device after blessing. If `false`, production code will be loaded the next time the device connects as part of BlinkUp, whether successful or not. Note, the newly created production Device Group always has this option `true` |
 | --min-supported-deployment | -m | No | No | [Build Identifier](#build-identifier) of the new *min_supported_deployment* (see the impCentral API spec). The Deployment should belong to this Device Group and should be newer than the current *min_supported_deployment* |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
@@ -1009,8 +1009,8 @@ At the end of the command execution information about the project is displayed (
 | --create-product | -c | No | No | If the Product specified by `--product` option does not exist, it is created. In this case, the value of `--product` option is considered as a Name of the new Product. If the Product specified by `--product` option exists, `--create-product` option is ignored |
 | --name | -n | Yes | Yes | Name of the new Device Group. Must be unique among all Device Groups in the specified Product |
 | --descr | -s | No | Yes | Description of the Device Group |
-| --device-file | -x | No | Yes | Name of a file for IMP device source code. Default value: *device.nut*. If the file does not exist, empty file is created |
-| --agent-file | -y | No | Yes | Name of a file for IMP agent source code. Default value: *agent.nut*. If the file does not exist, empty file is created |
+| --device-file | -x | No | Yes | Name of a file for device source code. Default value: *device.nut*. If the file does not exist, empty file is created |
+| --agent-file | -y | No | Yes | Name of a file for agent source code. Default value: *agent.nut*. If the file does not exist, empty file is created |
 | --pre-factory | -f | No | No | If not specified, the new Device Group is of the [type](#device-group-type) *development*. If specified, the new Device Group is of the [type](#device-group-type) *pre-factory* |
 | --target | -t | No | Yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the being created Device Group. May be specified if and only if `--pre-factory` option is specified. The specified target Device Group must be of the [type](#device-group-type) *pre-production* and belongs to the specified Product. Otherwise the command fails |
 | --create-target | -r | No | No | If the Device Group specified by `--target` option does not exist, it is created. In this case, the value of `--target` option is considered as a Name of the new Device Group. If `--target` option is not specified or the Device Group specified by `--target` option exists, `--create-target` option is ignored |
@@ -1030,11 +1030,11 @@ Does nothing if there is No [Project File](#project-file) in the current directo
 If `--entities` option is specified, the command additionally:
 - unassigns all Devices from the project Device Group (Device Group referenced by [Project File](#project-file)).
 - deletes the project Device Group.
-- deletes all builds (Deployments) of the project Device Group, including Deployments with *"flagged"* attribute set to *true*.
+- deletes all builds (Deployments) of the project Device Group, including Deployments with *"flagged"* attribute set to `true`.
 - if the project Device Group has a production target Device Group and that is a production target for one and only one Device Group:
   &mdash; unassigns all Devices from the production target Device Group.
   &mdash; deletes the production target Device Group.
-  &mdash; deletes all builds (Deployments) of the production target Device Group, including Deployments with *"flagged"* attribute set to *true*.
+  &mdash; deletes all builds (Deployments) of the production target Device Group, including Deployments with *"flagged"* attribute set to `true`.
 - if the corresponding Product (the Product which contains the Device Group referenced by [Project File](#project-file)) includes only the project Device Group and, if applicable, the production target Device Group mentioned above and does not include any other Device Groups:
   &mdash; deletes the corresponding Product.
 
@@ -1043,7 +1043,7 @@ The user is informed about all entities and files which are going to be deleted 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --entities | -e | No | No | Also deletes the impCentral API entities (Device Group, Product, Deployments) referenced by [Project File](#project-file). See above |
-| --files | -f | No | No | Also deletes the files referenced by [Project File](#project-file) as files with IMP device and agent source code |
+| --files | -f | No | No | Also deletes the files referenced by [Project File](#project-file) as files with device and agent source code |
 | --all | -a | No | No | Includes `--entities` and `--files` options |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
 | --debug | -z | No | No | Displays debug info for the command execution |
@@ -1088,8 +1088,8 @@ At the end of the command execution information about the project is displayed (
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --dg | -g | Yes | Yes | [Device Group Identifier](#device-group-identifier) |
-| --device-file | -x | No | Yes | Name of a file for IMP device source code. Default value: *device.nut*. If the file does not exist, empty file is created |
-| --agent-file | -y | No | Yes | Name of a file for IMP agent source code. Default value: *agent.nut*. If the file does not exist, empty file is created |
+| --device-file | -x | No | Yes | Name of a file for device source code. Default value: *device.nut*. If the file does not exist, empty file is created |
+| --agent-file | -y | No | Yes | Name of a file for agent source code. Default value: *agent.nut*. If the file does not exist, empty file is created |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
@@ -1111,125 +1111,127 @@ At the end of the command execution information about the project is displayed (
 | --- | --- | --- | --- | --- |
 | --name | -n | No | Yes | New Name of the Device Group referenced by [Project File](#project-file). Must be unique among all Device Groups in the Product |
 | --descr | -s | No | Yes | New Description of the Device Group referenced by [Project File](#project-file) |
-| --device-file | -x | No | Yes | New name of a file for IMP device source code. If the file does not exist, empty file is created |
-| --agent-file | -y | No | Yes | New name of a file for IMP agent source code. If the file does not exist, empty file is created |
+| --device-file | -x | No | Yes | New name of a file for device source code. If the file does not exist, empty file is created |
+| --agent-file | -y | No | Yes | New name of a file for agent source code. If the file does not exist, empty file is created |
 | --target | -t | No | Yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the Device Group referenced by [Project File](#project-file). May be specified if the Device Group referenced by [Project File](#project-file) is of the [type](#device-group-type) *pre-factory* only. The specified target Device Group must be of the [type](#device-group-type) *pre-production* and belongs to the same Product as the Device Group referenced by [Project File](#project-file). Otherwise the command fails |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
-### Test Commands
+### Test Commands ###
 
-#### Test Create
+#### Test Create ####
 
 ```
-impt test create --dg <DEVICE_GROUP_IDENTIFIER> [--device-file <device_file>] [--agent-file <agent_file>] [--timeout <timeout>] [--stop-on-fail [true|false]] [--allow-disconnect [true|false]] [--builder-cache [true|false]] [--test-file <test_file_name_pattern>] [--github-config <github_credentials_file_name>] [--builder-config <builder_file_name>] [--confirmed] [--debug] [--help]
+impt test create --dg <DEVICE_GROUP_IDENTIFIER> [--device-file <device_file>]
+    [--agent-file <agent_file>] [--timeout <timeout>] [--stop-on-fail [true|false]]
+    [--allow-disconnect [true|false]] [--builder-cache [true|false]]
+    [--test-file <test_file_name_pattern>] [--github-config <github_credentials_file_name>]
+    [--builder-config <builder_file_name>] [--confirmed] [--debug] [--help]
 ```
 
-Creates [Test Configuration File](#test-configuration-file) in the current directory.
+Creates a [test configuration file](#test-configuration-file) in the current directory.
 
-The user is asked to confirm the operation if the current directory already contains [Test Configuration File](#test-configuration-file) (confirmed automatically with the `--confirmed` option). If confirmed, the existed [Test Configuration File](#test-configuration-file) is overwritten.
+The user is asked to confirm the operation if the current directory already contains a [test configuration file](#test-configuration-file) (confirmed automatically with the `--confirmed` option). If confirmed, the existing [test configuration file](#test-configuration-file) is overwritten.
 
-At the end of the command execution information about the tests configuration is displayed (as by [`impt test info`](#test-info) command).
+At the end of the command execution, information about the test configuration is displayed (as by [`impt test info`](#test-info)).
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --dg | -g | Yes | Yes | [Device Group Identifier](#device-group-identifier) of Device Group whose Devices are used for tests execution |
-| --device-file | -x | No | Yes | A path to an optional file with IMP device source code that is deployed along with the tests. A relative or absolute path can be used |
-| --agent-file | -y | No | Yes | A path to an optional file with IMP agent source code that is deployed along with the tests. A relative or absolute path can be used |
-| --timeout | -t | No | Yes | A timeout period (in seconds) after which a test is interrupted and considered as failed. By default: 30 seconds |
-| --stop-on-fail | -s | No | No | If *true* or No value: the whole tests execution is stopped after a test failure. If *false* value: the tests execution is not stopped after a failure. By default: *false* |
-| --allow-disconnect | -a | No | No | If *true* or No value: keep a test session alive when a device is temporary disconnected. If *false* value: a test session fails when a device is disconnected. By default: *false* |
-| --builder-cache | -e | No | No | If *true* or No value: cache external libraries in the local *.builder-cache* directory. If *false* value: do not cache external libraries. If the local *.builder-cache* directory exists, it is cleaned up. By default: *false* |
-| --test-file | -f | No | Yes | Test file name or pattern. All files located in the current directory and all its subdirectories which names match the specified name or pattern are considered as files with test cases. This option may be repeated several times to specify several names and/or patterns. The values of the repeated option are combined by logical OR. By default: *"&#42;.test.nut" "tests/&#42;&#42;/&#42;.test.nut"* |
-| --github-config | -i | No | Yes | A path to a github credentials file. A relative or absolute path can be used. The specified file may not exist |
+| --dg | -g | Yes | Yes | The [Device Group Identifier](#device-group-identifier) of the Device Group whose devices are used for test execution |
+| --device-file | -x | No | Yes | A path to an optional file with device source code that is deployed along with the tests. A relative or absolute path can be used |
+| --agent-file | -y | No | Yes | A path to an optional file with agent source code that is deployed along with the tests. A relative or absolute path can be used |
+| --timeout | -t | No | Yes | A timeout period in seconds after which a test is interrupted and considered to have failed. Default: 30 seconds |
+| --stop-on-fail | -s | No | No | If `true` or no value, the whole tests execution is stopped after a test failure. If `false`, the tests execution is not stopped after a failure. Default: `false` |
+| --allow-disconnect | -a | No | No | If `true` or no value, keep a test session alive when a device is temporarily disconnected. If `false`, a test session fails when a device is disconnected. Default: `false` |
+| --builder-cache | -e | No | No | If `true` or no value, cache external libraries in the local `.builder-cache` directory. If `false`, do not cache external libraries. If the local `.builder-cache` directory exists, it is cleaned. Default: `false` |
+| --test-file | -f | No | Yes | Test file name or pattern. All files located in the current directory and all its sub-directories whose names match the specified name or pattern are considered as files with test cases. This option may be repeated multiple times to specify multiple names and/or patterns. The values of the repeated option are combined by logical OR. Default: `"*.test.nut"` `"tests/**/*.test.nut"` |
+| --github-config | -i | No | Yes | A path to a GitHub credentials file. A relative or absolute path can be used. The specified file may not exist |
 | --builder-config | -j | No | Yes | A path to a file with *Builder* variables. A relative or absolute path can be used. The specified file may not exist |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
-#### Test Delete
+#### Test Delete ####
 
 ```
 impt test delete [--github-config] [--builder-config] [--entities] [--all] [--confirmed]
     [--debug] [--help]
 ```
 
-Deletes [Test Configuration File](#test-configuration-file) in the current directory.
-Does nothing if there is No [Test Configuration File](#test-configuration-file) in the current directory.
+Deletes the [test configuration file](#test-configuration-file) in the current directory. Does nothing if there is no [test configuration file](#test-configuration-file) in the current directory.
 
-The following entities are deleted (if existed):
-- [Test Configuration File](#test-configuration-file) in the current directory.
-- *Builder* cache (*.builder-cache* directory) in the current directory.
-- Debug information (*.build* directory) in the current directory.
-- if `--github-config` option is specified, the github credentials file referenced by the Test Configuration File.
-- if `--builder-config` option is specified, the file with *Builder* variables referenced by the Test Configuration File.
-- if `--entities` option is specified:
-  &mdash; the Device Group referenced by the Test Configuration File. All Devices are unassigned from that Device Group.
-  &mdash; all builds (Deployments) of the Device Group referenced by the Test Configuration File, including Deployments with *"flagged"* attribute set to *true*.
-  &mdash; the Product which includes the Device Group referenced by the Test Configuration File. If the Product includes any additional Device Group, the Product is not deleted and it is not considered as a fail.
+The following entities are deleted (if the exist):
+- A [test configuration file](#test-configuration-file) in the current directory.
+- A *Builder* cache (`.builder-cache` directory) in the current directory.
+- Debug information (`.build` directory) in the current directory.
+- If the `--github-config` option is specified, the GitHub credentials file referenced by the test configuration file.
+- If the `--builder-config` option is specified, the file with *Builder* variables referenced by the test configuration file.
+- If the `--entities` option is specified:
+    - The Device Group referenced by the test configuration file. All Devices are unassigned from that Device Group.
+    - All builds (Deployments) of the Device Group referenced by the test configuration file, including Deployments with its *flagged* attribute set to `true`.
+    - The Product which includes the Device Group referenced by the test configuration file. If the Product includes any additional Device Groups, the Product is not deleted (the operation is not considered a fail).
 
-The user is asked to confirm the operation (confirmed automatically with the `--confirmed` option).
+The user is asked to confirm the operation unless confirmed automatically with the `--confirmed` option.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --github-config | -i | No | No | Also deletes the github credentials file referenced by [Test Configuration File](#test-configuration-file) |
-| --builder-config | -j | No | No | Also deletes the file with *Builder* variables referenced by [Test Configuration File](#test-configuration-file) |
-| --entities | -e | No | No | Also deletes the impCentral API entities (Device Group, Product, Deployments) referenced by [Test Configuration File](#test-configuration-file). See above |
+| --github-config | -i | No | No | Also deletes the GitHub credentials file referenced by [test configuration file](#test-configuration-file) |
+| --builder-config | -j | No | No | Also deletes the file with *Builder* variables referenced by [test configuration file](#test-configuration-file) |
+| --entities | -e | No | No | Also deletes the impCentral API entities (Device Group, Product, Deployments) referenced by [test configuration file](#test-configuration-file). See above |
 | --all | -a | No | No | Includes `--github-config`, `--builder-config` and `--entities` options |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
-#### Test Github
+#### Test Github ####
 
 ```
 impt test github --github-config <github_credentials_file_name> --user <github_username>
     --pwd <github_password> [--confirmed] [--debug] [--help]
 ```
 
-Creates or updates github credentials file.
+Creates or updates a GitHub credentials file.
 
-The user is asked to confirm the operation if the specified github credentials file already exists (confirmed automatically with the `--confirmed` option). If confirmed, the existed github credentials file is overwritten.
+The user is asked to confirm the operation if the specified GitHub credentials file already exists, unless confirmed automatically with the `--confirmed` option. If confirmed, the existing GitHub credentials file is overwritten.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --github-config | -i | Yes | Yes | A path to the github credentials file. A relative or absolute path can be used |
-| --user | -u | Yes | Yes | GitHub username |
-| --pwd | -w | Yes | Yes | GitHub password or personal access token |
+| --github-config | -i | Yes | Yes | A path to the GitHub credentials file. A relative or absolute path can be used |
+| --user | -u | Yes | Yes | A GitHub account username |
+| --pwd | -w | Yes | Yes | A GitHub account password or personal access token |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
-#### Test Info
+#### Test Info ####
 
 ```
 impt test info [--debug] [--help]
 ```
 
-Displays information about the tests configuration defined by [Test Configuration File](#test-configuration-file) in the current directory.
-With every call the latest actual information is obtained using impCentral API.
+Displays information about the test configuration defined by the [test configuration file](#test-configuration-file) in the current directory. With every call, the latest actual information is obtained using the impCentral API.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
-#### Test Run
+#### Test Run ####
 
 ```
 impt test run [--tests <test_pattern>] [--clear-cache] [--debug] [--help]
 ```
 
-Runs the tests specified by [Test Configuration File](#test-configuration-file) in the current directory.
+Runs the tests specified by the [test configuration file](#test-configuration-file) in the current directory.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --tests | -t | No | Yes | A pattern to select the tests. Allows to select specific test files, test cases, test methods for execution. The syntax of the pattern: *[testFile][:testCase][::testMethod]*, where *testFile* may include a relative path as well as [Regular Expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions). If the option is missed all tests from all test files specified in [Test Configuration File](#test-configuration-file) are executed |
-| --clear-cache | -e | No | No | Clears the local *.builder-cache* directory if it exists |
+| --tests | -t | No | Yes | A pattern to select the tests. Allows you to select specific test files, test cases and/or test methods for execution. The syntax of the pattern: *[testFile][:testCase][::testMethod]*, where *testFile* may include a relative path as well as [regular expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions). If the option is omitted, all tests from all test files specified in the [test configuration file](#test-configuration-file) are executed |
+| --clear-cache | -e | No | No | Clears the local `.builder-cache` directory if it exists |
 | --debug | -z | No | No | Runs the tests in the debug mode |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
-#### Test Update
+#### Test Update ####
 
 ```
 impt test update [--dg <DEVICE_GROUP_IDENTIFIER>] [--device-file [<device_file>]]
@@ -1239,21 +1241,21 @@ impt test update [--dg <DEVICE_GROUP_IDENTIFIER>] [--device-file [<device_file>]
     [--builder-config [<builder_file_name>]] [--debug] [--help]
 ```
 
-Updates [Test Configuration File](#test-configuration-file) in the current directory. Fails if there is No [Test Configuration File](#test-configuration-file) in the current directory.
+Updates the [test configuration file](#test-configuration-file) in the current directory. Fails if there is no [test configuration file](#test-configuration-file) in the current directory.
 
-At the end of the command execution information about the tests configuration is displayed (as by [`impt test info`](#test-info) command).
+At the end of the command execution, information about the test configuration is displayed (as by [`impt test info`](#test-info)).
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --dg | -g | No | Yes | [Device Group Identifier](#device-group-identifier) of Device Group whose Devices are used for tests execution |
-| --device-file | -x | No | No | A path to a file with IMP device source code that is deployed along with the tests. A relative or absolute path can be used. Specify this option without a value to remove this file from the test configuration |
-| --agent-file | -y | No | No | A path to a file with IMP agent source code that is deployed along with the tests. A relative or absolute path can be used. Specify this option without a value to remove this file from the test configuration |
-| --timeout | -t | No | Yes | A timeout period (in seconds) after which a test is interrupted and considered as failed |
-| --stop-on-fail | -s | No | No | If *true* or No value: the whole tests execution is stopped after a test failure. If *false* value: the tests execution is not stopped after a failure |
-| --allow-disconnect | -a | No | No | If *true* or No value: keep a test session alive when a device is temporary disconnected. If *false* value: a test session fails when a device is disconnected |
-| --builder-cache | -e | No | No | If *true* or No value: cache external libraries in the local *.builder-cache* directory. If *false* value: do not cache external libraries; in this case, if the local *.builder-cache* directory exists, it is cleaned up |
-| --test-file | -f | No | Yes | Test file name or pattern. All files located in the current directory and all its subdirectories which names match the specified name or pattern are considered as files with test cases. This option may be repeated several times to specify several names and/or patterns. The values of the repeated option are combined by logical OR. The specified values fully replace the existed setting |
-| --github-config | -i | No | No | A path to a github credentials file. A relative or absolute path can be used. The specified file may not exist. Specify this option without a value to remove a github credentials file from the test configuration |
+| --dg | -g | No | Yes | The [Device Group Identifier](#device-group-identifier) of the Device Group whose devices are used for test execution |
+| --device-file | -x | No | No | A path to a file with device source code that is deployed along with the tests. A relative or absolute path can be used. Specify this option without a value to remove this file from the test configuration |
+| --agent-file | -y | No | No | A path to a file with agent source code that is deployed along with the tests. A relative or absolute path can be used. Specify this option without a value to remove this file from the test configuration |
+| --timeout | -t | No | Yes | A timeout period in seconds after which a test is interrupted and considered as failed |
+| --stop-on-fail | -s | No | No | If `true` or no value, the whole tests execution is stopped after a test failure. If `false`, the tests execution is not stopped after a failure |
+| --allow-disconnect | -a | No | No | If `true` or no value, keep a test session alive when a device is temporary disconnected. If `false`, a test session fails when a device is disconnected |
+| --builder-cache | -e | No | No | If `true` or no value, cache external libraries in the local `.builder-cache` directory. If `false`, do not cache external libraries; in this case, if the local `.builder-cache` directory exists, it is cleaned |
+| --test-file | -f | No | Yes | Test file name or pattern. All files located in the current directory and all its sub-directories whose names match the specified name or pattern are considered as files with test cases. This option may be repeated multiple times to specify multiple names and/or patterns. The values of the repeated option are combined by logical OR. The specified values fully replace the existed setting |
+| --github-config | -i | No | No | A path to a GitHub credentials file. A relative or absolute path can be used. The specified file may not exist. Specify this option without a value to remove a GitHub credentials file from the test configuration |
 | --builder-config | -j | No | No | A path to a file with *Builder* variables. A relative or absolute path can be used. The specified file may not exist. Specify this option without a value to remove a file with *Builder* variables from the test configuration |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
