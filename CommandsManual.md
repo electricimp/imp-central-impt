@@ -82,13 +82,13 @@
 
 ### Command Syntax ###
 
-`impt <command_group> <command_name> [\<options>]`
+`impt <command_group> <command_name> [>options>]`
 
 where:
 
 - `<command_group>` &mdash; A logical group of commands.
 - `<command_name>` &mdash; A command name, unique to the group.
-- `\<options>` &mdash; One or more options applicable to the command; most commands have options. Options may be written in any order.
+- `>options>` &mdash; One or more options applicable to the command; most commands have options. Options may be written in any order.
 
 Each `option` has the following format:
 
@@ -232,7 +232,7 @@ Displays the status and the details of the authentication applicable to the curr
 
 #### Auth Login ####
 
-`impt auth login [--local] [--endpoint <endpoint_url>] (--user <user_id> --pwd \<password> | --lk <login_key_id>) [--temp] [--confirmed] [--debug] [--help]`
+`impt auth login [--local] [--endpoint <endpoint_url>] (--user <user_id> --pwd >password> | --lk <login_key_id>) [--temp] [--confirmed] [--debug] [--help]`
 
 Global or local login. Creates a [global](#global-auth-file) or [local](#local-auth-file) auth file.
 
@@ -327,7 +327,7 @@ The user is asked to confirm the operation (confirmed automatically with the `--
 
 #### Build Deploy ####
 
-`impt build deploy [--dg <DEVICE_GROUP_IDENTIFIER>] [--device-file <device_file>] [--agent-file <agent_file>] [--descr <build_description>] [--origin \<origin>] [--tag \<tag>] [--flagged [true|false]] [--debug] [--help]`
+`impt build deploy [--dg <DEVICE_GROUP_IDENTIFIER>] [--device-file <device_file>] [--agent-file <agent_file>] [--descr <build_description>] [--origin >origin>] [--tag >tag>] [--flagged [true|false]] [--debug] [--help]`
 
 Creates a build (Deployment) from the specified source files, with description (if specified) and attributes (if
 specified), and deploys it to all the devices assigned to the specified Device Group.
@@ -381,7 +381,7 @@ Displays information about the specified build (Deployment).
 
 #### Build List
 
-`impt build list [--owner <ACCOUNT_IDENTIFIER>] [--product <PRODUCT_IDENTIFIER>] [--dg <DEVICE_GROUP_IDENTIFIER>] [--dg-type <device_group_type>] [--sha <deployment_sha>] [--tag \<tag>] [--flagged] [--unflagged] [--non-zombie] [--zombie] [--debug] [--help]`
+`impt build list [--owner <ACCOUNT_IDENTIFIER>] [--product <PRODUCT_IDENTIFIER>] [--dg <DEVICE_GROUP_IDENTIFIER>] [--dg-type <device_group_type>] [--sha <deployment_sha>] [--tag >tag>] [--flagged] [--unflagged] [--non-zombie] [--zombie] [--debug] [--help]`
 
 Displays information about all builds (Deployments) available to the current logged-in account.
 
@@ -405,7 +405,7 @@ The returned list of the builds may be filtered. Filtering is possible by any co
 
 #### Build Run
 
-`impt build run [--dg <DEVICE_GROUP_IDENTIFIER>] [--device-file <device_file>] [--agent-file <agent_file>] [--descr <build_description>] [--origin \<origin>] [--tag \<tag>] [--flagged [true|false]] [--conditional] [--log] [--debug] [--help]`
+`impt build run [--dg <DEVICE_GROUP_IDENTIFIER>] [--device-file <device_file>] [--agent-file <agent_file>] [--descr <build_description>] [--origin >origin>] [--tag >tag>] [--flagged [true|false]] [--conditional] [--log] [--debug] [--help]`
 
 Creates, deploys and runs a build (Deployment). Optionally, displays logs of the running build.
 
@@ -423,13 +423,13 @@ Fails if one or both of the specified source files do not exist or the specified
 | --tag | -t | No | Yes | A tag applied to this build (Deployment). This option may be repeated several times to apply several tags |
 | --flagged | -f | No | No | If *true* or No value, this build (Deployment) cannot be deleted without first setting this option back to *false*. If *false* or the option is not specified, the build can be deleted |
 | --conditional | -c | No | No | Conditional restart of Devices assigned to the specified Device Group instead of a normal restart (see the impCentral API spec) |
-| --log | -l | No | No | Starts displaying logs from the Devices assigned to the specified Device Group (see `[impt log stream](#log-stream)` command description). To stop displaying the logs press *\<Ctrl-C>* |
+| --log | -l | No | No | Starts displaying logs from the Devices assigned to the specified Device Group (see `[impt log stream](#log-stream)` command description). To stop displaying the logs press *>Ctrl-C>* |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Build Update
 
-`impt build update [--build <BUILD_IDENTIFIER>] [--descr <build_description>] [--tag \<tag>] [--remove-tag \<tag>] [--flagged [true|false]] [--debug] [--help]`
+`impt build update [--build <BUILD_IDENTIFIER>] [--descr <build_description>] [--tag >tag>] [--remove-tag >tag>] [--flagged [true|false]] [--debug] [--help]`
 
 Updates Description, tags and flagged attribute (whatever specified) of the specified build (Deployment).
 Fails if the specified build (Deployment) does not exist.
@@ -527,7 +527,7 @@ Reboots the specified Device and, optionally, starts displaying logs from it.
 | --- | --- | --- | --- | --- |
 | --device | -d | Yes | Yes | [Device Identifier](#device-identifier) |
 | --conditional | -c | No | No | Conditional restart (see the impCentral API spec) |
-| --log | -l | No | No | Starts displaying logs from the specified Device (see `[impt log stream](#log-stream)` command description). To stop displaying the logs press *\<Ctrl-C>* |
+| --log | -l | No | No | Starts displaying logs from the specified Device (see `[impt log stream](#log-stream)` command description). To stop displaying the logs press *>Ctrl-C>* |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
@@ -675,7 +675,7 @@ Does nothing if the Device Group has No Devices assigned.
 | --- | --- | --- | --- | --- |
 | --dg | -g | Yes/[project](#project-file) | Yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if No Project File, the command fails) |
 | --conditional | -c | No | No | Conditional restart (see the impCentral API spec) |
-| --log | -l | No | No | Starts displaying logs from the Devices assigned to the specified Device Group (see `[impt log stream](#log-stream)` command description). To stop displaying the logs press *\<Ctrl-C>* |
+| --log | -l | No | No | Starts displaying logs from the Devices assigned to the specified Device Group (see `[impt log stream](#log-stream)` command description). To stop displaying the logs press *>Ctrl-C>* |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
@@ -725,8 +725,8 @@ Note, a limited number of log entries are kept for a limited period of time.
 If `--page-number` option is specified, the command displays the specified page of the log entries and finishes.
 
 If `--page-number` option is not specified, the command displays all saved log entries by pages, starting from the page with the most recent log entries. After every page of log entries is displayed the command is paused:
-- to display the next page press *\<Enter>*
-- to abort the command execution press *\<Ctrl-C>*
+- to display the next page press *>Enter>*
+- to abort the command execution press *>Ctrl-C>*
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
@@ -743,7 +743,7 @@ If `--page-number` option is not specified, the command displays all saved log e
 Creates a log stream and displays logs from the specified Devices in real-time.
 
 No one command can be called while the logs are being streamed.
-To stop displaying the logs press *\<Ctrl-C>*.
+To stop displaying the logs press *>Ctrl-C>*.
 
 Note, one account can have a limited number of log streams at a time. If the limit is reached and a new log stream is created, an existing one is automatically closed.
 
@@ -762,7 +762,7 @@ Note, there is a limit to the number of Devices in one log stream. The tool does
 
 #### Login Key Create
 
-`impt loginkey create --pwd \<password> [--descr <login_key_description>] [--debug] [--help]`
+`impt loginkey create --pwd >password> [--descr <login_key_description>] [--debug] [--help]`
 
 Creates a new Login Key for the currently logged-in account.
 
@@ -777,7 +777,7 @@ Note, there is a limit on a total number of Login Keys per one account. Use [`im
 
 #### Login Key Delete
 
-`impt loginkey delete --lk <login_key_id> --pwd \<password> [--confirmed] [--debug] [--help]`
+`impt loginkey delete --lk <login_key_id> --pwd >password> [--confirmed] [--debug] [--help]`
 
 Deletes the specified Login Key.
 
@@ -816,7 +816,7 @@ Displays information about all Login Keys of the current logged-in account.
 
 #### Login Key Update
 
-`impt loginkey update --lk <login_key_id> --pwd \<password> --descr <login_key_description> [--debug] [--help]`
+`impt loginkey update --lk <login_key_id> --pwd >password> --descr <login_key_description> [--debug] [--help]`
 
 Updates the Description of the specified Login Key.
 
@@ -1035,7 +1035,7 @@ At the end of the command execution information about the project is displayed (
 
 #### Test Create
 
-`impt test create --dg <DEVICE_GROUP_IDENTIFIER> [--device-file <device_file>] [--agent-file <agent_file>] [--timeout \<timeout>] [--stop-on-fail [true|false]] [--allow-disconnect [true|false]] [--builder-cache [true|false]] [--test-file <test_file_name_pattern>] [--github-config <github_credentials_file_name>] [--builder-config <builder_file_name>] [--confirmed] [--debug] [--help]`
+`impt test create --dg <DEVICE_GROUP_IDENTIFIER> [--device-file <device_file>] [--agent-file <agent_file>] [--timeout >timeout>] [--stop-on-fail [true|false]] [--allow-disconnect [true|false]] [--builder-cache [true|false]] [--test-file <test_file_name_pattern>] [--github-config <github_credentials_file_name>] [--builder-config <builder_file_name>] [--confirmed] [--debug] [--help]`
 
 Creates [Test Configuration File](#test-configuration-file) in the current directory.
 
@@ -1133,7 +1133,7 @@ Runs the tests specified by [Test Configuration File](#test-configuration-file) 
 
 #### Test Update
 
-`impt test update [--dg <DEVICE_GROUP_IDENTIFIER>] [--device-file [<device_file>]] [--agent-file [<agent_file>]] [--timeout \<timeout>] [--stop-on-fail [true|false]] [--allow-disconnect [true|false]] [--builder-cache [true|false]] [--test-file <test_file_name_pattern>] [--github-config [<github_credentials_file_name>]] [--builder-config [<builder_file_name>]] [--debug] [--help]`
+`impt test update [--dg <DEVICE_GROUP_IDENTIFIER>] [--device-file [<device_file>]] [--agent-file [<agent_file>]] [--timeout >timeout>] [--stop-on-fail [true|false]] [--allow-disconnect [true|false]] [--builder-cache [true|false]] [--test-file <test_file_name_pattern>] [--github-config [<github_credentials_file_name>]] [--builder-config [<builder_file_name>]] [--debug] [--help]`
 
 Updates [Test Configuration File](#test-configuration-file) in the current directory. Fails if there is No [Test Configuration File](#test-configuration-file) in the current directory.
 
