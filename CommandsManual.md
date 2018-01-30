@@ -82,13 +82,13 @@
 
 ### Command Syntax ###
 
-`impt <command_group> <command_name> [>options>]`
+`impt <command_group> <command_name> [&lt;options>]`
 
 where:
 
 - `<command_group>` &mdash; A logical group of commands.
 - `<command_name>` &mdash; A command name, unique to the group.
-- `>options>` &mdash; One or more options applicable to the command; most commands have options. Options may be written in any order.
+- `&lt;options>` &mdash; One or more options applicable to the command; most commands have options. Options may be written in any order.
 
 Each `option` has the following format:
 
@@ -183,11 +183,11 @@ The tool commands accept the following constants to specify a type of Device Gro
 - *factory* &mdash; for impCentral API "factoryfixture_devicegroup" type
 - *production* &mdash; for impCentral API "production_devicegroup" type
 
-### auth files ###
+### Auth Files ###
 
 An auth file is a `*.impt.auth` file. It stores authentication and other information necessary to execute the tool commands. There are two types of auth file &mdash; local and global. The both types have identical format and store similar information.
 
-#### local auth file ####
+#### Local Auth File ####
 
 A local auth file is an auth file located in the directory from where a tool command is called. Different directories may contain different local auth files. One directory must contain only one local auth file.
 
@@ -195,7 +195,7 @@ Any command called from a directory where a local auth file exists is executed i
 
 If the current directory does not contain a local auth file, the command is executed in the context defined by the global auth file
 
-#### global auth file ####
+#### Global Auth File ####
 
 A global auth file affects the tool commands which are called from any directory where a local auth file does not exist. There must be only one global auth file per tool installation.
 
@@ -232,7 +232,7 @@ Displays the status and the details of the authentication applicable to the curr
 
 #### Auth Login ####
 
-`impt auth login [--local] [--endpoint <endpoint_url>] (--user <user_id> --pwd >password> | --lk <login_key_id>) [--temp] [--confirmed] [--debug] [--help]`
+`impt auth login [--local] [--endpoint <endpoint_url>] (--user <user_id> --pwd &lt;password> | --lk <login_key_id>) [--temp] [--confirmed] [--debug] [--help]`
 
 Global or local login. Creates a [global](#global-auth-file) or [local](#local-auth-file) auth file.
 
@@ -303,7 +303,7 @@ The source code of the builds is not saved locally. To download the source code 
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --build | -b | Yes/[project](#project-file) | Yes | [Build Identifier](#build-identifier) of the Deployment to be copied. If not specified, the most recent Deployment for the Device Group referenced by [Project File](#project-file) in the current directory is assumed. If there is no Project file, the command fails |
+| --build | -b | Yes/[project](#project-files) | Yes | [Build Identifier](#build-identifier) of the Deployment to be copied. If not specified, the most recent Deployment for the Device Group referenced by [Project File](#project-file) in the current directory is assumed. If there is no Project file, the command fails |
 | --dg | -g | Yes | Yes | [Device Group Identifier](#device-group-identifier) of the Device Group the new Deployment is created for |
 | --all | -a | No | No | Copy all attributes of the specified Deployment |
 | --debug | -z | No | No | Displays debug info for the command execution |
@@ -327,10 +327,9 @@ The user is asked to confirm the operation (confirmed automatically with the `--
 
 #### Build Deploy ####
 
-`impt build deploy [--dg <DEVICE_GROUP_IDENTIFIER>] [--device-file <device_file>] [--agent-file <agent_file>] [--descr <build_description>] [--origin >origin>] [--tag >tag>] [--flagged [true|false]] [--debug] [--help]`
+`impt build deploy [--dg <DEVICE_GROUP_IDENTIFIER>] [--device-file <device_file>] [--agent-file <agent_file>] [--descr <build_description>] [--origin &lt;origin>] [--tag &lt;tag>] [--flagged [true|false]] [--debug] [--help]`
 
-Creates a build (Deployment) from the specified source files, with description (if specified) and attributes (if
-specified), and deploys it to all the devices assigned to the specified Device Group.
+Creates a build (Deployment) from the specified source files, with description (if specified) and attributes (if specified), and deploys it to all the devices assigned to the specified Device Group.
 
 Fails if one or both of the specified source files do not exist, or the specified Device Group does not exist.
 
@@ -338,36 +337,36 @@ The new build is not run until the devices are rebooted. To run it, call `[impt 
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --dg | -g | Yes/[project](#project-file) | Yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if No Project File, the command fails) |
-| --device-file | -x | No | Yes | Name of a file which contains a source code for IMP device. If not specified, the file referenced by [Project File](#project-file) in the current directory is assumed; if No Project File, empty code is assumed. If the specified file does not exist, the command fails |
-| --agent-file | -y | No | Yes | Name of a file which contains a source code for IMP agent. If not specified, the file referenced by [Project File](#project-file) in the current directory is assumed; if No Project File, empty code is assumed. If the specified file does not exist, the command fails |
+| --dg | -g | Yes/[Project](#project-files) | Yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by the [Project file](#project-files) in the current directory is used. If there is no Project file, the command fails |
+| --device-file | -x | No | Yes | Name of a file which contains source code for the device. If not specified, the file referenced by the [Project file](#project-file) in the current directory is used; if there is no Project file, empty code is used. If the specified file does not exist, the command fails |
+| --agent-file | -y | No | Yes | Name of a file which contains source code for the agent. If not specified, the file referenced by the [Project file](#project-file) in the current directory is used; if there is no Project file, empty code is used. If the specified file does not exist, the command fails |
 | --descr | -s | No | Yes | Description of the build (Deployment) |
 | --origin | -o | No | Yes | A free-form key to store the source of the code |
 | --tag | -t | No | Yes | A tag applied to this build (Deployment). This option may be repeated several times to apply several tags |
-| --flagged | -f | No | No | If *true* or No value, this build (Deployment) cannot be deleted without first setting this option back to *false*. If *false* or the option is not specified, the build can be deleted |
+| --flagged | -f | No | No | If `true` or no value is supplied, this build (Deployment) cannot be deleted without first setting this option back to `false`. If `false` or the option is not specified, the build can be deleted |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
-#### Build Get
+#### Build Get ####
 
 `impt build get [--build <BUILD_IDENTIFIER>] [--device-file <device_file>] [--agent-file <agent_file>] [--device-only] [--agent-only] [--confirmed] [--debug] [--help]`
 
 Downloads the source files of the specified build (Deployment) and displays information about the build.
 
-The user is asked to confirm the operation if the files with the specified names already exist in the current directory (confirmed automatically with the `--confirmed` option). If confirmed, the existed files are overwritten.
+The user is asked to confirm the operation if the files with the specified names already exist in the current directory (confirmed automatically with the `--confirmed` option). If confirmed, the existing files are overwritten.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --build | -b | Yes/[project](#project-file) | Yes | [Build Identifier](#build-identifier). If not specified, the most recent Deployment for the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if No Project File, the command fails) |
-| --device-file | -x | No | Yes | Name of a file to where download the source code for IMP device. If not specified, the file referenced by [Project File](#project-file) in the current directory is assumed; if No Project File and `--agent-only` option is not specified, the command fails |
-| --agent-file | -y | No | Yes | Name of a file to where download the source code for IMP agent. If not specified, the file referenced by [Project File](#project-file) in the current directory is assumed; if No Project File and `--device-only` option is not specified, the command fails |
-| --device-only | -i | No | Yes | Downloads the source code for IMP device only |
-| --agent-only | -j | No | Yes | Downloads the source code for IMP agent only |
+| --build | -b | Yes/[Project](#project-files) | Yes | [Build Identifier](#build-identifier). If not specified, the most recent Deployment for the Device Group referenced by the [Project file](#project-files) in the current directory is used. If there is no Project file, the command fails |
+| --device-file | -x | No | Yes | Name of a file which contains source code for the device. If not specified, the file referenced by the [Project file](#project-file) in the current directory is used; if there is no Project file, empty code is used. If the specified file does not exist, the command fails |
+| --agent-file | -y | No | Yes | Name of a file which contains source code for the agent. If not specified, the file referenced by the [Project file](#project-file) in the current directory is used; if there is no Project file, empty code is used. If the specified file does not exist, the command fails |
+| --device-only | -i | No | Yes | Downloads the source code for the device only |
+| --agent-only | -j | No | Yes | Downloads the source code for the agent only |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
-#### Build Info
+#### Build Info ####
 
 `impt build info [--build <BUILD_IDENTIFIER>] [--debug] [--help]`
 
@@ -375,78 +374,77 @@ Displays information about the specified build (Deployment).
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --build | -b | Yes/[project](#project-file) | Yes | [Build Identifier](#build-identifier). If not specified, the most recent Deployment for the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if No Project File, the command fails) |
+| --build | -b | Yes/[Project](#project-files) | Yes | [Build Identifier](#build-identifier). If not specified, the most recent Deployment for the Device Group referenced by the [Project file](#project-files) in the current directory is used. If there is no Project file, the command fails |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
-#### Build List
+#### Build List ####
 
-`impt build list [--owner <ACCOUNT_IDENTIFIER>] [--product <PRODUCT_IDENTIFIER>] [--dg <DEVICE_GROUP_IDENTIFIER>] [--dg-type <device_group_type>] [--sha <deployment_sha>] [--tag >tag>] [--flagged] [--unflagged] [--non-zombie] [--zombie] [--debug] [--help]`
+`impt build list [--owner <ACCOUNT_IDENTIFIER>] [--product <PRODUCT_IDENTIFIER>] [--dg <DEVICE_GROUP_IDENTIFIER>] [--dg-type <device_group_type>] [--sha <deployment_sha>] [--tag &lt;tag>] [--flagged] [--unflagged] [--non-zombie] [--zombie] [--debug] [--help]`
 
-Displays information about all builds (Deployments) available to the current logged-in account.
+Displays information about all builds (Deployments) available to the current account.
 
-The returned list of the builds may be filtered. Filtering is possible by any combination of the described Filter Options. Every Filter Option may be repeated several times. At first, all Filter Options with the same option name are combined by logical OR. After that, all Filter Options with different option names are combined by logical AND.
+The returned list of the builds may be filtered. Filtering is possible using any combination of the described filter options. Filter options may be repeated. All filter options with the same option name are combined by logical OR, then all filter options with different option names are combined by logical AND.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
-| Filter Options: | | | | |
+| Filter Options | | | | |
 | --owner | -o | No | Yes | Builds owned by the [specified Account(s)](#account-identifier) only |
 | --product | -p | No | Yes | Builds deployed to Device Groups which belong to the [specified Product(s)](#product-identifier) only |
 | --dg | -g | No | Yes | Builds deployed to the [specified Device Group(s)](#device-group-identifier) only |
 | --dg-type | -y | No | Yes | Builds deployed to Device Groups of the [specified type](#device-group-type) only |
-| --sha | -s | No | Yes | Builds with the specified *SHA* only |
+| --sha | -s | No | Yes | Builds with the specified SHA only |
 | --tag | -t | No | Yes | Builds with the specified tag only |
-| --flagged | -f | No | No | Builds with the flagged attribute set to *true* only |
-| --unflagged | -u | No | No | Builds with the flagged attribute set to *false* only |
-| --non-zombie | -n | No | No | Only builds which have existent relation to Device Group |
-| --zombie | -m | No | No | Only builds which do not have existent relation to Device Group |
+| --flagged | -f | No | No | Builds with the flagged attribute set to `true` only |
+| --unflagged | -u | No | No | Builds with the flagged attribute set to `false` only |
+| --non-zombie | -n | No | No | Only builds which are related to the Device Group |
+| --zombie | -m | No | No | Only builds which are not related to the Device Group |
 
-#### Build Run
+#### Build Run ####
 
-`impt build run [--dg <DEVICE_GROUP_IDENTIFIER>] [--device-file <device_file>] [--agent-file <agent_file>] [--descr <build_description>] [--origin >origin>] [--tag >tag>] [--flagged [true|false]] [--conditional] [--log] [--debug] [--help]`
+`impt build run [--dg <DEVICE_GROUP_IDENTIFIER>] [--device-file <device_file>] [--agent-file <agent_file>] [--descr <build_description>] [--origin &lt;origin>] [--tag &lt;tag>] [--flagged [true|false]] [--conditional] [--log] [--debug] [--help]`
 
 Creates, deploys and runs a build (Deployment). Optionally, displays logs of the running build.
 
-It behaves exactly like `[impt build deploy](#build-deploy)` command followed by `[impt dg restart](#device-group-restart)` command and, optionally, by `[impt log stream](#log-stream)`.
+It behaves exactly like `[impt build deploy](#build-deploy)` followed by `[impt dg restart](#device-group-restart)` and, optionally, by `[impt log stream](#log-stream)`.
 
-Fails if one or both of the specified source files do not exist or the specified Device Group does not exist. Informs user if the specified Device Group does not have assigned Devices, in this case the Deployment is created anyway.
+Fails if one or both of the specified source files do not exist or the specified Device Group does not exist. Informs the user if the specified Device Group does not have assigned devices; in this case, the Deployment is created anyway.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --dg | -g | Yes/[project](#project-file) | Yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if No Project File, the command fails) |
-| --device-file | -x | No | Yes | Name of a file which contains a source code for IMP device. If not specified, the file referenced by [Project File](#project-file) in the current directory is assumed; if No Project File, empty code is assumed. If the specified file does not exist, the command fails |
-| --agent-file | -y | No | Yes | Name of a file which contains a source code for IMP agent. If not specified, the file referenced by [Project File](#project-file) in the current directory is assumed; if No Project File, empty code is assumed. If the specified file does not exist, the command fails |
+| --dg | -g | Yes/[Project](#project-files) | Yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by the [Project file](#project-files) in the current directory is used. If there is no Project file, the command fails |
+| --device-file | -x | No | Yes | Name of a file which contains source code for the device. If not specified, the file referenced by the [Project file](#project-file) in the current directory is used; if there is no Project file, empty code is used. If the specified file does not exist, the command fails |
+| --agent-file | -y | No | Yes | Name of a file which contains source code for the agent. If not specified, the file referenced by the [Project file](#project-file) in the current directory is used; if there is no Project file, empty code is used. If the specified file does not exist, the command fails |
 | --descr | -s | No | Yes | Description of the build (Deployment) |
 | --origin | -o | No | Yes | A free-form key to store the source of the code |
 | --tag | -t | No | Yes | A tag applied to this build (Deployment). This option may be repeated several times to apply several tags |
-| --flagged | -f | No | No | If *true* or No value, this build (Deployment) cannot be deleted without first setting this option back to *false*. If *false* or the option is not specified, the build can be deleted |
-| --conditional | -c | No | No | Conditional restart of Devices assigned to the specified Device Group instead of a normal restart (see the impCentral API spec) |
-| --log | -l | No | No | Starts displaying logs from the Devices assigned to the specified Device Group (see `[impt log stream](#log-stream)` command description). To stop displaying the logs press *>Ctrl-C>* |
+| --flagged | -f | No | No | If `true` or no value is supplied, this build (Deployment) cannot be deleted without first setting this option back to `false`. If `false` or the option is not specified, the build can be deleted |
+| --conditional | -c | No | No | Conditional restart of devices assigned to the specified Device Group instead of a normal restart (see the impCentral API spec) |
+| --log | -l | No | No | Starts displaying logs from the devices assigned to the specified Device Group (see `[impt log stream](#log-stream)` command description). To stop displaying the logs, press *&lt;Ctrl-C>* |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
-#### Build Update
+#### Build Update ####
 
-`impt build update [--build <BUILD_IDENTIFIER>] [--descr <build_description>] [--tag >tag>] [--remove-tag >tag>] [--flagged [true|false]] [--debug] [--help]`
+`impt build update [--build <BUILD_IDENTIFIER>] [--descr <build_description>] [--tag &lt;tag>] [--remove-tag &lt;tag>] [--flagged [true|false]] [--debug] [--help]`
 
-Updates Description, tags and flagged attribute (whatever specified) of the specified build (Deployment).
-Fails if the specified build (Deployment) does not exist.
+Updates description, tags and *flagged* attribute (whichever is specified) of the specified build (Deployment). Fails if the specified build (Deployment) does not exist.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --build | -b | Yes/[project](#project-file) | Yes | [Build Identifier](#build-identifier). If not specified, the most recent Deployment for the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if No Project File, the command fails) |
+| --build | -b | Yes/[Project](#project-files) | Yes | [Build Identifier](#build-identifier). If not specified, the most recent Deployment for the Device Group referenced by [Project file](#project-files) in the current directory is used. If there is no Project file, the command fails |
 | --descr | -s | No | Yes | Description of the build (Deployment) |
 | --tag | -t | No | Yes | A tag applied to this build (Deployment). This option may be repeated several times to apply several tags |
 | --remove-tag | -r | No | Yes | A tag removed from this build (Deployment). This option may be repeated several times to remove several tags |
-| --flagged | -f | No | No | If *true* or No value, this build (Deployment) cannot be deleted without first setting this attribute back to *false*. If *false*, the build can be deleted |
+| --flagged | -f | No | No | If `true` or no value is supplied, this build (Deployment) cannot be deleted without first setting this option back to `false`. If `false` or the option is not specified, the build can be deleted |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
-### Device Manipulation Commands
+### Device Manipulation Commands ###
 
-#### Device Assign
+#### Device Assign ####
 
 `impt device assign --device <DEVICE_IDENTIFIER> [--dg <DEVICE_GROUP_IDENTIFIER>] [--confirmed] [--debug] [--help]`
 
@@ -527,7 +525,7 @@ Reboots the specified Device and, optionally, starts displaying logs from it.
 | --- | --- | --- | --- | --- |
 | --device | -d | Yes | Yes | [Device Identifier](#device-identifier) |
 | --conditional | -c | No | No | Conditional restart (see the impCentral API spec) |
-| --log | -l | No | No | Starts displaying logs from the specified Device (see `[impt log stream](#log-stream)` command description). To stop displaying the logs press *>Ctrl-C>* |
+| --log | -l | No | No | Starts displaying logs from the specified Device (see `[impt log stream](#log-stream)` command description). To stop displaying the logs press *&lt;Ctrl-C>* |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
@@ -675,7 +673,7 @@ Does nothing if the Device Group has No Devices assigned.
 | --- | --- | --- | --- | --- |
 | --dg | -g | Yes/[project](#project-file) | Yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if No Project File, the command fails) |
 | --conditional | -c | No | No | Conditional restart (see the impCentral API spec) |
-| --log | -l | No | No | Starts displaying logs from the Devices assigned to the specified Device Group (see `[impt log stream](#log-stream)` command description). To stop displaying the logs press *>Ctrl-C>* |
+| --log | -l | No | No | Starts displaying logs from the Devices assigned to the specified Device Group (see `[impt log stream](#log-stream)` command description). To stop displaying the logs press *&lt;Ctrl-C>* |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
@@ -725,8 +723,8 @@ Note, a limited number of log entries are kept for a limited period of time.
 If `--page-number` option is specified, the command displays the specified page of the log entries and finishes.
 
 If `--page-number` option is not specified, the command displays all saved log entries by pages, starting from the page with the most recent log entries. After every page of log entries is displayed the command is paused:
-- to display the next page press *>Enter>*
-- to abort the command execution press *>Ctrl-C>*
+- to display the next page press *&lt;Enter>*
+- to abort the command execution press *&lt;Ctrl-C>*
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
@@ -743,7 +741,7 @@ If `--page-number` option is not specified, the command displays all saved log e
 Creates a log stream and displays logs from the specified Devices in real-time.
 
 No one command can be called while the logs are being streamed.
-To stop displaying the logs press *>Ctrl-C>*.
+To stop displaying the logs press *&lt;Ctrl-C>*.
 
 Note, one account can have a limited number of log streams at a time. If the limit is reached and a new log stream is created, an existing one is automatically closed.
 
@@ -762,7 +760,7 @@ Note, there is a limit to the number of Devices in one log stream. The tool does
 
 #### Login Key Create
 
-`impt loginkey create --pwd >password> [--descr <login_key_description>] [--debug] [--help]`
+`impt loginkey create --pwd &lt;password> [--descr <login_key_description>] [--debug] [--help]`
 
 Creates a new Login Key for the currently logged-in account.
 
@@ -777,7 +775,7 @@ Note, there is a limit on a total number of Login Keys per one account. Use [`im
 
 #### Login Key Delete
 
-`impt loginkey delete --lk <login_key_id> --pwd >password> [--confirmed] [--debug] [--help]`
+`impt loginkey delete --lk <login_key_id> --pwd &lt;password> [--confirmed] [--debug] [--help]`
 
 Deletes the specified Login Key.
 
@@ -816,7 +814,7 @@ Displays information about all Login Keys of the current logged-in account.
 
 #### Login Key Update
 
-`impt loginkey update --lk <login_key_id> --pwd >password> --descr <login_key_description> [--debug] [--help]`
+`impt loginkey update --lk <login_key_id> --pwd &lt;password> --descr <login_key_description> [--debug] [--help]`
 
 Updates the Description of the specified Login Key.
 
@@ -1035,7 +1033,7 @@ At the end of the command execution information about the project is displayed (
 
 #### Test Create
 
-`impt test create --dg <DEVICE_GROUP_IDENTIFIER> [--device-file <device_file>] [--agent-file <agent_file>] [--timeout >timeout>] [--stop-on-fail [true|false]] [--allow-disconnect [true|false]] [--builder-cache [true|false]] [--test-file <test_file_name_pattern>] [--github-config <github_credentials_file_name>] [--builder-config <builder_file_name>] [--confirmed] [--debug] [--help]`
+`impt test create --dg <DEVICE_GROUP_IDENTIFIER> [--device-file <device_file>] [--agent-file <agent_file>] [--timeout &lt;timeout>] [--stop-on-fail [true|false]] [--allow-disconnect [true|false]] [--builder-cache [true|false]] [--test-file <test_file_name_pattern>] [--github-config <github_credentials_file_name>] [--builder-config <builder_file_name>] [--confirmed] [--debug] [--help]`
 
 Creates [Test Configuration File](#test-configuration-file) in the current directory.
 
@@ -1052,7 +1050,7 @@ At the end of the command execution information about the tests configuration is
 | --stop-on-fail | -s | No | No | If *true* or No value: the whole tests execution is stopped after a test failure. If *false* value: the tests execution is not stopped after a failure. By default: *false* |
 | --allow-disconnect | -a | No | No | If *true* or No value: keep a test session alive when a device is temporary disconnected. If *false* value: a test session fails when a device is disconnected. By default: *false* |
 | --builder-cache | -e | No | No | If *true* or No value: cache external libraries in the local *.builder-cache* directory. If *false* value: do not cache external libraries. If the local *.builder-cache* directory exists, it is cleaned up. By default: *false* |
-| --test-file | -f | No | Yes | Test file name or pattern. All files located in the current directory and all its subdirectories which names match the specified name or pattern are considered as files with test cases. This option may be repeated several times to specify several names and/or patterns. The values of the repeated option are combined by logical OR. By default: *"\*.test.nut" "tests/\*\*/\*.test.nut"* |
+| --test-file | -f | No | Yes | Test file name or pattern. All files located in the current directory and all its subdirectories which names match the specified name or pattern are considered as files with test cases. This option may be repeated several times to specify several names and/or patterns. The values of the repeated option are combined by logical OR. By default: *"&#42;.test.nut" "tests/&#42;&#42;/&#42;.test.nut"* |
 | --github-config | -i | No | Yes | A path to a github credentials file. A relative or absolute path can be used. The specified file may not exist |
 | --builder-config | -j | No | Yes | A path to a file with *Builder* variables. A relative or absolute path can be used. The specified file may not exist |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
@@ -1133,7 +1131,7 @@ Runs the tests specified by [Test Configuration File](#test-configuration-file) 
 
 #### Test Update
 
-`impt test update [--dg <DEVICE_GROUP_IDENTIFIER>] [--device-file [<device_file>]] [--agent-file [<agent_file>]] [--timeout >timeout>] [--stop-on-fail [true|false]] [--allow-disconnect [true|false]] [--builder-cache [true|false]] [--test-file <test_file_name_pattern>] [--github-config [<github_credentials_file_name>]] [--builder-config [<builder_file_name>]] [--debug] [--help]`
+`impt test update [--dg <DEVICE_GROUP_IDENTIFIER>] [--device-file [<device_file>]] [--agent-file [<agent_file>]] [--timeout &lt;timeout>] [--stop-on-fail [true|false]] [--allow-disconnect [true|false]] [--builder-cache [true|false]] [--test-file <test_file_name_pattern>] [--github-config [<github_credentials_file_name>]] [--builder-config [<builder_file_name>]] [--debug] [--help]`
 
 Updates [Test Configuration File](#test-configuration-file) in the current directory. Fails if there is No [Test Configuration File](#test-configuration-file) in the current directory.
 
