@@ -122,7 +122,7 @@ These rules govern how the tool searches an entity:
 - If at least one entity is found for the particular attribute, the search is stopped.
 - If No entity is found for all attributes or more than one entity is found, then, depending on a particular command, that may be considered as a success (for all `list` commands) or as a fail (for all other commands).
 
-#### Account Identifier ####
+#### Account identifier ####
 
 Option: `--owner <ACCOUNT_IDENTIFIER>`
 
@@ -133,7 +133,7 @@ Attributes accepted as <ACCOUNT_IDENTIFIER> (in order of search):
 - Email (always unique)
 - Username (always unique)
 
-#### Product Identifier ####
+#### Product identifier ####
 
 Option: `--product <PRODUCT_IDENTIFIER>`
 
@@ -142,7 +142,7 @@ Attributes accepted as `<PRODUCT_IDENTIFIER>` (in order of search):
 - Product ID (always unique)
 - Product Name (unique among all Products owned by a particular user)
 
-#### Device Group Identifier ####
+#### Device Group identifier ####
 
 Option: `--dg <DEVICE_GROUP_IDENTIFIER>`
 
@@ -151,7 +151,7 @@ Attributes accepted as `<DEVICE_GROUP_IDENTIFIER>` (in order of search):
 - Device Group ID (always unique)
 - Device Group Name (unique among all Device Groups in a Product)
 
-#### Device Identifier ####
+#### Device identifier ####
 
 Option: `--device <DEVICE_IDENTIFIER>`
 
@@ -162,7 +162,7 @@ Attributes accepted as `<DEVICE_IDENTIFIER>` (in order of search):
 - Agent ID
 - Device Name
 
-#### Build Identifier ####
+#### Build identifier ####
 
 Option: `--build <BUILD_IDENTIFIER>`
 
@@ -291,7 +291,7 @@ The user is asked to confirm the operation (confirmed automatically with the `--
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --product | -p | No | Yes | [Product Identifier](#product-identifier) of the Product. See above |
+| --product | -p | No | Yes | [Product identifier](#product-identifier) of the Product. See above |
 | --unflag | -u | No | No | Delete a Deployment even if it has *flagged* attribute set to `true`. See above |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
 | --debug | -z | No | No | Displays debug info for the command execution |
@@ -313,8 +313,8 @@ The source code of the builds is not saved locally. To download the source code 
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --build | -b | Yes/[project](#project-files) | Yes | [Build Identifier](#build-identifier) of the Deployment to be copied. If not specified, the most recent Deployment for the Device Group referenced by [Project File](#project-file) in the current directory is assumed. If there is no Project file, the command fails |
-| --dg | -g | Yes | Yes | [Device Group Identifier](#device-group-identifier) of the Device Group the new Deployment is created for |
+| --build | -b | Yes/[project](#project-files) | Yes | [Build identifier](#build-identifier) of the Deployment to be copied. If not specified, the most recent Deployment for the Device Group referenced by [Project File](#project-file) in the current directory is assumed. If there is no Project file, the command fails |
+| --dg | -g | Yes | Yes | [Device Group identifier](#device-group-identifier) of the Device Group the new Deployment is created for |
 | --all | -a | No | No | Copy all attributes of the specified Deployment |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
@@ -331,7 +331,7 @@ The user is asked to confirm the operation (confirmed automatically with the `--
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --build | -b | Yes | Yes | [Build Identifier](#build-identifier) |
+| --build | -b | Yes | Yes | [Build identifier](#build-identifier) |
 | --force | -f | No | No | If the Deployment has its *flagged* attribute set to `true`, set it to `false` to allow deletion |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
 | --debug | -z | No | No | Displays debug info for the command execution |
@@ -351,7 +351,7 @@ The new build is not run until the devices are rebooted. To run it, call `[impt 
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --dg | -g | Yes/[Project](#project-files) | Yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by the [Project file](#project-files) in the current directory is used. If there is no Project file, the command fails |
+| --dg | -g | Yes/[Project](#project-files) | Yes | [Device Group identifier](#device-group-identifier). If not specified, the Device Group referenced by the [Project file](#project-files) in the current directory is used. If there is no Project file, the command fails |
 | --device-file | -x | No | Yes | Name of a file which contains source code for the device. If not specified, the file referenced by the [Project file](#project-file) in the current directory is used; if there is no Project file, empty code is used. If the specified file does not exist, the command fails |
 | --agent-file | -y | No | Yes | Name of a file which contains source code for the agent. If not specified, the file referenced by the [Project file](#project-file) in the current directory is used; if there is no Project file, empty code is used. If the specified file does not exist, the command fails |
 | --descr | -s | No | Yes | Description of the build (Deployment) |
@@ -373,7 +373,7 @@ The user is asked to confirm the operation if the files with the specified names
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --build | -b | Yes/[Project](#project-files) | Yes | [Build Identifier](#build-identifier). If not specified, the most recent Deployment for the Device Group referenced by the [Project file](#project-files) in the current directory is used. If there is no Project file, the command fails |
+| --build | -b | Yes/[Project](#project-files) | Yes | [Build identifier](#build-identifier). If not specified, the most recent Deployment for the Device Group referenced by the [Project file](#project-files) in the current directory is used. If there is no Project file, the command fails |
 | --device-file | -x | No | Yes | Name of a file which contains source code for the device. If not specified, the file referenced by the [Project file](#project-file) in the current directory is used; if there is no Project file, empty code is used. If the specified file does not exist, the command fails |
 | --agent-file | -y | No | Yes | Name of a file which contains source code for the agent. If not specified, the file referenced by the [Project file](#project-file) in the current directory is used; if there is no Project file, empty code is used. If the specified file does not exist, the command fails |
 | --device-only | -i | No | Yes | Downloads the source code for the device only |
@@ -392,7 +392,7 @@ Displays information about the specified build (Deployment).
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --build | -b | Yes/[Project](#project-files) | Yes | [Build Identifier](#build-identifier). If not specified, the most recent Deployment for the Device Group referenced by the [Project file](#project-files) in the current directory is used. If there is no Project file, the command fails |
+| --build | -b | Yes/[Project](#project-files) | Yes | [Build identifier](#build-identifier). If not specified, the most recent Deployment for the Device Group referenced by the [Project file](#project-files) in the current directory is used. If there is no Project file, the command fails |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
@@ -436,7 +436,7 @@ Fails if one or both of the specified source files do not exist or the specified
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --dg | -g | Yes/[Project](#project-files) | Yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by the [Project file](#project-files) in the current directory is used. If there is no Project file, the command fails |
+| --dg | -g | Yes/[Project](#project-files) | Yes | [Device Group identifier](#device-group-identifier). If not specified, the Device Group referenced by the [Project file](#project-files) in the current directory is used. If there is no Project file, the command fails |
 | --device-file | -x | No | Yes | Name of a file which contains source code for the device. If not specified, the file referenced by the [Project file](#project-file) in the current directory is used; if there is no Project file, empty code is used. If the specified file does not exist, the command fails |
 | --agent-file | -y | No | Yes | Name of a file which contains source code for the agent. If not specified, the file referenced by the [Project file](#project-file) in the current directory is used; if there is no Project file, empty code is used. If the specified file does not exist, the command fails |
 | --descr | -s | No | Yes | Description of the build (Deployment) |
@@ -458,7 +458,7 @@ Updates description, tags and *flagged* attribute (whichever is specified) of th
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --build | -b | Yes/[Project](#project-files) | Yes | [Build Identifier](#build-identifier). If not specified, the most recent Deployment for the Device Group referenced by [Project file](#project-files) in the current directory is used. If there is no Project file, the command fails |
+| --build | -b | Yes/[Project](#project-files) | Yes | [Build identifier](#build-identifier). If not specified, the most recent Deployment for the Device Group referenced by [Project file](#project-files) in the current directory is used. If there is no Project file, the command fails |
 | --descr | -s | No | Yes | Description of the build (Deployment) |
 | --tag | -t | No | Yes | A tag applied to this build (Deployment). This option may be repeated several times to apply several tags |
 | --remove-tag | -r | No | Yes | A tag removed from this build (Deployment). This option may be repeated several times to remove several tags |
@@ -483,8 +483,8 @@ The operation may fail for some combinations of the Device Group [types](#device
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --device | -d | Yes | Yes | [Device Identifier](#device-identifier) |
-| --dg | -g | Yes/[project](#project-file) | Yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if No Project File, the command fails) |
+| --device | -d | Yes | Yes | [Device identifier](#device-identifier) |
+| --dg | -g | Yes/[project](#project-file) | Yes | [Device Group identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if No Project File, the command fails) |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
@@ -499,7 +499,7 @@ Displays information about the specified Device.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --device | -d | Yes | Yes | [Device Identifier](#device-identifier) |
+| --device | -d | Yes | Yes | [Device identifier](#device-identifier) |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
@@ -541,7 +541,7 @@ The user is asked to confirm the operation (confirmed automatically with the `--
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --device | -d | Yes | Yes | [Device Identifier](#device-identifier) |
+| --device | -d | Yes | Yes | [Device identifier](#device-identifier) |
 | --force | -f | No | No | If the Device is assigned to a Device Group, unassign it first to be able to remove |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
 | --debug | -z | No | No | Displays debug info for the command execution |
@@ -557,7 +557,7 @@ Reboots the specified Device and, optionally, starts displaying logs from it.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --device | -d | Yes | Yes | [Device Identifier](#device-identifier) |
+| --device | -d | Yes | Yes | [Device identifier](#device-identifier) |
 | --conditional | -c | No | No | Conditional restart (see the impCentral API spec) |
 | --log | -l | No | No | Starts displaying logs from the specified Device (see `[impt log stream](#log-stream)` command description). To stop displaying the logs press *<Ctrl-C>* |
 | --debug | -z | No | No | Displays debug info for the command execution |
@@ -574,7 +574,7 @@ Does nothing if the Device already unassigned.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --device | -d | Yes | Yes | [Device Identifier](#device-identifier) |
+| --device | -d | Yes | Yes | [Device identifier](#device-identifier) |
 | --unbond | -u | No | Yes | Unbond key is required to unassign Device from Device Group of the [type](#device-group-type) *production* |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
@@ -589,7 +589,7 @@ Updates Name of the specified Device.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --device | -d | Yes | Yes | [Device Identifier](#device-identifier) |
+| --device | -d | Yes | Yes | [Device identifier](#device-identifier) |
 | --name | -n | Yes | Yes | New Name of the Device |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
@@ -608,7 +608,7 @@ The user is asked to confirm the operation if any Deployment is going to be dele
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --dg | -g | Yes/[project](#project-file) | Yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if No Project File, the command fails) |
+| --dg | -g | Yes/[project](#project-file) | Yes | [Device Group identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if No Project File, the command fails) |
 | --unflag | -u | No | No | Set *"flagged"* attribute to `false` in all Deployments of the specified Device Group |
 | --unflag-old | -o | No | No | Set *"flagged"* attribute to `false` in all Deployments of the specified Device Group which are older than *min_supported_deployment* (see the impCentral API spec) |
 | --remove | -r | No | No | Deletes all Deployments of the specified Device Group which are older than *min_supported_deployment* (see the impCentral API spec) and have *"flagged"* attribute set to `false`. This option works after `--unflag`/`--unflag-old` options |
@@ -629,9 +629,9 @@ Fails if Device Group with the specified Name already exists in the specified Pr
 | --- | --- | --- | --- | --- |
 | --name | -n | Yes | Yes | Name of the Device Group. Must be unique among all Device Groups in the specified Product |
 | --dg-type | -y | No | Yes | [Type](#device-group-type) of the Device Group. If not specified, *development* type is assumed. If the type value is invalid, the command fails |
-| --product | -p | Yes/[project](#project-file) | Yes | [Product Identifier](#product-identifier) of the Product which the Device Group belongs to. If not specified, the Product referenced by [Project File](#project-file) in the current directory is assumed (if No Project File, the command fails) |
+| --product | -p | Yes/[project](#project-file) | Yes | [Product identifier](#product-identifier) of the Product which the Device Group belongs to. If not specified, the Product referenced by [Project File](#project-file) in the current directory is assumed (if No Project File, the command fails) |
 | --descr | -s | No | Yes | Description of the Device Group |
-| --target | -t | No | Yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the being created Device Group. Should be specified for the being created Device Group of the [type](#device-group-type) *factory* or *pre-factory* only. The target Device Group must be of the [type](#device-group-type) *production* or *pre-production* correspondingly and belongs to the specified Product. Otherwise the command fails |
+| --target | -t | No | Yes | [Device Group identifier](#device-group-identifier) of the production target Device Group for the being created Device Group. Should be specified for the being created Device Group of the [type](#device-group-type) *factory* or *pre-factory* only. The target Device Group must be of the [type](#device-group-type) *production* or *pre-production* correspondingly and belongs to the specified Product. Otherwise the command fails |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
@@ -653,7 +653,7 @@ The user is asked to confirm the operation (confirmed automatically with the `--
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --dg | -g | Yes/[project](#project-file) | Yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if No Project File, the command fails) |
+| --dg | -g | Yes/[project](#project-file) | Yes | [Device Group identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if No Project File, the command fails) |
 | --builds | -b | No | No | Additionally deletes all Deployments related to the Device Group |
 | --force | -f | No | No | Unassigns all Devices of the Device Group, as by [`impt dg unassign`](#device-group-unassign). Set *"flagged"* attribute to `false` in all Deployments of the Device Group |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
@@ -670,7 +670,7 @@ Displays information about the specified Device Group.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --dg | -g | Yes/[project](#project-file) | Yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if No Project File, the command fails) |
+| --dg | -g | Yes/[project](#project-file) | Yes | [Device Group identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if No Project File, the command fails) |
 | --full | -u | No | No | Displays additional information: details about Devices assigned to the Device Group, about Webhooks created for the Device Group and other |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
@@ -707,8 +707,8 @@ The operation may fail for some combinations of the Device Group [types](#device
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --from | -f | Yes | Yes | [Device Group Identifier](#device-group-identifier) of the origin Device Group |
-| --to | -t | Yes/[project](#project-file) | Yes | [Device Group Identifier](#device-group-identifier) of the destination Device Group. If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if No Project File, the command fails) |
+| --from | -f | Yes | Yes | [Device Group identifier](#device-group-identifier) of the origin Device Group |
+| --to | -t | Yes/[project](#project-file) | Yes | [Device Group identifier](#device-group-identifier) of the destination Device Group. If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if No Project File, the command fails) |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
@@ -723,7 +723,7 @@ Does nothing if the Device Group has No Devices assigned.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --dg | -g | Yes/[project](#project-file) | Yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if No Project File, the command fails) |
+| --dg | -g | Yes/[project](#project-file) | Yes | [Device Group identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if No Project File, the command fails) |
 | --conditional | -c | No | No | Conditional restart (see the impCentral API spec) |
 | --log | -l | No | No | Starts displaying logs from the Devices assigned to the specified Device Group (see `[impt log stream](#log-stream)` command description). To stop displaying the logs press *<Ctrl-C>* |
 | --debug | -z | No | No | Displays debug info for the command execution |
@@ -740,7 +740,7 @@ Does nothing if the Device Group has No Devices assigned.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --dg | -g | Yes/[project](#project-file) | Yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if No Project File, the command fails) |
+| --dg | -g | Yes/[project](#project-file) | Yes | [Device Group identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if No Project File, the command fails) |
 | --unbond | -u | No | Yes | Unbond key is required to unassign Devices from a Device Group of the [type](#device-group-type) *production* |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
@@ -756,12 +756,12 @@ Fails if the specified Device Group does not exist.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --dg | -g | Yes/[project](#project-file) | Yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if No Project File, the command fails) |
+| --dg | -g | Yes/[project](#project-file) | Yes | [Device Group identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-file) in the current directory is assumed (if No Project File, the command fails) |
 | --name | -n | No | Yes | New Name of the Device Group. Must be unique among all Device Groups in the Product |
 | --descr | -s | No | Yes | Description of the Device Group |
-| --target | -t | No | Yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the being updated Device Group. May be specified for the being updated Device Group of the [type](#device-group-type) *factory* or *pre-factory* only. The target Device Group must be of the [type](#device-group-type) *production* or *pre-production* correspondingly and belongs to the same Product as the being updated Device Group. Otherwise the command fails |
+| --target | -t | No | Yes | [Device Group identifier](#device-group-identifier) of the production target Device Group for the being updated Device Group. May be specified for the being updated Device Group of the [type](#device-group-type) *factory* or *pre-factory* only. The target Device Group must be of the [type](#device-group-type) *production* or *pre-production* correspondingly and belongs to the same Product as the being updated Device Group. Otherwise the command fails |
 | --load-code-after-blessing | -l | No | No | Applicable to Device Group of the [type](#device-group-type) *production* or *pre-production* only. If `true` or No value, production code is immediately loaded by the device after blessing. If `false`, production code will be loaded the next time the device connects as part of BlinkUp, whether successful or not. Note, the newly created production Device Group always has this option `true` |
-| --min-supported-deployment | -m | No | No | [Build Identifier](#build-identifier) of the new *min_supported_deployment* (see the impCentral API spec). The Deployment should belong to this Device Group and should be newer than the current *min_supported_deployment* |
+| --min-supported-deployment | -m | No | No | [Build identifier](#build-identifier) of the new *min_supported_deployment* (see the impCentral API spec). The Deployment should belong to this Device Group and should be newer than the current *min_supported_deployment* |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
@@ -786,7 +786,7 @@ If `--page-number` option is not specified, the command displays all saved log e
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --device | -d | Yes/[project](#project-file) | Yes | [Device Identifier](#device-identifier). If not specified and there is one and only one Device in the Device Group referenced by [Project File](#project-file) in the current directory, then this Device is assumed (if No Project File or the Device Group has zero or more than one Devices, the command fails) |
+| --device | -d | Yes/[project](#project-file) | Yes | [Device identifier](#device-identifier). If not specified and there is one and only one Device in the Device Group referenced by [Project File](#project-file) in the current directory, then this Device is assumed (if No Project File or the Device Group has zero or more than one Devices, the command fails) |
 | --page-size | -s | No | No | Number of log entries in one page. Default value: 20 |
 | --page-number | -n | No | No | Ordinal page number with the log entries to display. Must have a positive value. Page 1 is a page with the most recent log entries. If specified, the command displays this page of the log entries only. If not specified, the command displays all saved log entries |
 | --debug | -z | No | No | Displays debug info for the command execution |
@@ -811,8 +811,8 @@ Note, there is a limit to the number of Devices in one log stream. The tool does
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --device | -d | No | Yes | [Device Identifier](#device-identifier) of the Device which logs will be added to the log stream. This option may be repeated several times to specify several Devices |
-| --dg | -g | no/[project](#project-file) | Yes | [Device Group Identifier](#device-group-identifier). This option may be repeated several times to specify several Device Groups. Logs from all Devices assigned to the specified Device Groups will be added to the log stream. `--device` and `--dg` options are cumulative. If the both `--device` and `--dg` options are not specified but there is [Project File](#project-file) in the current directory, all Devices assigned to the Device Group referenced by the [Project File](#project-file) are assumed |
+| --device | -d | No | Yes | [Device identifier](#device-identifier) of the Device which logs will be added to the log stream. This option may be repeated several times to specify several Devices |
+| --dg | -g | no/[project](#project-file) | Yes | [Device Group identifier](#device-group-identifier). This option may be repeated several times to specify several Device Groups. Logs from all Devices assigned to the specified Device Groups will be added to the log stream. `--device` and `--dg` options are cumulative. If the both `--device` and `--dg` options are not specified but there is [Project File](#project-file) in the current directory, all Devices assigned to the Device Group referenced by the [Project File](#project-file) are assumed |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
@@ -928,7 +928,7 @@ The user is asked to confirm the operation (confirmed automatically with the `--
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --product | -p | Yes/[project](#project-file) | Yes | [Product Identifier](#product-identifier). If not specified, the Product referenced by [Project File](#project-file) in the current directory is assumed (if No Project File, the command fails) |
+| --product | -p | Yes/[project](#project-file) | Yes | [Product identifier](#product-identifier). If not specified, the Product referenced by [Project File](#project-file) in the current directory is assumed (if No Project File, the command fails) |
 | --builds | -b | No | No | Additionally deletes all Deployments related to all Device Groups which belong/belonged to the Product, including the Device Groups that were deleted before |
 | --force | -f | No | No | Deletes all Device Groups of the Product to be able to delete the Product. As by [`impt dg delete --force`](#device-group-delete) command called for every Device Group |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
@@ -945,7 +945,7 @@ Displays information about the specified Product.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --product | -p | Yes/[project](#project-file) | Yes | [Product Identifier](#product-identifier). If not specified, the Product referenced by [Project File](#project-file) in the current directory is assumed (if No Project File, the command fails) |
+| --product | -p | Yes/[project](#project-file) | Yes | [Product identifier](#product-identifier). If not specified, the Product referenced by [Project File](#project-file) in the current directory is assumed (if No Project File, the command fails) |
 | --full | -u | No | No | Displays additional information and the full structure of the Product: Details about every Device Group that belongs to the Product, about Devices assigned to the Device Groups and other |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
@@ -978,142 +978,145 @@ Fails if the specified Product does not exist.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --product | -p | Yes/[project](#project-file) | Yes | [Product Identifier](#product-identifier). If not specified, the Product referenced by [Project File](#project-file) in the current directory is assumed (if No Project File, the command fails) |
+| --product | -p | Yes/[project](#project-file) | Yes | [Product identifier](#product-identifier). If not specified, the Product referenced by [Project File](#project-file) in the current directory is assumed (if No Project File, the command fails) |
 | --name | -n | No | Yes | New Name of the Product. Must be unique among all Products owned by a particular Account |
 | --descr | -s | No | Yes | Description of the Product |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
-### Project Manipulation Commands
+### Project Manipulation Commands ###
 
-#### Project Create
+#### Project Create ####
 
-`impt project create --product <PRODUCT_IDENTIFIER> [--create-product] --name <device_group_name> [--descr <device_group_description>] [--device-file <device_file>] [--agent-file <agent_file>] [--pre-factory] [--target <DEVICE_GROUP_IDENTIFIER>] [--create-target] [--confirmed] [--debug] [--help]`
+```
+impt project create --product <PRODUCT_IDENTIFIER> [--create-product] --name <device_group_name>
+    [--descr <device_group_description>] [--device-file <device_file>] [--agent-file <agent_file>]
+    [--pre-factory] [--target <DEVICE_GROUP_IDENTIFIER>] [--create-target] [--confirmed]
+    [--debug] [--help]
+```
 
-Creates a new Device Group for the specified Product and creates new [Project File](#project-file) in the current directory by linking it to the new Device Group.
+Creates a new Device Group for the specified Product and creates a new [Project file](#project-files) in the current directory by linking it to the new Device Group.
 
 The command fails if:
-- the specified Product does not exist and `--create-product` option is not specified. Use either `--create-product` option, or [`impt product create`](#product-create) command to create the Product before the Project.
-- Device Group with the specified name already exist in the specified Product. Use [`impt project link`](#project-link) command to create the Project linked to that Device Group.
-- optionally specified production target Device Group does not exist and `--create-target` option is not specified. Use either `--create-target` option, or [`impt dg create`](#device-group-create) command to create the required Device Group of the [type](#device-group-type) *pre-production*.
+- The specified Product does not exist and the `--create-product` option was not specified. Use either the `--create-product` option or the [`impt product create`](#product-create) command to create the Product first.
+- The Device Group with the specified name already exist in the specified Product. Use [`impt project link`](#project-link) to create the Project linked to that Device Group.
+- The optionally specified production target Device Group does not exist and the `--create-target` option was not specified. Use either the `--create-target` option or the [`impt dg create`](#device-group-create) command to create the required Device Group of the [type](#device-group-type) *pre-production*.
 
-The user is asked to confirm the operation if the current directory already contains [Project File](#project-file) (confirmed automatically with the `--confirmed` option). If confirmed, the existed [Project File](#project-file) is overwritten.
+The user is asked to confirm the operation if the current directory already contains a [Project file](#project-files), unless confirmed automatically with the `--confirmed` option. If confirmed, the existing [Project file](#project-file) is overwritten.
 
-The created Device Group is of the [type](#device-group-type) *development* or *pre-factory* (depends on `--pre-factory` option).
+The new Device Group will be of the [type](#device-group-type) *development* or *pre-factory* (set with the `--pre-factory` option).
 
-At the end of the command execution information about the project is displayed (as by [`impt project info`](#project-info) command).
+At the end of the command execution, information about the Project is displayed (as by [`impt project info`](#project-info)).
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --product | -p | Yes | Yes | [Product Identifier](#product-identifier) |
-| --create-product | -c | No | No | If the Product specified by `--product` option does not exist, it is created. In this case, the value of `--product` option is considered as a Name of the new Product. If the Product specified by `--product` option exists, `--create-product` option is ignored |
-| --name | -n | Yes | Yes | Name of the new Device Group. Must be unique among all Device Groups in the specified Product |
-| --descr | -s | No | Yes | Description of the Device Group |
-| --device-file | -x | No | Yes | Name of a file for device source code. Default value: *device.nut*. If the file does not exist, empty file is created |
-| --agent-file | -y | No | Yes | Name of a file for agent source code. Default value: *agent.nut*. If the file does not exist, empty file is created |
+| --product | -p | Yes | Yes | A [Product identifier](#product-identifier) |
+| --create-product | -c | No | No | If the Product specified by the `--product` option does not exist, it is created. In this case, the value of `--product` is used as the name of the new Product. If the Product specified already exists, `--create-product` is ignored |
+| --name | -n | Yes | Yes | The name of the new Device Group. Must be unique among all Device Groups in the specified Product |
+| --descr | -s | No | Yes | The Device Group’s optional description |
+| --device-file | -x | No | Yes | The device source code file name. Default: `device.nut`. If the file does not exist, an empty file is created |
+| --agent-file | -y | No | Yes | The agent source code file name. Default: `agent.nut`. If the file does not exist, an empty file is created |
 | --pre-factory | -f | No | No | If not specified, the new Device Group is of the [type](#device-group-type) *development*. If specified, the new Device Group is of the [type](#device-group-type) *pre-factory* |
-| --target | -t | No | Yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the being created Device Group. May be specified if and only if `--pre-factory` option is specified. The specified target Device Group must be of the [type](#device-group-type) *pre-production* and belongs to the specified Product. Otherwise the command fails |
-| --create-target | -r | No | No | If the Device Group specified by `--target` option does not exist, it is created. In this case, the value of `--target` option is considered as a Name of the new Device Group. If `--target` option is not specified or the Device Group specified by `--target` option exists, `--create-target` option is ignored |
+| --target | -t | No | Yes | The [Device Group identifier](#device-group-identifier) of the new Project Device Group’s production target Device Group. May be specified only if `--pre-factory` is also specified. The specified Device Group must be of the [type](#device-group-type) *pre-production* and belong to the specified Product. Otherwise the command fails |
+| --create-target | -r | No | No | If the Device Group specified by `--target` option does not exist, it is created. In this case, the value of `--target` is used as the name of the new Device Group. If `--target` is not specified or the Device Group specified by `--target` exists, `--create-target` is ignored |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
-#### Project Delete
+#### Project Delete ####
 
 ```
 impt project delete [--entities] [--files] [--all] [--confirmed] [--debug] [--help]
 ```
 
-Deletes [Project File](#project-file) in the current directory and, optionally, the impCentral API entities (Device Group, Product, Deployments) related to the project, and, optionally, the local source files.
-Does nothing if there is No [Project File](#project-file) in the current directory.
+Deletes the [Project file](#project-files) in the current directory and, optionally, the impCentral API entities (Device Group, Product, Deployments) related to the Project, and, optionally, the local source files. Does nothing if there is no [Project file](#project-file) in the current directory.
 
-If `--entities` option is specified, the command additionally:
-- unassigns all Devices from the project Device Group (Device Group referenced by [Project File](#project-file)).
-- deletes the project Device Group.
-- deletes all builds (Deployments) of the project Device Group, including Deployments with *"flagged"* attribute set to `true`.
-- if the project Device Group has a production target Device Group and that is a production target for one and only one Device Group:
-  &mdash; unassigns all Devices from the production target Device Group.
-  &mdash; deletes the production target Device Group.
-  &mdash; deletes all builds (Deployments) of the production target Device Group, including Deployments with *"flagged"* attribute set to `true`.
-- if the corresponding Product (the Product which contains the Device Group referenced by [Project File](#project-file)) includes only the project Device Group and, if applicable, the production target Device Group mentioned above and does not include any other Device Groups:
-  &mdash; deletes the corresponding Product.
+If the `--entities` option is specified, the command additionally:
+- Unassigns all devices from the Project Device Group.
+- Deletes the Project  Device Group.
+- Deletes all of the Project Device Group’s builds (Deployments), including Deployments with their *flagged* attribute set to `true`.
+- If the Project  Device Group has a production target Device Group, and the latter is the production target for the Project Device Group only:
+    - Unassigns all devices from the production target Device Group.
+    - Deletes the production target Device Group.
+    - Deletes all the production target Device Group’s builds (Deployments), including Deployments with their *flagged* attribute set to `true`.
+- The corresponding Product if the corresponding Product (the Product which contains the Project Device Group) includes only the Project Device Group and, if applicable, the production target Device Group mentioned above.
 
-The user is informed about all entities and files which are going to be deleted or updated and is asked to confirm the operation (confirmed automatically with the `--confirmed` option).
+The user is informed about all entities and files which are going to be deleted or updated, and is asked to confirm the operation, unless confirmed automatically with the `--confirmed` option.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --entities | -e | No | No | Also deletes the impCentral API entities (Device Group, Product, Deployments) referenced by [Project File](#project-file). See above |
-| --files | -f | No | No | Also deletes the files referenced by [Project File](#project-file) as files with device and agent source code |
+| --entities | -e | No | No | Also deletes all of the impCentral API entities (Device Group, Product, Deployments) referenced by the [Project file](#project-files) |
+| --files | -f | No | No | Also deletes all of the device and agent source code files referenced by the [Project file](#project-files) |
 | --all | -a | No | No | Includes `--entities` and `--files` options |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
-#### Project Info
+#### Project Info ####
 
 ```
 impt project info [--full] [--debug] [--help]
 ```
 
-Displays information about the project.
-Fails if there is No [Project File](#project-file) in the current directory.
-With every call the latest actual information is obtained using impCentral API.
+Displays information about the project. Fails if there is no [Project file](#project-files) in the current directory. With every call the latest information is obtained using the impCentral API.
 
-Informs user if the Device Group referenced by [Project File](#project-file) does not exist. [Project File](#project-file) is not deleted in this case. To delete it &mdash; explicitly call [`impt project delete`](#project-delete).
+Informs the user if the Device Group referenced by [Project file](#project-files) does not exist. The [Project file](#project-file) is not deleted in this case. To delete it, call [`impt project delete`](#project-delete).
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --full | -u | No | No | Displays additional information: full details about the corresponding Device Group, like [`impt dg info --full`](#device-group-info) command displays; authentication status applicable to the current directory, like [`impt auth info`](#auth-info) command displays |
+| --full | -u | No | No | Displays additional information: full details about the corresponding Device Group as with [`impt dg info --full`](#device-group-info), and authentication status as with [`impt auth info`](#auth-info) |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
-#### Project Link
+#### Project Link ####
 
 ```
-impt project link --dg <DEVICE_GROUP_IDENTIFIER> [--device-file <device_file>] [--agent-file <agent_file>] [--confirmed] [--debug] [--help]
+impt project link --dg <DEVICE_GROUP_IDENTIFIER> [--device-file <device_file>]
+    [--agent-file <agent_file>] [--confirmed] [--debug] [--help]
 ```
 
-Creates new [Project File](#project-file) in the current directory by linking it to the specified Device Group.
+Creates a new [Project file](#project-files) in the current directory and links it to the specified Device Group.
 
 The command fails if:
-- the specified Device Group does not exist or is not unique.
-- the specified Device Group is not of the [type](#device-group-type) *development* or *pre-factory*.
+- The specified Device Group does not exist or is not unique.
+- The specified Device Group is not of the *development* or *pre-factory* [type](#device-group-type).
 
-The user is asked to confirm the operation if the current directory already contains [Project File](#project-file) (confirmed automatically with the `--confirmed` option). If confirmed, the existed [Project File](#project-file) is overwritten.
+The user is asked to confirm the operation if the current directory already contains a [Project file](#project-files), unless confirmed automatically with the `--confirmed` option. If confirmed, the existing [Project file](#project-file) is overwritten.
 
-The command does not download any Deployment. To download source code from a Deployment &mdash; explicitly call [`impt build get`](#build-get).
+The command does not download any Deployment. To download source code from a Deployment, call [`impt build get`](#build-get).
 
-At the end of the command execution information about the project is displayed (as by [`impt project info`](#project-info) command).
+At the end of the command execution, information about the Project is displayed as by [`impt project info`](#project-info).
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --dg | -g | Yes | Yes | [Device Group Identifier](#device-group-identifier) |
-| --device-file | -x | No | Yes | Name of a file for device source code. Default value: *device.nut*. If the file does not exist, empty file is created |
-| --agent-file | -y | No | Yes | Name of a file for agent source code. Default value: *agent.nut*. If the file does not exist, empty file is created |
+| --dg | -g | Yes | Yes | A [Device Group identifier](#device-group-identifier) |
+| --device-file | -x | No | Yes | The device source code file name. Default: `device.nut`. If the file does not exist, an empty file is created |
+| --agent-file | -y | No | Yes | The agent source code file name. Default: `agent.nut`. If the file does not exist, an empty file is created |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
-#### Project Update
+#### Project Update ####
 
 ```
-impt project update [--name <device_group_name>] [--descr <device_group_description>] [--device-file <device_file>] [--agent-file <agent_file>] [--target <DEVICE_GROUP_IDENTIFIER>] [--debug] [--help]
+impt project update [--name <device_group_name>] [--descr <device_group_description>]
+    [--device-file <device_file>] [--agent-file <agent_file>] [--target <DEVICE_GROUP_IDENTIFIER>]
+    [--debug] [--help]
 ```
 
-Updates the project settings and/or Name, Description, production target of the Device Group referenced by [Project File](#project-file).
-Fails if there is No [Project File](#project-file) in the current directory.
+Updates the Project settings and/or the name, description, or production target of the Device Group referenced by the [Project file](#project-files). Fails if there is no [Project file](#project-file) in the current directory.
 
-Informs user if the Device Group referenced by [Project File](#project-file) does not exist. [Project File](#project-file) is not updated or deleted in this case. To delete it &mdash; explicitly call [`impt project delete`](#project-delete).
+Informs the user if the Device Group referenced by the [Project file](#project-file) does not exist. The [Project file](#project-file) is not updated or deleted in this case. To delete it, call [`impt project delete`](#project-delete).
 
-At the end of the command execution information about the project is displayed (as by [`impt project info`](#project-info) command).
+At the end of the command execution, information about the Project is displayed as by [`impt project info`](#project-info).
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --name | -n | No | Yes | New Name of the Device Group referenced by [Project File](#project-file). Must be unique among all Device Groups in the Product |
-| --descr | -s | No | Yes | New Description of the Device Group referenced by [Project File](#project-file) |
-| --device-file | -x | No | Yes | New name of a file for device source code. If the file does not exist, empty file is created |
-| --agent-file | -y | No | Yes | New name of a file for agent source code. If the file does not exist, empty file is created |
-| --target | -t | No | Yes | [Device Group Identifier](#device-group-identifier) of the production target Device Group for the Device Group referenced by [Project File](#project-file). May be specified if the Device Group referenced by [Project File](#project-file) is of the [type](#device-group-type) *pre-factory* only. The specified target Device Group must be of the [type](#device-group-type) *pre-production* and belongs to the same Product as the Device Group referenced by [Project File](#project-file). Otherwise the command fails |
+| --name | -n | No | Yes | The Project Device Group’s new name. Must be unique among all Device Groups in the Product |
+| --descr | -s | No | Yes | The Project Device Group’s new description |
+| --device-file | -x | No | Yes | A new device source code file name. If the file does not exist, an empty file is created |
+| --agent-file | -y | No | Yes | A new agent source code file name. If the file does not exist, an empty file is created |
+| --target | -t | No | Yes | The [Device Group identifier](#device-group-identifier) of the Project Device Group’s production target Device Group. May only be specified if the Project Device Group is of the *pre-factory* [type](#device-group-type). The specified target Device Group must be of the [type](#device-group-type) *pre-production* and belong to the same Product as the Project Device Group. Otherwise the command fails |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
@@ -1137,7 +1140,7 @@ At the end of the command execution, information about the test configuration is
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --dg | -g | Yes | Yes | The [Device Group Identifier](#device-group-identifier) of the Device Group whose devices are used for test execution |
+| --dg | -g | Yes | Yes | The [Device Group identifier](#device-group-identifier) of the Device Group whose devices are used for test execution |
 | --device-file | -x | No | Yes | A path to an optional file with device source code that is deployed along with the tests. A relative or absolute path can be used |
 | --agent-file | -y | No | Yes | A path to an optional file with agent source code that is deployed along with the tests. A relative or absolute path can be used |
 | --timeout | -t | No | Yes | A timeout period in seconds after which a test is interrupted and considered to have failed. Default: 30 seconds |
@@ -1247,7 +1250,7 @@ At the end of the command execution, information about the test configuration is
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --dg | -g | No | Yes | The [Device Group Identifier](#device-group-identifier) of the Device Group whose devices are used for test execution |
+| --dg | -g | No | Yes | The [Device Group identifier](#device-group-identifier) of the Device Group whose devices are used for test execution |
 | --device-file | -x | No | No | A path to a file with device source code that is deployed along with the tests. A relative or absolute path can be used. Specify this option without a value to remove this file from the test configuration |
 | --agent-file | -y | No | No | A path to a file with agent source code that is deployed along with the tests. A relative or absolute path can be used. Specify this option without a value to remove this file from the test configuration |
 | --timeout | -t | No | Yes | A timeout period in seconds after which a test is interrupted and considered as failed |
@@ -1273,7 +1276,7 @@ Creates a new webhook for the specified Device Group.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --dg | -g | Yes/[Project](#project-filea) | Yes | [Device Group Identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project File](#project-filea) in the current directory is used, or if there is no project file, the command fails |
+| --dg | -g | Yes/[Project](#project-files) | Yes | A [Device Group identifier](#device-group-identifier). If not specified, the Device Group referenced by [Project file](#project-files) in the current directory is used, or if there is no Project file, the command fails |
 | --url | -u | Yes | Yes | The webhook’s target URL |
 | --event | -e | Yes | Yes | The event that triggers the webhook. Valid values: `"blessing"`, `"blinkup"`, `"deployment"` |
 | --mime | -m | Yes | Yes | The MIME content-type of the event data. Valid values: `"json"`, `"urlencoded"` |
