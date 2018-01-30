@@ -74,9 +74,9 @@
 - [The Help Option](#the-help-option)
 - [Entity Identification](#entity-identification)
 - [Device Group Type](#device-group-type)
-- [auth files](#auth-files)
+- [Auth files](#auth-files)
 - [Project Files](#project-files)
-- [test configuration files](#test-configuration-files)
+- [Test Configuration Files](#test-configuration-files)
 - [List of Aliases](#list-of-aliases)
 - [Common Filter Options](#common-filter-options)
 
