@@ -82,7 +82,7 @@
 
 ### Command Syntax ###
 
-`impt <command_group> <command_name> \[\<options>]`
+`impt <command_group> <command_name> [\<options>]`
 
 where:
 
@@ -221,7 +221,7 @@ Test configuration files contains settings to run unit tests that are created wi
 
 #### Auth Info ####
 
-`impt auth info \[--debug] \[--help]`
+`impt auth info [--debug] [--help]`
 
 Displays the status and the details of the authentication applicable to the current directory, whether [local](#local-auth-file) or [global](#global-auth-file).
 
@@ -232,7 +232,7 @@ Displays the status and the details of the authentication applicable to the curr
 
 #### Auth Login ####
 
-`impt auth login \[--local] \[--endpoint <endpoint_url>] (--user <user_id> --pwd \<password> | --lk <login_key_id>) \[--temp] \[--confirmed] \[--debug] \[--help]`
+`impt auth login [--local] [--endpoint <endpoint_url>] (--user <user_id> --pwd \<password> | --lk <login_key_id>) [--temp] [--confirmed] [--debug] [--help]`
 
 Global or local login. Creates a [global](#global-auth-file) or [local](#local-auth-file) auth file.
 
@@ -256,7 +256,7 @@ The user is asked to confirm the operation if the corresponding auth file alread
 
 #### Auth Logout ####
 
-`impt auth logout \[--local] \[--debug] \[--help]`
+`impt auth logout [--local] [--debug] [--help]`
 
 Global or local logout. Deletes [global](#global-auth-file) or [local](#local-auth-file) auth file.
 
@@ -270,7 +270,7 @@ Global or local logout. Deletes [global](#global-auth-file) or [local](#local-au
 
 #### Build Cleanup ####
 
-`impt build cleanup \[--product <PRODUCT_IDENTIFIER>] \[--unflag] \[--confirmed] \[--debug] \[--help]`
+`impt build cleanup [--product <PRODUCT_IDENTIFIER>] [--unflag] [--confirmed] [--debug] [--help]`
 
 Deletes builds (Deployments) which are not related to any Device Group (‘zombie’ builds).
 
@@ -291,7 +291,7 @@ The user is asked to confirm the operation (confirmed automatically with the `--
 
 #### Build Copy ####
 
-`impt build copy \[--build <BUILD_IDENTIFIER>] --dg <DEVICE_GROUP_IDENTIFIER> \[--all] \[--debug] \[--help]`
+`impt build copy [--build <BUILD_IDENTIFIER>] --dg <DEVICE_GROUP_IDENTIFIER> [--all] [--debug] [--help]`
 
 Copies the specified build (Deployment) to a new Deployment to the specified Device Group. Fails if the specified Deployment or the specified Device Group does not exist.
 
@@ -311,7 +311,7 @@ The source code of the builds is not saved locally. To download the source code 
 
 #### Build Delete ####
 
-`impt build delete --build <BUILD_IDENTIFIER> \[--force] \[--confirmed] \[--debug] \[--help]`
+`impt build delete --build <BUILD_IDENTIFIER> [--force] [--confirmed] [--debug] [--help]`
 
 Deletes the specified build (Deployment). The command fails if it is the *min_supported_deployment* (see the impCentral API spec) or a newer Deployment for a Device Group. The command also fails if the Deployment has its *flagged* attribute set to `true` and the `--force` option is not specified. Use either the `--force` option or [`impt build update`](#build-update) to update the attribute.
 
@@ -327,7 +327,7 @@ The user is asked to confirm the operation (confirmed automatically with the `--
 
 #### Build Deploy ####
 
-`impt build deploy \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--device-file <device_file>] \[--agent-file <agent_file>] \[--descr <build_description>] \[--origin \<origin>] \[--tag \<tag>] \[--flagged \[true|false]] \[--debug] \[--help]`
+`impt build deploy [--dg <DEVICE_GROUP_IDENTIFIER>] [--device-file <device_file>] [--agent-file <agent_file>] [--descr <build_description>] [--origin \<origin>] [--tag \<tag>] [--flagged [true|false]] [--debug] [--help]`
 
 Creates a build (Deployment) from the specified source files, with description (if specified) and attributes (if
 specified), and deploys it to all the devices assigned to the specified Device Group.
@@ -350,7 +350,7 @@ The new build is not run until the devices are rebooted. To run it, call `[impt 
 
 #### Build Get
 
-`impt build get \[--build <BUILD_IDENTIFIER>] \[--device-file <device_file>] \[--agent-file <agent_file>] \[--device-only] \[--agent-only] \[--confirmed] \[--debug] \[--help]`
+`impt build get [--build <BUILD_IDENTIFIER>] [--device-file <device_file>] [--agent-file <agent_file>] [--device-only] [--agent-only] [--confirmed] [--debug] [--help]`
 
 Downloads the source files of the specified build (Deployment) and displays information about the build.
 
@@ -369,7 +369,7 @@ The user is asked to confirm the operation if the files with the specified names
 
 #### Build Info
 
-`impt build info \[--build <BUILD_IDENTIFIER>] \[--debug] \[--help]`
+`impt build info [--build <BUILD_IDENTIFIER>] [--debug] [--help]`
 
 Displays information about the specified build (Deployment).
 
@@ -381,7 +381,7 @@ Displays information about the specified build (Deployment).
 
 #### Build List
 
-`impt build list \[--owner <ACCOUNT_IDENTIFIER>] \[--product <PRODUCT_IDENTIFIER>] \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--dg-type <device_group_type>] \[--sha <deployment_sha>] \[--tag \<tag>] \[--flagged] \[--unflagged] \[--non-zombie] \[--zombie] \[--debug] \[--help]`
+`impt build list [--owner <ACCOUNT_IDENTIFIER>] [--product <PRODUCT_IDENTIFIER>] [--dg <DEVICE_GROUP_IDENTIFIER>] [--dg-type <device_group_type>] [--sha <deployment_sha>] [--tag \<tag>] [--flagged] [--unflagged] [--non-zombie] [--zombie] [--debug] [--help]`
 
 Displays information about all builds (Deployments) available to the current logged-in account.
 
@@ -405,7 +405,7 @@ The returned list of the builds may be filtered. Filtering is possible by any co
 
 #### Build Run
 
-`impt build run \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--device-file <device_file>] \[--agent-file <agent_file>] \[--descr <build_description>] \[--origin \<origin>] \[--tag \<tag>] \[--flagged \[true|false]] \[--conditional] \[--log] \[--debug] \[--help]`
+`impt build run [--dg <DEVICE_GROUP_IDENTIFIER>] [--device-file <device_file>] [--agent-file <agent_file>] [--descr <build_description>] [--origin \<origin>] [--tag \<tag>] [--flagged [true|false]] [--conditional] [--log] [--debug] [--help]`
 
 Creates, deploys and runs a build (Deployment). Optionally, displays logs of the running build.
 
@@ -429,7 +429,7 @@ Fails if one or both of the specified source files do not exist or the specified
 
 #### Build Update
 
-`impt build update \[--build <BUILD_IDENTIFIER>] \[--descr <build_description>] \[--tag \<tag>] \[--remove-tag \<tag>] \[--flagged \[true|false]] \[--debug] \[--help]`
+`impt build update [--build <BUILD_IDENTIFIER>] [--descr <build_description>] [--tag \<tag>] [--remove-tag \<tag>] [--flagged [true|false]] [--debug] [--help]`
 
 Updates Description, tags and flagged attribute (whatever specified) of the specified build (Deployment).
 Fails if the specified build (Deployment) does not exist.
@@ -448,7 +448,7 @@ Fails if the specified build (Deployment) does not exist.
 
 #### Device Assign
 
-`impt device assign --device <DEVICE_IDENTIFIER> \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--confirmed] \[--debug] \[--help]`
+`impt device assign --device <DEVICE_IDENTIFIER> [--dg <DEVICE_GROUP_IDENTIFIER>] [--confirmed] [--debug] [--help]`
 
 Assigns the specified Device to the specified Device Group.
 Fails if the specified Device Group does not exist.
@@ -467,7 +467,7 @@ The operation may fail for some combinations of the Device Group [types](#device
 
 #### Device Info
 
-`impt device info --device <DEVICE_IDENTIFIER> \[--debug] \[--help]`
+`impt device info --device <DEVICE_IDENTIFIER> [--debug] [--help]`
 
 Displays information about the specified Device.
 
@@ -479,7 +479,7 @@ Displays information about the specified Device.
 
 #### Device List
 
-`impt device list \[--owner <ACCOUNT_IDENTIFIER>] \[--product <PRODUCT_IDENTIFIER>] \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--dg-type <device_group_type>] \[--unassigned] \[--assigned] \[--online] \[--offline] \[--debug] \[--help]`
+`impt device list [--owner <ACCOUNT_IDENTIFIER>] [--product <PRODUCT_IDENTIFIER>] [--dg <DEVICE_GROUP_IDENTIFIER>] [--dg-type <device_group_type>] [--unassigned] [--assigned] [--online] [--offline] [--debug] [--help]`
 
 Displays information about all Devices available to the current logged-in account.
 
@@ -501,7 +501,7 @@ The returned list of the Devices may be filtered. Filtering is possible by any c
 
 #### Device Remove
 
-`impt device remove --device <DEVICE_IDENTIFIER> \[--force] \[--confirmed] \[--debug] \[--help]`
+`impt device remove --device <DEVICE_IDENTIFIER> [--force] [--confirmed] [--debug] [--help]`
 
 Removes the specified Device from the logged-in account.
 
@@ -519,7 +519,7 @@ The user is asked to confirm the operation (confirmed automatically with the `--
 
 #### Device Restart
 
-`impt device restart --device <DEVICE_IDENTIFIER> \[--conditional] \[--log] \[--debug] \[--help]`
+`impt device restart --device <DEVICE_IDENTIFIER> [--conditional] [--log] [--debug] [--help]`
 
 Reboots the specified Device and, optionally, starts displaying logs from it.
 
@@ -533,7 +533,7 @@ Reboots the specified Device and, optionally, starts displaying logs from it.
 
 #### Device Unassign
 
-`impt device unassign --device <DEVICE_IDENTIFIER> \[--unbond <unbond_key>] \[--debug] \[--help]`
+`impt device unassign --device <DEVICE_IDENTIFIER> [--unbond <unbond_key>] [--debug] [--help]`
 
 Unassigns the specified Device.
 Does nothing if the Device already unassigned.
@@ -547,7 +547,7 @@ Does nothing if the Device already unassigned.
 
 #### Device Update
 
-`impt device update --device <DEVICE_IDENTIFIER> --name <device_name> \[--debug] \[--help]`
+`impt device update --device <DEVICE_IDENTIFIER> --name <device_name> [--debug] [--help]`
 
 Updates Name of the specified Device.
 
@@ -562,7 +562,7 @@ Updates Name of the specified Device.
 
 #### Device Group Builds
 
-`impt dg builds \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--unflag] \[--unflag-old] \[--remove] \[--confirmed] \[--debug] \[--help]`
+`impt dg builds [--dg <DEVICE_GROUP_IDENTIFIER>] [--unflag] [--unflag-old] [--remove] [--confirmed] [--debug] [--help]`
 
 Updates and/or deletes builds (Deployments) of the specified Device Group and displays information about all Deployments of the Device Group at the end of the command execution (as by [`impt build list`](#build-list) command).
 
@@ -580,7 +580,7 @@ The user is asked to confirm the operation if any Deployment is going to be dele
 
 #### Device Group Create
 
-`impt dg create --name <device_group_name> \[--dg-type <device_group_type>] \[--product <PRODUCT_IDENTIFIER>] \[--descr <device_group_description>] \[--target <DEVICE_GROUP_IDENTIFIER>] \[--debug] \[--help]`
+`impt dg create --name <device_group_name> [--dg-type <device_group_type>] [--product <PRODUCT_IDENTIFIER>] [--descr <device_group_description>] [--target <DEVICE_GROUP_IDENTIFIER>] [--debug] [--help]`
 
 Creates a new Device Group for the specified Product.
 Fails if Device Group with the specified Name already exists in the specified Product.
@@ -597,7 +597,7 @@ Fails if Device Group with the specified Name already exists in the specified Pr
 
 #### Device Group Delete
 
-`impt dg delete \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--builds] \[--force] \[--confirmed] \[--debug] \[--help]`
+`impt dg delete [--dg <DEVICE_GROUP_IDENTIFIER>] [--builds] [--force] [--confirmed] [--debug] [--help]`
 
 Deletes the specified Device Group and, optionally, all the related builds (Deployments).
 
@@ -620,7 +620,7 @@ The user is asked to confirm the operation (confirmed automatically with the `--
 
 #### Device Group Info
 
-`impt dg info \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--full] \[--debug] \[--help]`
+`impt dg info [--dg <DEVICE_GROUP_IDENTIFIER>] [--full] [--debug] [--help]`
 
 Displays information about the specified Device Group.
 
@@ -633,7 +633,7 @@ Displays information about the specified Device Group.
 
 #### Device Group List
 
-`impt dg list \[--owner <ACCOUNT_IDENTIFIER>] \[--product <PRODUCT_IDENTIFIER>] \[--dg-type <device_group_type>] \[--debug] \[--help]`
+`impt dg list [--owner <ACCOUNT_IDENTIFIER>] [--product <PRODUCT_IDENTIFIER>] [--dg-type <device_group_type>] [--debug] [--help]`
 
 Displays information about all Device Groups available to the current logged-in account.
 
@@ -650,7 +650,7 @@ The returned list of the Device Groups may be filtered. Filtering is possible by
 
 #### Device Group Reassign
 
-`impt dg reassign --from <DEVICE_GROUP_IDENTIFIER> \[--to <DEVICE_GROUP_IDENTIFIER>] \[--debug] \[--help]`
+`impt dg reassign --from <DEVICE_GROUP_IDENTIFIER> [--to <DEVICE_GROUP_IDENTIFIER>] [--debug] [--help]`
 
 Reassigns all Devices from one Device Group to another.
 Fails if any of the specified Device Groups does not exist.
@@ -666,7 +666,7 @@ The operation may fail for some combinations of the Device Group [types](#device
 
 #### Device Group Restart
 
-`impt dg restart \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--conditional] \[--log] \[--debug] \[--help]`
+`impt dg restart [--dg <DEVICE_GROUP_IDENTIFIER>] [--conditional] [--log] [--debug] [--help]`
 
 Reboots all Devices assigned to the specified Device Group and, optionally, starts displaying logs from them.
 Does nothing if the Device Group has No Devices assigned.
@@ -681,7 +681,7 @@ Does nothing if the Device Group has No Devices assigned.
 
 #### Device Group Unassign
 
-`impt dg unassign \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--unbond <unbond_key>] \[--debug] \[--help]`
+`impt dg unassign [--dg <DEVICE_GROUP_IDENTIFIER>] [--unbond <unbond_key>] [--debug] [--help]`
 
 Unassigns all Devices from the specified Device Group.
 Does nothing if the Device Group has No Devices assigned.
@@ -695,7 +695,7 @@ Does nothing if the Device Group has No Devices assigned.
 
 #### Device Group Update
 
-`impt dg update \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--name <device_group_name>] \[--descr <device_group_description>] \[--target <DEVICE_GROUP_IDENTIFIER>] \[--load-code-after-blessing \[true|false]] \[--min-supported-deployment <BUILD_IDENTIFIER>] \[--debug] \[--help]`
+`impt dg update [--dg <DEVICE_GROUP_IDENTIFIER>] [--name <device_group_name>] [--descr <device_group_description>] [--target <DEVICE_GROUP_IDENTIFIER>] [--load-code-after-blessing [true|false]] [--min-supported-deployment <BUILD_IDENTIFIER>] [--debug] [--help]`
 
 Updates the specified Device Group.
 Fails if the specified Device Group does not exist.
@@ -715,7 +715,7 @@ Fails if the specified Device Group does not exist.
 
 #### Log Get
 
-`impt log get \[--device <DEVICE_IDENTIFIER>] \[--page-size <number_of_entries>] \[--page-number <page_number>] \[--debug] \[--help]`
+`impt log get [--device <DEVICE_IDENTIFIER>] [--page-size <number_of_entries>] [--page-number <page_number>] [--debug] [--help]`
 
 Displays historical logs for the specified Device.
 The logs are displayed starting from the most recent one.
@@ -738,7 +738,7 @@ If `--page-number` option is not specified, the command displays all saved log e
 
 #### Log Stream
 
-`impt log stream \[--device <DEVICE_IDENTIFIER>] \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--debug] \[--help]`
+`impt log stream [--device <DEVICE_IDENTIFIER>] [--dg <DEVICE_GROUP_IDENTIFIER>] [--debug] [--help]`
 
 Creates a log stream and displays logs from the specified Devices in real-time.
 
@@ -762,7 +762,7 @@ Note, there is a limit to the number of Devices in one log stream. The tool does
 
 #### Login Key Create
 
-`impt loginkey create --pwd \<password> \[--descr <login_key_description>] \[--debug] \[--help]`
+`impt loginkey create --pwd \<password> [--descr <login_key_description>] [--debug] [--help]`
 
 Creates a new Login Key for the currently logged-in account.
 
@@ -777,7 +777,7 @@ Note, there is a limit on a total number of Login Keys per one account. Use [`im
 
 #### Login Key Delete
 
-`impt loginkey delete --lk <login_key_id> --pwd \<password> \[--confirmed] \[--debug] \[--help]`
+`impt loginkey delete --lk <login_key_id> --pwd \<password> [--confirmed] [--debug] [--help]`
 
 Deletes the specified Login Key.
 
@@ -793,7 +793,7 @@ The user is asked to confirm the operation (confirmed automatically with the `--
 
 #### Login Key Info
 
-`impt loginkey info --lk <login_key_id> \[--debug] \[--help]`
+`impt loginkey info --lk <login_key_id> [--debug] [--help]`
 
 Displays information about the specified Login Key.
 
@@ -805,7 +805,7 @@ Displays information about the specified Login Key.
 
 #### Login Key List
 
-`impt loginkey list \[--debug] \[--help]`
+`impt loginkey list [--debug] [--help]`
 
 Displays information about all Login Keys of the current logged-in account.
 
@@ -816,7 +816,7 @@ Displays information about all Login Keys of the current logged-in account.
 
 #### Login Key Update
 
-`impt loginkey update --lk <login_key_id> --pwd \<password> --descr <login_key_description> \[--debug] \[--help]`
+`impt loginkey update --lk <login_key_id> --pwd \<password> --descr <login_key_description> [--debug] [--help]`
 
 Updates the Description of the specified Login Key.
 
@@ -832,7 +832,7 @@ Updates the Description of the specified Login Key.
 
 #### Product Create
 
-`impt product create --name <product_name> \[--descr <product_description>] \[--debug] \[--help]`
+`impt product create --name <product_name> [--descr <product_description>] [--debug] [--help]`
 
 Creates a new Product.
 Fails if Product with the specified Name already exists.
@@ -846,7 +846,7 @@ Fails if Product with the specified Name already exists.
 
 #### Product Delete
 
-`impt product delete \[--product <PRODUCT_IDENTIFIER>] \[--builds] \[--force] \[--confirmed] \[--debug] \[--help]`
+`impt product delete [--product <PRODUCT_IDENTIFIER>] [--builds] [--force] [--confirmed] [--debug] [--help]`
 
 Deletes the specified Product.
 
@@ -865,7 +865,7 @@ The user is asked to confirm the operation (confirmed automatically with the `--
 
 #### Product Info
 
-`impt product info \[--product <PRODUCT_IDENTIFIER>] \[--full] \[--debug] \[--help]`
+`impt product info [--product <PRODUCT_IDENTIFIER>] [--full] [--debug] [--help]`
 
 Displays information about the specified Product.
 
@@ -878,7 +878,7 @@ Displays information about the specified Product.
 
 #### Product List
 
-`impt product list \[--owner <ACCOUNT_IDENTIFIER>] \[--debug] \[--help]`
+`impt product list [--owner <ACCOUNT_IDENTIFIER>] [--debug] [--help]`
 
 Displays information about all Products available to the current logged-in account.
 
@@ -893,7 +893,7 @@ The returned list of the Products may be filtered. Filtering is possible by any 
 
 #### Product Update
 
-`impt product update \[--product <PRODUCT_IDENTIFIER>] \[--name <product_name>] \[--descr <product_description>] \[--debug] \[--help]`
+`impt product update [--product <PRODUCT_IDENTIFIER>] [--name <product_name>] [--descr <product_description>] [--debug] [--help]`
 
 Updates the specified Product by a new Name and/or Description.
 Fails if the specified Product does not exist.
@@ -910,7 +910,7 @@ Fails if the specified Product does not exist.
 
 #### Project Create
 
-`impt project create --product <PRODUCT_IDENTIFIER> \[--create-product] --name <device_group_name> \[--descr <device_group_description>] \[--device-file <device_file>] \[--agent-file <agent_file>] \[--pre-factory] \[--target <DEVICE_GROUP_IDENTIFIER>] \[--create-target] \[--confirmed] \[--debug] \[--help]`
+`impt project create --product <PRODUCT_IDENTIFIER> [--create-product] --name <device_group_name> [--descr <device_group_description>] [--device-file <device_file>] [--agent-file <agent_file>] [--pre-factory] [--target <DEVICE_GROUP_IDENTIFIER>] [--create-target] [--confirmed] [--debug] [--help]`
 
 Creates a new Device Group for the specified Product and creates new [Project File](#project-file) in the current directory by linking it to the new Device Group.
 
@@ -942,7 +942,7 @@ At the end of the command execution information about the project is displayed (
 
 #### Project Delete
 
-`impt project delete \[--entities] \[--files] \[--all] \[--confirmed] \[--debug] \[--help]`
+`impt project delete [--entities] [--files] [--all] [--confirmed] [--debug] [--help]`
 
 Deletes [Project File](#project-file) in the current directory and, optionally, the impCentral API entities (Device Group, Product, Deployments) related to the project, and, optionally, the local source files.
 Does nothing if there is No [Project File](#project-file) in the current directory.
@@ -971,7 +971,7 @@ The user is informed about all entities and files which are going to be deleted 
 
 #### Project Info
 
-`impt project info \[--full] \[--debug] \[--help]`
+`impt project info [--full] [--debug] [--help]`
 
 Displays information about the project.
 Fails if there is No [Project File](#project-file) in the current directory.
@@ -987,7 +987,7 @@ Informs user if the Device Group referenced by [Project File](#project-file) doe
 
 #### Project Link
 
-`impt project link --dg <DEVICE_GROUP_IDENTIFIER> \[--device-file <device_file>] \[--agent-file <agent_file>] \[--confirmed] \[--debug] \[--help]`
+`impt project link --dg <DEVICE_GROUP_IDENTIFIER> [--device-file <device_file>] [--agent-file <agent_file>] [--confirmed] [--debug] [--help]`
 
 Creates new [Project File](#project-file) in the current directory by linking it to the specified Device Group.
 
@@ -1012,7 +1012,7 @@ At the end of the command execution information about the project is displayed (
 
 #### Project Update
 
-`impt project update \[--name <device_group_name>] \[--descr <device_group_description>] \[--device-file <device_file>] \[--agent-file <agent_file>] \[--target <DEVICE_GROUP_IDENTIFIER>] \[--debug] \[--help]`
+`impt project update [--name <device_group_name>] [--descr <device_group_description>] [--device-file <device_file>] [--agent-file <agent_file>] [--target <DEVICE_GROUP_IDENTIFIER>] [--debug] [--help]`
 
 Updates the project settings and/or Name, Description, production target of the Device Group referenced by [Project File](#project-file).
 Fails if there is No [Project File](#project-file) in the current directory.
@@ -1035,7 +1035,7 @@ At the end of the command execution information about the project is displayed (
 
 #### Test Create
 
-`impt test create --dg <DEVICE_GROUP_IDENTIFIER> \[--device-file <device_file>] \[--agent-file <agent_file>] \[--timeout \<timeout>] \[--stop-on-fail \[true|false]] \[--allow-disconnect \[true|false]] \[--builder-cache \[true|false]] \[--test-file <test_file_name_pattern>] \[--github-config <github_credentials_file_name>] \[--builder-config <builder_file_name>] \[--confirmed] \[--debug] \[--help]`
+`impt test create --dg <DEVICE_GROUP_IDENTIFIER> [--device-file <device_file>] [--agent-file <agent_file>] [--timeout \<timeout>] [--stop-on-fail [true|false]] [--allow-disconnect [true|false]] [--builder-cache [true|false]] [--test-file <test_file_name_pattern>] [--github-config <github_credentials_file_name>] [--builder-config <builder_file_name>] [--confirmed] [--debug] [--help]`
 
 Creates [Test Configuration File](#test-configuration-file) in the current directory.
 
@@ -1061,7 +1061,7 @@ At the end of the command execution information about the tests configuration is
 
 #### Test Delete
 
-`impt test delete \[--github-config] \[--builder-config] \[--entities] \[--all] \[--confirmed] \[--debug] \[--help]`
+`impt test delete [--github-config] [--builder-config] [--entities] [--all] [--confirmed] [--debug] [--help]`
 
 Deletes [Test Configuration File](#test-configuration-file) in the current directory.
 Does nothing if there is No [Test Configuration File](#test-configuration-file) in the current directory.
@@ -1091,7 +1091,7 @@ The user is asked to confirm the operation (confirmed automatically with the `--
 
 #### Test Github
 
-`impt test github --github-config <github_credentials_file_name> --user <github_username> --pwd <github_password> \[--confirmed] \[--debug] \[--help]`
+`impt test github --github-config <github_credentials_file_name> --user <github_username> --pwd <github_password> [--confirmed] [--debug] [--help]`
 
 Creates or updates github credentials file.
 
@@ -1108,7 +1108,7 @@ The user is asked to confirm the operation if the specified github credentials f
 
 #### Test Info
 
-`impt test info \[--debug] \[--help]`
+`impt test info [--debug] [--help]`
 
 Displays information about the tests configuration defined by [Test Configuration File](#test-configuration-file) in the current directory.
 With every call the latest actual information is obtained using impCentral API.
@@ -1120,20 +1120,20 @@ With every call the latest actual information is obtained using impCentral API.
 
 #### Test Run
 
-`impt test run \[--tests <test_pattern>] \[--clear-cache] \[--debug] \[--help]`
+`impt test run [--tests <test_pattern>] [--clear-cache] [--debug] [--help]`
 
 Runs the tests specified by [Test Configuration File](#test-configuration-file) in the current directory.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --tests | -t | No | Yes | A pattern to select the tests. Allows to select specific test files, test cases, test methods for execution. The syntax of the pattern: *\[testFile]\[:testCase]\[::testMethod]*, where *testFile* may include a relative path as well as [Regular Expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions). If the option is missed all tests from all test files specified in [Test Configuration File](#test-configuration-file) are executed |
+| --tests | -t | No | Yes | A pattern to select the tests. Allows to select specific test files, test cases, test methods for execution. The syntax of the pattern: *[testFile][:testCase][::testMethod]*, where *testFile* may include a relative path as well as [Regular Expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions). If the option is missed all tests from all test files specified in [Test Configuration File](#test-configuration-file) are executed |
 | --clear-cache | -e | No | No | Clears the local *.builder-cache* directory if it exists |
 | --debug | -z | No | No | Runs the tests in the debug mode |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Test Update
 
-`impt test update \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--device-file \[<device_file>]] \[--agent-file \[<agent_file>]] \[--timeout \<timeout>] \[--stop-on-fail \[true|false]] \[--allow-disconnect \[true|false]] \[--builder-cache \[true|false]] \[--test-file <test_file_name_pattern>] \[--github-config \[<github_credentials_file_name>]] \[--builder-config \[<builder_file_name>]] \[--debug] \[--help]`
+`impt test update [--dg <DEVICE_GROUP_IDENTIFIER>] [--device-file [<device_file>]] [--agent-file [<agent_file>]] [--timeout \<timeout>] [--stop-on-fail [true|false]] [--allow-disconnect [true|false]] [--builder-cache [true|false]] [--test-file <test_file_name_pattern>] [--github-config [<github_credentials_file_name>]] [--builder-config [<builder_file_name>]] [--debug] [--help]`
 
 Updates [Test Configuration File](#test-configuration-file) in the current directory. Fails if there is No [Test Configuration File](#test-configuration-file) in the current directory.
 
@@ -1158,7 +1158,7 @@ At the end of the command execution information about the tests configuration is
 
 #### Webhook Create
 
-`impt webhook create \[--dg <DEVICE_GROUP_IDENTIFIER>] --url <target_url> --event <triggered_event> --mime <content_type> \[--debug] \[--help]`
+`impt webhook create [--dg <DEVICE_GROUP_IDENTIFIER>] --url <target_url> --event <triggered_event> --mime <content_type> [--debug] [--help]`
 
 Creates a new Webhook for the specified Device Group.
 
@@ -1173,7 +1173,7 @@ Creates a new Webhook for the specified Device Group.
 
 #### Webhook Delete
 
-`impt webhook delete --wh <webhook_id> \[--confirmed] \[--debug] \[--help]`
+`impt webhook delete --wh <webhook_id> [--confirmed] [--debug] [--help]`
 
 Deletes the specified Webhook.
 
@@ -1188,7 +1188,7 @@ The user is asked to confirm the operation (confirmed automatically with the `--
 
 #### Webhook Info
 
-`impt webhook info --wh <webhook_id> \[--debug] \[--help]`
+`impt webhook info --wh <webhook_id> [--debug] [--help]`
 
 Displays information about the specified Webhook.
 
@@ -1200,7 +1200,7 @@ Displays information about the specified Webhook.
 
 #### Webhook List
 
-`impt webhook list \[--owner <ACCOUNT_IDENTIFIER>] \[--product <PRODUCT_IDENTIFIER>] \[--dg <DEVICE_GROUP_IDENTIFIER>] \[--dg-type <device_group_type>] \[--url <target_url>] \[--event <triggered_event>] \[--debug] \[--help]`
+`impt webhook list [--owner <ACCOUNT_IDENTIFIER>] [--product <PRODUCT_IDENTIFIER>] [--dg <DEVICE_GROUP_IDENTIFIER>] [--dg-type <device_group_type>] [--url <target_url>] [--event <triggered_event>] [--debug] [--help]`
 
 Displays information about all Webhooks available to the current logged-in account.
 
@@ -1220,7 +1220,7 @@ The returned list of the Webhooks may be filtered. Filtering is possible by any 
 
 #### Webhook Update
 
-`impt webhook update --wh <webhook_id> \[--url <target_url>] \[--mime <content_type>] \[--debug] \[--help]`
+`impt webhook update --wh <webhook_id> [--url <target_url>] [--mime <content_type>] [--debug] [--help]`
 
 Updates the specified Webhook by a new target URL and/or MIME content-type.
 Fails if the specified Webhook does not exist.
