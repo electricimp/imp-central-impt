@@ -747,7 +747,7 @@ Reboots all of the devices assigned to the specified Device Group and, optionall
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --dg | -g | Yes/[Project](#project-files) | Yes | [Device Group identifier](#device-group-identifier). If not specified, the Device Group referenced by the [Project file](#project-files) in the current directory is used (if there is no Project file, the command fails) |
+| --dg | -g | Yes/[Project](#project-files) | Yes | A [Device Group identifier](#device-group-identifier). If not specified, the Device Group referenced by the [Project file](#project-files) in the current directory is used (if there is no Project file, the command fails) |
 | --conditional | -c | No | No | Trigger a conditional restart (see the impCentral API specification) |
 | --log | -l | No | No | Start displaying logs from the devices assigned to the specified Device Group (see `[impt log stream](#log-stream)`). To stop displaying the logs press *Ctrl-C* |
 | --debug | -z | No | No | Displays debug info for the command execution |
@@ -809,7 +809,7 @@ If the `--page-number` option is specified, the command displays the specified p
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --device | -d | Yes/[Project](#project-files) | Yes | [Device identifier](#device-identifier). If not specified and there is only one device in the Device Group referenced by the [Project file](#project-files) in the current directory, then this device is used (if there is no Project file, or the Device Group has none or more than one device, the command fails) |
+| --device | -d | Yes/[Project](#project-files) | Yes | A [device identifier](#device-identifier). If not specified and there is only one device in the Device Group referenced by the [Project file](#project-files) in the current directory, then this device is used (if there is no Project file, or the Device Group has none or more than one device, the command fails) |
 | --page-size | -s | No | No | Number of log entries in one page. Default: 20 |
 | --page-number | -n | No | No | Ordinal page number with the log entries to display. Must have a positive value. Page 1 is a page with the most recent log entries. If not specified, the command displays all saved log entries |
 | --debug | -z | No | No | Displays debug info for the command execution |
@@ -999,7 +999,7 @@ Updates the specified Product with a new name and/or description. Fails if the s
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --product | -p | Yes/[Project](#project-files) | Yes | [Product identifier](#product-identifier). If not specified, the Product referenced by the [Project file](#project-files) in the current directory is used (if there is no Project file, the command fails) |
+| --product | -p | Yes/[Project](#project-files) | Yes | A [Product identifier](#product-identifier). If not specified, the Product referenced by the [Project file](#project-files) in the current directory is used (if there is no Project file, the command fails) |
 | --name | -n | No | Yes | The Product’s new name. Must be unique among all of the current Account’s Products |
 | --descr | -s | No | Yes | The Product’s new description |
 | --debug | -z | No | No | Displays debug info for the command execution |
