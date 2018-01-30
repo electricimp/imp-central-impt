@@ -71,7 +71,7 @@
 ## Contents ##
 
 - [Command Syntax](#command-syntax)
-- [The Help Option](the-help-option)
+- [The Help Option](#the-help-option)
 - [Entity Identification](#entity-identification)
 - [Device Group Type](#device-group-type)
 - [auth files](#auth-files)
