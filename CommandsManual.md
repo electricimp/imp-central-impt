@@ -310,7 +310,7 @@ Copies the specified build (Deployment) to a new Deployment related to the speci
 
 The new build for the specified Device Group is created from the device and agent source code that the specified original build has. If the `--all` option is specified, all other attributes (description, origin, flagged status and tags) are copied to the new build as well.
 
-The new build is not run until the devices are rebooted. To run it, use `[impt dg restart](#device-group-restart)` or `[impt device restart](#device-restart)`.
+The new build is not run until the devices are rebooted. To run it, use [`impt dg restart`](#device-group-restart) or [`impt device restart`](#device-restart).
 
 Build source code is not saved locally. To download the source code from a Deployment, call [`impt build get`](#build-get).
 
