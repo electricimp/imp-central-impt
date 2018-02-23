@@ -22,62 +22,59 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 
-/**
- * Test external commands
- */
-
 'use strict';
 
 require('jasmine-expect');
 
 const Shell = require('shelljs');
-const util = require('../util');
-const testUtil = require('./testUtil');
+const ImptTestingHelper = require('../ImptTestingHelper');
+const ImptTestCommandsHelper = require('./ImptTestCommandsHelper');
 
+// Test for external commands
 describe('impt test run for external-command scenario >', () => {
     beforeAll((done) => {
-        util.initAndLoginLocal().
-            then(testUtil.cleanUpTestEnvironment).
-            then(testUtil.createTestProductAndDG).
+        ImptTestingHelper.init().
+            then(ImptTestCommandsHelper.cleanUpTestEnvironment).
+            then(ImptTestCommandsHelper.createTestProductAndDG).
             then(done).
             catch(error => done.fail(error));
-    }, util.TIMEOUT);
+    }, ImptTestingHelper.TIMEOUT);
 
     afterAll((done) => {
-        testUtil.cleanUpTestEnvironment().
-            then(() => util.cleanUp()).
+        ImptTestCommandsHelper.cleanUpTestEnvironment().
+            then(() => ImptTestingHelper.cleanUp()).
             then(done).
             catch(error => done.fail(error));
-    }, util.TIMEOUT);
+    }, ImptTestingHelper.TIMEOUT);
 
     it('run exit-code test', (done) => {
-        testUtil.createTestConfig(
+        ImptTestCommandsHelper.createTestConfig(
             'fixtures/external_command',
             { 'test-file' : 'tests/exit-code.*.test.nut' }).
-            then(() => util.runCommand('impt test run', (commandOut) => {
+            then(() => ImptTestingHelper.runCommand('impt test run', (commandOut) => {
                 expect(commandOut).not.toBeEmptyString();
                 expect(commandOut).toMatch(/\> \"?external command output\"?/);
                 expect(commandOut).toMatch(/External command failed with exit code 125/);
-                testUtil.checkTestFailStatus(commandOut);
-                util.checkSuccessStatus(commandOut);
+                ImptTestCommandsHelper.checkTestFailStatus(commandOut);
+                ImptTestingHelper.checkSuccessStatus(commandOut);
             })).
             then(done).
             catch(error => done.fail(error));
     });
 
     it('run timeout test', (done) => {
-        testUtil.createTestConfig(
+        ImptTestCommandsHelper.createTestConfig(
             'fixtures/external_command',
             {
                 'timeout' : 1,
                 'test-file' : 'tests/timeout.*.test.nut'
             }).
-            then(() => util.runCommand('impt test run', (commandOut) => {
+            then(() => ImptTestingHelper.runCommand('impt test run', (commandOut) => {
                 expect(commandOut).not.toBeEmptyString();
                 expect(commandOut).not.toMatch(/\> external command output/);
                 expect(commandOut).toMatch(/External command timed out/);
-                testUtil.checkTestFailStatus(commandOut);
-                util.checkSuccessStatus(commandOut);
+                ImptTestCommandsHelper.checkTestFailStatus(commandOut);
+                ImptTestingHelper.checkSuccessStatus(commandOut);
             })).
             then(done).
             catch(error => done.fail(error));

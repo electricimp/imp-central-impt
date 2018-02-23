@@ -22,20 +22,19 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 
-// Builder syntax tests
-
 'use strict';
 
 require('jasmine-expect');
 
-const util = require('../util');
-const testUtil = require('./testUtil');
+const ImptTestingHelper = require('../ImptTestingHelper');
+const ImptTestCommandsHelper = require('./ImptTestCommandsHelper');
 
+// Builder syntax tests
 describe('impt test run for Builder syntax scenario >', () => {
     beforeAll((done) => {
-        util.initAndLoginLocal().
-            then(testUtil.cleanUpTestEnvironment).
-            then(() => testUtil.createTestEnvironment(
+        ImptTestingHelper.init().
+            then(ImptTestCommandsHelper.cleanUpTestEnvironment).
+            then(() => ImptTestCommandsHelper.createTestEnvironment(
                 'fixtures/builder',
                 {
                     'device-file' : 'myDevice.class.nut',
@@ -45,20 +44,20 @@ describe('impt test run for Builder syntax scenario >', () => {
                 })).
             then(done).
             catch(error => done.fail(error));
-    }, util.TIMEOUT);
+    }, ImptTestingHelper.TIMEOUT);
 
     afterAll((done) => {
-        testUtil.cleanUpTestEnvironment().
-            then(() => util.cleanUp()).
+        ImptTestCommandsHelper.cleanUpTestEnvironment().
+            then(() => ImptTestingHelper.cleanUp()).
             then(done).
             catch(error => done.fail(error));
-    }, util.TIMEOUT);
+    }, ImptTestingHelper.TIMEOUT);
 
     it('run test', (done) => {
-        util.runCommand('impt test run', (commandOut) => {
+        ImptTestingHelper.runCommand('impt test run', (commandOut) => {
                 expect(commandOut).not.toBeEmptyString();
-                testUtil.checkTestSuccessStatus(commandOut);
-                util.checkSuccessStatus(commandOut);
+                ImptTestCommandsHelper.checkTestSuccessStatus(commandOut);
+                ImptTestingHelper.checkSuccessStatus(commandOut);
             }).
             then(done).
             catch(error => done.fail(error));

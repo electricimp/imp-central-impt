@@ -22,38 +22,37 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 
-// Agent code and device code together
-
 'use strict';
 
-const util = require('../util');
-const testUtil = require('./testUtil');
+const ImptTestingHelper = require('../ImptTestingHelper');
+const ImptTestCommandsHelper = require('./ImptTestCommandsHelper');
 
+// Tests for Bi-directional Device-Agent Communication
 describe('impt test run for Agent code and device code together scenario >', () => {
     beforeAll((done) => {
-        util.initAndLoginLocal().
-            then(testUtil.cleanUpTestEnvironment).
-            then(() => testUtil.createTestEnvironment(
+        ImptTestingHelper.init().
+            then(ImptTestCommandsHelper.cleanUpTestEnvironment).
+            then(() => ImptTestCommandsHelper.createTestEnvironment(
                 'fixtures/agent_with_partner_code',
                 {'test-file' : 'tests/tmp.agent.*.nut'})).
             then(done).
             catch(error => done.fail(error));
-    }, util.TIMEOUT);
+    }, ImptTestingHelper.TIMEOUT);
 
     afterAll((done) => {
-        testUtil.cleanUpTestEnvironment().
-            then(() => util.cleanUp()).
+        ImptTestCommandsHelper.cleanUpTestEnvironment().
+            then(() => ImptTestingHelper.cleanUp()).
             then(done).
             catch(error => done.fail(error));
-    }, util.TIMEOUT);
+    }, ImptTestingHelper.TIMEOUT);
 
     it('run test', (done) => {
-        util.runCommand('impt test run --tests :MyTestCase::testMe_1', (commandOut) => {
+        ImptTestingHelper.runCommand('impt test run --tests :MyTestCase::testMe_1', (commandOut) => {
                 expect(commandOut).not.toBeEmptyString();
                 expect(commandOut).not.toMatch(/MyTestCase::testMe\(\)\n/);
                 expect(commandOut).toMatch(/MyTestCase::testMe_1\(\)\n/);
-                util.checkSuccessStatus(commandOut);
-                util.checkSuccessStatus(commandOut);
+                ImptTestingHelper.checkSuccessStatus(commandOut);
+                ImptTestingHelper.checkSuccessStatus(commandOut);
             }).
             then(done).
             catch(error => done.fail(error));

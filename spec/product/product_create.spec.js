@@ -26,59 +26,70 @@
 
 require('jasmine-expect');
 const config = require('../config');
-const util = require('../util');
+const ImptTestingHelper = require('../ImptTestingHelper');
 
 const PRODUCT_NAME = '__impt_product';
+const PRODUCT_NAME_2 = '__impt_product_2';
 const PRODUCT_DESCR = 'impt temp product description';
 
+// Test suite for 'impt create product' command.
+// Runs 'impt create product' command with different combinations of options,
+// checks that products are actually created using 'impt product info' and 'impt product list' commands.
 describe('impt product create test suite >', () => {
     let productId = null;
 
     beforeAll((done) => {
-        util.initAndLoginLocal().
+        ImptTestingHelper.init().
             then(testSuiteCleanUp).
             then(done).
             catch(error => done.fail(error));
-    }, util.TIMEOUT);
+    }, ImptTestingHelper.TIMEOUT);
 
     afterAll((done) => {
         testSuiteCleanUp().
-            then(util.cleanUp).
+            then(ImptTestingHelper.cleanUp).
             then(done).
             catch(error => done.fail(error));
-    }, util.TIMEOUT);
+    }, ImptTestingHelper.TIMEOUT);
 
     function testSuiteCleanUp() {
-        return util.runCommand(`impt product delete --product ${PRODUCT_NAME} --confirmed`, util.emptyCheck);
+        return ImptTestingHelper.runCommand(`impt product delete --product ${PRODUCT_NAME} --confirmed`, ImptTestingHelper.emptyCheck).
+            then(() => ImptTestingHelper.runCommand(`impt product delete -p ${PRODUCT_NAME_2} -q`, ImptTestingHelper.emptyCheck));
     }
 
     it('product create', (done) => {
-        util.runCommand(`impt product create --name ${PRODUCT_NAME} --descr "${PRODUCT_DESCR}"`, util.checkSuccessStatus).
+        ImptTestingHelper.runCommand(`impt product create --name ${PRODUCT_NAME} --descr "${PRODUCT_DESCR}"`, ImptTestingHelper.checkSuccessStatus).
             then(done).
             catch(error => done.fail(error));
     });
 
-    it('product info', (done) => {
-        util.runCommand(`impt product info --product ${PRODUCT_NAME}`, (commandOut) => {
-                expect(commandOut).toMatch(PRODUCT_NAME);
-                expect(commandOut).toMatch(PRODUCT_DESCR);
-                const idMatcher = commandOut.match(/id:\s+([A-Za-z0-9-]+)/);
+    it('product create without description', (done) => {
+        ImptTestingHelper.runCommand(`impt product create -n ${PRODUCT_NAME_2} --debug`, ImptTestingHelper.checkSuccessStatus).
+            then(done).
+            catch(error => done.fail(error));
+    });
+
+    it('check product info', (done) => {
+        ImptTestingHelper.runCommand(`impt product info --product ${PRODUCT_NAME}`, (commandOut) => {
+                ImptTestingHelper.checkAttribute(commandOut, ImptTestingHelper.ATTR_NAME, PRODUCT_NAME);
+                ImptTestingHelper.checkAttribute(commandOut, ImptTestingHelper.ATTR_DESCRIPTION, PRODUCT_DESCR);
+                const idMatcher = commandOut.match(new RegExp(`${ImptTestingHelper.ATTR_ID}:\\s+([A-Za-z0-9-]+)`));
                 expect(idMatcher).toBeNonEmptyArray();
                 if (idMatcher) {
                     productId = idMatcher[1];
                 }
-                util.checkSuccessStatus(commandOut);
+                ImptTestingHelper.checkSuccessStatus(commandOut);
             }).
             then(done).
             catch(error => done.fail(error));
     });
 
-    it('full product info by id', (done) => {
+    it('check full product info by id', (done) => {
         if (productId) {
-            util.runCommand(`impt product info -p ${productId} --full`, (commandOut) => {
-                    expect(commandOut).toMatch(PRODUCT_NAME);
-                    expect(commandOut).toMatch(PRODUCT_DESCR);
-                    util.checkSuccessStatus(commandOut);
+            ImptTestingHelper.runCommand(`impt product info -p ${productId} --full`, (commandOut) => {
+                    ImptTestingHelper.checkAttribute(commandOut, ImptTestingHelper.ATTR_NAME, PRODUCT_NAME);
+                    ImptTestingHelper.checkAttribute(commandOut, ImptTestingHelper.ATTR_DESCRIPTION, PRODUCT_DESCR);
+                    ImptTestingHelper.checkSuccessStatus(commandOut);
                 }).
                 then(done).
                 catch(error => done.fail(error));
@@ -88,20 +99,37 @@ describe('impt product create test suite >', () => {
         }
     });
 
-    it('product list', (done) => {
-        util.runCommand('impt product list', (commandOut) => {
-                expect(commandOut).toMatch(PRODUCT_NAME);
+    it('check product list', (done) => {
+        ImptTestingHelper.runCommand('impt product list', (commandOut) => {
+                ImptTestingHelper.checkAttribute(commandOut, ImptTestingHelper.ATTR_NAME, PRODUCT_NAME);
+                ImptTestingHelper.checkAttribute(commandOut, ImptTestingHelper.ATTR_NAME, PRODUCT_NAME_2);
                 if (productId) {
-                    expect(commandOut).toMatch(productId);
+                    ImptTestingHelper.checkAttribute(commandOut, ImptTestingHelper.ATTR_ID, productId);
                 }
-                util.checkSuccessStatus(commandOut);
+                ImptTestingHelper.checkSuccessStatus(commandOut);
             }).
             then(done).
             catch(error => done.fail(error));
     });
 
+    // negative tests
     it('create duplicated product', (done) => {
-        util.runCommand(`impt product create -n ${PRODUCT_NAME} -s "${PRODUCT_DESCR}"`, util.checkFailStatus).
+        ImptTestingHelper.runCommand(`impt product create -n ${PRODUCT_NAME} -s "${PRODUCT_DESCR}"`, ImptTestingHelper.checkFailStatus).
+            then(done).
+            catch(error => done.fail(error));
+    });
+
+    it('product create without name', (done) => {
+        ImptTestingHelper.runCommand('impt product create', ImptTestingHelper.checkFailStatus).
+            then(() => ImptTestingHelper.runCommand(`impt product create --descr "${PRODUCT_DESCR}"`, ImptTestingHelper.checkFailStatus)).
+            then(() => ImptTestingHelper.runCommand('impt product create -z', ImptTestingHelper.checkFailStatus)).
+            then(done).
+            catch(error => done.fail(error));
+    });
+
+    it('product create with empty name', (done) => {
+        ImptTestingHelper.runCommand('impt product create -n ""', ImptTestingHelper.checkFailStatus).
+            then(() => ImptTestingHelper.runCommand('impt product create --name', ImptTestingHelper.checkFailStatus)).
             then(done).
             catch(error => done.fail(error));
     });

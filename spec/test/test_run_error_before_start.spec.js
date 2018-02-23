@@ -22,46 +22,43 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 
-/**
- * Test for error-before-start behavior
- */
-
 'use strict';
 
 require('jasmine-expect');
 
-const util = require('../util');
+const ImptTestingHelper = require('../ImptTestingHelper');
 const config = require('../config');
-const testUtil = require('./testUtil');
+const ImptTestCommandsHelper = require('./ImptTestCommandsHelper');
 
+// Test for error-before-start behavior
 describe('impt test run for error-before-start behavior >', () => {
     beforeAll((done) => {
-        util.initAndLoginLocal().
-            then(testUtil.cleanUpTestEnvironment).
-            then(() => testUtil.createTestEnvironment('fixtures/error_before_start', {'device-file' : 'device.nut'})).
+        ImptTestingHelper.init().
+            then(ImptTestCommandsHelper.cleanUpTestEnvironment).
+            then(() => ImptTestCommandsHelper.createTestEnvironment('fixtures/error_before_start', {'device-file' : 'device.nut'})).
             then(done).
             catch(error => done.fail(error));
-    }, util.TIMEOUT);
+    }, ImptTestingHelper.TIMEOUT);
 
     afterAll((done) => {
-        testUtil.cleanUpTestEnvironment().
-            then(() => util.cleanUp()).
+        ImptTestCommandsHelper.cleanUpTestEnvironment().
+            then(() => ImptTestingHelper.cleanUp()).
             then(done).
             catch(error => done.fail(error));
-    }, util.TIMEOUT);
+    }, ImptTestingHelper.TIMEOUT);
 
     beforeEach(() => {
-        jasmine.DEFAULT_TIMEOUT_INTERVAL = util.TIMEOUT * (config.devices.length > 0 ? config.devices.length : 1);
+        jasmine.DEFAULT_TIMEOUT_INTERVAL = ImptTestingHelper.TIMEOUT * (config.devices.length > 0 ? config.devices.length : 1);
     });
 
     it('run test', (done) => {
-        util.runCommand('impt test run', (commandOut) => {
+        ImptTestingHelper.runCommand('impt test run', (commandOut) => {
                 expect(commandOut).not.toBeEmptyString();
                 expect(commandOut).toMatch(/warning\] Device is out of memory\n/);
                 expect(commandOut).toMatch(/error\] Session startup timeout\n/);
                 expect(commandOut).not.toMatch(/test\] Device is out of memory\n/);
-                testUtil.checkTestFailStatus(commandOut);
-                util.checkSuccessStatus(commandOut);
+                ImptTestCommandsHelper.checkTestFailStatus(commandOut);
+                ImptTestingHelper.checkSuccessStatus(commandOut);
             }).
             then(done).
             catch(error => done.fail(error));

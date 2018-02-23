@@ -27,98 +27,114 @@
 require('jasmine-expect');
 const FS = require('fs');
 const config = require('../config');
-const util = require('../util');
+const ImptTestingHelper = require('../ImptTestingHelper');
 
+const DEFAULT_ENDPOINT = 'https://api.electricimp.com/v5';
+
+// Test suite for 'impt auth login --user <user_id> --pwd <password>', 'impt auth logout', 'impt auth info' commands.
+// Runs impt auth commands with different combinations of options.
 describe('impt auth by user/password test suite >', () => {
     beforeAll((done) => {
-        util.init().
+        ImptTestingHelper.init(false).
             then(testSuiteInit).
             then(done).
             catch(error => done.fail(error));
-    }, util.TIMEOUT);
+    }, ImptTestingHelper.TIMEOUT);
 
     afterAll((done) => {
-        util.cleanUp().
+        ImptTestingHelper.cleanUp().
             then(done).
             catch(error => done.fail(error));
-    }, util.TIMEOUT);
+    }, ImptTestingHelper.TIMEOUT);
 
     function testSuiteInit() {
-        return util.runCommand('impt auth logout', util.emptyCheck);
+        return ImptTestingHelper.runCommand('impt auth logout', ImptTestingHelper.emptyCheck);
     }
 
+    // negative test - run 'impt auth info' command without login
     it('auth info without login', (done) => {
-        util.runCommand('impt auth info', util.checkFailStatus).
+        ImptTestingHelper.runCommand('impt auth info', ImptTestingHelper.checkFailStatus).
             then(done).
             catch(error => done.fail(error));
     });
 
+    // negative test - run 'impt auth logout' command without login
     it('global logout without login', (done) => {
-        util.runCommand('impt auth logout', util.checkFailStatus).
+        ImptTestingHelper.runCommand('impt auth logout', ImptTestingHelper.checkFailStatus).
             then(done).
             catch(error => done.fail(error));
     });
 
     it('global login', (done) => {
-        util.runCommand(`impt auth login --user ${config.email} --pwd ${config.password}`, util.checkSuccessStatus).
+        const endpoint = config.apiEndpoint ? `--endpoint ${config.apiEndpoint}` : '';
+        ImptTestingHelper.runCommand(
+            `impt auth login --user ${config.email} --pwd ${config.password} ${endpoint}`,
+            ImptTestingHelper.checkSuccessStatus).
             then(done).
             catch(error => done.fail(error));
     });
 
-    it('global auth info', (done) => {
-        util.runCommand('impt auth info', (commandOut) => {
+    it('check global auth info', (done) => {
+        ImptTestingHelper.runCommand('impt auth info', (commandOut) => {
                 expect(commandOut).toMatch('Global');
                 expect(commandOut).toMatch(config.email);
-                util.checkSuccessStatus(commandOut);
+                ImptTestingHelper.checkSuccessStatus(commandOut);
             }).
             then(done).
             catch(error => done.fail(error));
     });
 
     it('repeated global temp login', (done) => {
-        util.runCommand(`impt auth login -u ${config.email} -w ${config.password} --temp --confirmed`, util.checkSuccessStatus).
+        const endpoint = config.apiEndpoint ? `-e ${config.apiEndpoint}` : '';
+        ImptTestingHelper.runCommand(
+            `impt auth login -u ${config.email} -w ${config.password} ${endpoint} --temp --confirmed --debug`,
+            ImptTestingHelper.checkSuccessStatus).
             then(done).
             catch(error => done.fail(error));
     });
 
-    it('global temp auth info', (done) => {
-        util.runCommand('impt auth info', (commandOut) => {
+    it('check global temp auth info', (done) => {
+        ImptTestingHelper.runCommand('impt auth info', (commandOut) => {
                 expect(commandOut).toMatch('Global');
                 expect(commandOut).toMatch(config.email);
-                const matcher = commandOut.match(/auto refresh:\s+false/);
-                expect(matcher).toBeNonEmptyArray();
-                util.checkSuccessStatus(commandOut);
+                ImptTestingHelper.checkAttribute(commandOut, 'auto refresh', 'false');
+                ImptTestingHelper.checkSuccessStatus(commandOut);
             }).
             then(done).
             catch(error => done.fail(error));
     });
 
+    // negative test - run local logout command without login
     it('local logout without login', (done) => {
-        util.runCommand('impt auth logout --local', util.checkFailStatus).
+        ImptTestingHelper.runCommand('impt auth logout --local', ImptTestingHelper.checkFailStatus).
             then(done).
             catch(error => done.fail(error));
     });
 
     it('local login', (done) => {
-        util.runCommand(`impt auth login --local --user ${config.email} --pwd ${config.password}`, util.checkSuccessStatus).
+        const endpoint = config.apiEndpoint ? `--endpoint ${config.apiEndpoint}` : `--endpoint ${DEFAULT_ENDPOINT}`;
+        ImptTestingHelper.runCommand(
+            `impt auth login --local --user ${config.email} --pwd ${config.password} ${endpoint}`,
+            ImptTestingHelper.checkSuccessStatus).
             then(done).
             catch(error => done.fail(error));;
     });
 
-    it('local auth info', (done) => {
-        util.runCommand('impt auth info', (commandOut) => {
+    it('check local auth info', (done) => {
+        ImptTestingHelper.runCommand('impt auth info', (commandOut) => {
                 expect(commandOut).toMatch('Local');
                 expect(commandOut).toMatch(config.email);
-                util.checkSuccessStatus(commandOut);
+                ImptTestingHelper.checkSuccessStatus(commandOut);
             }).
             then(done).
             catch(error => done.fail(error));
     });
 
     it('repeated local temp login', (done) => {
-        util.runCommand(`impt auth login -l -u ${config.email} -w ${config.password} -q -t`, (commandOut) => {
+        const endpoint = config.apiEndpoint ? `-e ${config.apiEndpoint}` : `-e ${DEFAULT_ENDPOINT}`;
+        ImptTestingHelper.runCommand(`impt auth login -l -u ${config.email} -w ${config.password} ${endpoint} -q -t -z`, (commandOut) => {
                 // login --temp must not save refreshToken and loginKey in the auth config file
-                const authFileName = util.TESTS_EXECUTION_FOLDER + '/.impt.auth';
+                const authFileName = ImptTestingHelper.TESTS_EXECUTION_FOLDER + '/.impt.auth';
                 if (FS.existsSync(authFileName)) {
                     try {
                         const json = JSON.parse(FS.readFileSync(authFileName).toString());
@@ -131,20 +147,32 @@ describe('impt auth by user/password test suite >', () => {
                 else {
                     done.fail('Local auth file not found');
                 }
-                util.checkSuccessStatus(commandOut);
+                ImptTestingHelper.checkSuccessStatus(commandOut);
             }).
             then(done).
             catch(error => done.fail(error));
     });
 
     it('global logout', (done) => {
-        util.runCommand('impt auth logout', util.checkSuccessStatus).
+        ImptTestingHelper.runCommand('impt auth logout', ImptTestingHelper.checkSuccessStatus).
             then(done).
             catch(error => done.fail(error));
     });
 
     it('local logout', (done) => {
-        util.runCommand('impt auth logout -l', util.checkSuccessStatus).
+        ImptTestingHelper.runCommand('impt auth logout -l', ImptTestingHelper.checkSuccessStatus).
+            then(done).
+            catch(error => done.fail(error));
+    });
+
+    // negative tests
+    it('login without user/password', (done) => {
+        ImptTestingHelper.runCommand('impt auth login', ImptTestingHelper.checkFailStatus).
+            then(() => ImptTestingHelper.runCommand('impt auth login --local', ImptTestingHelper.checkFailStatus)).
+            then(() => ImptTestingHelper.runCommand('impt auth login -l -u', ImptTestingHelper.checkFailStatus)).
+            then(() => ImptTestingHelper.runCommand('impt auth login -l -w', ImptTestingHelper.checkFailStatus)).
+            then(() => ImptTestingHelper.runCommand(`impt auth login -l -u ${config.email}`, ImptTestingHelper.checkFailStatus)).
+            then(() => ImptTestingHelper.runCommand(`impt auth login -l -w ${config.password}`, ImptTestingHelper.checkFailStatus)).
             then(done).
             catch(error => done.fail(error));
     });

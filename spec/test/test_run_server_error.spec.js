@@ -26,27 +26,27 @@
 
 require('jasmine-expect');
 
-const util = require('../util');
-const testUtil = require('./testUtil');
+const ImptTestingHelper = require('../ImptTestingHelper');
+const ImptTestCommandsHelper = require('./ImptTestCommandsHelper');
 
 describe('impt test run for test server error scenario >', () => {
     beforeAll((done) => {
-        util.initAndLoginLocal().
-            then(testUtil.cleanUpTestEnvironment).
-            then(testUtil.createTestProductAndDG).
+        ImptTestingHelper.init().
+            then(ImptTestCommandsHelper.cleanUpTestEnvironment).
+            then(ImptTestCommandsHelper.createTestProductAndDG).
             then(done).
             catch(error => done.fail(error));
-    }, util.TIMEOUT);
+    }, ImptTestingHelper.TIMEOUT);
 
     afterAll((done) => {
-        testUtil.cleanUpTestEnvironment().
-            then(() => util.cleanUp()).
+        ImptTestCommandsHelper.cleanUpTestEnvironment().
+            then(() => ImptTestingHelper.cleanUp()).
             then(done).
             catch(error => done.fail(error));
-    }, util.TIMEOUT);
+    }, ImptTestingHelper.TIMEOUT);
 
     it('run test with agent and device test errors', (done) => {
-        testUtil.createTestConfig(
+        ImptTestCommandsHelper.createTestConfig(
             'fixtures/server_error',
             {
                 'device-file' : 'myDevice.class.nut',
@@ -59,10 +59,10 @@ describe('impt test run for test server error scenario >', () => {
                     'tests/server-error2.device.nut'
                 ]
             }).
-            then(() => util.runCommand('impt test run', (commandOut) => {
+            then(() => ImptTestingHelper.runCommand('impt test run', (commandOut) => {
                 expect(commandOut).not.toBeEmptyString();
-                testUtil.checkTestSuccessStatus(commandOut);
-                util.checkSuccessStatus(commandOut);
+                ImptTestCommandsHelper.checkTestSuccessStatus(commandOut);
+                ImptTestingHelper.checkSuccessStatus(commandOut);
             })).
             then(done).
             catch(error => done.fail(error));
@@ -70,36 +70,36 @@ describe('impt test run for test server error scenario >', () => {
 
     // Negative test cases
     it('run test with field does not exist', (done) => {
-        testUtil.createTestConfig(
+        ImptTestCommandsHelper.createTestConfig(
             'fixtures/server_error',
             {
                 'agent-file' : 'myAgent.class.nut',
                 'timeout': 40,
                 'test-file' : 'tests/server-index-access-failure.agent.nut'
             }).
-            then(() => util.runCommand('impt test run', (commandOut) => {
+            then(() => ImptTestingHelper.runCommand('impt test run', (commandOut) => {
                 expect(commandOut).not.toBeEmptyString();
                 expect(commandOut).toMatch("the index 'fieldDoesNotExists' does not exist");
-                testUtil.checkTestFailStatus(commandOut);
-                util.checkSuccessStatus(commandOut);
+                ImptTestCommandsHelper.checkTestFailStatus(commandOut);
+                ImptTestingHelper.checkSuccessStatus(commandOut);
             })).
             then(done).
             catch(error => done.fail(error));
     });
 
     it('run test with unhandled exception', (done) => {
-        testUtil.createTestConfig(
+        ImptTestCommandsHelper.createTestConfig(
             'fixtures/server_error',
             {
                 'agent-file' : 'myAgent.class.nut',
                 'timeout': 40,
                 'test-file' : 'tests/server-throw-exception.agent.nut'
             }).
-            then(() => util.runCommand('impt test run', (commandOut) => {
+            then(() => ImptTestingHelper.runCommand('impt test run', (commandOut) => {
                 expect(commandOut).not.toBeEmptyString();
                 expect(commandOut).toMatch("unhandled exception");
-                testUtil.checkTestFailStatus(commandOut);
-                util.checkSuccessStatus(commandOut);
+                ImptTestCommandsHelper.checkTestFailStatus(commandOut);
+                ImptTestingHelper.checkSuccessStatus(commandOut);
             })).
             then(done).
             catch(error => done.fail(error));

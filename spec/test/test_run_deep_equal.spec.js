@@ -22,41 +22,38 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 
-/**
- * Deep equal tests
- */
-
 'use strict';
 
 require('jasmine-expect');
 
-const util = require('../util');
-const testUtil = require('./testUtil');
+const ImptTestingHelper = require('../ImptTestingHelper');
+const ImptTestCommandsHelper = require('./ImptTestCommandsHelper');
 
+// Deep equal tests
 describe('impt test run for deep-equal scenario >', () => {
     beforeAll((done) => {
-        util.initAndLoginLocal().
-            then(testUtil.cleanUpTestEnvironment).
-            then(() => testUtil.createTestEnvironment('fixtures/deep_equal', {})).
+        ImptTestingHelper.init().
+            then(ImptTestCommandsHelper.cleanUpTestEnvironment).
+            then(() => ImptTestCommandsHelper.createTestEnvironment('fixtures/deep_equal', {})).
             then(done).
             catch(error => done.fail(error));
-    }, util.TIMEOUT);
+    }, ImptTestingHelper.TIMEOUT);
 
     afterAll((done) => {
-        testUtil.cleanUpTestEnvironment().
-            then(() => util.cleanUp()).
+        ImptTestCommandsHelper.cleanUpTestEnvironment().
+            then(() => ImptTestingHelper.cleanUp()).
             then(done).
             catch(error => done.fail(error));
-    }, util.TIMEOUT);
+    }, ImptTestingHelper.TIMEOUT);
 
     it('run test', (done) => {
-        util.runCommand('impt test run', (commandOut) => {
+        ImptTestingHelper.runCommand('impt test run', (commandOut) => {
                 expect(commandOut).not.toBeEmptyString();
                 expect(commandOut).toMatch(/Missing slot \[a\.b\.c\] in actual value\n/);
                 expect(commandOut).toMatch(/Extra slot \[a\.b\.d\] in actual value\n/);
                 expect(commandOut).toMatch(/At \[a\.b\.c\]: expected \"3\", got \"100\"\n/);
-                testUtil.checkTestFailStatus(commandOut);
-                util.checkSuccessStatus(commandOut);
+                ImptTestCommandsHelper.checkTestFailStatus(commandOut);
+                ImptTestingHelper.checkSuccessStatus(commandOut);
             }).
             then(done).
             catch(error => done.fail(error));

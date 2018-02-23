@@ -22,40 +22,37 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 
-/**
- * Test for timeout behavior
- */
-
 'use strict';
 
 require('jasmine-expect');
 
-const util = require('../util');
-const testUtil = require('./testUtil');
+const ImptTestingHelper = require('../ImptTestingHelper');
+const ImptTestCommandsHelper = require('./ImptTestCommandsHelper');
 
+// Tests for timeout behavior
 describe('impt test run for timeout behavior >', () => {
     beforeAll((done) => {
-        util.initAndLoginLocal().
-            then(testUtil.cleanUpTestEnvironment).
-            then(testUtil.createTestProductAndDG).
+        ImptTestingHelper.init().
+            then(ImptTestCommandsHelper.cleanUpTestEnvironment).
+            then(ImptTestCommandsHelper.createTestProductAndDG).
             then(done).
             catch(error => done.fail(error));
-    }, util.TIMEOUT);
+    }, ImptTestingHelper.TIMEOUT);
 
     afterAll((done) => {
-        testUtil.cleanUpTestEnvironment().
-            then(() => util.cleanUp()).
+        ImptTestCommandsHelper.cleanUpTestEnvironment().
+            then(() => ImptTestingHelper.cleanUp()).
             then(done).
             catch(error => done.fail(error));
-    }, util.TIMEOUT);
+    }, ImptTestingHelper.TIMEOUT);
 
     it('run test with too small timeout', (done) => {
-        testUtil.createTestConfig('fixtures/timeout', { 'timeout' : 3 }).
-            then(() => util.runCommand('impt test run', (commandOut) => {
+        ImptTestCommandsHelper.createTestConfig('fixtures/timeout', { 'timeout' : 3 }).
+            then(() => ImptTestingHelper.runCommand('impt test run', (commandOut) => {
                 expect(commandOut).not.toBeEmptyString();
                 expect(commandOut).toMatch('Test timed out');
-                testUtil.checkTestFailStatus(commandOut);
-                util.checkSuccessStatus(commandOut);
+                ImptTestCommandsHelper.checkTestFailStatus(commandOut);
+                ImptTestingHelper.checkSuccessStatus(commandOut);
             })).
             then(done).
             catch(error => done.fail(error));
@@ -63,11 +60,11 @@ describe('impt test run for timeout behavior >', () => {
 
     // checks that timeout is applied to every test method, not to the whole session
     it('run test with appropriate timeout', (done) => {
-        testUtil.createTestConfig('fixtures/timeout', { 'timeout' : 10 }).
-            then(() => util.runCommand('impt test run', (commandOut) => {
+        ImptTestCommandsHelper.createTestConfig('fixtures/timeout', { 'timeout' : 10 }).
+            then(() => ImptTestingHelper.runCommand('impt test run', (commandOut) => {
                 expect(commandOut).not.toBeEmptyString();
-                testUtil.checkTestSuccessStatus(commandOut);
-                util.checkSuccessStatus(commandOut);
+                ImptTestCommandsHelper.checkTestSuccessStatus(commandOut);
+                ImptTestingHelper.checkSuccessStatus(commandOut);
             })).
             then(done).
             catch(error => done.fail(error));

@@ -22,48 +22,47 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 
-// Builder syntax tests
-
 'use strict';
 
 require('jasmine-expect');
 
 const Shell = require('shelljs');
-const util = require('../util');
-const testUtil = require('./testUtil');
+const ImptTestingHelper = require('../ImptTestingHelper');
+const ImptTestCommandsHelper = require('./ImptTestCommandsHelper');
 const config = require('../config');
 
+// Builder cache tests
 describe('impt test run for Builder cache scenario >', () => {
     let gitHubConfigName = null;
 
     beforeAll((done) => {
-        util.initAndLoginLocal().
-            then(testUtil.cleanUpTestEnvironment).
-            then(testUtil.createTestProductAndDG).
+        ImptTestingHelper.init().
+            then(ImptTestCommandsHelper.cleanUpTestEnvironment).
+            then(ImptTestCommandsHelper.createTestProductAndDG).
             then(createGitHubConfig).
             then(done).
             catch(error => done.fail(error));
-    }, util.TIMEOUT);
+    }, ImptTestingHelper.TIMEOUT);
 
     afterAll((done) => {
-        testUtil.cleanUpTestEnvironment().
-            then(() => util.cleanUp()).
+        ImptTestCommandsHelper.cleanUpTestEnvironment().
+            then(() => ImptTestingHelper.cleanUp()).
             then(done).
             catch(error => done.fail(error));
-    }, util.TIMEOUT);
+    }, ImptTestingHelper.TIMEOUT);
 
     function createGitHubConfig() {
         if (config.githubUser && config.githubToken) {
             gitHubConfigName = '.impt.github';
-            return util.runCommand(
+            return ImptTestingHelper.runCommand(
                 `impt test github --github-config ${gitHubConfigName} --user ${config.githubUser} --pwd ${config.githubToken} --confirmed`,
-                util.checkSuccessStatus);
+                ImptTestingHelper.checkSuccessStatus);
         }
         return Promise.resolve();
     }
 
     it('run test without builder-cache option in the project config', (done) => {
-        testUtil.createTestConfig(
+        ImptTestCommandsHelper.createTestConfig(
             'fixtures/builder_cache',
             {
                 'device-file' : 'myDevice.class.nut',
@@ -72,17 +71,17 @@ describe('impt test run for Builder cache scenario >', () => {
                 'test-file' : 'tests/builder.agent.nut',
                 'github-config' : gitHubConfigName
             }).
-            then(() => util.runCommand('impt test run', (commandOut) => {
+            then(() => ImptTestingHelper.runCommand('impt test run', (commandOut) => {
                 expect(Shell.test('-e', '.builder-cache')).toBe(false);
-                testUtil.checkTestSuccessStatus(commandOut);
-                util.checkSuccessStatus(commandOut);
+                ImptTestCommandsHelper.checkTestSuccessStatus(commandOut);
+                ImptTestingHelper.checkSuccessStatus(commandOut);
             })).
             then(done).
             catch(error => done.fail(error));
     });
 
     it('run test with builder-cache option in the project config', (done) => {
-        testUtil.createTestConfig(
+        ImptTestCommandsHelper.createTestConfig(
             'fixtures/builder_cache',
             {
                 'device-file' : 'myDevice.class.nut',
@@ -92,10 +91,10 @@ describe('impt test run for Builder cache scenario >', () => {
                 'builder-cache' : true,
                 'github-config' : gitHubConfigName
             }).
-            then(() => util.runCommand('impt test run', (commandOut) => {
+            then(() => ImptTestingHelper.runCommand('impt test run', (commandOut) => {
                 expect(Shell.test('-e', '.builder-cache')).toBe(true);
-                testUtil.checkTestSuccessStatus(commandOut);
-                util.checkSuccessStatus(commandOut);
+                ImptTestCommandsHelper.checkTestSuccessStatus(commandOut);
+                ImptTestingHelper.checkSuccessStatus(commandOut);
             })).
             then(done).
             catch(error => done.fail(error));
@@ -103,7 +102,7 @@ describe('impt test run for Builder cache scenario >', () => {
 
     it('run test with --clear-cache and without builder-cache option in the project config', (done) => {
         expect(Shell.test('-e', '.builder-cache')).toBe(true);
-        testUtil.createTestConfig(
+        ImptTestCommandsHelper.createTestConfig(
             'fixtures/builder_cache',
             {
                 'device-file' : 'myDevice.class.nut',
@@ -113,10 +112,10 @@ describe('impt test run for Builder cache scenario >', () => {
                 'builder-cache' : false,
                 'github-config' : gitHubConfigName
             }).
-            then(() => util.runCommand('impt test run --clear-cache', (commandOut) => {
+            then(() => ImptTestingHelper.runCommand('impt test run --clear-cache', (commandOut) => {
                 expect(Shell.test('-e', '.builder-cache')).toBe(false);
-                testUtil.checkTestSuccessStatus(commandOut);
-                util.checkSuccessStatus(commandOut);
+                ImptTestCommandsHelper.checkTestSuccessStatus(commandOut);
+                ImptTestingHelper.checkSuccessStatus(commandOut);
             })).
             then(done).
             catch(error => done.fail(error));
