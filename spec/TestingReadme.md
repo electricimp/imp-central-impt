@@ -13,11 +13,11 @@ There are [Jasmine](https://www.npmjs.com/package/jasmine) tests in the [spec fo
 1. If needed, set optional environment variables:
     - **IMPT_DEBUG** - if *true*, displays additional output of the command execution (default: *false*).
     - **IMPT_ENDPOINT** - impCentral API endpoint (default: *https://api.electricimp.com/v5*). You need to specify it when working with a private impCentral installation.
-    - **IMPT_GITHUB_USER** / **IMPT_GITHUB_TOKEN** - a GitHub account username / password or personal access token. You need to specify them when you got `???` error.
+    - **IMPT_GITHUB_USER** / **IMPT_GITHUB_TOKEN** - a GitHub account username / password or personal access token. You need to specify them when you got `GitHub rate limit reached` error.
 1. Alternatively, instead of the environment variables setting, you can directly specify the values of the corresponding variables in your local [imp-central-impt/spec/config.js file](../spec/config.js).
 1. Run the tests by calling `npm test` command from your local *imp-central-impt* folder.
 
-Note, at this moment some tests for *impt test* commands need to be run either on an imp001 or an imp002 module as they are designed to fail with an `"Out of memory"` error, which does not happen on imp modules with more memory available.
+Note, at this moment some tests for *impt test run* command need to be run either on an imp001 or an imp002 module as they are designed to fail with an `"Out of memory"` error, which does not happen on imp modules with more memory available.
 
 ## Tests Running Management ##
 
@@ -40,7 +40,7 @@ Test files are combined in directories. One directory includes all test files (t
 - [imp-central-impt/spec/product](../spec/product) directory contains test suites to test *impt product* commands
 - [imp-central-impt/spec/test](../spec/test) directory contains test suites to test *impt test* commands
 
-A test file should be named as `*<test_suite_name>.spec.js`, where `<test_suite_name>` is some meaningful name, eg. it includes the tested command name.
+A test file should be named as `<test_suite_name>.spec.js`, where `<test_suite_name>` is some meaningful name, eg. it includes the tested command name.
 
 Every test file (test suite) is executed independently from all other test suites.
 
