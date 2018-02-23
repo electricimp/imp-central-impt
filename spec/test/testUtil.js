@@ -54,9 +54,12 @@ function createTestConfig(testFilesPath, testCreateOptions) {
     Shell.cp('-Rf', `${__dirname}/${testFilesPath}/*`, util.TESTS_EXECUTION_FOLDER);
     const options = Object.keys(testCreateOptions).reduce((acc, optionName) => {
         const optionValue = testCreateOptions[optionName];
-        let option = Array.isArray(optionValue) ? 
-            optionValue.reduce((opts, val) => `${opts} --${optionName} ${val}`, '') :
-            `--${optionName} ${optionValue}`;
+        let option = '';
+        if (optionValue) {
+            option = Array.isArray(optionValue) ? 
+                optionValue.reduce((opts, val) => `${opts} --${optionName} ${val}`, '') :
+                `--${optionName} ${optionValue}`;
+        }
         return `${acc} ${option}`;
     }, '');
     const testCreateCommand = `impt test create --dg ${TEST_DG_NAME} --confirmed ${options}`;

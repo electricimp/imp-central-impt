@@ -9,7 +9,9 @@ The library contains [Jasmine](https://www.npmjs.com/package/jasmine) tests in t
     - **IMPT_DEVICE_IDS** - comma separated list of Device IDs that will be used for tests execution.
 1. If needed, set optional environment variables:
     - **IMPT_DEBUG** - if *true*, displays additional output of the command execution (default: *false*).
-    - **IMPT_ENDPOINT** - impCentral API endpoint (default: *https://api.electricimp.com/v5*)
+    - **IMPT_ENDPOINT** - impCentral API endpoint (default: *https://api.electricimp.com/v5*).
+    - **IMPT_GITHUB_USER** - a GitHub account username.
+    - **IMPT_GITHUB_TOKEN** - a GitHub account password or personal access token.
 1. Alternatively, instead of the environment variables setting, you can directly specify the values of the corresponding variables in your local [imp-central-impt/spec/config.js file](../spec/config.js).
 1. Run the tests by calling `npm test` command from your local *imp-central-impt* folder.
 

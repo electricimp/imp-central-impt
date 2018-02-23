@@ -31,12 +31,16 @@ require('jasmine-expect');
 const Shell = require('shelljs');
 const util = require('../util');
 const testUtil = require('./testUtil');
+const config = require('../config');
 
 describe('impt test run for Builder cache scenario >', () => {
+    let gitHubConfigName = null;
+
     beforeAll((done) => {
         util.initAndLoginLocal().
             then(testUtil.cleanUpTestEnvironment).
             then(testUtil.createTestProductAndDG).
+            then(createGitHubConfig).
             then(done).
             catch(error => done.fail(error));
     }, util.TIMEOUT);
@@ -48,6 +52,16 @@ describe('impt test run for Builder cache scenario >', () => {
             catch(error => done.fail(error));
     }, util.TIMEOUT);
 
+    function createGitHubConfig() {
+        if (config.githubUser && config.githubToken) {
+            gitHubConfigName = '.impt.github';
+            return util.runCommand(
+                `impt test github --github-config ${gitHubConfigName} --user ${config.githubUser} --pwd ${config.githubToken} --confirmed`,
+                util.checkSuccessStatus);
+        }
+        return Promise.resolve();
+    }
+
     it('run test without builder-cache option in the project config', (done) => {
         testUtil.createTestConfig(
             'fixtures/builder_cache',
@@ -55,7 +69,8 @@ describe('impt test run for Builder cache scenario >', () => {
                 'device-file' : 'myDevice.class.nut',
                 'agent-file' : 'myAgent.class.nut',
                 'timeout': 40,
-                'test-file' : 'tests/builder.agent.nut'
+                'test-file' : 'tests/builder.agent.nut',
+                'github-config' : gitHubConfigName
             }).
             then(() => util.runCommand('impt test run', (commandOut) => {
                 expect(Shell.test('-e', '.builder-cache')).toBe(false);
@@ -74,7 +89,8 @@ describe('impt test run for Builder cache scenario >', () => {
                 'agent-file' : 'myAgent.class.nut',
                 'timeout' : 40,
                 'test-file' : 'tests/builder.agent.nut',
-                'builder-cache' : true
+                'builder-cache' : true,
+                'github-config' : gitHubConfigName
             }).
             then(() => util.runCommand('impt test run', (commandOut) => {
                 expect(Shell.test('-e', '.builder-cache')).toBe(true);
@@ -94,7 +110,8 @@ describe('impt test run for Builder cache scenario >', () => {
                 'agent-file' : 'myAgent.class.nut',
                 'timeout': 40,
                 'test-file' : 'tests/builder.agent.nut',
-                'builder-cache' : false
+                'builder-cache' : false,
+                'github-config' : gitHubConfigName
             }).
             then(() => util.runCommand('impt test run --clear-cache', (commandOut) => {
                 expect(Shell.test('-e', '.builder-cache')).toBe(false);

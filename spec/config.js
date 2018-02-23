@@ -29,3 +29,5 @@ exports.password = process.env.IMPT_USER_PASSWORD;
 exports.devices = process.env.IMPT_DEVICE_IDS ? process.env.IMPT_DEVICE_IDS.split(',') : [];
 exports.debug = process.env.IMPT_DEBUG === 'true' || process.env.IMPT_DEBUG === '1';
 exports.apiEndpoint = process.env.IMPT_ENDPOINT;
+exports.githubUser = process.env.IMPT_GITHUB_USER;
+exports.githubToken = process.env.IMPT_GITHUB_TOKEN;
