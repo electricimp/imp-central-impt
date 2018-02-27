@@ -55,7 +55,7 @@ A ‘test method’ (or simply called a ‘test’) is one of a test case’s me
 
 Every test may be uniquely identified or specified by the corresponding test file name, test case name and test method name.
 
-A ‘test project’ is an entity which combines test files intended to test a Squirrel library or other Squirrel code. Each test project is defined by one ‘test configuration’, which is embodied in a [‘test configuration file’](./CommandsManual.md#test-configuration-file). A test configuration indicates the test files which are part of the test project; the Device Group to which test devices are assigned and the compile test code deployed; the source file(s) with the Squirrel code which is going to be tested; and other settings required to build and run the tests.
+A ‘test project’ is an entity which combines test files intended to test a Squirrel library or other Squirrel code. Each test project is defined by one ‘test configuration’, which is embodied in a [‘test configuration file’](./CommandsManual.md#test-configuration-file). A test configuration indicates the test files which are part of the test project; the Device Group to which test devices are assigned and the test code deployed; the source file(s) with the Squirrel code which is going to be tested; and other settings required to build and run the tests.
 
 There must be only one [test configuration file](./CommandsManual.md#test-configuration-file) in a directory. Sub-directories may contain test configuration files too but this is not recommended.
 
@@ -264,7 +264,7 @@ For example: `#require "messagemanager.class.nut:2.0.0"` should be replaced with
 
 *Builder*’s cache is designed to improve the build time and reduce the number of requests issued to external resources. It is only possible to cache external libraries. *Builder* stores the cache in the `.builder-cache` sub-directory inside the test project directory. The cache is maintained for up to 24 hours to prevent library code from becoming stale.
 
-Cacheing is disabled by default. It can be enabled during [test configuration](#test-configuration). It is possible to clear the cache when you [run the tests](#running-tests).
+Caching is disabled by default. It can be enabled during [test configuration](#test-configuration). It is possible to clear the cache when you [run the tests](#running-tests).
 
 ### External Commands ###
 
@@ -425,8 +425,8 @@ this.assertThrowsError(function () {
 There are three ways to display diagnostic messages in the console from your tests:
 
 - Call `this.info(<message>);` from a test method, as many times as you need.
-- For synchronous tests, call `return <return_value>;` from a test method. The returned value will be displayed in the console, provided it is not `null` and the test succeeds.
-- For asynchronous tests, call Promise resolution or rejection methods with a value `resolve(<return_value>);` or `reject(<return_value>);`. The returned value will be displayed on the console, provided it is not `null`.
+- For synchronous tests, call `return <return_value>;` from a test method. The returned value will be displayed in the console, if it is not `null` and the test succeeds.
+- For asynchronous tests, call Promise resolution or rejection methods with a value `resolve(<return_value>);` or `reject(<return_value>);`. The returned value will be displayed on the console, if it is not `null`.
 
 Examples of tests output are provided in the [section on running tests](#running-tests).
 
@@ -481,11 +481,11 @@ To run your tests you need to have one or more devices associated with your acco
 
 1. Prepare a Product. If you already have a Product, note its ID or name. If you do not have a Product, create a new one with [`impt product create`](./CommandsManual.md#product-create):
 
-```
-> impt product create --name MyTestProduct
-Product "MyTestProduct" is created successfully.
-IMPT COMMAND SUCCEEDS
-```
+    ```
+    > impt product create --name MyTestProduct
+    Product "MyTestProduct" is created successfully.
+    IMPT COMMAND SUCCEEDS
+    ```
 
 2. Prepare a Device Group. If you already have a Device Group, note its ID or name. If you do not have a Device Group, create a new one with [`impt dg create`](./CommandsManual.md#device-group-create). You need to specify the Product when creating the Device Group.
     You may use a Device Group of any [type](./CommandsManual#device-group-type), but it is recommended that you use a Development Device Group.
@@ -497,8 +497,6 @@ IMPT COMMAND SUCCEEDS
     ```
 
 3. Assign one or more devices on which you plan to run your tests to the Device Group using [`impt device assign`](./CommandsManual.md#device-assign).
-
-    **Example**
 
     ```
     > impt device assign --device myDevice1 --dg MyTestDG
@@ -624,12 +622,12 @@ These may be needed if your test files [include code from GitHub](#include-from-
 
 For unauthenticated requests, the GitHub API allows you to make [up to 60 requests per hour](https://developer.github.com/v3/#rate-limiting), but this may be not sufficient for intensive testing. To overcome this limit, you can provide GitHub account credentials. There are two ways to do this:
 
-- Via environment variables **We strongly recommend this way for security reasons** &mdash; You should specify two environment variables:
+- Via environment variables. **We strongly recommend this way for security reasons** &mdash; You should specify two environment variables:
   - `GITHUB_USER` &mdash; A GitHub account username.
   - `GITHUB_TOKEN` &mdash; A GitHub account password or personal access token.
 
 - Via a GitHub credentials file.
-  - This file may be created or updated with [`impt test github`](./CommandsManual.md#test-github). You specify a GitHub username and password, and they are saved in the specified file. **Important** The credentials are stored in a plain text.
+  - This file may be created or updated with [`impt test github`](./CommandsManual.md#test-github). You specify a GitHub username and password, and they are saved in the specified file. **Important:** the credentials are stored in a plain text.
   - You may have several GitHub credential files and they may be located in any place. You specify a concrete GitHub credentials file during [test configuration](#test-configuration). If the specified file exists when you [run the tests](#running-tests), the GitHub credentials are taken from it. If the specified file does not exist, the GitHub credentials are taken from the environment variables, if they are set.
 
 **Example**

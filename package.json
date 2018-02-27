@@ -1,6 +1,6 @@
 {
   "name": "imp-central-impt",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "impt - command line tool for the Electric Imp impCentral API",
   "main": "bin/impt",
   "engines": {
@@ -44,7 +44,15 @@
     "sprintf-js": "^1.0.3",
     "sync-exec": "^0.6.2"
   },
+  "scripts": {
+    "test": "jasmine"
+  },
+  "devDependencies": {
+    "jasmine": "latest",
+    "jasmine-expect": "latest",
+    "shelljs": "latest"
+  },
   "yargs": {
-    "short-option-groups" : false
+    "short-option-groups": false
   }
 }
