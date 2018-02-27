@@ -185,7 +185,7 @@ Attributes accepted as `<BUILD_IDENTIFIER>` (in order of search):
 
 ### Auth Files ###
 
-An auth file is a `*.impt.auth` file. It stores authentication and other information necessary to execute *impt* commands. There are two types of auth file &mdash; local and global. The both types have an identical format and store similar information.
+An auth file is a `.impt.auth` file. It stores authentication and other information necessary to execute *impt* commands. There are two types of auth file &mdash; local and global. The both types have an identical format and store similar information.
 
 #### Local Auth File ####
 
@@ -203,7 +203,7 @@ Any command called from a directory where a local auth file does not exist is ex
 
 ### Project Files ###
 
-A Project file is a `*.impt.project` file located in a given directory. Different directories may contain different Project files. A directory must contain only one Project file.
+A Project file is a `.impt.project` file located in a given directory. Different directories may contain different Project files. A directory must contain only one Project file.
 
 Each Project file contains settings for a Project, an *impt* entity which links the source files in the current directory with a Device Group. A Project file references the linked Device Group (of the [types](#device-group-type) *development* or *pre-factory* only) and, correspondingly, the Product which contains that Device Group, devices assigned to the Device Group, and Deployments created for that Device Group.
 
@@ -211,7 +211,7 @@ A Project file may affect commands called from the directory where the file is l
 
 ### Test Configuration Files ###
 
-A test configuration file is a `*.impt.test` file located in a given directory. Different directories may contain different test configuration files. A directory must contain only one test configuration file.
+A test configuration file is a `.impt.test` file located in a given directory. Different directories may contain different test configuration files. A directory must contain only one test configuration file.
 
 Test configuration files contains settings to run unit tests that are created with the [*impUnit*](https://github.com/electricimp/impUnit) test framework and affect [Test Commands](#test-commands) only.
 
