@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 // MIT License
 //
 // Copyright 2018 Electric Imp
@@ -26,26 +24,10 @@
 
 'use strict';
 
-const Options = require('../lib/util/Options');
-const UserInteractor = require('../lib/util/UserInteractor');
-const Yargs = require('yargs');
-
-Yargs
-    .commandDir('cmds')
-    .demandCommand(1, UserInteractor.ERRORS.CMD_UNKNOWN)
-    .strict()
-    .version(false)
-    .usage(Options.getCommandGroupUsage(null))
-    .help('help', 'Displays description of the command. Ignores any other options.')
-    .alias('help', 'h')
-    .fail(function (msg, err, yargs) {
-        console.log(yargs.help());
-        if (err) {
-            UserInteractor.processError(err);
-        }
-        else {
-            UserInteractor.printErrorWithStatus(msg);
-        }
-        process.exit(1);
-    })
-    .argv
+exports.email = process.env.IMPT_USER_EMAIL;
+exports.password = process.env.IMPT_USER_PASSWORD;
+exports.devices = process.env.IMPT_DEVICE_IDS ? process.env.IMPT_DEVICE_IDS.split(',') : [];
+exports.debug = process.env.IMPT_DEBUG === 'true' || process.env.IMPT_DEBUG === '1';
+exports.apiEndpoint = process.env.IMPT_ENDPOINT;
+exports.githubUser = process.env.IMPT_GITHUB_USER;
+exports.githubToken = process.env.IMPT_GITHUB_TOKEN;

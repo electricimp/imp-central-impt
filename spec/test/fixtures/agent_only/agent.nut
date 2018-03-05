@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 // MIT License
 //
 // Copyright 2018 Electric Imp
@@ -24,28 +22,10 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 
-'use strict';
+// agent.nut
 
-const Options = require('../lib/util/Options');
-const UserInteractor = require('../lib/util/UserInteractor');
-const Yargs = require('yargs');
-
-Yargs
-    .commandDir('cmds')
-    .demandCommand(1, UserInteractor.ERRORS.CMD_UNKNOWN)
-    .strict()
-    .version(false)
-    .usage(Options.getCommandGroupUsage(null))
-    .help('help', 'Displays description of the command. Ignores any other options.')
-    .alias('help', 'h')
-    .fail(function (msg, err, yargs) {
-        console.log(yargs.help());
-        if (err) {
-            UserInteractor.processError(err);
-        }
-        else {
-            UserInteractor.printErrorWithStatus(msg);
-        }
-        process.exit(1);
-    })
-    .argv
+class AA {
+  function addTwoNums(a, b) {
+    return a + b;
+  }
+}

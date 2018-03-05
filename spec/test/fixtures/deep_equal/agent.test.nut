@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 // MIT License
 //
 // Copyright 2018 Electric Imp
@@ -24,28 +22,62 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 
-'use strict';
-
-const Options = require('../lib/util/Options');
-const UserInteractor = require('../lib/util/UserInteractor');
-const Yargs = require('yargs');
-
-Yargs
-    .commandDir('cmds')
-    .demandCommand(1, UserInteractor.ERRORS.CMD_UNKNOWN)
-    .strict()
-    .version(false)
-    .usage(Options.getCommandGroupUsage(null))
-    .help('help', 'Displays description of the command. Ignores any other options.')
-    .alias('help', 'h')
-    .fail(function (msg, err, yargs) {
-        console.log(yargs.help());
-        if (err) {
-            UserInteractor.processError(err);
+class TestCase1 extends ImpTestCase {
+  function test1() {
+    this.assertDeepEqual(
+      /* expected */
+      {
+        "a" : 1,
+        "b" : {
+          "c" : 3
         }
-        else {
-            UserInteractor.printErrorWithStatus(msg);
+      },
+      /* actual */
+      {
+        "a" : 1,
+        "b" : {
+//          "c" : 3
         }
-        process.exit(1);
-    })
-    .argv
+      }
+    );
+  }
+
+  function test2() {
+    this.assertDeepEqual(
+      /* expected */
+      {
+        "a" : 1,
+        "b" : {
+          "c" : 3
+        }
+      },
+      /* actual */
+      {
+        "a" : 1,
+        "b" : {
+          "c" : 3,
+          "d" : 4
+        }
+      }
+    );
+  }
+
+  function test3() {
+    this.assertDeepEqual(
+      /* expected */
+      {
+        "a" : 1,
+        "b" : {
+          "c" : 3
+        }
+      },
+      /* actual */
+      {
+        "a" : 1,
+        "b" : {
+          "c" : 100
+        }
+      }
+    );
+  }
+}
