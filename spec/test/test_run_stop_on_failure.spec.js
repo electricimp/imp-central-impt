@@ -52,7 +52,7 @@ describe('impt test run for stop-on-failure behavior >', () => {
                 expect(commandOut).not.toBeEmptyString();
                 expect(commandOut).not.toMatch(/Using device test file tests\/2\.device\.test\.nut\n/);
                 ImptTestCommandsHelper.checkTestFailStatus(commandOut);
-                ImptTestingHelper.checkSuccessStatus(commandOut);
+                ImptTestingHelper.checkFailStatus(commandOut);
             })).
             then(done).
             catch(error => done.fail(error));
@@ -64,7 +64,7 @@ describe('impt test run for stop-on-failure behavior >', () => {
                 expect(commandOut).not.toBeEmptyString();
                 expect(commandOut).toMatch(/Using device test file tests\/2\.device\.test\.nut\n/);
                 ImptTestCommandsHelper.checkTestFailStatus(commandOut);
-                ImptTestingHelper.checkSuccessStatus(commandOut);
+                ImptTestingHelper.checkFailStatus(commandOut);
             })).
             then(done).
             catch(error => done.fail(error));

@@ -56,7 +56,7 @@ describe('impt test run for external-command scenario >', () => {
                 expect(commandOut).toMatch(/\> \"?external command output\"?/);
                 expect(commandOut).toMatch(/External command failed with exit code 125/);
                 ImptTestCommandsHelper.checkTestFailStatus(commandOut);
-                ImptTestingHelper.checkSuccessStatus(commandOut);
+                ImptTestingHelper.checkFailStatus(commandOut);
             })).
             then(done).
             catch(error => done.fail(error));
@@ -74,7 +74,7 @@ describe('impt test run for external-command scenario >', () => {
                 expect(commandOut).not.toMatch(/\> external command output/);
                 expect(commandOut).toMatch(/External command timed out/);
                 ImptTestCommandsHelper.checkTestFailStatus(commandOut);
-                ImptTestingHelper.checkSuccessStatus(commandOut);
+                ImptTestingHelper.checkFailStatus(commandOut);
             })).
             then(done).
             catch(error => done.fail(error));

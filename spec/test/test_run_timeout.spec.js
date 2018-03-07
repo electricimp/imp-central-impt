@@ -52,7 +52,7 @@ describe('impt test run for timeout behavior >', () => {
                 expect(commandOut).not.toBeEmptyString();
                 expect(commandOut).toMatch('Test timed out');
                 ImptTestCommandsHelper.checkTestFailStatus(commandOut);
-                ImptTestingHelper.checkSuccessStatus(commandOut);
+                ImptTestingHelper.checkFailStatus(commandOut);
             })).
             then(done).
             catch(error => done.fail(error));
