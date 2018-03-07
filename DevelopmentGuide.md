@@ -237,7 +237,7 @@ The impCentral API provides two types of logs: [historical](#historical-logs) an
 
 To display historical logs for a device, use [`impt log get`](./CommandsManual.md#log-get). You do not need to specify a device identifier if there is only one device in your Project (ie. assigned to the Project’s Device Group).
 
-The log entries are displayed in pages. The page size may be specified in the command. By default, all pages are displayed one by one, starting from the most recent log entry and pausing after every page. To display the next page, press *\<Enter>*. To stop displaying, press *\<Ctrl-C>*. Alternatively, the command allows you to specify a page number to display. In this case, only the specified page is displayed and the command finishes.
+The log entries are displayed in pages. The page size may be specified in the command. By default, all pages are displayed one by one, starting from the most recent log entry and pausing after every page. To display the next page, press *Enter*. To stop displaying, press *Ctrl-C*. Alternatively, the command allows you to specify a page number to display. In this case, only the specified page is displayed and the command finishes.
 
 **Note** A limited number of log entries are kept by impCentral API for a limited period of time.
 
@@ -267,7 +267,7 @@ IMPT COMMAND SUCCEEDS
 
 #### Real-time Logs ####
 
-The impCentral API will stream log entries from device(s) in real time. Devices may be added to one log stream but there is a limit on the number of devices. There is also a limit on the number of log streams per account. The both limits are controlled by the impCentral API, not by *impt*.
+The impCentral API will stream log entries from device(s) in real time. Devices may be added to up to eight log streams per account but there is a limit on the number of devices: eight devices per stream. The both limits are controlled by the impCentral API, not by *impt*.
 
 *impt* provides several commands which start displaying real-time logs:
 
@@ -278,7 +278,7 @@ The impCentral API will stream log entries from device(s) in real time. Devices 
 
 If the total number of devices to be added to a log stream exceeds the per-stream limit, not all of them will be added. Check the command’s output to see which devices were added and which were not.
 
-While the logs are being streamed, no other command can be called. To stop displaying the logs, press *\<Ctrl-C>*. The log stream may be closed by the impCentral API: for example, when a new log stream is requested by the same account and that exceeds the limit of opened streams.
+While the logs are being streamed, no other command can be called. To stop displaying the logs, press *Ctrl-C*. The log stream may be closed by the impCentral API: for example, when a new log stream is requested by the same account and that exceeds the limit of opened streams.
 
 Every command listed above always creates a new log stream. The impCentral API currently permits only one log stream per account, so every successful execution of the above commands automatically closes the previous log stream, whether established by *impt* or the impCentral web app. Starting a log in impCentral closes a log stream opened in *impt*.
 
@@ -532,7 +532,7 @@ Press <Ctrl-C> to exit.
 
 10. Review how your application is working.
 
-11. Stop the logging by pressing *\<Ctrl-C>*.
+11. Stop the logging by pressing *Ctrl-C*.
 
 12. If needed, update your code, create and run a new build by using the command listed in Step 9.
 
@@ -644,7 +644,7 @@ Press <Ctrl-C> to exit.
 
 10. Use the fixture to configure test DUTs. They will connect, and download and run the factory firmware which will test and bless them.
 
-11. Stop the logging by pressing *\<Ctrl-C>*.
+11. Stop the logging by pressing *Ctrl-C*.
 
 12. If needed, update your factory firmware code, and create and run a new build by using the command listed in Step 9.
 
