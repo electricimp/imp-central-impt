@@ -691,6 +691,7 @@ Restart request for Device "234776801163a9ee" is successful.
 
 [+11.68/0.00s info] Testing failed
 IMPT COMMAND FAILS
+```
 
 **Example - all tests are passed**
 
