@@ -49,19 +49,19 @@ This guide contains two main parts:
 
 A ‘test file’ is a file containing ‘test cases’.
 
-A test case is a class inheriting from the *ImpTestCase* class defined by the [*impUnit*](https://github.com/electricimp/impUnit) framework. There can be several test cases in a test file.
+A ‘test case’ is a class inherited from the *ImpTestCase* class defined by the [*impUnit*](https://github.com/electricimp/impUnit) framework. There can be several test cases in a test file.
 
 A ‘test method’ (or simply called a ‘test’) is one of a test case’s methods. It should be prefixed by *test*, eg. *testEverythingOk()*. There can be several test methods (tests) in a test case.
 
 Every test may be uniquely identified or specified by the corresponding test file name, test case name and test method name.
 
-A ‘test project’ is an entity which combines test files intended to test a Squirrel library or other Squirrel code. Each test project is defined by one ‘test configuration’, which is embodied in a [‘test configuration file’](./CommandsManual.md#test-configuration-file). A test configuration indicates the test files which are part of the test project; the Device Group to which test devices are assigned and the test code deployed; the source file(s) with the Squirrel code which is going to be tested; and other settings required to build and run the tests.
+A ‘test project’ is an entity which combines test files intended to test a Squirrel library or other Squirrel code. Each test project is defined by one ‘test configuration’, which is embodied in a [‘test configuration file’](./CommandsManual.md#test-configuration-files). A test configuration indicates the test files which are part of the test project; the Device Group to which test devices are assigned and the test code deployed; the source file(s) with the Squirrel code which is going to be tested; and other settings required to build and run the tests.
 
-There must be only one [test configuration file](./CommandsManual.md#test-configuration-file) in a directory. Sub-directories may contain test configuration files too but this is not recommended.
+There must be only one [test configuration file](./CommandsManual.md#test-configuration-files) in a directory. Sub-directories may contain test configuration files too but this is not recommended.
 
-The ‘test home’ is the directory where the [test configuration file](./CommandsManual.md#test-configuration-file) is located. All of the files located in the test home and all of its sub-directories are considered as test files belonging to the corresponding test project if their names match the patterns specified in the test configuration.
+The ‘test home’ is the directory where the [test configuration file](./CommandsManual.md#test-configuration-files) is located. All of the files located in the test home and all of its sub-directories are considered as test files belonging to the corresponding test project if their names match the patterns specified in the test configuration.
 
-**Note** The test project entity has no any relation to the development Project entity described in the [*impt* Development Guide](./DevelopmentGuide.md). A [Project file](./CommandsManual.md#project-file) and a [test configuration file](./CommandsManual.md#test-configuration-file) may coexist in the same directory.
+**Note:** the test project entity has no any relation to the development Project entity described in the [*impt* Development Guide](./DevelopmentGuide.md). A [Project file](./CommandsManual.md#project-files) and a [test configuration file](./CommandsManual.md#test-configuration-files) may coexist in the same directory.
 
 A ‘test session’ is a run of a set of tests from one test file on one device. That may include all of the tests from all of the test cases from the test file, or a subset of all the tests in the test file. Running the same set of tests on another device is another test session.
 
@@ -103,8 +103,8 @@ You need to perform the following steps to write your tests:
   - Every test method name should start with *test*. Test methods may have identical names if they are in different test cases. There are no other rules for test method naming, but bear in mind that [running selective tests](#running-selective-tests) can have an impact on test method naming.
   - A test case may have several test methods (tests).
   - Additionally, any test case may have *setUp()* and *tearDown()* methods:
-    - If it exists, *setUp()* is called by the tool before any other methods in the test case. It may be used to perform environment setup before test execution.
-    - If it exists, *tearDown()* is called by the tool after all other methods in the test case. It may be used to clean the environment after test execution.
+    - If it exists, *setUp()* is called by the tool before any other methods in the test case. It may be used to perform environment setup before the test case execution.
+    - If it exists, *tearDown()* is called by the tool after all other methods in the test case. It may be used to clean the environment after the test case execution.
   - All test methods other than *setUp()* and *tearDown()* in one test case are chosen for execution by the tool in an arbitrary order, ie. your tests should be independent and not assume any particular order of execution.
 
 A test method may be run synchronously (the default) or [asynchronously](#asynchronous-testing).
@@ -477,7 +477,7 @@ class TestCase1 extends ImpTestCase {
 
 ### Test Device Group ###
 
-To run your tests you need to have one or more devices associated with your account and assigned to the Device Group to which your tests will be deployed. These then are the tasks you should perform in order to prepare your devices for testing:
+To run your tests you need to have one or more devices associated with your account and assigned to the Device Group to which your tests will be deployed. These are the tasks you should perform in order to prepare your devices for testing:
 
 1. Prepare a Product. If you already have a Product, note its ID or name. If you do not have a Product, create a new one with [`impt product create`](./CommandsManual.md#product-create):
 
@@ -488,7 +488,7 @@ To run your tests you need to have one or more devices associated with your acco
     ```
 
 2. Prepare a Device Group. If you already have a Device Group, note its ID or name. If you do not have a Device Group, create a new one with [`impt dg create`](./CommandsManual.md#device-group-create). You need to specify the Product when creating the Device Group.
-    You may use a Device Group of any [type](./CommandsManual#device-group-type), but it is recommended that you use a Development Device Group.
+    You may use a Device Group of any [type](./CommandsManual.md#device-group-type), but it is recommended that you use a Development Device Group.
 
     ```
     > impt dg create --name MyTestDG --product MyTestProduct
@@ -508,13 +508,13 @@ To run your tests you need to have one or more devices associated with your acco
 
 ### Test Configuration ###
 
-Before running the tests you should create a test configuration for your test project: call [`impt test create`](./CommandsManual.md#test-create) from the test home. If a [test configuration file](./CommandsManual.md#test-configuration-file) already exists in that directory, it will be deleted (if confirmed by you) and the new configuration will be created from scratch in its place.
+Before running the tests you should create a test configuration for your test project: call [`impt test create`](./CommandsManual.md#test-create) from the test home. If a [test configuration file](./CommandsManual.md#test-configuration-files) already exists in that directory, it will be deleted (if confirmed by you) and the new configuration will be created from scratch in its place.
 
 The configuration settings include:
 
 - `--dg` &mdash; the Device Group identifier. Your tests will run on all of the devices assigned to that Device Group. You may specify the Device Group by its ID or its name.
 
-- `--device-file`, `--agent-file` &mdash; The device and agent source code which is deployed along with the tests. Usually, it is the source code of a library or other Squirrel which you are planning to test.
+- `--device-file`, `--agent-file` &mdash; The device and agent source code which is deployed along with the tests. Usually, it is the source code of a library or other Squirrel code which you are planning to test.
 
 - `--test-file` &mdash; The test file name or the pattern which specifies the test file(s) included in your test project. You may repeat this option to specify several file names and/or patterns. The values of the repeated option are combined by logical OR. The default pattern is detailed in the [command’s spec](./CommandsManual.md#test-create).
 
@@ -555,7 +555,7 @@ IMPT COMMAND SUCCEEDS
 
 #### Updating the Configuration ####
 
-You may update the test configuration by calling [`impt test update`](./CommandsManual.md#test-update). The existing [test configuration file](./CommandsManual.md#test-configuration-file) will be updated with the new settings. The new `--test-file` option value(s) completely replace any existing setting.
+You may update the test configuration by calling [`impt test update`](./CommandsManual.md#test-update). The existing [test configuration file](./CommandsManual.md#test-configuration-files) will be updated with the new settings. The new `--test-file` option value(s) completely replace any existing setting.
 
 **Example**
 
@@ -645,7 +645,7 @@ To run your configured test project’s tests, call [`impt test run`](./Commands
 
 By default, the tool searches for all test files according to the file names and/or patterns specified in the [test configuration](#test-configuration) file. The search starts from the test home and includes all sub-directories. The tool looks for all test cases in the files it discovers. All test methods in all located test cases are considered as viable tests for execution. For a particular run, you may select a subset of test files, test cases and test methods by specifying the `--tests` option; see [here](#running-selective-tests) for more details.
 
-Every selected test file is a source for building and deploying code, so there will be as many different builds as there are selected test files for execution. Test files (builds) run in an arbitrary order.
+Every selected test file is a source of a new build (Deployment), so there will be as many different builds as there are selected test files for execution. Test files (builds) run in an arbitrary order.
 
 Every test file (build) runs on all devices currently assigned to the Device Group specified in the [test configuration](#test-configuration) file one by one: no device is run until the previous device has completed testing. Devices are chosen in an arbitrary order. A test file (build) running on one device is called a test session. When the build completes on the last device, the next test file (build) starts running on the same set of devices, again one after the other.
 
@@ -705,7 +705,7 @@ Restart request for Device "234776801163a9ee" is successful.
 [+19.24/0.00s info] Session round-angle failed
 
 [+19.24/0.00s info] Testing failed
-IMPT COMMAND SUCCEEDS
+IMPT COMMAND FAILS
 ```
 
 ### Running Selective Tests ###
@@ -753,7 +753,7 @@ In this example:
 
 ### Debug Mode ###
 
-You may run your tests in debug mode by specifying the `--debug` option of the [`impt test run`](./CommandsManual.md#test-delete) command. In this mode:
+You may run your tests in debug mode by specifying the `--debug` option of the [`impt test run`](./CommandsManual.md#test-run) command. In this mode:
 
 - All communications with the [impCentral API](https://apidoc.electricimp.com) are displayed in the console.
 - All communications with the [*impUnit* test framework](https://github.com/electricimp/impUnit) are displayed in the console.
@@ -844,7 +844,7 @@ IMPT COMMAND SUCCEEDS
 
 ### Cleaning Up ###
 
-After testing is complete, you may want to clean the various entities created during testing. If you want to delete your test project, call [`impt test delete`](./CommandsManual.md#test-run) from the test home. This deletes the [test configuration file](./CommandsManual.md#test-configuration-file), the *Builder* cache directory and any debug information. By specifying additional options you may also delete the GitHub credentials file, any file containing *Builder* variables, and impCentral API entities (Device Group, Deployments, Product) which were used or created during testing. Please see the [delete command’s spec](./CommandsManual.md#test-delete) for more information.
+After testing is complete, you may want to clean the various entities created during testing. If you want to delete your test project, call [`impt test delete`](./CommandsManual.md#test-delete) from the test home. This deletes the [test configuration file](./CommandsManual.md#test-configuration-files), the *Builder* cache directory and any debug information. By specifying additional options you may also delete the GitHub credentials file, any file containing *Builder* variables, and impCentral API entities (Device Group, Deployments, Product) which were used or created during testing. Please see the [delete command’s spec](./CommandsManual.md#test-delete) for more information.
 
 **Example**
 
@@ -934,7 +934,7 @@ Deployment "f44511f9-f1a0-a892-a4b8-53f48880d6c7" is deleted successfully.
 IMPT COMMAND SUCCEEDS
 ```
 
-If you only want to unassign the devices from the testing Device Group, use [`impt dg unassign`](./CommandsManual.md#dg-unassign) or [`impt device unassign`](./CommandsManual.md#device-unassign).
+If you only want to unassign the devices from the testing Device Group, use [`impt dg unassign`](./CommandsManual.md#device-group-unassign) or [`impt device unassign`](./CommandsManual.md#device-unassign).
 
 **Example**
 
