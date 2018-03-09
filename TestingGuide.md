@@ -661,57 +661,72 @@ When all tests are passed, the [`impt test run`](./CommandsManual.md#test-run) c
 
 ```
 > impt test run
-[info] Started at 22 Jan 2018 22:47:04 GMT+0300
-[+0.01/0.01s info] Found 2 test files:
+[info] Started at 09 Mar 2018 18:58:31 GMT+0300
+[+0.01/0.01s info] Found 1 test file:
         tests/TestFile1.test.nut
-        tests/TestFile2.test.nut
 [+0.02/0.00s info] Using agent source file: MyLibrary.agent.lib.nut
 [+0.02/0.00s info] Have no device source file, using blank
-[+0.63/0.61s info] Using device test file tests/TestFile1.test.nut
-[+0.66/0.03s info] Using DeviceGroup MyTestDG [e4bf84dd-7cc6-147e-9b42-b08812912b99]
-Deployment "2587b907-afa7-8c72-a4a5-a8f0407018b5" is created successfully.
-[+1.83/1.17s info] Created deployment: 2587b907-afa7-8c72-a4a5-a8f0407018b5
+[+0.72/0.70s info] Using device test file tests/TestFile1.test.nut
+[+0.76/0.04s info] Using DeviceGroup MyTestDG [ece0ef8d-fbb1-6bdf-e2b8-02776e2fdf41]
+Deployment "d28fb08b-44f2-d995-db1e-73a863c33a03" is created successfully.
+[+2.89/2.13s info] Created deployment: d28fb08b-44f2-d995-db1e-73a863c33a03
 
-[+1.83/0.00s info] Starting test session eight-inside
-[+1.83/0.00s info] Using device myDevice1 [234776801163a9ee] (1/1)
-[+1.83/0.00s info] Using device test file tests/TestFile1.test.nut
+[+2.89/0.00s info] Starting test session world-dawn
+[+2.89/0.00s info] Using device myDevice1 [234776801163a9ee] (1/1)
+[+2.89/0.00s info] Using device test file tests/TestFile1.test.nut
 Restart request for Device "234776801163a9ee" is successful.
-[+5.00/3.17s info] Device code space usage: 16.8%
-[+9.12/4.12s test] MyTestCase_1::testMe()
-[+9.13/0.00s test] Success
-[+9.13/0.00s test] MyTestCase_1::testMe_1()
-[+9.56/0.43s test] Failure: Failed to assert that condition is true
-[+9.56/0.00s test] MyTestCase::testMe()
-[+9.56/0.00s test] Success
-[+9.57/0.00s test] MyTestCase::testMe_1()
-[+9.57/0.01s test] Success
-[+9.57/0.00s test] Tests: 4, Assertions: 4, Failures: 1
-[+9.58/0.00s info] Session eight-inside failed
-[+9.58/0.00s info] Using device test file tests/TestFile2.test.nut
-[+9.61/0.03s info] Using DeviceGroup MyTestDG [e4bf84dd-7cc6-147e-9b42-b08812912b99]
-Deployment "3c0ef686-6200-59e1-cc39-ec8ca788a482" is created successfully.
-[+10.70/1.09s info] Created deployment: 3c0ef686-6200-59e1-cc39-ec8ca788a482
+[+6.03/3.14s info] Device code space usage: 17.0%
+[+11.19/5.15s test] MyTestCase_1::testMe_1()
+[+11.19/0.00s test] Success
+[+11.66/0.47s test] MyTestCase::setUp()
+[+11.66/0.00s test] Success: We're ready
+[+11.66/0.00s test] MyTestCase::testMe_1()
+[+11.67/0.00s test] Failure: Expected value: 1, got: 10
+[+11.67/0.00s test] MyTestCase::testMe()
+[+11.67/0.00s test] Success
+[+11.67/0.00s test] MyTestCase::tearDown()
+[+11.67/0.00s test] Success
+[+11.68/0.00s test] Tests: 3, Assertions: 3, Failures: 1
+[+11.68/0.00s info] Session world-dawn failed
 
-[+10.70/0.00s info] Starting test session round-angle
-[+10.70/0.00s info] Using device myDevice1 [234776801163a9ee] (1/1)
-[+10.70/0.00s info] Using device test file tests/TestFile2.test.nut
-Restart request for Device "234776801163a9ee" is successful.
-[+14.71/4.01s info] Device code space usage: 16.8%
-[+18.78/4.07s test] MyTestCase::setUp()
-[+18.78/0.00s test] Success: We're ready
-[+18.78/0.00s test] MyTestCase::testMe_1()
-[+18.78/0.00s test] Success
-[+19.23/0.45s test] MyTestCase::testMe()
-[+19.23/0.01s test] Failure: Expected value: 1, got: 10
-[+19.23/0.00s test] Tests: 2, Assertions: 2, Failures: 1
-[+19.24/0.00s info] Session round-angle failed
-
-[+19.24/0.00s info] Testing failed
+[+11.68/0.00s info] Testing failed
 IMPT COMMAND FAILS
-```
 
 **Example - all tests are passed**
 
+```
+> impt test run
+[info] Started at 09 Mar 2018 19:00:25 GMT+0300
+[+0.01/0.01s info] Found 1 test file:
+        tests/TestFile1.test.nut
+[+0.01/0.00s info] Using agent source file: MyLibrary.agent.lib.nut
+[+0.01/0.00s info] Have no device source file, using blank
+[+0.86/0.84s info] Using device test file tests/TestFile1.test.nut
+[+0.90/0.04s info] Using DeviceGroup MyTestDG [ece0ef8d-fbb1-6bdf-e2b8-02776e2fdf41]
+Deployment "03b7f0d3-f5df-9bd9-b856-5d5e3b9fd8e7" is created successfully.
+[+2.12/1.23s info] Created deployment: 03b7f0d3-f5df-9bd9-b856-5d5e3b9fd8e7
+
+[+2.13/0.00s info] Starting test session industry-grain
+[+2.13/0.00s info] Using device myDevice1 [234776801163a9ee] (1/1)
+[+2.13/0.00s info] Using device test file tests/TestFile1.test.nut
+Restart request for Device "234776801163a9ee" is successful.
+[+5.36/3.23s info] Device code space usage: 17.0%
+[+9.94/4.58s test] MyTestCase_1::testMe_1()
+[+9.94/0.00s test] Success
+[+9.94/0.00s test] MyTestCase::setUp()
+[+9.94/0.00s test] Success: We're ready
+[+9.94/0.00s test] MyTestCase::testMe_1()
+[+9.94/0.00s test] Success
+[+9.95/0.00s test] MyTestCase::testMe()
+[+9.95/0.00s test] Success
+[+10.16/0.21s test] MyTestCase::tearDown()
+[+10.16/0.00s test] Success
+[+10.16/0.00s info] Tests: 3, Assertions: 3, Failures: 0
+[+10.16/0.00s info] Session industry-grain succeeded
+
+[+10.17/0.00s info] Testing succeeded
+IMPT COMMAND SUCCEEDS
+```
 
 ### Running Selective Tests ###
 
