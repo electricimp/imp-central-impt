@@ -77,10 +77,11 @@
 - [Auth files](#auth-files)
 - [Project Files](#project-files)
 - [Test Configuration Files](#test-configuration-files)
+- [Command Description](#command-description)
 - [List of Aliases](#list-of-aliases)
 - [Common Filter Options](#common-filter-options)
 
-### Command Syntax ###
+## Command Syntax ##
 
 ```
 impt <command_group> <command_name> [<options>]
@@ -104,7 +105,7 @@ where:
 
 All commands and options are case sensitive.
 
-### The Help Option ###
+## The Help Option ##
 
 The `--help` option (alias: `-h`) can be used with a fully or a partially specified command:
 
@@ -112,9 +113,9 @@ The `--help` option (alias: `-h`) can be used with a fully or a partially specif
 - `impt <command_group> --help` &mdash; Displays a list of all of the group’s commands.
 - `impt <command_group> <command_name> --help` &mdash; Displays a detailed description of the command.
 
-### Entity Identification ###
+## Entity Identification ##
 
-Applicable to all impCentral API entities &mdash; Account, Product, Device Group, Device and Deployment &mdash; these rules govern how *impt* searches an entity:
+Applicable to the following impCentral API entities &mdash; Account, Product, Device Group, Device and Deployment &mdash; these rules govern how *impt* searches an entity:
 
 - There is an order of attributes for every entity type (see below).
 - *impt* starts from the first attribute in the order and searches the specified value for this attribute.
@@ -122,7 +123,7 @@ Applicable to all impCentral API entities &mdash; Account, Product, Device Group
 - If at least one entity is found for the particular attribute, the search is stopped.
 - If no entity is found for all attributes, or more than one entity is found, then, depending on a particular command, that may be considered as a success (for all `list` commands) or as a fail (for all other commands).
 
-#### Account identifier ####
+### Account identifier ###
 
 Option: `--owner <ACCOUNT_IDENTIFIER>`
 
@@ -133,7 +134,7 @@ Attributes accepted as <ACCOUNT_IDENTIFIER> (in order of search):
 - Email (always unique)
 - Username (always unique)
 
-#### Product identifier ####
+### Product identifier ###
 
 Option: `--product <PRODUCT_IDENTIFIER>`
 
@@ -142,7 +143,7 @@ Attributes accepted as `<PRODUCT_IDENTIFIER>` (in order of search):
 - Product ID (always unique)
 - Product name (unique among all Products owned by a particular user)
 
-#### Device Group identifier ####
+### Device Group identifier ###
 
 Option: `--dg <DEVICE_GROUP_IDENTIFIER>`
 
@@ -151,7 +152,7 @@ Attributes accepted as `<DEVICE_GROUP_IDENTIFIER>` (in order of search):
 - Device Group ID (always unique)
 - Device Group name (unique among all the Device Groups within a Product)
 
-#### Device identifier ####
+### Device identifier ###
 
 Option: `--device <DEVICE_IDENTIFIER>`
 
@@ -162,7 +163,7 @@ Attributes accepted as `<DEVICE_IDENTIFIER>` (in order of search):
 - Agent ID
 - Device name
 
-#### Build identifier ####
+### Build identifier ###
 
 Option: `--build <BUILD_IDENTIFIER>`
 
@@ -173,7 +174,7 @@ Attributes accepted as `<BUILD_IDENTIFIER>` (in order of search):
 - Tag
 - Origin
 
-### Device Group Type ###
+## Device Group Type ##
 
 *impt* commands accept the following constants to specify a type of Device Group:
 
@@ -183,37 +184,37 @@ Attributes accepted as `<BUILD_IDENTIFIER>` (in order of search):
 - *factory* &mdash; for the impCentral API’s "factoryfixture_devicegroup" type
 - *production* &mdash; for the impCentral API’s "production_devicegroup" type
 
-### Auth Files ###
+## Auth Files ##
 
 An auth file is a `.impt.auth` file. It stores authentication and other information necessary to execute *impt* commands. There are two types of auth file &mdash; local and global. The both types have an identical format and store similar information.
 
-#### Local Auth File ####
+### Local Auth File ###
 
-A local auth file is an auth file located in the directory from where an *impt* command is called. Different directories may contain different local auth files. One directory must contain only one local auth file.
+A local auth file is an auth file located in the directory from where an *impt* command is called. Different directories may contain different local auth files. One directory can contain only one local auth file.
 
 Any command called from a directory where a local auth file exists is executed in the context (with authentication and other settings) defined by that local auth file.
 
 If the current directory does not contain a local auth file, the command is executed in the context defined by the global auth file
 
-#### Global Auth File ####
+### Global Auth File ###
 
-A global auth file affects the tool commands which are called from any directory where a local auth file does not exist. There must be only one global auth file per tool installation.
+A global auth file affects the tool commands which are called from any directory where a local auth file does not exist. There can be only one global auth file per tool installation.
 
 Any command called from a directory where a local auth file does not exist is executed in the context (with authentication and other settings) defined by the global auth file. If neither a local nor a global auth file exists, the command fails.
 
-### Project Files ###
+## Project Files ##
 
-A Project file is a `.impt.project` file located in a given directory. Different directories may contain different Project files. A directory must contain only one Project file.
+A Project file is a `.impt.project` file located in a given directory. Different directories may contain different Project files. A directory can contain only one Project file.
 
 Each Project file contains settings for a Project, an *impt* entity which links the source files in the current directory with a Device Group. A Project file references the linked Device Group (of the [types](#device-group-type) *development* or *pre-factory* only) and, correspondingly, the Product which contains that Device Group, devices assigned to the Device Group, and Deployments created for that Device Group.
 
 A Project file may affect commands called from the directory where the file is located. Product, Device Group, Devices, Deployment, and source code files referenced by Project file may be assumed by a command when they are not specified explicitly.
 
-### Test Configuration Files ###
+## Test Configuration Files ##
 
-A test configuration file is a `.impt.test` file located in a given directory. Different directories may contain different test configuration files. A directory must contain only one test configuration file.
+A test configuration file is a `.impt.test` file located in a given directory. Different directories may contain different test configuration files. A directory can contain only one test configuration file.
 
-Test configuration files contains settings to run unit tests that are created with the [*impUnit*](https://github.com/electricimp/impUnit) test framework and affect [Test Commands](#test-commands) only.
+A test configuration file contains settings to run unit tests which are created with the [*impUnit*](https://github.com/electricimp/impUnit) test framework. Test configuration files affect [Test Commands](#test-commands) only.
 
 ## Command Description ##
 
@@ -251,7 +252,7 @@ The user is asked to confirm the operation if the corresponding auth file alread
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --local | -l | No | No | If specified, creates or replaces a [local auth file](#local-auth-file) in the current directory. If not specified, creates or replaces the [global auth file](#global-auth-file) |
-| --endpoint | -e | No | Yes | An impCentral API endpoint. Default: *https://api.electricimp.com/v5* |
+| --endpoint | -e | No | Yes | An impCentral API endpoint. Default: `https://api.electricimp.com/v5` |
 | --user | -u | Yes/no | Yes | The account identifier: username or email address. If specified, the `--pwd` option must be specified too |
 | --pwd | -w | Yes/no | Yes | The account password. If specified, the `--user` option must be specified too |
 | --lk | -k | Yes/no | Yes | The login key ID |
@@ -352,7 +353,7 @@ Creates a build (Deployment) from the specified source files, with a description
 
 The command fails if one or both of the specified source files do not exist, or the specified Device Group does not exist.
 
-The new build is not run until the devices are rebooted. To run it, call `[impt dg restart](#device-group-restart)` or `[impt device restart](#device-restart)`.
+The new build is not run until the devices are rebooted. To run it, call [`impt dg restart`](#device-group-restart) or [`impt device restart`](#device-restart).
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
@@ -445,7 +446,7 @@ impt build run [--dg <DEVICE_GROUP_IDENTIFIER>] [--device-file <device_file>]
 
 Creates, deploys and runs a build (Deployment). Optionally, displays logs of the running build.
 
-It behaves exactly like `[impt build deploy](#build-deploy)` followed by `[impt dg restart](#device-group-restart)` and, optionally, by `[impt log stream](#log-stream)`.
+It behaves exactly like [`impt build deploy`](#build-deploy) followed by [`impt dg restart`](#device-group-restart) and, optionally, by [`impt log stream`](#log-stream).
 
 The command fails if one or both of the specified source files do not exist, or the specified Device Group does not exist. Informs the user if the specified Device Group does not have assigned devices; in this case, the Deployment is created anyway.
 
@@ -459,7 +460,7 @@ The command fails if one or both of the specified source files do not exist, or 
 | --tag | -t | No | Yes | A tag applied to this build (Deployment). This option may be repeated multiple times to apply multiple tags |
 | --flagged | -f | No | No | If `true` or no value is supplied, this build (Deployment) cannot be deleted without first setting this option back to `false`. If `false` or the option is not specified, the build can be deleted |
 | --conditional | -c | No | No | Trigger a conditional restart of the devices assigned to the specified Device Group instead of a normal restart (see the impCentral API specification) |
-| --log | -l | No | No | Starts displaying logs from the devices assigned to the specified Device Group (see the `[impt log stream](#log-stream)` description). To stop displaying the logs, press *Ctrl-C* |
+| --log | -l | No | No | Starts displaying logs from the devices assigned to the specified Device Group (see the [`impt log stream`](#log-stream) description). To stop displaying the logs, press *Ctrl-C* |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
@@ -580,7 +581,7 @@ Reboots the specified device and, optionally, starts displaying logs from it.
 | --- | --- | --- | --- | --- |
 | --device | -d | Yes | Yes | A [device identifier](#device-identifier) |
 | --conditional | -c | No | No | Trigger a conditional restart (see the impCentral API specification) |
-| --log | -l | No | No | Start displaying logs from the specified device (see `[impt log stream](#log-stream)`). To stop displaying the logs press *Ctrl-C* |
+| --log | -l | No | No | Start displaying logs from the specified device (see [`impt log stream`](#log-stream)). To stop displaying the logs press *Ctrl-C* |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
@@ -749,7 +750,7 @@ Reboots all of the devices assigned to the specified Device Group and, optionall
 | --- | --- | --- | --- | --- |
 | --dg | -g | Yes/[Project](#project-files) | Yes | A [Device Group identifier](#device-group-identifier). If not specified, the Device Group referenced by the [Project file](#project-files) in the current directory is used (if there is no Project file, the command fails) |
 | --conditional | -c | No | No | Trigger a conditional restart (see the impCentral API specification) |
-| --log | -l | No | No | Start displaying logs from the devices assigned to the specified Device Group (see `[impt log stream](#log-stream)`). To stop displaying the logs press *Ctrl-C* |
+| --log | -l | No | No | Start displaying logs from the devices assigned to the specified Device Group (see [`impt log stream`](#log-stream)). To stop displaying the logs press *Ctrl-C* |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
@@ -827,12 +828,12 @@ Creates a log stream and displays logs from the specified devices in real-time. 
 
 The impCentral API permits an account to have only a limited number of log streams at a time. If the limit is reached and a new log stream is created, an existing one is automatically closed.
 
-The command allows you to add multiple devices to the newly created log stream. It is also possible to specify one or more Device Groups. Logs from all devices assigned to the specified Device Groups as well as from directly specified Devices will be displayed in the newly created log stream. However, there is an API-set limit to the number of devices allowed in one log stream. The tool does not check this limit and allow you to specify any number of devices. Check the operation output to see which devices were actually added to the log stream.
+The command allows you to add multiple devices to the newly created log stream. It is also possible to specify one or more Device Groups. Logs from all devices assigned to the specified Device Groups as well as from directly specified Devices will be displayed in the newly created log stream. However, the impCentral API has a limit to the number of devices allowed in one log stream. The tool does not check this limit and allow you to specify any number of devices. Check the operation output to see which devices were actually added to the log stream.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --device | -d | No | Yes | The [device identifier](#device-identifier) of the device to be added to the log stream. This option may be repeated multiple times to specify multiple devices |
-| --dg | -g | no/[Project](#project-files) | Yes | A [Device Group identifier](#device-group-identifier). This option may be repeated multiple times to specify multiple Device Groups. Logs from all of the devices assigned to the specified Device Groups will be added to the log stream. `--device` and `--dg` options are cumulative. If neither the `--device` nor the `--dg` options are not specified but there is a [Project file](#project-files) in the current directory, all of the devices assigned to the Device Group referenced by the [Project file](#project-files) are added |
+| --dg | -g | no/[Project](#project-files) | Yes | A [Device Group identifier](#device-group-identifier). This option may be repeated multiple times to specify multiple Device Groups. Logs from all of the devices assigned to the specified Device Groups will be added to the log stream. `--device` and `--dg` options are cumulative. If neither the `--device` nor the `--dg` options are specified but there is a [Project file](#project-files) in the current directory, all of the devices assigned to the Device Group referenced by the [Project file](#project-files) are added |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
@@ -1153,9 +1154,9 @@ impt test create --dg <DEVICE_GROUP_IDENTIFIER> [--device-file <device_file>]
     [--builder-config <builder_file_name>] [--confirmed] [--debug] [--help]
 ```
 
-Creates a [test configuration file](#test-configuration-file) in the current directory.
+Creates a [test configuration file](#test-configuration-files) in the current directory.
 
-The user is asked to confirm the operation if the current directory already contains a [test configuration file](#test-configuration-file) (confirmed automatically with the `--confirmed` option). If confirmed, the existing [test configuration file](#test-configuration-file) is overwritten.
+The user is asked to confirm the operation if the current directory already contains a [test configuration file](#test-configuration-files) (confirmed automatically with the `--confirmed` option). If confirmed, the existing [test configuration file](#test-configuration-files) is overwritten.
 
 At the end of the command execution, information about the test configuration is displayed (as by [`impt test info`](#test-info)).
 
@@ -1182,10 +1183,10 @@ impt test delete [--github-config] [--builder-config] [--entities] [--all] [--co
     [--debug] [--help]
 ```
 
-Deletes the [test configuration file](#test-configuration-file) in the current directory. Does nothing if there is no [test configuration file](#test-configuration-file) in the current directory.
+Deletes the [test configuration file](#test-configuration-files) in the current directory. Does nothing if there is no [test configuration file](#test-configuration-files) in the current directory.
 
 The following entities are deleted (if the exist):
-- A [test configuration file](#test-configuration-file) in the current directory.
+- A [test configuration file](#test-configuration-files) in the current directory.
 - A *Builder* cache (`.builder-cache` directory) in the current directory.
 - Debug information (`.build` directory) in the current directory.
 - If the `--github-config` option is specified, the GitHub credentials file referenced by the test configuration file.
@@ -1199,9 +1200,9 @@ The user is asked to confirm the operation unless confirmed automatically with t
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --github-config | -i | No | No | Also deletes the GitHub credentials file referenced by [test configuration file](#test-configuration-file) |
-| --builder-config | -j | No | No | Also deletes the file with *Builder* variables referenced by [test configuration file](#test-configuration-file) |
-| --entities | -e | No | No | Also deletes the impCentral API entities (Device Group, Product, Deployments) referenced by [test configuration file](#test-configuration-file). See above |
+| --github-config | -i | No | No | Also deletes the GitHub credentials file referenced by [test configuration file](#test-configuration-files) |
+| --builder-config | -j | No | No | Also deletes the file with *Builder* variables referenced by [test configuration file](#test-configuration-files) |
+| --entities | -e | No | No | Also deletes the impCentral API entities (Device Group, Product, Deployments) referenced by [test configuration file](#test-configuration-files). See above. |
 | --all | -a | No | No | Includes `--github-config`, `--builder-config` and `--entities` options |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
 | --debug | -z | No | No | Displays debug info for the command execution |
@@ -1233,7 +1234,7 @@ The user is asked to confirm the operation if the specified GitHub credentials f
 impt test info [--debug] [--help]
 ```
 
-Displays information about the test configuration defined by the [test configuration file](#test-configuration-file) in the current directory. With every call, the latest actual information is obtained using the impCentral API.
+Displays information about the test configuration defined by the [test configuration file](#test-configuration-files) in the current directory. With every call, the latest actual information is obtained using the impCentral API.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
@@ -1246,11 +1247,11 @@ Displays information about the test configuration defined by the [test configura
 impt test run [--tests <test_pattern>] [--clear-cache] [--debug] [--help]
 ```
 
-Runs the tests specified by the [test configuration file](#test-configuration-file) in the current directory.
+Runs the tests specified by the [test configuration file](#test-configuration-files) in the current directory.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --tests | -t | No | Yes | A pattern to select the tests. Allows you to select specific test files, test cases and/or test methods for execution. The syntax of the pattern: *[testFile][:testCase][::testMethod]*, where *testFile* may include a relative path as well as [regular expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions). If the option is omitted, all tests from all test files specified in the [test configuration file](#test-configuration-file) are executed |
+| --tests | -t | No | Yes | A pattern to select the tests. Allows you to select specific test files, test cases and/or test methods for execution. The syntax of the pattern: *[testFile][:testCase][::testMethod]*, where *testFile* may include a relative path as well as [regular expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions). If the option is omitted, all tests from all test files specified in the [test configuration file](#test-configuration-files) are executed |
 | --clear-cache | -e | No | No | Clears the local `.builder-cache` directory if it exists |
 | --debug | -z | No | No | Runs the tests in the debug mode |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
@@ -1265,7 +1266,7 @@ impt test update [--dg <DEVICE_GROUP_IDENTIFIER>] [--device-file [<device_file>]
     [--builder-config [<builder_file_name>]] [--debug] [--help]
 ```
 
-Updates the [test configuration file](#test-configuration-file) in the current directory. Fails if there is no [test configuration file](#test-configuration-file) in the current directory.
+Updates the [test configuration file](#test-configuration-files) in the current directory. Fails if there is no [test configuration file](#test-configuration-files) in the current directory.
 
 At the end of the command execution, information about the test configuration is displayed (as by [`impt test info`](#test-info)).
 

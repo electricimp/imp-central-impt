@@ -81,7 +81,7 @@ describe('impt test run for test server error scenario >', () => {
                 expect(commandOut).not.toBeEmptyString();
                 expect(commandOut).toMatch("the index 'fieldDoesNotExists' does not exist");
                 ImptTestCommandsHelper.checkTestFailStatus(commandOut);
-                ImptTestingHelper.checkSuccessStatus(commandOut);
+                ImptTestingHelper.checkFailStatus(commandOut);
             })).
             then(done).
             catch(error => done.fail(error));
@@ -99,7 +99,7 @@ describe('impt test run for test server error scenario >', () => {
                 expect(commandOut).not.toBeEmptyString();
                 expect(commandOut).toMatch("unhandled exception");
                 ImptTestCommandsHelper.checkTestFailStatus(commandOut);
-                ImptTestingHelper.checkSuccessStatus(commandOut);
+                ImptTestingHelper.checkFailStatus(commandOut);
             })).
             then(done).
             catch(error => done.fail(error));

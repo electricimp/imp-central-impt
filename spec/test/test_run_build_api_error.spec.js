@@ -60,7 +60,7 @@ describe('impt test run for build-api-error behavior >', () => {
                 expect(commandOut).toMatch(/Using device test file tests\/2\-device\.test\.nut\n/);
 
                 ImptTestCommandsHelper.checkTestFailStatus(commandOut);
-                ImptTestingHelper.checkSuccessStatus(commandOut);
+                ImptTestingHelper.checkFailStatus(commandOut);
             }).
             then(done).
             catch(error => done.fail(error));
