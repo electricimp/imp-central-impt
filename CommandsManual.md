@@ -77,10 +77,11 @@
 - [Auth files](#auth-files)
 - [Project Files](#project-files)
 - [Test Configuration Files](#test-configuration-files)
+- [Command Description](#command-description)
 - [List of Aliases](#list-of-aliases)
 - [Common Filter Options](#common-filter-options)
 
-### Command Syntax ###
+## Command Syntax ##
 
 ```
 impt <command_group> <command_name> [<options>]
@@ -104,7 +105,7 @@ where:
 
 All commands and options are case sensitive.
 
-### The Help Option ###
+## The Help Option ##
 
 The `--help` option (alias: `-h`) can be used with a fully or a partially specified command:
 
@@ -112,7 +113,7 @@ The `--help` option (alias: `-h`) can be used with a fully or a partially specif
 - `impt <command_group> --help` &mdash; Displays a list of all of the group’s commands.
 - `impt <command_group> <command_name> --help` &mdash; Displays a detailed description of the command.
 
-### Entity Identification ###
+## Entity Identification ##
 
 Applicable to all impCentral API entities &mdash; Account, Product, Device Group, Device and Deployment &mdash; these rules govern how *impt* searches an entity:
 
@@ -122,7 +123,7 @@ Applicable to all impCentral API entities &mdash; Account, Product, Device Group
 - If at least one entity is found for the particular attribute, the search is stopped.
 - If no entity is found for all attributes, or more than one entity is found, then, depending on a particular command, that may be considered as a success (for all `list` commands) or as a fail (for all other commands).
 
-#### Account identifier ####
+### Account identifier ###
 
 Option: `--owner <ACCOUNT_IDENTIFIER>`
 
@@ -133,7 +134,7 @@ Attributes accepted as <ACCOUNT_IDENTIFIER> (in order of search):
 - Email (always unique)
 - Username (always unique)
 
-#### Product identifier ####
+### Product identifier ###
 
 Option: `--product <PRODUCT_IDENTIFIER>`
 
@@ -142,7 +143,7 @@ Attributes accepted as `<PRODUCT_IDENTIFIER>` (in order of search):
 - Product ID (always unique)
 - Product name (unique among all Products owned by a particular user)
 
-#### Device Group identifier ####
+### Device Group identifier ###
 
 Option: `--dg <DEVICE_GROUP_IDENTIFIER>`
 
@@ -151,7 +152,7 @@ Attributes accepted as `<DEVICE_GROUP_IDENTIFIER>` (in order of search):
 - Device Group ID (always unique)
 - Device Group name (unique among all the Device Groups within a Product)
 
-#### Device identifier ####
+### Device identifier ###
 
 Option: `--device <DEVICE_IDENTIFIER>`
 
@@ -162,7 +163,7 @@ Attributes accepted as `<DEVICE_IDENTIFIER>` (in order of search):
 - Agent ID
 - Device name
 
-#### Build identifier ####
+### Build identifier ###
 
 Option: `--build <BUILD_IDENTIFIER>`
 
@@ -173,7 +174,7 @@ Attributes accepted as `<BUILD_IDENTIFIER>` (in order of search):
 - Tag
 - Origin
 
-### Device Group Type ###
+## Device Group Type ##
 
 *impt* commands accept the following constants to specify a type of Device Group:
 
@@ -183,11 +184,11 @@ Attributes accepted as `<BUILD_IDENTIFIER>` (in order of search):
 - *factory* &mdash; for the impCentral API’s "factoryfixture_devicegroup" type
 - *production* &mdash; for the impCentral API’s "production_devicegroup" type
 
-### Auth Files ###
+## Auth Files ##
 
 An auth file is a `.impt.auth` file. It stores authentication and other information necessary to execute *impt* commands. There are two types of auth file &mdash; local and global. The both types have an identical format and store similar information.
 
-#### Local Auth File ####
+### Local Auth File ###
 
 A local auth file is an auth file located in the directory from where an *impt* command is called. Different directories may contain different local auth files. One directory must contain only one local auth file.
 
@@ -195,13 +196,13 @@ Any command called from a directory where a local auth file exists is executed i
 
 If the current directory does not contain a local auth file, the command is executed in the context defined by the global auth file
 
-#### Global Auth File ####
+### Global Auth File ###
 
 A global auth file affects the tool commands which are called from any directory where a local auth file does not exist. There must be only one global auth file per tool installation.
 
 Any command called from a directory where a local auth file does not exist is executed in the context (with authentication and other settings) defined by the global auth file. If neither a local nor a global auth file exists, the command fails.
 
-### Project Files ###
+## Project Files ##
 
 A Project file is a `.impt.project` file located in a given directory. Different directories may contain different Project files. A directory must contain only one Project file.
 
@@ -209,7 +210,7 @@ Each Project file contains settings for a Project, an *impt* entity which links 
 
 A Project file may affect commands called from the directory where the file is located. Product, Device Group, Devices, Deployment, and source code files referenced by Project file may be assumed by a command when they are not specified explicitly.
 
-### Test Configuration Files ###
+## Test Configuration Files ##
 
 A test configuration file is a `.impt.test` file located in a given directory. Different directories may contain different test configuration files. A directory must contain only one test configuration file.
 
