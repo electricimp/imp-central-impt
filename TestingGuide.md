@@ -146,7 +146,7 @@ A test file is intended to test either device or agent code, so the opposite sid
 
 For example, `"Test1.agent.test.nut"` (a test file with test cases for agent code) would be partnered with  `"Test1.device.nut"` (the corresponding partner file with emulation of the device side of the interaction).
 
-**Note** It is sufficient that only the test file is selected for the run, ie. it satisfies the test file search pattern defined during [test configuration](#test-configuration). The corresponding partner file will be added to the test session automatically.
+**Note:** it is sufficient that only the test file is selected for the run, ie. it satisfies the test file search pattern defined during [test configuration](#test-configuration). The corresponding partner file will be added to the test session automatically.
 
 **Example**
 
@@ -649,13 +649,15 @@ Every selected test file is a source of a new build (Deployment), so there will 
 
 Every test file (build) runs on all devices currently assigned to the Device Group specified in the [test configuration](#test-configuration) file one by one: no device is run until the previous device has completed testing. Devices are chosen in an arbitrary order. A test file (build) running on one device is called a test session. When the build completes on the last device, the next test file (build) starts running on the same set of devices, again one after the other.
 
-Every test is treated as failed if an error is thrown or a timeout, as defined in the [test configuration](#test-configuration) file, occurs during the test execution. Otherwise the test is treated as passed. If at least one test in a test session fails, the test session is treated as failed. If the [test configuration](#test-configuration) has the `stop-on-fail` setting set to `true`, test execution ends after the first failed test.
-
 You may clear the [*Builder* cache](#builder-cache) before the tests starts by setting the `--clear-cache` option. If the *Builder* cache is enabled in the [test configuration](#test-configuration) file, it will then be re-created during the test run.
 
 You may run the tests in [debug mode](#debug-mode) by specifying the `--debug` option.
 
-**Example**
+A test is treated as failed if an error is thrown or a timeout, as defined in the [test configuration](#test-configuration) file, occurs during the test execution. Otherwise the test is treated as passed. If at least one test in a test session fails, the test session is treated as failed. If the [test configuration](#test-configuration) has the `stop-on-fail` setting set to `true`, test execution ends after the first failed test.
+
+When all tests are passed, the [`impt test run`](./CommandsManual.md#test-run) command outputs `IMPT COMMAND SUCCEEDS` phrase and returns zero exit code. Otherwise, it outputs `IMPT COMMAND FAILS` phrase and returns non-zero exit code.
+
+**Example - testing failed**
 
 ```
 > impt test run
@@ -707,6 +709,9 @@ Restart request for Device "234776801163a9ee" is successful.
 [+19.24/0.00s info] Testing failed
 IMPT COMMAND FAILS
 ```
+
+**Example - all tests are passed**
+
 
 ### Running Selective Tests ###
 
