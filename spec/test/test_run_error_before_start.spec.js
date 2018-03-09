@@ -58,7 +58,7 @@ describe('impt test run for error-before-start behavior >', () => {
                 expect(commandOut).toMatch(/error\] Session startup timeout\n/);
                 expect(commandOut).not.toMatch(/test\] Device is out of memory\n/);
                 ImptTestCommandsHelper.checkTestFailStatus(commandOut);
-                ImptTestingHelper.checkSuccessStatus(commandOut);
+                ImptTestingHelper.checkFailStatus(commandOut);
             }).
             then(done).
             catch(error => done.fail(error));

@@ -53,7 +53,7 @@ describe('impt test run for deep-equal scenario >', () => {
                 expect(commandOut).toMatch(/Extra slot \[a\.b\.d\] in actual value\n/);
                 expect(commandOut).toMatch(/At \[a\.b\.c\]: expected \"3\", got \"100\"\n/);
                 ImptTestCommandsHelper.checkTestFailStatus(commandOut);
-                ImptTestingHelper.checkSuccessStatus(commandOut);
+                ImptTestingHelper.checkFailStatus(commandOut);
             }).
             then(done).
             catch(error => done.fail(error));

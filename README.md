@@ -248,6 +248,8 @@ Interaction with a user is minimal. Only a few commands, such as [delete](#entit
 
 A command’s execution output contains one of the two predefined phrases: `IMPT COMMAND SUCCEEDS` or `IMPT COMMAND FAILS`. Scripts can parse a command’s output to find these standard phrases to detect whether the commmand succeeded or failed. If any command fails, `IMPT COMMAND FAILS` is always the last line of the command’s output. If a command succeeds, `IMPT COMMAND SUCCEEDS` phrase is the last line of the output for the most of the commands. Logging-related commands may have additional `IMPT COMMAND SUCCEEDS` phrases in their output. If the [help option](./CommandsManual.md#the-help-option) is specified for a command, its output does not contain either predefined phrase.
 
+If a command finishes with `IMPT COMMAND FAILS`, it returns non-zero exit code. Otherwise, it returns zero exit code. This can be used by scripts as well.
+
 **Example**
 
 **A successful command execution**
