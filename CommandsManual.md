@@ -115,7 +115,7 @@ The `--help` option (alias: `-h`) can be used with a fully or a partially specif
 
 ## Entity Identification ##
 
-Applicable to all impCentral API entities &mdash; Account, Product, Device Group, Device and Deployment &mdash; these rules govern how *impt* searches an entity:
+Applicable to the following impCentral API entities &mdash; Account, Product, Device Group, Device and Deployment &mdash; these rules govern how *impt* searches an entity:
 
 - There is an order of attributes for every entity type (see below).
 - *impt* starts from the first attribute in the order and searches the specified value for this attribute.
@@ -190,7 +190,7 @@ An auth file is a `.impt.auth` file. It stores authentication and other informat
 
 ### Local Auth File ###
 
-A local auth file is an auth file located in the directory from where an *impt* command is called. Different directories may contain different local auth files. One directory must contain only one local auth file.
+A local auth file is an auth file located in the directory from where an *impt* command is called. Different directories may contain different local auth files. One directory can contain only one local auth file.
 
 Any command called from a directory where a local auth file exists is executed in the context (with authentication and other settings) defined by that local auth file.
 
@@ -198,13 +198,13 @@ If the current directory does not contain a local auth file, the command is exec
 
 ### Global Auth File ###
 
-A global auth file affects the tool commands which are called from any directory where a local auth file does not exist. There must be only one global auth file per tool installation.
+A global auth file affects the tool commands which are called from any directory where a local auth file does not exist. There can be only one global auth file per tool installation.
 
 Any command called from a directory where a local auth file does not exist is executed in the context (with authentication and other settings) defined by the global auth file. If neither a local nor a global auth file exists, the command fails.
 
 ## Project Files ##
 
-A Project file is a `.impt.project` file located in a given directory. Different directories may contain different Project files. A directory must contain only one Project file.
+A Project file is a `.impt.project` file located in a given directory. Different directories may contain different Project files. A directory can contain only one Project file.
 
 Each Project file contains settings for a Project, an *impt* entity which links the source files in the current directory with a Device Group. A Project file references the linked Device Group (of the [types](#device-group-type) *development* or *pre-factory* only) and, correspondingly, the Product which contains that Device Group, devices assigned to the Device Group, and Deployments created for that Device Group.
 
@@ -212,9 +212,9 @@ A Project file may affect commands called from the directory where the file is l
 
 ## Test Configuration Files ##
 
-A test configuration file is a `.impt.test` file located in a given directory. Different directories may contain different test configuration files. A directory must contain only one test configuration file.
+A test configuration file is a `.impt.test` file located in a given directory. Different directories may contain different test configuration files. A directory can contain only one test configuration file.
 
-Test configuration files contains settings to run unit tests that are created with the [*impUnit*](https://github.com/electricimp/impUnit) test framework and affect [Test Commands](#test-commands) only.
+A test configuration file contains settings to run unit tests which are created with the [*impUnit*](https://github.com/electricimp/impUnit) test framework. Test configuration files affect [Test Commands](#test-commands) only.
 
 ## Command Description ##
 
@@ -252,7 +252,7 @@ The user is asked to confirm the operation if the corresponding auth file alread
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --local | -l | No | No | If specified, creates or replaces a [local auth file](#local-auth-file) in the current directory. If not specified, creates or replaces the [global auth file](#global-auth-file) |
-| --endpoint | -e | No | Yes | An impCentral API endpoint. Default: *https://api.electricimp.com/v5* |
+| --endpoint | -e | No | Yes | An impCentral API endpoint. Default: `https://api.electricimp.com/v5` |
 | --user | -u | Yes/no | Yes | The account identifier: username or email address. If specified, the `--pwd` option must be specified too |
 | --pwd | -w | Yes/no | Yes | The account password. If specified, the `--user` option must be specified too |
 | --lk | -k | Yes/no | Yes | The login key ID |
@@ -1154,9 +1154,9 @@ impt test create --dg <DEVICE_GROUP_IDENTIFIER> [--device-file <device_file>]
     [--builder-config <builder_file_name>] [--confirmed] [--debug] [--help]
 ```
 
-Creates a [test configuration file](#test-configuration-file) in the current directory.
+Creates a [test configuration file](#test-configuration-files) in the current directory.
 
-The user is asked to confirm the operation if the current directory already contains a [test configuration file](#test-configuration-file) (confirmed automatically with the `--confirmed` option). If confirmed, the existing [test configuration file](#test-configuration-file) is overwritten.
+The user is asked to confirm the operation if the current directory already contains a [test configuration file](#test-configuration-files) (confirmed automatically with the `--confirmed` option). If confirmed, the existing [test configuration file](#test-configuration-files) is overwritten.
 
 At the end of the command execution, information about the test configuration is displayed (as by [`impt test info`](#test-info)).
 
@@ -1183,10 +1183,10 @@ impt test delete [--github-config] [--builder-config] [--entities] [--all] [--co
     [--debug] [--help]
 ```
 
-Deletes the [test configuration file](#test-configuration-file) in the current directory. Does nothing if there is no [test configuration file](#test-configuration-file) in the current directory.
+Deletes the [test configuration file](#test-configuration-files) in the current directory. Does nothing if there is no [test configuration file](#test-configuration-files) in the current directory.
 
 The following entities are deleted (if the exist):
-- A [test configuration file](#test-configuration-file) in the current directory.
+- A [test configuration file](#test-configuration-files) in the current directory.
 - A *Builder* cache (`.builder-cache` directory) in the current directory.
 - Debug information (`.build` directory) in the current directory.
 - If the `--github-config` option is specified, the GitHub credentials file referenced by the test configuration file.
@@ -1200,9 +1200,9 @@ The user is asked to confirm the operation unless confirmed automatically with t
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --github-config | -i | No | No | Also deletes the GitHub credentials file referenced by [test configuration file](#test-configuration-file) |
-| --builder-config | -j | No | No | Also deletes the file with *Builder* variables referenced by [test configuration file](#test-configuration-file) |
-| --entities | -e | No | No | Also deletes the impCentral API entities (Device Group, Product, Deployments) referenced by [test configuration file](#test-configuration-file). See above |
+| --github-config | -i | No | No | Also deletes the GitHub credentials file referenced by [test configuration file](#test-configuration-files) |
+| --builder-config | -j | No | No | Also deletes the file with *Builder* variables referenced by [test configuration file](#test-configuration-files) |
+| --entities | -e | No | No | Also deletes the impCentral API entities (Device Group, Product, Deployments) referenced by [test configuration file](#test-configuration-files). See above. |
 | --all | -a | No | No | Includes `--github-config`, `--builder-config` and `--entities` options |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
 | --debug | -z | No | No | Displays debug info for the command execution |
@@ -1234,7 +1234,7 @@ The user is asked to confirm the operation if the specified GitHub credentials f
 impt test info [--debug] [--help]
 ```
 
-Displays information about the test configuration defined by the [test configuration file](#test-configuration-file) in the current directory. With every call, the latest actual information is obtained using the impCentral API.
+Displays information about the test configuration defined by the [test configuration file](#test-configuration-files) in the current directory. With every call, the latest actual information is obtained using the impCentral API.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
@@ -1247,11 +1247,11 @@ Displays information about the test configuration defined by the [test configura
 impt test run [--tests <test_pattern>] [--clear-cache] [--debug] [--help]
 ```
 
-Runs the tests specified by the [test configuration file](#test-configuration-file) in the current directory.
+Runs the tests specified by the [test configuration file](#test-configuration-files) in the current directory.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --tests | -t | No | Yes | A pattern to select the tests. Allows you to select specific test files, test cases and/or test methods for execution. The syntax of the pattern: *[testFile][:testCase][::testMethod]*, where *testFile* may include a relative path as well as [regular expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions). If the option is omitted, all tests from all test files specified in the [test configuration file](#test-configuration-file) are executed |
+| --tests | -t | No | Yes | A pattern to select the tests. Allows you to select specific test files, test cases and/or test methods for execution. The syntax of the pattern: *[testFile][:testCase][::testMethod]*, where *testFile* may include a relative path as well as [regular expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions). If the option is omitted, all tests from all test files specified in the [test configuration file](#test-configuration-files) are executed |
 | --clear-cache | -e | No | No | Clears the local `.builder-cache` directory if it exists |
 | --debug | -z | No | No | Runs the tests in the debug mode |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
@@ -1266,7 +1266,7 @@ impt test update [--dg <DEVICE_GROUP_IDENTIFIER>] [--device-file [<device_file>]
     [--builder-config [<builder_file_name>]] [--debug] [--help]
 ```
 
-Updates the [test configuration file](#test-configuration-file) in the current directory. Fails if there is no [test configuration file](#test-configuration-file) in the current directory.
+Updates the [test configuration file](#test-configuration-files) in the current directory. Fails if there is no [test configuration file](#test-configuration-files) in the current directory.
 
 At the end of the command execution, information about the test configuration is displayed (as by [`impt test info`](#test-info)).
 
