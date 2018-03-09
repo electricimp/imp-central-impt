@@ -353,7 +353,7 @@ Creates a build (Deployment) from the specified source files, with a description
 
 The command fails if one or both of the specified source files do not exist, or the specified Device Group does not exist.
 
-The new build is not run until the devices are rebooted. To run it, call `[impt dg restart](#device-group-restart)` or `[impt device restart](#device-restart)`.
+The new build is not run until the devices are rebooted. To run it, call [`impt dg restart`](#device-group-restart) or [`impt device restart`](#device-restart).
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
@@ -446,7 +446,7 @@ impt build run [--dg <DEVICE_GROUP_IDENTIFIER>] [--device-file <device_file>]
 
 Creates, deploys and runs a build (Deployment). Optionally, displays logs of the running build.
 
-It behaves exactly like `[impt build deploy](#build-deploy)` followed by `[impt dg restart](#device-group-restart)` and, optionally, by `[impt log stream](#log-stream)`.
+It behaves exactly like [`impt build deploy`](#build-deploy) followed by [`impt dg restart`](#device-group-restart) and, optionally, by [`impt log stream`](#log-stream).
 
 The command fails if one or both of the specified source files do not exist, or the specified Device Group does not exist. Informs the user if the specified Device Group does not have assigned devices; in this case, the Deployment is created anyway.
 
@@ -460,7 +460,7 @@ The command fails if one or both of the specified source files do not exist, or 
 | --tag | -t | No | Yes | A tag applied to this build (Deployment). This option may be repeated multiple times to apply multiple tags |
 | --flagged | -f | No | No | If `true` or no value is supplied, this build (Deployment) cannot be deleted without first setting this option back to `false`. If `false` or the option is not specified, the build can be deleted |
 | --conditional | -c | No | No | Trigger a conditional restart of the devices assigned to the specified Device Group instead of a normal restart (see the impCentral API specification) |
-| --log | -l | No | No | Starts displaying logs from the devices assigned to the specified Device Group (see the `[impt log stream](#log-stream)` description). To stop displaying the logs, press *Ctrl-C* |
+| --log | -l | No | No | Starts displaying logs from the devices assigned to the specified Device Group (see the [`impt log stream`](#log-stream) description). To stop displaying the logs, press *Ctrl-C* |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
@@ -581,7 +581,7 @@ Reboots the specified device and, optionally, starts displaying logs from it.
 | --- | --- | --- | --- | --- |
 | --device | -d | Yes | Yes | A [device identifier](#device-identifier) |
 | --conditional | -c | No | No | Trigger a conditional restart (see the impCentral API specification) |
-| --log | -l | No | No | Start displaying logs from the specified device (see `[impt log stream](#log-stream)`). To stop displaying the logs press *Ctrl-C* |
+| --log | -l | No | No | Start displaying logs from the specified device (see [`impt log stream`](#log-stream)). To stop displaying the logs press *Ctrl-C* |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
@@ -750,7 +750,7 @@ Reboots all of the devices assigned to the specified Device Group and, optionall
 | --- | --- | --- | --- | --- |
 | --dg | -g | Yes/[Project](#project-files) | Yes | A [Device Group identifier](#device-group-identifier). If not specified, the Device Group referenced by the [Project file](#project-files) in the current directory is used (if there is no Project file, the command fails) |
 | --conditional | -c | No | No | Trigger a conditional restart (see the impCentral API specification) |
-| --log | -l | No | No | Start displaying logs from the devices assigned to the specified Device Group (see `[impt log stream](#log-stream)`). To stop displaying the logs press *Ctrl-C* |
+| --log | -l | No | No | Start displaying logs from the devices assigned to the specified Device Group (see [`impt log stream`](#log-stream)). To stop displaying the logs press *Ctrl-C* |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
