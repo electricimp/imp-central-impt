@@ -64,7 +64,6 @@
 
 **[impt test create](#test-create)**<br>
 **[impt test delete](#test-delete)**<br>
-**[impt test github](#test-github)**<br>
 **[impt test info](#test-info)**<br>
 **[impt test run](#test-run)**<br>
 **[impt test update](#test-update)**<br>
@@ -366,6 +365,8 @@ impt build deploy [--dg <DEVICE_GROUP_IDENTIFIER>] [--device-file <device_file>]
 Creates a build (Deployment) from the specified source files, with a description (if specified) and attributes (if specified), and deploys it to all the devices assigned to the specified Device Group.
 
 The command fails if one or both of the specified source files do not exist, or the specified Device Group does not exist.
+
+If the current directory contains [builder configuration file](#builder-configuration-files), the specified source files are first preprocessed by [*Builder*](https://github.com/electricimp/Builder). Builder settings are controlled by [Builder Configuration Commands](#builder-configuration-commands).
 
 The new build is not run until the devices are rebooted. To run it, call [`impt dg restart`](#device-group-restart) or [`impt device restart`](#device-restart).
 
@@ -1287,9 +1288,8 @@ At the end of the command execution, information about the Project is displayed 
 ```
 impt test create --dg <DEVICE_GROUP_IDENTIFIER> [--device-file <device_file>]
     [--agent-file <agent_file>] [--timeout <timeout>] [--stop-on-fail [true|false]]
-    [--allow-disconnect [true|false]] [--builder-cache [true|false]]
-    [--test-file <test_file_name_pattern>] [--github-config <github_credentials_file_name>]
-    [--builder-config <builder_file_name>] [--confirmed] [--debug] [--help]
+    [--allow-disconnect [true|false]] [--test-file <test_file_name_pattern>]
+    [--confirmed] [--debug] [--help]
 ```
 
 Creates a [test configuration file](#test-configuration-files) in the current directory.
@@ -1306,10 +1306,7 @@ At the end of the command execution, information about the test configuration is
 | --timeout | -t | No | Yes | A timeout period in seconds after which a test is interrupted and considered to have failed. Default: 30 seconds |
 | --stop-on-fail | -s | No | No | If `true` or no value, the whole tests execution is stopped after a test failure. If `false`, the tests execution is not stopped after a failure. Default: `false` |
 | --allow-disconnect | -a | No | No | If `true` or no value, keep a test session alive when a device is temporarily disconnected. If `false`, a test session fails when a device is disconnected. Default: `false` |
-| --builder-cache | -e | No | No | If `true` or no value, cache external libraries in the local `.builder-cache` directory. If `false`, do not cache external libraries. If the local `.builder-cache` directory exists, it is cleaned. Default: `false` |
 | --test-file | -f | No | Yes | Test file name or pattern. All files located in the current directory and all its sub-directories whose names match the specified name or pattern are considered as files with test cases. This option may be repeated multiple times to specify multiple names and/or patterns. The values of the repeated option are combined by logical OR. Default: `"*.test.nut"` `"tests/**/*.test.nut"` |
-| --github-config | -i | No | Yes | A path to a GitHub credentials file. A relative or absolute path can be used. The specified file may not exist |
-| --builder-config | -j | No | Yes | A path to a file with *Builder* variables. A relative or absolute path can be used. The specified file may not exist |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
@@ -1317,18 +1314,14 @@ At the end of the command execution, information about the test configuration is
 #### Test Delete ####
 
 ```
-impt test delete [--github-config] [--builder-config] [--entities] [--all] [--confirmed]
-    [--debug] [--help]
+impt test delete [--entities] [--confirmed] [--debug] [--help]
 ```
 
 Deletes the [test configuration file](#test-configuration-files) in the current directory. Does nothing if there is no [test configuration file](#test-configuration-files) in the current directory.
 
 The following entities are deleted (if the exist):
-- A [test configuration file](#test-configuration-files) in the current directory.
-- A *Builder* cache (`.builder-cache` directory) in the current directory.
+- [Test configuration file](#test-configuration-files) in the current directory.
 - Debug information (`.build` directory) in the current directory.
-- If the `--github-config` option is specified, the GitHub credentials file referenced by the test configuration file.
-- If the `--builder-config` option is specified, the file with *Builder* variables referenced by the test configuration file.
 - If the `--entities` option is specified:
     - The Device Group referenced by the test configuration file. All Devices are unassigned from that Device Group.
     - All builds (Deployments) of the Device Group referenced by the test configuration file, including Deployments with its *flagged* attribute set to `true`.
@@ -1338,30 +1331,7 @@ The user is asked to confirm the operation unless confirmed automatically with t
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --github-config | -i | No | No | Also deletes the GitHub credentials file referenced by [test configuration file](#test-configuration-files) |
-| --builder-config | -j | No | No | Also deletes the file with *Builder* variables referenced by [test configuration file](#test-configuration-files) |
 | --entities | -e | No | No | Also deletes the impCentral API entities (Device Group, Product, Deployments) referenced by [test configuration file](#test-configuration-files). See above. |
-| --all | -a | No | No | Includes `--github-config`, `--builder-config` and `--entities` options |
-| --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
-| --debug | -z | No | No | Displays debug info for the command execution |
-| --help | -h | No | No | Displays a description of the command. Ignores any other options |
-
-#### Test Github ####
-
-```
-impt test github --github-config <github_credentials_file_name> --user <github_username>
-    --pwd <github_password> [--confirmed] [--debug] [--help]
-```
-
-Creates or updates a GitHub credentials file.
-
-The user is asked to confirm the operation if the specified GitHub credentials file already exists, unless confirmed automatically with the `--confirmed` option. If confirmed, the existing GitHub credentials file is overwritten.
-
-| Option | Alias | Mandatory? | Value Required? | Description |
-| --- | --- | --- | --- | --- |
-| --github-config | -i | Yes | Yes | A path to the GitHub credentials file. A relative or absolute path can be used |
-| --user | -u | Yes | Yes | A GitHub account username |
-| --pwd | -w | Yes | Yes | A GitHub account password or personal access token |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
@@ -1382,15 +1352,16 @@ Displays information about the test configuration defined by the [test configura
 #### Test Run ####
 
 ```
-impt test run [--tests <test_pattern>] [--clear-cache] [--debug] [--help]
+impt test run [--tests <test_pattern>] [--debug] [--help]
 ```
 
 Runs the tests specified by the [test configuration file](#test-configuration-files) in the current directory.
 
+If the current directory contains [builder configuration file](#builder-configuration-files), the specified tests are first preprocessed by [*Builder*](https://github.com/electricimp/Builder). Builder settings are controlled by [Builder Configuration Commands](#builder-configuration-commands).
+
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --tests | -t | No | Yes | A pattern to select the tests. Allows you to select specific test files, test cases and/or test methods for execution. The syntax of the pattern: *[testFile][:testCase][::testMethod]*, where *testFile* may include a relative path as well as [regular expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions). If the option is omitted, all tests from all test files specified in the [test configuration file](#test-configuration-files) are executed |
-| --clear-cache | -e | No | No | Clears the local `.builder-cache` directory if it exists |
 | --debug | -z | No | No | Runs the tests in the debug mode |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
@@ -1399,9 +1370,8 @@ Runs the tests specified by the [test configuration file](#test-configuration-fi
 ```
 impt test update [--dg <DEVICE_GROUP_IDENTIFIER>] [--device-file [<device_file>]]
     [--agent-file [<agent_file>]] [--timeout <timeout>] [--stop-on-fail [true|false]]
-    [--allow-disconnect [true|false]] [--builder-cache [true|false]]
-    [--test-file <test_file_name_pattern>] [--github-config [<github_credentials_file_name>]]
-    [--builder-config [<builder_file_name>]] [--debug] [--help]
+    [--allow-disconnect [true|false]] [--test-file <test_file_name_pattern>]
+    [--debug] [--help]
 ```
 
 Updates the [test configuration file](#test-configuration-files) in the current directory. Fails if there is no [test configuration file](#test-configuration-files) in the current directory.
@@ -1416,10 +1386,7 @@ At the end of the command execution, information about the test configuration is
 | --timeout | -t | No | Yes | A timeout period in seconds after which a test is interrupted and considered as failed |
 | --stop-on-fail | -s | No | No | If `true` or no value, the whole tests execution is stopped after a test failure. If `false`, the tests execution is not stopped after a failure |
 | --allow-disconnect | -a | No | No | If `true` or no value, keep a test session alive when a device is temporary disconnected. If `false`, a test session fails when a device is disconnected |
-| --builder-cache | -e | No | No | If `true` or no value, cache external libraries in the local `.builder-cache` directory. If `false`, do not cache external libraries; in this case, if the local `.builder-cache` directory exists, it is cleaned |
 | --test-file | -f | No | Yes | Test file name or pattern. All files located in the current directory and all its sub-directories whose names match the specified name or pattern are considered as files with test cases. This option may be repeated multiple times to specify multiple names and/or patterns. The values of the repeated option are combined by logical OR. The specified values fully replace the existed setting |
-| --github-config | -i | No | No | A path to a GitHub credentials file. A relative or absolute path can be used. The specified file may not exist. Specify this option without a value to remove a GitHub credentials file from the test configuration |
-| --builder-config | -j | No | No | A path to a file with *Builder* variables. A relative or absolute path can be used. The specified file may not exist. Specify this option without a value to remove a file with *Builder* variables from the test configuration |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
