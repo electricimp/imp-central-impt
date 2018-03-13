@@ -530,11 +530,11 @@ At the end of the command execution, information about the builder configuration
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --var-file | -? | No | Yes | A path to a file with variables. A relative or absolute path can be used. The specified file may not exist. Format of the file: `{ "<variable_name>": "<variable_value>"[, "<variable_name>": "<variable_value>"][, ...] }` **TBD** |
-| --github-file | -? | No | Yes | A path to a GitHub credentials file. A relative or absolute path can be used. The specified file may not exist. See [`impt builder github`](#builder-github) |
-| --cache | -? | No | No | If `true` or no value, cache external libraries in the local `.builder-cache` directory. If `false`, do not cache external libraries. If the local `.builder-cache` directory exists, it is deleted. See the details [here](https://github.com/electricimp/Builder#cache-for-remote-includes). Default: `false` |
-| --cache-exclude-list | -? | No | Yes | A path to a file with cache exclude list. A relative or absolute path can be used. The specified file may not exist. See the details [here](https://github.com/electricimp/Builder#cache-for-remote-includes) |
-| --save-results | -? | No | No | If `true` or no value, save the results of source code preprocessing in the local **TBD** and **TBD** files. If `false`, do not save the results of source code preprocessing. If the local **TBD** and **TBD** files exist, they are deleted. Default: `false` |
+| --var-file | -v | No | Yes | A path to a file with variables. A relative or absolute path can be used. The specified file may not exist. Format of the file: `{ "<variable_name>": "<variable_value>"[, "<variable_name>": "<variable_value>"][, ...] }` **TBD** |
+| --github-file | -i | No | Yes | A path to a GitHub credentials file. A relative or absolute path can be used. The specified file may not exist. See [`impt builder github`](#builder-github) |
+| --cache | -e | No | No | If `true` or no value, cache external libraries in the local `.builder-cache` directory. If `false`, do not cache external libraries. If the local `.builder-cache` directory exists, it is deleted. See the details [here](https://github.com/electricimp/Builder#cache-for-remote-includes). Default: `false` |
+| --cache-exclude-list | -x | No | Yes | A path to a file with cache exclude list. A relative or absolute path can be used. The specified file may not exist. See the details [here](https://github.com/electricimp/Builder#cache-for-remote-includes) |
+| --save-results | -s | No | No | If `true` or no value, save the results of source code preprocessing in the local **TBD** and **TBD** files. If `false`, do not save the results of source code preprocessing. If the local **TBD** and **TBD** files exist, they are deleted. Default: `false` |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
@@ -560,9 +560,9 @@ The user is asked to confirm the operation unless confirmed automatically with t
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --var-file | -? | No | No | Also deletes the file with variables, referenced by the [builder configuration file](#builder-configuration-files) |
-| --github-file | -? | No | No | Also deletes the GitHub credentials file, referenced by the [builder configuration file](#builder-configuration-files) |
-| --cache-exclude-list | -? | No | No | Also deletes the file with cache exclude list, referenced by the [builder configuration file](#builder-configuration-files) |
+| --var-file | -v | No | No | Also deletes the file with variables, referenced by the [builder configuration file](#builder-configuration-files) |
+| --github-file | -i | No | No | Also deletes the GitHub credentials file, referenced by the [builder configuration file](#builder-configuration-files) |
+| --cache-exclude-list | -x | No | No | Also deletes the file with cache exclude list, referenced by the [builder configuration file](#builder-configuration-files) |
 | --all | -a | No | No | Includes `--var-file`, `--github-file` and `--cache-exclude-list` options |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
 | --debug | -z | No | No | Displays debug info for the command execution |
@@ -581,7 +581,7 @@ The user is asked to confirm the operation if the specified GitHub credentials f
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --github-file | -? | Yes | Yes | A path to the GitHub credentials file. A relative or absolute path can be used |
+| --github-file | -i | Yes | Yes | A path to the GitHub credentials file. A relative or absolute path can be used |
 | --user | -u | Yes | Yes | A GitHub account username |
 | --pwd | -w | Yes | Yes | A GitHub account password or personal access token |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
@@ -615,11 +615,11 @@ At the end of the command execution, information about the builder configuration
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --var-file | -? | No | Yes | A path to a file with variables. A relative or absolute path can be used. The specified file may not exist. Format of the file: `{ "<variable_name>": "<variable_value>"[, "<variable_name>": "<variable_value>"][, ...] }` **TBD** |
-| --github-file | -? | No | Yes | A path to a GitHub credentials file. A relative or absolute path can be used. The specified file may not exist. See [`impt builder github`](#builder-github) |
-| --cache | -? | No | No | If `true` or no value, cache external libraries in the local `.builder-cache` directory. If `false`, do not cache external libraries (in this case, if the local `.builder-cache` directory exists, it is deleted). See the details [here](https://github.com/electricimp/Builder#cache-for-remote-includes) |
-| --cache-exclude-list | -? | No | Yes | A path to a file with cache exclude list. A relative or absolute path can be used. The specified file may not exist. See the details [here](https://github.com/electricimp/Builder#cache-for-remote-includes) |
-| --save-results | -? | No | No | If `true` or no value, save the results of source code preprocessing in the local **TBD** and **TBD** files. If `false`, do not save the results of source code preprocessing (in this case, if the local **TBD** and **TBD** files exist, they are deleted) |
+| --var-file | -v | No | Yes | A path to a file with variables. A relative or absolute path can be used. The specified file may not exist. Format of the file: `{ "<variable_name>": "<variable_value>"[, "<variable_name>": "<variable_value>"][, ...] }` **TBD** |
+| --github-file | -i | No | Yes | A path to a GitHub credentials file. A relative or absolute path can be used. The specified file may not exist. See [`impt builder github`](#builder-github) |
+| --cache | -e | No | No | If `true` or no value, cache external libraries in the local `.builder-cache` directory. If `false`, do not cache external libraries (in this case, if the local `.builder-cache` directory exists, it is deleted). See the details [here](https://github.com/electricimp/Builder#cache-for-remote-includes) |
+| --cache-exclude-list | -x | No | Yes | A path to a file with cache exclude list. A relative or absolute path can be used. The specified file may not exist. See the details [here](https://github.com/electricimp/Builder#cache-for-remote-includes) |
+| --save-results | -s | No | No | If `true` or no value, save the results of source code preprocessing in the local **TBD** and **TBD** files. If `false`, do not save the results of source code preprocessing (in this case, if the local **TBD** and **TBD** files exist, they are deleted) |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
@@ -1490,12 +1490,12 @@ Updates the specified webhook with a new target URL and/or MIME content-type. Fa
 | -b | --build, --builds |
 | -c | --create-product, --conditional |
 | -d | --device |
-| -e | --endpoint, --entities, --event, --builder-cache, --clear-cache |
+| -e | --endpoint, --entities, --event, --cache |
 | -f | --force, --files, --pre-factory, --from, --flagged, --offline, --test-file |
 | -g | --dg |
 | -h | --help |
-| -i | --device-only, --github-config |
-| -j | --agent-only, --builder-config |
+| -i | --device-only, --github-file |
+| -j | --agent-only |
 | -k | --lk |
 | -l | --log, --local, --load-code-after-blessing |
 | -m | --min-supported-deployment, --mime, --zombie |
@@ -1504,12 +1504,12 @@ Updates the specified webhook with a new target URL and/or MIME content-type. Fa
 | -p | --product |
 | -q | --confirmed |
 | -r | --create-target, --remove-tag, --remove |
-| -s | --descr, --sha, --page-size, --stop-on-fail |
+| -s | --descr, --sha, --page-size, --stop-on-fail, --save-results |
 | -t | --tag, --timeout, --temp, --target, --to, --tests |
 | -u | --user, --full, --unflagged, --unflag, --unassigned, --unbond, --url |
-| -v | |
+| -v | --var-file |
 | -w | --wh, --pwd |
-| -x | --device-file |
+| -x | --device-file, --cache-exclude-list |
 | -y | --agent-file, --dg-type |
 | -z | --debug |
 
