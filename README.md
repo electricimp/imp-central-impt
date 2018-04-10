@@ -273,6 +273,7 @@ IMPT COMMAND FAILS
 Calls to the impCentral API need to be authenticated. *impt* provides the [login command](./CommandsManual.md#auth-login) for this purpose. It can be used in either of two ways:
 
 - Using an account identifier (an email address or a username) and password: `impt auth login --user <user_id> --pwd <password>`
+  - NOTE: If your username or password contains certain special characters, such as the "!", you may need to wrap the `user_id` and `password` in single quotes to avoid [potential bash interpretation issues](https://ss64.com/bash/bang.html) (e.g. `impt auth login --user 'AUserId' --pwd 'A!Password'`)
 - Using a [login key](#login-keys): `impt auth login --lk <login_key>`
 
 The tool takes care of obtaining an access token and refreshing it using an obtained refresh token or a provided login key. Typically, you need only log in once and can continue using the tool while the refresh token or login key remains valid (ie. not deleted by you). For this purpose, the tool stores the access token and the refresh token/login key in an [auth file](./CommandsManual.md#auth-files).
