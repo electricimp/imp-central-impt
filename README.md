@@ -16,6 +16,7 @@ This guide covers the basic and common usage of *impt*, and should be read first
 ## Contents ##
 
 - [Installation](#installation)
+- [Proxy Setup](#proxy-setup)
 - [Syntax and Command Groups](#syntax-and-command-groups)
 - [Help](#help)
 - [Debugging](#debugging)
@@ -37,6 +38,18 @@ This guide covers the basic and common usage of *impt*, and should be read first
 
 ```bash
 npm install -g imp-central-impt
+```
+
+## Proxy Setup ##
+
+If *impt* is going to connect to the impCentral API via a proxy, one or both of the following environment variables should be set to a value in URL format:
+- `HTTPS_PROXY` (or `https_proxy`) &mdash; for the proxy which passes HTTPs requests.
+- `HTTP_PROXY` (or `http_proxy`) &mdash; for the proxy which passes HTTP requests.
+
+Note, the default impCentral API endpoint is working over HTTPs.
+
+```
+HTTPS_PROXY=https://proxy.example.net
 ```
 
 ## Syntax and Command Groups ##
