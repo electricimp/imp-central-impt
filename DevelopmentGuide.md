@@ -284,6 +284,8 @@ While the logs are being streamed, no other command can be called. To stop displ
 
 Note, the log stream may be closed by the impCentral API: for example, when a new log stream is requested by the same account and that exceeds the per-account limit of opened streams.
 
+If the logs streaming is stopped by an error (eg. due to a disconnection), *impt* tries to automatically reconnect and reestablish the stream. Note, even if the stream is restored, some log entries could be lost and not displayed.
+
 **Example**
 
 **Logging is started for a device from the Project’s Device Group**
