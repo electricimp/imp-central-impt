@@ -50,7 +50,8 @@ exports.builder = function (yargs) {
             demandOption : false,
             describe : 'Lists Device Groups of the specified type only.',
         },
-        [Options.DEBUG] : false
+        [Options.DEBUG] : false,
+        [Options.OUTPUT] : ""
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
