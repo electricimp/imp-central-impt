@@ -16,13 +16,6 @@
 **[impt build run](#build-run)**<br>
 **[impt build update](#build-update)**<br>
 
-**[impt builder clearcache](#builder-clearcache)**<br>
-**[impt builder create](#builder-create)**<br>
-**[impt builder delete](#builder-delete)**<br>
-**[impt builder github](#builder-github)**<br>
-**[impt builder info](#builder-info)**<br>
-**[impt builder update](#builder-update)**<br>
-
 **[impt device assign](#device-assign)**<br>
 **[impt device info](#device-info)**<br>
 **[impt device list](#device-list)**<br>
@@ -64,6 +57,7 @@
 
 **[impt test create](#test-create)**<br>
 **[impt test delete](#test-delete)**<br>
+**[impt test github](#test-github)**<br>
 **[impt test info](#test-info)**<br>
 **[impt test run](#test-run)**<br>
 **[impt test update](#test-update)**<br>
@@ -83,7 +77,6 @@
 - [Auth files](#auth-files)
 - [Project Files](#project-files)
 - [Test Configuration Files](#test-configuration-files)
-- [Builder Configuration Files](#builder-configuration-files)
 - [Command Description](#command-description)
 - [List of Aliases](#list-of-aliases)
 - [Common Filter Options](#common-filter-options)
@@ -223,12 +216,6 @@ A test configuration file is a `.impt.test` file located in a given directory. D
 
 A test configuration file contains settings to run unit tests which are created with the [*impUnit*](https://github.com/electricimp/impUnit) test framework. Test configuration files affect [Test Commands](#test-commands) only.
 
-## Builder Configuration Files ##
-
-A builder configuration file is a `.impt.builder` file located in a given directory. Different directories may contain different builder configuration files. A directory can contain only one builder configuration file.
-
-A builder configuration file contains settings for [*Builder*](https://github.com/electricimp/Builder) that may be used for code or tests development. If builder configuration file exists in a directory it affects the following commands called from this directory:  [`impt build deploy`](#impt-build-deploy), [`impt build run`](#impt-build-run), [`impt test run`](#impt-test-run).
-
 ## Command Description ##
 
 ### Authentication Commands ###
@@ -366,8 +353,6 @@ Creates a build (Deployment) from the specified source files, with a description
 
 The command fails if one or both of the specified source files do not exist, or the specified Device Group does not exist.
 
-If the current directory contains [builder configuration file](#builder-configuration-files), the specified source files are first preprocessed by [*Builder*](https://github.com/electricimp/Builder). Builder settings are controlled by [Builder Configuration Commands](#builder-configuration-commands).
-
 The new build is not run until the devices are rebooted. To run it, call [`impt dg restart`](#device-group-restart) or [`impt device restart`](#device-restart).
 
 | Option | Alias | Mandatory? | Value Required? | Description |
@@ -496,130 +481,6 @@ Updates the description, tags and/or the *flagged* attribute (whichever is speci
 | --tag | -t | No | Yes | A tag applied to this build (Deployment). This option may be repeated multiple times to apply multiple tags |
 | --remove-tag | -r | No | Yes | A tag removed from this build (Deployment). This option may be repeated multiple times to remove multiple tags |
 | --flagged | -f | No | No | If `true` or no value is supplied, this build (Deployment) cannot be deleted without first setting this option back to `false`. If `false` or the option is not specified, the build can be deleted |
-| --debug | -z | No | No | Displays debug info for the command execution |
-| --help | -h | No | No | Displays a description of the command. Ignores any other options |
-
-### Builder Configuration Commands ###
-
-#### Builder ClearCache ####
-
-```
-impt builder clearcache [--debug] [--help]
-```
-
-Deletes builder cache (`.builder-cache` directory), if exists in the current directory.
-
-| Option | Alias | Mandatory? | Value Required? | Description |
-| --- | --- | --- | --- | --- |
-| --debug | -z | No | No | Displays debug info for the command execution |
-| --help | -h | No | No | Displays a description of the command. Ignores any other options |
-
-#### Builder Create ####
-
-```
-impt builder create [--var-file <variables_file_name>] [--github-file <github_credentials_file_name>]
-    [--cache [true|false]] [--cache-exclude-list <exclude_list_file_name>]
-    [--save-results [true|false]] [--confirmed] [--debug] [--help]
-```
-
-Creates a [builder configuration file](#builder-configuration-files) in the current directory.
-
-The user is asked to confirm the operation if the current directory already contains a [builder configuration file](#builder-configuration-files) (confirmed automatically with the `--confirmed` option). If confirmed, the existing [builder configuration file](#builder-configuration-files) is overwritten.
-
-At the end of the command execution, information about the builder configuration is displayed (as by [`impt builder info`](#builder-info)).
-
-| Option | Alias | Mandatory? | Value Required? | Description |
-| --- | --- | --- | --- | --- |
-| --var-file | -v | No | Yes | A path to a file with variables. A relative or absolute path can be used. The specified file may not exist. Format of the file: `{ "<variable_name>": "<variable_value>"[, "<variable_name>": "<variable_value>"][, ...] }` **TBD** |
-| --github-file | -i | No | Yes | A path to a GitHub credentials file. A relative or absolute path can be used. The specified file may not exist. See [`impt builder github`](#builder-github) |
-| --cache | -e | No | No | If `true` or no value, cache external libraries in the local `.builder-cache` directory. If `false`, do not cache external libraries. If the local `.builder-cache` directory exists, it is deleted. See the details [here](https://github.com/electricimp/Builder#cache-for-remote-includes). Default: `false` |
-| --cache-exclude-list | -x | No | Yes | A path to a file with cache exclude list. A relative or absolute path can be used. The specified file may not exist. See the details [here](https://github.com/electricimp/Builder#cache-for-remote-includes) |
-| --save-results | -s | No | No | If `true` or no value, save the results of source code preprocessing in the local **TBD** and **TBD** files. If `false`, do not save the results of source code preprocessing. If the local **TBD** and **TBD** files exist, they are deleted. Default: `false` |
-| --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
-| --debug | -z | No | No | Displays debug info for the command execution |
-| --help | -h | No | No | Displays a description of the command. Ignores any other options |
-
-#### Builder Delete ####
-
-```
-impt builder delete [--var-file] [--github-file] [--cache-exclude-list] [--all]
-    [--confirmed] [--debug] [--help]
-```
-
-Deletes the [builder configuration file](#builder-configuration-files) in the current directory. Does nothing if there is no [builder configuration file](#builder-configuration-files) in the current directory.
-
-The following entities are deleted (if exist):
-- [builder configuration file](#builder-configuration-files) in the current directory.
-- builder cache (`.builder-cache` directory) in the current directory.
-- files with the results of source code preprocessing (**TBD** and **TBD** files) in the current directory.
-- If the `--var-file` option is specified, the file with variables, referenced by the builder configuration file.
-- If the `--github-file` option is specified, the GitHub credentials file, referenced by the builder configuration file.
-- If the `--cache-exclude-list` option is specified, the file with cache exclude list, referenced by the builder configuration file.
-
-The user is asked to confirm the operation unless confirmed automatically with the `--confirmed` option.
-
-| Option | Alias | Mandatory? | Value Required? | Description |
-| --- | --- | --- | --- | --- |
-| --var-file | -v | No | No | Also deletes the file with variables, referenced by the [builder configuration file](#builder-configuration-files) |
-| --github-file | -i | No | No | Also deletes the GitHub credentials file, referenced by the [builder configuration file](#builder-configuration-files) |
-| --cache-exclude-list | -x | No | No | Also deletes the file with cache exclude list, referenced by the [builder configuration file](#builder-configuration-files) |
-| --all | -a | No | No | Includes `--var-file`, `--github-file` and `--cache-exclude-list` options |
-| --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
-| --debug | -z | No | No | Displays debug info for the command execution |
-| --help | -h | No | No | Displays a description of the command. Ignores any other options |
-
-#### Builder Github ####
-
-```
-impt builder github --github-file <github_credentials_file_name> --user <github_username>
-    --pwd <github_password> [--confirmed] [--debug] [--help]
-```
-
-Creates or updates a GitHub credentials file.
-
-The user is asked to confirm the operation if the specified GitHub credentials file already exists, unless confirmed automatically with the `--confirmed` option. If confirmed, the existing GitHub credentials file is overwritten.
-
-| Option | Alias | Mandatory? | Value Required? | Description |
-| --- | --- | --- | --- | --- |
-| --github-file | -i | Yes | Yes | A path to the GitHub credentials file. A relative or absolute path can be used |
-| --user | -u | Yes | Yes | A GitHub account username |
-| --pwd | -w | Yes | Yes | A GitHub account password or personal access token |
-| --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
-| --debug | -z | No | No | Displays debug info for the command execution |
-| --help | -h | No | No | Displays a description of the command. Ignores any other options |
-
-#### Builder Info ####
-
-```
-impt builder info [--debug] [--help]
-```
-
-Displays information about the builder configuration defined by the [builder configuration file](#builder-configuration-files) in the current directory.
-
-| Option | Alias | Mandatory? | Value Required? | Description |
-| --- | --- | --- | --- | --- |
-| --debug | -z | No | No | Displays debug info for the command execution |
-| --help | -h | No | No | Displays a description of the command. Ignores any other options |
-
-#### Builder Update ####
-
-```
-impt builder update [--var-file <variables_file_name>] [--github-file <github_credentials_file_name>]
-    [--cache [true|false]] [--cache-exclude-list <exclude_list_file_name>]
-    [--save-results [true|false]] [--debug] [--help]
-```
-
-Updates the [builder configuration file](#builder-configuration-files) in the current directory. Fails if there is no [builder configuration file](#builder-configuration-files) in the current directory.
-
-At the end of the command execution, information about the builder configuration is displayed (as by [`impt builder info`](#builder-info)).
-
-| Option | Alias | Mandatory? | Value Required? | Description |
-| --- | --- | --- | --- | --- |
-| --var-file | -v | No | Yes | A path to a file with variables. A relative or absolute path can be used. The specified file may not exist. Format of the file: `{ "<variable_name>": "<variable_value>"[, "<variable_name>": "<variable_value>"][, ...] }` **TBD** |
-| --github-file | -i | No | Yes | A path to a GitHub credentials file. A relative or absolute path can be used. The specified file may not exist. See [`impt builder github`](#builder-github) |
-| --cache | -e | No | No | If `true` or no value, cache external libraries in the local `.builder-cache` directory. If `false`, do not cache external libraries (in this case, if the local `.builder-cache` directory exists, it is deleted). See the details [here](https://github.com/electricimp/Builder#cache-for-remote-includes) |
-| --cache-exclude-list | -x | No | Yes | A path to a file with cache exclude list. A relative or absolute path can be used. The specified file may not exist. See the details [here](https://github.com/electricimp/Builder#cache-for-remote-includes) |
-| --save-results | -s | No | No | If `true` or no value, save the results of source code preprocessing in the local **TBD** and **TBD** files. If `false`, do not save the results of source code preprocessing (in this case, if the local **TBD** and **TBD** files exist, they are deleted) |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
@@ -1288,8 +1149,9 @@ At the end of the command execution, information about the Project is displayed 
 ```
 impt test create --dg <DEVICE_GROUP_IDENTIFIER> [--device-file <device_file>]
     [--agent-file <agent_file>] [--timeout <timeout>] [--stop-on-fail [true|false]]
-    [--allow-disconnect [true|false]] [--test-file <test_file_name_pattern>]
-    [--confirmed] [--debug] [--help]
+    [--allow-disconnect [true|false]] [--builder-cache [true|false]]
+    [--test-file <test_file_name_pattern>] [--github-config <github_credentials_file_name>]
+    [--builder-config <builder_file_name>] [--confirmed] [--debug] [--help]
 ```
 
 Creates a [test configuration file](#test-configuration-files) in the current directory.
@@ -1306,7 +1168,10 @@ At the end of the command execution, information about the test configuration is
 | --timeout | -t | No | Yes | A timeout period in seconds after which a test is interrupted and considered to have failed. Default: 30 seconds |
 | --stop-on-fail | -s | No | No | If `true` or no value, the whole tests execution is stopped after a test failure. If `false`, the tests execution is not stopped after a failure. Default: `false` |
 | --allow-disconnect | -a | No | No | If `true` or no value, keep a test session alive when a device is temporarily disconnected. If `false`, a test session fails when a device is disconnected. Default: `false` |
+| --builder-cache | -e | No | No | If `true` or no value, cache external libraries in the local `.builder-cache` directory. If `false`, do not cache external libraries. If the local `.builder-cache` directory exists, it is cleaned. Default: `false` |
 | --test-file | -f | No | Yes | Test file name or pattern. All files located in the current directory and all its sub-directories whose names match the specified name or pattern are considered as files with test cases. This option may be repeated multiple times to specify multiple names and/or patterns. The values of the repeated option are combined by logical OR. Default: `"*.test.nut"` `"tests/**/*.test.nut"` |
+| --github-config | -i | No | Yes | A path to a GitHub credentials file. A relative or absolute path can be used. The specified file may not exist |
+| --builder-config | -j | No | Yes | A path to a file with *Builder* variables. A relative or absolute path can be used. The specified file may not exist |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
@@ -1314,14 +1179,18 @@ At the end of the command execution, information about the test configuration is
 #### Test Delete ####
 
 ```
-impt test delete [--entities] [--confirmed] [--debug] [--help]
+impt test delete [--github-config] [--builder-config] [--entities] [--all] [--confirmed]
+    [--debug] [--help]
 ```
 
 Deletes the [test configuration file](#test-configuration-files) in the current directory. Does nothing if there is no [test configuration file](#test-configuration-files) in the current directory.
 
 The following entities are deleted (if the exist):
-- [Test configuration file](#test-configuration-files) in the current directory.
+- A [test configuration file](#test-configuration-files) in the current directory.
+- A *Builder* cache (`.builder-cache` directory) in the current directory.
 - Debug information (`.build` directory) in the current directory.
+- If the `--github-config` option is specified, the GitHub credentials file referenced by the test configuration file.
+- If the `--builder-config` option is specified, the file with *Builder* variables referenced by the test configuration file.
 - If the `--entities` option is specified:
     - The Device Group referenced by the test configuration file. All Devices are unassigned from that Device Group.
     - All builds (Deployments) of the Device Group referenced by the test configuration file, including Deployments with its *flagged* attribute set to `true`.
@@ -1331,7 +1200,30 @@ The user is asked to confirm the operation unless confirmed automatically with t
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
+| --github-config | -i | No | No | Also deletes the GitHub credentials file referenced by [test configuration file](#test-configuration-files) |
+| --builder-config | -j | No | No | Also deletes the file with *Builder* variables referenced by [test configuration file](#test-configuration-files) |
 | --entities | -e | No | No | Also deletes the impCentral API entities (Device Group, Product, Deployments) referenced by [test configuration file](#test-configuration-files). See above. |
+| --all | -a | No | No | Includes `--github-config`, `--builder-config` and `--entities` options |
+| --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
+| --debug | -z | No | No | Displays debug info for the command execution |
+| --help | -h | No | No | Displays a description of the command. Ignores any other options |
+
+#### Test Github ####
+
+```
+impt test github --github-config <github_credentials_file_name> --user <github_username>
+    --pwd <github_password> [--confirmed] [--debug] [--help]
+```
+
+Creates or updates a GitHub credentials file.
+
+The user is asked to confirm the operation if the specified GitHub credentials file already exists, unless confirmed automatically with the `--confirmed` option. If confirmed, the existing GitHub credentials file is overwritten.
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --github-config | -i | Yes | Yes | A path to the GitHub credentials file. A relative or absolute path can be used |
+| --user | -u | Yes | Yes | A GitHub account username |
+| --pwd | -w | Yes | Yes | A GitHub account password or personal access token |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
@@ -1352,16 +1244,15 @@ Displays information about the test configuration defined by the [test configura
 #### Test Run ####
 
 ```
-impt test run [--tests <test_pattern>] [--debug] [--help]
+impt test run [--tests <test_pattern>] [--clear-cache] [--debug] [--help]
 ```
 
 Runs the tests specified by the [test configuration file](#test-configuration-files) in the current directory.
 
-If the current directory contains [builder configuration file](#builder-configuration-files), the specified tests are first preprocessed by [*Builder*](https://github.com/electricimp/Builder). Builder settings are controlled by [Builder Configuration Commands](#builder-configuration-commands).
-
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --tests | -t | No | Yes | A pattern to select the tests. Allows you to select specific test files, test cases and/or test methods for execution. The syntax of the pattern: *[testFile][:testCase][::testMethod]*, where *testFile* may include a relative path as well as [regular expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions). If the option is omitted, all tests from all test files specified in the [test configuration file](#test-configuration-files) are executed |
+| --clear-cache | -e | No | No | Clears the local `.builder-cache` directory if it exists |
 | --debug | -z | No | No | Runs the tests in the debug mode |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
@@ -1370,8 +1261,9 @@ If the current directory contains [builder configuration file](#builder-configur
 ```
 impt test update [--dg <DEVICE_GROUP_IDENTIFIER>] [--device-file [<device_file>]]
     [--agent-file [<agent_file>]] [--timeout <timeout>] [--stop-on-fail [true|false]]
-    [--allow-disconnect [true|false]] [--test-file <test_file_name_pattern>]
-    [--debug] [--help]
+    [--allow-disconnect [true|false]] [--builder-cache [true|false]]
+    [--test-file <test_file_name_pattern>] [--github-config [<github_credentials_file_name>]]
+    [--builder-config [<builder_file_name>]] [--debug] [--help]
 ```
 
 Updates the [test configuration file](#test-configuration-files) in the current directory. Fails if there is no [test configuration file](#test-configuration-files) in the current directory.
@@ -1386,7 +1278,10 @@ At the end of the command execution, information about the test configuration is
 | --timeout | -t | No | Yes | A timeout period in seconds after which a test is interrupted and considered as failed |
 | --stop-on-fail | -s | No | No | If `true` or no value, the whole tests execution is stopped after a test failure. If `false`, the tests execution is not stopped after a failure |
 | --allow-disconnect | -a | No | No | If `true` or no value, keep a test session alive when a device is temporary disconnected. If `false`, a test session fails when a device is disconnected |
+| --builder-cache | -e | No | No | If `true` or no value, cache external libraries in the local `.builder-cache` directory. If `false`, do not cache external libraries; in this case, if the local `.builder-cache` directory exists, it is cleaned |
 | --test-file | -f | No | Yes | Test file name or pattern. All files located in the current directory and all its sub-directories whose names match the specified name or pattern are considered as files with test cases. This option may be repeated multiple times to specify multiple names and/or patterns. The values of the repeated option are combined by logical OR. The specified values fully replace the existed setting |
+| --github-config | -i | No | No | A path to a GitHub credentials file. A relative or absolute path can be used. The specified file may not exist. Specify this option without a value to remove a GitHub credentials file from the test configuration |
+| --builder-config | -j | No | No | A path to a file with *Builder* variables. A relative or absolute path can be used. The specified file may not exist. Specify this option without a value to remove a file with *Builder* variables from the test configuration |
 | --debug | -z | No | No | Displays debug info for the command execution |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
@@ -1490,12 +1385,12 @@ Updates the specified webhook with a new target URL and/or MIME content-type. Fa
 | -b | --build, --builds |
 | -c | --create-product, --conditional |
 | -d | --device |
-| -e | --endpoint, --entities, --event, --cache |
+| -e | --endpoint, --entities, --event, --builder-cache, --clear-cache |
 | -f | --force, --files, --pre-factory, --from, --flagged, --offline, --test-file |
 | -g | --dg |
 | -h | --help |
-| -i | --device-only, --github-file |
-| -j | --agent-only |
+| -i | --device-only, --github-config |
+| -j | --agent-only, --builder-config |
 | -k | --lk |
 | -l | --log, --local, --load-code-after-blessing |
 | -m | --min-supported-deployment, --mime, --zombie |
@@ -1504,12 +1399,12 @@ Updates the specified webhook with a new target URL and/or MIME content-type. Fa
 | -p | --product |
 | -q | --confirmed |
 | -r | --create-target, --remove-tag, --remove |
-| -s | --descr, --sha, --page-size, --stop-on-fail, --save-results |
+| -s | --descr, --sha, --page-size, --stop-on-fail |
 | -t | --tag, --timeout, --temp, --target, --to, --tests |
 | -u | --user, --full, --unflagged, --unflag, --unassigned, --unbond, --url |
-| -v | --var-file |
+| -v | |
 | -w | --wh, --pwd |
-| -x | --device-file, --cache-exclude-list |
+| -x | --device-file |
 | -y | --agent-file, --dg-type |
 | -z | --debug |
 
