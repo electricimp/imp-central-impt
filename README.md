@@ -16,6 +16,7 @@ This guide covers the basic and common usage of *impt*, and should be read first
 ## Contents ##
 
 - [Installation](#installation)
+- [Proxy Setup](#proxy-setup)
 - [Syntax and Command Groups](#syntax-and-command-groups)
 - [Help](#help)
 - [Debugging](#debugging)
@@ -37,6 +38,18 @@ This guide covers the basic and common usage of *impt*, and should be read first
 
 ```bash
 npm install -g imp-central-impt
+```
+
+## Proxy Setup ##
+
+If *impt* is going to connect to the impCentral API via a proxy, one or both of the following environment variables should be set to a value in URL format:
+- `HTTPS_PROXY` (or `https_proxy`) &mdash; for the proxy which passes HTTPs requests.
+- `HTTP_PROXY` (or `http_proxy`) &mdash; for the proxy which passes HTTP requests.
+
+Note, the default impCentral API endpoint is working over HTTPs.
+
+```
+HTTPS_PROXY=https://proxy.example.net
 ```
 
 ## Syntax and Command Groups ##
@@ -273,6 +286,7 @@ IMPT COMMAND FAILS
 Calls to the impCentral API need to be authenticated. *impt* provides the [login command](./CommandsManual.md#auth-login) for this purpose. It can be used in either of two ways:
 
 - Using an account identifier (an email address or a username) and password: `impt auth login --user <user_id> --pwd <password>`
+  - NOTE: If your username or password contains certain special characters, such as the "!", you may need to wrap the `user_id` and `password` in single quotes to avoid [potential bash interpretation issues](https://ss64.com/bash/bang.html) (e.g. `impt auth login --user 'AUserId' --pwd 'A!Password'`)
 - Using a [login key](#login-keys): `impt auth login --lk <login_key>`
 
 The tool takes care of obtaining an access token and refreshing it using an obtained refresh token or a provided login key. Typically, you need only log in once and can continue using the tool while the refresh token or login key remains valid (ie. not deleted by you). For this purpose, the tool stores the access token and the refresh token/login key in an [auth file](./CommandsManual.md#auth-files).
