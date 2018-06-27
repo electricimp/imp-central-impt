@@ -289,6 +289,8 @@ Calls to the impCentral API need to be authenticated. *impt* provides the [login
   - NOTE: If your username or password contains certain special characters, such as the "!", you may need to wrap the `user_id` and `password` in single quotes to avoid [potential bash interpretation issues](https://ss64.com/bash/bang.html) (e.g. `impt auth login --user 'AUserId' --pwd 'A!Password'`)
 - Using a [login key](#login-keys): `impt auth login --lk <login_key>`
 
+You may specify the credentials (identifier/password or login key) directly in the [login command](./CommandsManual.md#auth-login) options. If not specified, *impt* asks you to choose a way of authentication and input the corresponding credentials.
+
 The tool takes care of obtaining an access token and refreshing it using an obtained refresh token or a provided login key. Typically, you need only log in once and can continue using the tool while the refresh token or login key remains valid (ie. not deleted by you). For this purpose, the tool stores the access token and the refresh token/login key in an [auth file](./CommandsManual.md#auth-files).
 
 *impt* never stores an account identifier and password. If you do not want the tool to store a refresh token/login key, use the [login command’s](./CommandsManual.md#auth-login) `--temp` option. In this case you will not be able to work with the impCentral API after the access token has expired (usually one hour after issue), and you will have to log in again to continue.
@@ -326,6 +328,20 @@ At any time you can get known the login status related to any directory. Call th
 
 ```
 > impt auth login --user username --pwd password
+Global login is successful.
+IMPT COMMAND SUCCEEDS
+```
+
+**Global login without specifying credentials in the options**
+
+```
+> impt auth login
+Choose authentication method:
+ (1) User/Password
+ (2) Login Key
+Enter 1 or 2: 1
+Enter username or email address: username
+Enter password: ********
 Global login is successful.
 IMPT COMMAND SUCCEEDS
 ```

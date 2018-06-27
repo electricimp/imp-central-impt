@@ -40,14 +40,16 @@ exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const formattedCommandOptions = Options.getFormattedCommandOptions(
-        '%s (%s | %s) %s',
+        '%s [%s [%s] | %s] %s',
         {
             [Options.LOCAL] : false,
             [Options.ENDPOINT] : false,
         },
         {
-            [Options.USER] : true,
-            [Options.PASSWORD] : true,
+            [Options.USER] : true
+        },
+        {
+            [Options.PASSWORD] : true
         },
         {
             [Options.LOGIN_KEY] : true
@@ -74,14 +76,11 @@ exports.builder = function (yargs) {
         .options(options)
         .check(function (argv) {
             const opts = new Options(argv);
-            if (!opts.user && !opts.loginKey) {
-                return new Errors.CommandSyntaxError(UserInteractor.ERRORS.CMD_REQUIRED_OPTIONS, Options.USER, Options.LOGIN_KEY);
-            }
             if (opts.user && opts.loginKey) {
                 return new Errors.CommandSyntaxError(UserInteractor.ERRORS.CMD_MUTUALLY_EXCLUSIVE_OPTIONS, Options.USER, Options.LOGIN_KEY);
             }
-            if (opts.user && opts.password === undefined) {
-                return new Errors.CommandSyntaxError(UserInteractor.ERRORS.CMD_REQUIRED_OPTION, Options.PASSWORD);
+            if (opts.user === undefined && opts.password) {
+                return new Errors.CommandSyntaxError(UserInteractor.ERRORS.CMD_COOPERATIVE_OPTIONS, Options.PASSWORD, Options.USER);
             }
             return Options.checkOptions(argv, options);
         })

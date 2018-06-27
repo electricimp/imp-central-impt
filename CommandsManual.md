@@ -237,15 +237,19 @@ Displays the status and the details of the authentication applicable to the curr
 
 ```
 impt auth login [--local] [--endpoint <endpoint_url>]
-    (--user <user_id> --pwd <password> | --lk <login_key_id>) [--temp] [--confirmed]
+    [--user <user_id> [--pwd <password>] | --lk <login_key_id>] [--temp] [--confirmed]
     [--debug] [--help]
 ```
 
 Perform global or local login. Creates a [global](#global-auth-file) or [local](#local-auth-file) auth file.
 
-The options for one and only one of the following authentication methods must be specified in the command:
+The options for one and only one of the following authentication methods may be specified in the command:
 - Using an account identifier and password (`--user` and `--pwd` options).
 - Using a [login key](#login-key-manipulation-commands) (`--lk` option).
+
+If neither `--user`, nor `--lk` option is specified, the user is asked to choose an authentication method and input the corresponding credentials.
+
+If `--user` option is specified but `--pwd` option is not, the user is asked to input the account password.
 
 The user is asked to confirm the operation if the corresponding auth file already exists, unless confirmed automatically with the `--confirmed` option. If confirmed, the existing auth file is overwritten.
 
@@ -253,9 +257,9 @@ The user is asked to confirm the operation if the corresponding auth file alread
 | --- | --- | --- | --- | --- |
 | --local | -l | No | No | If specified, creates or replaces a [local auth file](#local-auth-file) in the current directory. If not specified, creates or replaces the [global auth file](#global-auth-file) |
 | --endpoint | -e | No | Yes | An impCentral API endpoint. Default: `https://api.electricimp.com/v5` |
-| --user | -u | Yes/no | Yes | The account identifier: username or email address. If specified, the `--pwd` option must be specified too |
-| --pwd | -w | Yes/no | Yes | The account password. If specified, the `--user` option must be specified too |
-| --lk | -k | Yes/no | Yes | The login key ID |
+| --user | -u | No | Yes | The account identifier: username or email address |
+| --pwd | -w | No | Yes | The account password. If specified, the `--user` option must be specified too |
+| --lk | -k | No | Yes | The login key ID |
 | --temp | -t | No | No | If this option is not specified, *impt* saves the information required to refresh access token and refreshes it automatically when the token expires. If the option is specified, the tool does not save information required to refresh access token. In this case, you need to call `impt auth login` again after the access token has expired |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
 | --debug | -z | No | No | Displays debug info for the command execution |
