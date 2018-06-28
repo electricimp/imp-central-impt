@@ -341,7 +341,7 @@ Choose authentication method:
  (2) Login Key
 Enter 1 or 2: 1
 Enter username or email address: username
-Enter password: ********
+Enter password: 
 Global login is successful.
 IMPT COMMAND SUCCEEDS
 ```
