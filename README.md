@@ -56,7 +56,7 @@ HTTPS_PROXY=https://proxy.example.net
 
 All commands follow a unified format and [syntax](./CommandsManual.md#command-syntax):
 
-```
+```bash
 impt <command_group> <command_name> [<options>]
 ```
 
@@ -87,21 +87,21 @@ The most of commands have optional arguments: `--<options>`. Options may be writ
 
 Every option has a one letter [alias](./CommandsManual.md#list-of-aliases). The aliases are unique for a particular command but may be reused for different options in different commands. The same option in different commands always has the same alias. The options and aliases are detailed in the [Command Description](./CommandsManual.md#command-description).
 
-**Examples**
+##### Examples #####
 
-```
+```bash
 impt product create --name TestProduct --descr "My test product"
 ```
 
-```
+```bash
 impt product update --product TestProduct -s ""
 ```
 
-```
+```bash
 impt dg create --name "TestDG" -y development -p TestProduct
 ```
 
-```
+```bash
 impt device assign -g TestDG -d myDevice1
 ```
 
@@ -111,11 +111,9 @@ Every command has a `--help` option (alias: `-h`). If it is specified, any other
 
 The [help option](./CommandsManual.md#the-help-option) is applicable to a partially specified command, but also may be used to list all available command groups or to list all commands available in one group.
 
-**Examples**
+##### Example 1: List all command groups #####
 
-**List all command groups**
-
-```
+```bash
 > impt --help
 
 Usage: impt <command> [options]
@@ -137,9 +135,9 @@ Options:
                                                                        [boolean]
 ```
 
-**List all commands in one group**
+##### Example 2: List all the commands in one group #####
 
-```
+```bash
 > impt product --help
 
 Usage: impt product <command> [options]
@@ -158,9 +156,9 @@ Options:
                                                                        [boolean]
 ```
 
-**Display a command description**
+##### Example 3: Display a command description #####
 
-```
+```bash
 > impt product create --help
 
 Usage: impt product create --name <product_name> [--descr <product_description>]
@@ -181,9 +179,9 @@ Options:
 
 Every command has a `--debug` option (alias: `-z`). If it is specified, the tool displays debug information from the command being executed, including impCentral API requests and responses.
 
-**Example**
+#### Example ####
 
-```
+```bash
 > impt product create --name TestProduct --descr "My test product" --debug
 Doing the request with options:
 {
@@ -263,19 +261,17 @@ A command’s execution output contains one of the two predefined phrases: `IMPT
 
 If a command finishes with `IMPT COMMAND FAILS`, it returns non-zero exit code. Otherwise, it returns zero exit code. This can be used by scripts as well.
 
-**Example**
+##### Example 1: A successful command execution #####
 
-**A successful command execution**
-
-```
+```bash
 > impt product delete --product TestProduct --confirmed
 Product "TestProduct" is deleted successfully.
 IMPT COMMAND SUCCEEDS
 ```
 
-**A failed command execution**
+##### Example 2: A failed command execution #####
 
-```
+```bash
 > impt product delete --product TestProduct --confirmed
 ERROR: Product "TestProduct" is not found.
 IMPT COMMAND FAILS
@@ -288,6 +284,8 @@ Calls to the impCentral API need to be authenticated. *impt* provides the [login
 - Using an account identifier (an email address or a username) and password: `impt auth login --user <user_id> --pwd <password>`
   - NOTE: If your username or password contains certain special characters, such as the "!", you may need to wrap the `user_id` and `password` in single quotes to avoid [potential bash interpretation issues](https://ss64.com/bash/bang.html) (e.g. `impt auth login --user 'AUserId' --pwd 'A!Password'`)
 - Using a [login key](#login-keys): `impt auth login --lk <login_key>`
+
+You may specify credentials (identifier and password, or login key) directly in the [login command](./CommandsManual.md#auth-login) options. If credentials are not specified, *impt* asks you to choose an authentication method and to input the corresponding credentials.
 
 The tool takes care of obtaining an access token and refreshing it using an obtained refresh token or a provided login key. Typically, you need only log in once and can continue using the tool while the refresh token or login key remains valid (ie. not deleted by you). For this purpose, the tool stores the access token and the refresh token/login key in an [auth file](./CommandsManual.md#auth-files).
 
@@ -320,27 +318,39 @@ If you run the [logout command](./CommandsManual.md#auth-logout) with the `--loc
 
 At any time you can get known the login status related to any directory. Call the [`impt auth info`](./CommandsManual.md#auth-info) from the required directory. The returned information includes a type of the login applicable to the current directory, access token status, your account ID and other details.
 
-**Examples**
+##### Example 1: Global login #####
 
-**Global login**
-
-```
+```bash
 > impt auth login --user username --pwd password
 Global login is successful.
 IMPT COMMAND SUCCEEDS
 ```
 
-**Local login using a login key, specifying a endpoint, without storing the login key**
+##### Example 2: Global login without specifying credentials in the options #####
 
+```bash
+> impt auth login
+Choose authentication method:
+ (1) User/Password
+ (2) Login Key
+Enter 1 or 2: 1
+Enter username or email address: username
+Enter password: ********
+Global login is successful.
+IMPT COMMAND SUCCEEDS
 ```
+
+##### Example 3: Local login using a login key, specifying an endpoint, but without storing the login key #####
+
+```bash
 > impt auth login --local --lk 7d8e6670aa285e9d --temp --endpoint https://api.electricimp.com/v5
 Local login is successful.
 IMPT COMMAND SUCCEEDS
 ```
 
-**Display login status**
+##### Example 4: Display login status #####
 
-```
+```bash
 > impt auth info
 Auth info:
 impCentral API endpoint:   https://api.electricimp.com/v5
@@ -353,9 +363,9 @@ Account id:                c1d61eef-d544-4d09-c8dc-d43e6742cae3
 IMPT COMMAND SUCCEEDS
 ```
 
-**Local logout**
+##### Exmaple 5: Local logout #####
 
-```
+```bash
 > impt auth logout --local
 Local logout is successful.
 IMPT COMMAND SUCCEEDS
@@ -365,9 +375,9 @@ IMPT COMMAND SUCCEEDS
 
 *impt* provides a set of [Login Key manipulation commands](./CommandsManual.md#login-key-manipulation-commands) which allows you to fully control your account’s login keys: list the existent login keys, create a new one, delete one, etc. You must be logged in in order to use the commands, which may additionally requires your password.
 
-**Example**
+##### Example #####
 
-```
+```bash
 > impt loginkey list
 Login Key list (1 items):
 Login Key:
@@ -382,13 +392,11 @@ A Project is an *impt* entity introduced to help developers manage their work. A
 
 Projects are intended for developers and are described in detail in the [*impt* Development Guide](./DevelopmentGuide.md). The tool provides a set of [Project manipulation commands](./CommandsManual.md#project-manipulation-commands). However, many other commands are affected when called from a directory where a [Project file](./CommandsManual.md#project-files) is located. Product, Device Group, Devices, Deployment referenced by the Project file may be assumed by a command when they are not specified in the command’s options explicitly. If you want to avoid that, always specify the mandatory options of the commands. All such options are detailed in the [Command Description](./CommandsManual.md#command-description).
 
-**Example**
-
-**Unassign all Devices from Device Group** 
+##### Example: Unassign all Devices from a Device Group #####
 
 A Device Group is not specified in the command below, but the current directory contains a Project File. All Devices are unassigned from the Device Group referenced by that Project File.
 
-```
+```bash
 > impt dg unassign
 The following Devices are unassigned successfully from Device Group "dfcde3bd-3d89-6c75-bf2a-a543c47e586b":
 Device:
@@ -414,11 +422,9 @@ If you want to use this feature, please read the [Commands Manual](./CommandsMan
 
 When it is hard to uniquely specify an entity without knowing the entity ID, use [entity listing](#entity-listing-and-ownership) commands to view the entities basing on some attributes, choose the required entity and use its entity ID in the required command.
 
-**Examples**
+##### Example 1: An entity is found successfully**
 
-**An entity is found successfully**
-
-```
+```bash
 > impt device info --device 0c:2a:69:05:0d:62
 Device:
   id:                      234776801163a9ee
@@ -440,9 +446,9 @@ Device:
 IMPT COMMAND SUCCEEDS
 ```
 
-**An entity is not unique, so the command fails**
+##### Example 2: An entity is not unique, so the command fails #####
 
-```
+```bash
 > impt build info --build MyRC1
 ERROR: Multiple Deployments "MyRC1" are found:
 Deployment:
@@ -483,11 +489,9 @@ As a general rule, if an entity is owned by the current logged-in account, infor
 
 To display the Account ID and email of the current account, use [`impt auth info`](./CommandsManual.md#auth-info).
 
-**Example**
+##### Example 1: List all Products owned by me and my collaborators #####
 
-**List all Products owned by me and my collaborators**
-
-```
+```bash
 > impt product list
 impt product list
 Product list (4 items):
@@ -512,9 +516,9 @@ Product:
 IMPT COMMAND SUCCEEDS
 ```
 
-**List all Factory Device Groups owned by the specified account**
+##### Example 2: List all Factory Device Groups owned by a specified account #####
 
-```
+```bash
 > impt dg list --owner user@email.com --dg-type pre-factory --dg-type factory
 Device Group list (2 items):
 Device Group:
@@ -540,9 +544,9 @@ Device Group:
 IMPT COMMAND SUCCEEDS
 ```
 
-**List all Device Groups owned by me and belonged to the specified Products**
+##### Example 3: List all Device Groups owned by me and belonging to the specified Products #####
 
-```
+```bash
 > impt dg list --owner me --product MyProduct --product TestProduct
 Device Group list (4 items):
 Device Group:
@@ -580,9 +584,9 @@ IMPT COMMAND SUCCEEDS
 
 Most command groups contain the `info` command, which displays information about the specified entity. Some of that commands have a `--full` option (alias: `-u`). When it is specified, the command displays additional details about the related entities. For example, `impt product info --full` displays the full structure of the Product: details about every Device Group that belongs to the Product, and about devices assigned to the Device Groups.
 
-**Example**
+##### Example #####
 
-```
+```bash
 > impt product info --product MyProduct --full
 Product:
   id:            c4e006ed-85b9-3513-fa99-0700333c3ad7
@@ -619,19 +623,17 @@ By default, commands which delete impCentral entities (eg. Product, Device Group
 
 By default, every delete command asks a confirmation of the operation from user. Before that the command lists all the entities which are to be deleted or updated. If you specify the `--confirmed` option (alias: `-q`), the operation is executed without requesting confirmation from the user.
 
-**Example**
+##### Example 1: A failed delete command execution #####
 
-**A failed delete command execution**
-
-```
+```bash
 > impt dg delete --dg MyDevDG --confirmed
 ERROR: Flagged Deployments Exist: Cannot delete a devicegroup with flagged deployments; delete those first.
 IMPT COMMAND FAILS
 ```
 
-**A successful delete command execution**
+##### Example 2: A successful delete command execution #####
 
-```
+```bash
 > impt dg delete --dg MyDevDG --force
 The following entities will be deleted:
 Device Group:
