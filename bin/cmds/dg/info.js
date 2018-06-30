@@ -43,7 +43,8 @@ exports.builder = function (yargs) {
             demandOption : false,
             describe : 'Displays additional information. Details about every Device assigned to the Device Group, Deployments and other.'
         },
-        [Options.DEBUG] : false
+        [Options.DEBUG] : false,
+        [Options.OUTPUT] : ""
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
