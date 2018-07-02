@@ -1271,7 +1271,6 @@ Runs the tests specified by the [test configuration file](#test-configuration-fi
 | --tests | -t | No | Yes | A pattern to select the tests. Allows you to select specific test files, test cases and/or test methods for execution. The syntax of the pattern: *[testFile][:testCase][::testMethod]*, where *testFile* may include a relative path as well as [regular expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions). If the option is omitted, all tests from all test files specified in the [test configuration file](#test-configuration-files) are executed |
 | --clear-cache | -e | No | No | Clears the local `.builder-cache` directory if it exists |
 | --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments. `--output debug` runs the tests in the debug mode |
-| --debug | -z | No | No | Runs the tests in the debug mode |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Test Update ####
