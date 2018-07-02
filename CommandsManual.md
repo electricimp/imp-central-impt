@@ -251,7 +251,7 @@ Displays the status and the details of the authentication applicable to the curr
 ```
 impt auth login [--local] [--endpoint <endpoint_url>]
     [--user <user_id> [--pwd <password>] | --lk <login_key_id>] [--temp] [--confirmed]
-    [--debug] [--help]
+    [--output] [--help]
 ```
 
 Perform global or local login. Creates a [global](#global-auth-file) or [local](#local-auth-file) auth file.
@@ -275,13 +275,13 @@ The user is asked to confirm the operation if the corresponding auth file alread
 | --lk | -k | No | Yes | A login key for the account |
 | --temp | -t | No | No | If this option is not specified, *impt* saves the information required to refresh access token and refreshes it automatically when the token expires. If the option is specified, the tool does not save information required to refresh access token. In this case, you need to call `impt auth login` again after the access token has expired |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Auth Logout ####
 
 ```
-impt auth logout [--local] [--debug] [--help]
+impt auth logout [--local] [--output] [--help]
 ```
 
 Performs global or local logout. Deletes the [global](#global-auth-file) or [local](#local-auth-file) auth file.
@@ -289,7 +289,7 @@ Performs global or local logout. Deletes the [global](#global-auth-file) or [loc
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --local | -l | No | No | If specified, deletes the [local auth file](#local-auth-file) if one exists in the current directory. If not specified, it deletes the [global auth file](#global-auth-file) if it exists |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 ### Build Manipulation Commands ###
@@ -297,7 +297,7 @@ Performs global or local logout. Deletes the [global](#global-auth-file) or [loc
 #### Build Cleanup ####
 
 ```
-impt build cleanup [--product <PRODUCT_IDENTIFIER>] [--unflag] [--confirmed] [--debug] [--help]
+impt build cleanup [--product <PRODUCT_IDENTIFIER>] [--unflag] [--confirmed] [--output] [--help]
 ```
 
 Deletes builds (Deployments) which are not related to any Device Group (‘zombie’ builds).
@@ -314,14 +314,14 @@ The user is asked to confirm the operation, unless confirmed automatically with 
 | --product | -p | No | Yes | A [Product identifier](#product-identifier) |
 | --unflag | -u | No | No | Delete a Deployment even if it has its *flagged* attribute set to `true` |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Build Copy ####
 
 ```
 impt build copy [--build <BUILD_IDENTIFIER>] --dg <DEVICE_GROUP_IDENTIFIER> [--all]
-    [--debug] [--help]
+    [--output] [--help]
 ```
 
 Copies the specified build (Deployment) to a new Deployment related to the specified Device Group. Fails if the specified Deployment or the specified Device Group does not exist.
@@ -337,13 +337,13 @@ Build source code is not saved locally. To download the source code from a Deplo
 | --build | -b | Yes/[Project](#project-files) | Yes | The [Build identifier](#build-identifier) of the Deployment to be copied. If not specified, the most recent Deployment for the Device Group referenced by the [Project file](#project-files) in the current directory is used (if there is no Project file, the command fails) |
 | --dg | -g | Yes | Yes | The [Device Group identifier](#device-group-identifier) of the Device Group the new Deployment is created for |
 | --all | -a | No | No | Copy all attributes of the specified Deployment |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Build Delete ####
 
 ```
-impt build delete --build <BUILD_IDENTIFIER> [--force] [--confirmed] [--debug] [--help]
+impt build delete --build <BUILD_IDENTIFIER> [--force] [--confirmed] [--output] [--help]
 ```
 
 Deletes the specified build (Deployment). The command fails if the build is the Device Group’s *min_supported_deployment* (see the impCentral API specification) or a newer Deployment. The command also fails if the Deployment has its *flagged* attribute set to `true` and the `--force` option was not specified. Use either the `--force` option or [`impt build update`](#build-update) to update the attribute.
@@ -355,7 +355,7 @@ The user is asked to confirm the operation, unless confirmed automatically with 
 | --build | -b | Yes | Yes | A [Build identifier](#build-identifier) |
 | --force | -f | No | No | If the Deployment has its *flagged* attribute set to `true`, set it to `false` to allow deletion |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Build Deploy ####
@@ -363,7 +363,7 @@ The user is asked to confirm the operation, unless confirmed automatically with 
 ```
 impt build deploy [--dg <DEVICE_GROUP_IDENTIFIER>] [--device-file <device_file>]
     [--agent-file <agent_file>] [--descr <build_description>] [--origin <origin>]
-    [--tag <tag>] [--flagged [true|false]] [--debug] [--help]
+    [--tag <tag>] [--flagged [true|false]] [--output] [--help]
 ```
 
 Creates a build (Deployment) from the specified source files, with a description (if specified) and attributes (if specified), and deploys it to all the devices assigned to the specified Device Group.
@@ -381,7 +381,7 @@ The new build is not run until the devices are rebooted. To run it, call [`impt 
 | --origin | -o | No | Yes | A free-form key to store a link to the code’s storage location, eg. a GitHub repo name or URL |
 | --tag | -t | No | Yes | A tag applied to this build (Deployment). This option may be repeated multiple times to apply multiple tags |
 | --flagged | -f | No | No | If `true` or no value, this build (Deployment) cannot be deleted without first setting this option back to `false`. If `false` or the option is not specified, the build can be deleted |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Build Get ####
@@ -389,7 +389,7 @@ The new build is not run until the devices are rebooted. To run it, call [`impt 
 ```
 impt build get [--build <BUILD_IDENTIFIER>] [--device-file <device_file>]
     [--agent-file <agent_file>] [--device-only] [--agent-only]
-    [--confirmed] [--debug] [--help]
+    [--confirmed] [--output] [--help]
 ```
 
 Downloads the source files of the specified build (Deployment) and displays information about the build.
@@ -404,13 +404,13 @@ The user is asked to confirm the operation if the files with the specified names
 | --device-only | -i | No | Yes | Downloads the source code for the device only |
 | --agent-only | -j | No | Yes | Downloads the source code for the agent only |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Build Info ####
 
 ```
-impt build info [--build <BUILD_IDENTIFIER>] [--debug] [--help]
+impt build info [--build <BUILD_IDENTIFIER>] [--output] [--help]
 ```
 
 Displays information about the specified build (Deployment).
@@ -418,7 +418,7 @@ Displays information about the specified build (Deployment).
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --build | -b | Yes/[Project](#project-files) | Yes | A [Build identifier](#build-identifier). If not specified, the most recent Deployment for the Device Group referenced by the [Project file](#project-files) in the current directory is used (if there is no Project file, the command fails) |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Build List ####
@@ -427,7 +427,7 @@ Displays information about the specified build (Deployment).
 impt build list [--owner <ACCOUNT_IDENTIFIER>] [--product <PRODUCT_IDENTIFIER>]
     [--dg <DEVICE_GROUP_IDENTIFIER>] [--dg-type <device_group_type>]
     [--sha <deployment_sha>] [--tag <tag>] [--flagged] [--unflagged]
-    [--non-zombie] [--zombie] [--debug] [--help]
+    [--non-zombie] [--zombie] [--output] [--help]
 ```
 
 Displays information about all of the builds (Deployments) available to the current account.
@@ -436,7 +436,7 @@ The returned list of the builds may be filtered. Filtering uses any combination 
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 | Filter Option | Alias | Mandatory? | Value Required? | Description |
@@ -458,7 +458,7 @@ The returned list of the builds may be filtered. Filtering uses any combination 
 impt build run [--dg <DEVICE_GROUP_IDENTIFIER>] [--device-file <device_file>]
     [--agent-file <agent_file>] [--descr <build_description>]
     [--origin <origin>] [--tag <tag>] [--flagged [true|false]]
-    [--conditional] [--log] [--debug] [--help]
+    [--conditional] [--log] [--output] [--help]
 ```
 
 Creates, deploys and runs a build (Deployment). Optionally, displays logs of the running build.
@@ -478,7 +478,7 @@ The command fails if one or both of the specified source files do not exist, or 
 | --flagged | -f | No | No | If `true` or no value is supplied, this build (Deployment) cannot be deleted without first setting this option back to `false`. If `false` or the option is not specified, the build can be deleted |
 | --conditional | -c | No | No | Trigger a conditional restart of the devices assigned to the specified Device Group instead of a normal restart (see the impCentral API specification) |
 | --log | -l | No | No | Starts displaying logs from the devices assigned to the specified Device Group (see the [`impt log stream`](#log-stream) description). To stop displaying the logs, press *Ctrl-C* |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Build Update ####
@@ -486,7 +486,7 @@ The command fails if one or both of the specified source files do not exist, or 
 ```
 impt build update [--build <BUILD_IDENTIFIER>] [--descr <build_description>]
     [--tag <tag>] [--remove-tag <tag>] [--flagged [true|false]]
-    [--debug] [--help]
+    [--output] [--help]
 ```
 
 Updates the description, tags and/or the *flagged* attribute (whichever is specified) of the specified build (Deployment). Fails if the specified build (Deployment) does not exist.
@@ -498,7 +498,7 @@ Updates the description, tags and/or the *flagged* attribute (whichever is speci
 | --tag | -t | No | Yes | A tag applied to this build (Deployment). This option may be repeated multiple times to apply multiple tags |
 | --remove-tag | -r | No | Yes | A tag removed from this build (Deployment). This option may be repeated multiple times to remove multiple tags |
 | --flagged | -f | No | No | If `true` or no value is supplied, this build (Deployment) cannot be deleted without first setting this option back to `false`. If `false` or the option is not specified, the build can be deleted |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 ### Device Manipulation Commands ###
@@ -507,7 +507,7 @@ Updates the description, tags and/or the *flagged* attribute (whichever is speci
 
 ```
 impt device assign --device <DEVICE_IDENTIFIER> [--dg <DEVICE_GROUP_IDENTIFIER>]
-    [--confirmed] [--debug] [--help]
+    [--confirmed] [--output] [--help]
 ```
 
 Assigns the specified device to the specified Device Group. Fails if the specified Device Group does not exist.
@@ -521,13 +521,13 @@ The operation may fail for some combinations of Device Group [types](#device-gro
 | --device | -d | Yes | Yes | A [device identifier](#device-identifier) |
 | --dg | -g | Yes/[Project](#project-files) | Yes | A [Device Group identifier](#device-group-identifier). If not specified, the Device Group referenced by the [Project Files](#project-files) in the current directory is used (if there is no Project file, the command fails) |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Device Info ####
 
 ```
-impt device info --device <DEVICE_IDENTIFIER> [--debug] [--help]
+impt device info --device <DEVICE_IDENTIFIER> [--output] [--help]
 ```
 
 Displays information about the specified device.
@@ -535,7 +535,7 @@ Displays information about the specified device.
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --device | -d | Yes | Yes | A [device identifier](#device-identifier) |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Device List ####
@@ -543,7 +543,7 @@ Displays information about the specified device.
 ```
 impt device list [--owner <ACCOUNT_IDENTIFIER>] [--product <PRODUCT_IDENTIFIER>]
     [--dg <DEVICE_GROUP_IDENTIFIER>] [--dg-type <device_group_type>] [--unassigned]
-    [--assigned] [--online] [--offline] [--debug] [--help]
+    [--assigned] [--online] [--offline] [--output] [--help]
 ```
 
 Displays information about all of the devices available to the current account.
@@ -552,7 +552,7 @@ The returned list of the devices may be filtered. Filtering uses any combination
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 | Filter Option | Alias | Mandatory? | Value Required? | Description |
@@ -569,7 +569,7 @@ The returned list of the devices may be filtered. Filtering uses any combination
 #### Device Remove ####
 
 ```
-impt device remove --device <DEVICE_IDENTIFIER> [--force] [--confirmed] [--debug] [--help]
+impt device remove --device <DEVICE_IDENTIFIER> [--force] [--confirmed] [--output] [--help]
 ```
 
 Removes the specified Device from the current account.
@@ -583,13 +583,13 @@ The user is asked to confirm the operation, unless confirmed automatically with 
 | --device | -d | Yes | Yes | A [device identifier](#device-identifier) |
 | --force | -f | No | No | If the device is assigned to a Device Group, unassign it first |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Device Restart ####
 
 ```
-impt device restart --device <DEVICE_IDENTIFIER> [--conditional] [--log] [--debug] [--help]
+impt device restart --device <DEVICE_IDENTIFIER> [--conditional] [--log] [--output] [--help]
 ```
 
 Reboots the specified device and, optionally, starts displaying logs from it.
@@ -599,13 +599,13 @@ Reboots the specified device and, optionally, starts displaying logs from it.
 | --device | -d | Yes | Yes | A [device identifier](#device-identifier) |
 | --conditional | -c | No | No | Trigger a conditional restart (see the impCentral API specification) |
 | --log | -l | No | No | Start displaying logs from the specified device (see [`impt log stream`](#log-stream)). To stop displaying the logs press *Ctrl-C* |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Device Unassign ####
 
 ```
-impt device unassign --device <DEVICE_IDENTIFIER> [--unbond <unbond_key>] [--debug] [--help]
+impt device unassign --device <DEVICE_IDENTIFIER> [--unbond <unbond_key>] [--output] [--help]
 ```
 
 Unassigns the specified device. Does nothing if the device already unassigned.
@@ -614,13 +614,13 @@ Unassigns the specified device. Does nothing if the device already unassigned.
 | --- | --- | --- | --- | --- |
 | --device | -d | Yes | Yes | A [device identifier](#device-identifier) |
 | --unbond | -u | No | Yes | An unbond key is required to unassign the specified device from a Device Group of the *production* [type](#device-group-type) |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Device Update ####
 
 ```
-impt device update --device <DEVICE_IDENTIFIER> --name <device_name> [--debug] [--help]
+impt device update --device <DEVICE_IDENTIFIER> --name <device_name> [--output] [--help]
 ```
 
 Updates the name of the specified device.
@@ -629,7 +629,7 @@ Updates the name of the specified device.
 | --- | --- | --- | --- | --- |
 | --device | -d | Yes | Yes | A [device identifier](#device-identifier) |
 | --name | -n | Yes | Yes | The device’s new name |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 ### Device Group Manipulation Commands ###
@@ -638,7 +638,7 @@ Updates the name of the specified device.
 
 ```
 impt dg builds [--dg <DEVICE_GROUP_IDENTIFIER>] [--unflag] [--unflag-old] [--remove]
-    [--confirmed] [--debug] [--help]
+    [--confirmed] [--output] [--help]
 ```
 
 Updates and/or deletes builds (Deployments) belonging to the specified Device Group and displays information about all of the Device Group’s Deployments at the end of the command execution (as with [`impt build list`](#build-list)).
@@ -652,7 +652,7 @@ The user is asked to confirm the operation if any Deployment is going to be dele
 | --unflag-old | -o | No | No | Set the *flagged* attribute to `false` for all the Deployments of the specified Device Group which are older than *min_supported_deployment* (see the impCentral API specification) |
 | --remove | -r | No | No | Deletes all of the specified Device Group’s Deployments which are older than *min_supported_deployment* (see the impCentral API specification) and have their *flagged* attribute set to `false`. This option works after the `--unflag`/`--unflag-old` options |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Device Group Create ####
@@ -660,7 +660,7 @@ The user is asked to confirm the operation if any Deployment is going to be dele
 ```
 impt dg create --name <device_group_name> [--dg-type <device_group_type>]
     [--product <PRODUCT_IDENTIFIER>] [--descr <device_group_description>]
-    [--target <DEVICE_GROUP_IDENTIFIER>] [--debug] [--help]
+    [--target <DEVICE_GROUP_IDENTIFIER>] [--output] [--help]
 ```
 
 Creates a new Device Group for the specified Product. Fails if a Device Group with the specified name already exists under the specified Product.
@@ -672,13 +672,13 @@ Creates a new Device Group for the specified Product. Fails if a Device Group wi
 | --product | -p | Yes/[Project](#project-files) | Yes | The [Product identifier](#product-identifier) of the Product to which the Device Group belongs. If not specified, the Product referenced by the [Project file](#project-files) in the current directory is used (if there is no Project file, the command fails) |
 | --descr | -s | No | Yes | An optional description of the Device Group |
 | --target | -t | No | Yes | The [Device Group identifier](#device-group-identifier) of the new Device Group’s production target Device Group. Should only be specified if the new Device Group is of the *factory* or *pre-factory* [type](#device-group-type). The target Device Group must be of the [type](#device-group-type) *production* or *pre-production* correspondingly, and belong to the specified Product. Otherwise the command fails |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Device Group Delete ####
 
 ```
-impt dg delete [--dg <DEVICE_GROUP_IDENTIFIER>] [--builds] [--force] [--confirmed] [--debug] [--help]
+impt dg delete [--dg <DEVICE_GROUP_IDENTIFIER>] [--builds] [--force] [--confirmed] [--output] [--help]
 ```
 
 Deletes the specified Device Group and, optionally, all of the related builds (Deployments).
@@ -697,13 +697,13 @@ The user is asked to confirm the operation, unless confirmed automatically with 
 | --builds | -b | No | No | Additionally deletes all Deployments related to the Device Group |
 | --force | -f | No | No | Unassigns all of the Device Group’s devices as with [`impt dg unassign`](#device-group-unassign), and set the *flagged* attribute to `false` for all of the Device Group’s Deployments |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Device Group Info ####
 
 ```
-impt dg info [--dg <DEVICE_GROUP_IDENTIFIER>] [--full] [--debug] [--help]
+impt dg info [--dg <DEVICE_GROUP_IDENTIFIER>] [--full] [--output] [--help]
 ```
 
 Displays information about the specified Device Group.
@@ -712,14 +712,14 @@ Displays information about the specified Device Group.
 | --- | --- | --- | --- | --- |
 | --dg | -g | Yes/[Project](#project-files) | Yes | A [Device Group identifier](#device-group-identifier). If not specified, the Device Group referenced by the [Project file](#project-files) in the current directory is used (if there is no Project file, the command fails) |
 | --full | -u | No | No | Displays additional information, including details about the devices assigned to the Device Group, and Webhooks created for the Device Group |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Device Group List ####
 
 ```
 impt dg list [--owner <ACCOUNT_IDENTIFIER>] [--product <PRODUCT_IDENTIFIER>]
-    [--dg-type <device_group_type>] [--debug] [--help]
+    [--dg-type <device_group_type>] [--output] [--help]
 ```
 
 Displays information about all Device Groups available to the current account.
@@ -728,7 +728,7 @@ The returned list of the Device Groups may be filtered. Filtering uses any combi
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 | Filter Option | Alias | Mandatory? | Value Required? | Description |
@@ -741,7 +741,7 @@ The returned list of the Device Groups may be filtered. Filtering uses any combi
 
 ```
 impt dg reassign --from <DEVICE_GROUP_IDENTIFIER> [--to <DEVICE_GROUP_IDENTIFIER>]
-    [--debug] [--help]
+    [--output] [--help]
 ```
 
 Reassigns all of the devices from one Device Group to another. Fails if any of the specified Device Groups does not exist.
@@ -752,13 +752,13 @@ The operation may also fail for some combinations of Device Group [type](#device
 | --- | --- | --- | --- | --- |
 | --from | -f | Yes | Yes | The [Device Group identifier](#device-group-identifier) of the origin Device Group |
 | --to | -t | Yes/[Project](#project-files) | Yes | The [Device Group identifier](#device-group-identifier) of the destination Device Group. If not specified, the Device Group referenced by the [Project file](#project-files) in the current directory is used (if there is no Project file, the command fails) |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Device Group Restart ####
 
 ```
-impt dg restart [--dg <DEVICE_GROUP_IDENTIFIER>] [--conditional] [--log] [--debug] [--help]
+impt dg restart [--dg <DEVICE_GROUP_IDENTIFIER>] [--conditional] [--log] [--output] [--help]
 ```
 
 Reboots all of the devices assigned to the specified Device Group and, optionally, starts displaying logs from them. Does nothing if the Device Group has no devices assigned to it.
@@ -768,13 +768,13 @@ Reboots all of the devices assigned to the specified Device Group and, optionall
 | --dg | -g | Yes/[Project](#project-files) | Yes | A [Device Group identifier](#device-group-identifier). If not specified, the Device Group referenced by the [Project file](#project-files) in the current directory is used (if there is no Project file, the command fails) |
 | --conditional | -c | No | No | Trigger a conditional restart (see the impCentral API specification) |
 | --log | -l | No | No | Start displaying logs from the devices assigned to the specified Device Group (see [`impt log stream`](#log-stream)). To stop displaying the logs press *Ctrl-C* |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Device Group Unassign ####
 
 ```
-impt dg unassign [--dg <DEVICE_GROUP_IDENTIFIER>] [--unbond <unbond_key>] [--debug] [--help]
+impt dg unassign [--dg <DEVICE_GROUP_IDENTIFIER>] [--unbond <unbond_key>] [--output] [--help]
 ```
 
 Unassigns all of the devices from the specified Device Group. Does nothing if the Device Group has no devices assigned to it.
@@ -783,7 +783,7 @@ Unassigns all of the devices from the specified Device Group. Does nothing if th
 | --- | --- | --- | --- | --- |
 | --dg | -g | Yes/[Project](#project-files) | Yes | A [Device Group identifier](#device-group-identifier). If not specified, the Device Group referenced by the [Project file](#project-files) in the current directory is used (if there is no Project file, the command fails) |
 | --unbond | -u | No | Yes | An unbond key is required to unassign devices from a Device Group of the [type](#device-group-type) *production* |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Device Group Update ####
@@ -792,7 +792,7 @@ Unassigns all of the devices from the specified Device Group. Does nothing if th
 impt dg update [--dg <DEVICE_GROUP_IDENTIFIER>] [--name <device_group_name>]
     [--descr <device_group_description>] [--target <DEVICE_GROUP_IDENTIFIER>]
     [--load-code-after-blessing [true|false]]
-    [--min-supported-deployment <BUILD_IDENTIFIER>] [--debug] [--help]
+    [--min-supported-deployment <BUILD_IDENTIFIER>] [--output] [--help]
 ```
 
 Updates the specified Device Group. Fails if the specified Device Group does not exist.
@@ -805,7 +805,7 @@ Updates the specified Device Group. Fails if the specified Device Group does not
 | --target | -t | No | Yes | The [Device Group identifier](#device-group-identifier) of the specified Device Group’s production target Device Group. May only be specified for *factory* and *pre-factory* Device Groups. The target Device Group must be of the [type](#device-group-type) *production* or *pre-production* correspondingly, and belong to the same Product as the specified Device Group. Otherwise the command fails |
 | --load-code-after-blessing | -l | No | No | Only applicable to *production* and *pre-production* Device Groups. If `true` or no value is supplied, production application code is immediately loaded by the device after blessing. If `false`, production code will be loaded when the device first connects as part of BlinkUp. Newly created Production Device Groups default this setting to `true` |
 | --min-supported-deployment | -m | No | No | The [Build identifier](#build-identifier) of the new *min_supported_deployment* (see the impCentral API specification). The Deployment should belong to this Device Group and should be newer than the current *min_supported_deployment* |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 ### Log Manipulation Commands ###
@@ -814,7 +814,7 @@ Updates the specified Device Group. Fails if the specified Device Group does not
 
 ```
 impt log get [--device <DEVICE_IDENTIFIER>] [--page-size <number_of_entries>]
-    [--page-number <page_number>] [--debug] [--help]
+    [--page-number <page_number>] [--output] [--help]
 ```
 
 Displays historical logs for the specified device. The logs are displayed with the most recent entry first.
@@ -830,13 +830,13 @@ If the `--page-number` option is specified, the command displays the specified p
 | --device | -d | Yes/[Project](#project-files) | Yes | A [device identifier](#device-identifier). If not specified and there is only one device in the Device Group referenced by the [Project file](#project-files) in the current directory, then this device is used (if there is no Project file, or the Device Group has none or more than one device, the command fails) |
 | --page-size | -s | No | No | Number of log entries in one page. Default: 20 |
 | --page-number | -n | No | No | Ordinal page number with the log entries to display. Must have a positive value. Page 1 is a page with the most recent log entries. If not specified, the command displays all saved log entries |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Log Stream ####
 
 ```
-impt log stream [--device <DEVICE_IDENTIFIER>] [--dg <DEVICE_GROUP_IDENTIFIER>] [--debug] [--help]
+impt log stream [--device <DEVICE_IDENTIFIER>] [--dg <DEVICE_GROUP_IDENTIFIER>] [--output] [--help]
 ```
 
 Creates a log stream and displays logs from the specified devices in real-time. To stop displaying the logs press *Ctrl-C*.
@@ -851,7 +851,7 @@ The command allows you to add multiple devices to the newly created log stream. 
 | --- | --- | --- | --- | --- |
 | --device | -d | No | Yes | The [device identifier](#device-identifier) of the device to be added to the log stream. This option may be repeated multiple times to specify multiple devices |
 | --dg | -g | no/[Project](#project-files) | Yes | A [Device Group identifier](#device-group-identifier). This option may be repeated multiple times to specify multiple Device Groups. Logs from all of the devices assigned to the specified Device Groups will be added to the log stream. `--device` and `--dg` options are cumulative. If neither the `--device` nor the `--dg` options are specified but there is a [Project file](#project-files) in the current directory, all of the devices assigned to the Device Group referenced by the [Project file](#project-files) are added |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 ### Login Key Manipulation Commands ###
@@ -859,7 +859,7 @@ The command allows you to add multiple devices to the newly created log stream. 
 #### Login Key Create ####
 
 ```
-impt loginkey create --pwd <password> [--descr <login_key_description>] [--debug] [--help]
+impt loginkey create --pwd <password> [--descr <login_key_description>] [--output] [--help]
 ```
 
 Creates a new login key for the current account.
@@ -870,13 +870,13 @@ Creates a new login key for the current account.
 | --- | --- | --- | --- | --- |
 | --pwd | -w | Yes | Yes | The account password |
 | --descr | -s | No | Yes | An optional description of the login key, eg. `"John's key"` |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Login Key Delete ####
 
 ```
-impt loginkey delete --lk <login_key_id> --pwd <password> [--confirmed] [--debug] [--help]
+impt loginkey delete --lk <login_key_id> --pwd <password> [--confirmed] [--output] [--help]
 ```
 
 Deletes the specified login key. The user is asked to confirm the operation, unless confirmed automatically with the `--confirmed` option.
@@ -886,13 +886,13 @@ Deletes the specified login key. The user is asked to confirm the operation, unl
 | --lk | -k | Yes | Yes | The login key ID |
 | --pwd | -w | Yes | Yes | The account password |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Login Key Info ####
 
 ```
-impt loginkey info --lk <login_key_id> [--debug] [--help]
+impt loginkey info --lk <login_key_id> [--output] [--help]
 ```
 
 Displays information about the specified Login Key.
@@ -900,27 +900,27 @@ Displays information about the specified Login Key.
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --lk | -k | Yes | Yes | The login key ID |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Login Key List ####
 
 ```
-impt loginkey list [--debug] [--help]
+impt loginkey list [--output] [--help]
 ```
 
 Displays information about all of the login keys belonging to the current account.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Login Key Update ####
 
 ```
 impt loginkey update --lk <login_key_id> --pwd <password> --descr <login_key_description>
-    [--debug] [--help]
+    [--output] [--help]
 ```
 
 Updates the specified login key’s description.
@@ -930,7 +930,7 @@ Updates the specified login key’s description.
 | --lk | -k | Yes | Yes | The login key ID |
 | --pwd | -w | Yes | Yes | The account password |
 | --descr | -s | No | Yes | The login key’s new description |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 ### Product Manipulation Commands ###
@@ -938,7 +938,7 @@ Updates the specified login key’s description.
 #### Product Create ####
 
 ```
-impt product create --name <product_name> [--descr <product_description>] [--debug] [--help]
+impt product create --name <product_name> [--descr <product_description>] [--output] [--help]
 ```
 
 Creates a new Product. Fails if a Product with the specified name already exists.
@@ -947,14 +947,14 @@ Creates a new Product. Fails if a Product with the specified name already exists
 | --- | --- | --- | --- | --- |
 | --name | -n | Yes | Yes | The Product’s name. Must be unique among all of the current account’s Products |
 | --descr | -s | No | Yes | An optional description of the Product |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Product Delete ####
 
 ```
 impt product delete [--product <PRODUCT_IDENTIFIER>] [--builds] [--force] [--confirmed]
-    [--debug] [--help]
+    [--output] [--help]
 ```
 
 Deletes the specified Product.
@@ -969,13 +969,13 @@ The user is asked to confirm the operation, unless confirmed automatically with 
 | --builds | -b | No | No | Additionally deletes all Deployments related to all of the Device Groups which belong to the Product, including Device Groups that were deleted previously |
 | --force | -f | No | No | Deletes all of the Product’s Device Groups as with [`impt dg delete --force`](#device-group-delete) called for every one of the Product’s Device Groups |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Product Info ####
 
 ```
-impt product info [--product <PRODUCT_IDENTIFIER>] [--full] [--debug] [--help]
+impt product info [--product <PRODUCT_IDENTIFIER>] [--full] [--output] [--help]
 ```
 
 Displays information about the specified Product.
@@ -984,13 +984,13 @@ Displays information about the specified Product.
 | --- | --- | --- | --- | --- |
 | --product | -p | Yes/[Project](#project-files) | Yes | A [Product identifier](#product-identifier). If not specified, the Product referenced by the [Project File](#project-files) in the current directory is used (if there is no Project file, the command fails) |
 | --full | -u | No | No | Displays additional information and the full structure of the Product, including details about every Device Group that belongs to the Product, and devices assigned to those Device Groups |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Product List ####
 
 ```
-impt product list [--owner <ACCOUNT_IDENTIFIER>] [--debug] [--help]
+impt product list [--owner <ACCOUNT_IDENTIFIER>] [--output] [--help]
 ```
 
 Displays information about all of the Products available to the current account.
@@ -999,7 +999,7 @@ The returned list of the Products may be filtered. Filtering uses any combinatio
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 | Filter Options | Alias | Mandatory? | Value Required? | Description |
@@ -1010,7 +1010,7 @@ The returned list of the Products may be filtered. Filtering uses any combinatio
 
 ```
 impt product update [--product <PRODUCT_IDENTIFIER>] [--name <product_name>]
-    [--descr <product_description>] [--debug] [--help]
+    [--descr <product_description>] [--output] [--help]
 ```
 
 Updates the specified Product with a new name and/or description. Fails if the specified Product does not exist.
@@ -1020,7 +1020,7 @@ Updates the specified Product with a new name and/or description. Fails if the s
 | --product | -p | Yes/[Project](#project-files) | Yes | A [Product identifier](#product-identifier). If not specified, the Product referenced by the [Project file](#project-files) in the current directory is used (if there is no Project file, the command fails) |
 | --name | -n | No | Yes | The Product’s new name. Must be unique among all of the current Account’s Products |
 | --descr | -s | No | Yes | The Product’s new description |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 ### Project Manipulation Commands ###
@@ -1031,7 +1031,7 @@ Updates the specified Product with a new name and/or description. Fails if the s
 impt project create --product <PRODUCT_IDENTIFIER> [--create-product] --name <device_group_name>
     [--descr <device_group_description>] [--device-file <device_file>] [--agent-file <agent_file>]
     [--pre-factory] [--target <DEVICE_GROUP_IDENTIFIER>] [--create-target] [--confirmed]
-    [--debug] [--help]
+    [--output] [--help]
 ```
 
 Creates a new Device Group for the specified Product and creates a new [Project file](#project-files) in the current directory by linking it to the new Device Group.
@@ -1059,13 +1059,13 @@ At the end of the command execution, information about the Project is displayed 
 | --target | -t | No | Yes | The [Device Group identifier](#device-group-identifier) of the new Project Device Group’s production target Device Group. May be specified only if `--pre-factory` is also specified. The specified Device Group must be of the [type](#device-group-type) *pre-production* and belong to the specified Product. Otherwise the command fails |
 | --create-target | -r | No | No | If the Device Group specified by `--target` option does not exist, it is created. In this case, the value of `--target` is used as the name of the new Device Group. If `--target` is not specified or the Device Group specified by `--target` exists, `--create-target` is ignored |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Project Delete ####
 
 ```
-impt project delete [--entities] [--files] [--all] [--confirmed] [--debug] [--help]
+impt project delete [--entities] [--files] [--all] [--confirmed] [--output] [--help]
 ```
 
 Deletes the [Project file](#project-files) in the current directory and, optionally, the impCentral API entities (Device Group, Product, Deployments) related to the Project, and, optionally, the local source files. Does nothing if there is no [Project file](#project-files) in the current directory.
@@ -1088,13 +1088,13 @@ The user is informed about all entities and files which are going to be deleted 
 | --files | -f | No | No | Also deletes all of the device and agent source code files referenced by the [Project file](#project-files) |
 | --all | -a | No | No | Includes `--entities` and `--files` options |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Project Info ####
 
 ```
-impt project info [--full] [--debug] [--help]
+impt project info [--full] [--output] [--help]
 ```
 
 Displays information about the project. Fails if there is no [Project file](#project-files) in the current directory. With every call the latest information is obtained using the impCentral API.
@@ -1104,14 +1104,14 @@ Informs the user if the Device Group referenced by [Project file](#project-files
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --full | -u | No | No | Displays additional information: full details about the corresponding Device Group as with [`impt dg info --full`](#device-group-info), and authentication status as with [`impt auth info`](#auth-info) |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Project Link ####
 
 ```
 impt project link --dg <DEVICE_GROUP_IDENTIFIER> [--device-file <device_file>]
-    [--agent-file <agent_file>] [--confirmed] [--debug] [--help]
+    [--agent-file <agent_file>] [--confirmed] [--output] [--help]
 ```
 
 Creates a new [Project file](#project-files) in the current directory and links it to the specified Device Group.
@@ -1132,7 +1132,7 @@ At the end of the command execution, information about the Project is displayed 
 | --device-file | -x | No | Yes | The device source code file name. Default: `device.nut`. If the file does not exist, an empty file is created |
 | --agent-file | -y | No | Yes | The agent source code file name. Default: `agent.nut`. If the file does not exist, an empty file is created |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Project Update ####
@@ -1140,7 +1140,7 @@ At the end of the command execution, information about the Project is displayed 
 ```
 impt project update [--name <device_group_name>] [--descr <device_group_description>]
     [--device-file <device_file>] [--agent-file <agent_file>] [--target <DEVICE_GROUP_IDENTIFIER>]
-    [--debug] [--help]
+    [--output] [--help]
 ```
 
 Updates the Project settings and/or the name, description, or production target of the Device Group referenced by the [Project file](#project-files). Fails if there is no [Project file](#project-files) in the current directory.
@@ -1156,7 +1156,7 @@ At the end of the command execution, information about the Project is displayed 
 | --device-file | -x | No | Yes | A new device source code file name. If the file does not exist, an empty file is created |
 | --agent-file | -y | No | Yes | A new agent source code file name. If the file does not exist, an empty file is created |
 | --target | -t | No | Yes | The [Device Group identifier](#device-group-identifier) of the Project Device Group’s production target Device Group. May only be specified if the Project Device Group is of the *pre-factory* [type](#device-group-type). The specified target Device Group must be of the [type](#device-group-type) *pre-production* and belong to the same Product as the Project Device Group. Otherwise the command fails |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 ### Test Commands ###
@@ -1168,7 +1168,7 @@ impt test create --dg <DEVICE_GROUP_IDENTIFIER> [--device-file <device_file>]
     [--agent-file <agent_file>] [--timeout <timeout>] [--stop-on-fail [true|false]]
     [--allow-disconnect [true|false]] [--builder-cache [true|false]]
     [--test-file <test_file_name_pattern>] [--github-config <github_credentials_file_name>]
-    [--builder-config <builder_file_name>] [--confirmed] [--debug] [--help]
+    [--builder-config <builder_file_name>] [--confirmed] [--output] [--help]
 ```
 
 Creates a [test configuration file](#test-configuration-files) in the current directory.
@@ -1190,14 +1190,14 @@ At the end of the command execution, information about the test configuration is
 | --github-config | -i | No | Yes | A path to a GitHub credentials file. A relative or absolute path can be used. The specified file may not exist |
 | --builder-config | -j | No | Yes | A path to a file with *Builder* variables. A relative or absolute path can be used. The specified file may not exist |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Test Delete ####
 
 ```
 impt test delete [--github-config] [--builder-config] [--entities] [--all] [--confirmed]
-    [--debug] [--help]
+    [--output] [--help]
 ```
 
 Deletes the [test configuration file](#test-configuration-files) in the current directory. Does nothing if there is no [test configuration file](#test-configuration-files) in the current directory.
@@ -1222,14 +1222,14 @@ The user is asked to confirm the operation unless confirmed automatically with t
 | --entities | -e | No | No | Also deletes the impCentral API entities (Device Group, Product, Deployments) referenced by [test configuration file](#test-configuration-files). See above. |
 | --all | -a | No | No | Includes `--github-config`, `--builder-config` and `--entities` options |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Test Github ####
 
 ```
 impt test github --github-config <github_credentials_file_name> --user <github_username>
-    --pwd <github_password> [--confirmed] [--debug] [--help]
+    --pwd <github_password> [--confirmed] [--output] [--help]
 ```
 
 Creates or updates a GitHub credentials file.
@@ -1242,26 +1242,26 @@ The user is asked to confirm the operation if the specified GitHub credentials f
 | --user | -u | Yes | Yes | A GitHub account username |
 | --pwd | -w | Yes | Yes | A GitHub account password or personal access token |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Test Info ####
 
 ```
-impt test info [--debug] [--help]
+impt test info [--output] [--help]
 ```
 
 Displays information about the test configuration defined by the [test configuration file](#test-configuration-files) in the current directory. With every call, the latest actual information is obtained using the impCentral API.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Test Run ####
 
 ```
-impt test run [--tests <test_pattern>] [--clear-cache] [--debug] [--help]
+impt test run [--tests <test_pattern>] [--clear-cache] [--output] [--help]
 ```
 
 Runs the tests specified by the [test configuration file](#test-configuration-files) in the current directory.
@@ -1270,6 +1270,7 @@ Runs the tests specified by the [test configuration file](#test-configuration-fi
 | --- | --- | --- | --- | --- |
 | --tests | -t | No | Yes | A pattern to select the tests. Allows you to select specific test files, test cases and/or test methods for execution. The syntax of the pattern: *[testFile][:testCase][::testMethod]*, where *testFile* may include a relative path as well as [regular expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions). If the option is omitted, all tests from all test files specified in the [test configuration file](#test-configuration-files) are executed |
 | --clear-cache | -e | No | No | Clears the local `.builder-cache` directory if it exists |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments. `--output debug` runs the tests in the debug mode |
 | --debug | -z | No | No | Runs the tests in the debug mode |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
@@ -1280,7 +1281,7 @@ impt test update [--dg <DEVICE_GROUP_IDENTIFIER>] [--device-file [<device_file>]
     [--agent-file [<agent_file>]] [--timeout <timeout>] [--stop-on-fail [true|false]]
     [--allow-disconnect [true|false]] [--builder-cache [true|false]]
     [--test-file <test_file_name_pattern>] [--github-config [<github_credentials_file_name>]]
-    [--builder-config [<builder_file_name>]] [--debug] [--help]
+    [--builder-config [<builder_file_name>]] [--output] [--help]
 ```
 
 Updates the [test configuration file](#test-configuration-files) in the current directory. Fails if there is no [test configuration file](#test-configuration-files) in the current directory.
@@ -1299,7 +1300,7 @@ At the end of the command execution, information about the test configuration is
 | --test-file | -f | No | Yes | Test file name or pattern. All files located in the current directory and all its sub-directories whose names match the specified name or pattern are considered as files with test cases. This option may be repeated multiple times to specify multiple names and/or patterns. The values of the repeated option are combined by logical OR. The specified values fully replace the existed setting |
 | --github-config | -i | No | No | A path to a GitHub credentials file. A relative or absolute path can be used. The specified file may not exist. Specify this option without a value to remove a GitHub credentials file from the test configuration |
 | --builder-config | -j | No | No | A path to a file with *Builder* variables. A relative or absolute path can be used. The specified file may not exist. Specify this option without a value to remove a file with *Builder* variables from the test configuration |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 ### Webhook Manipulation Commands ###
@@ -1308,7 +1309,7 @@ At the end of the command execution, information about the test configuration is
 
 ```
 impt webhook create [--dg <DEVICE_GROUP_IDENTIFIER>] --url <target_url> --event <triggered_event>
-    --mime <content_type> [--debug] [--help]
+    --mime <content_type> [--output] [--help]
 ```
 
 Creates a new webhook for the specified Device Group.
@@ -1319,13 +1320,13 @@ Creates a new webhook for the specified Device Group.
 | --url | -u | Yes | Yes | The webhook’s target URL |
 | --event | -e | Yes | Yes | The event that triggers the webhook. Valid values: `"blessing"`, `"blinkup"`, `"deployment"` |
 | --mime | -m | Yes | Yes | The MIME content-type of the event data. Valid values: `"json"`, `"urlencoded"` |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Webhook Delete ####
 
 ```
-impt webhook delete --wh <webhook_id> [--confirmed] [--debug] [--help]
+impt webhook delete --wh <webhook_id> [--confirmed] [--output] [--help]
 ```
 
 Deletes the specified webhook.
@@ -1336,19 +1337,19 @@ The user is asked to confirm the operation unless confirmed automatically with t
 | --- | --- | --- | --- | --- |
 | --wh | -w | Yes | Yes | The webhook ID |
 | --confirmed | -q | No | No | Executes the operation without asking for confirmation from the user |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Webhook Info ####
 
-`impt webhook info --wh <webhook_id> [--debug] [--help]`
+`impt webhook info --wh <webhook_id> [--output] [--help]`
 
 Displays information about the specified webhook.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --wh | -w | Yes | Yes | The Webhook ID |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Webhook List ####
@@ -1356,7 +1357,7 @@ Displays information about the specified webhook.
 ```
 impt webhook list [--owner <ACCOUNT_IDENTIFIER>] [--product <PRODUCT_IDENTIFIER>]
     [--dg <DEVICE_GROUP_IDENTIFIER>] [--dg-type <device_group_type>]
-    [--url <target_url>] [--event <triggered_event>] [--debug] [--help]
+    [--url <target_url>] [--event <triggered_event>] [--output] [--help]
 ```
 
 Displays information about all webhooks available to the current account.
@@ -1365,7 +1366,7 @@ The returned list of the webhooks may be filtered with any combination of the de
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 | Filter Option | Alias | Mandatory? | Value Required? | Description |
@@ -1381,7 +1382,7 @@ The returned list of the webhooks may be filtered with any combination of the de
 
 ```
 impt webhook update --wh <webhook_id> [--url <target_url>] [--mime <content_type>]
-    [--debug] [--help]
+    [--output] [--help]
 ```
 
 Updates the specified webhook with a new target URL and/or MIME content-type. Fails if the specified webhook does not exist.
@@ -1391,7 +1392,7 @@ Updates the specified webhook with a new target URL and/or MIME content-type. Fa
 | --wh | -w | Yes | Yes | The webhook ID |
 | --url | -u | No | Yes | The webhook’s new target URL |
 | --mime | -m | No | Yes | New MIME content-type of the event data. Valid values: `"json"`, `"urlencoded"` |
-| --debug | -z | No | No | Displays debug info for the command execution |
+| --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 ## List of Aliases ##
