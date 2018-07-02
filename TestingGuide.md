@@ -651,7 +651,7 @@ Every test file (build) runs on all devices currently assigned to the Device Gro
 
 You may clear the [*Builder* cache](#builder-cache) before the tests starts by setting the `--clear-cache` option. If the *Builder* cache is enabled in the [test configuration](#test-configuration) file, it will then be re-created during the test run.
 
-You may run the tests in [debug mode](#debug-mode) by specifying the `--debug` option.
+You may run the tests in [debug mode](#debug-mode) by specifying the `--output debug` option.
 
 A test is treated as failed if an error is thrown or a timeout, as defined in the [test configuration](#test-configuration) file, occurs during the test execution. Otherwise the test is treated as passed. If at least one test in a test session fails, the test session is treated as failed. If the [test configuration](#test-configuration) has the `stop-on-fail` setting set to `true`, test execution ends after the first failed test.
 
@@ -774,7 +774,7 @@ In this example:
 
 ### Debug Mode ###
 
-You may run your tests in debug mode by specifying the `--debug` option of the [`impt test run`](./CommandsManual.md#test-run) command. In this mode:
+You may run your tests in debug mode by specifying the `--output debug` option of the [`impt test run`](./CommandsManual.md#test-run) command. In this mode:
 
 - All communications with the [impCentral API](https://apidoc.electricimp.com) are displayed in the console.
 - All communications with the [*impUnit* test framework](https://github.com/electricimp/impUnit) are displayed in the console.
@@ -783,7 +783,7 @@ You may run your tests in debug mode by specifying the `--debug` option of the [
 **Example**
 
 ```
-> impt test run --tests TestFile1:MyTestCase::testMe --debug
+> impt test run --tests TestFile1:MyTestCase::testMe --output debug
 ...
 [info] Started at 22 Jan 2018 22:49:25 GMT+0300
 [debug:TestHelper] Skipping found test tests/TestFile2.test.nut
