@@ -859,7 +859,7 @@ The command allows you to add multiple devices to the newly created log stream. 
 #### Login Key Create ####
 
 ```
-impt loginkey create --pwd <password> [--descr <login_key_description>] [--output <mode>] [--help]
+impt loginkey create [--pwd <password>] [--descr <login_key_description>] [--output <mode>] [--help]
 ```
 
 Creates a new login key for the current account.
@@ -868,7 +868,7 @@ Creates a new login key for the current account.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --pwd | -w | Yes | Yes | The account password |
+| --pwd | -w | No | Yes | The account password. If the option is not specified, the user is asked to input the account password |
 | --descr | -s | No | Yes | An optional description of the login key, eg. `"John's key"` |
 | --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
@@ -876,7 +876,7 @@ Creates a new login key for the current account.
 #### Login Key Delete ####
 
 ```
-impt loginkey delete --lk <login_key_id> --pwd <password> [--confirmed] [--output <mode>] [--help]
+impt loginkey delete --lk <login_key_id> [--pwd <password>] [--confirmed] [--output <mode>] [--help]
 ```
 
 Deletes the specified login key. The user is asked to confirm the operation, unless confirmed automatically with the `--confirmed` option.
@@ -884,7 +884,7 @@ Deletes the specified login key. The user is asked to confirm the operation, unl
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --lk | -k | Yes | Yes | The login key ID |
-| --pwd | -w | Yes | Yes | The account password |
+| --pwd | -w | No | Yes | The account password. If the option is not specified, the user is asked to input the account password |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
 | --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
@@ -919,7 +919,7 @@ Displays information about all of the login keys belonging to the current accoun
 #### Login Key Update ####
 
 ```
-impt loginkey update --lk <login_key_id> --pwd <password> --descr <login_key_description>
+impt loginkey update --lk <login_key_id> [--pwd <password>] --descr <login_key_description>
     [--output <mode>] [--help]
 ```
 
@@ -928,7 +928,7 @@ Updates the specified login key’s description.
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --lk | -k | Yes | Yes | The login key ID |
-| --pwd | -w | Yes | Yes | The account password |
+| --pwd | -w | No | Yes | The account password. If the option is not specified, the user is asked to input the account password |
 | --descr | -s | No | Yes | The login key’s new description |
 | --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
@@ -1228,19 +1228,21 @@ The user is asked to confirm the operation unless confirmed automatically with t
 #### Test Github ####
 
 ```
-impt test github --github-config <github_credentials_file_name> --user <github_username>
-    --pwd <github_password> [--confirmed] [--output <mode>] [--help]
+impt test github --github-config <github_credentials_file_name> [--user <github_username>
+    [--pwd <github_password>]] [--confirmed] [--output <mode>] [--help]
 ```
 
 Creates or updates a GitHub credentials file.
 
 The user is asked to confirm the operation if the specified GitHub credentials file already exists, unless confirmed automatically with the `--confirmed` option. If confirmed, the existing GitHub credentials file is overwritten.
 
+If the `--user` option is not specified, the user is asked to input the GitHub credentials. If the `--user` option is specified but the `--pwd` option is not, the user is asked to input the GitHub account password or personal access token.
+
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --github-config | -i | Yes | Yes | A path to the GitHub credentials file. A relative or absolute path can be used |
-| --user | -u | Yes | Yes | A GitHub account username |
-| --pwd | -w | Yes | Yes | A GitHub account password or personal access token |
+| --user | -u | No | Yes | A GitHub account username |
+| --pwd | -w | No | Yes | A GitHub account password or personal access token. If specified, the `--user` option must be specified too |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
 | --output | -z | No | Yes | Adjusts the [command output](#command-output). This option may be repeated multiple times to specify multiple adjustments |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
