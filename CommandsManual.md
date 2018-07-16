@@ -1234,6 +1234,8 @@ impt test github --github-config <github_credentials_file_name> [--user <github_
 
 Creates or updates a GitHub credentials file.
 
+**Note**, this command does NOT include the created or updated GitHub credentials file into any [test configuration file](#test-configuration-files). Use [`impt test create`](#test-create) or [`impt test update`](#test-update) commands to apply the GitHub credentials to tests.
+
 The user is asked to confirm the operation if the specified GitHub credentials file already exists, unless confirmed automatically with the `--confirmed` option. If confirmed, the existing GitHub credentials file is overwritten.
 
 If the `--user` option is not specified, the user is asked to input the GitHub credentials. If the `--user` option is specified but the `--pwd` option is not, the user is asked to input the GitHub account password or personal access token.
