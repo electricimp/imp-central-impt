@@ -161,17 +161,18 @@ Options:
 > impt product create --help
 
 Usage: impt product create --name <product_name> [--descr <product_description>]
-[--debug] [--help]
+[--output <mode>] [--help]
 
 Creates a new Product. Fails if Product with the specified Name already exists.
 
 Options:
-  --help, -h   Displays description of the command. Ignores any other options.
+  --help, -h    Displays description of the command. Ignores any other options.
                                                                        [boolean]
-  --name, -n   Name of the Product. Must be unique among all Products owned by
-               the logged-in account.                        [string] [required]
-  --descr, -s  Description of the Product.                              [string]
-  --debug, -z  Displays debug info of the command execution.           [boolean]
+  --name, -n    Name of the Product. Must be unique among all Products owned by
+                the logged-in account.                       [string] [required]
+  --descr, -s   Description of the Product.                             [string]
+  --output, -z  Adjusts the command output. (may be repeated several times)
+                                   [array] [choices: "minimal", "json", "debug"]
 ```
 
 ## Command Output ##
@@ -200,7 +201,7 @@ IMPT COMMAND SUCCEEDS
 
 ```bash
 > impt product delete --product TestProduct --confirmed
-ERROR: Product "TestProduct" is not found.
+Error: Product "TestProduct" is not found.
 IMPT COMMAND FAILS
 ```
 
@@ -224,11 +225,110 @@ The same command in different output modes:
 
 ##### Example 1: Default output #####
 
+```bash
+> impt product create --name TestProduct --descr "My test product"
+Product "TestProduct" is created successfully.
+Product:
+  id:   94a2b60b-a4d4-5e5f-e43b-bc0486a0efee
+  name: TestProduct
+IMPT COMMAND SUCCEEDS
+```
+
 ##### Example 2: Default output with debug information #####
+
+```bash
+> impt product create --name TestProduct --descr "My test product" --output debug
+Doing the request with options:
+{
+  "url": "https://api.electricimp.com/v5/products",
+  "method": "POST",
+  "headers": {
+    "Content-type": "application/vnd.api+json",
+    "Authorization": "[hidden]"
+  },
+  "json": true,
+  "qs": null,
+  "body": {
+    "data": {
+      "type": "product",
+      "attributes": {
+        "name": "TestProduct",
+        "description": "My test product"
+      }
+    }
+  },
+  "qsStringifyOptions": {
+    "arrayFormat": "repeat"
+  }
+}
+
+Response code: 201
+Response headers: {
+  "date": "Sun, 22 Jul 2018 11:27:49 GMT",
+  "content-type": "application/vnd.api+json",
+  "content-length": "477",
+  "connection": "close",
+  "server": "nginx/1.4.6 (Ubuntu)",
+  "content-language": "en",
+  "x-node": "api04",
+  "accept": "application/vnd.api+json",
+  "x-ratelimit-limit": "40",
+  "x-ratelimit-reset": "1",
+  "x-ratelimit-remaining": "39",
+  "strict-transport-security": "max-age=1209600"
+}
+Response body: {
+  "data": {
+    "type": "product",
+    "id": "4e264cef-3316-cdfa-7f39-7a5d458994b3",
+    "links": {
+      "self": "https://api.electricimp.com/v5/products/4e264cef-3316-cdfa-7f39-7a5d458994b3"
+    },
+    "attributes": {
+      "name": "TestProduct",
+      "description": "My test product",
+      "created_at": "2018-07-22T11:27:49.633Z",
+      "updated_at": "2018-07-22T11:27:49.633Z"
+    },
+    "relationships": {
+      "owner": {
+        "type": "account",
+        "id": "c1d61eef-d544-4d09-c8dc-d43e6742cae3"
+      },
+      "creator": {
+        "type": "account",
+        "id": "c1d61eef-d544-4d09-c8dc-d43e6742cae3"
+      }
+    }
+  }
+}
+Product "TestProduct" is created successfully.
+Product: 
+  id:   4e264cef-3316-cdfa-7f39-7a5d458994b3
+  name: TestProduct
+IMPT COMMAND SUCCEEDS
+```
 
 ##### Example 3: Minimal output #####
 
+```bash
+> impt product create --name TestProduct --descr "My test product" --output minimal
+Product:
+  id:   7ffda462-5502-091f-377b-a789fb47d74c
+  name: TestProduct
+```
+
 ##### Example 4: Minimal output in JSON format #####
+
+```bash
+> impt product create --name TestProduct --descr "My test product" --output json
+{
+  "Product": {
+    "id": "1299f725-7d22-7200-5c9c-0aa55a45fcfa",
+    "name": "TestProduct"
+  }
+}
+```
 
 ## Authentication ##
 
@@ -305,14 +405,14 @@ IMPT COMMAND SUCCEEDS
 
 ```bash
 > impt auth info
-Auth info:
-impCentral API endpoint:   https://api.electricimp.com/v5
-Auth file:                 Local
-Access token auto refresh: false
-Access token:              expires in 59 minutes
-Username:                  username
-Email:                     user@email.com
-Account id:                c1d61eef-d544-4d09-c8dc-d43e6742cae3
+Auth:
+  impCentral API endpoint:   https://api.electricimp.com/v5
+  Auth file:                 Local
+  Access token auto refresh: false
+  Access token:              expires in 59 minutes
+  Username:                  username
+  Email:                     user@email.com
+  Account id:                c1d61eef-d544-4d09-c8dc-d43e6742cae3
 IMPT COMMAND SUCCEEDS
 ```
 
@@ -403,7 +503,7 @@ IMPT COMMAND SUCCEEDS
 
 ```bash
 > impt build info --build MyRC1
-ERROR: Multiple Deployments "MyRC1" are found:
+Error: Multiple Deployments "MyRC1" are found:
 Deployment:
   id:           24aa0e91-ebc0-9198-090c-44cca8b977f3
   sha:          4e7f3395e86658ab39a178f9fe4b8cd8244a8ade92cb5ae1bb2d758434174c05
@@ -446,7 +546,6 @@ To display the Account ID and email of the current account, use [`impt auth info
 
 ```bash
 > impt product list
-impt product list
 Product list (4 items):
 Product:
   id:   30f19176-2b38-838d-62fd-38f5f3602ea4
@@ -580,7 +679,7 @@ By default, every delete command asks a confirmation of the operation from user.
 
 ```bash
 > impt dg delete --dg MyDevDG --confirmed
-ERROR: Flagged Deployments Exist: Cannot delete a devicegroup with flagged deployments; delete those first.
+Error: Flagged Deployments Exist: Cannot delete a devicegroup with flagged deployments; delete those first.
 IMPT COMMAND FAILS
 ```
 
