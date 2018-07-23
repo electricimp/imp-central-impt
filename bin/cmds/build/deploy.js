@@ -61,7 +61,7 @@ exports.builder = function (yargs) {
         [Options.ORIGIN] : false,
         [Options.TAG] : false,
         [Options.FLAGGED] : false,
-        [Options.DEBUG] : false
+        [Options.OUTPUT] : false
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))

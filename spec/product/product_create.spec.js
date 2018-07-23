@@ -64,7 +64,7 @@ describe('impt product create test suite >', () => {
     });
 
     it('product create without description', (done) => {
-        ImptTestingHelper.runCommand(`impt product create -n ${PRODUCT_NAME_2} --debug`, ImptTestingHelper.checkSuccessStatus).
+        ImptTestingHelper.runCommand(`impt product create -n ${PRODUCT_NAME_2} --output debug`, ImptTestingHelper.checkSuccessStatus).
             then(done).
             catch(error => done.fail(error));
     });

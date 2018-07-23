@@ -44,7 +44,7 @@ exports.builder = function (yargs) {
             describe : 'Displays additional information.' +
                 ' Details about every Device Group that belongs to the Product, Devices assigned to every Device Group and other.'
         },
-        [Options.DEBUG] : false
+        [Options.OUTPUT] : false
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))

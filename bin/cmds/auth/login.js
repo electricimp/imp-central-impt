@@ -57,7 +57,7 @@ exports.builder = function (yargs) {
         {
             [Options.TEMP] : false,
             [Options.CONFIRMED] : false,
-            [Options.DEBUG] : false,
+            [Options.OUTPUT] : false,
         });
 
     const options = Options.getOptions({
@@ -68,7 +68,7 @@ exports.builder = function (yargs) {
         [Options.LOGIN_KEY] : false,
         [Options.TEMP] : false,
         [Options.CONFIRMED] : false,
-        [Options.DEBUG] : false
+        [Options.OUTPUT] : false
     });
 
     return yargs

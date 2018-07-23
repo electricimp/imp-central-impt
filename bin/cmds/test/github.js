@@ -26,6 +26,8 @@
 
 const Test = require('../../../lib/Test');
 const Options = require('../../../lib/util/Options');
+const Errors = require('../../../lib/util/Errors');
+const UserInteractor = require('../../../lib/util/UserInteractor');
 
 const COMMAND = 'github';
 const COMMAND_SECTION = 'test';
@@ -43,22 +45,26 @@ exports.builder = function (yargs) {
             describe : 'A path to the github credentials file. A relative or absolute path can be used.'
         },
         [Options.USER] : {
-            demandOption : true,
+            demandOption : false,
             describe : 'GitHub username.',
             _usage: '<github_username>'
         },
         [Options.PASSWORD] : {
-            demandOption : true,
+            demandOption : false,
             describe : 'GitHub password or personal access token.',
             _usage: '<github_password>'
         },
         [Options.CONFIRMED] : false,
-        [Options.DEBUG] : false
+        [Options.OUTPUT] : false
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
         .options(options)
         .check(function (argv) {
+            const opts = new Options(argv);
+            if (opts.user === undefined && opts.password) {
+                return new Errors.CommandSyntaxError(UserInteractor.ERRORS.CMD_COOPERATIVE_OPTIONS, Options.PASSWORD, Options.USER);
+            }
             return Options.checkOptions(argv, options);
         })
         .strict();

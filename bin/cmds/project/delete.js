@@ -53,7 +53,7 @@ exports.builder = function (yargs) {
             describe : Util.format('Includes --%s and --%s options.', Options.ENTITIES, Options.FILES)
         },
         [Options.CONFIRMED] : false,
-        [Options.DEBUG] : false
+        [Options.OUTPUT] : false
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
