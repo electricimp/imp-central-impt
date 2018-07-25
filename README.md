@@ -171,7 +171,7 @@ Options:
   --name, -n    Name of the Product. Must be unique among all Products owned by
                 the logged-in account.                       [string] [required]
   --descr, -s   Description of the Product.                             [string]
-  --output, -z  Adjusts the command output.
+  --output, -z  Adjusts the command's output.
                                   [string] [choices: "minimal", "json", "debug"]
 ```
 
