@@ -53,7 +53,6 @@ describe('impt test run for error-before-start behavior >', () => {
 
     it('run test', (done) => {
         ImptTestingHelper.runCommand('impt test run', (commandOut) => {
-                commandOut = commandOut.replace(/\u001b\[.*?m/g, '');
                 expect(commandOut).not.toBeEmptyString();
                 expect(commandOut).toMatch(/warning\] Device is out of memory/);
                 expect(commandOut).toMatch(/error\] Session startup timeout/);

@@ -42,15 +42,15 @@
     "random-words": "0.0.1",
     "randomstring": "^1.1.3",
     "sprintf-js": "^1.0.3",
-    "hoek": "^5.0.3",
-    "shelljs": "latest"
+    "hoek": "^5.0.3"
   },
   "scripts": {
     "test": "jasmine"
   },
   "devDependencies": {
     "jasmine": "latest",
-    "jasmine-expect": "latest"
+    "jasmine-expect": "latest",
+    "shelljs": "latest"
   },
   "yargs": {
     "short-option-groups": false
