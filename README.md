@@ -338,7 +338,7 @@ Calls to the impCentral API need to be authenticated. *impt* provides the [login
   - NOTE: If your username or password contains certain special characters, such as the "!", you may need to wrap the `user_id` and `password` in single quotes to avoid [potential bash interpretation issues](https://ss64.com/bash/bang.html) (e.g. `impt auth login --user 'AUserId' --pwd 'A!Password'`)
 - Using a [login key](#login-keys): `impt auth login --lk <login_key>`
 
-You may specify credentials (identifier and password, or login key) directly in the [login command](./CommandsManual.md#auth-login) options. If credentials are not specified, *impt* asks you to choose an authentication method and to input the corresponding credentials.
+You may specify credentials (identifier and password, or login key) directly in the [login command](./CommandsManual.md#auth-login) options. If credentials are not specified, *impt* asks you to choose an authentication method and to input the corresponding credentials. If multi-factor authentication is enabled for the account, *impt* additionally asks to input one-time password.
 
 The tool takes care of obtaining an access token and refreshing it using an obtained refresh token or a provided login key. Typically, you need only log in once and can continue using the tool while the refresh token or login key remains valid (ie. not deleted by you). For this purpose, the tool stores the access token and the refresh token/login key in an [auth file](./CommandsManual.md#auth-files).
 
