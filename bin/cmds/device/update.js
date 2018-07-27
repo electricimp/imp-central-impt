@@ -45,7 +45,7 @@ exports.builder = function (yargs) {
             requiresArg : false,
             _usage : '<device_name>'
         },
-        [Options.DEBUG] : false
+        [Options.OUTPUT] : false
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))

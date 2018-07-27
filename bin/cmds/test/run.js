@@ -40,10 +40,7 @@ exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.TESTS] : false,
         [Options.CLEAR_CACHE] : false,
-        [Options.DEBUG] : {
-            demandOption : false,
-            describe : 'Runs the tests in the debug mode.'
-        }
+        [Options.OUTPUT] : false
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))

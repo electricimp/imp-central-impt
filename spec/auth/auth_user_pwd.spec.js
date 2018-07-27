@@ -87,7 +87,7 @@ describe('impt auth by user/password test suite >', () => {
     it('repeated global temp login', (done) => {
         const endpoint = config.apiEndpoint ? `-e ${config.apiEndpoint}` : '';
         ImptTestingHelper.runCommand(
-            `impt auth login -u ${config.email} -w ${config.password} ${endpoint} --temp --confirmed --debug`,
+            `impt auth login -u ${config.email} -w ${config.password} ${endpoint} --temp --confirmed --output debug`,
             ImptTestingHelper.checkSuccessStatus).
             then(done).
             catch(error => done.fail(error));
@@ -132,7 +132,7 @@ describe('impt auth by user/password test suite >', () => {
 
     it('repeated local temp login', (done) => {
         const endpoint = config.apiEndpoint ? `-e ${config.apiEndpoint}` : `-e ${DEFAULT_ENDPOINT}`;
-        ImptTestingHelper.runCommand(`impt auth login -l -u ${config.email} -w ${config.password} ${endpoint} -q -t -z`, (commandOut) => {
+        ImptTestingHelper.runCommand(`impt auth login -l -u ${config.email} -w ${config.password} ${endpoint} -q -t -z debug`, (commandOut) => {
                 // login --temp must not save refreshToken and loginKey in the auth config file
                 const authFileName = ImptTestingHelper.TESTS_EXECUTION_FOLDER + '/.impt.auth';
                 if (FS.existsSync(authFileName)) {

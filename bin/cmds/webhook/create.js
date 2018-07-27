@@ -42,7 +42,7 @@ exports.builder = function (yargs) {
         [Options.URL] : true,
         [Options.EVENT] : true,
         [Options.MIME] : true,
-        [Options.DEBUG] : false
+        [Options.OUTPUT] : false
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))

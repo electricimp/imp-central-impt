@@ -39,6 +39,17 @@ exports.command = COMMAND;
 exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
+    const options = Options.getOptions({
+        [Options.LOCAL] : false,
+        [Options.ENDPOINT] : false,
+        [Options.USER] : false,
+        [Options.PASSWORD] : false,
+        [Options.LOGIN_KEY] : false,
+        [Options.TEMP] : false,
+        [Options.CONFIRMED] : false,
+        [Options.OUTPUT] : false
+    });
+
     const formattedCommandOptions = Options.getFormattedCommandOptions(
         '%s [%s [%s] | %s] %s',
         {
@@ -57,19 +68,8 @@ exports.builder = function (yargs) {
         {
             [Options.TEMP] : false,
             [Options.CONFIRMED] : false,
-            [Options.DEBUG] : false,
+            [Options.OUTPUT] : false,
         });
-
-    const options = Options.getOptions({
-        [Options.LOCAL] : false,
-        [Options.ENDPOINT] : false,
-        [Options.USER] : false,
-        [Options.PASSWORD] : false,
-        [Options.LOGIN_KEY] : false,
-        [Options.TEMP] : false,
-        [Options.CONFIRMED] : false,
-        [Options.DEBUG] : false
-    });
 
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, formattedCommandOptions))

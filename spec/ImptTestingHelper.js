@@ -91,7 +91,7 @@ class ImptTestingHelper {
                 }
                 Shell.cd(TESTS_EXECUTION_FOLDER);
                 Shell.exec(`node ${__dirname}/../bin/${command}`, { silent : !config.debug }, (code, stdout, stderr) => {
-                    resolve(stdout);
+                    resolve(stdout.replace(/\u001b\[.*?m/g, ''));
                 });
             }).
             then(outputChecker);

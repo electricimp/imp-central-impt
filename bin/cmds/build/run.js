@@ -64,7 +64,7 @@ exports.builder = function (yargs) {
             describe : 'Conditional restart of Devices assigned to the specified Device Group instead of a normal restart.'
         },
         [Options.LOG] : false,
-        [Options.DEBUG] : false
+        [Options.OUTPUT] : false
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))

@@ -71,20 +71,20 @@ Use the [`impt project link`](./CommandsManual.md#project-link) command. This cr
 Device source file "device.nut" is created successfully.
 Agent source file "agent.nut" is created successfully.
 Project is linked successfully.
-Project info:
-Device file:  device.nut
-Agent file:   agent.nut
-Device Group:
-  id:          27f8ee81-59cd-a9ad-d2a4-e430e4e19ae9
-  type:        development
-  name:        MyDG
-  description: New description of my DG
-  region:
-  created_at:  2018-01-22T18:20:28.399Z
-  updated_at:  2018-01-22T18:21:10.057Z
-  Product:
-    id:   da0800ab-ad5f-c54e-949e-ec986efb0bf1
-    name: MyProduct
+Project:
+  Device file:  device.nut
+  Agent file:   agent.nut
+  Device Group:
+    id:          27f8ee81-59cd-a9ad-d2a4-e430e4e19ae9
+    type:        development
+    name:        MyDG
+    description: New description of my DG
+    region:
+    created_at:  2018-01-22T18:20:28.399Z
+    updated_at:  2018-01-22T18:21:10.057Z
+    Product:
+      id:   da0800ab-ad5f-c54e-949e-ec986efb0bf1
+      name: MyProduct
 IMPT COMMAND SUCCEEDS
 ```
 
@@ -112,20 +112,20 @@ Device Group "MyDG" is created successfully.
 Device source file "device.nut" is created successfully.
 Agent source file "agent.nut" is created successfully.
 Project is created successfully.
-Project info:
-Device file:  device.nut
-Agent file:   agent.nut
-Device Group:
-  id:          27f8ee81-59cd-a9ad-d2a4-e430e4e19ae9
-  type:        development
-  name:        MyDG
-  description:
-  region:
-  created_at:  2018-01-22T18:20:28.399Z
-  updated_at:  2018-01-22T18:20:28.399Z
-  Product:
-    id:   da0800ab-ad5f-c54e-949e-ec986efb0bf1
-    name: MyProduct
+Project:
+  Device file:  device.nut
+  Agent file:   agent.nut
+  Device Group:
+    id:          27f8ee81-59cd-a9ad-d2a4-e430e4e19ae9
+    type:        development
+    name:        MyDG
+    description:
+    region:
+    created_at:  2018-01-22T18:20:28.399Z
+    updated_at:  2018-01-22T18:20:28.399Z
+    Product:
+      id:   da0800ab-ad5f-c54e-949e-ec986efb0bf1
+      name: MyProduct
 IMPT COMMAND SUCCEEDS
 ```
 
@@ -147,20 +147,20 @@ You can update your Project at any time with the [`impt project update`](./Comma
 Device Group "27f8ee81-59cd-a9ad-d2a4-e430e4e19ae9" is updated successfully.
 Device source file "device1.nut" is created successfully.
 Project is updated successfully.
-Project info:
-Device file:  device1.nut
-Agent file:   agent.nut
-Device Group:
-  id:          27f8ee81-59cd-a9ad-d2a4-e430e4e19ae9
-  type:        development
-  name:        MyDG
-  description: New description of my DG
-  region:
-  created_at:  2018-01-22T18:20:28.399Z
-  updated_at:  2018-01-22T18:21:10.057Z
-  Product:
-    id:   da0800ab-ad5f-c54e-949e-ec986efb0bf1
-    name: MyProduct
+Project:
+  Device file:  device1.nut
+  Agent file:   agent.nut
+  Device Group:
+    id:          27f8ee81-59cd-a9ad-d2a4-e430e4e19ae9
+    type:        development
+    name:        MyDG
+    description: New description of my DG
+    region:
+    created_at:  2018-01-22T18:20:28.399Z
+    updated_at:  2018-01-22T18:21:10.057Z
+    Product:
+      id:   da0800ab-ad5f-c54e-949e-ec986efb0bf1
+      name: MyProduct
 IMPT COMMAND SUCCEEDS
 ```
 
@@ -212,6 +212,11 @@ Alternatively, you can use [`impt build run`](./CommandsManual.md#build-run). Th
 ```
 > impt build deploy --descr "my new build" --tag TAG1 --flagged
 Deployment "b3cd81d0-0be3-b7a3-f15c-df2ded28a154" is created successfully.
+Deployment:
+  id:      b3cd81d0-0be3-b7a3-f15c-df2ded28a154
+  sha:     4e7f3395e86658ab39a178f9fe4b8cd8244a8ade92cb5ae1bb2d758434174c05
+  tags:    TAG1
+  flagged: true
 IMPT COMMAND SUCCEEDS
 ```
 
@@ -315,43 +320,43 @@ Use [`impt product info`](./CommandsManual.md#product-info) with the option `--f
 
 ```
 > impt project info --full
-Project info:
-Device file:  device.nut
-Agent file:   agent.nut
-Device Group:
-  id:                       27f8ee81-59cd-a9ad-d2a4-e430e4e19ae9
-  type:                     development
-  name:                     MyDG
-  description:              New description of my DG
-  region:
-  created_at:               2018-01-22T18:20:28.399Z
-  updated_at:               2018-01-22T18:35:42.521Z
-  Product:
-    id:   da0800ab-ad5f-c54e-949e-ec986efb0bf1
-    name: MyProduct
-  Current Deployment:
-    id:      8b59afb0-32c6-1221-fdf8-fc5bf38ed155
-    sha:     f4756c7578aa69910a8857d8ec08ff15bc2d7e1a8fc8007caf98e3ea9fca07a3
-    tags:    TAG1
-    flagged: true
-  Min supported Deployment:
-    id:  e3461b2c-75ae-a3b7-7164-f31ec495030b
-    sha: 4e7f3395e86658ab39a178f9fe4b8cd8244a8ade92cb5ae1bb2d758434174c05
-  Devices:
-    Device:
-      id:            234776801163a9ee
-      name:          myDevice1
-      mac_address:   0c:2a:69:05:0d:62
-      agent_id:      T1oUmIZ3At_N
-      device_online: true
-Auth info:
-impCentral API endpoint:   https://api.electricimp.com/v5
-Auth file:                 Global
-Access token auto refresh: true
-Login method:              User/Password
-Username:                  username
-Email:                     user@email.com
-Account id:                c1d61eef-d544-4d09-c8dc-d43e6742cae3
+Project:
+  Device file:  device.nut
+  Agent file:   agent.nut
+  Device Group:
+    id:                       27f8ee81-59cd-a9ad-d2a4-e430e4e19ae9
+    type:                     development
+    name:                     MyDG
+    description:              New description of my DG
+    region:
+    created_at:               2018-01-22T18:20:28.399Z
+    updated_at:               2018-01-22T18:35:42.521Z
+    Product:
+      id:   da0800ab-ad5f-c54e-949e-ec986efb0bf1
+      name: MyProduct
+    Current Deployment:
+      id:      8b59afb0-32c6-1221-fdf8-fc5bf38ed155
+      sha:     f4756c7578aa69910a8857d8ec08ff15bc2d7e1a8fc8007caf98e3ea9fca07a3
+      tags:    TAG1
+      flagged: true
+    Min supported Deployment:
+      id:  e3461b2c-75ae-a3b7-7164-f31ec495030b
+      sha: 4e7f3395e86658ab39a178f9fe4b8cd8244a8ade92cb5ae1bb2d758434174c05
+    Devices:
+      Device:
+        id:            234776801163a9ee
+        name:          myDevice1
+        mac_address:   0c:2a:69:05:0d:62
+        agent_id:      T1oUmIZ3At_N
+        device_online: true
+Auth:
+  impCentral API endpoint:   https://api.electricimp.com/v5
+  Auth file:                 Global
+  Access token auto refresh: true
+  Login method:              User/Password
+  Username:                  username
+  Email:                     user@email.com
+  Account id:                c1d61eef-d544-4d09-c8dc-d43e6742cae3
 IMPT COMMAND SUCCEEDS
 ```
 
@@ -464,20 +469,20 @@ Device Group "MyDevDG" is created successfully.
 Device source file "myapp.device.nut" is created successfully.
 Agent source file "myapp.agent.nut" is created successfully.
 Project is created successfully.
-Project info:
-Device file:  myapp.device.nut
-Agent file:   myapp.agent.nut
-Device Group:
-  id:          c675ad8a-9d88-1d0f-e017-4a8c71bb0fd5
-  type:        development
-  name:        MyDevDG
-  description: imp Application Firmware
-  region:
-  created_at:  2018-01-22T17:56:27.973Z
-  updated_at:  2018-01-22T17:56:27.973Z
-  Product:
-    id:   da0800ab-ad5f-c54e-949e-ec986efb0bf1
-    name: MyProduct
+Project:
+  Device file:  myapp.device.nut
+  Agent file:   myapp.agent.nut
+  Device Group:
+    id:          c675ad8a-9d88-1d0f-e017-4a8c71bb0fd5
+    type:        development
+    name:        MyDevDG
+    description: imp Application Firmware
+    region:
+    created_at:  2018-01-22T17:56:27.973Z
+    updated_at:  2018-01-22T17:56:27.973Z
+    Product:
+      id:   da0800ab-ad5f-c54e-949e-ec986efb0bf1
+      name: MyProduct
 IMPT COMMAND SUCCEEDS
 ```
 
@@ -571,24 +576,24 @@ Device Group "MyPreFactoryDG" is created successfully.
 Device source file "factory.device.nut" is created successfully.
 Agent source file "factory.agent.nut" is created successfully.
 Project is created successfully.
-Project info:
-Device file:  factory.device.nut
-Agent file:   factory.agent.nut
-Device Group:
-  id:                71c3be05-a7d2-a326-8906-8af3b205bd13
-  type:              pre-factory
-  name:              MyPreFactoryDG
-  description:       Factory Firmware
-  region:
-  created_at:        2018-01-22T18:17:19.537Z
-  updated_at:        2018-01-22T18:17:19.537Z
-  Product:
-    id:   da0800ab-ad5f-c54e-949e-ec986efb0bf1
-    name: MyProduct
-  Production Target:
-    id:   53ca29f4-937d-e684-729b-7e6b6a192c19
-    type: pre-production
-    name: MyPreProductionDG
+Project:
+  Device file:  factory.device.nut
+  Agent file:   factory.agent.nut
+  Device Group:
+    id:                71c3be05-a7d2-a326-8906-8af3b205bd13
+    type:              pre-factory
+    name:              MyPreFactoryDG
+    description:       Factory Firmware
+    region:
+    created_at:        2018-01-22T18:17:19.537Z
+    updated_at:        2018-01-22T18:17:19.537Z
+    Product:
+      id:   da0800ab-ad5f-c54e-949e-ec986efb0bf1
+      name: MyProduct
+    Production Target:
+      id:   53ca29f4-937d-e684-729b-7e6b6a192c19
+      type: pre-production
+      name: MyPreProductionDG
 IMPT COMMAND SUCCEEDS
 ```
 
@@ -778,7 +783,7 @@ Deployment "00e7645f-138f-f0d0-45bd-b7e9b79f0d3f" is deleted successfully.
 Deployment "4c8a43e9-d3c4-3019-1219-456e30d972ac" is deleted successfully.
 Deployment "3612cbab-8d69-4b2b-65da-6a65e40ebf4e" is deleted successfully.
 Deployment "495c7420-e004-b29e-bb67-a4c1bea66f5b" is deleted successfully.
-Deployment list (4 items):
+Deployment list (2 items):
 Deployment:
   id:           e0059ee6-2483-4ab1-50eb-e693e62155b7
   sha:          f4756c7578aa69910a8857d8ec08ff15bc2d7e1a8fc8007caf98e3ea9fca07a3

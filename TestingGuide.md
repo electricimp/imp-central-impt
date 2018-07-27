@@ -484,6 +484,9 @@ To run your tests you need to have one or more devices associated with your acco
     ```
     > impt product create --name MyTestProduct
     Product "MyTestProduct" is created successfully.
+    Product:
+      id:   a83ecc00-cb39-d950-9a60-96694403ab9d
+      name: MyTestProduct
     IMPT COMMAND SUCCEEDS
     ```
 
@@ -493,6 +496,10 @@ To run your tests you need to have one or more devices associated with your acco
     ```
     > impt dg create --name MyTestDG --product MyTestProduct
     Device Group "MyTestDG" is created successfully.
+    Device Group:
+      id:   e4bf84dd-7cc6-147e-9b42-b08812912b99
+      type: development
+      name: MyTestDG
     IMPT COMMAND SUCCEEDS
     ```
 
@@ -528,28 +535,28 @@ The configuration settings include:
 
 ```
 > impt test create --dg MyTestDG --agent-file MyLibrary.agent.lib.nut
-Test Configuration File is created successfully.
-Test Configuration info:
-Test files:       *.test.nut, tests/**/*.test.nut
-Agent file:       MyLibrary.agent.lib.nut
-Stop on failure:  false
-Timeout:          30
-Allow disconnect: false
-Builder cache:    false
-Device Group:
-  id:      e4bf84dd-7cc6-147e-9b42-b08812912b99
-  type:    development
-  name:    MyTestDG
-  Product:
-    id:   a83ecc00-cb39-d950-9a60-96694403ab9d
-    name: MyTestProduct
-  Devices:
-    Device:
-      id:            234776801163a9ee
-      name:          myDevice1
-      mac_address:   0c:2a:69:05:0d:62
-      agent_id:      T1oUmIZ3At_N
-      device_online: true
+Test Configuration is created successfully.
+Test Configuration:
+  Test files:       *.test.nut, tests/**/*.test.nut
+  Agent file:       MyLibrary.agent.lib.nut
+  Stop on failure:  false
+  Timeout:          30
+  Allow disconnect: false
+  Builder cache:    false
+  Device Group:
+    id:      e4bf84dd-7cc6-147e-9b42-b08812912b99
+    type:    development
+    name:    MyTestDG
+    Product:
+      id:   a83ecc00-cb39-d950-9a60-96694403ab9d
+      name: MyTestProduct
+    Devices:
+      Device:
+        id:            234776801163a9ee
+        name:          myDevice1
+        mac_address:   0c:2a:69:05:0d:62
+        agent_id:      T1oUmIZ3At_N
+        device_online: true
 IMPT COMMAND SUCCEEDS
 ```
 
@@ -561,28 +568,28 @@ You may update the test configuration by calling [`impt test update`](./Commands
 
 ```
 > impt test update --timeout 60 --builder-cache true
-Test Configuration File is updated successfully.
-Test Configuration info:
-Test files:       *.test.nut, tests/**/*.test.nut
-Agent file:       MyLibrary.agent.lib.nut
-Stop on failure:  false
-Timeout:          60
-Allow disconnect: false
-Builder cache:    true
-Device Group:
-  id:      e4bf84dd-7cc6-147e-9b42-b08812912b99
-  type:    development
-  name:    MyTestDG
-  Product:
-    id:   a83ecc00-cb39-d950-9a60-96694403ab9d
-    name: MyTestProduct
-  Devices:
-    Device:
-      id:            234776801163a9ee
-      name:          myDevice1
-      mac_address:   0c:2a:69:05:0d:62
-      agent_id:      T1oUmIZ3At_N
-      device_online: true
+Test Configuration is updated successfully.
+Test Configuration:
+  Test files:       *.test.nut, tests/**/*.test.nut
+  Agent file:       MyLibrary.agent.lib.nut
+  Stop on failure:  false
+  Timeout:          60
+  Allow disconnect: false
+  Builder cache:    true
+  Device Group:
+    id:      e4bf84dd-7cc6-147e-9b42-b08812912b99
+    type:    development
+    name:    MyTestDG
+    Product:
+      id:   a83ecc00-cb39-d950-9a60-96694403ab9d
+      name: MyTestProduct
+    Devices:
+      Device:
+        id:            234776801163a9ee
+        name:          myDevice1
+        mac_address:   0c:2a:69:05:0d:62
+        agent_id:      T1oUmIZ3At_N
+        device_online: true
 IMPT COMMAND SUCCEEDS
 ```
 
@@ -592,27 +599,27 @@ You may also display the current test configuration by calling [`impt test info`
 
 ```
 > impt test info
-Test Configuration info:
-Test files:       *.test.nut, tests/**/*.test.nut
-Agent file:       MyLibrary.agent.lib.nut
-Stop on failure:  false
-Timeout:          60
-Allow disconnect: false
-Builder cache:    true
-Device Group:
-  id:      e4bf84dd-7cc6-147e-9b42-b08812912b99
-  type:    development
-  name:    MyTestDG
-  Product:
-    id:   a83ecc00-cb39-d950-9a60-96694403ab9d
-    name: MyTestProduct
-  Devices:
-    Device:
-      id:            234776801163a9ee
-      name:          myDevice1
-      mac_address:   0c:2a:69:05:0d:62
-      agent_id:      T1oUmIZ3At_N
-      device_online: true
+Test Configuration:
+  Test files:       *.test.nut, tests/**/*.test.nut
+  Agent file:       MyLibrary.agent.lib.nut
+  Stop on failure:  false
+  Timeout:          60
+  Allow disconnect: false
+  Builder cache:    true
+  Device Group:
+    id:      e4bf84dd-7cc6-147e-9b42-b08812912b99
+    type:    development
+    name:    MyTestDG
+    Product:
+      id:   a83ecc00-cb39-d950-9a60-96694403ab9d
+      name: MyTestProduct
+    Devices:
+      Device:
+        id:            234776801163a9ee
+        name:          myDevice1
+        mac_address:   0c:2a:69:05:0d:62
+        agent_id:      T1oUmIZ3At_N
+        device_online: true
 IMPT COMMAND SUCCEEDS
 ```
 
@@ -635,7 +642,7 @@ For unauthenticated requests, the GitHub API allows you to make [up to 60 reques
 ```
 > impt test github --github-config github.conf --user github_username
     --pwd github_password
-GitHub credentials Configuration File is created successfully.
+GitHub credentials Configuration is created successfully.
 IMPT COMMAND SUCCEEDS
 ```
 
@@ -651,7 +658,7 @@ Every test file (build) runs on all devices currently assigned to the Device Gro
 
 You may clear the [*Builder* cache](#builder-cache) before the tests starts by setting the `--clear-cache` option. If the *Builder* cache is enabled in the [test configuration](#test-configuration) file, it will then be re-created during the test run.
 
-You may run the tests in [debug mode](#debug-mode) by specifying the `--debug` option.
+You may run the tests in [debug mode](#debug-mode) by specifying the `--output debug` option.
 
 A test is treated as failed if an error is thrown or a timeout, as defined in the [test configuration](#test-configuration) file, occurs during the test execution. Otherwise the test is treated as passed. If at least one test in a test session fails, the test session is treated as failed. If the [test configuration](#test-configuration) has the `stop-on-fail` setting set to `true`, test execution ends after the first failed test.
 
@@ -666,15 +673,15 @@ When all tests are passed, the [`impt test run`](./CommandsManual.md#test-run) c
         tests/TestFile1.test.nut
 [+0.02/0.00s info] Using agent source file: MyLibrary.agent.lib.nut
 [+0.02/0.00s info] Have no device source file, using blank
-[+0.72/0.70s info] Using device test file tests/TestFile1.test.nut
-[+0.76/0.04s info] Using DeviceGroup MyTestDG [ece0ef8d-fbb1-6bdf-e2b8-02776e2fdf41]
+[+0.72/0.70s info] Using device test file "tests/TestFile1.test.nut"
+[+0.76/0.04s info] Using DeviceGroup "MyTestDG" [ece0ef8d-fbb1-6bdf-e2b8-02776e2fdf41]
 Deployment "d28fb08b-44f2-d995-db1e-73a863c33a03" is created successfully.
 [+2.89/2.13s info] Created deployment: d28fb08b-44f2-d995-db1e-73a863c33a03
 
-[+2.89/0.00s info] Starting test session world-dawn
+[+2.89/0.00s test] Starting test session "world-dawn"
 [+2.89/0.00s info] Using device myDevice1 [234776801163a9ee] (1/1)
-[+2.89/0.00s info] Using device test file tests/TestFile1.test.nut
-Restart request for Device "234776801163a9ee" is successful.
+[+2.89/0.00s info] Using device test file "tests/TestFile1.test.nut"
+Device "234776801163a9ee" is assigned successfully to Device Group "ece0ef8d-fbb1-6bdf-e2b8-02776e2fdf41".
 [+6.03/3.14s info] Device code space usage: 17.0%
 [+11.19/5.15s test] MyTestCase_1::testMe_1()
 [+11.19/0.00s test] Success
@@ -687,9 +694,10 @@ Restart request for Device "234776801163a9ee" is successful.
 [+11.67/0.00s test] MyTestCase::tearDown()
 [+11.67/0.00s test] Success
 [+11.68/0.00s test] Tests: 3, Assertions: 3, Failures: 1
-[+11.68/0.00s info] Session world-dawn failed
+[+11.68/0.00s test] Session "world-dawn" failed
 
 [+11.68/0.00s info] Testing failed
+Error: Testing failed
 IMPT COMMAND FAILS
 ```
 
@@ -702,15 +710,15 @@ IMPT COMMAND FAILS
         tests/TestFile1.test.nut
 [+0.01/0.00s info] Using agent source file: MyLibrary.agent.lib.nut
 [+0.01/0.00s info] Have no device source file, using blank
-[+0.86/0.84s info] Using device test file tests/TestFile1.test.nut
-[+0.90/0.04s info] Using DeviceGroup MyTestDG [ece0ef8d-fbb1-6bdf-e2b8-02776e2fdf41]
+[+0.86/0.84s info] Using device test file "tests/TestFile1.test.nut"
+[+0.90/0.04s info] Using DeviceGroup "MyTestDG" [ece0ef8d-fbb1-6bdf-e2b8-02776e2fdf41]
 Deployment "03b7f0d3-f5df-9bd9-b856-5d5e3b9fd8e7" is created successfully.
 [+2.12/1.23s info] Created deployment: 03b7f0d3-f5df-9bd9-b856-5d5e3b9fd8e7
 
-[+2.13/0.00s info] Starting test session industry-grain
+[+2.13/0.00s test] Starting test session "industry-grain"
 [+2.13/0.00s info] Using device myDevice1 [234776801163a9ee] (1/1)
-[+2.13/0.00s info] Using device test file tests/TestFile1.test.nut
-Restart request for Device "234776801163a9ee" is successful.
+[+2.13/0.00s info] Using device test file "tests/TestFile1.test.nut"
+Device "234776801163a9ee" is assigned successfully to Device Group "ece0ef8d-fbb1-6bdf-e2b8-02776e2fdf41".
 [+5.36/3.23s info] Device code space usage: 17.0%
 [+9.94/4.58s test] MyTestCase_1::testMe_1()
 [+9.94/0.00s test] Success
@@ -722,8 +730,8 @@ Restart request for Device "234776801163a9ee" is successful.
 [+9.95/0.00s test] Success
 [+10.16/0.21s test] MyTestCase::tearDown()
 [+10.16/0.00s test] Success
-[+10.16/0.00s info] Tests: 3, Assertions: 3, Failures: 0
-[+10.16/0.00s info] Session industry-grain succeeded
+[+10.16/0.00s test] Tests: 3, Assertions: 3, Failures: 0
+[+10.16/0.00s test] Session "industry-grain" succeeded
 
 [+10.17/0.00s info] Testing succeeded
 IMPT COMMAND SUCCEEDS
@@ -774,7 +782,7 @@ In this example:
 
 ### Debug Mode ###
 
-You may run your tests in debug mode by specifying the `--debug` option of the [`impt test run`](./CommandsManual.md#test-run) command. In this mode:
+You may run your tests in debug mode by specifying the `--output debug` option of the [`impt test run`](./CommandsManual.md#test-run) command. In this mode:
 
 - All communications with the [impCentral API](https://apidoc.electricimp.com) are displayed in the console.
 - All communications with the [*impUnit* test framework](https://github.com/electricimp/impUnit) are displayed in the console.
@@ -783,37 +791,33 @@ You may run your tests in debug mode by specifying the `--debug` option of the [
 **Example**
 
 ```
-> impt test run --tests TestFile1:MyTestCase::testMe --debug
+> impt test run --tests TestFile1:MyTestCase::testMe --output debug
 ...
 [info] Started at 22 Jan 2018 22:49:25 GMT+0300
-[debug:TestHelper] Skipping found test tests/TestFile2.test.nut
-[debug:TestHelper] Test files found: [ { name: 'tests/TestFile1.test.nut',
-    path: 'C:\\impt\\test\\tests\\TestFile1.test.nut',
-    type: 'device' } ]
+[debug:TestHelper] Skipping found test "tests/TestFile2.test.nut"
 [+0.02/0.02s info] Found 1 test file:
         tests/TestFile1.test.nut
-[debug:TestHelper] Agent source code file path: MyLibrary.agent.lib.nut
 [+0.03/0.00s info] Using agent source file: MyLibrary.agent.lib.nut
 [+0.03/0.00s info] Have no device source file, using blank
 ...
-[+1.16/1.13s info] Using device test file tests/TestFile1.test.nut
+[+1.16/1.13s info] Using device test file "tests/TestFile1.test.nut"
 [debug:TestHelper] Agent code size: 53 bytes
 [debug:TestHelper] Device code size: 22207 bytes
-[+1.19/0.04s info] Using DeviceGroup MyTestDG [e4bf84dd-7cc6-147e-9b42-b08812912b99]
+[+1.19/0.04s info] Using DeviceGroup "MyTestDG" [e4bf84dd-7cc6-147e-9b42-b08812912b99]
 ...
 Deployment "e46e138c-9053-db40-e9de-f299e7c2908e" is created successfully.
 [+3.04/1.85s info] Created deployment: e46e138c-9053-db40-e9de-f299e7c2908e
 
-[+3.04/0.00s info] Starting test session paint-influence
+[+3.04/0.00s test] Starting test session "paint-influence"
 [+3.05/0.00s info] Using device myDevice1 [234776801163a9ee] (1/1)
-[+3.05/0.00s info] Using device test file tests/TestFile1.test.nut
+[+3.05/0.00s info] Using device test file "tests/TestFile1.test.nut"
 [debug:TestHelper] Agent code size: 53 bytes
 [debug:TestHelper] Device code size: 22207 bytes
 [debug:TestWatchdog] Watchdog "session-start" started
 ...
 Doing the request with options:
 {
-  "url": "https://api.electricimp.com/v5/devices/234776801163a9ee/restart",
+  "url": "https://api.electricimp.com/v5/devicegroups/e4bf84dd-7cc6-147e-9b42-b08812912b99/relationships/devices",
   "method": "POST",
   "headers": {
     "Content-type": "application/vnd.api+json",
@@ -821,7 +825,14 @@ Doing the request with options:
   },
   "json": true,
   "qs": null,
-  "body": null,
+  "body": {
+    "data": [
+      {
+        "type": "device",
+        "id": "234776801163a9ee"
+      }
+    ]
+  },
   "qsStringifyOptions": {
     "arrayFormat": "repeat"
   }
@@ -829,8 +840,7 @@ Doing the request with options:
 
 Response code: 204
 Response body: undefined
-Restart request for Device "234776801163a9ee" is successful.
-[debug:TestSession] Device restarted
+Device "234776801163a9ee" is assigned successfully to Device Group "e4bf84dd-7cc6-147e-9b42-b08812912b99".
 [debug:TestLogsParser] Log line received: {"device_id":"234776801163a9ee","ts":"2018-01-22T19:49:30.423Z","log_type":"development","type":"status","msg":"Agent restarted: reload."}
 [debug:TestLogsParser] Log line received: {"device_id":"234776801163a9ee","ts":"2018-01-22T19:49:30.673Z","log_type":"development","type":"status","msg":"Agent restarted: new_bytecode_version."}
 [debug:TestLogsParser] Log line received: {"device_id":"234776801163a9ee","ts":"2018-01-22T19:49:30.667Z","log_type":"development","type":"status","msg":"Downloading new code; 16.83% program storage used"}
@@ -854,8 +864,8 @@ Restart request for Device "234776801163a9ee" is successful.
 [debug:TestWatchdog] Watchdog "test-messages" stopped
 [debug:TestWatchdog] Watchdog "test-messages" started
 [debug:TestWatchdog] Watchdog "test-messages" stopped
-[+10.51/0.01s info] Tests: 1, Assertions: 1, Failures: 0
-[+10.51/0.00s info] Session paint-influence succeeded
+[+10.51/0.01s test] Tests: 1, Assertions: 1, Failures: 0
+[+10.51/0.00s test] Session paint-influence succeeded
 [debug:TestWatchdog] Watchdog "session-start" stopped
 [debug:TestWatchdog] Watchdog "test-messages" stopped
 

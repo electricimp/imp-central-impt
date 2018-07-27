@@ -56,8 +56,8 @@ describe('impt test run for build-api-error behavior >', () => {
 
                 // verify that 2 sessions started
                 // which means that compilation error has not stopped the command
-                expect(commandOut).toMatch(/Using device test file tests\/1\-device\.test\.nut\n/);
-                expect(commandOut).toMatch(/Using device test file tests\/2\-device\.test\.nut\n/);
+                expect(commandOut).toMatch(/Using device test file "tests\/1\-device\.test\.nut"\n/);
+                expect(commandOut).toMatch(/Using device test file "tests\/2\-device\.test\.nut"\n/);
 
                 ImptTestCommandsHelper.checkTestFailStatus(commandOut);
                 ImptTestingHelper.checkFailStatus(commandOut);
