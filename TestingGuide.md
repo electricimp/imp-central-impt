@@ -75,7 +75,7 @@ Other *impt* commands may also be needed during testing, such as commands to ass
 
 ## Writing Tests ##
 
-### Main Rules and Steps ###
+### Main Rules And Steps ###
 
 You need to perform the following steps to write your tests:
 
@@ -121,17 +121,17 @@ Tests may call external (eg. a host operating system) commands; please find furt
 
 ```squirrel
 class MyTestCase extends ImpTestCase {
-    function testAssertTrue() {
-        this.assertTrue(true);
-    }
+  function testAssertTrue() {
+    this.assertTrue(true);
+  }
 
-    function testAssertEqual() {
-        this.assertEqual(1000 * 0.01, 100 * 0.1);
-    }
+  function testAssertEqual() {
+    this.assertEqual(1000 * 0.01, 100 * 0.1);
+  }
 }
 ```
 
-### Tests for Bi-directional Device-Agent Communication ###
+### Tests For Bi-directional Device-Agent Communication ###
 
 It is possible to test an interaction between device and agent by emulating one side of the interaction.
 
@@ -151,38 +151,40 @@ For example, `"Test1.agent.test.nut"` (a test file with test cases for agent cod
 **Example**
 
 Test file `"Test1.agent.test.nut"`:
+
 ```squirrel
 class MyTestCase extends ImpTestCase {
-    _myVar = null;
+  _myVar = null;
 
-    function setUp() {
-        device.on("data", function(data) {
-            _myVar = data;
-        }.bindenv(this));
-    }
+  function setUp() {
+    device.on("data", function(data) {
+      _myVar = data;
+    }.bindenv(this));
+  }
 
-    function testMe() {
-        local myFunc = null;
-        return Promise(function(resolve, reject) {
-            myFunc = function() {
-                if (_myVar == null) {
-                    imp.wakeup(1.0, myFunc);
-                } else if (_myVar == "Hello from the device") {
-                    resolve();
-                } else {
-                    reject();
-                }
-            }.bindenv(this);
-            imp.wakeup(1.0, myFunc);
-        }.bindenv(this));
-    }
+  function testMe() {
+    local myFunc = null;
+    return Promise(function(resolve, reject) {
+      myFunc = function() {
+        if (_myVar == null) {
+          imp.wakeup(1.0, myFunc);
+        } else if (_myVar == "Hello from the device") {
+          resolve();
+        } else {
+          reject();
+        }
+      }.bindenv(this);
+      imp.wakeup(1.0, myFunc);
+    }.bindenv(this));
+  }
 }
 ```
 
 The corresponding partner file `"Test1.device.nut"`:
+
 ```squirrel
 imp.wakeup(5.0, function() {
-    agent.send("data", "Hello from the dDevice");
+  agent.send("data", "Hello from the dDevice");
 });
 ```
 
@@ -196,9 +198,9 @@ Test methods should return an instance of the [Promise](https://github.com/elect
 
 ```squirrel
 function testSomethingAsynchronously() {
-    return Promise(function (resolve, reject) {
-        resolve("It's all good, man!");
-    });
+  return Promise(function (resolve, reject) {
+    resolve("It's all good, man!");
+  });
 }
 ```
 
@@ -212,23 +214,23 @@ You can use the [*Builder*](https://github.com/electricimp/Builder) language in 
 @set assertText = "Failed to assert that values are"
 
 this.assertEqual(
-    expected,
-    actual,
-        "@{assertText}"
-        + " equal in '@{__FILE__}'"
-        + " at line @{__LINE__}"
-    );
+  expected,
+  actual,
+    "@{assertText}"
+    + " equal in '@{__FILE__}'"
+    + " at line @{__LINE__}"
+);
 ```
 
 [*\_\_FILE\_\_* and *\_\_LINE\_\_*](https://github.com/electricimp/Builder#variables) variables are defined by [*Builder*](https://github.com/electricimp/Builder). They can be useful for debugging:
 
 ```squirrel
 this.assertEqual(
-    expected,
-    actual,
-    "Failed to assert that values are"
-        + " equal in '@{__FILE__}'"
-        + " at line @{__LINE__}"
+  expected,
+  actual,
+  "Failed to assert that values are"
+    + " equal in '@{__FILE__}'"
+    + " at line @{__LINE__}"
 );
 ```
 
@@ -246,9 +248,9 @@ This allows [*Builder*](https://github.com/electricimp/Builder) to process custo
 ```squirrel
 local response = http.get("@{pollServer}", {}).sendsync();
 this.assertEqual(
-    "@{expectedAnswer}",
-    response,
-    "Failed to get expected answer"
+  "@{expectedAnswer}",
+  response,
+  "Failed to get expected answer"
 );
 ```
 
@@ -411,12 +413,12 @@ Asserts that the function _func_ throws an error when it is called with the argu
 ```squirrel
 // OK, returns "abc"
 this.assertThrowsError(function (a) {
-    throw a;
+  throw a;
 }, this, ["abc"]);
 
 // Failure: Function was expected to throw an error
 this.assertThrowsError(function () {
-    // Throw "error";
+  // Throw "error";
 }, this);
 ```
 
@@ -437,9 +439,9 @@ The utility file `myFile.nut` contains the following code:
 ```squirrel
 // (optional) Async version, can also be synchronous
 function setUp() {
-    return Promise(function (resolve, reject) {
-        resolve("We're ready");
-    }.bindenv(this));
+  return Promise(function (resolve, reject) {
+    resolve("We're ready");
+  }.bindenv(this));
 }
 ```
 
@@ -450,26 +452,26 @@ class TestCase1 extends ImpTestCase {
 
 @include __PATH__+"/myFile.nut"
 
-    // Sync test method
-    function testSomethingSync() {
-        this.assertTrue(true);    // OK
-        this.assertTrue(false);   // Fails
-    }
+  // Sync test method
+  function testSomethingSync() {
+    this.assertTrue(true);    // OK
+    this.assertTrue(false);   // Fails
+  }
 
-    // Async test method
-    function testSomethingAsync() {
-        return Promise(function (resolve, reject) {
-            // Return in 2 seconds
-            imp.wakeup(2 /* 2 seconds */, function() {
-                resolve("something useful");
-            }.bindenv(this));
-        }.bindenv(this));
-    }
+  // Async test method
+  function testSomethingAsync() {
+    return Promise(function (resolve, reject) {
+      // Return in 2 seconds
+      imp.wakeup(2 /* 2 seconds */, function() {
+        resolve("something useful");
+      }.bindenv(this));
+    }.bindenv(this));
+  }
 
-    // (optional) Teardown method - cleans up after the test
-    function tearDown() {
-        // Clean-up here
-    }
+  // (optional) Teardown method - cleans up after the test
+  function tearDown() {
+    // Clean-up here
+  }
 }
 ```
 
@@ -481,7 +483,7 @@ To run your tests you need to have one or more devices associated with your acco
 
 1. Prepare a Product. If you already have a Product, note its ID or name. If you do not have a Product, create a new one with [`impt product create`](./CommandsManual.md#product-create):
 
-    ```
+    ```shell
     > impt product create --name MyTestProduct
     Product "MyTestProduct" is created successfully.
     Product:
@@ -493,7 +495,7 @@ To run your tests you need to have one or more devices associated with your acco
 2. Prepare a Device Group. If you already have a Device Group, note its ID or name. If you do not have a Device Group, create a new one with [`impt dg create`](./CommandsManual.md#device-group-create). You need to specify the Product when creating the Device Group.
     You may use a Device Group of any [type](./CommandsManual.md#device-group-type), but it is recommended that you use a Development Device Group.
 
-    ```
+    ```shell
     > impt dg create --name MyTestDG --product MyTestProduct
     Device Group "MyTestDG" is created successfully.
     Device Group:
@@ -505,7 +507,7 @@ To run your tests you need to have one or more devices associated with your acco
 
 3. Assign one or more devices on which you plan to run your tests to the Device Group using [`impt device assign`](./CommandsManual.md#device-assign).
 
-    ```
+    ```shell
     > impt device assign --device myDevice1 --dg MyTestDG
     Device "myDevice1" is assigned successfully to Device Group "MyTestDG".
     IMPT COMMAND SUCCEEDS
@@ -533,7 +535,7 @@ The configuration settings include:
 
 **Example**
 
-```
+```shell
 > impt test create --dg MyTestDG --agent-file MyLibrary.agent.lib.nut
 Test Configuration is created successfully.
 Test Configuration:
@@ -560,13 +562,13 @@ Test Configuration:
 IMPT COMMAND SUCCEEDS
 ```
 
-#### Updating the Configuration ####
+#### Updating The Configuration ####
 
 You may update the test configuration by calling [`impt test update`](./CommandsManual.md#test-update). The existing [test configuration file](./CommandsManual.md#test-configuration-files) will be updated with the new settings. The new `--test-file` option value(s) completely replace any existing setting.
 
 **Example**
 
-```
+```shell
 > impt test update --timeout 60 --builder-cache true
 Test Configuration is updated successfully.
 Test Configuration:
@@ -597,7 +599,7 @@ You may also display the current test configuration by calling [`impt test info`
 
 **Example**
 
-```
+```shell
 > impt test info
 Test Configuration:
   Test files:       *.test.nut, tests/**/*.test.nut
@@ -639,7 +641,7 @@ For unauthenticated requests, the GitHub API allows you to make [up to 60 reques
 
 **Example**
 
-```
+```shell
 > impt test github --github-config github.conf --user github_username
     --pwd github_password
 GitHub credentials Configuration is created successfully.
@@ -662,11 +664,11 @@ You may run the tests in [debug mode](#debug-mode) by specifying the `--output d
 
 A test is treated as failed if an error is thrown or a timeout, as defined in the [test configuration](#test-configuration) file, occurs during the test execution. Otherwise the test is treated as passed. If at least one test in a test session fails, the test session is treated as failed. If the [test configuration](#test-configuration) has the `stop-on-fail` setting set to `true`, test execution ends after the first failed test.
 
-When all tests are passed, the [`impt test run`](./CommandsManual.md#test-run) command outputs `IMPT COMMAND SUCCEEDS` phrase and returns zero exit code. Otherwise, it outputs `IMPT COMMAND FAILS` phrase and returns non-zero exit code.
+When all tests are passed, the [`impt test run`](./CommandsManual.md#test-run) command outputs `IMPT COMMAND SUCCEEDS` command outputs `IMPT COMMAND SUCCEEDS` and returns an exit code of zero. Otherwise, it outputs `IMPT COMMAND FAILS` and returns a non-zero exit code.
 
-**Example - testing failed**
+**Example: Testing Failed**
 
-```
+```shell
 > impt test run
 [info] Started at 09 Mar 2018 18:58:31 GMT+0300
 [+0.01/0.01s info] Found 1 test file:
@@ -701,9 +703,9 @@ Error: Testing failed
 IMPT COMMAND FAILS
 ```
 
-**Example - all tests are passed**
+**Example: All Tests Are Passed**
 
-```
+```shell
 > impt test run
 [info] Started at 09 Mar 2018 19:00:25 GMT+0300
 [+0.01/0.01s info] Found 1 test file:
@@ -753,13 +755,13 @@ A test file `TestFile1.test.nut` contains:
 
 ```squirrel
 class MyTestCase extends ImpTestCase {
-    function testMe() {...}
-    function testMe_1() {...}
+  function testMe() {...}
+  function testMe_1() {...}
 }
 
 class MyTestCase_1 extends ImpTestCase {
-    function testMe() {...}
-    function testMe_1() {...}
+  function testMe() {...}
+  function testMe_1() {...}
 }
 ```
 
@@ -767,8 +769,8 @@ A test file `TestFile2.test.nut` contains:
 
 ```squirrel
 class MyTestCase extends ImpTestCase {
-    function testMe() {...}
-    function testMe_1() {...}
+  function testMe() {...}
+  function testMe_1() {...}
 }
 ```
 
@@ -790,7 +792,7 @@ You may run your tests in debug mode by specifying the `--output debug` option o
 
 **Example**
 
-```
+```shell
 > impt test run --tests TestFile1:MyTestCase::testMe --output debug
 ...
 [info] Started at 22 Jan 2018 22:49:25 GMT+0300
@@ -879,7 +881,7 @@ After testing is complete, you may want to clean the various entities created du
 
 **Example**
 
-```
+```shell
 > impt test delete --all
 The following entities will be deleted:
 Product:
@@ -929,7 +931,7 @@ Alternatively, you may fully delete the Device Group which you used for the test
 
 **Example**
 
-```
+```shell
 > impt dg delete --dg MyTestDG --builds --force
 The following entities will be deleted:
 Device Group:
@@ -969,7 +971,7 @@ If you only want to unassign the devices from the testing Device Group, use [`im
 
 **Example**
 
-```
+```shell
 > impt dg unassign --dg MyTestDG
 The following Devices are unassigned successfully from Device Group "MyTestDG":
 Device:
@@ -981,7 +983,7 @@ Device:
 IMPT COMMAND SUCCEEDS
 ```
 
-```
+```shell
 > impt device unassign --device myDevice1
 Device "myDevice1" is unassigned successfully.
 IMPT COMMAND SUCCEEDS
@@ -991,7 +993,7 @@ If you want to delete the Product, use [`impt product delete`](./CommandsManual.
 
 **Example**
 
-```
+```shell
 > impt product delete --product MyTestProduct --builds --force
 The following entities will be deleted:
 Product:
