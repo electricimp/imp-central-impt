@@ -45,7 +45,7 @@ exports.builder = function (yargs) {
             describe : 'Starts displaying logs from the specified Device (see impt log stream command description).' +
                 ' To stop displaying the logs press <Ctrl-C>.'
         },
-        [Options.DEBUG] : false
+        [Options.OUTPUT] : false
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))

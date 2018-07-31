@@ -47,7 +47,7 @@ exports.builder = function (yargs) {
             describe: 'Delete a Deployment even if it has "flagged" attribute set to true.'
         },
         [Options.CONFIRMED] : false,
-        [Options.DEBUG] : false
+        [Options.OUTPUT] : false
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))

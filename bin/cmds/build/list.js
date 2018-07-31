@@ -78,7 +78,7 @@ exports.builder = function (yargs) {
         [Options.UNFLAGGED] : false,
         [Options.NON_ZOMBIE] : false,
         [Options.ZOMBIE] : false,
-        [Options.DEBUG] : false
+        [Options.OUTPUT] : false
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))

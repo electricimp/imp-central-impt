@@ -40,7 +40,7 @@ exports.builder = function (yargs) {
     const entityType = 'Products';
     const options = Options.getOptions({
         [Options.OWNER] : { demandOption : false, describeFormatArgs : [ entityType ] },
-        [Options.DEBUG] : false
+        [Options.OUTPUT] : false
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))

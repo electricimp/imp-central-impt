@@ -50,7 +50,7 @@ describe('impt test run for stop-on-failure behavior >', () => {
         ImptTestCommandsHelper.createTestConfig('fixtures/stop_on_failure', { 'stop-on-fail' : true }).
             then(() => ImptTestingHelper.runCommand('impt test run', (commandOut) => {
                 expect(commandOut).not.toBeEmptyString();
-                expect(commandOut).not.toMatch(/Using device test file tests\/2\.device\.test\.nut\n/);
+                expect(commandOut).not.toMatch(/Using device test file "tests\/2\.device\.test\.nut"/);
                 ImptTestCommandsHelper.checkTestFailStatus(commandOut);
                 ImptTestingHelper.checkFailStatus(commandOut);
             })).
@@ -62,7 +62,7 @@ describe('impt test run for stop-on-failure behavior >', () => {
         ImptTestCommandsHelper.createTestConfig('fixtures/stop_on_failure', { 'stop-on-fail' : false }).
             then(() => ImptTestingHelper.runCommand('impt test run', (commandOut) => {
                 expect(commandOut).not.toBeEmptyString();
-                expect(commandOut).toMatch(/Using device test file tests\/2\.device\.test\.nut\n/);
+                expect(commandOut).toMatch(/Using device test file "tests\/2\.device\.test\.nut"/);
                 ImptTestCommandsHelper.checkTestFailStatus(commandOut);
                 ImptTestingHelper.checkFailStatus(commandOut);
             })).

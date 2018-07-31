@@ -39,9 +39,9 @@ exports.describe = COMMAND_SHORT_DESCR;
 exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.LOGIN_KEY] : true,
-        [Options.PASSWORD] : true,
+        [Options.PASSWORD] : false,
         [Options.DESCRIPTION] : { demandOption : true, describe : 'New Description of the Login Key.', _usage : '<login_key_description>' },
-        [Options.DEBUG] : false
+        [Options.OUTPUT] : false
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))

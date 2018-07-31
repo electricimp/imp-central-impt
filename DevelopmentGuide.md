@@ -21,7 +21,7 @@ The full *impt* commands specification is described in the [*impt* Commands Manu
 - [Typical Use-cases](#typical-use-cases)
   - [Develop Application Firmware](#develop-application-firmware)
   - [Develop Factory Firmware](#develop-factory-firmware)
-  - [Clean-up](#clean-up)
+  - [Clean Up](#clean-up)
 
 ## Projects ##
 
@@ -60,35 +60,35 @@ Project creation centers on the creation of [Project file](./CommandsManual.md#p
 
 There are two ways to create a Project: [base it on an existing Device Group](#link-a-device-group) or [create a new one from scratch](#create-a-new-device-group).
 
-#### Link a Device Group ####
+#### Link A Device Group ####
 
 Use the [`impt project link`](./CommandsManual.md#project-link) command. This creates a Project which references the existing Device Group; it just links it to the local source files. The source files can be specified directly using the `--device-file <device_file>` and `--agent-file <agent_file>` options. Or the default names can be used. If a specified file does not exist, the command creates it as an empty file.
 
 **Example**
 
-```
+```shell
 > impt project link --dg MyDG
 Device source file "device.nut" is created successfully.
 Agent source file "agent.nut" is created successfully.
 Project is linked successfully.
-Project info:
-Device file:  device.nut
-Agent file:   agent.nut
-Device Group:
-  id:          27f8ee81-59cd-a9ad-d2a4-e430e4e19ae9
-  type:        development
-  name:        MyDG
-  description: New description of my DG
-  region:
-  created_at:  2018-01-22T18:20:28.399Z
-  updated_at:  2018-01-22T18:21:10.057Z
-  Product:
-    id:   da0800ab-ad5f-c54e-949e-ec986efb0bf1
-    name: MyProduct
+Project:
+  Device file:  device.nut
+  Agent file:   agent.nut
+  Device Group:
+    id:          27f8ee81-59cd-a9ad-d2a4-e430e4e19ae9
+    type:        development
+    name:        MyDG
+    description: New description of my DG
+    region:
+    created_at:  2018-01-22T18:20:28.399Z
+    updated_at:  2018-01-22T18:21:10.057Z
+    Product:
+      id:   da0800ab-ad5f-c54e-949e-ec986efb0bf1
+      name: MyProduct
 IMPT COMMAND SUCCEEDS
 ```
 
-#### Create a New Device Group ####
+#### Create A New Device Group ####
 
 Use the [`impt project create`](./CommandsManual.md#project-create) command. This creates a new Device Group and a Project which references that Device Group. The Device Group should belong to a Product:
 
@@ -106,26 +106,26 @@ The source code files can be specified directly using the `--device-file <device
 
 **Example**
 
-```
+```shell
 > impt project create --product MyProduct --name MyDG
 Device Group "MyDG" is created successfully.
 Device source file "device.nut" is created successfully.
 Agent source file "agent.nut" is created successfully.
 Project is created successfully.
-Project info:
-Device file:  device.nut
-Agent file:   agent.nut
-Device Group:
-  id:          27f8ee81-59cd-a9ad-d2a4-e430e4e19ae9
-  type:        development
-  name:        MyDG
-  description:
-  region:
-  created_at:  2018-01-22T18:20:28.399Z
-  updated_at:  2018-01-22T18:20:28.399Z
-  Product:
-    id:   da0800ab-ad5f-c54e-949e-ec986efb0bf1
-    name: MyProduct
+Project:
+  Device file:  device.nut
+  Agent file:   agent.nut
+  Device Group:
+    id:          27f8ee81-59cd-a9ad-d2a4-e430e4e19ae9
+    type:        development
+    name:        MyDG
+    description:
+    region:
+    created_at:  2018-01-22T18:20:28.399Z
+    updated_at:  2018-01-22T18:20:28.399Z
+    Product:
+      id:   da0800ab-ad5f-c54e-949e-ec986efb0bf1
+      name: MyProduct
 IMPT COMMAND SUCCEEDS
 ```
 
@@ -140,27 +140,27 @@ You can update your Project at any time with the [`impt project update`](./Comma
 
 **Example**
 
-**Update the description of the Project’s Device Group, change the linked device source file to `device1.nut`**
+Update the description of the Project’s Device Group, change the linked device source file to `device1.nut`:
 
-```
+```shell
 > impt project update --descr "New description of my DG" --device-file device1.nut
 Device Group "27f8ee81-59cd-a9ad-d2a4-e430e4e19ae9" is updated successfully.
 Device source file "device1.nut" is created successfully.
 Project is updated successfully.
-Project info:
-Device file:  device1.nut
-Agent file:   agent.nut
-Device Group:
-  id:          27f8ee81-59cd-a9ad-d2a4-e430e4e19ae9
-  type:        development
-  name:        MyDG
-  description: New description of my DG
-  region:
-  created_at:  2018-01-22T18:20:28.399Z
-  updated_at:  2018-01-22T18:21:10.057Z
-  Product:
-    id:   da0800ab-ad5f-c54e-949e-ec986efb0bf1
-    name: MyProduct
+Project:
+  Device file:  device1.nut
+  Agent file:   agent.nut
+  Device Group:
+    id:          27f8ee81-59cd-a9ad-d2a4-e430e4e19ae9
+    type:        development
+    name:        MyDG
+    description: New description of my DG
+    region:
+    created_at:  2018-01-22T18:20:28.399Z
+    updated_at:  2018-01-22T18:21:10.057Z
+    Product:
+      id:   da0800ab-ad5f-c54e-949e-ec986efb0bf1
+      name: MyProduct
 IMPT COMMAND SUCCEEDS
 ```
 
@@ -177,13 +177,13 @@ You can use [`impt device list`](./CommandsManual.md#device-list) to find an ide
 
 **Examples**
 
-```
+```shell
 > impt device assign --device myDevice1
 Device "myDevice1" is assigned successfully to Device Group "27f8ee81-59cd-a9ad-d2a4-e430e4e19ae9".
 IMPT COMMAND SUCCEEDS
 ```
 
-```
+```shell
 > impt dg reassign --from TestDG
 The following Devices assigned to Device Group "TestDG" are reassigned successfully to Device Group
 "27f8ee81-59cd-a9ad-d2a4-e430e4e19ae9":
@@ -196,7 +196,7 @@ Device:
 IMPT COMMAND SUCCEEDS
 ```
 
-### Creating and Running Builds ###
+### Creating And Running Builds ###
 
 To create a new build (a Deployment) without running it immediately, use [`impt build deploy`](./CommandsManual.md#build-deploy). By default, the Deployment will be created from the source files referenced by your Project. When you want to run the newly created Deployment:
 
@@ -207,17 +207,22 @@ Alternatively, you can use [`impt build run`](./CommandsManual.md#build-run). Th
 
 **Example**
 
-**Create a new flagged Deployment with description and tag**
+Create a new flagged Deployment with description and tag:
 
-```
+```shell
 > impt build deploy --descr "my new build" --tag TAG1 --flagged
 Deployment "b3cd81d0-0be3-b7a3-f15c-df2ded28a154" is created successfully.
+Deployment:
+  id:      b3cd81d0-0be3-b7a3-f15c-df2ded28a154
+  sha:     4e7f3395e86658ab39a178f9fe4b8cd8244a8ade92cb5ae1bb2d758434174c05
+  tags:    TAG1
+  flagged: true
 IMPT COMMAND SUCCEEDS
 ```
 
-**Run the new Deployment**
+Run the new Deployment:
 
-```
+```shell
 > impt dg restart
 Restart request for Devices assigned to Device Group "27f8ee81-59cd-a9ad-d2a4-e430e4e19ae9" is successful:
 Device:
@@ -243,7 +248,7 @@ The log entries are displayed in pages. The page size may be specified in the co
 
 **Example**
 
-```
+```shell
 > impt log get --page-size 5
 2018-01-22T18:33:59.537Z [agent.log] { "measureTime": "1516646039", "data": 8 }
 2018-01-22T18:33:59.536Z [agent.log] Data published successfully:
@@ -288,9 +293,9 @@ If the logs streaming is stopped by an error (eg. due to a disconnection), *impt
 
 **Example**
 
-**Logging is started for a device from the Project’s Device Group**
+Logging is started for a device from the Project’s Device Group:
 
-```
+```shell
 > impt log stream
 Log stream for Device(s) 234776801163a9ee is opened.
 IMPT COMMAND SUCCEEDS
@@ -313,45 +318,45 @@ Use [`impt product info`](./CommandsManual.md#product-info) with the option `--f
 
 **Example**
 
-```
+```shell
 > impt project info --full
-Project info:
-Device file:  device.nut
-Agent file:   agent.nut
-Device Group:
-  id:                       27f8ee81-59cd-a9ad-d2a4-e430e4e19ae9
-  type:                     development
-  name:                     MyDG
-  description:              New description of my DG
-  region:
-  created_at:               2018-01-22T18:20:28.399Z
-  updated_at:               2018-01-22T18:35:42.521Z
-  Product:
-    id:   da0800ab-ad5f-c54e-949e-ec986efb0bf1
-    name: MyProduct
-  Current Deployment:
-    id:      8b59afb0-32c6-1221-fdf8-fc5bf38ed155
-    sha:     f4756c7578aa69910a8857d8ec08ff15bc2d7e1a8fc8007caf98e3ea9fca07a3
-    tags:    TAG1
-    flagged: true
-  Min supported Deployment:
-    id:  e3461b2c-75ae-a3b7-7164-f31ec495030b
-    sha: 4e7f3395e86658ab39a178f9fe4b8cd8244a8ade92cb5ae1bb2d758434174c05
-  Devices:
-    Device:
-      id:            234776801163a9ee
-      name:          myDevice1
-      mac_address:   0c:2a:69:05:0d:62
-      agent_id:      T1oUmIZ3At_N
-      device_online: true
-Auth info:
-impCentral API endpoint:   https://api.electricimp.com/v5
-Auth file:                 Global
-Access token auto refresh: true
-Login method:              User/Password
-Username:                  username
-Email:                     user@email.com
-Account id:                c1d61eef-d544-4d09-c8dc-d43e6742cae3
+Project:
+  Device file:  device.nut
+  Agent file:   agent.nut
+  Device Group:
+    id:                       27f8ee81-59cd-a9ad-d2a4-e430e4e19ae9
+    type:                     development
+    name:                     MyDG
+    description:              New description of my DG
+    region:
+    created_at:               2018-01-22T18:20:28.399Z
+    updated_at:               2018-01-22T18:35:42.521Z
+    Product:
+      id:   da0800ab-ad5f-c54e-949e-ec986efb0bf1
+      name: MyProduct
+    Current Deployment:
+      id:      8b59afb0-32c6-1221-fdf8-fc5bf38ed155
+      sha:     f4756c7578aa69910a8857d8ec08ff15bc2d7e1a8fc8007caf98e3ea9fca07a3
+      tags:    TAG1
+      flagged: true
+    Min supported Deployment:
+      id:  e3461b2c-75ae-a3b7-7164-f31ec495030b
+      sha: 4e7f3395e86658ab39a178f9fe4b8cd8244a8ade92cb5ae1bb2d758434174c05
+    Devices:
+      Device:
+        id:            234776801163a9ee
+        name:          myDevice1
+        mac_address:   0c:2a:69:05:0d:62
+        agent_id:      T1oUmIZ3At_N
+        device_online: true
+Auth:
+  impCentral API endpoint:   https://api.electricimp.com/v5
+  Auth file:                 Global
+  Access token auto refresh: true
+  Login method:              User/Password
+  Username:                  username
+  Email:                     user@email.com
+  Account id:                c1d61eef-d544-4d09-c8dc-d43e6742cae3
 IMPT COMMAND SUCCEEDS
 ```
 
@@ -363,7 +368,7 @@ Your Project can be easily shared, copied or moved: just copy the whole director
 
 On the contrary, if you do want to share or copy the authentication information along with your Project but the directory does not include a [local auth file](./CommandsManual.md#local-auth-file) (ie. you use global login), call [`impt auth login`](./CommandsManual.md#auth-login) with the option `--local` and with the same credentials and endpoint as you used for global login. A [local auth file](./CommandsManual.md#local-auth-file) will be created and you will be able to copy it alongside the other Project files.
 
-### Deleting a Project ###
+### Deleting A Project ###
 
 There are several levels of Project deletion:
 
@@ -375,9 +380,9 @@ There are several levels of Project deletion:
 
 **Example**
 
-**Delete everything**
+Delete everything:
 
-```
+```shell
 > impt project delete --all
 The following entities will be deleted:
 Device Group:
@@ -436,7 +441,7 @@ IMPT COMMAND SUCCEEDS
 
 1. Log in to the impCentral API using global login (ie. the [global auth file](./CommandsManual.md#global-auth-file))
 
-```
+```shell
 > impt auth login --user username --pwd password
 Global login is successful.
 IMPT COMMAND SUCCEEDS
@@ -444,19 +449,19 @@ IMPT COMMAND SUCCEEDS
 
 2. Create a new directory called, for example, `dev`.
 
-```
+```shell
 > mkdir dev
 ```
 
 3. Go to the new directory.
 
-```
+```shell
 > cd dev
 ```
 
 4. Create a Project based on a new Product “MyProduct”, a new Device Group “MyDevDG”, empty files `myapp.device.nut` and `myapp.agent.nut`, and a [Project file](./CommandsManual.md#project-files).
 
-```
+```shell
 > impt project create --product MyProduct --create-product --name MyDevDG
     --descr "imp Application Firmware" --device-file myapp.device.nut --agent-file myapp.agent.nut
 Product "MyProduct" is created successfully.
@@ -464,20 +469,20 @@ Device Group "MyDevDG" is created successfully.
 Device source file "myapp.device.nut" is created successfully.
 Agent source file "myapp.agent.nut" is created successfully.
 Project is created successfully.
-Project info:
-Device file:  myapp.device.nut
-Agent file:   myapp.agent.nut
-Device Group:
-  id:          c675ad8a-9d88-1d0f-e017-4a8c71bb0fd5
-  type:        development
-  name:        MyDevDG
-  description: imp Application Firmware
-  region:
-  created_at:  2018-01-22T17:56:27.973Z
-  updated_at:  2018-01-22T17:56:27.973Z
-  Product:
-    id:   da0800ab-ad5f-c54e-949e-ec986efb0bf1
-    name: MyProduct
+Project:
+  Device file:  myapp.device.nut
+  Agent file:   myapp.agent.nut
+  Device Group:
+    id:          c675ad8a-9d88-1d0f-e017-4a8c71bb0fd5
+    type:        development
+    name:        MyDevDG
+    description: imp Application Firmware
+    region:
+    created_at:  2018-01-22T17:56:27.973Z
+    updated_at:  2018-01-22T17:56:27.973Z
+    Product:
+      id:   da0800ab-ad5f-c54e-949e-ec986efb0bf1
+      name: MyProduct
 IMPT COMMAND SUCCEEDS
 ```
 
@@ -505,7 +510,7 @@ IMPT COMMAND SUCCEEDS
 
 8. Add the device to your Project. You can specify the device by its ID, name, MAC or agent ID.
 
-```
+```shell
 > impt device assign --device myDevice1
 Device "myDevice1" is assigned successfully to Device Group "c675ad8a-9d88-1d0f-e017-4a8c71bb0fd5".
 IMPT COMMAND SUCCEEDS
@@ -513,7 +518,7 @@ IMPT COMMAND SUCCEEDS
 
 9. Create a new build, run it and start logging.
 
-```
+```shell
 > impt build run --log
 Deployment "e0059ee6-2483-4ab1-50eb-e693e62155b7" is created successfully.
 Restart request for Devices assigned to Device Group "c675ad8a-9d88-1d0f-e017-4a8c71bb0fd5" is successful:
@@ -544,7 +549,7 @@ Press <Ctrl-C> to exit.
 
 13. When you are satisfied with your code, mark the latest build by a tag &mdash; for example, "MyRC1" &mdash; and set the *flagged* attribute to `true` (this protects it from accidental deletion).
 
-```
+```shell
 > impt build update --descr "My Release Candidate 1" --tag MyRC1 --flagged
 Deployment "e0059ee6-2483-4ab1-50eb-e693e62155b7" is updated successfully.
 IMPT COMMAND SUCCEEDS
@@ -552,7 +557,7 @@ IMPT COMMAND SUCCEEDS
 
 ### Develop Factory Firmware ###
 
-**Note:** you need to have appropriate permission to make use of the impCentral API entities related to pre-production processes.
+**Note** You need to have appropriate permission to make use of the impCentral API entities related to pre-production processes.
 
 The following assumes you are making use of the Product created in the use-case above.
 
@@ -562,7 +567,7 @@ The following assumes you are making use of the Product created in the use-case 
 
 3. Create a Project for [factory firmware](https://developer.electricimp.com/examples/factoryfirmware) which is linked to the existing Product "MyProduct"; create new Device Groups "MyPreFactoryDG" and "MyPreProductionDG" in that Product, and empty files `factory.device.nut` and `factory.agent.nut`, and a [Project file](./CommandsManual.md#project-files).
 
-```
+```shell
 > impt project create --pre-factory --product MyProduct --name MyPreFactoryDG 
     --descr "Factory Firmware" --target MyPreProductionDG --create-target 
     --device-file factory.device.nut --agent-file factory.agent.nut
@@ -571,30 +576,30 @@ Device Group "MyPreFactoryDG" is created successfully.
 Device source file "factory.device.nut" is created successfully.
 Agent source file "factory.agent.nut" is created successfully.
 Project is created successfully.
-Project info:
-Device file:  factory.device.nut
-Agent file:   factory.agent.nut
-Device Group:
-  id:                71c3be05-a7d2-a326-8906-8af3b205bd13
-  type:              pre-factory
-  name:              MyPreFactoryDG
-  description:       Factory Firmware
-  region:
-  created_at:        2018-01-22T18:17:19.537Z
-  updated_at:        2018-01-22T18:17:19.537Z
-  Product:
-    id:   da0800ab-ad5f-c54e-949e-ec986efb0bf1
-    name: MyProduct
-  Production Target:
-    id:   53ca29f4-937d-e684-729b-7e6b6a192c19
-    type: pre-production
-    name: MyPreProductionDG
+Project:
+  Device file:  factory.device.nut
+  Agent file:   factory.agent.nut
+  Device Group:
+    id:                71c3be05-a7d2-a326-8906-8af3b205bd13
+    type:              pre-factory
+    name:              MyPreFactoryDG
+    description:       Factory Firmware
+    region:
+    created_at:        2018-01-22T18:17:19.537Z
+    updated_at:        2018-01-22T18:17:19.537Z
+    Product:
+      id:   da0800ab-ad5f-c54e-949e-ec986efb0bf1
+      name: MyProduct
+    Production Target:
+      id:   53ca29f4-937d-e684-729b-7e6b6a192c19
+      type: pre-production
+      name: MyPreProductionDG
 IMPT COMMAND SUCCEEDS
 ```
 
 4. Copy your application’s build tagged as “MyRC1” to the “MyPreProductionDG” Device Group. “MyRC1” contains the code for devices blessed by your factory firmware. Build attributes are not copied.
 
-```
+```shell
 > impt build copy --build MyRC1 --dg MyPreProductionDG
 Deployment "a0e8e599-c6c5-62c0-2a88-a8d4ac3e07d8" is created successfully.
 Deployment "MyRC1" is copied successfully to Deployment "a0e8e599-c6c5-62c0-2a88-a8d4ac3e07d8".
@@ -607,7 +612,7 @@ IMPT COMMAND SUCCEEDS
 
 7. List all of your unassigned devices and find the test fixture.
 
-```
+```shell
 > impt device list --unassigned
 Device list (2 items):
 Device:
@@ -625,7 +630,7 @@ IMPT COMMAND SUCCEEDS
 
 8. Add the test fixture to your project. You can specify the device by its ID, Name, MAC or agent ID.
 
-```
+```shell
 > impt device assign --device 5000d8c46a56cfca
 Device "5000d8c46a56cfca" is assigned successfully to Device Group "71c3be05-a7d2-a326-8906-8af3b205bd13".
 IMPT COMMAND SUCCEEDS
@@ -633,7 +638,7 @@ IMPT COMMAND SUCCEEDS
 
 9. Create a new factory firmware build, run it and start logging.
 
-```
+```shell
 > impt build run --log
 Deployment "4a7339e4-1f7c-3caa-2ce5-15c367df9a3f" is created successfully.
 Restart request for Devices assigned to Device Group "71c3be05-a7d2-a326-8906-8af3b205bd13" is successful:
@@ -658,13 +663,13 @@ Press <Ctrl-C> to exit.
 
 13. When you are satisfied with your factory firmware, mark the latest build by a tag, eg. “MyFactoryRC1”, and set its *flagged* attribute to `true` (this protects it from accidental deletion).
 
-```
+```shell
 > impt build update --descr "My Factory Firmware Release Candidate 1" --tag MyFactoryRC1 --flagged
 Deployment "4a7339e4-1f7c-3caa-2ce5-15c367df9a3f" is updated successfully.
 IMPT COMMAND SUCCEEDS
 ```
 
-### Clean-up ###
+### Clean Up ###
 
 #### Go To Production ####
 
@@ -674,7 +679,7 @@ If you are developing production firmware, whether application, factory or both,
 
 2. Delete all unnecessary builds of your factory firmware code (*flagged* builds will not be deleted).
 
-```
+```shell
 > impt dg builds --remove
 The following entities will be deleted:
 Deployment:
@@ -711,7 +716,7 @@ IMPT COMMAND SUCCEEDS
 
 3. Unassign your pre-factory fixture device in order to reuse it in other Projects.
 
-```
+```shell
 > impt dg unassign
 The following Devices are unassigned successfully from Device Group "71c3be05-a7d2-a326-8906-8af3b205bd13":
 Device:
@@ -725,7 +730,7 @@ IMPT COMMAND SUCCEEDS
 
 4. Unassign your test-blessed devices in order to reuse them in other Projects.
 
-```
+```shell
 > impt dg unassign --dg MyPreProductionDG
 The following Devices are unassigned successfully from Device Group "MyPreProductionDG":
 Device:
@@ -737,7 +742,7 @@ IMPT COMMAND SUCCEEDS
 
 5. If you want, delete your factory firmware Project and the source files in this directory. The impCentral API entities will not be deleted; you may keep the source files in your version control or software configuration management tool.
 
-```
+```shell
 > impt project delete --files
 The following files will be deleted:
 Device/agent source files: factory.device.nut, factory.agent.nut
@@ -755,7 +760,7 @@ IMPT COMMAND SUCCEEDS
 
 7. Delete all unnecessary builds of your application firmware (*flagged* builds will not be deleted).
 
-```
+```shell
 > impt dg builds --remove
 The following entities will be deleted:
 Deployment:
@@ -778,7 +783,7 @@ Deployment "00e7645f-138f-f0d0-45bd-b7e9b79f0d3f" is deleted successfully.
 Deployment "4c8a43e9-d3c4-3019-1219-456e30d972ac" is deleted successfully.
 Deployment "3612cbab-8d69-4b2b-65da-6a65e40ebf4e" is deleted successfully.
 Deployment "495c7420-e004-b29e-bb67-a4c1bea66f5b" is deleted successfully.
-Deployment list (4 items):
+Deployment list (2 items):
 Deployment:
   id:           e0059ee6-2483-4ab1-50eb-e693e62155b7
   sha:          f4756c7578aa69910a8857d8ec08ff15bc2d7e1a8fc8007caf98e3ea9fca07a3
@@ -800,7 +805,7 @@ IMPT COMMAND SUCCEEDS
 
 8. Unassign the development device which you used for application testing.
 
-```
+```shell
 > impt dg unassign
 The following Devices are unassigned successfully from Device Group "c675ad8a-9d88-1d0f-e017-4a8c71bb0fd5":
 Device:
@@ -814,7 +819,7 @@ IMPT COMMAND SUCCEEDS
 
 9. Display and review the full structure of your Product.
 
-```
+```shell
 > impt product info --full
 Product:
   id:            da0800ab-ad5f-c54e-949e-ec986efb0bf1
@@ -871,7 +876,7 @@ IMPT COMMAND SUCCEEDS
 
 10. If you want, delete your application Project and the source files in this directory. The impCentral API entities will not be deleted; you may keep the source files in your version control or software configuration management tool.
 
-```
+```shell
 > impt project delete --files
 The following files will be deleted:
 Device/agent source files: myapp.device.nut, myapp.agent.nut
@@ -889,7 +894,7 @@ IMPT COMMAND SUCCEEDS
 
 12. If you want, log out from the impCentral API.
 
-```
+```shell
 > impt auth logout
 Global logout is successful.
 IMPT COMMAND SUCCEEDS
@@ -897,7 +902,7 @@ IMPT COMMAND SUCCEEDS
 
 The *impt* usage for factory and production processes is described fully in the [*impt* Production Guide](./ProductionGuide.md).
 
-#### Full Clean-up ####
+#### Full Clean Up ####
 
 If your development work was temporary, you may want to remove all of your development activities, including all of the impCentral API entities you created.
 
@@ -905,7 +910,7 @@ If your development work was temporary, you may want to remove all of your devel
 
 2. Delete your factory firmware Project, the source files and all impCentral API entities. The “MyPreFactoryDG” and “MyPreProductionDG” Device Groups and all their builds (including *flagged* ones) will be deleted, and the devices will be unassigned from them. The “MyProduct” Product will not be deleted as you still have another Project (ie. a Device Group) related to it.
 
-```
+```shell
 > impt project delete --all
 The following entities will be deleted:
 Device Group:
@@ -967,7 +972,7 @@ IMPT COMMAND SUCCEEDS
 
 4. Delete your application Project, the source files and all impCentral API entities. The “MyDevDG” Device Group and all its builds (including *flagged* ones) will be deleted, and its devices will be unassigned from it. The “MyProduct” Product will be deleted.
 
-```
+```shell
 > impt project delete --all
 The following entities will be deleted:
 Product:
@@ -1024,7 +1029,7 @@ IMPT COMMAND SUCCEEDS
 
 6. If you want, log out from impCentral API.
 
-```
+```shell
 > impt auth logout
 Global logout is successful.
 IMPT COMMAND SUCCEEDS
