@@ -1,6 +1,6 @@
 # impt Commands Manual #
 
-## List of Commands ##
+## List Of Commands ##
 
 **[impt auth info](#auth-info)**<br>
 **[impt auth login](#auth-login)**<br>
@@ -84,7 +84,7 @@
 
 ## Command Syntax ##
 
-```
+```shell
 impt <command_group> <command_name> [<options>]
 ```
 
@@ -235,7 +235,7 @@ A test configuration file contains settings to run unit tests which are created 
 
 #### Auth Info ####
 
-```
+```shell
 impt auth info [--output <mode>] [--help]
 ```
 
@@ -248,7 +248,7 @@ Displays the status and the details of the authentication applicable to the curr
 
 #### Auth Login ####
 
-```
+```shell
 impt auth login [--local] [--endpoint <endpoint_url>]
     [--user <user_id> [--pwd <password>] | --lk <login_key_id>] [--temp] [--confirmed]
     [--output <mode>] [--help]
@@ -280,7 +280,7 @@ The user is asked to confirm the operation if the corresponding auth file alread
 
 #### Auth Logout ####
 
-```
+```shell
 impt auth logout [--local] [--output <mode>] [--help]
 ```
 
@@ -296,7 +296,7 @@ Performs global or local logout. Deletes the [global](#global-auth-file) or [loc
 
 #### Build Cleanup ####
 
-```
+```shell
 impt build cleanup [--product <PRODUCT_IDENTIFIER>] [--unflag] [--confirmed] [--output <mode>] [--help]
 ```
 
@@ -319,7 +319,7 @@ The user is asked to confirm the operation, unless confirmed automatically with 
 
 #### Build Copy ####
 
-```
+```shell
 impt build copy [--build <BUILD_IDENTIFIER>] --dg <DEVICE_GROUP_IDENTIFIER> [--all]
     [--output <mode>] [--help]
 ```
@@ -342,7 +342,7 @@ Build source code is not saved locally. To download the source code from a Deplo
 
 #### Build Delete ####
 
-```
+```shell
 impt build delete --build <BUILD_IDENTIFIER> [--force] [--confirmed] [--output <mode>] [--help]
 ```
 
@@ -360,7 +360,7 @@ The user is asked to confirm the operation, unless confirmed automatically with 
 
 #### Build Deploy ####
 
-```
+```shell
 impt build deploy [--dg <DEVICE_GROUP_IDENTIFIER>] [--device-file <device_file>]
     [--agent-file <agent_file>] [--descr <build_description>] [--origin <origin>]
     [--tag <tag>] [--flagged [true|false]] [--output <mode>] [--help]
@@ -386,7 +386,7 @@ The new build is not run until the devices are rebooted. To run it, call [`impt 
 
 #### Build Get ####
 
-```
+```shell
 impt build get [--build <BUILD_IDENTIFIER>] [--device-file <device_file>]
     [--agent-file <agent_file>] [--device-only] [--agent-only]
     [--confirmed] [--output <mode>] [--help]
@@ -409,7 +409,7 @@ The user is asked to confirm the operation if the files with the specified names
 
 #### Build Info ####
 
-```
+```shell
 impt build info [--build <BUILD_IDENTIFIER>] [--output <mode>] [--help]
 ```
 
@@ -423,7 +423,7 @@ Displays information about the specified build (Deployment).
 
 #### Build List ####
 
-```
+```shell
 impt build list [--owner <ACCOUNT_IDENTIFIER>] [--product <PRODUCT_IDENTIFIER>]
     [--dg <DEVICE_GROUP_IDENTIFIER>] [--dg-type <device_group_type>]
     [--sha <deployment_sha>] [--tag <tag>] [--flagged] [--unflagged]
@@ -454,7 +454,7 @@ The returned list of the builds may be filtered. Filtering uses any combination 
 
 #### Build Run ####
 
-```
+```shell
 impt build run [--dg <DEVICE_GROUP_IDENTIFIER>] [--device-file <device_file>]
     [--agent-file <agent_file>] [--descr <build_description>]
     [--origin <origin>] [--tag <tag>] [--flagged [true|false]]
@@ -483,7 +483,7 @@ The command fails if one or both of the specified source files do not exist, or 
 
 #### Build Update ####
 
-```
+```shell
 impt build update [--build <BUILD_IDENTIFIER>] [--descr <build_description>]
     [--tag <tag>] [--remove-tag <tag>] [--flagged [true|false]]
     [--output <mode>] [--help]
@@ -505,7 +505,7 @@ Updates the description, tags and/or the *flagged* attribute (whichever is speci
 
 #### Device Assign ####
 
-```
+```shell
 impt device assign --device <DEVICE_IDENTIFIER> [--dg <DEVICE_GROUP_IDENTIFIER>]
     [--confirmed] [--output <mode>] [--help]
 ```
@@ -526,7 +526,7 @@ The operation may fail for some combinations of Device Group [types](#device-gro
 
 #### Device Info ####
 
-```
+```shell
 impt device info --device <DEVICE_IDENTIFIER> [--output <mode>] [--help]
 ```
 
@@ -540,7 +540,7 @@ Displays information about the specified device.
 
 #### Device List ####
 
-```
+```shell
 impt device list [--owner <ACCOUNT_IDENTIFIER>] [--product <PRODUCT_IDENTIFIER>]
     [--dg <DEVICE_GROUP_IDENTIFIER>] [--dg-type <device_group_type>] [--unassigned]
     [--assigned] [--online] [--offline] [--output <mode>] [--help]
@@ -568,7 +568,7 @@ The returned list of the devices may be filtered. Filtering uses any combination
 
 #### Device Remove ####
 
-```
+```shell
 impt device remove --device <DEVICE_IDENTIFIER> [--force] [--confirmed] [--output <mode>] [--help]
 ```
 
@@ -588,7 +588,7 @@ The user is asked to confirm the operation, unless confirmed automatically with 
 
 #### Device Restart ####
 
-```
+```shell
 impt device restart --device <DEVICE_IDENTIFIER> [--conditional] [--log] [--output <mode>] [--help]
 ```
 
@@ -604,7 +604,7 @@ Reboots the specified device and, optionally, starts displaying logs from it.
 
 #### Device Unassign ####
 
-```
+```shell
 impt device unassign --device <DEVICE_IDENTIFIER> [--unbond <unbond_key>] [--output <mode>] [--help]
 ```
 
@@ -619,7 +619,7 @@ Unassigns the specified device. Does nothing if the device already unassigned.
 
 #### Device Update ####
 
-```
+```shell
 impt device update --device <DEVICE_IDENTIFIER> --name <device_name> [--output <mode>] [--help]
 ```
 
@@ -636,7 +636,7 @@ Updates the name of the specified device.
 
 #### Device Group Builds ####
 
-```
+```shell
 impt dg builds [--dg <DEVICE_GROUP_IDENTIFIER>] [--unflag] [--unflag-old] [--remove]
     [--confirmed] [--output <mode>] [--help]
 ```
@@ -657,7 +657,7 @@ The user is asked to confirm the operation if any Deployment is going to be dele
 
 #### Device Group Create ####
 
-```
+```shell
 impt dg create --name <device_group_name> [--dg-type <device_group_type>]
     [--product <PRODUCT_IDENTIFIER>] [--descr <device_group_description>]
     [--target <DEVICE_GROUP_IDENTIFIER>] [--output <mode>] [--help]
@@ -677,7 +677,7 @@ Creates a new Device Group for the specified Product. Fails if a Device Group wi
 
 #### Device Group Delete ####
 
-```
+```shell
 impt dg delete [--dg <DEVICE_GROUP_IDENTIFIER>] [--builds] [--force] [--confirmed] [--output <mode>] [--help]
 ```
 
@@ -702,7 +702,7 @@ The user is asked to confirm the operation, unless confirmed automatically with 
 
 #### Device Group Info ####
 
-```
+```shell
 impt dg info [--dg <DEVICE_GROUP_IDENTIFIER>] [--full] [--output <mode>] [--help]
 ```
 
@@ -717,7 +717,7 @@ Displays information about the specified Device Group.
 
 #### Device Group List ####
 
-```
+```shell
 impt dg list [--owner <ACCOUNT_IDENTIFIER>] [--product <PRODUCT_IDENTIFIER>]
     [--dg-type <device_group_type>] [--output <mode>] [--help]
 ```
@@ -739,7 +739,7 @@ The returned list of the Device Groups may be filtered. Filtering uses any combi
 
 #### Device Group Reassign ####
 
-```
+```shell
 impt dg reassign --from <DEVICE_GROUP_IDENTIFIER> [--to <DEVICE_GROUP_IDENTIFIER>]
     [--output <mode>] [--help]
 ```
@@ -757,7 +757,7 @@ The operation may also fail for some combinations of Device Group [type](#device
 
 #### Device Group Restart ####
 
-```
+```shell
 impt dg restart [--dg <DEVICE_GROUP_IDENTIFIER>] [--conditional] [--log] [--output <mode>] [--help]
 ```
 
@@ -773,7 +773,7 @@ Reboots all of the devices assigned to the specified Device Group and, optionall
 
 #### Device Group Unassign ####
 
-```
+```shell
 impt dg unassign [--dg <DEVICE_GROUP_IDENTIFIER>] [--unbond <unbond_key>] [--output <mode>] [--help]
 ```
 
@@ -788,7 +788,7 @@ Unassigns all of the devices from the specified Device Group. Does nothing if th
 
 #### Device Group Update ####
 
-```
+```shell
 impt dg update [--dg <DEVICE_GROUP_IDENTIFIER>] [--name <device_group_name>]
     [--descr <device_group_description>] [--target <DEVICE_GROUP_IDENTIFIER>]
     [--load-code-after-blessing [true|false]]
@@ -812,7 +812,7 @@ Updates the specified Device Group. Fails if the specified Device Group does not
 
 #### Log Get ####
 
-```
+```shell
 impt log get [--device <DEVICE_IDENTIFIER>] [--page-size <number_of_entries>]
     [--page-number <page_number>] [--output <mode>] [--help]
 ```
@@ -835,7 +835,7 @@ If the `--page-number` option is specified, the command displays the specified p
 
 #### Log Stream ####
 
-```
+```shell
 impt log stream [--device <DEVICE_IDENTIFIER>] [--dg <DEVICE_GROUP_IDENTIFIER>] [--output <mode>] [--help]
 ```
 
@@ -858,7 +858,7 @@ The command allows you to add multiple devices to the newly created log stream. 
 
 #### Login Key Create ####
 
-```
+```shell
 impt loginkey create [--pwd <password>] [--descr <login_key_description>] [--output <mode>] [--help]
 ```
 
@@ -875,7 +875,7 @@ Creates a new login key for the current account.
 
 #### Login Key Delete ####
 
-```
+```shell
 impt loginkey delete --lk <login_key_id> [--pwd <password>] [--confirmed] [--output <mode>] [--help]
 ```
 
@@ -891,7 +891,7 @@ Deletes the specified login key. The user is asked to confirm the operation, unl
 
 #### Login Key Info ####
 
-```
+```shell
 impt loginkey info --lk <login_key_id> [--output <mode>] [--help]
 ```
 
@@ -905,7 +905,7 @@ Displays information about the specified Login Key.
 
 #### Login Key List ####
 
-```
+```shell
 impt loginkey list [--output <mode>] [--help]
 ```
 
@@ -918,7 +918,7 @@ Displays information about all of the login keys belonging to the current accoun
 
 #### Login Key Update ####
 
-```
+```shell
 impt loginkey update --lk <login_key_id> [--pwd <password>] --descr <login_key_description>
     [--output <mode>] [--help]
 ```
@@ -937,7 +937,7 @@ Updates the specified login key’s description.
 
 #### Product Create ####
 
-```
+```shell
 impt product create --name <product_name> [--descr <product_description>] [--output <mode>] [--help]
 ```
 
@@ -952,7 +952,7 @@ Creates a new Product. Fails if a Product with the specified name already exists
 
 #### Product Delete ####
 
-```
+```shell
 impt product delete [--product <PRODUCT_IDENTIFIER>] [--builds] [--force] [--confirmed]
     [--output <mode>] [--help]
 ```
@@ -974,7 +974,7 @@ The user is asked to confirm the operation, unless confirmed automatically with 
 
 #### Product Info ####
 
-```
+```shell
 impt product info [--product <PRODUCT_IDENTIFIER>] [--full] [--output <mode>] [--help]
 ```
 
@@ -989,7 +989,7 @@ Displays information about the specified Product.
 
 #### Product List ####
 
-```
+```shell
 impt product list [--owner <ACCOUNT_IDENTIFIER>] [--output <mode>] [--help]
 ```
 
@@ -1008,7 +1008,7 @@ The returned list of the Products may be filtered. Filtering uses any combinatio
 
 #### Product Update ####
 
-```
+```shell
 impt product update [--product <PRODUCT_IDENTIFIER>] [--name <product_name>]
     [--descr <product_description>] [--output <mode>] [--help]
 ```
@@ -1027,7 +1027,7 @@ Updates the specified Product with a new name and/or description. Fails if the s
 
 #### Project Create ####
 
-```
+```shell
 impt project create --product <PRODUCT_IDENTIFIER> [--create-product] --name <device_group_name>
     [--descr <device_group_description>] [--device-file <device_file>] [--agent-file <agent_file>]
     [--pre-factory] [--target <DEVICE_GROUP_IDENTIFIER>] [--create-target] [--confirmed]
@@ -1064,7 +1064,7 @@ At the end of the command execution, information about the Project is displayed 
 
 #### Project Delete ####
 
-```
+```shell
 impt project delete [--entities] [--files] [--all] [--confirmed] [--output <mode>] [--help]
 ```
 
@@ -1093,7 +1093,7 @@ The user is informed about all entities and files which are going to be deleted 
 
 #### Project Info ####
 
-```
+```shell
 impt project info [--full] [--output <mode>] [--help]
 ```
 
@@ -1109,7 +1109,7 @@ Informs the user if the Device Group referenced by [Project file](#project-files
 
 #### Project Link ####
 
-```
+```shell
 impt project link --dg <DEVICE_GROUP_IDENTIFIER> [--device-file <device_file>]
     [--agent-file <agent_file>] [--confirmed] [--output <mode>] [--help]
 ```
@@ -1137,7 +1137,7 @@ At the end of the command execution, information about the Project is displayed 
 
 #### Project Update ####
 
-```
+```shell
 impt project update [--name <device_group_name>] [--descr <device_group_description>]
     [--device-file <device_file>] [--agent-file <agent_file>] [--target <DEVICE_GROUP_IDENTIFIER>]
     [--output <mode>] [--help]
@@ -1163,7 +1163,7 @@ At the end of the command execution, information about the Project is displayed 
 
 #### Test Create ####
 
-```
+```shell
 impt test create --dg <DEVICE_GROUP_IDENTIFIER> [--device-file <device_file>]
     [--agent-file <agent_file>] [--timeout <timeout>] [--stop-on-fail [true|false]]
     [--allow-disconnect [true|false]] [--builder-cache [true|false]]
@@ -1195,7 +1195,7 @@ At the end of the command execution, information about the test configuration is
 
 #### Test Delete ####
 
-```
+```shell
 impt test delete [--github-config] [--builder-config] [--entities] [--all] [--confirmed]
     [--output <mode>] [--help]
 ```
@@ -1227,7 +1227,7 @@ The user is asked to confirm the operation unless confirmed automatically with t
 
 #### Test Github ####
 
-```
+```shell
 impt test github --github-config <github_credentials_file_name> [--user <github_username>
     [--pwd <github_password>]] [--confirmed] [--output <mode>] [--help]
 ```
@@ -1251,7 +1251,7 @@ If the `--user` option is not specified, the user is asked to input the GitHub c
 
 #### Test Info ####
 
-```
+```shell
 impt test info [--output <mode>] [--help]
 ```
 
@@ -1264,7 +1264,7 @@ Displays information about the test configuration defined by the [test configura
 
 #### Test Run ####
 
-```
+```shell
 impt test run [--tests <test_pattern>] [--clear-cache] [--output <mode>] [--help]
 ```
 
@@ -1279,7 +1279,7 @@ Runs the tests specified by the [test configuration file](#test-configuration-fi
 
 #### Test Update ####
 
-```
+```shell
 impt test update [--dg <DEVICE_GROUP_IDENTIFIER>] [--device-file [<device_file>]]
     [--agent-file [<agent_file>]] [--timeout <timeout>] [--stop-on-fail [true|false]]
     [--allow-disconnect [true|false]] [--builder-cache [true|false]]
@@ -1310,7 +1310,7 @@ At the end of the command execution, information about the test configuration is
 
 #### Webhook Create ####
 
-```
+```shell
 impt webhook create [--dg <DEVICE_GROUP_IDENTIFIER>] --url <target_url> --event <triggered_event>
     --mime <content_type> [--output <mode>] [--help]
 ```
@@ -1328,7 +1328,7 @@ Creates a new webhook for the specified Device Group.
 
 #### Webhook Delete ####
 
-```
+```shell
 impt webhook delete --wh <webhook_id> [--confirmed] [--output <mode>] [--help]
 ```
 
@@ -1345,7 +1345,9 @@ The user is asked to confirm the operation unless confirmed automatically with t
 
 #### Webhook Info ####
 
-`impt webhook info --wh <webhook_id> [--output <mode>] [--help]`
+```shell
+impt webhook info --wh <webhook_id> [--output <mode>] [--help]
+```
 
 Displays information about the specified webhook.
 
@@ -1357,7 +1359,7 @@ Displays information about the specified webhook.
 
 #### Webhook List ####
 
-```
+```shell
 impt webhook list [--owner <ACCOUNT_IDENTIFIER>] [--product <PRODUCT_IDENTIFIER>]
     [--dg <DEVICE_GROUP_IDENTIFIER>] [--dg-type <device_group_type>]
     [--url <target_url>] [--event <triggered_event>] [--output <mode>] [--help]
@@ -1383,7 +1385,7 @@ The returned list of the webhooks may be filtered with any combination of the de
 
 #### Webhook Update ####
 
-```
+```shell
 impt webhook update --wh <webhook_id> [--url <target_url>] [--mime <content_type>]
     [--output <mode>] [--help]
 ```
@@ -1398,7 +1400,7 @@ Updates the specified webhook with a new target URL and/or MIME content-type. Fa
 | --output | -z | No | Yes | Adjusts the [command's output](#command-output) |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
-## List of Aliases ##
+## List Of Aliases ##
 
 | Command<br>Option<br>Alias | Command Option<br>Full Name(s) |
 | --- | --- |
