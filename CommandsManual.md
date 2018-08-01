@@ -264,6 +264,8 @@ If neither the `--user` nor the `--lk` option is specified, the user is asked to
 
 If the `--user` option is specified but the `--pwd` option is not, the user is asked to input the account password.
 
+If multi-factor authentication is enabled for the account, the user is asked to input one-time password.
+
 The user is asked to confirm the operation if the corresponding auth file already exists, unless confirmed automatically with the `--confirmed` option. If confirmed, the existing auth file is overwritten.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
