@@ -51,6 +51,8 @@ describe('impt auth by user/password test suite >', () => {
         return ImptTestingHelper.runCommand('impt auth logout', ImptTestingHelper.emptyCheck);
     }
 
+	//return true;
+	
     // negative test - run 'impt auth info' command without login
     it('auth info without login', (done) => {
         ImptTestingHelper.runCommand('impt auth info', ImptTestingHelper.checkFailStatus).
@@ -73,16 +75,71 @@ describe('impt auth by user/password test suite >', () => {
             then(done).
             catch(error => done.fail(error));
     });
-
-    it('check global auth info', (done) => {
+	
+	
+		it('check global auth info', (done) => {
+		const endpoint = config.apiEndpoint ? `${config.apiEndpoint}` : `${DEFAULT_ENDPOINT}`;
         ImptTestingHelper.runCommand('impt auth info', (commandOut) => {
-                expect(commandOut).toMatch('Global');
-                expect(commandOut).toMatch(config.email);
-                ImptTestingHelper.checkSuccessStatus(commandOut);
+				expect(commandOut).toMatch(endpoint);
+				ImptTestingHelper.checkAttribute(commandOut, 'auto refresh', 'true');
+				expect(commandOut).toMatch('Global');
+				expect(commandOut).toMatch('User/Password');
+				expect(commandOut).toMatch(config.email);
+			//  temporary disabled - need adding environment variable IMPT_USER in config.js file 
+			//	expect(commandOut).toMatch(config.user);
+				const idMatcher = commandOut.match(new RegExp(`${ImptTestingHelper.ATTR_ID}:\\s+([A-Za-z0-9-]+)`));
+                expect(idMatcher).toBeNonEmptyArray();
+				ImptTestingHelper.checkSuccessStatus(commandOut);
             }).
             then(done).
             catch(error => done.fail(error));
     });
+	
+	
+	
+		 // negative test - run 'impt auth info -z' command without value of -z option
+	it('auth info output option without value', (done) => {
+		ImptTestingHelper.runCommand('impt auth info -z', (commandOut) => {
+				expect(commandOut).toMatch('Not enough arguments');
+				ImptTestingHelper.checkFailStatus(commandOut);
+            }).
+            then(done).
+            catch(error => done.fail(error));
+    });
+		
+	
+	it('check auth info help', (done) => {
+		ImptTestingHelper.runCommand('impt auth info --help', (commandOut) => {
+				expect(commandOut).toMatch('Usage: impt auth info');
+			}).
+            then(done).
+            catch(error => done.fail(error));
+    });
+	
+	it('auth info json output', (done) => {
+		ImptTestingHelper.runCommand('impt auth info -z json', (commandOut) => {
+				 try {
+                        const json = JSON.parse(commandOut);
+                        expect(json.Auth).toBeDefined();
+                    } catch (error) {
+                        done.fail('JSON format data reading failed: ' + error);
+                    }
+			}).
+            then(done).
+            catch(error => done.fail(error));
+    });
+	
+	it('auth info debug output', (done) => {
+		ImptTestingHelper.runCommand('impt auth info -z debug', (commandOut) => {
+				expect(commandOut).toMatch('request with options:');
+				expect(commandOut).toMatch('Response headers:');
+				expect(commandOut).toMatch('Response body:');
+				ImptTestingHelper.checkSuccessStatus(commandOut);
+			}).
+            then(done).
+            catch(error => done.fail(error));
+    });
+	
 
     it('repeated global temp login', (done) => {
         const endpoint = config.apiEndpoint ? `-e ${config.apiEndpoint}` : '';
@@ -93,10 +150,8 @@ describe('impt auth by user/password test suite >', () => {
             catch(error => done.fail(error));
     });
 
-    it('check global temp auth info', (done) => {
+    it('check temp auth info', (done) => {
         ImptTestingHelper.runCommand('impt auth info', (commandOut) => {
-                expect(commandOut).toMatch('Global');
-                expect(commandOut).toMatch(config.email);
                 ImptTestingHelper.checkAttribute(commandOut, 'auto refresh', 'false');
                 ImptTestingHelper.checkSuccessStatus(commandOut);
             }).
@@ -129,6 +184,10 @@ describe('impt auth by user/password test suite >', () => {
             then(done).
             catch(error => done.fail(error));
     });
+	
+
+	
+	
 
     it('repeated local temp login', (done) => {
         const endpoint = config.apiEndpoint ? `-e ${config.apiEndpoint}` : `-e ${DEFAULT_ENDPOINT}`;
@@ -176,4 +235,13 @@ describe('impt auth by user/password test suite >', () => {
             then(done).
             catch(error => done.fail(error));
     });
+	
+	
+	
+
+	
+	
+	
+	
+	
 });
