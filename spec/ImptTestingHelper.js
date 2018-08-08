@@ -98,23 +98,23 @@ class ImptTestingHelper {
             then(outputChecker);
     }
 	
-	 // Executes impt command and calls codeChecker function to check the return code
-     static runCommandRetCode(command, codeChecker) {
+	// Executes impt command and calls outputChecker function to check the command output and return code 
+	static runCommandEx(command, outputChecker) {
         return new Promise((resolve, reject) => {
                 if (config.debug) {
                     console.log('Running command: ' + command);
                 }
                 Shell.cd(TESTS_EXECUTION_FOLDER);
                 Shell.exec(`node ${__dirname}/../bin/${command}`, { silent : !config.debug }, (code, stdout, stderr) => {
-                    resolve(code);
+                    resolve({code: code, output: stdout.replace(/\u001b\[.*?m/g, '')});
 				});
             }).
-            then(codeChecker);
+            then(outputChecker);
     }
-	
+	 
     // Checks IMPT COMMAND SUCCEEDS status of the command
     static checkSuccessStatus(commandOut) {
-        expect(commandOut).toMatch('IMPT COMMAND SUCCEEDS');
+		expect(commandOut).toMatch('IMPT COMMAND SUCCEEDS');
     }
 
     // Checks IMPT COMMAND FAILS status of the command
@@ -123,23 +123,38 @@ class ImptTestingHelper {
         expect(commandOut).toMatch('IMPT COMMAND FAILS');
     }
 	
-
-    // Checks non zero return code of the command
-    static checkReturnCodeFail(code) {
-       expect(code).not.toEqual(0);
-	   console.log("code=" + code);
+	// Does not check command status, just check 'Access to impCentral failed or timed out' error doesn't occur.
+    static emptyCheck(commandOut) {
+        expect(commandOut).not.toMatch(UserInteractor.ERRORS.ACCESS_FAILED);
     }
-	
-	// Checks zero return code of the command
-	static checkReturnCodeSuccess(code) {
-        expect(code).toEqual(0);
-		console.log("code=" + code);
-    }
-
-
     // Checks if the command output contains the specified attribute name and value
     static checkAttribute(commandOut, attrName, attrValue) {
-        expect(commandOut).toMatch(new RegExp(`${attrName}:\\s+${attrValue}`));
+        expect(commandOut).toMatch(new RegExp(`${attrName}"?:\\s+${attrValue}`));
+    }
+	
+	
+	
+	
+	
+	// Checks success return code of the command
+    static checkSuccessStatusEx(commandOut) {
+		expect(commandOut.code).toEqual(0);
+    }
+
+    // Checks fail return code of the command
+    static checkFailStatusEx(commandOut) {
+        expect(commandOut.output).not.toMatch(UserInteractor.ERRORS.ACCESS_FAILED);
+        expect(commandOut.code).not.toEqual(0);
+    }
+	
+	// Does not check command status, just check 'Access to impCentral failed or timed out' error doesn't occur.
+    static emptyCheckEx(commandOut) {
+        expect(commandOut.output).not.toMatch(UserInteractor.ERRORS.ACCESS_FAILED);
+    }
+	
+	// Checks if the command output contains the specified attribute name and value
+    static checkAttributeEx(commandOut, attrName, attrValue) {
+        expect(commandOut.output).toMatch(new RegExp(`${attrName}:\\s+${attrValue}`));
     }
 }
 
