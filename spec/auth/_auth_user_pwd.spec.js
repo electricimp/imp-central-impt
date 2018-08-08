@@ -26,8 +26,8 @@
 
 require('jasmine-expect');
 const FS = require('fs');
-const config = require('../../../config');
-const ImptTestingHelper = require('../../../ImptTestingHelper');
+const config = require('../config');
+const ImptTestingHelper = require('../ImptTestingHelper');
 
 const DEFAULT_ENDPOINT = 'https://api.electricimp.com/v5';
 
