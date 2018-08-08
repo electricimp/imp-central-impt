@@ -1,17 +1,32 @@
-# impt tests summary table
+# impt tests summary table  
 
-| Command group |Command name | Test case | Test name  |
-| :-------------: | :-------------: |------------- | ------------- | 
-| Auth | info | output of global auth info |[test file](auth/auth_user_pwd.spec.js) "check global auth info" |
-|      |  | output of temporary auth info |[test file](auth/auth_user_pwd.spec.js) "check temp auth info" |
-|      |  | output of local auth info |[test file](auth/auth_user_pwd.spec.js) "check local auth info" |
-|      |  | output of auth info in minimal format | planned with medium priority |
-|      |  | output of auth info in json format |[test file](auth/auth_user_pwd.spec.js) "auth info json output" |
-|      |  | output of auth info in debug format |[test file](auth/auth_user_pwd.spec.js) "auth info debug output" |
-|      |  | output of auth info help page |[test file](auth/auth_user_pwd.spec.js) "check auth info help" |
-|      |  | output of auth info without login |[test file](auth/auth_user_pwd.spec.js) "auth info without login" |
-|      |  | output command option without argument |[test file](auth/auth_user_pwd.spec.js) "auth info output option without value" |
-|      | login |||
-|      |  |||
-|      |  |||
-|      |  |||
+[Google Doc](https://docs.google.com/spreadsheets/d/1sAOkKtzRiPov6Yq6fYbqpluihLuWpczDOkmuQCYFb9c/edit?usp=sharing)
+
+
+|Command group|Command name|Precondition||||||||||
+|----|-----|----|-----|----|-----|----|-----|----|-----|----|-----|
+||||auth|local|temp|endpoint|confirmed|output||||
+|auth|login|not auth|user/pwd|||||default|[_auth_user_pwd.spec.js](/auth/_auth_user_pwd.spec.js) |global auth login|
+||||user/pwd||||Y|default|[_auth_user_pwd.spec.js](/auth/_auth_user_pwd.spec.js) |global auth login with confirm|
+||||user/pwd|||Y||default|[_auth_user_pwd.spec.js](/auth/_auth_user_pwd.spec.js) |global auth login with endpoint|
+||||user/pwd|||Y|Y|default|[_auth_user_pwd.spec.js](/auth/_auth_user_pwd.spec.js) |global auth login with endpoint and confirm|
+||||user/pwd||Y|||default|[_auth_user_pwd.spec.js](/auth/_auth_user_pwd.spec.js) |global temp auth login|
+||||user/pwd||Y||Y|default|[_auth_user_pwd.spec.js](/auth/_auth_user_pwd.spec.js) |global temp auth login with confirm|
+||||user/pwd||Y|Y||default|[_auth_user_pwd.spec.js](/auth/_auth_user_pwd.spec.js) |global temp auth login with endpoint|
+||||user/pwd||Y|Y|Y|default|[_auth_user_pwd.spec.js](/auth/_auth_user_pwd.spec.js) |global temp auth login with endpoint and confirm|
+||||user/pwd|Y||||default|[_auth_user_pwd.spec.js](/auth/_auth_user_pwd.spec.js) |local auth login|
+||||user/pwd|Y|||Y|default|[_auth_user_pwd.spec.js](/auth/_auth_user_pwd.spec.js) |local auth login with confirm|
+||||user/pwd|Y||Y||default|[_auth_user_pwd.spec.js](/auth/_auth_user_pwd.spec.js) |local auth login with endpoint|
+||||user/pwd|Y||Y|Y|default|[_auth_user_pwd.spec.js](/auth/_auth_user_pwd.spec.js) |local auth login with endpoint and confirm|
+||||user/pwd|Y|Y|||default|[_auth_user_pwd.spec.js](/auth/_auth_user_pwd.spec.js) |local temp auth login|
+||||user/pwd|Y|Y||Y|default|[_auth_user_pwd.spec.js](/auth/_auth_user_pwd.spec.js) |local temp auth login with confirm|
+||||user/pwd|Y|Y|Y||default|[_auth_user_pwd.spec.js](/auth/_auth_user_pwd.spec.js) |local temp auth login with endpoint|
+||||user/pwd|Y|Y|Y|Y|default|[_auth_user_pwd.spec.js](/auth/_auth_user_pwd.spec.js) |local temp auth login with endpoint and confirm|
+|||global auth|user/pwd||||Y|default|[_auth_user_pwd.spec.js](/auth/_auth_user_pwd.spec.js) |repeated global auth login with confirm|
+||||user/pwd|||Y|Y|default|[_auth_user_pwd.spec.js](/auth/_auth_user_pwd.spec.js) |repeated global auth login with endpoint and confirm|
+||||user/pwd||Y||Y|default|[_auth_user_pwd.spec.js](/auth/_auth_user_pwd.spec.js) |repeated global temp auth login with confirm|
+||||user/pwd||Y|Y|Y|default|[_auth_user_pwd.spec.js](/auth/_auth_user_pwd.spec.js) |repeated global temp auth login with endpoint and confirm|
+|||local auth|user/pwd|Y|||Y|default|[_auth_user_pwd.spec.js](/auth/_auth_user_pwd.spec.js) |repeated local auth login with confirm|
+||||user/pwd|Y||Y|Y|default|[_auth_user_pwd.spec.js](/auth/_auth_user_pwd.spec.js) |repeated local auth login with endpoint and confirm|
+||||user/pwd|Y|Y||Y|default|[_auth_user_pwd.spec.js](/auth/_auth_user_pwd.spec.js) |repeated local temp auth login with confirm|
+||||user/pwd|Y|Y|Y|Y|default|[_auth_user_pwd.spec.js](/auth/_auth_user_pwd.spec.js) |repeated local temp auth login with endpoint and confirm|

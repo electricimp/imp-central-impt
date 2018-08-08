@@ -82,9 +82,10 @@ class ImptTestingHelper {
         Utils.removeDirSync(TESTS_EXECUTION_FOLDER);
         return Promise.resolve();
     }
-
+	
+	
     // Executes impt command and calls outputChecker function to check the command output
-    static runCommand(command, outputChecker) {
+     static runCommand(command, outputChecker) {
         return new Promise((resolve, reject) => {
                 if (config.debug) {
                     console.log('Running command: ' + command);
@@ -92,11 +93,25 @@ class ImptTestingHelper {
                 Shell.cd(TESTS_EXECUTION_FOLDER);
                 Shell.exec(`node ${__dirname}/../bin/${command}`, { silent : !config.debug }, (code, stdout, stderr) => {
                     resolve(stdout.replace(/\u001b\[.*?m/g, ''));
-                });
+				});
             }).
             then(outputChecker);
     }
-
+	
+	 // Executes impt command and calls codeChecker function to check the return code
+     static runCommandRetCode(command, codeChecker) {
+        return new Promise((resolve, reject) => {
+                if (config.debug) {
+                    console.log('Running command: ' + command);
+                }
+                Shell.cd(TESTS_EXECUTION_FOLDER);
+                Shell.exec(`node ${__dirname}/../bin/${command}`, { silent : !config.debug }, (code, stdout, stderr) => {
+                    resolve(code);
+				});
+            }).
+            then(codeChecker);
+    }
+	
     // Checks IMPT COMMAND SUCCEEDS status of the command
     static checkSuccessStatus(commandOut) {
         expect(commandOut).toMatch('IMPT COMMAND SUCCEEDS');
@@ -107,11 +122,20 @@ class ImptTestingHelper {
         expect(commandOut).not.toMatch(UserInteractor.ERRORS.ACCESS_FAILED);
         expect(commandOut).toMatch('IMPT COMMAND FAILS');
     }
+	
 
-    // Does not check command status, just check 'Access to impCentral failed or timed out' error doesn't occur.
-    static emptyCheck(commandOut) {
-        expect(commandOut).not.toMatch(UserInteractor.ERRORS.ACCESS_FAILED);
+    // Checks non zero return code of the command
+    static checkReturnCodeFail(code) {
+       expect(code).not.toEqual(0);
+	   console.log("code=" + code);
     }
+	
+	// Checks zero return code of the command
+	static checkReturnCodeSuccess(code) {
+        expect(code).toEqual(0);
+		console.log("code=" + code);
+    }
+
 
     // Checks if the command output contains the specified attribute name and value
     static checkAttribute(commandOut, attrName, attrValue) {
