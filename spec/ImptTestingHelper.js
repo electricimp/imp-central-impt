@@ -35,6 +35,7 @@ const UserInteractor = require('../lib/util/UserInteractor');
 const TIMEOUT_MS = 100000;
 const TESTS_EXECUTION_FOLDER = `${__dirname}/../__test`;
 
+
 // Helper class for testing impt tool.
 // Contains common methods for testing environment initialization and cleanup,
 // running impt commands, check commands output, ...
@@ -82,8 +83,7 @@ class ImptTestingHelper {
         Utils.removeDirSync(TESTS_EXECUTION_FOLDER);
         return Promise.resolve();
     }
-	
-	
+		
     // Executes impt command and calls outputChecker function to check the command output
      static runCommand(command, outputChecker) {
         return new Promise((resolve, reject) => {
@@ -129,12 +129,8 @@ class ImptTestingHelper {
     }
     // Checks if the command output contains the specified attribute name and value
     static checkAttribute(commandOut, attrName, attrValue) {
-        expect(commandOut).toMatch(new RegExp(`${attrName}"?:\\s+${attrValue}`));
+        expect(commandOut).toMatch(new RegExp(`${attrName}:\\s+${attrValue}`));
     }
-	
-	
-	
-	
 	
 	// Checks success return code of the command
     static checkSuccessStatusEx(commandOut) {
@@ -154,7 +150,7 @@ class ImptTestingHelper {
 	
 	// Checks if the command output contains the specified attribute name and value
     static checkAttributeEx(commandOut, attrName, attrValue) {
-        expect(commandOut.output).toMatch(new RegExp(`${attrName}:\\s+${attrValue}`));
+        expect(commandOut.output).toMatch(new RegExp(`${attrName}"?:?\\s+${attrValue}`));
     }
 }
 
