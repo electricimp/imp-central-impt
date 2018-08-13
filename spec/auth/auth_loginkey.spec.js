@@ -39,7 +39,7 @@ describe('impt auth login by loginkey test suite >', () => {
 	const auth = `--user ${config.email} --pwd ${config.password}`;
 	const endpoint = config.apiEndpoint ? `${config.apiEndpoint}` : `${DEFAULT_ENDPOINT}`;
 	const outmode = '';
-	var loginkey = '';
+	let loginkey = null;
 
 	beforeAll((done) => {
             ImptTestingHelper.init(true).
