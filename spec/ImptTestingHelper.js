@@ -150,7 +150,7 @@ class ImptTestingHelper {
 	
 	// Checks if the command output contains the specified attribute name and value
     static checkAttributeEx(commandOut, attrName, attrValue) {
-        expect(commandOut.output).toMatch(new RegExp(`${attrName}"?:?\\s+${attrValue}`));
+        expect(commandOut.output).toMatch(new RegExp(`${attrName}"?:\\s+"?${attrValue}`));
     }
 }
 

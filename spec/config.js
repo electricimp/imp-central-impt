@@ -24,6 +24,8 @@
 
 'use strict';
 
+exports.username = process.env.IMPT_USER_NAME;
+exports.accountid = process.env.IMPT_ACCOUNT_ID
 exports.email = process.env.IMPT_USER_EMAIL;
 exports.password = process.env.IMPT_USER_PASSWORD;
 exports.devices = process.env.IMPT_DEVICE_IDS ? process.env.IMPT_DEVICE_IDS.split(',') : [];

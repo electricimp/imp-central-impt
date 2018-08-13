@@ -103,7 +103,7 @@ let product_id = null;
             catch(error => done.fail(error));
     });
 	
-/*	it('product list with owner by id', (done) => {
+	it('product list with owner by id', (done) => {
         ImptTestingHelper.runCommandEx(`impt product list --owner ${config.accountid} ${outmode}`, (commandOut) => {
 			expect(commandOut.output).toMatch(`${PRODUCT_NAME}`);
 			expect(commandOut.output).toMatch(`${PRODUCT_NAME_2}`);
@@ -112,11 +112,9 @@ let product_id = null;
             then(done).
             catch(error => done.fail(error));
     });
-*/
+
 	it('product list without owner value', (done) => {
         ImptTestingHelper.runCommandEx(`impt product list --owner ${outmode}`, (commandOut) => {
-			expect(commandOut.output).toMatch(`${PRODUCT_NAME}`);
-			expect(commandOut.output).toMatch(`${PRODUCT_NAME_2}`);
 			ImptTestingHelper.checkFailStatusEx(commandOut);
 			}).
             then(done).

@@ -41,11 +41,11 @@ static globalLogout() {
     }
 	
 static localLogin() {
-        return ImptTestingHelper.runCommandEx(`impt auth login --local ${auth} --confirmed`, ImptTestingHelper.emptyCheckEx);
+        return ImptTestingHelper.runCommandEx(`impt auth login --local --user ${config.email} --pwd ${config.password}--confirmed`, ImptTestingHelper.emptyCheckEx);
     }
 	
 static globalLogin() {
-        return ImptTestingHelper.runCommandEx(`impt auth login ${auth} --confirmed`, ImptTestingHelper.emptyCheckEx);
+        return ImptTestingHelper.runCommandEx(`impt auth login --user ${config.email} --pwd ${config.password} --confirmed`, ImptTestingHelper.emptyCheckEx);
     }
 }
 

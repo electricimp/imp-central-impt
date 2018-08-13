@@ -25,25 +25,22 @@
 'use strict';
 
 require('jasmine-expect');
-const FS = require('fs');
+
 const config = require('../config');
 const ImptTestingHelper = require('../ImptTestingHelper');
 const ImptAuthCommandsHelper = require('./ImptAuthCommandsHelper');
 
 const DEFAULT_ENDPOINT = 'https://api.electricimp.com/v5';
 
-// Test suite for 'impt auth login --user <user_id> --pwd <password>', 'impt auth logout', 'impt auth info' commands.
+// Test suite for 'impt auth login --lk<loginkey>', 'impt auth logout', 'impt auth info' commands.
 // Runs impt auth commands with different combinations of options.
 describe('impt auth login by loginkey test suite >', () => {
     
 	const auth = `--user ${config.email} --pwd ${config.password}`;
-	const local = '--local';
 	const endpoint = config.apiEndpoint ? `${config.apiEndpoint}` : `${DEFAULT_ENDPOINT}`;
 	const outmode = '';
 	var loginkey = '';
-	
 
-	
 	beforeAll((done) => {
             ImptTestingHelper.init(true).
 			then(createLoginkey).
@@ -75,7 +72,7 @@ describe('impt auth login by loginkey test suite >', () => {
 		return ImptTestingHelper.runCommandEx(`impt loginkey delete --lk ${loginkey} --pwd ${config.password} -q`,ImptTestingHelper.emptyCheckEx);
     }
 		
-describe('Not auth preconditions >', () => {	
+describe('Tests with not auth preconditions >', () => {	
 	
 	afterEach((done) => {
            ImptAuthCommandsHelper.localLogout().
