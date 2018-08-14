@@ -55,34 +55,35 @@ describe('impt auth login by loginkey test suite >', () => {
             then(done).
             catch(error => done.fail(error));
     }, ImptTestingHelper.TIMEOUT);
-    
+
     function createLoginkey() {
         return ImptTestingHelper.runCommandEx(`impt loginkey create --pwd ${config.password}`, (commandOut) => {
             const idMatcher = commandOut.output.match(new RegExp(`[0-9a-z]{16}`));
-            if(idMatcher && idMatcher.length > 0){
+            if (idMatcher && idMatcher.length > 0) {
                 loginkey = idMatcher[0];
             }
             else fail("TestSuitInit error: Fail create loginkey");
             ImptTestingHelper.emptyCheckEx(commandOut);
         });
     }
-    
+
     function deleteLoginkey() {
-        return ImptTestingHelper.runCommandEx(`impt loginkey delete --lk ${loginkey} --pwd ${config.password} -q`,ImptTestingHelper.emptyCheckEx);
+        return ImptTestingHelper.runCommandEx(`impt loginkey delete --lk ${loginkey} --pwd ${config.password} -q`,
+            ImptTestingHelper.emptyCheckEx);
     }
-        
-	describe('Tests with not auth preconditions >', () => {    
-		
-		afterEach((done) => {
-		   ImptAuthCommandsHelper.localLogout().
-				then(done).
-				catch(error => done.fail(error));
-		}, ImptTestingHelper.TIMEOUT);
-		
-		it('global auth login by keylogin ', (done) => {
-			ImptTestingHelper.runCommandEx(`impt auth login  --lk ${loginkey} ${outmode}`, ImptTestingHelper.checkSuccessStatusEx).
-				then(done).
-				catch(error => done.fail(error));
-		});    
-	});    
+
+    describe('Tests with not auth preconditions >', () => {
+        afterEach((done) => {
+            ImptAuthCommandsHelper.localLogout().
+                then(done).
+                catch(error => done.fail(error));
+        }, ImptTestingHelper.TIMEOUT);
+
+        it('global auth login by keylogin ', (done) => {
+            ImptTestingHelper.runCommandEx(`impt auth login  --lk ${loginkey} ${outmode}`,
+                ImptTestingHelper.checkSuccessStatusEx).
+                then(done).
+                catch(error => done.fail(error));
+        });
+    });
 });    

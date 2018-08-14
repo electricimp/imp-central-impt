@@ -41,7 +41,7 @@ const PRODUCT_DESCR_2 = 'impt temp product description 2';
 describe('impt product delete test suite >', () => {
     const outmode = '';
     let product_id = null;
-    
+
     beforeAll((done) => {
         ImptTestingHelper.init().
             then(testSuiteInit).
@@ -62,43 +62,43 @@ describe('impt product delete test suite >', () => {
             then(() => ImptTestingHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME_3} -q`, ImptTestingHelper.emptyCheckEx)).
             then(() => ImptTestingHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME_4} -q`, ImptTestingHelper.emptyCheckEx));
     }
-    
+
     function testSuiteInit() {
-        return ImptTestingHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME} --descr "${PRODUCT_DESCR}"`,(commandOut) => {
-                const idMatcher = commandOut.output.match(new RegExp(`${ImptTestingHelper.ATTR_ID}"?:\\s+"?([A-Za-z0-9-]+)`));
-                if(idMatcher && idMatcher.length > 1){
-                    product_id = idMatcher[1];
-                }
-                else fail("TestSuitInit error: Fail create product");
-                ImptTestingHelper.emptyCheckEx(commandOut);
-            }).
+        return ImptTestingHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME} --descr "${PRODUCT_DESCR}"`, (commandOut) => {
+            const idMatcher = commandOut.output.match(new RegExp(`${ImptTestingHelper.ATTR_ID}"?:\\s+"?([A-Za-z0-9-]+)`));
+            if (idMatcher && idMatcher.length > 1) {
+                product_id = idMatcher[1];
+            }
+            else fail("TestSuitInit error: Fail create product");
+            ImptTestingHelper.emptyCheckEx(commandOut);
+        }).
             then(() => ImptTestingHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME_2}`, ImptTestingHelper.emptyCheckEx)).
             then(() => ImptTestingHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME_3}`, ImptTestingHelper.emptyCheckEx)).
             then(() => ImptTestingHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME_4}`, ImptTestingHelper.emptyCheckEx));
-            
+
     }
 
     it('product delete by name without confirmation', (done) => {
         ImptTestingHelper.runCommandEx(`impt product delete --product ${PRODUCT_NAME_2} ${outmode}`, (commandOut) => {
-                ImptTestingHelper.checkFailStatusEx(commandOut);
-            }).
+            ImptTestingHelper.checkFailStatusEx(commandOut);
+        }).
             then(done).
             catch(error => done.fail(error));
     });
-    
+
     it('product delete by name', (done) => {
         ImptTestingHelper.runCommandEx(`impt product delete --product ${PRODUCT_NAME_2} --confirmed ${outmode}`, (commandOut) => {
-                ImptTestingHelper.checkSuccessStatusEx(commandOut);
-            }).
+            ImptTestingHelper.checkSuccessStatusEx(commandOut);
+        }).
             then(done).
             catch(error => done.fail(error));
     });
-    
+
     it('product delete by id', (done) => {
         ImptTestingHelper.runCommandEx(`impt product delete -p ${product_id} -q ${outmode}`, (commandOut) => {
-                ImptTestingHelper.checkSuccessStatusEx(commandOut);
-            }).
+            ImptTestingHelper.checkSuccessStatusEx(commandOut);
+        }).
             then(done).
             catch(error => done.fail(error));
-    });   
+    });
 });

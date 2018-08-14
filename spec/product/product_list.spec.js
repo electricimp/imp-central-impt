@@ -36,7 +36,7 @@ const PRODUCT_NAME_2 = '__impt_product_2';
 describe('impt product list test suite >', () => {
     const outmode = '';
     let product_id = null;
-        
+
     beforeAll((done) => {
         ImptTestingHelper.init().
             then(testSuiteCleanUp).
@@ -56,70 +56,71 @@ describe('impt product list test suite >', () => {
         return ImptTestingHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME}`, ImptTestingHelper.emptyCheckEx).
             then(() => ImptTestingHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME_2}`, ImptTestingHelper.emptyCheckEx));
     }
-        
+
     function testSuiteCleanUp() {
         return ImptTestingHelper.runCommandEx(`impt product delete --product ${PRODUCT_NAME} --confirmed`, ImptTestingHelper.emptyCheckEx).
-            then(() => ImptTestingHelper.runCommandEx(`impt product delete --product ${PRODUCT_NAME_2} --confirmed`, ImptTestingHelper.emptyCheckEx));
+            then(() => ImptTestingHelper.runCommandEx(`impt product delete --product ${PRODUCT_NAME_2} --confirmed`,
+                ImptTestingHelper.emptyCheckEx));
     }
 
     it('product list', (done) => {
         ImptTestingHelper.runCommandEx(`impt product list  ${outmode}`, (commandOut) => {
-                expect(commandOut.output).toMatch(`${PRODUCT_NAME}`);
-                expect(commandOut.output).toMatch(`${PRODUCT_NAME_2}`);
-                ImptTestingHelper.checkSuccessStatusEx(commandOut);
-            }).
+            expect(commandOut.output).toMatch(`${PRODUCT_NAME}`);
+            expect(commandOut.output).toMatch(`${PRODUCT_NAME_2}`);
+            ImptTestingHelper.checkSuccessStatusEx(commandOut);
+        }).
             then(done).
             catch(error => done.fail(error));
     });
 
     it('product list with owner by me', (done) => {
         ImptTestingHelper.runCommandEx(`impt product list --owner me ${outmode}`, (commandOut) => {
-                expect(commandOut.output).toMatch(`${PRODUCT_NAME}`);
-                expect(commandOut.output).toMatch(`${PRODUCT_NAME_2}`);
-                ImptTestingHelper.checkSuccessStatusEx(commandOut);
-            }).
+            expect(commandOut.output).toMatch(`${PRODUCT_NAME}`);
+            expect(commandOut.output).toMatch(`${PRODUCT_NAME_2}`);
+            ImptTestingHelper.checkSuccessStatusEx(commandOut);
+        }).
             then(done).
             catch(error => done.fail(error));
     });
-    
+
     it('product list with owner by name', (done) => {
         ImptTestingHelper.runCommandEx(`impt product list --owner ${config.username} ${outmode}`, (commandOut) => {
-                expect(commandOut.output).toMatch(`${PRODUCT_NAME}`);
-                expect(commandOut.output).toMatch(`${PRODUCT_NAME_2}`);
-                ImptTestingHelper.checkSuccessStatusEx(commandOut);
-            }).
+            expect(commandOut.output).toMatch(`${PRODUCT_NAME}`);
+            expect(commandOut.output).toMatch(`${PRODUCT_NAME_2}`);
+            ImptTestingHelper.checkSuccessStatusEx(commandOut);
+        }).
             then(done).
             catch(error => done.fail(error));
     });
-    
+
     it('product list with owner by email', (done) => {
         ImptTestingHelper.runCommandEx(`impt product list --owner ${config.email} ${outmode}`, (commandOut) => {
-                expect(commandOut.output).toMatch(`${PRODUCT_NAME}`);
-                expect(commandOut.output).toMatch(`${PRODUCT_NAME_2}`);
-                ImptTestingHelper.checkSuccessStatusEx(commandOut);
-            }).
+            expect(commandOut.output).toMatch(`${PRODUCT_NAME}`);
+            expect(commandOut.output).toMatch(`${PRODUCT_NAME_2}`);
+            ImptTestingHelper.checkSuccessStatusEx(commandOut);
+        }).
             then(done).
             catch(error => done.fail(error));
     });
-    
+
     it('product list with owner by id', (done) => {
         ImptTestingHelper.runCommandEx(`impt product list --owner ${config.accountid} ${outmode}`, (commandOut) => {
-                expect(commandOut.output).toMatch(`${PRODUCT_NAME}`);
-                expect(commandOut.output).toMatch(`${PRODUCT_NAME_2}`);
-                ImptTestingHelper.checkSuccessStatusEx(commandOut);
-            }).
+            expect(commandOut.output).toMatch(`${PRODUCT_NAME}`);
+            expect(commandOut.output).toMatch(`${PRODUCT_NAME_2}`);
+            ImptTestingHelper.checkSuccessStatusEx(commandOut);
+        }).
             then(done).
             catch(error => done.fail(error));
     });
 
     it('product list without owner value', (done) => {
         ImptTestingHelper.runCommandEx(`impt product list --owner ${outmode}`, (commandOut) => {
-                ImptTestingHelper.checkFailStatusEx(commandOut);
-            }).
+            ImptTestingHelper.checkFailStatusEx(commandOut);
+        }).
             then(done).
             catch(error => done.fail(error));
     });
-    
+
     it('product list without output value', (done) => {
         ImptTestingHelper.runCommandEx(`impt product list -z`, ImptTestingHelper.checkFailStatusEx).
             then(() => ImptTestingHelper.runCommandEx(`impt product list -z undefined`, ImptTestingHelper.checkFailStatusEx)).
