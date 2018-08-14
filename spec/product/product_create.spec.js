@@ -40,8 +40,7 @@ const PRODUCT_DESCR_2 = 'impt temp product description 2';
 // Runs 'impt product create' command with different combinations of options,
 
 describe('impt product create test suite >', () => {
-
-const outmode = '';
+    const outmode = '';
     
     beforeAll((done) => {
         ImptTestingHelper.init().
@@ -60,41 +59,41 @@ const outmode = '';
     function testSuiteCleanUp() {
         return ImptTestingHelper.runCommandEx(`impt product delete --product ${PRODUCT_NAME} --confirmed`, ImptTestingHelper.emptyCheckEx).
             then(() => ImptTestingHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME_2} -q`, ImptTestingHelper.emptyCheckEx)).
-			then(() => ImptTestingHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME_3} -q`, ImptTestingHelper.emptyCheckEx)).
-			then(() => ImptTestingHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME_4} -q`, ImptTestingHelper.emptyCheckEx));
+            then(() => ImptTestingHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME_3} -q`, ImptTestingHelper.emptyCheckEx)).
+            then(() => ImptTestingHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME_4} -q`, ImptTestingHelper.emptyCheckEx));
     }
 
     it('product create', (done) => {
         ImptTestingHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME} --descr "${PRODUCT_DESCR}" ${outmode}`, (commandOut) => {
-			ImptTestingHelper.checkAttributeEx(commandOut, 'name', `${PRODUCT_NAME}`);
-			ImptTestingHelper.checkSuccessStatusEx(commandOut);
-			}).
+                ImptTestingHelper.checkAttributeEx(commandOut, 'name', `${PRODUCT_NAME}`);
+                ImptTestingHelper.checkSuccessStatusEx(commandOut);
+            }).
             then(done).
             catch(error => done.fail(error));
     });
 
     it('product create without description', (done) => {
         ImptTestingHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME_2} ${outmode}`, (commandOut) => {
-			ImptTestingHelper.checkAttributeEx(commandOut, 'name', `${PRODUCT_NAME_2}`);
-			ImptTestingHelper.checkSuccessStatusEx(commandOut);
-			}).
+                ImptTestingHelper.checkAttributeEx(commandOut, 'name', `${PRODUCT_NAME_2}`);
+                ImptTestingHelper.checkSuccessStatusEx(commandOut);
+            }).
             then(done).
             catch(error => done.fail(error));
     });
 
-	it('product create with duplicated description', (done) => {
+    it('product create with duplicated description', (done) => {
         ImptTestingHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME_3} --descr "${PRODUCT_DESCR}" ${outmode}`, (commandOut) => {
-			ImptTestingHelper.checkAttributeEx(commandOut, 'name', `${PRODUCT_NAME_3}`);
-			ImptTestingHelper.checkSuccessStatusEx(commandOut);
-			}).
-			then(done).
+                ImptTestingHelper.checkAttributeEx(commandOut, 'name', `${PRODUCT_NAME_3}`);
+                ImptTestingHelper.checkSuccessStatusEx(commandOut);
+            }).
+            then(done).
             catch(error => done.fail(error));
     });
-	
+    
     it('create duplicated product', (done) => {
         ImptTestingHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME} ${outmode}`, ImptTestingHelper.checkFailStatusEx).
             then(() => ImptTestingHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME} -s "${PRODUCT_DESCR_2}" ${outmode}`, ImptTestingHelper.checkFailStatusEx)).
-			then(done).
+            then(done).
             catch(error => done.fail(error));
     });
 
@@ -111,28 +110,26 @@ const outmode = '';
             then(done).
             catch(error => done.fail(error));
     });
-	
-	it('product create without description value', (done) => {
+    
+    it('product create without description value', (done) => {
         ImptTestingHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME_4} -s ${outmode}`, ImptTestingHelper.checkFailStatusEx).
             then(done).
             catch(error => done.fail(error));
     });
-	
-	it('product create without output value', (done) => {
+    
+    it('product create without output value', (done) => {
         ImptTestingHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME_4}  --output`, ImptTestingHelper.checkFailStatusEx).
             then(() => ImptTestingHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME} --output undefined`, ImptTestingHelper.checkFailStatusEx)).
             then(done).
             catch(error => done.fail(error));
     });
-	
-	it('product create with empty description', (done) => {
+    
+    it('product create with empty description', (done) => {
         ImptTestingHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME_4} -s "" ${outmode}`, (commandOut) => {
-			ImptTestingHelper.checkAttributeEx(commandOut, 'name', `${PRODUCT_NAME_4}`);
-			ImptTestingHelper.checkSuccessStatusEx(commandOut);
-			}).
-			then(done).
+                ImptTestingHelper.checkAttributeEx(commandOut, 'name', `${PRODUCT_NAME_4}`);
+                ImptTestingHelper.checkSuccessStatusEx(commandOut);
+            }).
+            then(done).
             catch(error => done.fail(error));
     });
-
 });
-

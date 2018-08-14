@@ -35,7 +35,6 @@ const UserInteractor = require('../lib/util/UserInteractor');
 const TIMEOUT_MS = 100000;
 const TESTS_EXECUTION_FOLDER = `${__dirname}/../__test`;
 
-
 // Helper class for testing impt tool.
 // Contains common methods for testing environment initialization and cleanup,
 // running impt commands, check commands output, ...
@@ -83,7 +82,7 @@ class ImptTestingHelper {
         Utils.removeDirSync(TESTS_EXECUTION_FOLDER);
         return Promise.resolve();
     }
-		
+        
     // Executes impt command and calls outputChecker function to check the command output
      static runCommand(command, outputChecker) {
         return new Promise((resolve, reject) => {
@@ -93,13 +92,13 @@ class ImptTestingHelper {
                 Shell.cd(TESTS_EXECUTION_FOLDER);
                 Shell.exec(`node ${__dirname}/../bin/${command}`, { silent : !config.debug }, (code, stdout, stderr) => {
                     resolve(stdout.replace(/\u001b\[.*?m/g, ''));
-				});
+                });
             }).
             then(outputChecker);
     }
-	
-	// Executes impt command and calls outputChecker function to check the command output and return code 
-	static runCommandEx(command, outputChecker) {
+    
+    // Executes impt command and calls outputChecker function to check the command output and return code 
+    static runCommandEx(command, outputChecker) {
         return new Promise((resolve, reject) => {
                 if (config.debug) {
                     console.log('Running command: ' + command);
@@ -107,14 +106,14 @@ class ImptTestingHelper {
                 Shell.cd(TESTS_EXECUTION_FOLDER);
                 Shell.exec(`node ${__dirname}/../bin/${command}`, { silent : !config.debug }, (code, stdout, stderr) => {
                     resolve({code: code, output: stdout.replace(/\u001b\[.*?m/g, '')});
-				});
+                });
             }).
             then(outputChecker);
     }
-	 
+     
     // Checks IMPT COMMAND SUCCEEDS status of the command
     static checkSuccessStatus(commandOut) {
-		expect(commandOut).toMatch('IMPT COMMAND SUCCEEDS');
+        expect(commandOut).toMatch('IMPT COMMAND SUCCEEDS');
     }
 
     // Checks IMPT COMMAND FAILS status of the command
@@ -122,19 +121,20 @@ class ImptTestingHelper {
         expect(commandOut).not.toMatch(UserInteractor.ERRORS.ACCESS_FAILED);
         expect(commandOut).toMatch('IMPT COMMAND FAILS');
     }
-	
-	// Does not check command status, just check 'Access to impCentral failed or timed out' error doesn't occur.
+    
+    // Does not check command status, just check 'Access to impCentral failed or timed out' error doesn't occur.
     static emptyCheck(commandOut) {
         expect(commandOut).not.toMatch(UserInteractor.ERRORS.ACCESS_FAILED);
     }
+    
     // Checks if the command output contains the specified attribute name and value
     static checkAttribute(commandOut, attrName, attrValue) {
         expect(commandOut).toMatch(new RegExp(`${attrName}:\\s+${attrValue}`));
     }
-	
-	// Checks success return code of the command
+    
+    // Checks success return code of the command
     static checkSuccessStatusEx(commandOut) {
-		expect(commandOut.code).toEqual(0);
+        expect(commandOut.code).toEqual(0);
     }
 
     // Checks fail return code of the command
@@ -142,13 +142,13 @@ class ImptTestingHelper {
         expect(commandOut.output).not.toMatch(UserInteractor.ERRORS.ACCESS_FAILED);
         expect(commandOut.code).not.toEqual(0);
     }
-	
-	// Does not check command status, just check 'Access to impCentral failed or timed out' error doesn't occur.
+    
+    // Does not check command status, just check 'Access to impCentral failed or timed out' error doesn't occur.
     static emptyCheckEx(commandOut) {
         expect(commandOut.output).not.toMatch(UserInteractor.ERRORS.ACCESS_FAILED);
     }
-	
-	// Checks if the command output contains the specified attribute name and value
+    
+    // Checks if the command output contains the specified attribute name and value
     static checkAttributeEx(commandOut, attrName, attrValue) {
         expect(commandOut.output).toMatch(new RegExp(`${attrName}"?:\\s+"?${attrValue}`));
     }

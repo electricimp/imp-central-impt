@@ -31,20 +31,19 @@ const ImptTestingHelper = require('../ImptTestingHelper');
 
 // Helper class for testing impt auth commands.
 class ImptAuthCommandsHelper {
-
-static localLogout() {
+    static localLogout() {
         return ImptTestingHelper.runCommandEx(`impt auth logout --local `, ImptTestingHelper.emptyCheckEx);
     }
-	
-static globalLogout() {
+    
+    static globalLogout() {
         return ImptTestingHelper.runCommandEx(`impt auth logout`, ImptTestingHelper.emptyCheckEx);
     }
-	
-static localLogin() {
+    
+    static localLogin() {
         return ImptTestingHelper.runCommandEx(`impt auth login --local --user ${config.email} --pwd ${config.password}--confirmed`, ImptTestingHelper.emptyCheckEx);
     }
-	
-static globalLogin() {
+    
+    static globalLogin() {
         return ImptTestingHelper.runCommandEx(`impt auth login --user ${config.email} --pwd ${config.password} --confirmed`, ImptTestingHelper.emptyCheckEx);
     }
 }

@@ -35,57 +35,54 @@ const DEFAULT_ENDPOINT = 'https://api.electricimp.com/v5';
 // Test suite for 'impt auth login --lk<loginkey>', 'impt auth logout', 'impt auth info' commands.
 // Runs impt auth commands with different combinations of options.
 describe('impt auth login by loginkey test suite >', () => {
-    
-	const auth = `--user ${config.email} --pwd ${config.password}`;
-	const endpoint = config.apiEndpoint ? `${config.apiEndpoint}` : `${DEFAULT_ENDPOINT}`;
-	const outmode = '';
-	let loginkey = null;
+    const auth = `--user ${config.email} --pwd ${config.password}`;
+    const endpoint = config.apiEndpoint ? `${config.apiEndpoint}` : `${DEFAULT_ENDPOINT}`;
+    const outmode = '';
+    let loginkey = null;
 
-	beforeAll((done) => {
-            ImptTestingHelper.init(true).
-			then(createLoginkey).
-			then(ImptAuthCommandsHelper.localLogout).
-			then(ImptAuthCommandsHelper.globalLogout).
+    beforeAll((done) => {
+        ImptTestingHelper.init(true).
+            then(createLoginkey).
+            then(ImptAuthCommandsHelper.localLogout).
+            then(ImptAuthCommandsHelper.globalLogout).
             then(done).
             catch(error => done.fail(error));
     }, ImptTestingHelper.TIMEOUT);
 
     afterAll((done) => {
         ImptTestingHelper.cleanUp().
-			then(deleteLoginkey).
+            then(deleteLoginkey).
             then(done).
             catch(error => done.fail(error));
     }, ImptTestingHelper.TIMEOUT);
-	
-	function createLoginkey() {
+    
+    function createLoginkey() {
         return ImptTestingHelper.runCommandEx(`impt loginkey create --pwd ${config.password}`, (commandOut) => {
-			const idMatcher = commandOut.output.match(new RegExp(`[0-9a-z]{16}`));
+            const idMatcher = commandOut.output.match(new RegExp(`[0-9a-z]{16}`));
             if(idMatcher && idMatcher.length > 0){
-				loginkey = idMatcher[0];
-			}
-			else fail("TestSuitInit error: Fail create loginkey");
-			ImptTestingHelper.emptyCheckEx(commandOut);
-		});
+                loginkey = idMatcher[0];
+            }
+            else fail("TestSuitInit error: Fail create loginkey");
+            ImptTestingHelper.emptyCheckEx(commandOut);
+        });
     }
-	
-	function deleteLoginkey() {
-		return ImptTestingHelper.runCommandEx(`impt loginkey delete --lk ${loginkey} --pwd ${config.password} -q`,ImptTestingHelper.emptyCheckEx);
+    
+    function deleteLoginkey() {
+        return ImptTestingHelper.runCommandEx(`impt loginkey delete --lk ${loginkey} --pwd ${config.password} -q`,ImptTestingHelper.emptyCheckEx);
     }
+        
+	describe('Tests with not auth preconditions >', () => {    
 		
-describe('Tests with not auth preconditions >', () => {	
-	
-	afterEach((done) => {
-           ImptAuthCommandsHelper.localLogout().
-            then(done).
-            catch(error => done.fail(error));
-    }, ImptTestingHelper.TIMEOUT);
-	
-	it('global auth login by keylogin ', (done) => {
-        ImptTestingHelper.runCommandEx(`impt auth login  --lk ${loginkey} ${outmode}`, ImptTestingHelper.checkSuccessStatusEx).
-            then(done).
-            catch(error => done.fail(error));
-    });
-	
-});	
-
-});	
+		afterEach((done) => {
+		   ImptAuthCommandsHelper.localLogout().
+				then(done).
+				catch(error => done.fail(error));
+		}, ImptTestingHelper.TIMEOUT);
+		
+		it('global auth login by keylogin ', (done) => {
+			ImptTestingHelper.runCommandEx(`impt auth login  --lk ${loginkey} ${outmode}`, ImptTestingHelper.checkSuccessStatusEx).
+				then(done).
+				catch(error => done.fail(error));
+		});    
+	});    
+});    
