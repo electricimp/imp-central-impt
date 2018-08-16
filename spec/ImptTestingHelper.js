@@ -154,7 +154,14 @@ class ImptTestingHelper {
 
     // Checks if the command output contains the specified attribute name and value
     static checkAttributeEx(commandOut, attrName, attrValue) {
-        expect(commandOut.output).toMatch(new RegExp(`${attrName}"?:\\s+"?${attrValue}`));
+        expect(commandOut.output).toMatch(new RegExp(`${attrName}"?:\\s+"?${attrValue}("|\\s)`));
+    }
+
+    // Checks if the command output contains the specified value by output mode
+    static checkValueByOutputEx(condition, commandOut, value) {
+        const matcher = condition.match(('-z\\s+debug')|('-z\\s+debug'));
+        if (matcher && matcher.length) expect(commandOut.output).toMatch(value);
+        else expect(true).toBeTrue;
     }
 }
 

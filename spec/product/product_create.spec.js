@@ -27,6 +27,8 @@
 require('jasmine-expect');
 const config = require('../config');
 const ImptTestingHelper = require('../ImptTestingHelper');
+const Identifier = require('../../lib/util/Identifier');
+const UserInterractor = require('../../lib/util/UserInteractor');
 
 const PRODUCT_NAME = '__impt_product';
 const PRODUCT_NAME_2 = '__impt_product_2';
@@ -41,7 +43,7 @@ const PRODUCT_DESCR_2 = 'impt temp product description 2';
 
 describe('impt product create test suite >', () => {
     const outmode = '';
-
+    let product_id = null;
     beforeAll((done) => {
         ImptTestingHelper.init().
             then(testSuiteCleanUp).
@@ -63,20 +65,38 @@ describe('impt product create test suite >', () => {
             then(() => ImptTestingHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME_4} -q`, ImptTestingHelper.emptyCheckEx));
     }
 
-    it('product create', (done) => {
+    fit('product create', (done) => {
         ImptTestingHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME} --descr "${PRODUCT_DESCR}" ${outmode}`, (commandOut) => {
-            ImptTestingHelper.checkAttributeEx(commandOut, 'name', `${PRODUCT_NAME}`);
+            ImptTestingHelper.checkValueByOutputEx(`${outmode}`,
+                `${commandOut, Identifier.ENTITY_TYPE.TYPE_PRODUCT}\\s+"${PRODUCT_NAME}"\\s+${UserInterractor.MESSAGES.ENTITY_CREATED}`);
+            ImptTestingHelper.checkAttributeEx(commandOut, ImptTestingHelper.ATTR_NAME, `${PRODUCT_NAME}`);
+            const idMatcher = commandOut.output.match(new RegExp(`${ImptTestingHelper.ATTR_ID}"?:\\s+"?([A-Za-z0-9-]+)`));
+            if (idMatcher && idMatcher.length > 1) {
+                product_id = idMatcher[1];
+            }
             ImptTestingHelper.checkSuccessStatusEx(commandOut);
         }).
+            then(() => expect(product_id).not.toBeNull).
+            then(() => ImptTestingHelper.runCommandEx(`impt product info -p ${product_id}  ${outmode}`, (commandOut) => {
+                ImptTestingHelper.checkAttributeEx(commandOut, ImptTestingHelper.ATTR_NAME, `${PRODUCT_NAME}`);
+                ImptTestingHelper.checkAttributeEx(commandOut, ImptTestingHelper.ATTR_DESCRIPTION, `${PRODUCT_DESCR}`);
+                ImptTestingHelper.checkAttributeEx(commandOut, ImptTestingHelper.ATTR_ID, `${product_id}`);
+                ImptTestingHelper.checkSuccessStatusEx(commandOut);
+            })).
             then(done).
             catch(error => done.fail(error));
     });
 
-    it('product create without description', (done) => {
+    fit('product create without description', (done) => {
         ImptTestingHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME_2} ${outmode}`, (commandOut) => {
-            ImptTestingHelper.checkAttributeEx(commandOut, 'name', `${PRODUCT_NAME_2}`);
+            ImptTestingHelper.checkAttributeEx(commandOut, ImptTestingHelper.ATTR_NAME, `${PRODUCT_NAME_2}`);
             ImptTestingHelper.checkSuccessStatusEx(commandOut);
         }).
+            then(() => ImptTestingHelper.runCommandEx(`impt product info -p ${PRODUCT_NAME_2}  ${outmode}`, (commandOut) => {
+                ImptTestingHelper.checkAttributeEx(commandOut, ImptTestingHelper.ATTR_NAME, `${PRODUCT_NAME_2}`);
+                ImptTestingHelper.checkAttributeEx(commandOut, ImptTestingHelper.ATTR_DESCRIPTION, '');
+                ImptTestingHelper.checkSuccessStatusEx(commandOut);
+            })).
             then(done).
             catch(error => done.fail(error));
     });
