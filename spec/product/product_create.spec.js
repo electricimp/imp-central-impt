@@ -89,6 +89,8 @@ describe('impt product create test suite >', () => {
 
     fit('product create without description', (done) => {
         ImptTestingHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME_2} ${outmode}`, (commandOut) => {
+            ImptTestingHelper.checkValueByOutputEx(`${outmode}`,
+                `${commandOut, Identifier.ENTITY_TYPE.TYPE_PRODUCT}\\s+"${PRODUCT_NAME_2}"\\s+${UserInterractor.MESSAGES.ENTITY_CREATED}`);
             ImptTestingHelper.checkAttributeEx(commandOut, ImptTestingHelper.ATTR_NAME, `${PRODUCT_NAME_2}`);
             ImptTestingHelper.checkSuccessStatusEx(commandOut);
         }).
@@ -103,9 +105,16 @@ describe('impt product create test suite >', () => {
 
     it('product create with duplicated description', (done) => {
         ImptTestingHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME_3} --descr "${PRODUCT_DESCR}" ${outmode}`, (commandOut) => {
-            ImptTestingHelper.checkAttributeEx(commandOut, 'name', `${PRODUCT_NAME_3}`);
+            ImptTestingHelper.checkValueByOutputEx(`${outmode}`,
+                `${commandOut, Identifier.ENTITY_TYPE.TYPE_PRODUCT}\\s+"${PRODUCT_NAME_3}"\\s+${UserInterractor.MESSAGES.ENTITY_CREATED}`);
+            ImptTestingHelper.checkAttributeEx(commandOut, ImptTestingHelper.ATTR_NAME, `${PRODUCT_NAME_3}`);
             ImptTestingHelper.checkSuccessStatusEx(commandOut);
         }).
+            then(() => ImptTestingHelper.runCommandEx(`impt product info -p ${PRODUCT_NAME_3}  ${outmode}`, (commandOut) => {
+                ImptTestingHelper.checkAttributeEx(commandOut, ImptTestingHelper.ATTR_NAME, `${PRODUCT_NAME_3}`);
+                ImptTestingHelper.checkAttributeEx(commandOut, ImptTestingHelper.ATTR_DESCRIPTION, `${PRODUCT_DESCR}`);
+                ImptTestingHelper.checkSuccessStatusEx(commandOut);
+            })).
             then(done).
             catch(error => done.fail(error));
     });
