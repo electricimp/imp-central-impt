@@ -99,7 +99,6 @@ class ImptTestingHelper {
         }).then(outputChecker);
     }
 
-    // Executes impt command and calls outputChecker function to check the command output and return code 
     static runCommandEx(command, outputChecker) {
         return new Promise((resolve, reject) => {
             if (config.debug) {
@@ -109,7 +108,7 @@ class ImptTestingHelper {
             Shell.exec(`node ${__dirname}/../bin/${command}`,
                 { silent: !config.debug },
                 (code, stdout, stderr) => {
-                    resolve({ code: code, output: stdout.replace(/\u001b\[.*?m/g, '') });
+                    resolve({ code: code, output: stdout.replace(/((\u001b\[2K.*\u001b\[1G)|(\u001b\[[0-9]{2}m))/g, '') });
                 }
             );
         }).then(outputChecker);
@@ -157,11 +156,20 @@ class ImptTestingHelper {
         expect(commandOut.output).toMatch(new RegExp(`${attrName}"?:\\s+"?${attrValue}("|\\s)`));
     }
 
-    // Checks if the command output contains the specified value by output mode
-    static checkValueByOutputEx(condition, commandOut, value) {
-        const matcher = condition.match(('-z\\s+debug')|('-z\\s+debug'));
-        if (matcher && matcher.length) expect(commandOut.output).toMatch(value);
-        else expect(true).toBeTrue;
+    // Checks if the command output contains the specified value by output format
+    static checkOutputMessageEx(condition, commandOut, value) {
+        const matcher = condition.match(('-z\\s+json') | ('-z\\s+minimal'));
+        if (matcher && matcher.length) expect(true).toBeTrue;
+        else expect(commandOut.output).toMatch(value);
+    }
+
+    // parse ID from command output and return id value if success, otherwise return null
+    static parseId(commandOut) {
+        const idMatcher = commandOut.output.match(new RegExp(`${ImptTestingHelper.ATTR_ID}"?:\\s+"?([A-Za-z0-9-]+)`));
+        if (idMatcher && idMatcher.length > 1) {
+            return idMatcher[1];
+        }
+        else return null;
     }
 }
 
