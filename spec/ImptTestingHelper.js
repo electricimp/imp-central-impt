@@ -157,8 +157,8 @@ class ImptTestingHelper {
     }
 
     // Checks if the command output contains the specified value by output format
-    static checkOutputMessageEx(condition, commandOut, value) {
-        const matcher = condition.match(('-z\\s+json') | ('-z\\s+minimal'));
+    static checkOutputMessageEx(outputMode, commandOut, value) {
+        const matcher = outputMode.match(('-z\\s+json') | ('-z\\s+minimal'));
         if (matcher && matcher.length) expect(true).toBeTrue;
         else expect(commandOut.output).toMatch(value);
     }
