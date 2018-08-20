@@ -43,7 +43,7 @@ const DEVICE_GROUP_DESCR = 'impt temp device group description';
 // Test suite for 'impt dg create' command.
 // Runs 'impt dg create' command with different combinations of options,
 
-describe('impt device group create test suite >', () => {
+fdescribe('impt device group create test suite >', () => {
     const outputMode = '';
     let dg_id = null;
     let product_id = null;
@@ -102,7 +102,7 @@ describe('impt device group create test suite >', () => {
         );
     }
 
-    fit('device group create', (done) => {
+    it('device group create', (done) => {
         ImptTestingHelper.runCommandEx(`impt dg create --name ${DEVICE_GROUP_NAME} --product ${PRODUCT_NAME} ${outputMode}`, (commandOut) => {
             dg_id = ImptTestingHelper.parseId(commandOut);
             expect(dg_id).not.toBeNull;
@@ -118,5 +118,34 @@ describe('impt device group create test suite >', () => {
             catch(error => done.fail(error));
     });
 
+    it('device group info by id', (done) => {
+        ImptTestingHelper.runCommandEx(`impt dg info -g ${dg_id}  -z json`, (commandOut) => {
+            const json = JSON.parse(commandOut.output);
+            expect(json['Device Group'].id).toBe(dg_id);
+            expect(json['Device Group'].name).toBe(DEVICE_GROUP_NAME);
+            expect(json['Device Group'].type).toBe('development');
+            expect(json['Device Group'].description).toBe('');
+            expect(json['Device Group'].Product.id).toBe(product_id);
+            expect(json['Device Group'].Product.name).toBe(PRODUCT_NAME);
+            ImptTestingHelper.checkSuccessStatusEx(commandOut);
+        }).
+            then(done).
+            catch(error => done.fail(error));
+    });
+
+    it('device group list', (done) => {
+        ImptTestingHelper.runCommandEx(`impt dg list  -z json`, (commandOut) => {
+            const jsonList = JSON.parse(commandOut.output);
+            const json = jsonList.find(element => element['Device Group'].name === DEVICE_GROUP_NAME);
+            expect(json['Device Group'].id).toBe(dg_id);
+            expect(json['Device Group'].name).toBe(DEVICE_GROUP_NAME);
+            expect(json['Device Group'].type).toBe('development');
+            expect(json['Device Group'].Product.id).toBe(product_id);
+            expect(json['Device Group'].Product.name).toBe(PRODUCT_NAME);
+            ImptTestingHelper.checkSuccessStatusEx(commandOut);
+        }).
+            then(done).
+            catch(error => done.fail(error));
+    });
 
 });
