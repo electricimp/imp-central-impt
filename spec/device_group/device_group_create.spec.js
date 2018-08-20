@@ -83,14 +83,13 @@ describe('impt device group create test suite >', () => {
     // check name and description of requested device group
     function checkDeviceGroupInfo(name, desc) {
         return ImptTestingHelper.runCommandEx(`impt dg info -g ${name}  -z json`, (commandOut) => {
-               const json = JSON.parse(commandOut.output);
-                console.log(json);
-                expect(json['Device Group'].id).toBe(dg_id);
-                expect(json['Device Group'].name).toBe(name);
-                expect(json['Device Group'].type).toBe('development');
-                expect(json['Device Group'].description).toBe(desc);
-                expect(json['Device Group'].Product.id).toBe(product_id);
-                expect(json['Device Group'].Product.name).toBe(PRODUCT_NAME);
+            const json = JSON.parse(commandOut.output);
+            expect(json['Device Group'].id).toBe(dg_id);
+            expect(json['Device Group'].name).toBe(name);
+            expect(json['Device Group'].type).toBe('development');
+            expect(json['Device Group'].description).toBe(desc);
+            expect(json['Device Group'].Product.id).toBe(product_id);
+            expect(json['Device Group'].Product.name).toBe(PRODUCT_NAME);
             ImptTestingHelper.checkSuccessStatusEx(commandOut);
         });
     }

@@ -164,7 +164,7 @@ class ImptTestingHelper {
     static checkOutputMessageEx(outputMode, commandOut, value) {
         const matcher = outputMode.match(('-z\\s+json') | ('-z\\s+minimal'));
         if (matcher && matcher.length) expect(true).toBeTrue;
-        else expect(commandOut.output).toMatch(value.replace('"','\\?"'));
+        else expect(commandOut.output).toMatch(value);
     }
 
     // parse ID from command output and return id value if success, otherwise return null
