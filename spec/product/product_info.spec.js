@@ -27,6 +27,8 @@
 require('jasmine-expect');
 const config = require('../config');
 const ImptTestingHelper = require('../ImptTestingHelper');
+const MessageHelper = require('../MessageHelper');
+const Identifier = require('../../lib/util/Identifier');
 
 const PRODUCT_NAME = '__impt_product';
 const PRODUCT_NAME_2 = '__impt_product_2';
@@ -36,7 +38,7 @@ const PRODUCT_DESCR = 'impt temp product description';
 // Test suite for 'impt product info' command.
 // Runs 'impt product info' command with different combinations of options,
 describe('impt product info test suite >', () => {
-    const outmode = '';
+    const outputMode = '';
     let product_id = null;
 
     beforeAll((done) => {
@@ -57,11 +59,8 @@ describe('impt product info test suite >', () => {
     // create product and save product id for test purposes
     function testSuiteInit() {
         return ImptTestingHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME} --descr "${PRODUCT_DESCR}"`, (commandOut) => {
-            const idMatcher = commandOut.output.match(new RegExp(`${ImptTestingHelper.ATTR_ID}"?:\\s+"?([A-Za-z0-9-]+)`));
-            if (idMatcher && idMatcher.length > 1) {
-                product_id = idMatcher[1];
-            }
-            else fail("TestSuitInit error: Fail create product");
+            product_id = ImptTestingHelper.parseId(commandOut);
+            if (!product_id) fail("TestSuitInit error: Fail create product");
             ImptTestingHelper.emptyCheckEx(commandOut);
         });
     }
@@ -73,7 +72,7 @@ describe('impt product info test suite >', () => {
     }
 
     it('product info by id', (done) => {
-        ImptTestingHelper.runCommandEx(`impt product info --product ${product_id}  ${outmode}`, (commandOut) => {
+        ImptTestingHelper.runCommandEx(`impt product info --product ${product_id}  ${outputMode}`, (commandOut) => {
             expect(commandOut.output).toMatch(`${PRODUCT_NAME}`);
             expect(commandOut.output).toMatch(`${PRODUCT_DESCR}`);
             expect(commandOut.output).toMatch(`${product_id}`);
@@ -84,7 +83,7 @@ describe('impt product info test suite >', () => {
     });
 
     it('product info by name', (done) => {
-        ImptTestingHelper.runCommandEx(`impt product info -p ${PRODUCT_NAME}  ${outmode}`, (commandOut) => {
+        ImptTestingHelper.runCommandEx(`impt product info -p ${PRODUCT_NAME}  ${outputMode}`, (commandOut) => {
             expect(commandOut.output).toMatch(`${PRODUCT_NAME}`);
             expect(commandOut.output).toMatch(`${PRODUCT_DESCR}`);
             expect(commandOut.output).toMatch(`${product_id}`);
@@ -95,7 +94,7 @@ describe('impt product info test suite >', () => {
     });
 
     it('product full info by name', (done) => {
-        ImptTestingHelper.runCommandEx(`impt product info --product ${PRODUCT_NAME} --full ${outmode}`, (commandOut) => {
+        ImptTestingHelper.runCommandEx(`impt product info --product ${PRODUCT_NAME} --full ${outputMode}`, (commandOut) => {
             expect(commandOut.output).toMatch(`${PRODUCT_NAME}`);
             expect(commandOut.output).toMatch(`${PRODUCT_DESCR}`);
             expect(commandOut.output).toMatch(`${product_id}`);
@@ -106,20 +105,22 @@ describe('impt product info test suite >', () => {
     });
 
     it('not exist product info', (done) => {
-        ImptTestingHelper.runCommandEx(`impt product info --product ${PRODUCT_NAME_2} ${outmode}`, ImptTestingHelper.checkFailStatusEx).
+        ImptTestingHelper.runCommandEx(`impt product info --product ${PRODUCT_NAME_2} ${outputMode}`, (commandOut) => {
+            MessageHelper.checkEntityNotFoundError(commandOut, Identifier.ENTITY_TYPE.TYPE_PRODUCT, PRODUCT_NAME_2);
+            ImptTestingHelper.checkFailStatusEx(commandOut)}).
             then(done).
             catch(error => done.fail(error));
     });
 
     it('product info without product name', (done) => {
-        ImptTestingHelper.runCommandEx(`impt product info ${outmode}`, ImptTestingHelper.checkFailStatusEx).
+        ImptTestingHelper.runCommandEx(`impt product info ${outputMode}`, ImptTestingHelper.checkFailStatusEx).
             then(done).
             catch(error => done.fail(error));
     });
 
     it('product info with empty product name', (done) => {
-        ImptTestingHelper.runCommandEx(`impt product info --product "" ${outmode}`, ImptTestingHelper.checkFailStatusEx).
-            then(() => ImptTestingHelper.runCommandEx(`impt product info --product  ${outmode}`, ImptTestingHelper.checkFailStatusEx)).
+        ImptTestingHelper.runCommandEx(`impt product info --product "" ${outputMode}`, ImptTestingHelper.checkFailStatusEx).
+            then(() => ImptTestingHelper.runCommandEx(`impt product info --product  ${outputMode}`, ImptTestingHelper.checkFailStatusEx)).
             then(done).
             catch(error => done.fail(error));
     });

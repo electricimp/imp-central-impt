@@ -26,8 +26,8 @@
 
 require('jasmine-expect');
 
-const ImptTestingHelper = require('../ImptTestingHelper');
-const UserInterractor = require('../../lib/util/UserInteractor');
+const ImptTestingHelper = require('./ImptTestingHelper');
+const UserInterractor = require('../lib/util/UserInteractor');
 
 // Helper class for testing impt tool.
 // Contains common methods for testing output error message
@@ -59,6 +59,12 @@ class MessageHelper {
     static checkInvalidValuesError(commandOut) {
         ImptTestingHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
             'Invalid values:'
+        );
+    }
+
+    static checkEntityNotFoundError(commandOut, entity, name) {
+        ImptTestingHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
+            `${entity} "${name}" is not found.`
         );
     }
 }

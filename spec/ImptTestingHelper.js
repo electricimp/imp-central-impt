@@ -59,6 +59,10 @@ class ImptTestingHelper {
         return 'id';
     }
 
+    static get ATTR_TYPE() {
+        return 'type';
+    }
+
     // Initializes testing environment: creates test execution folder, sets default jasmine test timeout.
     // Optionally executes 'impt auth login --local' command in the test execution folder.
     // Should be called from any test suite beforeAll method.
@@ -160,7 +164,7 @@ class ImptTestingHelper {
     static checkOutputMessageEx(outputMode, commandOut, value) {
         const matcher = outputMode.match(('-z\\s+json') | ('-z\\s+minimal'));
         if (matcher && matcher.length) expect(true).toBeTrue;
-        else expect(commandOut.output).toMatch(value);
+        else expect(commandOut.output).toMatch(value.replace('"','\\?"'));
     }
 
     // parse ID from command output and return id value if success, otherwise return null

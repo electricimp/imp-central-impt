@@ -43,7 +43,7 @@ const PRODUCT_DESCR_2 = 'impt temp product description 2';
 // Test suite for 'impt product create' command.
 // Runs 'impt product create' command with different combinations of options,
 
-fdescribe('impt product create test suite >', () => {
+describe('impt product create test suite >', () => {
     const outputMode = '';
     let product_id = null;
 
