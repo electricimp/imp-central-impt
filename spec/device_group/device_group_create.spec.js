@@ -43,7 +43,7 @@ const DEVICE_GROUP_DESCR = 'impt temp device group description';
 // Test suite for 'impt dg create' command.
 // Runs 'impt dg create' command with different combinations of options,
 
-fdescribe('impt device group create test suite >', () => {
+describe('impt device group create test suite >', () => {
     const outputMode = '';
     let dg_id = null;
     let product_id = null;
@@ -80,19 +80,15 @@ fdescribe('impt device group create test suite >', () => {
             then(() => ImptTestingHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME_2} -f -q`, ImptTestingHelper.emptyCheckEx));
     }
 
-    // check name and description of requested device group
-    function checkDeviceGroupInfo(name, desc) {
-        return ImptTestingHelper.runCommandEx(`impt dg info -g ${name}  -z json`, (commandOut) => {
-            const json = JSON.parse(commandOut.output);
-            expect(json['Device Group'].id).toBe(dg_id);
-            expect(json['Device Group'].name).toBe(name);
-            expect(json['Device Group'].type).toBe('development');
-            expect(json['Device Group'].description).toBe(desc);
-            expect(json['Device Group'].Product.id).toBe(product_id);
-            expect(json['Device Group'].Product.name).toBe(PRODUCT_NAME);
-            ImptTestingHelper.checkSuccessStatusEx(commandOut);
-        });
-    }
+    // check base atributes of requested device group
+    function checkDeviceGroupInfo(deviceGroup) {
+        expect(deviceGroup.id).toBe(dg_id);
+        expect(deviceGroup.name).toBe(DEVICE_GROUP_NAME);
+        expect(deviceGroup.type).toBe('development');
+        expect(deviceGroup.Product.id).toBe(product_id);
+        expect(deviceGroup.Product.name).toBe(PRODUCT_NAME);
+    };
+
 
     // check successfuly created device group output message 
     function checkSuccessCreateDeviceGroupMessage(commandOut, deviceGroupName) {
@@ -103,7 +99,7 @@ fdescribe('impt device group create test suite >', () => {
     }
 
     it('device group create', (done) => {
-        ImptTestingHelper.runCommandEx(`impt dg create --name ${DEVICE_GROUP_NAME} --product ${PRODUCT_NAME} ${outputMode}`, (commandOut) => {
+        ImptTestingHelper.runCommandEx(`impt dg create --name ${DEVICE_GROUP_NAME} --desc ${DEVICE_GROUP_DESCR} --product ${PRODUCT_NAME} ${outputMode}`, (commandOut) => {
             dg_id = ImptTestingHelper.parseId(commandOut);
             expect(dg_id).not.toBeNull;
             // check "device group successfuly created" message  
@@ -113,7 +109,12 @@ fdescribe('impt device group create test suite >', () => {
             ImptTestingHelper.checkAttributeEx(commandOut, ImptTestingHelper.ATTR_TYPE, 'development');
             ImptTestingHelper.checkSuccessStatusEx(commandOut);
         }).
-            then(() => checkDeviceGroupInfo(DEVICE_GROUP_NAME, '')).
+            then(() => ImptTestingHelper.runCommandEx(`impt dg info -g ${name}  -z json`, (commandOut) => {
+                const json = JSON.parse(commandOut.output);
+                checkDeviceGroupInfo(json);
+                expect(json.description).toBe(DEVICE_GROUP_DESCR);
+                ImptTestingHelper.checkSuccessStatusEx(commandOut);
+            })).
             then(done).
             catch(error => done.fail(error));
     });
@@ -121,12 +122,8 @@ fdescribe('impt device group create test suite >', () => {
     it('device group info by id', (done) => {
         ImptTestingHelper.runCommandEx(`impt dg info -g ${dg_id}  -z json`, (commandOut) => {
             const json = JSON.parse(commandOut.output);
-            expect(json['Device Group'].id).toBe(dg_id);
-            expect(json['Device Group'].name).toBe(DEVICE_GROUP_NAME);
-            expect(json['Device Group'].type).toBe('development');
-            expect(json['Device Group'].description).toBe('');
-            expect(json['Device Group'].Product.id).toBe(product_id);
-            expect(json['Device Group'].Product.name).toBe(PRODUCT_NAME);
+            checkDeviceGroupInfo(json);
+            expect(json.description).toBe(DEVICE_GROUP_DESCR);
             ImptTestingHelper.checkSuccessStatusEx(commandOut);
         }).
             then(done).
@@ -137,11 +134,7 @@ fdescribe('impt device group create test suite >', () => {
         ImptTestingHelper.runCommandEx(`impt dg list  -z json`, (commandOut) => {
             const jsonList = JSON.parse(commandOut.output);
             const json = jsonList.find(element => element['Device Group'].name === DEVICE_GROUP_NAME);
-            expect(json['Device Group'].id).toBe(dg_id);
-            expect(json['Device Group'].name).toBe(DEVICE_GROUP_NAME);
-            expect(json['Device Group'].type).toBe('development');
-            expect(json['Device Group'].Product.id).toBe(product_id);
-            expect(json['Device Group'].Product.name).toBe(PRODUCT_NAME);
+            checkDeviceGroupInfo(json);
             ImptTestingHelper.checkSuccessStatusEx(commandOut);
         }).
             then(done).
