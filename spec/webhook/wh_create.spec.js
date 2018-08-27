@@ -41,7 +41,6 @@ describe('impt webhook create test suite >', () => {
 
     let dg_id = null;
     let wh_id = null;
-    let mime = null;
 
     beforeAll((done) => {
         ImptTestingHelper.init().
@@ -64,7 +63,7 @@ describe('impt webhook create test suite >', () => {
             catch(error => done.fail(error));
     }, ImptTestingHelper.TIMEOUT);
 
-    // delete all products using in impt product create test suite
+    // delete all entities using in impt webhook create test suite
     function testSuiteCleanUp() {
         return ImptTestingHelper.runCommandEx(`impt product delete --product ${PRODUCT_NAME} --force --confirmed`, ImptTestingHelper.emptyCheckEx).
             then(() => ImptTestingHelper.runCommandEx(`impt dg delete --dg ${DG_NAME_2} -f `, ImptTestingHelper.emptyCheckEx));
@@ -75,7 +74,6 @@ describe('impt webhook create test suite >', () => {
         return ImptTestingHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME}`, ImptTestingHelper.emptyCheckEx).
             then(() => ImptTestingHelper.runCommandEx(`impt dg create --name ${DG_NAME} -p ${PRODUCT_NAME} `, (commandOut) => {
                 dg_id = ImptTestingHelper.parseId(commandOut);
-                console.log(dg_id);
                 ImptTestingHelper.emptyCheckEx(commandOut);
             })).
             then(() => ImptTestingHelper.runCommandEx(`impt project link --dg ${DG_NAME} -q`, (commandOut) => {
@@ -83,8 +81,16 @@ describe('impt webhook create test suite >', () => {
             }));
     }
 
+// check successfuly created webhook output message 
+function checkSuccessCreateWebhookMessage(commandOut, webhookId) {
+    ImptTestingHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+        `${Identifier.ENTITY_TYPE.TYPE_WEBHOOK}\\s+` +
+        Util.format(`${UserInterractor.MESSAGES.ENTITY_CREATED}`, `"${webhookId}"`)
+    );
+}
+
     // check command`s result by exec webhook info command
-    function checkWebhookInfo() {
+    function checkWebhookInfo(mime) {
         return ImptTestingHelper.runCommandEx(`impt webhook info --wh ${wh_id} -z json`, (commandOut) => {
             const json = JSON.parse(commandOut.output);
             expect(json.Webhook.id).toBe(wh_id);
@@ -100,10 +106,10 @@ describe('impt webhook create test suite >', () => {
     it('webhook create by dg id', (done) => {
         ImptTestingHelper.runCommandEx(`impt webhook create --dg ${dg_id} --url ${WH_URL} --event deployment --mime json ${outputMode}`, (commandOut) => {
             wh_id = ImptTestingHelper.parseId(commandOut);
-            mime = 'json';
+            ImptTestingHelper.checkOutputMessageEx(outputMode,commandOut,wh_id);
             ImptTestingHelper.checkSuccessStatusEx(commandOut);
         }).
-            then(checkWebhookInfo).
+            then(() => { checkWebhookInfo('json') }).
             then(done).
             catch(error => done.fail(error));
     });
@@ -111,10 +117,10 @@ describe('impt webhook create test suite >', () => {
     it('webhook create by dg name', (done) => {
         ImptTestingHelper.runCommandEx(`impt webhook create --dg ${DG_NAME} --url ${WH_URL} --event deployment --mime json ${outputMode}`, (commandOut) => {
             wh_id = ImptTestingHelper.parseId(commandOut);
-            mime = 'json';
+            ImptTestingHelper.checkOutputMessageEx(outputMode,commandOut,wh_id);
             ImptTestingHelper.checkSuccessStatusEx(commandOut);
         }).
-            then(checkWebhookInfo).
+            then(() => { checkWebhookInfo('json') }).
             then(done).
             catch(error => done.fail(error));
     });
@@ -122,10 +128,10 @@ describe('impt webhook create test suite >', () => {
     it('webhook create by project', (done) => {
         ImptTestingHelper.runCommandEx(`impt webhook create --url ${WH_URL} --event deployment --mime urlencoded ${outputMode}`, (commandOut) => {
             wh_id = ImptTestingHelper.parseId(commandOut);
-            mime = 'urlencoded';
+            ImptTestingHelper.checkOutputMessageEx(outputMode,commandOut,wh_id);
             ImptTestingHelper.checkSuccessStatusEx(commandOut);
         }).
-            then(checkWebhookInfo).
+            then(() => { checkWebhookInfo('urlencoded') }).
             then(done).
             catch(error => done.fail(error));
     });
