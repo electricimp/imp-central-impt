@@ -29,14 +29,14 @@ const config = require('../config');
 const ImptTestingHelper = require('../ImptTestingHelper');
 const MessageHelper = require('../MessageHelper');
 const Identifier = require('../../lib/util/Identifier');
-
+const Util = require('util');
+const UserInterractor = require('../../lib/util/UserInteractor');
 const PRODUCT_NAME = '__impt_product';
 const DG_NAME = '__impt_device_group';
 const DG_NAME_2 = '__impt_device_group_2';
 const WH_URL = 'http://example.ru/';
 
-describe('impt webhook create test suite >', () => {
-
+fdescribe('impt webhook create test suite >', () => {
     const outputMode = '';
 
     let dg_id = null;
@@ -92,7 +92,7 @@ describe('impt webhook create test suite >', () => {
 
     // check command`s result by exec webhook info command
     function checkWebhookInfo(expectInfo) {
-        return ImptTestingHelper.runCommandEx(`impt webhook info --wh ${wh_id} -z json`, (commandOut) => {
+        return ImptTestingHelper.runCommandEx(`impt webhook info --wh ${expectInfo && expectInfo.id ? expectInfo.id : wh_id} -z json`, (commandOut) => {
             const json = JSON.parse(commandOut.output);
             expect(json.Webhook).toBeDefined;
             expect(json.Webhook.id).toBe(expectInfo && expectInfo.id ? expectInfo.id : wh_id);
@@ -108,7 +108,7 @@ describe('impt webhook create test suite >', () => {
     it('webhook create by dg id', (done) => {
         ImptTestingHelper.runCommandEx(`impt webhook create --dg ${dg_id} --url ${WH_URL} --event deployment --mime json ${outputMode}`, (commandOut) => {
             wh_id = ImptTestingHelper.parseId(commandOut);
-            ImptTestingHelper.checkOutputMessageEx(outputMode, commandOut, wh_id);
+            checkSuccessCreateWebhookMessage(commandOut, wh_id);
             ImptTestingHelper.checkSuccessStatusEx(commandOut);
         }).
             then(checkWebhookInfo).
@@ -119,7 +119,7 @@ describe('impt webhook create test suite >', () => {
     it('webhook create by dg name', (done) => {
         ImptTestingHelper.runCommandEx(`impt webhook create --dg ${DG_NAME} --url ${WH_URL} --event deployment --mime json ${outputMode}`, (commandOut) => {
             wh_id = ImptTestingHelper.parseId(commandOut);
-            ImptTestingHelper.checkOutputMessageEx(outputMode, commandOut, wh_id);
+            checkSuccessCreateWebhookMessage(commandOut, wh_id);
             ImptTestingHelper.checkSuccessStatusEx(commandOut);
         }).
             then(checkWebhookInfo).
@@ -130,12 +130,11 @@ describe('impt webhook create test suite >', () => {
     it('webhook create by project', (done) => {
         ImptTestingHelper.runCommandEx(`impt webhook create --url ${WH_URL} --event deployment --mime urlencoded ${outputMode}`, (commandOut) => {
             wh_id = ImptTestingHelper.parseId(commandOut);
-            ImptTestingHelper.checkOutputMessageEx(outputMode, commandOut, wh_id);
+            checkSuccessCreateWebhookMessage(commandOut, wh_id);
             ImptTestingHelper.checkSuccessStatusEx(commandOut);
         }).
             then(() => {
-                let expectedInfo = { mime: 'urlencoded' };
-                checkWebhookInfo(expectedInfo)
+               checkWebhookInfo( { mime: 'urlencoded' });
             }).
             then(done).
             catch(error => done.fail(error));
