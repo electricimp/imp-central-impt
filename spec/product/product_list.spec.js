@@ -26,7 +26,7 @@
 
 require('jasmine-expect');
 const config = require('../config');
-const ImptTestingHelper = require('../ImptTestingHelper');
+const ImptTestHelper = require('../ImptTestHelper');
 
 const PRODUCT_NAME = '__impt_product';
 const PRODUCT_NAME_2 = '__impt_product_2';
@@ -34,96 +34,96 @@ const PRODUCT_NAME_2 = '__impt_product_2';
 // Test suite for 'impt product list' command.
 // Runs 'impt product list' command with different combinations of options,
 describe('impt product list test suite >', () => {
-    const outmode = '';
+    const outputMode = '';
     let product_id = null;
 
     beforeAll((done) => {
-        ImptTestingHelper.init().
+        ImptTestHelper.init().
             then(testSuiteCleanUp).
             then(testSuiteInit).
             then(done).
             catch(error => done.fail(error));
-    }, ImptTestingHelper.TIMEOUT);
+    }, ImptTestHelper.TIMEOUT);
 
     afterAll((done) => {
         testSuiteCleanUp().
-            then(ImptTestingHelper.cleanUp).
+            then(ImptTestHelper.cleanUp).
             then(done).
             catch(error => done.fail(error));
-    }, ImptTestingHelper.TIMEOUT);
+    }, ImptTestHelper.TIMEOUT);
 
     function testSuiteInit() {
-        return ImptTestingHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME}`, ImptTestingHelper.emptyCheckEx).
-            then(() => ImptTestingHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME_2}`, ImptTestingHelper.emptyCheckEx));
+        return ImptTestHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
+            then(() => ImptTestHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME_2}`, ImptTestHelper.emptyCheckEx));
     }
 
     function testSuiteCleanUp() {
-        return ImptTestingHelper.runCommandEx(`impt product delete --product ${PRODUCT_NAME} --confirmed`, ImptTestingHelper.emptyCheckEx).
-            then(() => ImptTestingHelper.runCommandEx(`impt product delete --product ${PRODUCT_NAME_2} --confirmed`,
-                ImptTestingHelper.emptyCheckEx));
+        return ImptTestHelper.runCommandEx(`impt product delete --product ${PRODUCT_NAME} --confirmed`, ImptTestHelper.emptyCheckEx).
+            then(() => ImptTestHelper.runCommandEx(`impt product delete --product ${PRODUCT_NAME_2} --confirmed`,
+                ImptTestHelper.emptyCheckEx));
     }
 
     it('product list', (done) => {
-        ImptTestingHelper.runCommandEx(`impt product list  ${outmode}`, (commandOut) => {
+        ImptTestHelper.runCommandEx(`impt product list  ${outputMode}`, (commandOut) => {
             expect(commandOut.output).toMatch(`${PRODUCT_NAME}`);
             expect(commandOut.output).toMatch(`${PRODUCT_NAME_2}`);
-            ImptTestingHelper.checkSuccessStatusEx(commandOut);
+            ImptTestHelper.checkSuccessStatusEx(commandOut);
         }).
             then(done).
             catch(error => done.fail(error));
     });
 
     it('product list with owner by me', (done) => {
-        ImptTestingHelper.runCommandEx(`impt product list --owner me ${outmode}`, (commandOut) => {
+        ImptTestHelper.runCommandEx(`impt product list --owner me ${outputMode}`, (commandOut) => {
             expect(commandOut.output).toMatch(`${PRODUCT_NAME}`);
             expect(commandOut.output).toMatch(`${PRODUCT_NAME_2}`);
-            ImptTestingHelper.checkSuccessStatusEx(commandOut);
+            ImptTestHelper.checkSuccessStatusEx(commandOut);
         }).
             then(done).
             catch(error => done.fail(error));
     });
 
     it('product list with owner by name', (done) => {
-        ImptTestingHelper.runCommandEx(`impt product list --owner ${config.username} ${outmode}`, (commandOut) => {
+        ImptTestHelper.runCommandEx(`impt product list --owner ${config.username} ${outputMode}`, (commandOut) => {
             expect(commandOut.output).toMatch(`${PRODUCT_NAME}`);
             expect(commandOut.output).toMatch(`${PRODUCT_NAME_2}`);
-            ImptTestingHelper.checkSuccessStatusEx(commandOut);
+            ImptTestHelper.checkSuccessStatusEx(commandOut);
         }).
             then(done).
             catch(error => done.fail(error));
     });
 
     it('product list with owner by email', (done) => {
-        ImptTestingHelper.runCommandEx(`impt product list --owner ${config.email} ${outmode}`, (commandOut) => {
+        ImptTestHelper.runCommandEx(`impt product list --owner ${config.email} ${outputMode}`, (commandOut) => {
             expect(commandOut.output).toMatch(`${PRODUCT_NAME}`);
             expect(commandOut.output).toMatch(`${PRODUCT_NAME_2}`);
-            ImptTestingHelper.checkSuccessStatusEx(commandOut);
+            ImptTestHelper.checkSuccessStatusEx(commandOut);
         }).
             then(done).
             catch(error => done.fail(error));
     });
 
     it('product list with owner by id', (done) => {
-        ImptTestingHelper.runCommandEx(`impt product list --owner ${config.accountid} ${outmode}`, (commandOut) => {
+        ImptTestHelper.runCommandEx(`impt product list --owner ${config.accountid} ${outputMode}`, (commandOut) => {
             expect(commandOut.output).toMatch(`${PRODUCT_NAME}`);
             expect(commandOut.output).toMatch(`${PRODUCT_NAME_2}`);
-            ImptTestingHelper.checkSuccessStatusEx(commandOut);
+            ImptTestHelper.checkSuccessStatusEx(commandOut);
         }).
             then(done).
             catch(error => done.fail(error));
     });
 
     it('product list without owner value', (done) => {
-        ImptTestingHelper.runCommandEx(`impt product list --owner ${outmode}`, (commandOut) => {
-            ImptTestingHelper.checkFailStatusEx(commandOut);
+        ImptTestHelper.runCommandEx(`impt product list --owner ${outputMode}`, (commandOut) => {
+            ImptTestHelper.checkFailStatusEx(commandOut);
         }).
             then(done).
             catch(error => done.fail(error));
     });
 
     it('product list without output value', (done) => {
-        ImptTestingHelper.runCommandEx(`impt product list -z`, ImptTestingHelper.checkFailStatusEx).
-            then(() => ImptTestingHelper.runCommandEx(`impt product list -z undefined`, ImptTestingHelper.checkFailStatusEx)).
+        ImptTestHelper.runCommandEx(`impt product list -z`, ImptTestHelper.checkFailStatusEx).
+            then(() => ImptTestHelper.runCommandEx(`impt product list -z undefined`, ImptTestHelper.checkFailStatusEx)).
             then(done).
             catch(error => done.fail(error));
     });

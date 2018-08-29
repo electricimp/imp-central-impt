@@ -26,7 +26,7 @@
 
 require('jasmine-expect');
 const config = require('../config');
-const ImptTestingHelper = require('../ImptTestingHelper');
+const ImptTestHelper = require('../ImptTestHelper');
 const Identifier = require('../../lib/util/Identifier');
 const UserInterractor = require('../../lib/util/UserInteractor');
 const Util = require('util');
@@ -50,34 +50,34 @@ describe('impt device group create test suite >', () => {
 
 
     beforeAll((done) => {
-        ImptTestingHelper.init().
+        ImptTestHelper.init().
             then(testSuiteCleanUp).
             then(testSuiteInit).
             then(done).
             catch(error => done.fail(error));
-    }, ImptTestingHelper.TIMEOUT);
+    }, ImptTestHelper.TIMEOUT);
 
     afterAll((done) => {
         testSuiteCleanUp().
-            then(ImptTestingHelper.cleanUp).
+            then(ImptTestHelper.cleanUp).
             then(done).
             catch(error => done.fail(error));
-    }, ImptTestingHelper.TIMEOUT);
+    }, ImptTestHelper.TIMEOUT);
 
     // create products for device group testing
     function testSuiteInit() {
-        return ImptTestingHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME}`, (commandOut) => {
-            product_id = ImptTestingHelper.parseId(commandOut);
-            ImptTestingHelper.emptyCheckEx(commandOut);
+        return ImptTestHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME}`, (commandOut) => {
+            product_id = ImptTestHelper.parseId(commandOut);
+            ImptTestHelper.emptyCheckEx(commandOut);
         }).
-            then(() => ImptTestingHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME_2}`, ImptTestingHelper.emptyCheckEx));
+            then(() => ImptTestHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME_2}`, ImptTestHelper.emptyCheckEx));
     }
 
 
     // delete all products using in impt dg create test suite
     function testSuiteCleanUp() {
-        return ImptTestingHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} --force -q`, ImptTestingHelper.emptyCheckEx).
-            then(() => ImptTestingHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME_2} -f -q`, ImptTestingHelper.emptyCheckEx));
+        return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} --force -q`, ImptTestHelper.emptyCheckEx).
+            then(() => ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME_2} -f -q`, ImptTestHelper.emptyCheckEx));
     }
 
     // check base atributes of requested device group
@@ -92,50 +92,50 @@ describe('impt device group create test suite >', () => {
 
     // check successfuly created device group output message 
     function checkSuccessCreateDeviceGroupMessage(commandOut, deviceGroupName) {
-        ImptTestingHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+        ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
             `${Identifier.ENTITY_TYPE.TYPE_DEVICE_GROUP}\\s+` +
             Util.format(`${UserInterractor.MESSAGES.ENTITY_CREATED}`, `"${deviceGroupName}"`)
         );
     }
 
     it('device group create', (done) => {
-        ImptTestingHelper.runCommandEx(`impt dg create --name ${DEVICE_GROUP_NAME} --desc ${DEVICE_GROUP_DESCR} --product ${PRODUCT_NAME} ${outputMode}`, (commandOut) => {
-            dg_id = ImptTestingHelper.parseId(commandOut);
+        ImptTestHelper.runCommandEx(`impt dg create --name ${DEVICE_GROUP_NAME} --desc ${DEVICE_GROUP_DESCR} --product ${PRODUCT_NAME} ${outputMode}`, (commandOut) => {
+            dg_id = ImptTestHelper.parseId(commandOut);
             expect(dg_id).not.toBeNull;
             // check "device group successfuly created" message  
             checkSuccessCreateDeviceGroupMessage(commandOut, DEVICE_GROUP_NAME);
-            ImptTestingHelper.checkAttributeEx(commandOut, ImptTestingHelper.ATTR_NAME, DEVICE_GROUP_NAME);
-            ImptTestingHelper.checkAttributeEx(commandOut, ImptTestingHelper.ATTR_ID, dg_id);
-            ImptTestingHelper.checkAttributeEx(commandOut, ImptTestingHelper.ATTR_TYPE, 'development');
-            ImptTestingHelper.checkSuccessStatusEx(commandOut);
+            ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_NAME, DEVICE_GROUP_NAME);
+            ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_ID, dg_id);
+            ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_TYPE, 'development');
+            ImptTestHelper.checkSuccessStatusEx(commandOut);
         }).
-            then(() => ImptTestingHelper.runCommandEx(`impt dg info -g ${name}  -z json`, (commandOut) => {
+            then(() => ImptTestHelper.runCommandEx(`impt dg info -g ${name}  -z json`, (commandOut) => {
                 const json = JSON.parse(commandOut.output);
                 checkDeviceGroupInfo(json);
                 expect(json.description).toBe(DEVICE_GROUP_DESCR);
-                ImptTestingHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatusEx(commandOut);
             })).
             then(done).
             catch(error => done.fail(error));
     });
 
     it('device group info by id', (done) => {
-        ImptTestingHelper.runCommandEx(`impt dg info -g ${dg_id}  -z json`, (commandOut) => {
+        ImptTestHelper.runCommandEx(`impt dg info -g ${dg_id}  -z json`, (commandOut) => {
             const json = JSON.parse(commandOut.output);
             checkDeviceGroupInfo(json);
             expect(json.description).toBe(DEVICE_GROUP_DESCR);
-            ImptTestingHelper.checkSuccessStatusEx(commandOut);
+            ImptTestHelper.checkSuccessStatusEx(commandOut);
         }).
             then(done).
             catch(error => done.fail(error));
     });
 
     it('device group list', (done) => {
-        ImptTestingHelper.runCommandEx(`impt dg list  -z json`, (commandOut) => {
+        ImptTestHelper.runCommandEx(`impt dg list  -z json`, (commandOut) => {
             const jsonList = JSON.parse(commandOut.output);
             const json = jsonList.find(element => element['Device Group'].name === DEVICE_GROUP_NAME);
             checkDeviceGroupInfo(json);
-            ImptTestingHelper.checkSuccessStatusEx(commandOut);
+            ImptTestHelper.checkSuccessStatusEx(commandOut);
         }).
             then(done).
             catch(error => done.fail(error));

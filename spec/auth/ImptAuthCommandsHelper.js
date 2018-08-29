@@ -27,26 +27,26 @@
 require('jasmine-expect');
 
 const config = require('../config');
-const ImptTestingHelper = require('../ImptTestingHelper');
+const ImptTestHelper = require('../ImptTestHelper');
 
 // Helper class for testing impt auth commands.
 class ImptAuthCommandsHelper {
     static localLogout() {
-        return ImptTestingHelper.runCommandEx(`impt auth logout --local `, ImptTestingHelper.emptyCheckEx);
+        return ImptTestHelper.runCommandEx(`impt auth logout --local `, ImptTestHelper.emptyCheckEx);
     }
 
     static globalLogout() {
-        return ImptTestingHelper.runCommandEx(`impt auth logout`, ImptTestingHelper.emptyCheckEx);
+        return ImptTestHelper.runCommandEx(`impt auth logout`, ImptTestHelper.emptyCheckEx);
     }
 
     static localLogin() {
-        return ImptTestingHelper.runCommandEx(`impt auth login --local --user ${config.email} --pwd ${config.password}--confirmed`,
-            ImptTestingHelper.emptyCheckEx);
+        return ImptTestHelper.runCommandEx(`impt auth login --local --user ${config.email} --pwd ${config.password}--confirmed`,
+            ImptTestHelper.emptyCheckEx);
     }
 
     static globalLogin() {
-        return ImptTestingHelper.runCommandEx(`impt auth login --user ${config.email} --pwd ${config.password} --confirmed`,
-            ImptTestingHelper.emptyCheckEx);
+        return ImptTestHelper.runCommandEx(`impt auth login --user ${config.email} --pwd ${config.password} --confirmed`,
+            ImptTestHelper.emptyCheckEx);
     }
 }
 

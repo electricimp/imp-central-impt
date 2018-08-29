@@ -26,7 +26,11 @@
 
 require('jasmine-expect');
 const config = require('../config');
-const ImptTestingHelper = require('../ImptTestingHelper');
+const ImptTestHelper = require('../ImptTestHelper');
+const MessageHelper = require('../MessageHelper');
+const Identifier = require('../../lib/util/Identifier');
+const Util = require('util');
+const UserInterractor = require('../../lib/util/UserInteractor');
 
 const PRODUCT_NAME = '__impt_product';
 const PRODUCT_NAME_2 = '__impt_product_2';
@@ -36,121 +40,185 @@ const PRODUCT_DESCR_2 = 'impt temp product description 2';
 
 // Test suite for 'impt product update' command.
 // Runs 'impt product update' command with different combinations of options,
+ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
+    fdescribe(`impt product update test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
+        let product_id = null;
 
-describe('impt product update test suite >', () => {
-    const outmode = '';
-    let product_id = null;
+        beforeAll((done) => {
+            ImptTestHelper.init().
+                then(testSuiteCleanUp).
+                then(testSuiteInit).
+                then(done).
+                catch(error => done.fail(error));
+        }, ImptTestHelper.TIMEOUT);
 
-    beforeAll((done) => {
-        ImptTestingHelper.init().
-            then(testSuiteCleanUp).
-            then(testSuiteInit).
-            then(done).
-            catch(error => done.fail(error));
-    }, ImptTestingHelper.TIMEOUT);
+        afterAll((done) => {
+            testSuiteCleanUp().
+                then(ImptTestHelper.cleanUp).
+                then(done).
+                catch(error => done.fail(error));
+        }, ImptTestHelper.TIMEOUT);
 
-    afterAll((done) => {
-        testSuiteCleanUp().
-            then(ImptTestingHelper.cleanUp).
-            then(done).
-            catch(error => done.fail(error));
-    }, ImptTestingHelper.TIMEOUT);
+        // delete all entities using in impt product update test suite
+        function testSuiteCleanUp() {
+            return ImptTestHelper.runCommandEx(`impt product delete --product ${PRODUCT_NAME} --confirmed`, ImptTestHelper.emptyCheckEx).
+                then(() => ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME_2} -q`, ImptTestHelper.emptyCheckEx));
+        }
 
-    function testSuiteCleanUp() {
-        return ImptTestingHelper.runCommandEx(`impt product delete --product ${PRODUCT_NAME} --confirmed`, ImptTestingHelper.emptyCheckEx).
-            then(() => ImptTestingHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME_2} -q`, ImptTestingHelper.emptyCheckEx));
-    }
+        // prepare test environment for impt product update test suite
+        function testSuiteInit() {
+            return ImptTestHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME} --descr "${PRODUCT_DESCR}"`, (commandOut) => {
+                const idMatcher = commandOut.output.match(new RegExp(`${ImptTestHelper.ATTR_ID}"?:\\s+"?([A-Za-z0-9-]+)`));
+                if (idMatcher && idMatcher.length > 1) {
+                    product_id = idMatcher[1];
+                }
+                else fail("TestSuitInit error: Fail create product");
+                ImptTestHelper.emptyCheckEx(commandOut);
+            });
+        }
 
-    // create product and save product id for test purposes
-    function testSuiteInit() {
-        return ImptTestingHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME} --descr "${PRODUCT_DESCR}"`, (commandOut) => {
-            const idMatcher = commandOut.output.match(new RegExp(`${ImptTestingHelper.ATTR_ID}"?:\\s+"?([A-Za-z0-9-]+)`));
-            if (idMatcher && idMatcher.length > 1) {
-                product_id = idMatcher[1];
-            }
-            else fail("TestSuitInit error: Fail create product");
-            ImptTestingHelper.emptyCheckEx(commandOut);
+        // check 'product successfully updated' output message 
+        function checkSuccessUpdateProductMessage(commandOut, product) {
+            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+                `${Identifier.ENTITY_TYPE.TYPE_PRODUCT}\\s+` +
+                Util.format(`${UserInterractor.MESSAGES.ENTITY_UPDATED}`, `"${product}"`)
+            );
+        }
+
+        // check command`s result by exec product info command
+        function checkProductInfo(name, desc) {
+            return ImptTestHelper.runCommandEx(`impt product info -p ${name}  ${outputMode}`, (commandOut) => {
+                ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_NAME, `${name}`);
+                ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_DESCRIPTION, `${desc}`);
+                ImptTestHelper.checkSuccessStatusEx(commandOut);
+            });
+        }
+
+        it('update product name', (done) => {
+            ImptTestHelper.runCommandEx(`impt product update -p ${PRODUCT_NAME} -n ${PRODUCT_NAME_2} ${outputMode}`, (commandOut) => {
+                checkSuccessUpdateProductMessage(commandOut, PRODUCT_NAME);
+                ImptTestHelper.checkSuccessStatusEx(commandOut);
+            }).
+                then(() => checkProductInfo(PRODUCT_NAME_2, PRODUCT_DESCR)).
+                then(done).
+                catch(error => done.fail(error));
         });
-    }
 
-    it('update product name', (done) => {
-        ImptTestingHelper.runCommandEx(`impt product update -p ${PRODUCT_NAME} -n ${PRODUCT_NAME_2} ${outmode}`, ImptTestingHelper.checkSuccessStatusEx).
-            then(done).
-            catch(error => done.fail(error));
-    });
+        it('update product description', (done) => {
+            ImptTestHelper.runCommandEx(`impt product update -p ${PRODUCT_NAME_2} -s "${PRODUCT_DESCR_2}" ${outputMode}`, (commandOut) => {
+                checkSuccessUpdateProductMessage(commandOut, PRODUCT_NAME_2);
+                ImptTestHelper.checkSuccessStatusEx(commandOut);
+            }).
+                then(() => checkProductInfo(PRODUCT_NAME_2, PRODUCT_DESCR_2)).
+                then(done).
+                catch(error => done.fail(error));
+        });
 
-    it('update product description', (done) => {
-        ImptTestingHelper.runCommandEx(`impt product update -p ${PRODUCT_NAME_2} -s "${PRODUCT_DESCR_2}" ${outmode}`, ImptTestingHelper.checkSuccessStatusEx).
-            then(done).
-            catch(error => done.fail(error));
-    });
+        it('update product name and description', (done) => {
+            ImptTestHelper.runCommandEx(`impt product update -p ${PRODUCT_NAME_2} -n ${PRODUCT_NAME} -s "${PRODUCT_DESCR}" ${outputMode}`, (commandOut) => {
+                checkSuccessUpdateProductMessage(commandOut, PRODUCT_NAME_2);
+                ImptTestHelper.checkSuccessStatusEx(commandOut);
+            }).
+                then(() => checkProductInfo(PRODUCT_NAME, PRODUCT_DESCR)).
+                then(done).
+                catch(error => done.fail(error));
+        });
 
-    it('update product name and description', (done) => {
-        ImptTestingHelper.runCommandEx(`impt product update -p ${PRODUCT_NAME_2} -n ${PRODUCT_NAME} -s "${PRODUCT_DESCR}" ${outmode}`, ImptTestingHelper.checkSuccessStatusEx).
-            then(done).
-            catch(error => done.fail(error));
-    });
+        it('update product to empty description', (done) => {
+            ImptTestHelper.runCommandEx(`impt product update -p ${PRODUCT_NAME}  -s "" ${outputMode}`, (commandOut) => {
+                checkSuccessUpdateProductMessage(commandOut, PRODUCT_NAME);
+                ImptTestHelper.checkSuccessStatusEx(commandOut);
+            }).
+                then(() => checkProductInfo(PRODUCT_NAME, '')).
+                then(done).
+                catch(error => done.fail(error));
+        });
 
-    it('update product to empty description', (done) => {
-        ImptTestingHelper.runCommandEx(`impt product update -p ${PRODUCT_NAME}  -s "" ${outmode}`, ImptTestingHelper.checkSuccessStatusEx).
-            then(done).
-            catch(error => done.fail(error));
-    });
+        it('update product name by id', (done) => {
+            ImptTestHelper.runCommandEx(`impt product update -p ${product_id}  -n ${PRODUCT_NAME_2} ${outputMode}`, (commandOut) => {
+                checkSuccessUpdateProductMessage(commandOut, product_id);
+                ImptTestHelper.checkSuccessStatusEx(commandOut);
+            }).
+                then(() => checkProductInfo(PRODUCT_NAME_2, '')).
+                then(done).
+                catch(error => done.fail(error));
+        });
 
-    it('update product name by id', (done) => {
-        ImptTestingHelper.runCommandEx(`impt product update -p ${product_id}  -n ${PRODUCT_NAME_2} ${outmode}`, ImptTestingHelper.checkSuccessStatusEx).
-            then(done).
-            catch(error => done.fail(error));
-    });
+        it('update product without new values', (done) => {
+            ImptTestHelper.runCommandEx(`impt product update -p ${PRODUCT_NAME_2} ${outputMode}`, (commandOut) => {
+                checkSuccessUpdateProductMessage(commandOut, PRODUCT_NAME_2);
+                ImptTestHelper.checkSuccessStatusEx(commandOut);
+            }).
+                then(() => checkProductInfo(PRODUCT_NAME_2, '')).
+                then(done).
+                catch(error => done.fail(error));
+        });
 
-    it('update product without new values', (done) => {
-        ImptTestingHelper.runCommandEx(`impt product update -p ${PRODUCT_NAME_2} ${outmode}`, ImptTestingHelper.checkSuccessStatusEx).
-            then(done).
-            catch(error => done.fail(error));
-    });
+        it('update product to empty name', (done) => {
+            ImptTestHelper.runCommandEx(`impt product update -p ${PRODUCT_NAME_2} -n "" ${outputMode}`, (commandOut) => {
+                MessageHelper.checkMissingArgumentValueError(commandOut, 'name');
+                ImptTestHelper.checkFailStatusEx(commandOut);
+            }).
+                then(done).
+                catch(error => done.fail(error));
+        });
 
-    it('update product to empty name', (done) => {
-        ImptTestingHelper.runCommandEx(`impt product update -p ${PRODUCT_NAME_2} -n "" ${outmode}`, ImptTestingHelper.checkFailStatusEx).
-            then(done).
-            catch(error => done.fail(error));
-    });
+        it('update product to name without value', (done) => {
+            ImptTestHelper.runCommandEx(`impt product update -p ${PRODUCT_NAME_2} -n`, (commandOut) => {
+                MessageHelper.checkNotEnoughArgumentsError(commandOut, 'n');
+                ImptTestHelper.checkFailStatusEx(commandOut);
+            }).
+                then(done).
+                catch(error => done.fail(error));
+        });
 
-    it('update product to name without value', (done) => {
-        ImptTestingHelper.runCommandEx(`impt product update -p ${PRODUCT_NAME_2} -n`, ImptTestingHelper.checkFailStatusEx).
-            then(done).
-            catch(error => done.fail(error));
-    });
+        it('update product to description without value', (done) => {
+            ImptTestHelper.runCommandEx(`impt product update -p ${PRODUCT_NAME_2} -s`, (commandOut) => {
+                MessageHelper.checkNotEnoughArgumentsError(commandOut, 's');
+                ImptTestHelper.checkFailStatusEx(commandOut);
+            }).
+                then(done).
+                catch(error => done.fail(error));
+        });
 
-    it('update product to description without value', (done) => {
-        ImptTestingHelper.runCommandEx(`impt product update -p ${PRODUCT_NAME_2} -s`, ImptTestingHelper.checkFailStatusEx).
-            then(done).
-            catch(error => done.fail(error));
-    });
+        it('update product by empty name', (done) => {
+            ImptTestHelper.runCommandEx(`impt product update -n ${PRODUCT_NAME_2} -p "" `, (commandOut) => {
+                MessageHelper.checkMissingArgumentValueError(commandOut, 'product');
+                ImptTestHelper.checkFailStatusEx(commandOut);
+            }).
+                then(done).
+                catch(error => done.fail(error));
+        });
 
-    it('update product by empty name', (done) => {
-        ImptTestingHelper.runCommandEx(`impt product update -p "" -n ${PRODUCT_NAME_2}`, ImptTestingHelper.checkFailStatusEx).
-            then(done).
-            catch(error => done.fail(error));
-    });
+        it('update product by name without value', (done) => {
+            ImptTestHelper.runCommandEx(`impt product update  -n ${PRODUCT_NAME_2} -p`, (commandOut) => {
+                MessageHelper.checkNotEnoughArgumentsError(commandOut, 'p');
+                ImptTestHelper.checkFailStatusEx(commandOut);
+            }).
+                then(done).
+                catch(error => done.fail(error));
+        });
 
-    it('update product by name without value', (done) => {
-        ImptTestingHelper.runCommandEx(`impt product update -p -n ${PRODUCT_NAME_2}`, ImptTestingHelper.checkFailStatusEx).
-            then(done).
-            catch(error => done.fail(error));
-    });
+        it('update product without output value', (done) => {
+            ImptTestHelper.runCommandEx(`impt product update -p ${PRODUCT_NAME_2}  -n ${PRODUCT_NAME} -z`, (commandOut) => {
+                MessageHelper.checkNotEnoughArgumentsError(commandOut, 'z');
+                ImptTestHelper.checkFailStatusEx(commandOut);
+            }).
+                then(() => ImptTestHelper.runCommandEx(`impt product update -p ${PRODUCT_NAME_2}  -n ${PRODUCT_NAME} -z undefined`, (commandOut) => {
+                    MessageHelper.checkInvalidValuesError(commandOut);
+                    ImptTestHelper.checkFailStatusEx(commandOut);
+                })).
+                then(done).
+                catch(error => done.fail(error));
+        });
 
-    it('update product without output value', (done) => {
-        ImptTestingHelper.runCommandEx(`impt product update -p ${PRODUCT_NAME_2}  -n ${PRODUCT_NAME} -z`, ImptTestingHelper.checkFailStatusEx).
-            then(() => ImptTestingHelper.runCommandEx(`impt product update -p ${PRODUCT_NAME_2}  -n ${PRODUCT_NAME} -z undefined`,
-                ImptTestingHelper.checkFailStatusEx)).
-            then(done).
-            catch(error => done.fail(error));
-    });
-
-    it('update not existing product', (done) => {
-        ImptTestingHelper.runCommandEx(`impt product update -p __not_existing_product  -n "${PRODUCT_NAME} ${outmode}`,
-            ImptTestingHelper.checkFailStatusEx).
-            then(done).
-            catch(error => done.fail(error));
+        it('update not existing product', (done) => {
+            ImptTestHelper.runCommandEx(`impt product update -p __not_existing_product  -n "${PRODUCT_NAME} ${outputMode}`, (commandOut) => {
+                MessageHelper.checkEntityNotFoundError(commandOut, Identifier.ENTITY_TYPE.TYPE_PRODUCT, '__not_existing_product');
+                ImptTestHelper.checkFailStatusEx(commandOut);
+            }).
+                then(done).
+                catch(error => done.fail(error));
+        });
     });
 });

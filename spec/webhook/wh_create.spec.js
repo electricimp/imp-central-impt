@@ -26,7 +26,7 @@
 
 require('jasmine-expect');
 const config = require('../config');
-const ImptTestingHelper = require('../ImptTestingHelper');
+const ImptTestHelper = require('../ImptTestHelper');
 const MessageHelper = require('../MessageHelper');
 const Identifier = require('../../lib/util/Identifier');
 const Util = require('util');
@@ -34,56 +34,56 @@ const UserInterractor = require('../../lib/util/UserInteractor');
 const PRODUCT_NAME = '__impt_product';
 const DG_NAME = '__impt_device_group';
 const DG_NAME_2 = '__impt_device_group_2';
-const WH_URL = 'http://example.ru/';
+const WH_URL = 'http://example.com/';
 
-fdescribe('impt webhook create test suite >', () => {
+describe('impt webhook create test suite >', () => {
     const outputMode = '';
 
     let dg_id = null;
     let wh_id = null;
 
     beforeAll((done) => {
-        ImptTestingHelper.init().
+        ImptTestHelper.init().
             then(testSuiteCleanUp).
             then(testSuiteInit).
             then(done).
             catch(error => done.fail(error));
-    }, ImptTestingHelper.TIMEOUT);
+    }, ImptTestHelper.TIMEOUT);
 
     afterAll((done) => {
         testSuiteCleanUp().
-            then(ImptTestingHelper.cleanUp).
+            then(ImptTestHelper.cleanUp).
             then(done).
             catch(error => done.fail(error));
-    }, ImptTestingHelper.TIMEOUT);
+    }, ImptTestHelper.TIMEOUT);
 
     afterEach((done) => {
-        ImptTestingHelper.runCommandEx(`impt webhook delete --wh ${wh_id} -q`, ImptTestingHelper.emptyCheckEx).
+        ImptTestHelper.runCommandEx(`impt webhook delete --wh ${wh_id} -q`, ImptTestHelper.emptyCheckEx).
             then(done).
             catch(error => done.fail(error));
-    }, ImptTestingHelper.TIMEOUT);
+    }, ImptTestHelper.TIMEOUT);
 
     // delete all entities using in impt webhook create test suite
     function testSuiteCleanUp() {
-        return ImptTestingHelper.runCommandEx(`impt product delete --product ${PRODUCT_NAME} --force --confirmed`, ImptTestingHelper.emptyCheckEx).
-            then(() => ImptTestingHelper.runCommandEx(`impt dg delete --dg ${DG_NAME_2} -f `, ImptTestingHelper.emptyCheckEx));
+        return ImptTestHelper.runCommandEx(`impt product delete --product ${PRODUCT_NAME} --force --confirmed`, ImptTestHelper.emptyCheckEx).
+            then(() => ImptTestHelper.runCommandEx(`impt dg delete --dg ${DG_NAME_2} -f `, ImptTestHelper.emptyCheckEx));
     }
 
     // prepare test environment for impt webhook create test suite
     function testSuiteInit() {
-        return ImptTestingHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME}`, ImptTestingHelper.emptyCheckEx).
-            then(() => ImptTestingHelper.runCommandEx(`impt dg create --name ${DG_NAME} -p ${PRODUCT_NAME} `, (commandOut) => {
-                dg_id = ImptTestingHelper.parseId(commandOut);
-                ImptTestingHelper.emptyCheckEx(commandOut);
+        return ImptTestHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
+            then(() => ImptTestHelper.runCommandEx(`impt dg create --name ${DG_NAME} -p ${PRODUCT_NAME} `, (commandOut) => {
+                dg_id = ImptTestHelper.parseId(commandOut);
+                ImptTestHelper.emptyCheckEx(commandOut);
             })).
-            then(() => ImptTestingHelper.runCommandEx(`impt project link --dg ${DG_NAME} -q`, (commandOut) => {
-                ImptTestingHelper.emptyCheckEx(commandOut);
+            then(() => ImptTestHelper.runCommandEx(`impt project link --dg ${DG_NAME} -q`, (commandOut) => {
+                ImptTestHelper.emptyCheckEx(commandOut);
             }));
     }
 
     // check 'webhook successfuly created' output message 
     function checkSuccessCreateWebhookMessage(commandOut, webhookId) {
-        ImptTestingHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+        ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
             `${Identifier.ENTITY_TYPE.TYPE_WEBHOOK}\\s+` +
             Util.format(`${UserInterractor.MESSAGES.ENTITY_CREATED}`, `"${webhookId}"`)
         );
@@ -92,7 +92,7 @@ fdescribe('impt webhook create test suite >', () => {
 
     // check command`s result by exec webhook info command
     function checkWebhookInfo(expectInfo) {
-        return ImptTestingHelper.runCommandEx(`impt webhook info --wh ${expectInfo && expectInfo.id ? expectInfo.id : wh_id} -z json`, (commandOut) => {
+        return ImptTestHelper.runCommandEx(`impt webhook info --wh ${expectInfo && expectInfo.id ? expectInfo.id : wh_id} -z json`, (commandOut) => {
             const json = JSON.parse(commandOut.output);
             expect(json.Webhook).toBeDefined;
             expect(json.Webhook.id).toBe(expectInfo && expectInfo.id ? expectInfo.id : wh_id);
@@ -101,15 +101,15 @@ fdescribe('impt webhook create test suite >', () => {
             expect(json.Webhook.content_type).toBe(expectInfo && expectInfo.mime ? expectInfo.mime : 'json');
             expect(json.Webhook['Device Group'].id).toBe(expectInfo && expectInfo.dg_id ? expectInfo.dg_id : dg_id);
             expect(json.Webhook['Device Group'].name).toBe(expectInfo && expectInfo.dg_name ? expectInfo.dg_name : DG_NAME);
-            ImptTestingHelper.checkSuccessStatusEx(commandOut);
+            ImptTestHelper.checkSuccessStatusEx(commandOut);
         });
     }
 
     it('webhook create by dg id', (done) => {
-        ImptTestingHelper.runCommandEx(`impt webhook create --dg ${dg_id} --url ${WH_URL} --event deployment --mime json ${outputMode}`, (commandOut) => {
-            wh_id = ImptTestingHelper.parseId(commandOut);
+        ImptTestHelper.runCommandEx(`impt webhook create --dg ${dg_id} --url ${WH_URL} --event deployment --mime json ${outputMode}`, (commandOut) => {
+            wh_id = ImptTestHelper.parseId(commandOut);
             checkSuccessCreateWebhookMessage(commandOut, wh_id);
-            ImptTestingHelper.checkSuccessStatusEx(commandOut);
+            ImptTestHelper.checkSuccessStatusEx(commandOut);
         }).
             then(checkWebhookInfo).
             then(done).
@@ -117,10 +117,10 @@ fdescribe('impt webhook create test suite >', () => {
     });
 
     it('webhook create by dg name', (done) => {
-        ImptTestingHelper.runCommandEx(`impt webhook create --dg ${DG_NAME} --url ${WH_URL} --event deployment --mime json ${outputMode}`, (commandOut) => {
-            wh_id = ImptTestingHelper.parseId(commandOut);
+        ImptTestHelper.runCommandEx(`impt webhook create --dg ${DG_NAME} --url ${WH_URL} --event deployment --mime json ${outputMode}`, (commandOut) => {
+            wh_id = ImptTestHelper.parseId(commandOut);
             checkSuccessCreateWebhookMessage(commandOut, wh_id);
-            ImptTestingHelper.checkSuccessStatusEx(commandOut);
+            ImptTestHelper.checkSuccessStatusEx(commandOut);
         }).
             then(checkWebhookInfo).
             then(done).
@@ -128,10 +128,10 @@ fdescribe('impt webhook create test suite >', () => {
     });
 
     it('webhook create by project', (done) => {
-        ImptTestingHelper.runCommandEx(`impt webhook create --url ${WH_URL} --event deployment --mime urlencoded ${outputMode}`, (commandOut) => {
-            wh_id = ImptTestingHelper.parseId(commandOut);
+        ImptTestHelper.runCommandEx(`impt webhook create --url ${WH_URL} --event deployment --mime urlencoded ${outputMode}`, (commandOut) => {
+            wh_id = ImptTestHelper.parseId(commandOut);
             checkSuccessCreateWebhookMessage(commandOut, wh_id);
-            ImptTestingHelper.checkSuccessStatusEx(commandOut);
+            ImptTestHelper.checkSuccessStatusEx(commandOut);
         }).
             then(() => {
                checkWebhookInfo( { mime: 'urlencoded' });
@@ -141,18 +141,18 @@ fdescribe('impt webhook create test suite >', () => {
     });
 
     it('webhook create with invalid url', (done) => {
-        ImptTestingHelper.runCommandEx(`impt webhook create --url invalidurl --event deployment --mime urlencoded ${outputMode}`, (commandOut) => {
+        ImptTestHelper.runCommandEx(`impt webhook create --url invalidurl --event deployment --mime urlencoded ${outputMode}`, (commandOut) => {
             MessageHelper.checkInvalidUrlError(commandOut);
-            ImptTestingHelper.checkFailStatusEx(commandOut);
+            ImptTestHelper.checkFailStatusEx(commandOut);
         }).
             then(done).
             catch(error => done.fail(error));
     });
 
     it('webhook create with not exist dg', (done) => {
-        ImptTestingHelper.runCommandEx(`impt webhook create --dg ${DG_NAME_2} --url ${WH_URL} --event deployment --mime json ${outputMode}`, (commandOut) => {
+        ImptTestHelper.runCommandEx(`impt webhook create --dg ${DG_NAME_2} --url ${WH_URL} --event deployment --mime json ${outputMode}`, (commandOut) => {
             MessageHelper.checkEntityNotFoundError(commandOut, Identifier.ENTITY_TYPE.TYPE_DEVICE_GROUP, DG_NAME_2);
-            ImptTestingHelper.checkFailStatusEx(commandOut);
+            ImptTestHelper.checkFailStatusEx(commandOut);
         }).
             then(done).
             catch(error => done.fail(error));

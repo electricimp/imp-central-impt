@@ -26,45 +26,51 @@
 
 require('jasmine-expect');
 
-const ImptTestingHelper = require('./ImptTestingHelper');
+const ImptTestHelper = require('./ImptTestHelper');
 const UserInterractor = require('../lib/util/UserInteractor');
 
 // Helper class for testing impt tool.
 // Contains common methods for testing output error message
 class MessageHelper {
     static checkDuplicateResourceError(commandOut, entity) {
-        ImptTestingHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
+        ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
             `Duplicate Resource: ${entity}s must have unique names.`
         );
     }
 
     static checkMissingArgumentsError(commandOut, names) {
-        ImptTestingHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
+        ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
             `Missing required argument: ${names}`
         );
     }
 
     static checkNotEnoughArgumentsError(commandOut, option) {
-        ImptTestingHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
+        ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
             `Not enough arguments following: ${option}`
         );
     }
 
     static checkMissingArgumentValueError(commandOut, option) {
-        ImptTestingHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
+        ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
             `Missing argument value: ${option}`
         );
     }
 
     static checkInvalidValuesError(commandOut) {
-        ImptTestingHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
+        ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
             'Invalid values:'
         );
     }
 
     static checkEntityNotFoundError(commandOut, entity, name) {
-        ImptTestingHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
+        ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
             `${entity} "${name}" is not found.`
+        );
+    }
+
+    static checkInvalidUrlError(commandOut) {
+        ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
+            `Invalid URL: The provided URL is invalid.`
         );
     }
 }

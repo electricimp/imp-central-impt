@@ -26,7 +26,7 @@
 
 require('jasmine-expect');
 
-const ImptTestingHelper = require('../ImptTestingHelper');
+const ImptTestHelper = require('../ImptTestHelper');
 const UserInterractor = require('../../lib/util/UserInteractor');
 
 describe('impt help pages test suite >', () => {
@@ -45,26 +45,26 @@ describe('impt help pages test suite >', () => {
     tool.impt.webhook = ['', 'create', 'delete', 'info', 'list', 'update'];
 
     beforeAll((done) => {
-        ImptTestingHelper.init(false).
+        ImptTestHelper.init(false).
             then(done).
             catch(error => done.fail(error));
-    }, ImptTestingHelper.TIMEOUT);
+    }, ImptTestHelper.TIMEOUT);
 
     afterAll((done) => {
-        ImptTestingHelper.cleanUp().
+        ImptTestHelper.cleanUp().
             then(done).
             catch(error => done.fail(error));
-    }, ImptTestingHelper.TIMEOUT);
+    }, ImptTestHelper.TIMEOUT);
 
     // help page tests for all commands
     tool.forEach((imptool) => {
         // negative test for tool
         it(`${imptool} without command group`, (done) => {
-            ImptTestingHelper.runCommandEx(`${imptool}`, (commandOut) => {
+            ImptTestHelper.runCommandEx(`${imptool}`, (commandOut) => {
                 expect(commandOut.output).toMatch(`Usage: ${imptool}\\s*(\\<|\\[|-)`);
-                ImptTestingHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
+                ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
                     UserInterractor.ERRORS.CMD_UNKNOWN);
-                ImptTestingHelper.checkFailStatusEx(commandOut);
+                ImptTestHelper.checkFailStatusEx(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
@@ -72,11 +72,11 @@ describe('impt help pages test suite >', () => {
         tool[imptool].forEach((commandGroup) => {
             // negative test for each command group 
             it(`${imptool} ${commandGroup} without command`, (done) => {
-                ImptTestingHelper.runCommandEx(`${imptool} ${commandGroup}`, (commandOut) => {
+                ImptTestHelper.runCommandEx(`${imptool} ${commandGroup}`, (commandOut) => {
                     expect(commandOut.output).toMatch(`Usage: ${imptool}\\s*${commandGroup}\\s*(\\<|\\[|-)`);
-                    ImptTestingHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
+                    ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
                         UserInterractor.ERRORS.CMD_UNKNOWN);
-                    ImptTestingHelper.checkFailStatusEx(commandOut);
+                    ImptTestHelper.checkFailStatusEx(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
@@ -84,9 +84,9 @@ describe('impt help pages test suite >', () => {
             tool[imptool][commandGroup].forEach((command) => {
                 // positive tests for all
                 it(`${imptool} ${commandGroup} ${command} help page`, (done) => {
-                    ImptTestingHelper.runCommandEx(`${imptool} ${commandGroup} ${command} -h`, (commandOut) => {
+                    ImptTestHelper.runCommandEx(`${imptool} ${commandGroup} ${command} -h`, (commandOut) => {
                         expect(commandOut.output).toMatch(`Usage: ${imptool}\\s*${commandGroup}\\s*${command}\\s*(\\<|\\[|-)`);
-                        ImptTestingHelper.checkSuccessStatusEx(commandOut);
+                        ImptTestHelper.checkSuccessStatusEx(commandOut);
                     }).
                         then(done).
                         catch(error => done.fail(error));

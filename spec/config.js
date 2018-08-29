@@ -24,6 +24,7 @@
 
 'use strict';
 
+exports.outputModes = process.env.IMPT_OUTPUT_MODES ? process.env.IMPT_OUTPUT_MODES.split(',') : [];
 exports.username = process.env.IMPT_USER_NAME;
 exports.accountid = process.env.IMPT_ACCOUNT_ID
 exports.email = process.env.IMPT_USER_EMAIL;
