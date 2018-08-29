@@ -24,7 +24,7 @@
 
 'use strict';
 
-const ImptTestingHelper = require('../ImptTestingHelper');
+const ImptTestingHelper = require('../ImptTestHelper');
 const ImptTestCommandsHelper = require('./ImptTestCommandsHelper');
 
 // Tests for Bi-directional Device-Agent Communication

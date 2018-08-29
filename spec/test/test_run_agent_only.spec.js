@@ -26,7 +26,7 @@
 
 require('jasmine-expect');
 
-const ImptTestingHelper = require('../ImptTestingHelper');
+const ImptTestingHelper = require('../ImptTestHelper');
 const ImptTestCommandsHelper = require('./ImptTestCommandsHelper');
 
 // Agent-only tests

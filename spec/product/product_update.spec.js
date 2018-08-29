@@ -41,7 +41,7 @@ const PRODUCT_DESCR_2 = 'impt temp product description 2';
 // Test suite for 'impt product update' command.
 // Runs 'impt product update' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
-    fdescribe(`impt product update test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
+    describe(`impt product update test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         let product_id = null;
 
         beforeAll((done) => {
@@ -86,10 +86,11 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         }
 
         // check command`s result by exec product info command
-        function checkProductInfo(name, desc) {
-            return ImptTestHelper.runCommandEx(`impt product info -p ${name}  ${outputMode}`, (commandOut) => {
-                ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_NAME, `${name}`);
-                ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_DESCRIPTION, `${desc}`);
+        function checkProductInfo(expectInfo) {
+            return ImptTestHelper.runCommandEx(`impt product info -p ${expectInfo && expectInfo.name ? expectInfo.name : PRODUCT_NAME}  ${outputMode}`, (commandOut) => {
+                ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_ID, `${expectInfo && expectInfo.id ? expectInfo.id : product_id}`);
+                ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_NAME, `${expectInfo && expectInfo.name ? expectInfo.name : PRODUCT_NAME}`);
+                ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_DESCRIPTION, `${expectInfo && expectInfo.descr ? expectInfo.descr : ''}`);
                 ImptTestHelper.checkSuccessStatusEx(commandOut);
             });
         }
@@ -99,7 +100,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 checkSuccessUpdateProductMessage(commandOut, PRODUCT_NAME);
                 ImptTestHelper.checkSuccessStatusEx(commandOut);
             }).
-                then(() => checkProductInfo(PRODUCT_NAME_2, PRODUCT_DESCR)).
+                then(() => checkProductInfo({ name: PRODUCT_NAME_2, descr: PRODUCT_DESCR })).
                 then(done).
                 catch(error => done.fail(error));
         });
@@ -109,7 +110,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 checkSuccessUpdateProductMessage(commandOut, PRODUCT_NAME_2);
                 ImptTestHelper.checkSuccessStatusEx(commandOut);
             }).
-                then(() => checkProductInfo(PRODUCT_NAME_2, PRODUCT_DESCR_2)).
+                then(() => checkProductInfo({ name: PRODUCT_NAME_2, descr: PRODUCT_DESCR_2 })).
                 then(done).
                 catch(error => done.fail(error));
         });
@@ -119,7 +120,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 checkSuccessUpdateProductMessage(commandOut, PRODUCT_NAME_2);
                 ImptTestHelper.checkSuccessStatusEx(commandOut);
             }).
-                then(() => checkProductInfo(PRODUCT_NAME, PRODUCT_DESCR)).
+                then(() => checkProductInfo({ name: PRODUCT_NAME, descr: PRODUCT_DESCR })).
                 then(done).
                 catch(error => done.fail(error));
         });
@@ -129,7 +130,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 checkSuccessUpdateProductMessage(commandOut, PRODUCT_NAME);
                 ImptTestHelper.checkSuccessStatusEx(commandOut);
             }).
-                then(() => checkProductInfo(PRODUCT_NAME, '')).
+                then(() => checkProductInfo).
                 then(done).
                 catch(error => done.fail(error));
         });
@@ -139,7 +140,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 checkSuccessUpdateProductMessage(commandOut, product_id);
                 ImptTestHelper.checkSuccessStatusEx(commandOut);
             }).
-                then(() => checkProductInfo(PRODUCT_NAME_2, '')).
+                then(() => checkProductInfo({ name: PRODUCT_NAME_2 })).
                 then(done).
                 catch(error => done.fail(error));
         });
@@ -149,7 +150,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 checkSuccessUpdateProductMessage(commandOut, PRODUCT_NAME_2);
                 ImptTestHelper.checkSuccessStatusEx(commandOut);
             }).
-                then(() => checkProductInfo(PRODUCT_NAME_2, '')).
+                then(() => checkProductInfo({ name: PRODUCT_NAME_2 })).
                 then(done).
                 catch(error => done.fail(error));
         });

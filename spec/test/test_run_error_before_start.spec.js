@@ -26,7 +26,7 @@
 
 require('jasmine-expect');
 
-const ImptTestingHelper = require('../ImptTestingHelper');
+const ImptTestingHelper = require('../ImptTestHelper');
 const config = require('../config');
 const ImptTestCommandsHelper = require('./ImptTestCommandsHelper');
 

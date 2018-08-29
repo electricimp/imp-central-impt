@@ -37,7 +37,8 @@ const PRODUCT_DESCR = 'impt temp product description';
 
 // Test suite for 'impt product info' command.
 // Runs 'impt product info' command with different combinations of options,
-describe('impt product info test suite >', () => {
+ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
+    describe(`impt product info test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
     const outputMode = '';
     let product_id = null;
 
@@ -131,4 +132,5 @@ describe('impt product info test suite >', () => {
             then(done).
             catch(error => done.fail(error));
     });
+});
 });

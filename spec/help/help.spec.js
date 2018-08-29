@@ -30,7 +30,7 @@ const ImptTestHelper = require('../ImptTestHelper');
 const UserInterractor = require('../../lib/util/UserInteractor');
 
 describe('impt help pages test suite >', () => {
-    const tool = ['impt'];
+    let tool = ['impt'];
     tool.impt = ['', 'auth', 'build', 'device', 'dg', 'log', 'loginkey', 'product', 'project', 'test', 'webhook'];
     tool.impt[''] = [''];
     tool.impt.auth = ['', 'info', 'login', 'logout'];

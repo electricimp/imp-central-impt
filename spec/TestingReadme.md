@@ -52,5 +52,5 @@ Every test suite must delete all impCentral entities (Products, Device Groups, D
 
 If a test suite needs a new input parameter (eg. an unbound key or a Webhook url) it should be provided via a new environment variable. The environment variable must be documented in this readme file.
 
-There is a common util file - [imp-central-impt/spec/ImptTestingHelper.js](../spec/ImptTestingHelper.js) - that contains useful methods which may be used by different test suites. The file may be extended by adding more reusable methods during new tests development.
+There is a common util file - [imp-central-impt/spec/ImptTestHelper.js](../spec/ImptTestHelper.js) - that contains useful methods which may be used by different test suites. The file may be extended by adding more reusable methods during new tests development.
 

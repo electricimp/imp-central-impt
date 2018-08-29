@@ -28,7 +28,7 @@ require('jasmine-expect');
 
 const Shell = require('shelljs');
 const config = require('../config');
-const ImptTestingHelper = require('../ImptTestingHelper');
+const ImptTestingHelper = require('../ImptTestHelper');
 
 const TEST_PRODUCT_NAME = '__impt_test_run_product';
 const TEST_DG_NAME = '__impt_test_run_dg';

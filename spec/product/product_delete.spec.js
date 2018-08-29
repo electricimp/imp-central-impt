@@ -42,7 +42,8 @@ const PRODUCT_DESCR_2 = 'impt temp product description 2';
 
 // Test suite for 'impt product delete command.
 // Runs 'impt product delete' command with different combinations of options,
-describe('impt product delete test suite >', () => {
+ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
+    describe(`impt product delete test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
     const outputMode = '';
     let product_id = null;
 
@@ -122,4 +123,5 @@ describe('impt product delete test suite >', () => {
             then(done).
             catch(error => done.fail(error));
     });
+});
 });
