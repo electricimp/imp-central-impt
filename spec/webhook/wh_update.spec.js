@@ -35,8 +35,8 @@ const UserInterractor = require('../../lib/util/UserInteractor');
 const PRODUCT_NAME = '__impt_product';
 const DG_NAME = '__impt_device_group';
 const DG_NAME_2 = '__impt_device_group_2';
-const WH_URL = 'http://example.com/';
-const WH_URL_2 = 'http://example.com/v2/';
+const WH_URL = 'http://example.com/wu/';
+const WH_URL_2 = 'http://example.com/wu2/';
 
 describe('impt webhook update test suite >', () => {
 

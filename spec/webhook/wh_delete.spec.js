@@ -35,7 +35,7 @@ const UserInterractor = require('../../lib/util/UserInteractor');
 const PRODUCT_NAME = '__impt_product';
 const DG_NAME = '__impt_device_group';
 const DG_NAME_2 = '__impt_device_group_2';
-const WH_URL = 'http://example.ru/';
+const WH_URL = 'http://example.com/wd/';
 
 describe('impt webhook delete test suite >', () => {
 

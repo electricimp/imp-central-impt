@@ -32,7 +32,7 @@ const Identifier = require('../../lib/util/Identifier');
 
 const PRODUCT_NAME = '__impt_product';
 const DG_NAME = '__impt_device_group';
-const WH_URL = 'http://example.ru/';
+const WH_URL = 'http://example.com/wi/';
 
 describe('impt webhook info test suite >', () => {
 
