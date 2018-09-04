@@ -40,25 +40,25 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         beforeAll((done) => {
             ImptTestHelper.init().
-                then(testSuiteCleanUp).
-                then(testSuiteInit).
+                then(_testSuiteCleanUp).
+                then(_testSuiteInit).
                 then(done).
                 catch(error => done.fail(error));
         }, ImptTestHelper.TIMEOUT);
 
         afterAll((done) => {
-            testSuiteCleanUp().
+            _testSuiteCleanUp().
                 then(ImptTestHelper.cleanUp).
                 then(done).
                 catch(error => done.fail(error));
         }, ImptTestHelper.TIMEOUT);
 
-        function testSuiteInit() {
+        function _testSuiteInit() {
             return ImptTestHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
                 then(() => ImptTestHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME_2}`, ImptTestHelper.emptyCheckEx));
         }
 
-        function testSuiteCleanUp() {
+        function _testSuiteCleanUp() {
             return ImptTestHelper.runCommandEx(`impt product delete --product ${PRODUCT_NAME} --confirmed`, ImptTestHelper.emptyCheckEx).
                 then(() => ImptTestHelper.runCommandEx(`impt product delete --product ${PRODUCT_NAME_2} --confirmed`,
                     ImptTestHelper.emptyCheckEx));

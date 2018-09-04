@@ -44,21 +44,21 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
     beforeAll((done) => {
         ImptTestHelper.init().
-            then(testSuiteCleanUp).
-            then(testSuiteInit).
+            then(_testSuiteCleanUp).
+            then(_testSuiteInit).
             then(done).
             catch(error => done.fail(error));
     }, ImptTestHelper.TIMEOUT);
 
     afterAll((done) => {
-        testSuiteCleanUp().
+        _testSuiteCleanUp().
             then(ImptTestHelper.cleanUp).
             then(done).
             catch(error => done.fail(error));
     }, ImptTestHelper.TIMEOUT);
 
     // create product and save product id for test purposes
-    function testSuiteInit() {
+    function _testSuiteInit() {
         return ImptTestHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME} --descr "${PRODUCT_DESCR}"`, (commandOut) => {
             product_id = ImptTestHelper.parseId(commandOut);
             if (!product_id) fail("TestSuitInit error: Fail create product");
@@ -66,7 +66,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         });
     }
 
-    function testSuiteCleanUp() {
+    function _testSuiteCleanUp() {
         return ImptTestHelper.runCommandEx(`impt product delete --product ${PRODUCT_NAME} --confirmed`, ImptTestHelper.emptyCheckEx).
             then(() => ImptTestHelper.runCommandEx(`impt product delete --product ${PRODUCT_NAME_2} --confirmed`,
                 ImptTestHelper.emptyCheckEx));

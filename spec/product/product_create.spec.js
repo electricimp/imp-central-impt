@@ -48,20 +48,20 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         beforeAll((done) => {
             ImptTestHelper.init().
-                then(testSuiteCleanUp).
+                then(_testSuiteCleanUp).
                 then(done).
                 catch(error => done.fail(error));
         }, ImptTestHelper.TIMEOUT);
 
         afterAll((done) => {
-            testSuiteCleanUp().
+            _testSuiteCleanUp().
                 then(ImptTestHelper.cleanUp).
                 then(done).
                 catch(error => done.fail(error));
         }, ImptTestHelper.TIMEOUT);
 
         // delete all entities using in impt product create test suite
-        function testSuiteCleanUp() {
+        function _testSuiteCleanUp() {
             return ImptTestHelper.runCommandEx(`impt product delete --product ${PRODUCT_NAME} --force --confirmed`, ImptTestHelper.emptyCheckEx).
                 then(() => ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME_2} -f -q`, ImptTestHelper.emptyCheckEx)).
                 then(() => ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME_3} -f -q`, ImptTestHelper.emptyCheckEx)).
@@ -69,7 +69,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         }
 
         // check command`s result by exec product info command
-        function checkProductInfo(expectInfo) {
+        function _checkProductInfo(expectInfo) {
             return ImptTestHelper.runCommandEx(`impt product info -p ${expectInfo && expectInfo.name ? expectInfo.name : PRODUCT_NAME}  ${outputMode}`, (commandOut) => {
                 ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_ID, `${expectInfo && expectInfo.id ? expectInfo.id : product_id}`);
                 ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_NAME, `${expectInfo && expectInfo.name ? expectInfo.name : PRODUCT_NAME}`);
@@ -79,7 +79,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         }
 
         // check successfuly created product output message 
-        function checkSuccessCreateProductMessage(commandOut, productName) {
+        function _checkSuccessCreateProductMessage(commandOut, productName) {
             ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
                 `${Identifier.ENTITY_TYPE.TYPE_PRODUCT}\\s+` +
                 Util.format(`${UserInterractor.MESSAGES.ENTITY_CREATED}`, `"${productName}"`)
@@ -90,12 +90,12 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             ImptTestHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME} --descr "${PRODUCT_DESCR}" ${outputMode}`, (commandOut) => {
                 product_id = ImptTestHelper.parseId(commandOut);
                 expect(product_id).not.toBeNull;
-                checkSuccessCreateProductMessage(commandOut, PRODUCT_NAME);
+                _checkSuccessCreateProductMessage(commandOut, PRODUCT_NAME);
                 ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_NAME, PRODUCT_NAME);
                 ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_ID, product_id);
                 ImptTestHelper.checkSuccessStatusEx(commandOut);
             }).
-                then(() => checkProductInfo({ name: PRODUCT_NAME, descr: PRODUCT_DESCR })).
+                then(() => _checkProductInfo({ name: PRODUCT_NAME, descr: PRODUCT_DESCR })).
                 then(done).
                 catch(error => done.fail(error));
         });
@@ -104,11 +104,11 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME_2} ${outputMode}`, (commandOut) => {
                 product_id = ImptTestHelper.parseId(commandOut);
                 expect(product_id).not.toBeNull;
-                checkSuccessCreateProductMessage(commandOut, PRODUCT_NAME_2);
+                _checkSuccessCreateProductMessage(commandOut, PRODUCT_NAME_2);
                 ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_NAME, `${PRODUCT_NAME_2}`);
                 ImptTestHelper.checkSuccessStatusEx(commandOut);
             }).
-                then(() => checkProductInfo({ name: PRODUCT_NAME_2 })).
+                then(() => _checkProductInfo({ name: PRODUCT_NAME_2 })).
                 then(done).
                 catch(error => done.fail(error));
         });
@@ -117,11 +117,11 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME_3} --descr "${PRODUCT_DESCR}" ${outputMode}`, (commandOut) => {
                 product_id = ImptTestHelper.parseId(commandOut);
                 expect(product_id).not.toBeNull;
-                checkSuccessCreateProductMessage(commandOut, PRODUCT_NAME_3);
+                _checkSuccessCreateProductMessage(commandOut, PRODUCT_NAME_3);
                 ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_NAME, `${PRODUCT_NAME_3}`);
                 ImptTestHelper.checkSuccessStatusEx(commandOut);
             }).
-                then(() => checkProductInfo({ name: PRODUCT_NAME_3, descr: PRODUCT_DESCR })).
+                then(() => _checkProductInfo({ name: PRODUCT_NAME_3, descr: PRODUCT_DESCR })).
                 then(done).
                 catch(error => done.fail(error));
         });
@@ -130,11 +130,11 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME_4} -s "" ${outputMode}`, (commandOut) => {
                 product_id = ImptTestHelper.parseId(commandOut);
                 expect(product_id).not.toBeNull;
-                checkSuccessCreateProductMessage(commandOut, PRODUCT_NAME_4);
+                _checkSuccessCreateProductMessage(commandOut, PRODUCT_NAME_4);
                 ImptTestHelper.checkAttributeEx(commandOut, 'name', `${PRODUCT_NAME_4}`);
                 ImptTestHelper.checkSuccessStatusEx(commandOut);
             }).
-                then(() => checkProductInfo({ name: PRODUCT_NAME_4 })).
+                then(() => _checkProductInfo({ name: PRODUCT_NAME_4 })).
                 then(done).
                 catch(error => done.fail(error));
         });

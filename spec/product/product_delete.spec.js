@@ -49,26 +49,26 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
     beforeAll((done) => {
         ImptTestHelper.init().
-            then(testSuiteInit).
+            then(_testSuiteInit).
             then(done).
             catch(error => done.fail(error));
     }, ImptTestHelper.TIMEOUT);
 
     afterAll((done) => {
-        testSuiteCleanUp().
+        _testSuiteCleanUp().
             then(ImptTestHelper.cleanUp).
             then(done).
             catch(error => done.fail(error));
     }, ImptTestHelper.TIMEOUT);
 
-    function testSuiteCleanUp() {
+    function _testSuiteCleanUp() {
         return ImptTestHelper.runCommandEx(`impt product delete --product ${PRODUCT_NAME} --confirmed`, ImptTestHelper.emptyCheckEx).
             then(() => ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME_2} -q`, ImptTestHelper.emptyCheckEx)).
             then(() => ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME_3} -q`, ImptTestHelper.emptyCheckEx)).
             then(() => ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME_4} -q`, ImptTestHelper.emptyCheckEx));
     }
 
-    function testSuiteInit() {
+    function _testSuiteInit() {
         return ImptTestHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME} --descr "${PRODUCT_DESCR}"`, (commandOut) => {
             const idMatcher = commandOut.output.match(new RegExp(`${ImptTestHelper.ATTR_ID}"?:\\s+"?([A-Za-z0-9-]+)`));
             if (idMatcher && idMatcher.length > 1) {
@@ -83,7 +83,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
     }
 
     // check 'product successfully deleted' output message 
-    function checkSuccessDeleteProductMessage(commandOut, product) {
+    function _checkSuccessDeleteProductMessage(commandOut, product) {
         ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
             `${Identifier.ENTITY_TYPE.TYPE_PRODUCT}\\s+` +
             Util.format(`${UserInterractor.MESSAGES.ENTITY_DELETED}`, `"${product}"`)
@@ -100,7 +100,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
     it('product delete by name', (done) => {
         ImptTestHelper.runCommandEx(`impt product delete --product ${PRODUCT_NAME_2} --confirmed ${outputMode}`, (commandOut) => {
-            checkSuccessDeleteProductMessage(commandOut, PRODUCT_NAME_2);
+            _checkSuccessDeleteProductMessage(commandOut, PRODUCT_NAME_2);
             ImptTestHelper.checkSuccessStatusEx(commandOut);
         }).
             then(() => ImptTestHelper.runCommandEx(`impt product info -p ${PRODUCT_NAME_2} ${outputMode}`, (commandOut) => {
@@ -113,7 +113,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
     it('product delete by id', (done) => {
         ImptTestHelper.runCommandEx(`impt product delete -p ${product_id} -q ${outputMode}`, (commandOut) => {
-            checkSuccessDeleteProductMessage(commandOut, product_id);
+            _checkSuccessDeleteProductMessage(commandOut, product_id);
             ImptTestHelper.checkSuccessStatusEx(commandOut);
         }).
             then(() => ImptTestHelper.runCommandEx(`impt product info -p ${product_id} ${outputMode}`, (commandOut) => {

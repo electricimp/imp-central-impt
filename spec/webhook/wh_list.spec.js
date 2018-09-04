@@ -52,27 +52,27 @@ describe('impt webhook delete test suite >', () => {
 
     beforeAll((done) => {
         ImptTestHelper.init().
-            then(testSuiteCleanUp).
-            then(testSuiteInit).
+            then(_testSuiteCleanUp).
+            then(_testSuiteInit).
             then(done).
             catch(error => done.fail(error));
     }, ImptTestHelper.TIMEOUT);
 
     afterAll((done) => {
-        testSuiteCleanUp().
+        _testSuiteCleanUp().
             then(ImptTestHelper.cleanUp).
             then(done).
             catch(error => done.fail(error));
     }, ImptTestHelper.TIMEOUT);
 
     // delete all entities using in impt webhook list  test suite
-    function testSuiteCleanUp() {
+    function _testSuiteCleanUp() {
         return ImptTestHelper.runCommandEx(`impt product delete --product ${PRODUCT_NAME} --force --confirmed`, ImptTestHelper.emptyCheckEx).
             then(() => ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME_2} -f -q`, ImptTestHelper.emptyCheckEx));
     }
 
     // prepare test environment for impt webhook list test suite
-    function testSuiteInit() {
+    function _testSuiteInit() {
         return ImptTestHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME}`, (commandOut) => {
             pr_id = ImptTestHelper.parseId(commandOut);
             ImptTestHelper.emptyCheckEx(commandOut);
@@ -97,7 +97,7 @@ describe('impt webhook delete test suite >', () => {
     }
 
     // check webhook exist in webhook list
-    function checkWebhookExist(commandOut, expectInfo) {
+    function _checkWebhookExist(commandOut, expectInfo) {
         const json = JSON.parse(commandOut.output);
         expect(json).toBeArrayOfObjects;
         let obj = {
@@ -116,7 +116,7 @@ describe('impt webhook delete test suite >', () => {
     }
 
     // check webhook count in webhook list
-    function checkWebhookCount(commandOut, expectCount) {
+    function _checkWebhookCount(commandOut, expectCount) {
         const json = JSON.parse(commandOut.output);
         expect(json).toBeArrayOfObjects;
         expect(json.length).toEqual(expectCount);
@@ -124,8 +124,8 @@ describe('impt webhook delete test suite >', () => {
 
     it('webhook list by owner', (done) => {
         ImptTestHelper.runCommandEx(`impt webhook list --owner me -z json`, (commandOut) => {
-            checkWebhookExist(commandOut);
-            checkWebhookExist(commandOut,
+            _checkWebhookExist(commandOut);
+            _checkWebhookExist(commandOut,
                 { id: wh_id_2, url: WH_URL_2, mime: 'urlencoded', dg_id: dg_id_2, dg_name: DG_NAME_2 });
             ImptTestHelper.checkSuccessStatusEx(commandOut);
         }).
@@ -135,8 +135,8 @@ describe('impt webhook delete test suite >', () => {
 
     it('webhook list by product id', (done) => {
         ImptTestHelper.runCommandEx(`impt webhook list -p ${pr_id} -z json`, (commandOut) => {
-            checkWebhookExist(commandOut);
-            checkWebhookCount(commandOut, 1);
+            _checkWebhookExist(commandOut);
+            _checkWebhookCount(commandOut, 1);
             ImptTestHelper.checkSuccessStatusEx(commandOut);
         }).
             then(done).
@@ -145,8 +145,8 @@ describe('impt webhook delete test suite >', () => {
 
     it('webhook list by product name', (done) => {
         ImptTestHelper.runCommandEx(`impt webhook list -p ${PRODUCT_NAME} -z json`, (commandOut) => {
-            checkWebhookExist(commandOut);
-            checkWebhookCount(commandOut, 1);
+            _checkWebhookExist(commandOut);
+            _checkWebhookCount(commandOut, 1);
             ImptTestHelper.checkSuccessStatusEx(commandOut);
         }).
             then(done).
@@ -155,8 +155,8 @@ describe('impt webhook delete test suite >', () => {
 
     it('webhook list by dg id', (done) => {
         ImptTestHelper.runCommandEx(`impt webhook list -g ${dg_id} -z json`, (commandOut) => {
-            checkWebhookExist(commandOut);
-            checkWebhookCount(commandOut, 1);
+            _checkWebhookExist(commandOut);
+            _checkWebhookCount(commandOut, 1);
             ImptTestHelper.checkSuccessStatusEx(commandOut);
         }).
             then(done).
@@ -165,8 +165,8 @@ describe('impt webhook delete test suite >', () => {
 
     it('webhook list by product name url and event', (done) => {
         ImptTestHelper.runCommandEx(`impt webhook list -p ${PRODUCT_NAME} -u ${WH_URL} -e deployment -z json`, (commandOut) => {
-            checkWebhookExist(commandOut);
-            checkWebhookCount(commandOut, 1);
+            _checkWebhookExist(commandOut);
+            _checkWebhookCount(commandOut, 1);
             ImptTestHelper.checkSuccessStatusEx(commandOut);
         }).
             then(done).
@@ -175,10 +175,10 @@ describe('impt webhook delete test suite >', () => {
 
     it('webhook list by several url', (done) => {
         ImptTestHelper.runCommandEx(`impt webhook list -u ${WH_URL} -u ${WH_URL_2} -z json`, (commandOut) => {
-            checkWebhookExist(commandOut);
-            checkWebhookExist(commandOut,
+            _checkWebhookExist(commandOut);
+            _checkWebhookExist(commandOut,
                 { id: wh_id_2, url: WH_URL_2, mime: 'urlencoded', dg_id: dg_id_2, dg_name: DG_NAME_2 });
-            checkWebhookCount(commandOut, 2);
+            _checkWebhookCount(commandOut, 2);
             ImptTestHelper.checkSuccessStatusEx(commandOut);
         }).
             then(done).

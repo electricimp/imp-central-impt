@@ -46,28 +46,28 @@ describe('impt webhook delete test suite >', () => {
 
     beforeAll((done) => {
         ImptTestHelper.init().
-            then(testSuiteCleanUp).
-            then(testSuiteInit).
+            then(_testSuiteCleanUp).
+            then(_testSuiteInit).
             then(done).
             catch(error => done.fail(error));
     }, ImptTestHelper.TIMEOUT);
 
     afterAll((done) => {
-        testSuiteCleanUp().
+        _testSuiteCleanUp().
             then(ImptTestHelper.cleanUp).
             then(done).
             catch(error => done.fail(error));
     }, ImptTestHelper.TIMEOUT);
 
     // delete all entities using in impt webhook delete  test suite
-    function testSuiteCleanUp() {
+    function _testSuiteCleanUp() {
         return ImptTestHelper.runCommandEx(`impt product delete --product ${PRODUCT_NAME} --force --confirmed`, ImptTestHelper.emptyCheckEx).
             then(() => ImptTestHelper.runCommandEx(`impt dg delete --dg ${DG_NAME_2} -f `, ImptTestHelper.emptyCheckEx)).
             then(() => ImptTestHelper.runCommandEx(`impt webhook delete --wh ${wh_id} -q`, ImptTestHelper.emptyCheckEx));
     }
 
     // prepare test environment for impt webhook delete test suite
-    function testSuiteInit() {
+    function _testSuiteInit() {
         return ImptTestHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
             then(() => ImptTestHelper.runCommandEx(`impt dg create --name ${DG_NAME} -p ${PRODUCT_NAME} `, (commandOut) => {
                 dg_id = ImptTestHelper.parseId(commandOut);
@@ -79,8 +79,8 @@ describe('impt webhook delete test suite >', () => {
             }));
     }
 
-    // check 'webhook successfully deleted' output message 
-    function checkSuccessDeleteWebhookMessage(commandOut, webhookId) {
+    // _check 'webhook successfully deleted' output message 
+    function _checkSuccessDeleteWebhookMessage(commandOut, webhookId) {
         ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
             `${Identifier.ENTITY_TYPE.TYPE_WEBHOOK}\\s+` +
             Util.format(`${UserInterractor.MESSAGES.ENTITY_DELETED}`, `"${webhookId}"`)
@@ -89,7 +89,7 @@ describe('impt webhook delete test suite >', () => {
 
     it('webhook delete', (done) => {
         ImptTestHelper.runCommandEx(`impt webhook delete --wh ${wh_id} --confirmed ${outputMode}`, (commandOut) => {
-            checkSuccessDeleteWebhookMessage(commandOut, wh_id);
+            _checkSuccessDeleteWebhookMessage(commandOut, wh_id);
             ImptTestHelper.checkSuccessStatusEx(commandOut);
         }).
             then(() => {
