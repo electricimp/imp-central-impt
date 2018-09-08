@@ -40,7 +40,7 @@ const DG_DESCR = 'impt temp dg description';
 // Test suite for 'impt project create command.
 // Runs 'impt project create' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
-    fdescribe(`impt project create test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
+    describe(`impt project create test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         let product_id = null;
 
         beforeAll((done) => {
@@ -115,7 +115,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         }
 
         it('project create by product id', (done) => {
-            ImptTestHelper.runCommandEx(`impt project create --product ${product_id} --name ${DG_NAME} --descr "${DG_DESCR}" ${outputMode}`, (commandOut) => {
+            ImptTestHelper.runCommandEx(`impt project create --product ${product_id} --name ${DG_NAME} --descr "${DG_DESCR}" ${outputMode} -z json`, (commandOut) => {
                 _checkSuccessCreateDeviceGroupMessage(commandOut, DG_NAME);
                 _checkSuccessCreateDeviceSourceFileMessage(commandOut, 'device.nut');
                 _checkSuccessCreateAgentSourceFileMessage(commandOut, 'agent.nut');
