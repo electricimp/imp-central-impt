@@ -73,6 +73,19 @@ class MessageHelper {
             `Invalid URL: The provided URL is invalid.`
         );
     }
+
+  
+    static checkProjectDeviceGroupNotExistMessage(commandOut, deviceGroup) {
+        ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
+            `Device Group "${deviceGroup}", saved in Project File, does not exist anymore.`
+        );
+    }
+
+    static  checkProjectNotFoundMessage(commandOut) {
+        ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
+            `Project File is not found in the current directory.`
+        );
+    }
 }
 
 module.exports = MessageHelper;

@@ -35,16 +35,17 @@ const Shell = require('shelljs');
 
 const PRODUCT_NAME = '__impt_product';
 const DG_NAME = '__impt_dg';
-
 const DG_DESCR = 'impt temp dg description';
 
-const DEFAULT_ENDPOINT = 'https://api.electricimp.com/v5';
-// Test suite for 'impt project create command.
-// Runs 'impt project create' command with different combinations of options,
-ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
-    describe(`impt project info test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
+const DG_NEW_NAME = '__impt_new_dg';
+const DG_NEW_DESCR = 'impt new dg description';
 
-        describe('impt project info positive tests', () => {
+// Test suite for 'impt project update command.
+// Runs 'impt project update' command with different combinations of options,
+ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
+    describe(`impt project update test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
+
+        describe('impt project update positive tests', () => {
             let product_id = null;
             let dg_id = null;
 
@@ -78,91 +79,73 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             }
 
             function _testSuiteCleanUp() {
-                return ImptTestHelper.runCommandEx(`impt project delete -all --confirmed`, (commandOut) => {
+                return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -q`, (commandOut) => {
                     ImptTestHelper.emptyCheckEx(commandOut);
                 });
             }
 
-            it('project info', (done) => {
-                ImptTestHelper.runCommandEx(`impt project info -z json`, (commandOut) => {
+            // check command`s result by exec project info command
+            function _checkProjectInfo(expectInfo) {
+                return ImptTestHelper.runCommandEx(`impt project info -z json`, (commandOut) => {
                     const json = JSON.parse(commandOut.output);
-                    expect(json.Project['Device file']).toBe('device.nut');
-                    expect(json.Project['Agent file']).toBe('agent.nut');
-                    expect(json.Project['Device Group'].id).toBe(dg_id);
+                    expect(json.Project).toBeDefined;
+                    expect(json.Project['Device file']).toBe(expectInfo && expectInfo.dfile ? expectInfo.dfile : 'device.nut');
+                    expect(json.Project['Agent file']).toBe(expectInfo && expectInfo.afile ? expectInfo.afile : 'agent.nut');
+                    expect(json.Project['Device Group'].id).toBe(expectInfo && expectInfo.dg_id ? expectInfo.dg_id : dg_id);
                     expect(json.Project['Device Group'].type).toBe('development');
-                    expect(json.Project['Device Group'].name).toBe(DG_NAME);
-                    expect(json.Project['Device Group'].description).toBe(DG_DESCR);
-                    expect(json.Project['Device Group'].Product.id).toBe(product_id);
-                    expect(json.Project['Device Group'].Product.name).toBe(PRODUCT_NAME);
+                    expect(json.Project['Device Group'].name).toBe(expectInfo && expectInfo.dg_name ? expectInfo.dg_name : DG_NAME);
+                    expect(json.Project['Device Group'].description).toBe(expectInfo && expectInfo.dg_descr ? expectInfo.dg_descr : DG_DESCR);
+                    expect(json.Project['Device Group'].Product.id).toBe(expectInfo && expectInfo.product_id ? expectInfo.product_id : product_id);
+                    expect(json.Project['Device Group'].Product.name).toBe(expectInfo && expectInfo.product_name ? expectInfo.product_name : PRODUCT_NAME);
                     ImptTestHelper.checkSuccessStatusEx(commandOut);
-                }).
-                    then(done).
-                    catch(error => done.fail(error));
-            });
+                });
+            }
 
-            it('project full info', (done) => {
-                ImptTestHelper.runCommandEx(`impt project info --full -z json`, (commandOut) => {
-                    const endpoint = config.apiEndpoint ? `${config.apiEndpoint}` : `${DEFAULT_ENDPOINT}`;
-                    const json = JSON.parse(commandOut.output);
-                    // Project info
-                    expect(json.Project['Device file']).toBe('device.nut');
-                    expect(json.Project['Agent file']).toBe('agent.nut');
-                    expect(json.Project['Device Group'].id).toBe(dg_id);
-                    expect(json.Project['Device Group'].type).toBe('development');
-                    expect(json.Project['Device Group'].name).toBe(DG_NAME);
-                    expect(json.Project['Device Group'].description).toBe(DG_DESCR);
-                    expect(json.Project['Device Group'].Product.id).toBe(product_id);
-                    expect(json.Project['Device Group'].Product.name).toBe(PRODUCT_NAME);
-                    // Auth info
-                    expect(json.Auth['impCentral API endpoint']).toBe(endpoint);
-                    expect(json.Auth['Auth file']).toBe('Local');
-                    expect(json.Auth['Access token auto refresh']).toBe(true);
-                    expect(json.Auth['Login method']).toBe('User/Password');
-                    expect(json.Auth['Username']).toBe(config.username);
-                    expect(json.Auth['Email']).toBe(config.email);
-                    expect(json.Auth['Account id']).toBe(config.accountid);
+// check 'project successfully updated' output message 
+function _checkSuccessUpdateProjectMessage(commandOut) {
+    ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+        Util.format(`${UserInterractor.MESSAGES.ENTITY_UPDATED}`, 'Project')
+    );
+}
+
+            it('project update', (done) => {
+                ImptTestHelper.runCommandEx(`impt project update --name ${DG_NEW_NAME} --descr "${DG_NEW_DESCR}" --device-file dfile.nut --agent-file afile.nut ${outputMode}`, (commandOut) => {
+                    _checkSuccessUpdateProjectMessage(commandOut);
                     ImptTestHelper.checkSuccessStatusEx(commandOut);
                 }).
+                then(()=>_checkProjectInfo({dg_name:DG_NEW_NAME ,dg_descr:DG_NEW_DESCR,dfile: 'dfile.nut',afile: 'afile.nut'})).
                     then(done).
                     catch(error => done.fail(error));
             });
         });
 
-        describe('impt project info negative tests', () => {
+        describe('impt project update negative tests', () => {
 
             beforeAll((done) => {
                 ImptTestHelper.init().
-                    then(_testSuiteCleanUp).
                     then(done).
                     catch(error => done.fail(error));
             }, ImptTestHelper.TIMEOUT);
 
-            afterEach((done) => {
-                _testSuiteCleanUp().
-                    then(ImptTestHelper.cleanUp).
+            afterAll((done) => {
+               ImptTestHelper.cleanUp().
                     then(done).
                     catch(error => done.fail(error));
             }, ImptTestHelper.TIMEOUT);
 
-            function _testSuiteCleanUp() {
-                return ImptTestHelper.runCommandEx(`impt project delete -all --confirmed`, (commandOut) => {
-                    ImptTestHelper.emptyCheckEx(commandOut);
-                });
-            }
-
-            it('project info with not exist device group', (done) => {
-                Shell.cp('-Rf', `${__dirname}/fixtures/.impt.project`, ImptTestHelper.TESTS_EXECUTION_FOLDER);
-                ImptTestHelper.runCommandEx(`impt project info ${outputMode}`, (commandOut) => {
-                    MessageHelper.checkProjectDeviceGroupNotExistMessage(commandOut, 'not-exist-device-group')
+            it('project update without project file', (done) => {
+                ImptTestHelper.runCommandEx(`impt project update -n ${DG_NEW_NAME} ${outputMode}`, (commandOut) => {
+                    MessageHelper.checkProjectNotFoundMessage(commandOut);
                     ImptTestHelper.checkFailStatusEx(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
             });
 
-            it('project info without project file', (done) => {
-                ImptTestHelper.runCommandEx(`impt project info ${outputMode}`, (commandOut) => {
-                    MessageHelper.checkProjectNotFoundMessage(commandOut);
+            it('project update with not exist device group', (done) => {
+                Shell.cp('-Rf', `${__dirname}/fixtures/.impt.project`, ImptTestHelper.TESTS_EXECUTION_FOLDER);
+                ImptTestHelper.runCommandEx(`impt project update -n ${DG_NEW_NAME} ${outputMode}`, (commandOut) => {
+                    MessageHelper.checkProjectDeviceGroupNotExistMessage(commandOut, 'not-exist-device-group')
                     ImptTestHelper.checkFailStatusEx(commandOut);
                 }).
                     then(done).

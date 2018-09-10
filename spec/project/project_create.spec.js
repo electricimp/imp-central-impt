@@ -42,30 +42,26 @@ const DG_DESCR = 'impt temp dg description';
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
     describe(`impt project create test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         let product_id = null;
+        let dg_id = null;
 
         beforeAll((done) => {
             ImptTestHelper.init().
-                then(_testSuiteCleanUp).
-                then(_testSuiteInit).
+                // then(_testSuiteCleanUp).
+                //  then(_testSuiteInit).
                 then(done).
                 catch(error => done.fail(error));
         }, ImptTestHelper.TIMEOUT);
 
         afterAll((done) => {
-            _testSuiteCleanUp().
-                then(ImptTestHelper.cleanUp).
-                then(done).
-                catch(error => done.fail(error));
-        }, ImptTestHelper.TIMEOUT);
-
-        afterEach((done) => {
-            _testSuiteCleanUp().
+            //   _testSuiteCleanUp().
+            ImptTestHelper.cleanUp().
                 then(done).
                 catch(error => done.fail(error));
         }, ImptTestHelper.TIMEOUT);
 
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommandEx(`impt project delete --all --confirmed`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx).
+            then(()=>ImptTestHelper.runCommandEx(`impt project delete --all --confirmed`, ImptTestHelper.emptyCheckEx));
         }
 
         function _testSuiteInit() {
@@ -114,19 +110,131 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             );
         }
 
-        it('project create by product id', (done) => {
-            ImptTestHelper.runCommandEx(`impt project create --product ${product_id} --name ${DG_NAME} --descr "${DG_DESCR}" ${outputMode} -z json`, (commandOut) => {
-                _checkSuccessCreateDeviceGroupMessage(commandOut, DG_NAME);
-                _checkSuccessCreateDeviceSourceFileMessage(commandOut, 'device.nut');
-                _checkSuccessCreateAgentSourceFileMessage(commandOut, 'agent.nut');
-                _checkSuccessCreateProjectMessage(commandOut);
+        // check command`s result by exec project info command
+        function _checkProjectInfo(expectInfo) {
+            return ImptTestHelper.runCommandEx(`impt project info -z json`, (commandOut) => {
+                const json = JSON.parse(commandOut.output);
+                expect(json.Project).toBeDefined;
+                expect(json.Project['Device file']).toBe(expectInfo && expectInfo.dfile ? expectInfo.dfile : 'device.nut');
+                expect(json.Project['Agent file']).toBe(expectInfo && expectInfo.afile ? expectInfo.afile : 'agent.nut');
+                //   expect(json.Project['Device Group'].id).toBe(expectInfo && expectInfo.dg_id ? expectInfo.dg_id : dg_id);
+                expect(json.Project['Device Group'].type).toBe('development');
+                expect(json.Project['Device Group'].name).toBe(expectInfo && expectInfo.dg_name ? expectInfo.dg_name : DG_NAME);
+                expect(json.Project['Device Group'].description).toBe(expectInfo && expectInfo.dg_descr ? expectInfo.dg_descr : DG_DESCR);
+                expect(json.Project['Device Group'].Product.id).toBe(expectInfo && expectInfo.product_id ? expectInfo.product_id : product_id);
+                expect(json.Project['Device Group'].Product.name).toBe(expectInfo && expectInfo.product_name ? expectInfo.product_name : PRODUCT_NAME);
                 ImptTestHelper.checkSuccessStatusEx(commandOut);
-            }).
-                then(done).
-                then(done).
-                catch(error => done.fail(error));
+            });
+        }
+
+        describe('project create tests without existing product', () => {
+            beforeAll((done) => {
+                _testSuiteCleanUp().
+                    then(done).
+                    catch(error => done.fail(error));
+            }, ImptTestHelper.TIMEOUT);
+
+            afterEach((done) => {
+                _testSuiteCleanUp().
+                    then(done).
+                    catch(error => done.fail(error));
+            }, ImptTestHelper.TIMEOUT);
+
+            it('project create with product creating', (done) => {
+                ImptTestHelper.runCommandEx(`impt project create --product ${PRODUCT_NAME} --create-product --name ${DG_NAME} --descr "${DG_DESCR}" ${outputMode}`, (commandOut) => {
+                    _checkSuccessCreateProductMessage(commandOut, PRODUCT_NAME);
+                    _checkSuccessCreateDeviceGroupMessage(commandOut, DG_NAME);
+                    _checkSuccessCreateDeviceSourceFileMessage(commandOut, 'device.nut');
+                    _checkSuccessCreateAgentSourceFileMessage(commandOut, 'agent.nut');
+                    _checkSuccessCreateProjectMessage(commandOut);
+                    ImptTestHelper.checkFileExist('device.nut');
+                    ImptTestHelper.checkFileExist('agent.nut');
+                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                }).
+                    then(_checkProjectInfo).
+                    then(done).
+                    catch(error => done.fail(error));
+            });
+
+            it('project create with not existing product', (done) => {
+                ImptTestHelper.runCommandEx(`impt project create --product not-exist-product --name ${DG_NAME} ${outputMode}`, (commandOut) => {
+                    MessageHelper.checkEntityNotFoundError(commandOut, Identifier.ENTITY_TYPE.TYPE_PRODUCT, 'not-exist-product');
+                    ImptTestHelper.checkFailStatusEx(commandOut);
+                }).
+                    then(done).
+                    catch(error => done.fail(error));
+            });
         });
 
+        describe('project create tests with existing product', () => {
+            beforeEach((done) => {
+                _testSuiteCleanUp().
+                    then(_testSuiteInit).
+                    then(done).
+                    catch(error => done.fail(error));
+            }, ImptTestHelper.TIMEOUT);
+
+            afterEach((done) => {
+                _testSuiteCleanUp().
+                    then(done).
+                    catch(error => done.fail(error));
+            }, ImptTestHelper.TIMEOUT);
+
+            it('project create by product id', (done) => {
+                ImptTestHelper.runCommandEx(`impt project create --product ${product_id} --name ${DG_NAME} --descr "${DG_DESCR}" ${outputMode}`, (commandOut) => {
+                    _checkSuccessCreateDeviceGroupMessage(commandOut, DG_NAME);
+                    _checkSuccessCreateDeviceSourceFileMessage(commandOut, 'device.nut');
+                    _checkSuccessCreateAgentSourceFileMessage(commandOut, 'agent.nut');
+                    _checkSuccessCreateProjectMessage(commandOut);
+                    ImptTestHelper.checkFileExist('device.nut');
+                    ImptTestHelper.checkFileExist('agent.nut');
+                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                }).
+                    then(_checkProjectInfo).
+                    then(done).
+                    catch(error => done.fail(error));
+            });
+
+            it('project create by product name with device file', (done) => {
+                ImptTestHelper.runCommandEx(`impt project create --product ${PRODUCT_NAME} --name ${DG_NAME} --descr "${DG_DESCR}" --device-file dfile.nut ${outputMode}`, (commandOut) => {
+                    _checkSuccessCreateDeviceGroupMessage(commandOut, DG_NAME);
+                    _checkSuccessCreateDeviceSourceFileMessage(commandOut, 'dfile.nut');
+                    _checkSuccessCreateAgentSourceFileMessage(commandOut, 'agent.nut');
+                    _checkSuccessCreateProjectMessage(commandOut);
+                    ImptTestHelper.checkFileExist('dfile.nut');
+                    ImptTestHelper.checkFileExist('agent.nut');
+                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                }).
+                    then( _checkProjectInfo).
+                    then(done).
+                    catch(error => done.fail(error));
+            });
+
+            it('project create by product name with agent file', (done) => {
+                ImptTestHelper.runCommandEx(`impt project create --product ${PRODUCT_NAME} --name ${DG_NAME} --descr "${DG_DESCR}" --agent-file afile.nut ${outputMode}`, (commandOut) => {
+                    _checkSuccessCreateDeviceGroupMessage(commandOut, DG_NAME);
+                    _checkSuccessCreateDeviceSourceFileMessage(commandOut, 'device.nut');
+                    _checkSuccessCreateAgentSourceFileMessage(commandOut, 'afile.nut');
+                    _checkSuccessCreateProjectMessage(commandOut);
+                    ImptTestHelper.checkFileExist('device.nut');
+                    ImptTestHelper.checkFileExist('afile.nut');
+                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                }).
+                    then(_checkProjectInfo).
+                    then(done).
+                    catch(error => done.fail(error));
+            });
+
+            it('project create without product value', (done) => {
+                ImptTestHelper.runCommandEx(`impt project create ${outputMode} --product`, (commandOut) => {
+                    MessageHelper.checkNotEnoughArgumentsError(commandOut, 'product');
+                    ImptTestHelper.checkFailStatusEx(commandOut);
+                }).
+                    then(done).
+                    catch(error => done.fail(error));
+            });
+
+        });
 
     });
 });
