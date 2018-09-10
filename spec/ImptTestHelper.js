@@ -131,6 +131,12 @@ class ImptTestHelper {
         expect(files).toBeNonEmptyArray();
     }
 
+    // Checks if file not exist in the TESTS_EXECUTION_FOLDER
+    static checkFileNotExist(fileName) {
+        let files = Shell.find(`${TESTS_EXECUTION_FOLDER}/${fileName}`);
+        expect(files.code).toBe(1);
+    }
+
     // Checks IMPT COMMAND SUCCEEDS status of the command
     static checkSuccessStatus(commandOut) {
         expect(commandOut).toMatch('IMPT COMMAND SUCCEEDS');

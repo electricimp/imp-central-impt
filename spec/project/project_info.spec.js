@@ -32,6 +32,7 @@ const Identifier = require('../../lib/util/Identifier');
 const Util = require('util');
 const UserInterractor = require('../../lib/util/UserInteractor');
 const Shell = require('shelljs');
+const ProjectHelper = require('./ImptProjectTestHelper');
 
 const PRODUCT_NAME = '__impt_product';
 const DG_NAME = '__impt_dg';
@@ -43,22 +44,34 @@ const DEFAULT_ENDPOINT = 'https://api.electricimp.com/v5';
 // Runs 'impt project create' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
     describe(`impt project info test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
+        let product_id = null;
+        let dg_id = null;
 
-        describe('impt project info positive tests', () => {
+        beforeAll((done) => {
+            ImptTestHelper.init().
+                then(_testSuiteCleanUp).
+                then(done).
+                catch(error => done.fail(error));
+        }, ImptTestHelper.TIMEOUT);
+
+        afterAll((done) => {
+            _testSuiteCleanUp().
+                then(ImptTestHelper.cleanUp).
+                then(done).
+                catch(error => done.fail(error));
+        }, ImptTestHelper.TIMEOUT);
+
+        function _testSuiteCleanUp() {
+            return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -q`, (commandOut) => ImptTestHelper.emptyCheckEx).
+            then(() => ImptTestHelper.runCommandEx(`impt project delete --all -q`, ImptTestHelper.emptyCheckEx));
+        }
+
+        describe('project exist preconditions >', () => {
             let product_id = null;
             let dg_id = null;
 
             beforeAll((done) => {
-                ImptTestHelper.init().
-                    then(_testSuiteCleanUp).
-                    then(_testSuiteInit).
-                    then(done).
-                    catch(error => done.fail(error));
-            }, ImptTestHelper.TIMEOUT);
-
-            afterAll((done) => {
-                _testSuiteCleanUp().
-                    then(ImptTestHelper.cleanUp).
+                _testSuiteInit().
                     then(done).
                     catch(error => done.fail(error));
             }, ImptTestHelper.TIMEOUT);
@@ -77,17 +90,11 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     }));
             }
 
-            function _testSuiteCleanUp() {
-                return ImptTestHelper.runCommandEx(`impt project delete -all --confirmed`, (commandOut) => {
-                    ImptTestHelper.emptyCheckEx(commandOut);
-                });
-            }
-
             it('project info', (done) => {
                 ImptTestHelper.runCommandEx(`impt project info -z json`, (commandOut) => {
                     const json = JSON.parse(commandOut.output);
-                    expect(json.Project['Device file']).toBe('device.nut');
-                    expect(json.Project['Agent file']).toBe('agent.nut');
+                    expect(json.Project['Device file']).toBe(ProjectHelper.DEVICE_FILE);
+                    expect(json.Project['Agent file']).toBe(ProjectHelper.AGENT_FILE);
                     expect(json.Project['Device Group'].id).toBe(dg_id);
                     expect(json.Project['Device Group'].type).toBe('development');
                     expect(json.Project['Device Group'].name).toBe(DG_NAME);
@@ -105,8 +112,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     const endpoint = config.apiEndpoint ? `${config.apiEndpoint}` : `${DEFAULT_ENDPOINT}`;
                     const json = JSON.parse(commandOut.output);
                     // Project info
-                    expect(json.Project['Device file']).toBe('device.nut');
-                    expect(json.Project['Agent file']).toBe('agent.nut');
+                    expect(json.Project['Device file']).toBe(ProjectHelper.DEVICE_FILE);
+                    expect(json.Project['Agent file']).toBe(ProjectHelper.AGENT_FILE);
                     expect(json.Project['Device Group'].id).toBe(dg_id);
                     expect(json.Project['Device Group'].type).toBe('development');
                     expect(json.Project['Device Group'].name).toBe(DG_NAME);
@@ -128,37 +135,12 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
         });
 
-        describe('impt project info negative tests', () => {
-
+        describe('project not exist preconditions >', () => {
             beforeAll((done) => {
-                ImptTestHelper.init().
-                    then(_testSuiteCleanUp).
-                    then(done).
-                    catch(error => done.fail(error));
-            }, ImptTestHelper.TIMEOUT);
-
-            afterEach((done) => {
                 _testSuiteCleanUp().
-                    then(ImptTestHelper.cleanUp).
                     then(done).
                     catch(error => done.fail(error));
             }, ImptTestHelper.TIMEOUT);
-
-            function _testSuiteCleanUp() {
-                return ImptTestHelper.runCommandEx(`impt project delete -all --confirmed`, (commandOut) => {
-                    ImptTestHelper.emptyCheckEx(commandOut);
-                });
-            }
-
-            it('project info with not exist device group', (done) => {
-                Shell.cp('-Rf', `${__dirname}/fixtures/.impt.project`, ImptTestHelper.TESTS_EXECUTION_FOLDER);
-                ImptTestHelper.runCommandEx(`impt project info ${outputMode}`, (commandOut) => {
-                    MessageHelper.checkProjectDeviceGroupNotExistMessage(commandOut, 'not-exist-device-group')
-                    ImptTestHelper.checkFailStatusEx(commandOut);
-                }).
-                    then(done).
-                    catch(error => done.fail(error));
-            });
 
             it('project info without project file', (done) => {
                 ImptTestHelper.runCommandEx(`impt project info ${outputMode}`, (commandOut) => {
@@ -167,6 +149,25 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 }).
                     then(done).
                     catch(error => done.fail(error));
+            });
+
+            describe('project not exist preconditions with restore >', () => {
+                afterEach((done) => {
+                    _testSuiteCleanUp().
+                        then(ImptTestHelper.cleanUp).
+                        then(done).
+                        catch(error => done.fail(error));
+                }, ImptTestHelper.TIMEOUT);
+
+                it('project info with not exist device group', (done) => {
+                    Shell.cp('-Rf', `${__dirname}/fixtures/.impt.project`, ImptTestHelper.TESTS_EXECUTION_FOLDER);
+                    ImptTestHelper.runCommandEx(`impt project info ${outputMode}`, (commandOut) => {
+                        MessageHelper.checkProjectDeviceGroupNotExistMessage(commandOut, 'not-exist-device-group')
+                        ImptTestHelper.checkFailStatusEx(commandOut);
+                    }).
+                        then(done).
+                        catch(error => done.fail(error));
+                });
             });
         });
     });

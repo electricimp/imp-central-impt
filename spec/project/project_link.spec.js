@@ -32,6 +32,7 @@ const Identifier = require('../../lib/util/Identifier');
 const Util = require('util');
 const UserInterractor = require('../../lib/util/UserInteractor');
 const Shell = require('shelljs');
+const ProjectHelper = require('./ImptProjectTestHelper');
 
 const PRODUCT_NAME = '__impt_product';
 const DG_NAME = '__impt_dg';
@@ -106,47 +107,31 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             );
         }
 
-        // check command`s result by exec project info command
-        function _checkProjectInfo(expectInfo) {
-            return ImptTestHelper.runCommandEx(`impt project info -z json`, (commandOut) => {
-                const json = JSON.parse(commandOut.output);
-                expect(json.Project).toBeDefined;
-                expect(json.Project['Device file']).toBe(expectInfo && expectInfo.dfile ? expectInfo.dfile : 'device.nut');
-                expect(json.Project['Agent file']).toBe(expectInfo && expectInfo.afile ? expectInfo.afile : 'agent.nut');
-                expect(json.Project['Device Group'].id).toBe(expectInfo && expectInfo.dg_id ? expectInfo.dg_id : dg_id);
-                expect(json.Project['Device Group'].type).toBe('development');
-                expect(json.Project['Device Group'].name).toBe(expectInfo && expectInfo.dg_name ? expectInfo.dg_name : DG_NAME);
-                expect(json.Project['Device Group'].description).toBe(expectInfo && expectInfo.dg_descr ? expectInfo.dg_descr : DG_DESCR);
-                expect(json.Project['Device Group'].Product.id).toBe(expectInfo && expectInfo.product_id ? expectInfo.product_id : product_id);
-                expect(json.Project['Device Group'].Product.name).toBe(expectInfo && expectInfo.product_name ? expectInfo.product_name : PRODUCT_NAME);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
-            });
-        }
 
         it('project link to dg by id', (done) => {
             ImptTestHelper.runCommandEx(`impt project link --dg ${dg_id} --device-file dfile.nut ${outputMode}`, (commandOut) => {
-                _checkSuccessCreateDeviceSourceFileMessage( commandOut, 'dfile.nut');
-                _checkSuccessCreateAgentSourceFileMessage( commandOut, 'agent.nut');
-                _checkSuccessLinkedProjectMessage( commandOut);
+                _checkSuccessCreateDeviceSourceFileMessage(commandOut, 'dfile.nut');
+                _checkSuccessCreateAgentSourceFileMessage(commandOut, 'agent.nut');
+                _checkSuccessLinkedProjectMessage(commandOut);
                 ImptTestHelper.checkFileExist('dfile.nut');
                 ImptTestHelper.checkFileExist('agent.nut');
                 ImptTestHelper.checkSuccessStatusEx(commandOut);
             }).
-                then(()=>_checkProjectInfo({dfile: 'dfile.nut'})).
+                then(() => ProjectHelper.checkProjectInfo({ product_id: product_id, dg_id: dg_id, dfile: 'dfile.nut' })).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('project link to dg by name', (done) => {
             ImptTestHelper.runCommandEx(`impt project link --dg ${DG_NAME} --agent-file afile.nut ${outputMode}`, (commandOut) => {
-                _checkSuccessCreateDeviceSourceFileMessage( commandOut, 'device.nut');
-                _checkSuccessCreateAgentSourceFileMessage( commandOut, 'afile.nut');
-                _checkSuccessLinkedProjectMessage( commandOut);
+                _checkSuccessCreateDeviceSourceFileMessage(commandOut, 'device.nut');
+                _checkSuccessCreateAgentSourceFileMessage(commandOut, 'afile.nut');
+                _checkSuccessLinkedProjectMessage(commandOut);
                 ImptTestHelper.checkFileExist('device.nut');
                 ImptTestHelper.checkFileExist('afile.nut');
                 ImptTestHelper.checkSuccessStatusEx(commandOut);
             }).
-                then(()=>_checkProjectInfo({afile: 'afile.nut'})).
+                then(() => ProjectHelper.checkProjectInfo({ product_id: product_id, dg_id: dg_id, afile: 'afile.nut' })).
                 then(done).
                 catch(error => done.fail(error));
         });
