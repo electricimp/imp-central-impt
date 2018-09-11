@@ -28,6 +28,8 @@ require('jasmine-expect');
 
 const ImptTestHelper = require('./ImptTestHelper');
 const UserInterractor = require('../lib/util/UserInteractor');
+const Identifier = require('../lib/util/Identifier');
+const Util = require('util');
 
 // Helper class for testing impt tool.
 // Contains common methods for testing output error message
@@ -74,16 +76,27 @@ class MessageHelper {
         );
     }
 
-  
+
     static checkProjectDeviceGroupNotExistMessage(commandOut, deviceGroup) {
         ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
             `Device Group "${deviceGroup}", saved in Project File, does not exist anymore.`
         );
     }
 
-    static  checkProjectNotFoundMessage(commandOut) {
+    static checkProjectNotFoundMessage(commandOut) {
         ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
             `Project File is not found in the current directory.`
+        );
+    }
+
+    static checkDependedDeviceGroupExistMessage(commandOut) {
+        ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
+            `Dependent Devicegroups Exist: Cannot delete a product with associated devicegroups.`
+        );
+    }
+    static checkNoIdentifierIsSpecifiedMessage(commandOut, entity) {
+        ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
+            Util.format(`${UserInterractor.ERRORS.NO_IDENTIFIER}`, entity)
         );
     }
 }
