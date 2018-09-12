@@ -38,97 +38,96 @@ const DG_NAME_2 = '__impt_device_group_2';
 const WH_URL = 'http://example.com/wu/';
 const WH_URL_2 = 'http://example.com/wu2/';
 
-describe('impt webhook update test suite >', () => {
+ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
+    describe('impt webhook update test suite >', () => {
+        let dg_id = null;
+        let wh_id = null;
 
-    const outputMode = '';
+        beforeAll((done) => {
+            ImptTestHelper.init().
+                then(_testSuiteCleanUp).
+                then(_testSuiteInit).
+                then(done).
+                catch(error => done.fail(error));
+        }, ImptTestHelper.TIMEOUT);
 
-    let dg_id = null;
-    let wh_id = null;
+        afterAll((done) => {
+            _testSuiteCleanUp().
+                then(ImptTestHelper.cleanUp).
+                then(done).
+                catch(error => done.fail(error));
+        }, ImptTestHelper.TIMEOUT);
 
-    beforeAll((done) => {
-        ImptTestHelper.init().
-            then(_testSuiteCleanUp).
-            then(_testSuiteInit).
-            then(done).
-            catch(error => done.fail(error));
-    }, ImptTestHelper.TIMEOUT);
+        // delete all entities using in impt webhook update  test suite
+        function _testSuiteCleanUp() {
+            return ImptTestHelper.runCommandEx(`impt product delete --product ${PRODUCT_NAME} --force --confirmed`, ImptTestHelper.emptyCheckEx).
+                then(() => ImptTestHelper.runCommandEx(`impt dg delete --dg ${DG_NAME_2} -f `, ImptTestHelper.emptyCheckEx)).
+                then(() => ImptTestHelper.runCommandEx(`impt webhook delete --wh ${wh_id} -q`, ImptTestHelper.emptyCheckEx));
+        }
 
-    afterAll((done) => {
-        _testSuiteCleanUp().
-            then(ImptTestHelper.cleanUp).
-            then(done).
-            catch(error => done.fail(error));
-    }, ImptTestHelper.TIMEOUT);
+        // prepare test environment for impt webhook update test suite
+        function _testSuiteInit() {
+            return ImptTestHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
+                then(() => ImptTestHelper.runCommandEx(`impt dg create --name ${DG_NAME} -p ${PRODUCT_NAME} `, (commandOut) => {
+                    dg_id = ImptTestHelper.parseId(commandOut);
+                    ImptTestHelper.emptyCheckEx(commandOut);
+                })).
+                then(() => ImptTestHelper.runCommandEx(`impt webhook create --dg ${DG_NAME} --url ${WH_URL} --event deployment --mime json `, (commandOut) => {
+                    wh_id = ImptTestHelper.parseId(commandOut);
+                    ImptTestHelper.emptyCheckEx(commandOut);
+                }));
+        }
 
-    // delete all entities using in impt webhook update  test suite
-    function _testSuiteCleanUp() {
-        return ImptTestHelper.runCommandEx(`impt product delete --product ${PRODUCT_NAME} --force --confirmed`, ImptTestHelper.emptyCheckEx).
-            then(() => ImptTestHelper.runCommandEx(`impt dg delete --dg ${DG_NAME_2} -f `, ImptTestHelper.emptyCheckEx)).
-            then(() => ImptTestHelper.runCommandEx(`impt webhook delete --wh ${wh_id} -q`, ImptTestHelper.emptyCheckEx));
-    }
+        // check 'webhook successfully updated' output message 
+        function _checkSuccessUpdateWebhookMessage(commandOut, webhookId) {
+            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+                `${Identifier.ENTITY_TYPE.TYPE_WEBHOOK}\\s+` +
+                Util.format(`${UserInterractor.MESSAGES.ENTITY_UPDATED}`, `"${webhookId}"`)
+            );
+        }
 
-    // prepare test environment for impt webhook update test suite
-    function _testSuiteInit() {
-        return ImptTestHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
-            then(() => ImptTestHelper.runCommandEx(`impt dg create --name ${DG_NAME} -p ${PRODUCT_NAME} `, (commandOut) => {
-                dg_id = ImptTestHelper.parseId(commandOut);
-                ImptTestHelper.emptyCheckEx(commandOut);
-            })).
-            then(() => ImptTestHelper.runCommandEx(`impt webhook create --dg ${DG_NAME} --url ${WH_URL} --event deployment --mime json `, (commandOut) => {
-                wh_id = ImptTestHelper.parseId(commandOut);
-                ImptTestHelper.emptyCheckEx(commandOut);
-            }));
-    }
+        // check command`s result by exec webhook info command
+        function _checkWebhookInfo(expectInfo) {
+            return ImptTestHelper.runCommandEx(`impt webhook info --wh ${expectInfo && expectInfo.id ? expectInfo.id : wh_id} -z json`, (commandOut) => {
+                const json = JSON.parse(commandOut.output);
+                expect(json.Webhook).toBeDefined;
+                expect(json.Webhook.id).toBe(expectInfo && expectInfo.id ? expectInfo.id : wh_id);
+                expect(json.Webhook.url).toBe(expectInfo && expectInfo.url ? expectInfo.url : WH_URL);
+                expect(json.Webhook.event).toBe(expectInfo && expectInfo.deployment ? expectInfo.deployment : 'deployment');
+                expect(json.Webhook.content_type).toBe(expectInfo && expectInfo.mime ? expectInfo.mime : 'json');
+                expect(json.Webhook['Device Group'].id).toBe(expectInfo && expectInfo.dg_id ? expectInfo.dg_id : dg_id);
+                expect(json.Webhook['Device Group'].name).toBe(expectInfo && expectInfo.dg_name ? expectInfo.dg_name : DG_NAME);
+                ImptTestHelper.checkSuccessStatusEx(commandOut);
+            });
+        }
 
-    // check 'webhook successfully updated' output message 
-    function _checkSuccessUpdateWebhookMessage(commandOut, webhookId) {
-        ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
-            `${Identifier.ENTITY_TYPE.TYPE_WEBHOOK}\\s+` +
-            Util.format(`${UserInterractor.MESSAGES.ENTITY_UPDATED}`, `"${webhookId}"`)
-        );
-    }
-
-    // check command`s result by exec webhook info command
-    function _checkWebhookInfo(expectInfo) {
-        return ImptTestHelper.runCommandEx(`impt webhook info --wh ${expectInfo && expectInfo.id ? expectInfo.id : wh_id} -z json`, (commandOut) => {
-            const json = JSON.parse(commandOut.output);
-            expect(json.Webhook).toBeDefined;
-            expect(json.Webhook.id).toBe(expectInfo && expectInfo.id ? expectInfo.id : wh_id);
-            expect(json.Webhook.url).toBe(expectInfo && expectInfo.url ? expectInfo.url : WH_URL);
-            expect(json.Webhook.event).toBe(expectInfo && expectInfo.deployment ? expectInfo.deployment : 'deployment');
-            expect(json.Webhook.content_type).toBe(expectInfo && expectInfo.mime ? expectInfo.mime : 'json');
-            expect(json.Webhook['Device Group'].id).toBe(expectInfo && expectInfo.dg_id ? expectInfo.dg_id : dg_id);
-            expect(json.Webhook['Device Group'].name).toBe(expectInfo && expectInfo.dg_name ? expectInfo.dg_name : DG_NAME);
-            ImptTestHelper.checkSuccessStatusEx(commandOut);
+        it('webhook update without url and mime', (done) => {
+            ImptTestHelper.runCommandEx(`impt webhook update --wh ${wh_id} ${outputMode}`, (commandOut) => {
+                _checkSuccessUpdateWebhookMessage(commandOut, wh_id);
+                ImptTestHelper.checkSuccessStatusEx(commandOut);
+            }).
+                then(checkWebhookInfo).
+                then(done).
+                catch(error => done.fail(error));
         });
-    }
 
-    it('webhook update without url and mime', (done) => {
-        ImptTestHelper.runCommandEx(`impt webhook update --wh ${wh_id} ${outputMode}`, (commandOut) => {
-            _checkSuccessUpdateWebhookMessage(commandOut, wh_id);
-            ImptTestHelper.checkSuccessStatusEx(commandOut);
-        }).
-            then(checkWebhookInfo).
-            then(done).
-            catch(error => done.fail(error));
-    });
+        it('webhook update url and mime', (done) => {
+            ImptTestHelper.runCommandEx(`impt webhook update --wh ${wh_id} --url ${WH_URL_2} --mime urlencoded ${outputMode}`, (commandOut) => {
+                _checkSuccessUpdateWebhookMessage(commandOut, wh_id);
+                ImptTestHelper.checkSuccessStatusEx(commandOut);
+            }).
+                then(() => { _checkWebhookInfo({ url: WH_URL_2, mime: 'urlencoded' }); }).
+                then(done).
+                catch(error => done.fail(error));
+        });
 
-    it('webhook update url and mime', (done) => {
-        ImptTestHelper.runCommandEx(`impt webhook update --wh ${wh_id} --url ${WH_URL_2} --mime urlencoded ${outputMode}`, (commandOut) => {
-            _checkSuccessUpdateWebhookMessage(commandOut, wh_id);
-            ImptTestHelper.checkSuccessStatusEx(commandOut);
-        }).
-            then(() => { _checkWebhookInfo({ url: WH_URL_2, mime: 'urlencoded' }); }).
-            then(done).
-            catch(error => done.fail(error));
-    });
-
-    it('update not exist webhook', (done) => {
-        ImptTestHelper.runCommandEx(`impt webhook update --wh not-exist-webhook --url ${WH_URL_2} ${outputMode}`, (commandOut) => {
-            MessageHelper.checkEntityNotFoundError(commandOut, Identifier.ENTITY_TYPE.TYPE_WEBHOOK, 'not-exist-webhook');
-            ImptTestHelper.checkFailStatusEx(commandOut);
-        }).
-            then(done).
-            catch(error => done.fail(error));
+        it('update not exist webhook', (done) => {
+            ImptTestHelper.runCommandEx(`impt webhook update --wh not-exist-webhook --url ${WH_URL_2} ${outputMode}`, (commandOut) => {
+                MessageHelper.checkEntityNotFoundError(commandOut, Identifier.ENTITY_TYPE.TYPE_WEBHOOK, 'not-exist-webhook');
+                ImptTestHelper.checkFailStatusEx(commandOut);
+            }).
+                then(done).
+                catch(error => done.fail(error));
+        });
     });
 });
