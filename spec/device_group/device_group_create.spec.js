@@ -195,6 +195,15 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     then(done).
                     catch(error => done.fail(error));
             });
+
+            it('device group create by not exist product', (done) => {
+                ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP_NAME} -p not-exist-product ${outputMode}`, (commandOut) => {
+                    MessageHelper.checkEntityNotFoundError(commandOut, 'Product', 'not-exist-product')
+                    ImptTestHelper.checkFailStatusEx(commandOut);
+                }).
+                    then(done).
+                    catch(error => done.fail(error));
+            });
         });
 
     });
