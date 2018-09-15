@@ -261,7 +261,7 @@ describe('impt auth login by user/password test suite >', () => {
                 expect(commandOut.output).toMatch('Global');
                 expect(commandOut.output).toMatch('User/Password');
                 expect(commandOut.output).toMatch(config.email);
-                if (config.user) expect(commandOut.output).toMatch(config.user);
+                if (config.username) expect(commandOut.output).toMatch(config.username);
                 const idMatcher = commandOut.output.match(new RegExp(`${ImptTestHelper.ATTR_ID}"?:\\s+([A-Za-z0-9-]+)`));
                 expect(idMatcher).toBeNonEmptyArray();
                 ImptTestHelper.checkSuccessStatusEx(commandOut);

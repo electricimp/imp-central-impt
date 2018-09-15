@@ -39,9 +39,6 @@ const WH_URL = 'http://example.com/wd/';
 
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
     describe('impt webhook delete test suite >', () => {
-
-        const outputMode = '';
-
         let dg_id = null;
         let wh_id = null;
 

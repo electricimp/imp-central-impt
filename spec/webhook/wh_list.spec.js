@@ -39,150 +39,148 @@ const DG_NAME_2 = '__impt_device_group_2';
 const WH_URL = 'http://example.com/wl/';
 const WH_URL_2 = 'http://example.com/wl2/';
 
+ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
+    describe('impt webhook delete test suite >', () => {
+        let pr_id = null;
+        let dg_id = null;
+        let dg_id_2 = null;
+        let wh_id = null;
+        let wh_id_2 = null;
 
-describe('impt webhook delete test suite >', () => {
+        beforeAll((done) => {
+            ImptTestHelper.init().
+                then(_testSuiteCleanUp).
+                then(_testSuiteInit).
+                then(done).
+                catch(error => done.fail(error));
+        }, ImptTestHelper.TIMEOUT);
 
-    const outputMode = '';
+        afterAll((done) => {
+            _testSuiteCleanUp().
+                then(ImptTestHelper.cleanUp).
+                then(done).
+                catch(error => done.fail(error));
+        }, ImptTestHelper.TIMEOUT);
 
-    let pr_id = null;
-    let dg_id = null;
-    let dg_id_2 = null;
-    let wh_id = null;
-    let wh_id_2 = null;
+        // delete all entities using in impt webhook list  test suite
+        function _testSuiteCleanUp() {
+            return ImptTestHelper.runCommandEx(`impt product delete --product ${PRODUCT_NAME} --force --confirmed`, ImptTestHelper.emptyCheckEx).
+                then(() => ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME_2} -f -q`, ImptTestHelper.emptyCheckEx));
+        }
 
-    beforeAll((done) => {
-        ImptTestHelper.init().
-            then(_testSuiteCleanUp).
-            then(_testSuiteInit).
-            then(done).
-            catch(error => done.fail(error));
-    }, ImptTestHelper.TIMEOUT);
-
-    afterAll((done) => {
-        _testSuiteCleanUp().
-            then(ImptTestHelper.cleanUp).
-            then(done).
-            catch(error => done.fail(error));
-    }, ImptTestHelper.TIMEOUT);
-
-    // delete all entities using in impt webhook list  test suite
-    function _testSuiteCleanUp() {
-        return ImptTestHelper.runCommandEx(`impt product delete --product ${PRODUCT_NAME} --force --confirmed`, ImptTestHelper.emptyCheckEx).
-            then(() => ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME_2} -f -q`, ImptTestHelper.emptyCheckEx));
-    }
-
-    // prepare test environment for impt webhook list test suite
-    function _testSuiteInit() {
-        return ImptTestHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME}`, (commandOut) => {
-            pr_id = ImptTestHelper.parseId(commandOut);
-            ImptTestHelper.emptyCheckEx(commandOut);
-        }).
-            then(() => ImptTestHelper.runCommandEx(`impt dg create --name ${DG_NAME} -p ${PRODUCT_NAME} `, (commandOut) => {
-                dg_id = ImptTestHelper.parseId(commandOut);
+        // prepare test environment for impt webhook list test suite
+        function _testSuiteInit() {
+            return ImptTestHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME}`, (commandOut) => {
+                pr_id = ImptTestHelper.parseId(commandOut);
                 ImptTestHelper.emptyCheckEx(commandOut);
-            })).
-            then(() => ImptTestHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME_2}`, ImptTestHelper.emptyCheckEx)).
-            then(() => ImptTestHelper.runCommandEx(`impt dg create --name ${DG_NAME_2} -p ${PRODUCT_NAME_2} `, (commandOut) => {
-                dg_id_2 = ImptTestHelper.parseId(commandOut);
-                ImptTestHelper.emptyCheckEx(commandOut);
-            })).
-            then(() => ImptTestHelper.runCommandEx(`impt webhook create --dg ${DG_NAME} --url ${WH_URL} --event deployment --mime json `, (commandOut) => {
-                wh_id = ImptTestHelper.parseId(commandOut);
-                ImptTestHelper.emptyCheckEx(commandOut);
-            })).
-            then(() => ImptTestHelper.runCommandEx(`impt webhook create --dg ${DG_NAME_2} --url ${WH_URL_2} --event deployment --mime urlencoded `, (commandOut) => {
-                wh_id_2 = ImptTestHelper.parseId(commandOut);
-                ImptTestHelper.emptyCheckEx(commandOut);
-            }));
-    }
+            }).
+                then(() => ImptTestHelper.runCommandEx(`impt dg create --name ${DG_NAME} -p ${PRODUCT_NAME} `, (commandOut) => {
+                    dg_id = ImptTestHelper.parseId(commandOut);
+                    ImptTestHelper.emptyCheckEx(commandOut);
+                })).
+                then(() => ImptTestHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME_2}`, ImptTestHelper.emptyCheckEx)).
+                then(() => ImptTestHelper.runCommandEx(`impt dg create --name ${DG_NAME_2} -p ${PRODUCT_NAME_2} `, (commandOut) => {
+                    dg_id_2 = ImptTestHelper.parseId(commandOut);
+                    ImptTestHelper.emptyCheckEx(commandOut);
+                })).
+                then(() => ImptTestHelper.runCommandEx(`impt webhook create --dg ${DG_NAME} --url ${WH_URL} --event deployment --mime json `, (commandOut) => {
+                    wh_id = ImptTestHelper.parseId(commandOut);
+                    ImptTestHelper.emptyCheckEx(commandOut);
+                })).
+                then(() => ImptTestHelper.runCommandEx(`impt webhook create --dg ${DG_NAME_2} --url ${WH_URL_2} --event deployment --mime urlencoded `, (commandOut) => {
+                    wh_id_2 = ImptTestHelper.parseId(commandOut);
+                    ImptTestHelper.emptyCheckEx(commandOut);
+                }));
+        }
 
-    // check webhook exist in webhook list
-    function _checkWebhookExist(commandOut, expectInfo) {
-        const json = JSON.parse(commandOut.output);
-        expect(json).toBeArrayOfObjects;
-        let obj = {
-            Webhook: {
-                id: `${expectInfo && expectInfo.id ? expectInfo.id : wh_id}`,
-                url: `${expectInfo && expectInfo.url ? expectInfo.url : WH_URL}`,
-                event: `${expectInfo && expectInfo.deployment ? expectInfo.deployment : 'deployment'}`,
-                'Device Group': {
-                    id: `${expectInfo && expectInfo.dg_id ? expectInfo.dg_id : dg_id}`,
-                    type: `${expectInfo && expectInfo.dg_type ? expectInfo.dg_type : 'development'}`,
-                    name: `${expectInfo && expectInfo.dg_name ? expectInfo.dg_name : DG_NAME}`
+        // check webhook exist in webhook list
+        function _checkWebhookExist(commandOut, expectInfo) {
+            const json = JSON.parse(commandOut.output);
+            expect(json).toBeArrayOfObjects;
+            let obj = {
+                Webhook: {
+                    id: `${expectInfo && expectInfo.id ? expectInfo.id : wh_id}`,
+                    url: `${expectInfo && expectInfo.url ? expectInfo.url : WH_URL}`,
+                    event: `${expectInfo && expectInfo.deployment ? expectInfo.deployment : 'deployment'}`,
+                    'Device Group': {
+                        id: `${expectInfo && expectInfo.dg_id ? expectInfo.dg_id : dg_id}`,
+                        type: `${expectInfo && expectInfo.dg_type ? expectInfo.dg_type : 'development'}`,
+                        name: `${expectInfo && expectInfo.dg_name ? expectInfo.dg_name : DG_NAME}`
+                    }
                 }
-            }
-        };
-        expect(json).toContain(jasmine.objectContaining(obj));
-    }
+            };
+            expect(json).toContain(jasmine.objectContaining(obj));
+        }
 
-    // check webhook count in webhook list
-    function _checkWebhookCount(commandOut, expectCount) {
-        const json = JSON.parse(commandOut.output);
-        expect(json).toBeArrayOfObjects;
-        expect(json.length).toEqual(expectCount);
-    }
+        // check webhook count in webhook list
+        function _checkWebhookCount(commandOut, expectCount) {
+            const json = JSON.parse(commandOut.output);
+            expect(json).toBeArrayOfObjects;
+            expect(json.length).toEqual(expectCount);
+        }
 
-    it('webhook list by owner', (done) => {
-        ImptTestHelper.runCommandEx(`impt webhook list --owner me -z json`, (commandOut) => {
-            _checkWebhookExist(commandOut);
-            _checkWebhookExist(commandOut,
-                { id: wh_id_2, url: WH_URL_2, mime: 'urlencoded', dg_id: dg_id_2, dg_name: DG_NAME_2 });
-            ImptTestHelper.checkSuccessStatusEx(commandOut);
-        }).
-            then(done).
-            catch(error => done.fail(error));
+        it('webhook list by owner', (done) => {
+            ImptTestHelper.runCommandEx(`impt webhook list --owner me -z json`, (commandOut) => {
+                _checkWebhookExist(commandOut);
+                _checkWebhookExist(commandOut,
+                    { id: wh_id_2, url: WH_URL_2, mime: 'urlencoded', dg_id: dg_id_2, dg_name: DG_NAME_2 });
+                ImptTestHelper.checkSuccessStatusEx(commandOut);
+            }).
+                then(done).
+                catch(error => done.fail(error));
+        });
+
+        it('webhook list by product id', (done) => {
+            ImptTestHelper.runCommandEx(`impt webhook list -p ${pr_id} -z json`, (commandOut) => {
+                _checkWebhookExist(commandOut);
+                _checkWebhookCount(commandOut, 1);
+                ImptTestHelper.checkSuccessStatusEx(commandOut);
+            }).
+                then(done).
+                catch(error => done.fail(error));
+        });
+
+        it('webhook list by product name', (done) => {
+            ImptTestHelper.runCommandEx(`impt webhook list -p ${PRODUCT_NAME} -z json`, (commandOut) => {
+                _checkWebhookExist(commandOut);
+                _checkWebhookCount(commandOut, 1);
+                ImptTestHelper.checkSuccessStatusEx(commandOut);
+            }).
+                then(done).
+                catch(error => done.fail(error));
+        });
+
+        it('webhook list by dg id', (done) => {
+            ImptTestHelper.runCommandEx(`impt webhook list -g ${dg_id} -z json`, (commandOut) => {
+                _checkWebhookExist(commandOut);
+                _checkWebhookCount(commandOut, 1);
+                ImptTestHelper.checkSuccessStatusEx(commandOut);
+            }).
+                then(done).
+                catch(error => done.fail(error));
+        });
+
+        it('webhook list by product name url and event', (done) => {
+            ImptTestHelper.runCommandEx(`impt webhook list -p ${PRODUCT_NAME} -u ${WH_URL} -e deployment -z json`, (commandOut) => {
+                _checkWebhookExist(commandOut);
+                _checkWebhookCount(commandOut, 1);
+                ImptTestHelper.checkSuccessStatusEx(commandOut);
+            }).
+                then(done).
+                catch(error => done.fail(error));
+        });
+
+        it('webhook list by several url', (done) => {
+            ImptTestHelper.runCommandEx(`impt webhook list -u ${WH_URL} -u ${WH_URL_2} -z json`, (commandOut) => {
+                _checkWebhookExist(commandOut);
+                _checkWebhookExist(commandOut,
+                    { id: wh_id_2, url: WH_URL_2, mime: 'urlencoded', dg_id: dg_id_2, dg_name: DG_NAME_2 });
+                _checkWebhookCount(commandOut, 2);
+                ImptTestHelper.checkSuccessStatusEx(commandOut);
+            }).
+                then(done).
+                catch(error => done.fail(error));
+        });
+
     });
-
-    it('webhook list by product id', (done) => {
-        ImptTestHelper.runCommandEx(`impt webhook list -p ${pr_id} -z json`, (commandOut) => {
-            _checkWebhookExist(commandOut);
-            _checkWebhookCount(commandOut, 1);
-            ImptTestHelper.checkSuccessStatusEx(commandOut);
-        }).
-            then(done).
-            catch(error => done.fail(error));
-    });
-
-    it('webhook list by product name', (done) => {
-        ImptTestHelper.runCommandEx(`impt webhook list -p ${PRODUCT_NAME} -z json`, (commandOut) => {
-            _checkWebhookExist(commandOut);
-            _checkWebhookCount(commandOut, 1);
-            ImptTestHelper.checkSuccessStatusEx(commandOut);
-        }).
-            then(done).
-            catch(error => done.fail(error));
-    });
-
-    it('webhook list by dg id', (done) => {
-        ImptTestHelper.runCommandEx(`impt webhook list -g ${dg_id} -z json`, (commandOut) => {
-            _checkWebhookExist(commandOut);
-            _checkWebhookCount(commandOut, 1);
-            ImptTestHelper.checkSuccessStatusEx(commandOut);
-        }).
-            then(done).
-            catch(error => done.fail(error));
-    });
-
-    it('webhook list by product name url and event', (done) => {
-        ImptTestHelper.runCommandEx(`impt webhook list -p ${PRODUCT_NAME} -u ${WH_URL} -e deployment -z json`, (commandOut) => {
-            _checkWebhookExist(commandOut);
-            _checkWebhookCount(commandOut, 1);
-            ImptTestHelper.checkSuccessStatusEx(commandOut);
-        }).
-            then(done).
-            catch(error => done.fail(error));
-    });
-
-    it('webhook list by several url', (done) => {
-        ImptTestHelper.runCommandEx(`impt webhook list -u ${WH_URL} -u ${WH_URL_2} -z json`, (commandOut) => {
-            _checkWebhookExist(commandOut);
-            _checkWebhookExist(commandOut,
-                { id: wh_id_2, url: WH_URL_2, mime: 'urlencoded', dg_id: dg_id_2, dg_name: DG_NAME_2 });
-            _checkWebhookCount(commandOut, 2);
-            ImptTestHelper.checkSuccessStatusEx(commandOut);
-        }).
-            then(done).
-            catch(error => done.fail(error));
-    });
-
 });
