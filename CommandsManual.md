@@ -403,8 +403,8 @@ The user is asked to confirm the operation if the files with the specified names
 | --build | -b | Yes/[Project](#project-files) | Yes | A [Build identifier](#build-identifier). If not specified, the most recent Deployment for the Device Group referenced by the [Project file](#project-files) in the current directory is used (if there is no Project file, the command fails) |
 | --device-file | -x | No | Yes | The device source code file name. If not specified, the file referenced by the [Project file](#project-files) in the current directory is used; if there is no Project file, empty code is used. If the specified file does not exist, the command fails |
 | --agent-file | -y | No | Yes | The agent source code file name. If not specified, the file referenced by the [Project file](#project-files) in the current directory is used; if there is no Project file, empty code is used. If the specified file does not exist, the command fails |
-| --device-only | -i | No | Yes | Downloads the source code for the device only |
-| --agent-only | -j | No | Yes | Downloads the source code for the agent only |
+| --device-only | -i | No | No | Downloads the source code for the device only |
+| --agent-only | -j | No | No | Downloads the source code for the agent only |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
 | --output | -z | No | Yes | Adjusts the [command's output](#command-output) |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
@@ -806,7 +806,7 @@ Updates the specified Device Group. Fails if the specified Device Group does not
 | --descr | -s | No | Yes | An optional description of the Device Group |
 | --target | -t | No | Yes | The [Device Group identifier](#device-group-identifier) of the specified Device Group’s production target Device Group. May only be specified for *factory* and *pre-factory* Device Groups. The target Device Group must be of the [type](#device-group-type) *production* or *pre-production* correspondingly, and belong to the same Product as the specified Device Group. Otherwise the command fails |
 | --load-code-after-blessing | -l | No | No | Only applicable to *production* and *pre-production* Device Groups. If `true` or no value is supplied, production application code is immediately loaded by the device after blessing. If `false`, production code will be loaded when the device first connects as part of BlinkUp. Newly created Production Device Groups default this setting to `true` |
-| --min-supported-deployment | -m | No | No | The [Build identifier](#build-identifier) of the new *min_supported_deployment* (see the impCentral API specification). The Deployment should belong to this Device Group and should be newer than the current *min_supported_deployment* |
+| --min-supported-deployment | -m | No | Yes | The [Build identifier](#build-identifier) of the new *min_supported_deployment* (see the impCentral API specification). The Deployment should belong to this Device Group and should be newer than the current *min_supported_deployment* |
 | --output | -z | No | Yes | Adjusts the [command's output](#command-output) |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
@@ -830,8 +830,8 @@ If the `--page-number` option is specified, the command displays the specified p
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --device | -d | Yes/[Project](#project-files) | Yes | A [device identifier](#device-identifier). If not specified and there is only one device in the Device Group referenced by the [Project file](#project-files) in the current directory, then this device is used (if there is no Project file, or the Device Group has none or more than one device, the command fails) |
-| --page-size | -s | No | No | Number of log entries in one page. Default: 20 |
-| --page-number | -n | No | No | Ordinal page number with the log entries to display. Must have a positive value. Page 1 is a page with the most recent log entries. If not specified, the command displays all saved log entries |
+| --page-size | -s | No | Yes | Number of log entries in one page. Default: 20 |
+| --page-number | -n | No | Yes | Ordinal page number with the log entries to display. Must have a positive value. Page 1 is a page with the most recent log entries. If not specified, the command displays all saved log entries |
 | --output | -z | No | Yes | Adjusts the [command's output](#command-output) |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
@@ -931,7 +931,7 @@ Updates the specified login key’s description.
 | --- | --- | --- | --- | --- |
 | --lk | -k | Yes | Yes | The login key ID |
 | --pwd | -w | No | Yes | The account password. If the option is not specified, the user is asked to input the account password |
-| --descr | -s | No | Yes | The login key’s new description |
+| --descr | -s | Yes | Yes | The login key’s new description |
 | --output | -z | No | Yes | Adjusts the [command's output](#command-output) |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
