@@ -137,6 +137,22 @@ class ImptTestHelper {
         expect(files.code).toBe(1);
     }
 
+    static projectCreate(dg) {
+        return ImptTestHelper.runCommandEx(`impt project link --dg ${dg} -q`, ImptTestHelper.emptyCheckEx);
+    }
+
+    static projectDelete() {
+        return ImptTestHelper.runCommandEx(`impt project delete --files -q`, ImptTestHelper.emptyCheckEx);
+    }
+
+    static deviceAssign(dg) {
+        return ImptTestHelper.runCommandEx(`impt device assign -d ${config.devices[0]} -g ${dg} -q`, ImptTestHelper.emptyCheckEx);
+    }
+
+    static deviceUnassign(dg) {
+        return ImptTestHelper.runCommandEx(`impt dg unassign -g ${dg}`, ImptTestHelper.emptyCheckEx);
+    }
+
     // Checks IMPT COMMAND SUCCEEDS status of the command
     static checkSuccessStatus(commandOut) {
         expect(commandOut).toMatch('IMPT COMMAND SUCCEEDS');

@@ -31,11 +31,9 @@ const Identifier = require('../../lib/util/Identifier');
 const UserInterractor = require('../../lib/util/UserInteractor');
 const Util = require('util');
 const MessageHelper = require('../MessageHelper');
+const ImptDgTestHelper = require('./ImptDgTestHelper');
 
 const PRODUCT_NAME = '__impt_product';
-const PRODUCT_DESCR = '__impt_product_description';
-
-
 const DEVICE_GROUP_NAME = '__impt_device_group';
 const DEVICE_GROUP_NEW_NAME = '__impt_new_device_group';
 const DEVICE_GROUP_DESCR = 'impt temp device group description';
@@ -44,9 +42,10 @@ const DEVICE_GROUP_NEW_DESCR = 'impt new device group description';
 // Test suite for 'impt dg update' command.
 // Runs 'impt dg update' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
-    describe('impt device group create test suite >', () => {
+    describe('impt device group update test suite >', () => {
         let dg_id = null;
         let product_id = null;
+        let deploy_id = null;
 
         beforeAll((done) => {
             ImptTestHelper.init().
@@ -64,7 +63,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         }, ImptTestHelper.TIMEOUT);
 
 
-        // create products for device group testing
+        // prepare environment for device group update command test suite
         function _testSuiteInit() {
             return ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME}`, (commandOut) => {
                 product_id = ImptTestHelper.parseId(commandOut);
@@ -72,18 +71,21 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
         }
 
-        // create products for device group testing
+        // prepare environment for each device group update test
         function _testInit() {
             return ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP_NAME} -s "${DEVICE_GROUP_DESCR}" -p ${PRODUCT_NAME}`, (commandOut) => {
                 dg_id = ImptTestHelper.parseId(commandOut);
                 ImptTestHelper.emptyCheckEx(commandOut);
-            });
+            }).
+                then(() => ImptTestHelper.runCommandEx(`impt build deploy --dg ${dg_id}`, (commandOut) => {
+                    deploy_id = ImptTestHelper.parseId(commandOut);
+                    ImptTestHelper.emptyCheckEx(commandOut);
+                }));
         }
 
-        // delete all products using in impt dg update test suite
+        // delete all entities using in impt dg update test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx).
-                then(() => ImptTestHelper.runCommandEx(`impt project delete --all -q`, ImptTestHelper.emptyCheckEx));
+            return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
         }
 
         // delete device group using in impt dg update test
@@ -100,24 +102,24 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             );
         }
 
-        // check base atributes of requested device group
-        function _checkDeviceGroupInfo(expInfo) {
-            ImptTestHelper.runCommandEx(`impt dg info -g ${expInfo && expInfo.id ? expInfo.id : dg_id}  -z json`, (commandOut) => {
-                const json = JSON.parse(commandOut.output);
-                expect(json['Device Group']).toBeDefined();
-                expect(json['Device Group'].id).toBe(expInfo && expInfo.id ? expInfo.id : dg_id);
-                expect(json['Device Group'].name).toBe(expInfo && expInfo.name ? expInfo.name : DEVICE_GROUP_NAME);
-                expect(json['Device Group'].description).toBe(expInfo && expInfo.descr ? expInfo.descr : DEVICE_GROUP_DESCR);
-                expect(json['Device Group'].type).toBe('development');
-                expect(json['Device Group'].Product.id).toBe(expInfo && expInfo.p_id ? expInfo.p_id : product_id);
-                expect(json['Device Group'].Product.name).toBe(expInfo && expInfo.p_name ? expInfo.p_name : PRODUCT_NAME);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
-            });
+        // check 'min sup deployment successfully updated' output message 
+        function _checkSuccessUpdatedMinSupDeploymentMessage(commandOut, dg) {
+            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+                Util.format(`${UserInterractor.MESSAGES.DG_MIN_SUPPORTED_DEPLOYMENT_UPDATED}`,
+                    `${Identifier.ENTITY_TYPE.TYPE_DEVICE_GROUP} "${dg}"`)
+            );
         }
 
-        describe('project not exist preconditions >', () => {
+        describe('device group update positive tests >', () => {
+            afterAll((done) => {
+                ImptTestHelper.projectDelete().
+                    then(done).
+                    catch(error => done.fail(error));
+            }, ImptTestHelper.TIMEOUT);
+
             beforeEach((done) => {
                 _testInit().
+                    then(() => ImptTestHelper.projectCreate(dg_id)).
                     then(done).
                     catch(error => done.fail(error));
             }, ImptTestHelper.TIMEOUT);
@@ -133,7 +135,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     _checkSuccessUpdatedDeviceGroupMessage(commandOut, dg_id);
                     ImptTestHelper.checkSuccessStatusEx(commandOut);
                 }).
-                    then(() => _checkDeviceGroupInfo).
+                    then(() => ImptDgTestHelper.checkDeviceGroupInfo({ id: dg_id, p_id: product_id })).
                     then(done).
                     catch(error => done.fail(error));
             });
@@ -143,50 +145,29 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     _checkSuccessUpdatedDeviceGroupMessage(commandOut, DEVICE_GROUP_NAME);
                     ImptTestHelper.checkSuccessStatusEx(commandOut);
                 }).
-                    then(() => _checkDeviceGroupInfo({ name: DEVICE_GROUP_NEW_NAME })).
+                    then(() => ImptDgTestHelper.checkDeviceGroupInfo({ id: dg_id, p_id: product_id, name: DEVICE_GROUP_NEW_NAME })).
                     then(done).
                     catch(error => done.fail(error));
             });
 
-            it('update device group by not exist project', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg update -n ${DEVICE_GROUP_NEW_NAME} -s "${DEVICE_GROUP_NEW_DESCR}" ${outputMode}`, (commandOut) => {
-                    MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, 'Device Group');
-                    ImptTestHelper.checkFailStatusEx(commandOut);
+            it('update device group by project', (done) => {
+                ImptTestHelper.runCommandEx(`impt dg update -n ${DEVICE_GROUP_NEW_NAME} -s "${DEVICE_GROUP_NEW_DESCR}" --min-supported-deployment  ${deploy_id} ${outputMode}`, (commandOut) => {
+                    _checkSuccessUpdatedDeviceGroupMessage(commandOut, dg_id);
+                    _checkSuccessUpdatedMinSupDeploymentMessage(commandOut, dg_id);
+                    ImptTestHelper.checkSuccessStatusEx(commandOut);
                 }).
+                    then(() => ImptDgTestHelper.checkDeviceGroupInfo({ id: dg_id, p_id: product_id, name: DEVICE_GROUP_NEW_NAME, descr: DEVICE_GROUP_NEW_DESCR })).
                     then(done).
                     catch(error => done.fail(error));
             });
         });
 
-        describe('project exist preconditions >', () => {
-            let deploy_id = null;
-
-            beforeAll((done) => {
-                _testProjectExistInit().
-                    then(done).
-                    catch(error => done.fail(error));
-            }, ImptTestHelper.TIMEOUT);
-
-            // create products for device group testing
-            function _testProjectExistInit() {
-                return ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP_NAME} -s "${DEVICE_GROUP_DESCR}" -p ${PRODUCT_NAME}`, (commandOut) => {
-                    dg_id = ImptTestHelper.parseId(commandOut);
-                    ImptTestHelper.emptyCheckEx(commandOut);
+        describe('device group create negative tests >', () => {
+            it('update device group by not exist project', (done) => {
+                ImptTestHelper.runCommandEx(`impt dg update -n ${DEVICE_GROUP_NEW_NAME} -s "${DEVICE_GROUP_NEW_DESCR}" ${outputMode}`, (commandOut) => {
+                    MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, 'Device Group');
+                    ImptTestHelper.checkFailStatusEx(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommandEx(`impt project link --dg ${DEVICE_GROUP_NAME} `, ImptTestHelper.emptyCheckEx)).
-                    then(() => ImptTestHelper.runCommandEx(`impt build deploy`, (commandOut) => {
-                        deploy_id = ImptTestHelper.parseId(commandOut);
-                        ImptTestHelper.emptyCheckEx(commandOut);
-                    }));
-            }
-
-            it('update device group by project', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg update -n ${DEVICE_GROUP_NEW_NAME} -s "${DEVICE_GROUP_NEW_DESCR}" --min-supported-deployment  ${deploy_id} ${outputMode}`, (commandOut) => {
-                    _checkSuccessUpdatedDeviceGroupMessage(commandOut, dg_id);
-                    //TODO: check DG_MIN_SUPPORTED_DEPLOYMENT_UPDATED message
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
-                }).
-                    then(() => _checkDeviceGroupInfo({ name: DEVICE_GROUP_NEW_NAME, descr: DEVICE_GROUP_NEW_DESCR })).
                     then(done).
                     catch(error => done.fail(error));
             });

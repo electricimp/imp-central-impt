@@ -31,10 +31,9 @@ const Identifier = require('../../lib/util/Identifier');
 const UserInterractor = require('../../lib/util/UserInteractor');
 const Util = require('util');
 const MessageHelper = require('../MessageHelper');
+const ImptDgTestHelper = require('./ImptDgTestHelper');
 
 const PRODUCT_NAME = '__impt_product';
-const PRODUCT_DESCR = '__impt_product_description';
-
 const DEVICE_GROUP_NAME = '__impt_device_group';
 const DEVICE_GROUP_DESCR = 'impt temp device group description';
 
@@ -49,6 +48,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         beforeAll((done) => {
             ImptTestHelper.init().
                 then(_testSuiteCleanUp).
+                then(_testSuiteInit).
                 then(done).
                 catch(error => done.fail(error));
         }, ImptTestHelper.TIMEOUT);
@@ -61,7 +61,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         }, ImptTestHelper.TIMEOUT);
 
 
-        // create products for device group testing
+        // prepare environment for device group create command test suite 
         function _testSuiteInit() {
             return ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME}`, (commandOut) => {
                 product_id = ImptTestHelper.parseId(commandOut);
@@ -69,35 +69,17 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             }).
                 then(() => ImptTestHelper.runCommandEx(`impt dg create -n dg_exist_name -p ${PRODUCT_NAME}`, (commandOut) => {
                     ImptTestHelper.emptyCheckEx(commandOut);
-                })).
-                then(() => ImptTestHelper.runCommandEx(`impt project link --dg dg_exist_name`, (commandOut) => {
-                    ImptTestHelper.emptyCheckEx(commandOut);
                 }));
         }
 
-        // delete all products using in impt dg create test suite
+        // delete all entities using in impt dg create test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx).
-                then(() => ImptTestHelper.runCommandEx(`impt project delete --all -q`, ImptTestHelper.emptyCheckEx));
+            return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx);
         }
 
         // delete device group using in impt dg create test
         function _testCleanUp() {
             return ImptTestHelper.runCommandEx(`impt dg delete --dg ${DEVICE_GROUP_NAME} -f -q`, ImptTestHelper.emptyCheckEx);
-        }
-
-        // check base atributes of requested device group
-        function _checkDeviceGroupInfo(expInfo) {
-            ImptTestHelper.runCommandEx(`impt dg info -g ${expInfo && expInfo.id ? expInfo.id : dg_id}  -z json`, (commandOut) => {
-                const json = JSON.parse(commandOut.output);
-                expect(json['Device Group']).toBeDefined();
-                expect(json['Device Group'].id).toBe(expInfo && expInfo.id ? expInfo.id : dg_id);
-                expect(json['Device Group'].name).toBe(expInfo && expInfo.name ? expInfo.name : DEVICE_GROUP_NAME);
-                expect(json['Device Group'].type).toBe('development');
-                expect(json['Device Group'].Product.id).toBe(expInfo && expInfo.p_id ? expInfo.p_id : product_id);
-                expect(json['Device Group'].Product.name).toBe(expInfo && expInfo.p_name ? expInfo.p_name : PRODUCT_NAME);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
-            });
         }
 
         // check successfuly created device group output message 
@@ -108,15 +90,15 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             );
         }
 
-        describe('project exist preconditions >', () => {
+        describe('device group create positive tests >', () => {
             beforeAll((done) => {
-                _testSuiteInit().
+                ImptTestHelper.projectCreate('dg_exist_name').
                     then(done).
                     catch(error => done.fail(error));
             }, ImptTestHelper.TIMEOUT);
 
             afterAll((done) => {
-                _testSuiteCleanUp().
+                ImptTestHelper.projectDelete().
                     then(done).
                     catch(error => done.fail(error));
             }, ImptTestHelper.TIMEOUT);
@@ -141,7 +123,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     _checkDeviceGroupCreateResult(commandOut);
                     ImptTestHelper.checkSuccessStatusEx(commandOut);
                 }).
-                    then(() => _checkDeviceGroupInfo).
+                    then(() => ImptDgTestHelper.checkDeviceGroupInfo({ id: dg_id, p_id: product_id })).
                     then(done).
                     catch(error => done.fail(error));
             });
@@ -153,7 +135,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     _checkDeviceGroupCreateResult(commandOut);
                     ImptTestHelper.checkSuccessStatusEx(commandOut);
                 }).
-                    then(() => _checkDeviceGroupInfo).
+                    then(() => ImptDgTestHelper.checkDeviceGroupInfo({ id: dg_id, p_id: product_id })).
                     then(done).
                     catch(error => done.fail(error));
             });
@@ -165,27 +147,13 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     _checkDeviceGroupCreateResult(commandOut);
                     ImptTestHelper.checkSuccessStatusEx(commandOut);
                 }).
-                    then(() => _checkDeviceGroupInfo).
-                    then(done).
-                    catch(error => done.fail(error));
-            });
-
-            it('create duplicate device group', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg create -n dg_exist_name -p ${PRODUCT_NAME} ${outputMode}`, (commandOut) => {
-                    MessageHelper.checkDuplicateResourceError(commandOut, 'Devicegroup');
-                    ImptTestHelper.checkFailStatusEx(commandOut);
-                }).
+                    then(() => ImptDgTestHelper.checkDeviceGroupInfo({ id: dg_id, p_id: product_id })).
                     then(done).
                     catch(error => done.fail(error));
             });
         });
 
-        describe('project not exist preconditions >', () => {
-            beforeAll((done) => {
-                _testSuiteCleanUp().
-                    then(done).
-                    catch(error => done.fail(error));
-            }, ImptTestHelper.TIMEOUT);
+        describe('device group create negative tests >', () => {
 
             it('device group create by not exist project', (done) => {
                 ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP_NAME} ${outputMode}`, (commandOut) => {
@@ -204,7 +172,15 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     then(done).
                     catch(error => done.fail(error));
             });
-        });
 
+            it('create duplicate device group', (done) => {
+                ImptTestHelper.runCommandEx(`impt dg create -n dg_exist_name -p ${PRODUCT_NAME} ${outputMode}`, (commandOut) => {
+                    MessageHelper.checkDuplicateResourceError(commandOut, 'Devicegroup');
+                    ImptTestHelper.checkFailStatusEx(commandOut);
+                }).
+                    then(done).
+                    catch(error => done.fail(error));
+            });
+        });
     });
 });

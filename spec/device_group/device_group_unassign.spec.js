@@ -31,15 +31,15 @@ const Identifier = require('../../lib/util/Identifier');
 const UserInterractor = require('../../lib/util/UserInteractor');
 const Util = require('util');
 const MessageHelper = require('../MessageHelper');
+const ImptDgTestHelper = require('./ImptDgTestHelper');
 
 const PRODUCT_NAME = '__impt_product';
 const DEVICE_GROUP_NAME = '__impt_device_group';
-const DEVICE_GROUP_DESCR = 'impt temp device group description';
 
-// Test suite for 'impt dg restart' command.
-// Runs 'impt dg restart' command with different combinations of options,
+// Test suite for 'impt dg unassign' command.
+// Runs 'impt dg unassign' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
-    describe('impt device group restart test suite >', () => {
+    describe('impt device group unassign test suite >', () => {
         let dg_id = null;
 
         beforeAll((done) => {
@@ -57,37 +57,30 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 catch(error => done.fail(error));
         }, ImptTestHelper.TIMEOUT);
 
-        // prepare environment for device group restart command testing
+        // prepare environment for device group unassign command test suite 
         function _testSuiteInit() {
             return ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
-                then(() => ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP_NAME} -s "${DEVICE_GROUP_DESCR}" -p ${PRODUCT_NAME}`, (commandOut) => {
+                then(() => ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
                     dg_id = ImptTestHelper.parseId(commandOut);
                     ImptTestHelper.emptyCheckEx(commandOut);
                 }));
+
         }
 
-        // delete all entities using in impt dg restart test suite
+        // delete entities using in impt dg unassign test suite
         function _testSuiteCleanUp() {
             return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx);
         }
 
-        // check 'device group successfully restarted' output message 
-        function _checkSuccessRestartedDeviceMessage(commandOut, dg) {
+        // check 'device successfully unassigned' output message 
+        function _checkSuccessUnassignedDeviceMessage(commandOut, dg) {
             ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
-                Util.format(`${UserInterractor.MESSAGES.DG_DEVICES_RESTARTED}`,
+                Util.format(`${UserInterractor.MESSAGES.DG_DEVICES_UNASSIGNED}`,
                     `${Identifier.ENTITY_TYPE.TYPE_DEVICE_GROUP} "${dg}"`)
             );
         }
 
-        // check 'device group successfully coditional restarted' output message 
-        function _checkSuccessCondRestartedDeviceMessage(commandOut, dg) {
-            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
-                Util.format(`${UserInterractor.MESSAGES.DG_DEVICES_COND_RESTARTED}`,
-                    `${Identifier.ENTITY_TYPE.TYPE_DEVICE_GROUP} "${dg}"`)
-            );
-        }
-
-        // check 'device group have no device' output message 
+        // check 'device group has no devices' output message 
         function _checkNoDeviceMessage(commandOut, dg) {
             ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
                 Util.format(`${UserInterractor.MESSAGES.DG_NO_DEVICES}`,
@@ -95,67 +88,62 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             );
         }
 
-        describe('device group restart positive tests >', () => {
+        describe('device group unassign positive tests >', () => {
             beforeAll((done) => {
                 ImptTestHelper.projectCreate(DEVICE_GROUP_NAME).
-                    then(() => ImptTestHelper.deviceAssign(DEVICE_GROUP_NAME)).
                     then(done).
                     catch(error => done.fail(error));
             }, ImptTestHelper.TIMEOUT);
 
             afterAll((done) => {
                 ImptTestHelper.projectDelete().
-                    then(() => ImptTestHelper.deviceUnassign(DEVICE_GROUP_NAME)).
                     then(done).
                     catch(error => done.fail(error));
             }, ImptTestHelper.TIMEOUT);
 
-            it('restart device by device group id', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg restart --dg ${dg_id} ${outputMode}`, (commandOut) => {
-                    _checkSuccessRestartedDeviceMessage(commandOut, dg_id);
+            beforeEach((done) => {
+                ImptTestHelper.deviceAssign(DEVICE_GROUP_NAME).
+                    then(done).
+                    catch(error => done.fail(error));
+            }, ImptTestHelper.TIMEOUT);
+
+            it('unassign device by device group id', (done) => {
+                ImptTestHelper.runCommandEx(`impt dg unassign --dg ${dg_id} ${outputMode}`, (commandOut) => {
+                    _checkSuccessUnassignedDeviceMessage(commandOut, dg_id);
                     ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_ID, config.devices[0]);
                     ImptTestHelper.checkSuccessStatusEx(commandOut);
                 }).
+                    then(() => ImptDgTestHelper.checkDeviceGroupHasNoDevice(dg_id)).
                     then(done).
                     catch(error => done.fail(error));
             });
 
-            it('restart device by device group name', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg restart --dg ${DEVICE_GROUP_NAME} --conditional ${outputMode}`, (commandOut) => {
-                    _checkSuccessCondRestartedDeviceMessage(commandOut, DEVICE_GROUP_NAME);
+            it('unassign device by device group name', (done) => {
+                ImptTestHelper.runCommandEx(`impt dg unassign --dg ${DEVICE_GROUP_NAME} ${outputMode}`, (commandOut) => {
+                    _checkSuccessUnassignedDeviceMessage(commandOut, DEVICE_GROUP_NAME);
                     ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_ID, config.devices[0]);
                     ImptTestHelper.checkSuccessStatusEx(commandOut);
                 }).
+                    then(() => ImptDgTestHelper.checkDeviceGroupHasNoDevice(dg_id)).
                     then(done).
                     catch(error => done.fail(error));
             });
 
-            it('restart device by project', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg restart ${outputMode}`, (commandOut) => {
-                    _checkSuccessRestartedDeviceMessage(commandOut, dg_id);
+            it('unassign device by project', (done) => {
+                ImptTestHelper.runCommandEx(`impt dg unassign ${outputMode}`, (commandOut) => {
+                    _checkSuccessUnassignedDeviceMessage(commandOut, dg_id);
                     ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_ID, config.devices[0]);
                     ImptTestHelper.checkSuccessStatusEx(commandOut);
                 }).
-                    then(done).
-                    catch(error => done.fail(error));
-            });
-
-            xit('restart device with log display', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg restart --dg ${DEVICE_GROUP_NAME} --log ${outputMode}`, (commandOut) => {
-                    _checkSuccessRestartedDeviceMessage(commandOut, DEVICE_GROUP_NAME);
-                    // TODO: check interactive output
-                    ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_ID, config.devices[0]);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
-                }).
+                    then(() => ImptDgTestHelper.checkDeviceGroupHasNoDevice(dg_id)).
                     then(done).
                     catch(error => done.fail(error));
             });
         });
 
-        describe('device group create negative tests >', () => {
-
-            it('restart device by not exist project', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg restart ${outputMode}`, (commandOut) => {
+        describe('project not exist preconditions >', () => {
+            it('unassign device by not exist project', (done) => {
+                ImptTestHelper.runCommandEx(`impt dg unassign ${outputMode}`, (commandOut) => {
                     MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, 'Device Group');
                     ImptTestHelper.checkFailStatusEx(commandOut);
                 }).
@@ -163,8 +151,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     catch(error => done.fail(error));
             });
 
-            it('restart device by not exist device group', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg restart -g not-exist-device-group ${outputMode}`, (commandOut) => {
+            it('unassign device by not exist device group', (done) => {
+                ImptTestHelper.runCommandEx(`impt dg unassign -g not-exist-device-group ${outputMode}`, (commandOut) => {
                     MessageHelper.checkEntityNotFoundError(commandOut, 'Device Group', 'not-exist-device-group');
                     ImptTestHelper.checkFailStatusEx(commandOut);
                 }).
@@ -172,8 +160,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     catch(error => done.fail(error));
             });
 
-            it('restart not exist device', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg restart -g ${DEVICE_GROUP_NAME} ${outputMode}`, (commandOut) => {
+            it('unassign not exist device', (done) => {
+                ImptTestHelper.runCommandEx(`impt dg unassign -g ${DEVICE_GROUP_NAME} ${outputMode}`, (commandOut) => {
                     _checkNoDeviceMessage(commandOut, DEVICE_GROUP_NAME)
                     ImptTestHelper.checkSuccessStatusEx(commandOut);
                 }).

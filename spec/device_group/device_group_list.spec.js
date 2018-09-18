@@ -28,10 +28,6 @@ require('jasmine-expect');
 const config = require('../config');
 const ImptTestHelper = require('../ImptTestHelper');
 const lodash = require('lodash');
-const Identifier = require('../../lib/util/Identifier');
-const UserInterractor = require('../../lib/util/UserInteractor');
-const Util = require('util');
-const MessageHelper = require('../MessageHelper');
 
 const PRODUCT_NAME = '__impt_product';
 const PRODUCT_NAME2 = '__impt_product2';
@@ -41,8 +37,8 @@ const DEVICE_GROUP_NAME = '__impt_device_group';
 const DEVICE_GROUP_NAME2 = '__impt_device_group2';
 const DEVICE_GROUP_NAME3 = '__impt_device_group3';
 
-// Test suite for 'impt dg create' command.
-// Runs 'impt dg create' command with different combinations of options,
+// Test suite for 'impt dg list' command.
+// Runs 'impt dg list' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
     describe('impt device group list test suite >', () => {
         let product_id = null;
@@ -93,7 +89,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 catch(error => done.fail(error));
         }, ImptTestHelper.TIMEOUT);
 
-        // create products and device groups for device group list command testing
+        // prepare environment for device group list command testing
         function _testSuiteInit() {
             return ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME}`, (commandOut) => {
                 product_id = ImptTestHelper.parseId(commandOut);
@@ -106,28 +102,27 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 then(() => ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP_NAME3} -p ${PRODUCT_NAME3}`, ImptTestHelper.emptyCheckEx));
         }
 
-        // delete all products using in impt dg list test suite
+        // delete all entities using in impt dg list test suite
         function _testSuiteCleanUp() {
             return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx).
                 then(() => ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME2} -f -q`, ImptTestHelper.emptyCheckEx)).
                 then(() => ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME3} -f -q`, ImptTestHelper.emptyCheckEx));
         }
 
-        function _checkDeviceGroupExist(commandOut, expectInfo) {
+        function _checkDeviceGroupExist(commandOut, expInfo) {
             const json = JSON.parse(commandOut.output);
             expect(json).toBeArrayOfObjects();
-            expect(json).toContainsDeviceGroup(expectInfo);
+            expect(json).toContainsDeviceGroup(expInfo);
         }
 
         // check device group count in  list
-        function _checkDeviceGroupCount(commandOut, expectCount) {
+        function _checkDeviceGroupCount(commandOut, expCount) {
             const json = JSON.parse(commandOut.output);
             expect(json).toBeArrayOfObjects;
-            expect(json.length).toEqual(expectCount);
+            expect(json.length).toEqual(expCount);
         }
 
-        describe('prodject not exist preconditions >', () => {
-
+        describe('device group list positive tests >', () => {
             it('device group list by owner me', (done) => {
                 ImptTestHelper.runCommandEx(`impt dg list --owner me -z json`, (commandOut) => {
                     _checkDeviceGroupExist(commandOut, { name: `${DEVICE_GROUP_NAME}`, Project: { name: `${PRODUCT_NAME}` } });
