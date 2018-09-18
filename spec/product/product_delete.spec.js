@@ -170,8 +170,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 return ImptTestHelper.runCommandEx(`impt project create --product ${PRODUCT_NAME} --name ${DG_NAME} -q`, ImptTestHelper.emptyCheckEx);
             }
 
-            it('product force delete by project', (done) => {
-                ImptTestHelper.runCommandEx(`impt product delete --force -q ${outputMode}`, (commandOut) => {
+            it('product delete by project', (done) => {
+                ImptTestHelper.runCommandEx(`impt product delete -q ${outputMode}`, (commandOut) => {
                     _checkSuccessDeleteProductMessage(commandOut, product_id);
                     ImptTestHelper.checkSuccessStatusEx(commandOut);
                 }).
