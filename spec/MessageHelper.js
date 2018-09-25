@@ -34,6 +34,20 @@ const Util = require('util');
 // Helper class for testing impt tool.
 // Contains common methods for testing output error message
 class MessageHelper {
+
+    static get DEVICE() {
+        return Identifier.ENTITY_TYPE.TYPE_DEVICE;
+    }
+
+    static get DG() {
+        return Identifier.ENTITY_TYPE.TYPE_DEVICE_GROUP;
+    }
+
+    static get PRODUCT() {
+        return Identifier.ENTITY_TYPE.TYPE_PRODUCT;
+    }
+
+
     static checkDuplicateResourceError(commandOut, entity) {
         ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
             `Duplicate Resource: ${entity}s must have unique names.`
@@ -64,17 +78,18 @@ class MessageHelper {
         );
     }
 
-    static checkEntityNotFoundError(commandOut, entity, name) {
-        ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
-            `${entity} "${name}" is not found.`
-        );
-    }
-
     static checkInvalidUrlError(commandOut) {
         ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
             `Invalid URL: The provided URL is invalid.`
         );
     }
+
+    static checkOptionPositiveValueError(commandOut, option) {
+        ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
+            `Option "${option}" must have a positive integer value.`
+        );
+    }
+
 
 
     static checkProjectDeviceGroupNotExistMessage(commandOut, deviceGroup) {
@@ -94,11 +109,20 @@ class MessageHelper {
             `Dependent Devicegroups Exist: Cannot delete a product with associated devicegroups.`
         );
     }
+
     static checkNoIdentifierIsSpecifiedMessage(commandOut, entity) {
         ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
             Util.format(`${UserInterractor.ERRORS.NO_IDENTIFIER}`, entity)
         );
     }
+
+    static checkEntityNotFoundError(commandOut, entity, name) {
+        ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
+            Util.format(`${UserInterractor.ERRORS.ENTITY_NOT_FOUND}`, entity, name)
+        );
+    }
+
+
 }
 
 module.exports = MessageHelper;

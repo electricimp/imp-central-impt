@@ -30,6 +30,9 @@ exports.accountid = process.env.IMPT_ACCOUNT_ID
 exports.email = process.env.IMPT_USER_EMAIL;
 exports.password = process.env.IMPT_USER_PASSWORD;
 exports.devices = process.env.IMPT_DEVICE_IDS ? process.env.IMPT_DEVICE_IDS.split(',') : [];
+exports.devicemacs = process.env.IMPT_DEVICE_MAC ? process.env.IMPT_DEVICE_MAC.split(',') : [];
+exports.deviceaids = process.env.IMPT_DEVICE_AGENTID ? process.env.IMPT_DEVICE_AGENTID.split(',') : [];
+exports.devicenames = process.env.IMPT_DEVICE_NAME ? process.env.IMPT_DEVICE_NAME.split(',') : [];
 exports.debug = process.env.IMPT_DEBUG === 'true' || process.env.IMPT_DEBUG === '1';
 exports.apiEndpoint = process.env.IMPT_ENDPOINT;
 exports.githubUser = process.env.IMPT_GITHUB_USER;

@@ -48,47 +48,47 @@ class ImptProjectTestHelper {
     }
 
     // check command`s result by exec project info command
-    static checkProjectInfo(expectInfo) {
+    static checkProjectInfo(expectInfo = {}) {
         return ImptTestHelper.runCommandEx(`impt project info -z json`, (commandOut) => {
             const json = JSON.parse(commandOut.output);
             expect(json.Project).toBeDefined;
-            expect(json.Project['Device file']).toBe(expectInfo && expectInfo.dfile ? expectInfo.dfile : ImptProjectTestHelper.DEVICE_FILE);
-            expect(json.Project['Agent file']).toBe(expectInfo && expectInfo.afile ? expectInfo.afile : ImptProjectTestHelper.AGENT_FILE);
-            expect(json.Project['Device Group'].id).toBe(expectInfo && expectInfo.dg_id ? expectInfo.dg_id : json.Project['Device Group'].id);
+            expect(json.Project['Device file']).toBe(expectInfo.dfile ? expectInfo.dfile : ImptProjectTestHelper.DEVICE_FILE);
+            expect(json.Project['Agent file']).toBe(expectInfo.afile ? expectInfo.afile : ImptProjectTestHelper.AGENT_FILE);
+            expect(json.Project['Device Group'].id).toBe(expectInfo.dg_id ? expectInfo.dg_id : json.Project['Device Group'].id);
             expect(json.Project['Device Group'].type).toBe('development');
-            expect(json.Project['Device Group'].name).toBe(expectInfo && expectInfo.dg_name ? expectInfo.dg_name : DG_NAME);
-            expect(json.Project['Device Group'].description).toBe(expectInfo && expectInfo.dg_descr ? expectInfo.dg_descr : DG_DESCR);
-            expect(json.Project['Device Group'].Product.id).toBe(expectInfo && expectInfo.product_id ? expectInfo.product_id : json.Project['Device Group'].Product.id);
-            expect(json.Project['Device Group'].Product.name).toBe(expectInfo && expectInfo.product_name ? expectInfo.product_name : PRODUCT_NAME);
+            expect(json.Project['Device Group'].name).toBe(expectInfo.dg_name ? expectInfo.dg_name : DG_NAME);
+            expect(json.Project['Device Group'].description).toBe(expectInfo.dg_descr ? expectInfo.dg_descr : DG_DESCR);
+            expect(json.Project['Device Group'].Product.id).toBe(expectInfo.product_id ? expectInfo.product_id : json.Project['Device Group'].Product.id);
+            expect(json.Project['Device Group'].Product.name).toBe(expectInfo.product_name ? expectInfo.product_name : PRODUCT_NAME);
             ImptTestHelper.checkSuccessStatusEx(commandOut);
         });
     }
 
     // Checks if device and agent files exists
-    static checkDeviceAgentFilesExists(expFiles) {
-        ImptTestHelper.checkFileExist(expFiles && expFiles.dfile ? expFiles.dfile : ImptProjectTestHelper.DEVICE_FILE);
-        ImptTestHelper.checkFileExist(expFiles && expFiles.afile ? expFiles.afile : ImptProjectTestHelper.AGENT_FILE);
+    static checkDeviceAgentFilesExists(expFiles = {}) {
+        ImptTestHelper.checkFileExist(expFiles.dfile ? expFiles.dfile : ImptProjectTestHelper.DEVICE_FILE);
+        ImptTestHelper.checkFileExist(expFiles.afile ? expFiles.afile : ImptProjectTestHelper.AGENT_FILE);
     }
 
     // Checks if device and agent files not exists
-    static checkDeviceAgentFilesNotExists(expFiles) {
-        ImptTestHelper.checkFileNotExist(expFiles && expFiles.dfile ? expFiles.dfile : ImptProjectTestHelper.DEVICE_FILE);
-        ImptTestHelper.checkFileNotExist(expFiles && expFiles.afile ? expFiles.afile : ImptProjectTestHelper.AGENT_FILE);
+    static checkDeviceAgentFilesNotExists(expFiles = {}) {
+        ImptTestHelper.checkFileNotExist(expFiles.dfile ? expFiles.dfile : ImptProjectTestHelper.DEVICE_FILE);
+        ImptTestHelper.checkFileNotExist(expFiles.afile ? expFiles.afile : ImptProjectTestHelper.AGENT_FILE);
     }
 
     // Checks if project`s entities exists
-    static checkProjectsEntitiesExists(expEntities) {
-        return ImptTestHelper.runCommandEx(`impt product info -p ${expEntities && expEntities.product_name ? expEntities.product_name : PRODUCT_NAME}`,
+    static checkProjectsEntitiesExists(expEntities = {}) {
+        return ImptTestHelper.runCommandEx(`impt product info -p ${expEntities.product_name ? expEntities.product_name : PRODUCT_NAME}`,
             ImptTestHelper.checkSuccessStatusEx).
-            then(() => ImptTestHelper.runCommandEx(`impt dg info -g ${expEntities && expEntities.dg_name ? expEntities.dg_name : DG_NAME}`,
+            then(() => ImptTestHelper.runCommandEx(`impt dg info -g ${expEntities.dg_name ? expEntities.dg_name : DG_NAME}`,
                 ImptTestHelper.checkSuccessStatusEx));
     }
 
     // Checks if project`s entities not exists
-    static checkProjectsEntitiesNotExists(expEntities) {
-        return ImptTestHelper.runCommandEx(`impt product info -p ${expEntities && expEntities.product_name ? expEntities.product_name : PRODUCT_NAME}`,
+    static checkProjectsEntitiesNotExists(expEntities = {}) {
+        return ImptTestHelper.runCommandEx(`impt product info -p ${expEntities.product_name ? expEntities.product_name : PRODUCT_NAME}`,
             ImptTestHelper.checkFailStatusEx).
-            then(() => ImptTestHelper.runCommandEx(`impt dg info -g ${expEntities && expEntities.dg_name ? expEntities.dg_name : DG_NAME}`,
+            then(() => ImptTestHelper.runCommandEx(`impt dg info -g ${expEntities.dg_name ? expEntities.dg_name : DG_NAME}`,
                 ImptTestHelper.checkFailStatusEx));
     }
 }

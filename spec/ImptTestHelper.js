@@ -31,9 +31,16 @@ const FS = require('fs');
 const config = require('./config');
 const Utils = require('../lib/util/Utils');
 const UserInteractor = require('../lib/util/UserInteractor');
+const child_process = require('child_process');
 
 const TIMEOUT_MS = 100000;
 const TESTS_EXECUTION_FOLDER = `${__dirname}/../__test`;
+const KEY_ANSWER = {
+    CTRL_C: '\x03',
+    ENTER: '\n',
+    YES: 'y',
+    NO: 'n'
+};
 
 // Helper class for testing impt tool.
 // Contains common methods for testing environment initialization and cleanup,
@@ -70,6 +77,11 @@ class ImptTestHelper {
         config.outputModes.forEach((item) => { if (VALID_MODES.includes(item)) modes.push(`-z ${item}`) });
         return modes;
     }
+
+    static get KEY_ANSWER() {
+        return KEY_ANSWER;
+    }
+
     // Initializes testing environment: creates test execution folder, sets default jasmine test timeout.
     // Optionally executes 'impt auth login --local' command in the test execution folder.
     // Should be called from any test suite beforeAll method.
@@ -122,6 +134,22 @@ class ImptTestHelper {
                     resolve({ code: code, output: stdout.replace(/((\u001b\[2K.*\u001b\[1G)|(\u001b\[[0-9]{2}m))/g, '') });
                 }
             );
+        }).then(outputChecker);
+    }
+
+    static runCommandInteractive(command, outputChecker) {
+        let out;
+        return new Promise((resolve, reject) => {
+            if (config.debug) {
+                console.log('Running command: ' + command);
+            }
+            let child = Shell.exec(`node ${__dirname}/../bin/${command}`,
+                { silent: !config.debug },
+                (code, stdout, stderr) => {
+                    resolve({ code: code, output: stdout.replace(/((\u001b\[2K.*\u001b\[1G)|(\u001b\[[0-9]{2}m))/g, '') });
+                });
+            child.stdin.write('\x03');    
+            child.stdin.end();
         }).then(outputChecker);
     }
 

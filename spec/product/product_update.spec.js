@@ -63,7 +63,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         afterEach((done) => {
             _testSuiteCleanUp().
-            then(_testSuiteInit).
+                then(_testSuiteInit).
                 then(done).
                 catch(error => done.fail(error));
         }, ImptTestHelper.TIMEOUT);
