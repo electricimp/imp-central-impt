@@ -79,7 +79,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         function _checkDeviceInfo(commandOut) {
             let json = JSON.parse(commandOut.output);
             expect(json.Device.id).toBe(config.devices[0]);
-            expect(json.Device.name).toBe(config.devicenames[0]);
+            expect(json.Device.name).toBe(config.devices[0]);
             expect(json.Device.mac_address).toBe(config.devicemacs[0]);
             expect(json.Device.agent_id).toBe(config.deviceaids[0]);
             expect(json.Device['Device Group'].id).toBe(dg_id);
@@ -112,7 +112,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('device info by name', (done) => {
-                ImptTestHelper.runCommandEx(`impt device info --device ${config.devicenames[0]} -z json`, (commandOut) => {
+                ImptTestHelper.runCommandEx(`impt device info --device ${config.devices[0]} -z json`, (commandOut) => {
                     _checkDeviceInfo(commandOut);
                     ImptTestHelper.checkSuccessStatusEx(commandOut);
                 }).
@@ -146,7 +146,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     let json = JSON.parse(commandOut.output);
                     console.log(json);
                     expect(json.Device.id).toBe(config.devices[0]);
-                    expect(json.Device.name).toBe(config.devicenames[0]);
+                    expect(json.Device.name).toBe(config.devices[0]);
                     expect(json.Device.mac_address).toBe(config.devicemacs[0]);
                     expect(json.Device.agent_id).toBeEmptyString();
                     expect(json.Device['Device Group']).toBeUndefined();

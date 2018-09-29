@@ -68,7 +68,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         }
         // delete all entities using in impt device update test suite
         function _testCleanUp() {
-            return ImptTestHelper.runCommandEx(`impt device update -d ${config.devices[0]} --name ${config.devicenames[0]}`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommandEx(`impt device update -d ${config.devices[0]} --name ${config.devices[0]}`, ImptTestHelper.emptyCheckEx);
         }
 
         // check 'device successfully updated' output message 
@@ -116,8 +116,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('device update by device name', (done) => {
-                ImptTestHelper.runCommandEx(`impt device update --device ${config.devicenames[0]}  --name ${DEVICE_NEW_NAME} ${outputMode}`, (commandOut) => {
-                    _checkSuccessUpdatedDeviceMessage(commandOut, config.devicenames[0])
+                ImptTestHelper.runCommandEx(`impt device update --device ${config.devices[0]}  --name ${DEVICE_NEW_NAME} ${outputMode}`, (commandOut) => {
+                    _checkSuccessUpdatedDeviceMessage(commandOut, config.devices[0])
                     ImptTestHelper.checkSuccessStatusEx(commandOut);
                 }).
                     then(() => _checkDeviceInfo).

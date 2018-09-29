@@ -148,7 +148,7 @@ class ImptTestHelper {
                 (code, stdout, stderr) => {
                     resolve({ code: code, output: stdout.replace(/((\u001b\[2K.*\u001b\[1G)|(\u001b\[[0-9]{2}m))/g, '') });
                 });
-            child.stdin.write('\x03');    
+            child.stdin.write('\x03');
             child.stdin.end();
         }).then(outputChecker);
     }
@@ -233,6 +233,15 @@ class ImptTestHelper {
     // parse ID from command output and return id value if success, otherwise return null
     static parseId(commandOut) {
         const idMatcher = commandOut.output.match(new RegExp(`${ImptTestHelper.ATTR_ID}"?:\\s+"?([A-Za-z0-9-]+)`));
+        if (idMatcher && idMatcher.length > 1) {
+            return idMatcher[1];
+        }
+        else return null;
+    }
+
+    // parse sha from command output and return sha value if success, otherwise return null
+    static parseSha(commandOut) {
+        const idMatcher = commandOut.output.match(new RegExp(`sha"?:\\s+"?([A-Za-z0-9]{64})`));
         if (idMatcher && idMatcher.length > 1) {
             return idMatcher[1];
         }

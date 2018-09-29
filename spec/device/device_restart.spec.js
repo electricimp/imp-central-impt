@@ -98,8 +98,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('restart device by device name', (done) => {
-                ImptTestHelper.runCommandEx(`impt device restart -d ${config.devicenames[0]} ${outputMode}`, (commandOut) => {
-                    _checkSuccessRestartedDeviceMessage(commandOut, config.devicenames[0]);
+                ImptTestHelper.runCommandEx(`impt device restart -d ${config.devices[0]} ${outputMode}`, (commandOut) => {
+                    _checkSuccessRestartedDeviceMessage(commandOut, config.devices[0]);
                     ImptTestHelper.checkSuccessStatusEx(commandOut);
                 }).
                     then(done).
