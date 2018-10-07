@@ -122,7 +122,24 @@ class MessageHelper {
         );
     }
 
+    static checkDeleteFlaggedDeploymentMessage(commandOut) {
+        ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
+            `Resource Flagged: You cannot delete flagged deployments; set the flagged attribute to false and try again.`
+        );
+    }
 
+    static checkDeleteMinSupportedDeploymentMessage(commandOut,build,dg) {
+        ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
+            Util.format(`${UserInterractor.ERRORS.BUILD_DELETE_ERR}`, `"${build}"`,  `${Identifier.ENTITY_TYPE.TYPE_DEVICE_GROUP} "${dg}"`)
+        );
+    }
+
+    static checkBuildDeployFileNotFoundMessage(commandOut,filetype,file) {
+        ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
+            Util.format(`${UserInterractor.ERRORS.BUILD_DEPLOY_FILE_NOT_FOUND}`, `${filetype}`,  `${file}`)
+        );
+    }
+    
 }
 
 module.exports = MessageHelper;
