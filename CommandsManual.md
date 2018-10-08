@@ -76,6 +76,8 @@
 - [Entity Identification](#entity-identification)
 - [Device Group Type](#device-group-type)
 - [Auth files](#auth-files)
+- [Auth Environment Variables](#auth-environment-variables)
+- [Command Execution Context](#command-execution-context)
 - [Project Files](#project-files)
 - [Test Configuration Files](#test-configuration-files)
 - [Command Description](#command-description)
