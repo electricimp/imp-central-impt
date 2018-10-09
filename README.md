@@ -382,11 +382,19 @@ Environment variables recognized by *impt* are described in the [Commands Manual
 
 - Make sure you know and understand the [Command Execution Context](./CommandsManual.md#command-execution-context) rules.
 
-- If you always work on behalf of the same user with the same impCentral API endpoint, it is sufficient to use the [global auth file](./CommandsManual.md#global-auth-file) and the [login command](./CommandsManual.md#auth-login) for it.
+- If you always work on behalf of the same user with the same impCloud, it is sufficient to use the [global auth file](./CommandsManual.md#global-auth-file) and the [login command](./CommandsManual.md#auth-login) for it.
 
-- If you often work on behalf of different users or use different impCentral API endpoints, TBD.
+- If, in parallel with your main activities, you have a project/product with an alternative impCloud and/or under an alternative user, you may create a [local auth file](./CommandsManual.md#local-auth-file) in a directory with this project &mdash; by calling the [login command](./CommandsManual.md#auth-login) with the `--local` option (alias: `-l`).
 
-- TBD
+- You may have as many different [local auth files](./CommandsManual.md#local-auth-file) as you want and run *impt* commands with different authentication information in parallel (eg. for different projects/products) by running them from different processes (eg. consoles). But note, a [local auth file](./CommandsManual.md#local-auth-file) affects commands called from the directory where the file is located only, not from subdirectories.
+
+- If you want to run *impt* commands in parallel in different processes (eg. consoles) with different authentication information and call them from any directory, you can utilize the [environment variables](./CommandsManual.md#auth-environment-variables):
+  - Option 1. Create the required number of [auth files](./CommandsManual.md#auth-files) with different authentication information; in every process specify it's own path to the required auth file using `IMPT_AUTH_FILE_PATH` environment variable.
+  - Option 2. In every process specify it's own required authentication information using `IMPT_LOGINKEY`, `IMPT_USER`, `IMPT_PASSWORD` and `IMPT_ENDPOINT` environment variables.
+
+- If you do not want to have the user credentials visible in the console (shell) history, call the [login command](./CommandsManual.md#auth-login) without specifying the credentials, *impt* will prompt to enter them additionally.
+  
+- If you do not want to store any authentication information in files, use `IMPT_LOGINKEY`, `IMPT_USER`, `IMPT_PASSWORD` and `IMPT_ENDPOINT` environment variables for authentication.
 
 - At any time and in any directory you can get known the execution context currently applicable to this directory and the login status. Call the [`impt auth info`](./CommandsManual.md#auth-info) command from the required directory. The returned information includes a type of the authentication applicable to the current directory, access token status, account ID and other details.
 
