@@ -430,13 +430,11 @@ IMPT COMMAND SUCCEEDS
 
 ##### Example 4: Display authentication status #####
 
-TODO
-
 ```bash
 > impt auth info
 Auth:
+  Auth type:                 Local Auth file
   impCentral API endpoint:   https://api.electricimp.com/v5
-  Auth file:                 Local
   Access token auto refresh: false
   Access token:              expires in 59 minutes
   Username:                  username

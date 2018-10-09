@@ -318,8 +318,6 @@ Use [`impt product info`](./CommandsManual.md#product-info) with the option `--f
 
 **Example**
 
-TODO
-
 ```
 > impt project info --full
 Project:
@@ -352,8 +350,8 @@ Project:
         agent_id:      T1oUmIZ3At_N
         device_online: true
 Auth:
+  Auth type:                 Global Auth file
   impCentral API endpoint:   https://api.electricimp.com/v5
-  Auth file:                 Global
   Access token auto refresh: true
   Login method:              User/Password
   Username:                  username
