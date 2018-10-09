@@ -332,11 +332,23 @@ Product:
 
 ## Authentication ##
 
-Calls to the impCentral API need to be authenticated. *impt* provides the [login command](./CommandsManual.md#auth-login) for this purpose. It can be used in either of two ways:
+Calls to the impCentral API need to be authenticated by one of the two ways:
+- Using an account identifier (an email address or a username) and password.
+- Using a [login key](#login-keys).
 
-- Using an account identifier (an email address or a username) and password: `impt auth login --user <user_id> --pwd <password>`
-  - NOTE: If your username or password contains certain special characters, such as the "!", you may need to wrap the `user_id` and `password` in single quotes to avoid [potential bash interpretation issues](https://ss64.com/bash/bang.html) (e.g. `impt auth login --user 'AUserId' --pwd 'A!Password'`)
-- Using a [login key](#login-keys): `impt auth login --lk <login_key>`
+Also, during authentication you can specify an alternative impCentral API endpoint (the API base URL). You may need this if you work with a Private impCloud. The default endpoint is `https://api.electricimp.com/v5`.
+
+*impt* provides the two methods of authentication:
+- Using [auth files](./CommandsManual.md#auth-files) and the [login command](./CommandsManual.md#auth-login).
+- Using [environment variables](./CommandsManual.md#auth-environment-variables).
+
+The Command Execution Context rules (how *impt* determines authentication and other settings for a command execution) are described in the [Commands Manual](./CommandsManual.md#command-execution-context).
+
+### Auth Files And Login Command ###
+
+*impt* includes the [login command](./CommandsManual.md#auth-login) which you may use to authenticate by a [login key](#login-keys) &mdash; `impt auth login --lk <login_key>`, or by an account identifier &mdash; `impt auth login --user <user_id> --pwd <password>`.
+
+**Note**: If your username or password contains certain special characters, such as the "!", you may need to wrap the `<user_id>` and `<password>` in single quotes to avoid [potential bash interpretation issues](https://ss64.com/bash/bang.html) (e.g. `impt auth login --user 'AUserId' --pwd 'A!Password'`).
 
 You may specify credentials (identifier and password, or login key) directly in the [login command](./CommandsManual.md#auth-login) options. If credentials are not specified, *impt* asks you to choose an authentication method and to input the corresponding credentials. If multi-factor authentication is enabled for the account, *impt* additionally asks to input one-time password.
 
@@ -344,34 +356,41 @@ The tool takes care of obtaining an access token and refreshing it using an obta
 
 *impt* never stores an account identifier and password. If you do not want the tool to store a refresh token/login key, use the [login command’s](./CommandsManual.md#auth-login) `--temp` option. In this case you will not be able to work with the impCentral API after the access token has expired (usually one hour after issue), and you will have to log in again to continue.
 
-At any time, you can call the [logout command](./CommandsManual.md#auth-logout), `impt auth logout`, to delete the [auth file](./CommandsManual.md#auth-files). Usually you will not be able to work with the impCentral API after logging out and will have to log in again to continue working, but see the explanation about global and local login/logout below.
+At any time, you can call the [logout command](./CommandsManual.md#auth-logout) &mdash; `impt auth logout` &mdash; to delete the [auth file](./CommandsManual.md#auth-files). Usually you will not be able to work with the impCentral API after logging out and will have to log in again to continue working, but see the [Command Execution Context](./CommandsManual.md#command-execution-context) rules.
 
 You do not need to use the logout command if you want just to re-login using other credentials. A new login command overwrites the [auth file](./CommandsManual.md#auth-files), if it exists and the operation is confirmed by the user.
 
-During login, you can specify an alternative impCentral API endpoint using the [login command’s](./CommandsManual.md#auth-login) `--endpoint` option (alias: `-e`). You may need this if you work with a Private impCloud. The default endpoint is `https://api.electricimp.com/v5`.
+#### Global and Local Auth Files ####
 
-### Global and Local Authentication ###
+There are two types of auth files: [global](./CommandsManual.md#global-auth-file) and [local](./CommandsManual.md#local-auth-file) (it affects commands called from the directory where the file is located).
 
-There are two types of login: global and local.
+By default, the [login](./CommandsManual.md#auth-login) and [logout](./CommandsManual.md#auth-logout) commands work with the [global auth file](./CommandsManual.md#global-auth-file).
 
-- Global login is the default. It is sufficient to use if you always work on behalf of the same user with the same impCentral
-API endpoint. A [global auth file](./CommandsManual.md#global-auth-file) &mdash; only one per *impt* installation &mdash; is created for the global login. Every *impt* command is executed in the context of the global login when a local login is not applicable.
+To work with a [local auth file](./CommandsManual.md#local-auth-file) specify the `--local` option (alias: `-l`) in the [login](./CommandsManual.md#auth-login) and [logout](./CommandsManual.md#auth-logout) commands.
 
-- Local login works for a particular directory. It may be convenient if you often work on behalf of different users or use different impCentral API endpoints. In this case, you may choose a directory and in this directory call the [login command](./CommandsManual.md#auth-login) with the `--local` option (alias: `-l`). If the authentication is successful, a [local auth file](./CommandsManual.md#local-auth-file) is created in the directory. After that, every *impt* command called from this directory is executed in the context of the local login.
+There can be only one [local auth file](./CommandsManual.md#local-auth-file) in a directory, but any number of directories with local auth files. And all of them are independent of each other and of the [global auth file](./CommandsManual.md#global-auth-file). Note, that local auth file affects the current directory only and does not affect any sub-directories &mdash; they may or may not contain their own local auth files.
 
-There can be only one [local auth file](./CommandsManual.md#local-auth-file) in a directory, but any number of directories with local auth files, ie. any number of local logins. And all of them are independent of each other and of the [global auth file](./CommandsManual.md#global-auth-file). You do not need to have the global login in order to use local logins. Note, that local auth file affects the current directory only and does not affect any sub-directories &mdash; they may or may not contain their own local auth files.
+### Auth Environment Variables ###
 
-If you run the [logout command](./CommandsManual.md#auth-logout) with the `--local` option, it deletes the [local auth file](./CommandsManual.md#local-auth-file), if it exists in the current directory. After that, any subsequent command called from this directory will be executed in the context of the global login. Calling the [logout command](./CommandsManual.md#auth-logout) without the `--local` option deletes the [global auth file](./CommandsManual.md#global-auth-file).
+Environment variables recognized by *impt* are described in the [Commands Manual](./CommandsManual.md#auth-environment-variables).
 
-### Summary of the *impt* Command Execution Context ###
+`IMPT_AUTH_FILE_PATH` variable may be used to specify a concrete [auth file](./CommandsManual.md#auth-files) with authentication information for commands execution.
 
-- If the current directory contains an auth file, this file is considered the [local auth file](./CommandsManual.md#local-auth-file) and a command called from this directory is executed in the context of the local login defined by this file.
-- Otherwise, if a [global auth file](./CommandsManual.md#global-auth-file) exists, a command is executed in the context of the global login defined by that file.
-- Otherwise, a command fails (global or local login is required).
+`IMPT_LOGINKEY`, `IMPT_USER`, `IMPT_PASSWORD`, `IMPT_ENDPOINT` variables may be used as an alternative method of specifying authentication information for commands execution. Ie. without storing the information in any [auth file](./CommandsManual.md#auth-files).
 
-At any time you can get known the login status related to any directory. Call the [`impt auth info`](./CommandsManual.md#auth-info) from the required directory. The returned information includes a type of the login applicable to the current directory, access token status, your account ID and other details.
+### Authentication Tips ###
 
-##### Example 1: Global login #####
+- Make sure you know and understand the [Command Execution Context](./CommandsManual.md#command-execution-context) rules.
+
+- If you always work on behalf of the same user with the same impCentral API endpoint, it is sufficient to use the [global auth file](./CommandsManual.md#global-auth-file) and the [login command](./CommandsManual.md#auth-login) for it.
+
+- If you often work on behalf of different users or use different impCentral API endpoints, TBD.
+
+- TBD
+
+- At any time and in any directory you can get known the execution context currently applicable to this directory and the login status. Call the [`impt auth info`](./CommandsManual.md#auth-info) command from the required directory. The returned information includes a type of the authentication applicable to the current directory, access token status, account ID and other details.
+
+##### Example 1: Login (global auth file) #####
 
 ```bash
 > impt auth login --user username --pwd password
@@ -379,7 +398,7 @@ Global login is successful.
 IMPT COMMAND SUCCEEDS
 ```
 
-##### Example 2: Global login without specifying credentials in the options #####
+##### Example 2: Login (global auth file) without specifying credentials in the options #####
 
 ```bash
 > impt auth login
@@ -393,7 +412,7 @@ Global login is successful.
 IMPT COMMAND SUCCEEDS
 ```
 
-##### Example 3: Local login using a login key, specifying an endpoint, but without storing the login key #####
+##### Example 3: Login (local auth file) using a login key, specifying an endpoint, but without storing the login key #####
 
 ```bash
 > impt auth login --local --lk 7d8e6670aa285e9d --temp --endpoint https://api.electricimp.com/v5
@@ -401,7 +420,9 @@ Local login is successful.
 IMPT COMMAND SUCCEEDS
 ```
 
-##### Example 4: Display login status #####
+##### Example 4: Display authentication status #####
+
+TODO
 
 ```bash
 > impt auth info
@@ -416,7 +437,7 @@ Auth:
 IMPT COMMAND SUCCEEDS
 ```
 
-##### Exmaple 5: Local logout #####
+##### Example 5: Logout (local auth file) #####
 
 ```bash
 > impt auth logout --local
