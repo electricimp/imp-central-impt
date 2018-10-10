@@ -165,12 +165,22 @@ class ImptTestHelper {
         expect(files.code).toBe(1);
     }
 
-    static projectCreate(dg) {
-        return ImptTestHelper.runCommandEx(`impt project link --dg ${dg} -q`, ImptTestHelper.emptyCheckEx);
+    static checkFileEqual(fileName,fileName2) {
+        let file = Shell.find(`${TESTS_EXECUTION_FOLDER}/${fileName}`);
+        let file2 = Shell.find(`${TESTS_EXECUTION_FOLDER}/${fileName2}`);
+        expect(file).toBeNonEmptyArray();
+        expect(file2).toBeNonEmptyArray();
+        file = Shell.cat(`${TESTS_EXECUTION_FOLDER}/${fileName}`);
+        file2 = Shell.cat(`${TESTS_EXECUTION_FOLDER}/${fileName2}`);
+        expect(file).toEqual(file2);
+    }
+
+    static projectCreate(dg, dfile = 'device.nut', afile = 'agent.nut') {
+        return ImptTestHelper.runCommandEx(`impt project link -g ${dg} -x ${dfile}  -y ${afile} -q`, ImptTestHelper.emptyCheckEx);
     }
 
     static projectDelete() {
-        return ImptTestHelper.runCommandEx(`impt project delete --files -q`, ImptTestHelper.emptyCheckEx);
+        return ImptTestHelper.runCommandEx(`impt project delete -f -q`, ImptTestHelper.emptyCheckEx);
     }
 
     static deviceAssign(dg) {
