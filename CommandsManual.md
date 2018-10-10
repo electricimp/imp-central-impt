@@ -1000,14 +1000,14 @@ impt product delete [--product <PRODUCT_IDENTIFIER>] [--builds] [--force] [--con
 
 Deletes the specified Product.
 
-The command fails if the Product has nay Device Groups and the `--force` option was not specified. Use either the `--force` option, or [`impt dg delete`](#device-group-delete) to delete the Product’s Device Groups.
+The command fails if the Product has any Device Groups and the `--force` option was not specified. Use either the `--force` option, or [`impt dg delete`](#device-group-delete) to delete the Product’s Device Groups.
 
 The user is asked to confirm the operation, unless confirmed automatically with the `--confirmed` option.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --product | -p | Yes/[Project](#project-files) | Yes | A [Product identifier](#product-identifier). If not specified, the Product referenced by the [Project file](#project-files) in the current directory is used (if there is no Project file, the command fails) |
-| --builds | -b | No | No | Additionally deletes all Deployments related to all of the Device Groups which belong to the Product, including Device Groups that were deleted previously |
+| --builds | -b | No | No | Additionally deletes all Deployments related to all of the Device Groups which belong to the Product, including Device Groups that were deleted previously. The command fails if any Deployment has *flagged* attribute set to `true` and the `--force` option was not specified. |
 | --force | -f | No | No | Deletes all of the Product’s Device Groups as with [`impt dg delete --force`](#device-group-delete) called for every one of the Product’s Device Groups |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
 | --output | -z | No | Yes | Adjusts the [command's output](#command-output) |
