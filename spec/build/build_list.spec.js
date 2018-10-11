@@ -29,10 +29,6 @@ const config = require('../config');
 const Shell = require('shelljs');
 const ImptTestHelper = require('../ImptTestHelper');
 const lodash = require('lodash');
-const MessageHelper = require('../MessageHelper');
-const Identifier = require('../../lib/util/Identifier');
-const Util = require('util');
-const UserInterractor = require('../../lib/util/UserInteractor');
 
 const PRODUCT_NAME = '__impt_product';
 const DEVICE_GROUP_NAME = '__impt_device_group';
@@ -163,7 +159,6 @@ describe('impt build list test suite >', () => {
     }
 
     describe('build list positive tests >', () => {
-
         it('build list by owner me and dg type', (done) => {
             ImptTestHelper.runCommandEx(`impt build list --owner me --dg-type development -z json`, (commandOut) => {
                 expect(commandOut).toContainsBuild({ id: build_id });
@@ -288,7 +283,7 @@ describe('impt build list test suite >', () => {
         });
     });
 
-    describe('build list positive tests >', () => {
+    describe('build list negative tests >', () => {
 
     });
 });
