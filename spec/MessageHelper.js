@@ -47,6 +47,21 @@ class MessageHelper {
         return Identifier.ENTITY_TYPE.TYPE_PRODUCT;
     }
 
+    static get BUILD() {
+        return Identifier.ENTITY_TYPE.TYPE_BUILD;
+    }
+
+    static get ACCOUNT() {
+        return Identifier.ENTITY_TYPE.TYPE_ACCOUNT;
+    }
+
+    static get LOGINKEY() {
+        return Identifier.ENTITY_TYPE.TYPE_LOGIN_KEY;
+    }
+
+    static get WEBHOOK() {
+        return Identifier.ENTITY_TYPE.TYPE_WEBHOOK;
+    }
 
     static checkDuplicateResourceError(commandOut, entity) {
         ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
@@ -128,18 +143,24 @@ class MessageHelper {
         );
     }
 
-    static checkDeleteMinSupportedDeploymentMessage(commandOut,build,dg) {
+    static checkDeleteMinSupportedDeploymentMessage(commandOut, build, dg) {
         ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
-            Util.format(`${UserInterractor.ERRORS.BUILD_DELETE_ERR}`, `"${build}"`,  `${Identifier.ENTITY_TYPE.TYPE_DEVICE_GROUP} "${dg}"`)
+            Util.format(`${UserInterractor.ERRORS.BUILD_DELETE_ERR}`, `"${build}"`, `${Identifier.ENTITY_TYPE.TYPE_DEVICE_GROUP} "${dg}"`)
         );
     }
 
-    static checkBuildDeployFileNotFoundMessage(commandOut,filetype,file) {
+    static checkBuildDeployFileNotFoundMessage(commandOut, filetype, file) {
         ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
-            Util.format(`${UserInterractor.ERRORS.BUILD_DEPLOY_FILE_NOT_FOUND}`, `${filetype}`,  `${file}`)
+            Util.format(`${UserInterractor.ERRORS.BUILD_DEPLOY_FILE_NOT_FOUND}`, `${filetype}`, `${file}`)
         );
     }
-    
+
+    static checkOptionMustBeSpecifiedMessage(commandOut, option) {
+        ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
+            Util.format(`${UserInterractor.ERRORS.CMD_REQUIRED_OPTION}`, `${option}`)
+        );
+    }
+
 }
 
 module.exports = MessageHelper;
