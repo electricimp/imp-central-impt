@@ -39,7 +39,7 @@ const DEVICE_GROUP_NAME = '__impt_device_group';
 
 // Test suite for 'impt build info' command.
 // Runs 'impt build info' command with different combinations of options,
-fdescribe('impt build info test suite >', () => {
+describe('impt build info test suite >', () => {
     let product_id = null;
     let dg_id = null;
     let build_id = null;
