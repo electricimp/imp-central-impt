@@ -108,8 +108,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 then(() => ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
                     ImptTestHelper.emptyCheckEx(commandOut);
                 })).
-                then(() => Shell.cp('-Rf', `${__dirname}/fixtures/device.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER)).
-                then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP_NAME} -x device.nut -t build_tag -o build_origin`, (commandOut) => {
+                then(() => Shell.cp('-Rf', `${__dirname}/fixtures/devicecode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER)).
+                then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP_NAME} -x devicecode.nut -t build_tag -o build_origin`, (commandOut) => {
                     build_id = ImptTestHelper.parseId(commandOut);
                     build_sha = ImptTestHelper.parseSha(commandOut);
                     ImptTestHelper.emptyCheckEx(commandOut);

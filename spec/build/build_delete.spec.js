@@ -44,7 +44,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
     describe('impt device group builds test suite >', () => {
         let build_id = null;
         let build_sha = null;
-        let build3_id = null;
+        let build2_id = null;
         let dg_id = null;
 
         beforeAll((done) => {
@@ -65,7 +65,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         // prepare environment for build delete command testing
         function _testSuiteInit() {
             return ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
-                then(() => Shell.cp('-Rf', `${__dirname}/fixtures/device.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER));
+                then(() => Shell.cp('-Rf', `${__dirname}/fixtures/devicecode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER));
 
         }
 
@@ -79,22 +79,21 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 dg_id = ImptTestHelper.parseId(commandOut);
                 ImptTestHelper.emptyCheckEx(commandOut)
             }).
-                then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP_NAME} -t build_tag -o build_origin  -x device.nut`, (commandOut) => {
+                then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP_NAME} -t build_tag -o build_origin  -x devicecode.nut`, (commandOut) => {
                     build_id = ImptTestHelper.parseId(commandOut);
                     build_sha = ImptTestHelper.parseSha(commandOut);
                     ImptTestHelper.emptyCheckEx(commandOut);
                 })).
                 then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP_NAME}`, (commandOut) => {
-                    build3_id = ImptTestHelper.parseId(commandOut);
+                    build2_id = ImptTestHelper.parseId(commandOut);
                     ImptTestHelper.emptyCheckEx(commandOut);
                 })).
-                then(() => ImptTestHelper.runCommandEx(`impt dg update -g ${DEVICE_GROUP_NAME} -m ${build3_id}`, ImptTestHelper.emptyCheckEx));
+                then(() => ImptTestHelper.runCommandEx(`impt dg update -g ${DEVICE_GROUP_NAME} -m ${build2_id}`, ImptTestHelper.emptyCheckEx));
         }
 
         function _testCleanUp() {
             return ImptTestHelper.runCommandEx(`impt dg delete -g ${DEVICE_GROUP_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
         }
-
 
         // check 'deployment successfully deleted' output message 
         function _checkSuccessDeleteDeploymentMessage(commandOut, deploy) {
@@ -158,8 +157,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('min supported build delete', (done) => {
-                ImptTestHelper.runCommandEx(`impt build delete -b  ${build3_id}  -q ${outputMode}`, (commandOut) => {
-                    MessageHelper.checkDeleteMinSupportedDeploymentMessage(commandOut, build3_id, dg_id);
+                ImptTestHelper.runCommandEx(`impt build delete -b  ${build2_id}  -q ${outputMode}`, (commandOut) => {
+                    MessageHelper.checkDeleteMinSupportedDeploymentMessage(commandOut, build2_id, dg_id);
                     ImptTestHelper.checkFailStatusEx(commandOut);
                 }).
                     then(done).
@@ -189,8 +188,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 it('flagged build force delete', (done) => {
                     ImptTestHelper.runCommandEx(`impt build delete -b  ${build_id} --force -q ${outputMode}`, (commandOut) => {
                         _checkSuccessDeleteDeploymentMessage(commandOut, build_id);
-                        ImptTestHelper.checkFailStatusEx(commandOut);
+                        ImptTestHelper.checkSuccessStatusEx(commandOut);
                     }).
+                        then(() => ImptTestHelper.runCommandEx(`impt build info -b ${build_id}`, ImptTestHelper.checkFailStatusEx)).
                         then(done).
                         catch(error => done.fail(error));
                 });

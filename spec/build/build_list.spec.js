@@ -70,10 +70,10 @@ describe('impt build list test suite >', () => {
                     let result = { pass: false };
                     const BuildArray = JSON.parse(commandOut.output);
                     if (!Array.isArray(BuildArray)) return result;
-                    lodash.map(BuildArray, function (DgItem) {
-                        lodash.map(DgItem, function (DgProperties) {
+                    lodash.map(BuildArray, function (BuildItem) {
+                        lodash.map(BuildItem, function (BuildProperties) {
                             let compareFlag = true;
-                            lodash.map(DgProperties, function (value, key) {
+                            lodash.map(BuildProperties, function (value, key) {
                                 if (typeof (value) === 'object' && typeof (expected[key]) === 'object') {
                                     lodash.map(value, function (subval, subkey) {
                                         compareFlag = compareFlag && (expected[key][subkey] === undefined ? true : util.equals(subval, expected[key][subkey], customEqualityTesters));
@@ -129,12 +129,12 @@ describe('impt build list test suite >', () => {
             then(() => ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP3_NAME} -p ${PRODUCT2_NAME}`, (commandOut) => {
                 ImptTestHelper.emptyCheckEx(commandOut);
             })).
-            then(() => Shell.cp('-Rf', `${__dirname}/fixtures/device.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER)).
+            then(() => Shell.cp('-Rf', `${__dirname}/fixtures/devicecode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER)).
             then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP_NAME} -t build_tag`, (commandOut) => {
                 build_id = ImptTestHelper.parseId(commandOut);
                 ImptTestHelper.emptyCheckEx(commandOut);
             })).
-            then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP2_NAME} -f -t build2_tag -x device.nut`, (commandOut) => {
+            then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP2_NAME} -f -t build2_tag -x devicecode.nut`, (commandOut) => {
                 build2_id = ImptTestHelper.parseId(commandOut);
                 build2_sha = ImptTestHelper.parseSha(commandOut);
                 ImptTestHelper.emptyCheckEx(commandOut);

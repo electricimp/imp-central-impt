@@ -1,0 +1,171 @@
+// MIT License
+//
+// Copyright 2018 Electric Imp
+//
+// SPDX-License-Identifier: MIT
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO
+// EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+// OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+// ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+// OTHER DEALINGS IN THE SOFTWARE.
+
+'use strict';
+
+require('jasmine-expect');
+const config = require('../config');
+const ImptTestHelper = require('../ImptTestHelper');
+const MessageHelper = require('../MessageHelper');
+const Shell = require('shelljs');
+const Identifier = require('../../lib/util/Identifier');
+const Util = require('util');
+const UserInterractor = require('../../lib/util/UserInteractor');
+
+const PRODUCT_NAME = '__impt_product';
+const DEVICE_GROUP_NAME = '__impt_device_group';
+const DEVICE_GROUP2_NAME = '__impt_device_group2';
+
+// Test suite for 'impt log stream' command.
+// Runs 'impt log stream' command with different combinations of options,
+ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
+    describe('impt log stream test suite >', () => {
+        beforeAll((done) => {
+            ImptTestHelper.init().
+                then(_testSuiteCleanUp).
+                then(_testSuiteInit).
+                then(done).
+                catch(error => done.fail(error));
+        }, ImptTestHelper.TIMEOUT);
+
+        afterAll((done) => {
+            _testSuiteCleanUp().
+                then(ImptTestHelper.cleanUp).
+                then(done).
+                catch(error => done.fail(error));
+        }, ImptTestHelper.TIMEOUT);
+
+        // prepare environment for impt log stream command testing
+        function _testSuiteInit() {
+            return ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
+                then(() => ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx)).
+                then(() => ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP2_NAME} -p ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx)).
+                then(() => ImptTestHelper.deviceAssign(DEVICE_GROUP_NAME)).
+                then(() => Shell.cp('-Rf', `${__dirname}/fixtures/devicecode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER)).
+                then(() => ImptTestHelper.runCommandEx(`impt build run -g ${DEVICE_GROUP_NAME} -x devicecode.nut`, ImptTestHelper.emptyCheckEx));
+        }
+
+        function _checkLogMessages(commandOut, messages = {}) {
+            let matcher = commandOut.output.match(new RegExp(/....-..-..T..:..:../g));
+            expect(matcher.length).toEqual(messages.count)
+            // if output contains non server.log messages change message start nuber
+            matcher = commandOut.output.match(new RegExp(/server\.log/g));
+            if (matcher.length < messages.count) {
+                messages.startNumber = messages.startNumber + (messages.count - matcher.length);
+            }
+            expect(commandOut.output).toMatch(`Message #${messages.startNumber}#`);
+            expect(commandOut.output).toMatch(`Message #${messages.endNumber}#`);
+        }
+
+        // delete all entities using in impt log stream test suite
+        function _testSuiteCleanUp() {
+            return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
+        }
+
+        function _checkLogStreamOpenedMessage(commandOut, device) {
+            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+                Util.format(`${UserInterractor.MESSAGES.LOG_STREAM_OPENED}`,
+                    `${device}`
+                )
+            );
+        }
+
+        describe('log stream positive tests >', () => {
+            beforeAll((done) => {
+                ImptTestHelper.projectCreate(DEVICE_GROUP_NAME).
+                    then(done).
+                    catch(error => done.fail(error));
+            }, ImptTestHelper.TIMEOUT);
+
+            afterAll((done) => {
+                ImptTestHelper.projectDelete().
+                    then(done).
+                    catch(error => done.fail(error));
+            }, ImptTestHelper.TIMEOUT);
+
+            it('log stream by device id', (done) => {
+                Promise.all([
+                    ImptTestHelper.runCommandWithTerminate(`impt log stream -d ${config.devices[0]} ${outputMode}`, (commandOut) => {
+                        _checkLogStreamOpenedMessage(commandOut, config.devices[0]);
+                        ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    }),
+                    ImptTestHelper.delayMs(5000).
+                        then(ImptTestHelper.deviceRestart)
+                ]).
+                    then(done).
+                    catch(error => done.fail(error));
+            });
+        });
+
+        describe('log stream negative tests >', () => {
+            it('log stream by not exist project', (done) => {
+                ImptTestHelper.runCommandEx(`impt log stream ${outputMode}`, (commandOut) => {
+                    MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, MessageHelper.DEVICE);
+                    ImptTestHelper.checkFailStatusEx(commandOut);
+                }).
+                    then(done).
+                    catch(error => done.fail(error));
+            });
+
+            it('log stream without device value', (done) => {
+                ImptTestHelper.runCommandEx(`impt log stream ${outputMode} -d`, (commandOut) => {
+                    MessageHelper.checkNotEnoughArgumentsError(commandOut, 'd');
+                    ImptTestHelper.checkFailStatusEx(commandOut);
+                }).
+                    then(() => ImptTestHelper.runCommandEx(`impt log stream ${outputMode} -d ""`, (commandOut) => {
+                        MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, MessageHelper.DEVICE);
+                        ImptTestHelper.checkFailStatusEx(commandOut);
+                    })).
+                    then(done).
+                    catch(error => done.fail(error));
+            });
+
+            it('log stream without dg value', (done) => {
+                ImptTestHelper.runCommandEx(`impt log stream ${outputMode} -g`, (commandOut) => {
+                    MessageHelper.checkNotEnoughArgumentsError(commandOut, 'g');
+                    ImptTestHelper.checkFailStatusEx(commandOut);
+                }).
+                    then(() => ImptTestHelper.runCommandEx(`impt log stream ${outputMode} -g ""`, (commandOut) => {
+                        MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, MessageHelper.DG);
+                        ImptTestHelper.checkFailStatusEx(commandOut);
+                    })).
+                    then(done).
+                    catch(error => done.fail(error));
+            });
+
+            it('log stream without output value', (done) => {
+                ImptTestHelper.runCommandEx(`impt log stream -d ${config.devices[0]} -z`, (commandOut) => {
+                    MessageHelper.checkNotEnoughArgumentsError(commandOut, 'z');
+                    ImptTestHelper.checkFailStatusEx(commandOut);
+                }).
+                    then(() => ImptTestHelper.runCommandEx(`impt log stream -d ${config.devices[0]} -z undefined`, (commandOut) => {
+                        MessageHelper.checkInvalidValuesError(commandOut);
+                        ImptTestHelper.checkFailStatusEx(commandOut);
+                    })).
+                    then(done).
+                    catch(error => done.fail(error));
+            });
+        });
+    });
+});

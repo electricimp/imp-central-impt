@@ -33,7 +33,7 @@ const Utils = require('../lib/util/Utils');
 const UserInteractor = require('../lib/util/UserInteractor');
 const child_process = require('child_process');
 
-const TIMEOUT_MS = 100000;
+const TIMEOUT_MS = 300000;
 const TESTS_EXECUTION_FOLDER = `${__dirname}/../__test`;
 const KEY_ANSWER = {
     CTRL_C: '\x03',
@@ -148,9 +148,34 @@ class ImptTestHelper {
                 (code, stdout, stderr) => {
                     resolve({ code: code, output: stdout.replace(/((\u001b\[2K.*\u001b\[1G)|(\u001b\[[0-9]{2}m))/g, '') });
                 });
-            child.stdin.write('\x03');
             child.stdin.end();
         }).then(outputChecker);
+    }
+
+    static runCommandWithTerminate(command, outputChecker) {
+        var child;
+        return Promise.all([
+            new Promise((resolve, reject) => {
+                if (config.debug) {
+                    console.log('Running command: ' + command);
+                }
+                child = Shell.exec(`node ${__dirname}/../bin/${command}`,
+                    { silent: !config.debug },
+                    (code, stdout, stderr) => {
+                        resolve({ code: code, output: stdout.replace(/((\u001b\[2K.*\u001b\[1G)|(\u001b\[[0-9]{2}m))/g, '') });
+                    });
+
+            }).then(outputChecker),
+            this.delayMs(20000).
+                then(() => child.kill('SIGINT')).
+                then(() => child.kill())
+        ]);
+    }
+
+    static delayMs(ms) {
+        return new Promise((resolve) => {
+            setTimeout(resolve, ms);
+        });
     }
 
     // Checks if file exist in the TESTS_EXECUTION_FOLDER
@@ -165,7 +190,7 @@ class ImptTestHelper {
         expect(files.code).toBe(1);
     }
 
-    static checkFileEqual(fileName,fileName2) {
+    static checkFileEqual(fileName, fileName2) {
         let file = Shell.find(`${TESTS_EXECUTION_FOLDER}/${fileName}`);
         let file2 = Shell.find(`${TESTS_EXECUTION_FOLDER}/${fileName2}`);
         expect(file).toBeNonEmptyArray();
@@ -185,6 +210,10 @@ class ImptTestHelper {
 
     static deviceAssign(dg) {
         return ImptTestHelper.runCommandEx(`impt device assign -d ${config.devices[0]} -g ${dg} -q`, ImptTestHelper.emptyCheckEx);
+    }
+
+    static deviceRestart() {
+        return ImptTestHelper.runCommandEx(`impt device restart -d ${config.devices[0]}`, ImptTestHelper.emptyCheckEx);
     }
 
     static deviceUnassign(dg) {
@@ -237,7 +266,7 @@ class ImptTestHelper {
     static checkOutputMessageEx(outputMode, commandOut, message) {
         const matcher = outputMode.match('-(z|-output)\\s+(json|minimal)');
         if (matcher && matcher.length) expect(true).toBeTrue;
-        else expect(commandOut.output).toMatch(message.replace(new RegExp(/[()"]/g),`\\$&`));
+        else expect(commandOut.output).toMatch(message.replace(new RegExp(/[()\\]/g), `\\$&`));
     }
 
     // parse ID from command output and return id value if success, otherwise return null

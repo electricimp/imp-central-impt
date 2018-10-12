@@ -75,8 +75,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                         let result = { pass: false };
                         const BuildArray = JSON.parse(commandOut.output);
                         if (!Array.isArray(BuildArray)) return result;
-                        lodash.map(BuildArray, function (DgItem) {
-                            lodash.map(DgItem, function (DgProperties) {
+                        lodash.map(BuildArray, function (BuildItem) {
+                            lodash.map(BuildItem, function (DgProperties) {
                                 let compareFlag = true;
                                 lodash.map(DgProperties, function (value, key) {
                                     if (typeof (value) === 'object' && typeof (expected[key]) === 'object') {
@@ -184,7 +184,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         }
 
         // check 'deployment successfully updated' output message 
-        function _checkSuccessDeleteDeploymentMessage(commandOut, deploy) {
+        function _checkSuccessUpdatedDeploymentMessage(commandOut, deploy) {
             ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
                 Util.format(`${UserInterractor.MESSAGES.ENTITY_UPDATED}`,
                     `${Identifier.ENTITY_TYPE.TYPE_BUILD} "${deploy}"`)
@@ -220,7 +220,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     })).
                     then(done).
                     catch(error => done.fail(error));
-            }, ImptTestHelper.TIMEOUT * 3);
+            });
 
             it('flagged build cleanup by product name', (done) => {
                 ImptTestHelper.runCommandEx(`impt build cleanup --product ${PRODUCT_NAME} -u -q ${outputMode}`, (commandOut) => {
@@ -239,7 +239,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     })).
                     then(done).
                     catch(error => done.fail(error));
-            }, ImptTestHelper.TIMEOUT * 3);
+            });
 
             it('build cleanup', (done) => {
                 ImptTestHelper.runCommandEx(`impt build cleanup -q ${outputMode}`, (commandOut) => {
@@ -256,7 +256,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     })).
                     then(done).
                     catch(error => done.fail(error));
-            }, ImptTestHelper.TIMEOUT * 3);
+            });
 
             it('flagged build cleanup', (done) => {
                 ImptTestHelper.runCommandEx(`impt build cleanup -u -q ${outputMode}`, (commandOut) => {
@@ -274,7 +274,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     })).
                     then(done).
                     catch(error => done.fail(error));
-            }, ImptTestHelper.TIMEOUT * 3);
+            });
 
             it('build cleanup by not exist product', (done) => {
                 ImptTestHelper.runCommandEx(`impt build cleanup -p not-exist-product -u -q ${outputMode}`, (commandOut) => {

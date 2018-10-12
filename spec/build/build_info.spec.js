@@ -109,7 +109,7 @@ describe('impt build info test suite >', () => {
             }).
                 then(done).
                 catch(error => done.fail(error));
-        }, ImptTestHelper.TIMEOUT * 3);
+        });
 
         it('build info by sha', (done) => {
             ImptTestHelper.runCommandEx(`impt build info -b ${build_sha} -z json`, (commandOut) => {
@@ -118,7 +118,7 @@ describe('impt build info test suite >', () => {
             }).
                 then(done).
                 catch(error => done.fail(error));
-        }, ImptTestHelper.TIMEOUT * 3);
+        });
 
         it('build info by tag', (done) => {
             ImptTestHelper.runCommandEx(`impt build info -b build_tag -z json`, (commandOut) => {
@@ -127,7 +127,7 @@ describe('impt build info test suite >', () => {
             }).
                 then(done).
                 catch(error => done.fail(error));
-        }, ImptTestHelper.TIMEOUT * 3);
+        });
 
         it('build info by origin', (done) => {
             ImptTestHelper.runCommandEx(`impt build info -b build_origin -z json`, (commandOut) => {
@@ -136,7 +136,7 @@ describe('impt build info test suite >', () => {
             }).
                 then(done).
                 catch(error => done.fail(error));
-        }, ImptTestHelper.TIMEOUT * 3);
+        });
 
         it('build info by project', (done) => {
             ImptTestHelper.projectCreate(DEVICE_GROUP_NAME).
@@ -147,7 +147,7 @@ describe('impt build info test suite >', () => {
                 then(ImptTestHelper.projectDelete).
                 then(done).
                 catch(error => done.fail(error));
-        }, ImptTestHelper.TIMEOUT * 3);
+        });
     });
 
     describe('build info negative tests >', () => {

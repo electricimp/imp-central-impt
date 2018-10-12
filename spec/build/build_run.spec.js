@@ -40,7 +40,7 @@ const DEVICE_GROUP_NAME = '__impt_device_group';
 // Test suite for 'impt build run' command.
 // Runs 'impt build run' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
-    fdescribe('impt build run test suite >', () => {
+    describe('impt build run test suite >', () => {
         let dg_id = null;
         let build_id = null;
 
@@ -156,7 +156,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     })).
                     then(done).
                     catch(error => done.fail(error));
-            }, ImptTestHelper.TIMEOUT * 3);
+            });
 
             it('build run by dg name', (done) => {
                 ImptTestHelper.runCommandEx(`impt build run --dg ${DEVICE_GROUP_NAME} -t build_tag -t build_tag2 --conditional ${outputMode}`, (commandOut) => {
@@ -169,7 +169,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     })).
                     then(done).
                     catch(error => done.fail(error));
-            }, ImptTestHelper.TIMEOUT * 3);
+            });
 
             it('build run by project', (done) => {
                 ImptTestHelper.projectCreate(DEVICE_GROUP_NAME, 'devicecode.nut', 'agentcode.nut').
@@ -185,7 +185,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     then(ImptTestHelper.projectDelete).
                     then(done).
                     catch(error => done.fail(error));
-            }, ImptTestHelper.TIMEOUT * 3);
+            });
         });
 
         describe('build run negative tests >', () => {
