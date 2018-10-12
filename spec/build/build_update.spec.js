@@ -35,16 +35,12 @@ const Util = require('util');
 const UserInterractor = require('../../lib/util/UserInteractor');
 
 const PRODUCT_NAME = '__impt_product';
-const PRODUCT2_NAME = '__impt_product2';
 const DEVICE_GROUP_NAME = '__impt_device_group';
-const DEVICE_GROUP2_NAME = '__impt_device2_group';
-
-
 
 // Test suite for 'impt build update' command.
 // Runs 'impt build update' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
-    describe('impt build update test suite >', () => {
+    fdescribe('impt build update test suite >', () => {
         let dg_id = null;
         let build_id = null;
         let build_sha = null;
@@ -67,7 +63,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         // prepare environment for build update command testing
         function _testSuiteInit() {
             return ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
-                then(() => Shell.cp('-Rf', `${__dirname}/fixtures/device.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER));
+                then(() => Shell.cp('-Rf', `${__dirname}/fixtures/devicecode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER));
         }
 
         // delete all entities using in impt build update test suite
@@ -80,7 +76,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 dg_id = ImptTestHelper.parseId(commandOut);
                 ImptTestHelper.emptyCheckEx(commandOut);
             }).
-                then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP_NAME} -x device.nut -t build_tag  -t build_tag2 -t build_tag3 -o build_origin`, (commandOut) => {
+                then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP_NAME} -x devicecode.nut -t build_tag  -t build_tag2 -t build_tag3 -o build_origin`, (commandOut) => {
                     build_id = ImptTestHelper.parseId(commandOut);
                     build_sha = ImptTestHelper.parseSha(commandOut);
                     ImptTestHelper.emptyCheckEx(commandOut);
@@ -121,13 +117,6 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         }
 
         describe('build update positive tests >', () => {
-
-            afterAll((done) => {
-                ImptTestHelper.projectDelete().
-                    then(done).
-                    catch(error => done.fail(error));
-            }, ImptTestHelper.TIMEOUT);
-
             beforeEach((done) => {
                 _testInit().
                     then(done).
@@ -187,6 +176,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                         ImptTestHelper.checkSuccessStatusEx(commandOut);
                     })).
                     then(() => _checkBuildInfo({ tag: ['build_tag', 'build_tag3'], tag_cnt: 2 })).
+                    then(ImptTestHelper.projectDelete).
                     then(done).
                     catch(error => done.fail(error));
             });
@@ -213,7 +203,6 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         });
 
         describe('build update negative tests >', () => {
-
             beforeEach((done) => {
                 _testInit().
                     then(done).
@@ -228,7 +217,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
             it('build update by not exist project', (done) => {
                 ImptTestHelper.runCommandEx(`impt build update ${outputMode}`, (commandOut) => {
-                    MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, 'Deployment');
+                    MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, MessageHelper.BUILD);
                     ImptTestHelper.checkFailStatusEx(commandOut);
                 }).
                     then(done).

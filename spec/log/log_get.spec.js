@@ -29,61 +29,25 @@ const config = require('../config');
 const ImptTestHelper = require('../ImptTestHelper');
 const lodash = require('lodash');
 const MessageHelper = require('../MessageHelper');
+const Shell = require('shelljs');
 
 const PRODUCT_NAME = '__impt_product';
 const DEVICE_GROUP_NAME = '__impt_device_group';
 const DEVICE_GROUP_DESCR = 'impt temp device group description';
 
-// Test suite for 'impt dg builds' command.
-// Runs 'impt dg builds' command with different combinations of options,
+// Test suite for 'impt log get' command.
+// Runs 'impt log get' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
-    describe('impt device group builds test suite >', () => {
+    describe('impt log get test suite >', () => {
         let dg_id = null;
         let build_id = null;
         let build2_id = null;
         let build3_id = null;
 
-        // custom matcher for search flagged and  not flagged deployments
-        let customMatcher = {
-            toContainsDeployment: function () {
-                return {
-                    compare: function (DeploymentArray, expected) {
-                        let result = { pass: false };
-                        lodash.map(DeploymentArray, function (Item) {
-                            result.pass = result.pass || (Item.Deployment.id === expected && Item.Deployment.flagged === undefined);
-                        });
-                        if (result.pass) {
-                            result.message = "Deployment array contains deployment \"" + expected + "\"";
-                        } else {
-                            result.message = "Deployment array not contains deployment \"" + expected + "\"";
-                        }
-                        return result;
-                    }
-                };
-            },
-            toContainsFlaggedDeployment: function () {
-                return {
-                    compare: function (DeploymentArray, expected) {
-                        let result = { pass: false };
-                        lodash.map(DeploymentArray, function (Item) {
-                            result.pass = result.pass || (Item.Deployment.id === expected && Item.Deployment.flagged === true);
-                        });
-                        if (result.pass) {
-                            result.message = "Deployment array contains flagged deployment \"" + expected + "\"";
-                        } else {
-                            result.message = "Deployment array not contains flagged deployment \"" + expected + "\"";
-                        }
-                        return result;
-                    }
-                };
-            }
-        };
-
         beforeAll((done) => {
             ImptTestHelper.init().
                 then(_testSuiteCleanUp).
                 then(_testSuiteInit).
-                then(() => jasmine.addMatchers(customMatcher)).
                 then(done).
                 catch(error => done.fail(error));
         }, ImptTestHelper.TIMEOUT);
@@ -102,17 +66,29 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     dg_id = ImptTestHelper.parseId(commandOut);
                     ImptTestHelper.emptyCheckEx(commandOut);
                 })).
-                then(() => ImptTestHelper.deviceAssign(DEVICE_GROUP_NAME));
+                then(() => ImptTestHelper.deviceAssign(DEVICE_GROUP_NAME)).
+                then(() => Shell.cp('-Rf', `${__dirname}/fixtures/devicecode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER)).
+                then(() => ImptTestHelper.runCommandEx(`impt build run -g ${DEVICE_GROUP_NAME} -x devicecode.nut`, (commandOut) => {
+                    ImptTestHelper.emptyCheckEx(commandOut);
+                }));
+        }
 
-
+        function _checkLogMessages(commandOut, messages = {}) {
+            let matcher = commandOut.output.match(new RegExp(/....-..-..T..:..:../g));
+            expect(matcher.length).toEqual(messages.count)
+            // if output contains non server.log messages change message start nuber
+            matcher = commandOut.output.match(new RegExp(/server\.log/g));
+            if (matcher.length < messages.count) {
+                messages.startNumber = messages.startNumber + (messages.count - matcher.length);
+            }
+            expect(commandOut.output).toMatch(`Message #${messages.startNumber}#`);
+            expect(commandOut.output).toMatch(`Message #${messages.endNumber}#`);
         }
 
         // delete all entities using in impt log get test suite
         function _testSuiteCleanUp() {
             return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
         }
-
-
 
         describe('log get positive tests >', () => {
             beforeAll((done) => {
@@ -127,18 +103,68 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     catch(error => done.fail(error));
             }, ImptTestHelper.TIMEOUT);
 
-            it('log get by not exist project', (done) => {
-                ImptTestHelper.runCommandInteractive(`impt log get ${outputMode}`, '\x0d', (commandOut) => {
-                   
+            it('log get by project', (done) => {
+                ImptTestHelper.runCommandInteractive(`impt log get ${outputMode}`, (commandOut) => {
+                    _checkLogMessages(commandOut, { startNumber: 1, endNumber: 20, count: 20 });
                     ImptTestHelper.checkSuccessStatusEx(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
             });
 
+            it('log get by device id', (done) => {
+                ImptTestHelper.runCommandInteractive(`impt log get -d ${config.devices[0]} ${outputMode}`, (commandOut) => {
+                    _checkLogMessages(commandOut, { startNumber: 1, endNumber: 20, count: 20 });
+                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                }).
+                    then(done).
+                    catch(error => done.fail(error));
+            });
 
+            it('log get by device mac', (done) => {
+                ImptTestHelper.runCommandInteractive(`impt log get -d ${config.devicemacs[0]} ${outputMode}`, (commandOut) => {
+                    _checkLogMessages(commandOut, { startNumber: 1, endNumber: 20, count: 20 });
+                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                }).
+                    then(done).
+                    catch(error => done.fail(error));
+            });
 
+            it('log get by agent id', (done) => {
+                ImptTestHelper.runCommandInteractive(`impt log get -d ${config.deviceaids[0]} ${outputMode}`, (commandOut) => {
+                    _checkLogMessages(commandOut, { startNumber: 1, endNumber: 20, count: 20 });
+                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                }).
+                    then(done).
+                    catch(error => done.fail(error));
+            });
 
+            it('log get by device name', (done) => {
+                ImptTestHelper.runCommandInteractive(`impt log get -d ${config.devicenames[0]} ${outputMode}`, (commandOut) => {
+                    _checkLogMessages(commandOut, { startNumber: 1, endNumber: 20, count: 20 });
+                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                }).
+                    then(done).
+                    catch(error => done.fail(error));
+            });
+
+            it('log get with page size', (done) => {
+                ImptTestHelper.runCommandInteractive(`impt log get -d ${config.devices[0]} --page-size 4 ${outputMode}`, (commandOut) => {
+                    _checkLogMessages(commandOut, { startNumber: 17, endNumber: 20, count: 4 });
+                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                }).
+                    then(done).
+                    catch(error => done.fail(error));
+            });
+
+            it('log get with page size and number', (done) => {
+                ImptTestHelper.runCommandInteractive(`impt log get -d ${config.devices[0]} --page-size 5 --page-number 3 ${outputMode}`, (commandOut) => {
+                    _checkLogMessages(commandOut, { startNumber: 6, endNumber: 10, count: 5 });
+                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                }).
+                    then(done).
+                    catch(error => done.fail(error));
+            });
         });
 
         describe('log get negative tests >', () => {

@@ -65,7 +65,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         // prepare environment for build delete command testing
         function _testSuiteInit() {
             return ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
-                then(() => Shell.cp('-Rf', `${__dirname}/fixtures/device.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER));
+                then(() => Shell.cp('-Rf', `${__dirname}/fixtures/devicecode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER));
 
         }
 
@@ -79,7 +79,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 dg_id = ImptTestHelper.parseId(commandOut);
                 ImptTestHelper.emptyCheckEx(commandOut)
             }).
-                then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP_NAME} -t build_tag -o build_origin  -x device.nut`, (commandOut) => {
+                then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP_NAME} -t build_tag -o build_origin  -x devicecode.nut`, (commandOut) => {
                     build_id = ImptTestHelper.parseId(commandOut);
                     build_sha = ImptTestHelper.parseSha(commandOut);
                     ImptTestHelper.emptyCheckEx(commandOut);
@@ -94,7 +94,6 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         function _testCleanUp() {
             return ImptTestHelper.runCommandEx(`impt dg delete -g ${DEVICE_GROUP_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
         }
-
 
         // check 'deployment successfully deleted' output message 
         function _checkSuccessDeleteDeploymentMessage(commandOut, deploy) {

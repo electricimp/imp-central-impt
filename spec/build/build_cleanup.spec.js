@@ -75,8 +75,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                         let result = { pass: false };
                         const BuildArray = JSON.parse(commandOut.output);
                         if (!Array.isArray(BuildArray)) return result;
-                        lodash.map(BuildArray, function (DgItem) {
-                            lodash.map(DgItem, function (DgProperties) {
+                        lodash.map(BuildArray, function (BuildItem) {
+                            lodash.map(BuildItem, function (DgProperties) {
                                 let compareFlag = true;
                                 lodash.map(DgProperties, function (value, key) {
                                     if (typeof (value) === 'object' && typeof (expected[key]) === 'object') {
