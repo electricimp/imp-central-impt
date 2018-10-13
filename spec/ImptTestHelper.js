@@ -41,6 +41,13 @@ const KEY_ANSWER = {
     YES: 'y',
     NO: 'n'
 };
+const ENV_VARS = [
+    'IMPT_USER',
+    'IMPT_PASSWORD',
+    'IMPT_LOGINKEY',
+    'IMPT_ENDPOINT',
+    'IMPT_AUTH_FILE_PATH'
+]
 
 // Helper class for testing impt tool.
 // Contains common methods for testing environment initialization and cleanup,
@@ -122,12 +129,16 @@ class ImptTestHelper {
         }).then(outputChecker);
     }
 
-    static runCommandEx(command, outputChecker) {
+    static runCommandEx(command, outputChecker, env = {}) {
         return new Promise((resolve, reject) => {
             if (config.debug) {
                 console.log('Running command: ' + command);
             }
             Shell.cd(TESTS_EXECUTION_FOLDER);
+            ENV_VARS.forEach(function (val) {
+                if (env[val] === undefined) delete Shell.env[val];
+                else Shell.env[val] = env[val];
+            });
             Shell.exec(`node ${__dirname}/../bin/${command}`,
                 { silent: !config.debug },
                 (code, stdout, stderr) => {
@@ -137,12 +148,15 @@ class ImptTestHelper {
         }).then(outputChecker);
     }
 
-    static runCommandInteractive(command, outputChecker) {
-        let out;
+    static runCommandInteractive(command, outputChecker, env = {}) {
         return new Promise((resolve, reject) => {
             if (config.debug) {
                 console.log('Running command: ' + command);
             }
+            ENV_VARS.forEach(function (val) {
+                if (env[val] === undefined) delete Shell.env[val];
+                else Shell.env[val] = env[val];
+            });
             let child = Shell.exec(`node ${__dirname}/../bin/${command}`,
                 { silent: !config.debug },
                 (code, stdout, stderr) => {

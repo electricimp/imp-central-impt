@@ -122,7 +122,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     expect(json.Project['Device Group'].Product.name).toBe(PRODUCT_NAME);
                     // Auth info
                     expect(json.Auth['impCentral API endpoint']).toBe(endpoint);
-                    expect(json.Auth['Auth file']).toBe('Local');
+                    expect(json.Auth['Auth type']).toBe('Local Auth file');
                     expect(json.Auth['Access token auto refresh']).toBe(true);
                     expect(json.Auth['Login method']).toBe('User/Password');
                     expect(json.Auth['Username']).toBe(config.username);

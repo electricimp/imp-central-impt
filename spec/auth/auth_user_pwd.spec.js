@@ -29,6 +29,10 @@ const FS = require('fs');
 const config = require('../config');
 const ImptTestHelper = require('../ImptTestHelper');
 const ImptAuthCommandsHelper = require('./ImptAuthCommandsHelper');
+const Identifier = require('../../lib/util/Identifier');
+const UserInterractor = require('../../lib/util/UserInteractor');
+const Util = require('util');
+const MessageHelper = require('../MessageHelper');
 
 const DEFAULT_ENDPOINT = 'https://api.electricimp.com/v5';
 
@@ -254,16 +258,15 @@ describe('impt auth login by user/password test suite >', () => {
                 catch(error => done.fail(error));
         });
 
-        it('check global auth info ', (done) => {
+        it('check global auth info', (done) => {
             ImptTestHelper.runCommandEx(`impt auth info  ${outputMode}`, (commandOut) => {
-                expect(commandOut.output).toMatch(`${endpoint}`);
                 ImptTestHelper.checkAttributeEx(commandOut, 'auto refresh', 'true');
-                expect(commandOut.output).toMatch('Global');
-                expect(commandOut.output).toMatch('User/Password');
-                expect(commandOut.output).toMatch(config.email);
-                if (config.username) expect(commandOut.output).toMatch(config.username);
-                const idMatcher = commandOut.output.match(new RegExp(`${ImptTestHelper.ATTR_ID}"?:\\s+([A-Za-z0-9-]+)`));
-                expect(idMatcher).toBeNonEmptyArray();
+                ImptTestHelper.checkAttributeEx(commandOut, 'endpoint', `${endpoint}`);
+                ImptTestHelper.checkAttributeEx(commandOut, 'Auth type', 'Global Auth file');
+                ImptTestHelper.checkAttributeEx(commandOut, 'Login method', 'User/Password');
+                ImptTestHelper.checkAttributeEx(commandOut, 'Email', config.email);
+                ImptTestHelper.checkAttributeEx(commandOut, 'Username', config.username);
+                ImptTestHelper.checkAttributeEx(commandOut, 'Account id', config.accountid);
                 ImptTestHelper.checkSuccessStatusEx(commandOut);
             }).
                 then(done).
@@ -398,7 +401,7 @@ describe('impt auth login by user/password test suite >', () => {
 
         it('check local auth info ', (done) => {
             ImptTestHelper.runCommandEx(`impt auth info`, (commandOut) => {
-                expect(commandOut.output).toMatch('Local');
+                ImptTestHelper.checkAttributeEx(commandOut, 'Auth type', 'Local Auth file');
                 ImptTestHelper.checkSuccessStatusEx(commandOut);
             }).
                 then(done).
