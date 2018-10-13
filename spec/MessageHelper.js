@@ -145,7 +145,7 @@ class MessageHelper {
 
     static checkDeleteMinSupportedDeploymentMessage(commandOut, build, dg) {
         ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
-            Util.format(`${UserInterractor.ERRORS.BUILD_DELETE_ERR}`, `"${build}"`, `${Identifier.ENTITY_TYPE.TYPE_DEVICE_GROUP} "${dg}"`)
+            Util.format(`${UserInterractor.ERRORS.BUILD_DELETE_ERR}`, `${Identifier.ENTITY_TYPE.TYPE_BUILD} "${build}"`, `${Identifier.ENTITY_TYPE.TYPE_DEVICE_GROUP} "${dg}"`)
         );
     }
 
