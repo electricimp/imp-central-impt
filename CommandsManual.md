@@ -76,6 +76,8 @@
 - [Entity Identification](#entity-identification)
 - [Device Group Type](#device-group-type)
 - [Auth files](#auth-files)
+- [Auth Environment Variables](#auth-environment-variables)
+- [Command Execution Context](#command-execution-context)
 - [Project Files](#project-files)
 - [Test Configuration Files](#test-configuration-files)
 - [Command Description](#command-description)
@@ -199,21 +201,56 @@ Attributes accepted as `<BUILD_IDENTIFIER>` (in order of search):
 
 ## Auth Files ##
 
-An auth file is a `.impt.auth` file. It stores authentication and other information necessary to execute *impt* commands. There are two types of auth file &mdash; local and global. The both types have an identical format and store similar information.
+An auth file is a `.impt.auth` file. It stores authentication and other information necessary to execute *impt* commands.
 
 ### Local Auth File ###
 
 A local auth file is an auth file located in the directory from where an *impt* command is called. Different directories may contain different local auth files. One directory can contain only one local auth file.
 
-Any command called from a directory where a local auth file exists is executed in the context (with authentication and other settings) defined by that local auth file.
-
-If the current directory does not contain a local auth file, the command is executed in the context defined by the global auth file
-
 ### Global Auth File ###
 
-A global auth file affects the tool commands which are called from any directory where a local auth file does not exist. There can be only one global auth file per tool installation.
+The global auth file is located in the tool specific place. There can be none or only one global auth file per *impt* installation.
 
-Any command called from a directory where a local auth file does not exist is executed in the context (with authentication and other settings) defined by the global auth file. If neither a local nor a global auth file exists, the command fails.
+## Auth Environment Variables ##
+
+*impt* recognizes the following environment variables:
+
+- `IMPT_AUTH_FILE_PATH` &mdash; a path to a directory with an [auth file](#auth-files).
+- `IMPT_LOGINKEY` &mdash; a login key for the account.
+- `IMPT_USER` &mdash; an account identifier: a username or an email address.
+- `IMPT_PASSWORD` &mdash; an account password.
+- `IMPT_ENDPOINT` &mdash; an impCentral API endpoint (the API base URL).
+
+## Command Execution Context ##
+
+This is how *impt* determines a context (authentication and other settings) for execution of a command.
+
+1. If the current directory contains an auth file ([local auth file](#local-auth-file)):
+    - The command is executed in the context defined by this file.
+    - If the file is broken, the command fails.
+  
+2. Otherwise, if `IMPT_AUTH_FILE_PATH` environment variable is set:
+    - The command is executed in the context defined by the auth file in the directory referenced by this environment variable.
+    - If the file does not exist or is broken, the command fails.
+
+3. Otherwise, if `IMPT_LOGINKEY` environment variable is set:
+    - *impt* tries to login using the specified login key and then the command is executed in the context of this login.
+    - If multi-factor authentication is enabled for the account, the user is additionally asked to input a one-time password.
+    - If the login fails, the command fails.
+    - If `IMPT_ENDPOINT` environment variable is set, it's value is used as an impCentral API endpoint. Else, the default endpoint (`https://api.electricimp.com/v5`) is used.
+
+4. Otherwise, if `IMPT_USER` environment variable is set:
+    - *impt* tries to login using the specified account identifier (user) and a password and then the command is executed in the context of this login.
+    - If `IMPT_PASSWORD` environment variable is set, it's value is used as a password. Else, the user is asked to input the password.
+    - If multi-factor authentication is enabled for the account, the user is additionally asked to input a one-time password.
+    - If the login fails, the command fails.
+    - If `IMPT_ENDPOINT` environment variable is set, it's value is used as an impCentral API endpoint. Else, the default endpoint (`https://api.electricimp.com/v5`) is used.
+
+5. Otherwise, if the [global auth file](#global-auth-file) exists:
+    - The command is executed in the context defined by this file.
+    - If the file is broken, the command fails.
+
+6. Otherwise, the command fails (no authentication information is found to execute the command).
 
 ## Project Files ##
 
@@ -239,7 +276,9 @@ A test configuration file contains settings to run unit tests which are created 
 impt auth info [--output <mode>] [--help]
 ```
 
-Displays the status and the details of the authentication applicable to the current directory, whether [local](#local-auth-file) or [global](#global-auth-file).
+Displays the status and the details of the authentication applicable to the current directory.
+
+Applicable authentication settings are determined according to the [Command Execution Context](#command-execution-context) rules.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
@@ -254,7 +293,7 @@ impt auth login [--local] [--endpoint <endpoint_url>]
     [--output <mode>] [--help]
 ```
 
-Perform global or local login. Creates a [global](#global-auth-file) or [local](#local-auth-file) auth file.
+Creates the [global](#global-auth-file) or [local](#local-auth-file) auth file.
 
 The options for one, and only one, of the following authentication methods may be specified in the command:
 - Using an account identifier and password (`--user` and `--pwd` options).
@@ -271,7 +310,7 @@ The user is asked to confirm the operation if the corresponding auth file alread
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --local | -l | No | No | If specified, creates or replaces a [local auth file](#local-auth-file) in the current directory. If not specified, creates or replaces the [global auth file](#global-auth-file) |
-| --endpoint | -e | No | Yes | An impCentral API endpoint. Default: `https://api.electricimp.com/v5` |
+| --endpoint | -e | No | Yes | An impCentral API endpoint (the API base URL). Default: `https://api.electricimp.com/v5` |
 | --user | -u | No | Yes | The account identifier: a username or an email address |
 | --pwd | -w | No | Yes | The account password. If specified, the `--user` option must be specified too |
 | --lk | -k | No | Yes | A login key for the account |
@@ -286,7 +325,7 @@ The user is asked to confirm the operation if the corresponding auth file alread
 impt auth logout [--local] [--output <mode>] [--help]
 ```
 
-Performs global or local logout. Deletes the [global](#global-auth-file) or [local](#local-auth-file) auth file.
+Deletes the [global](#global-auth-file) or [local](#local-auth-file) auth file.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
@@ -401,8 +440,8 @@ The user is asked to confirm the operation if the files with the specified names
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --build | -b | Yes/[Project](#project-files) | Yes | A [Build identifier](#build-identifier). If not specified, the most recent Deployment for the Device Group referenced by the [Project file](#project-files) in the current directory is used (if there is no Project file, the command fails) |
-| --device-file | -x | No | Yes | The device source code file name. If not specified, the file referenced by the [Project file](#project-files) in the current directory is used; if there is no Project file, empty code is used. If the specified file does not exist, the command fails |
-| --agent-file | -y | No | Yes | The agent source code file name. If not specified, the file referenced by the [Project file](#project-files) in the current directory is used; if there is no Project file, empty code is used. If the specified file does not exist, the command fails |
+| --device-file | -x | No | Yes | Name of a file to where download the source code for IMP device. If not specified, the file referenced by the [Project file](#project-files) in the current directory is used (if there is no Project file and `--agent-only` option is not specified, the command fails) |
+| --agent-file | -y | No | Yes | Name of a file to where download the source code for IMP agent. If not specified, the file referenced by the [Project file](#project-files) in the current directory is used (if there is no Project file and `--device-only` option is not specified, the command fails) |
 | --device-only | -i | No | No | Downloads the source code for the device only |
 | --agent-only | -j | No | No | Downloads the source code for the agent only |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
@@ -852,7 +891,7 @@ The command allows you to add multiple devices to the newly created log stream. 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --device | -d | No | Yes | The [device identifier](#device-identifier) of the device to be added to the log stream. This option may be repeated multiple times to specify multiple devices |
-| --dg | -g | No/[Project](#project-files) | Yes | A [Device Group identifier](#device-group-identifier). This option may be repeated multiple times to specify multiple Device Groups. Logs from all of the devices assigned to the specified Device Groups will be added to the log stream. `--device` and `--dg` options are cumulative. If neither the `--device` nor the `--dg` options are specified but there is a [Project file](#project-files) in the current directory, all of the devices assigned to the Device Group referenced by the [Project file](#project-files) are added |
+| --dg | -g | no/[Project](#project-files) | Yes | A [Device Group identifier](#device-group-identifier). This option may be repeated multiple times to specify multiple Device Groups. Logs from all of the devices assigned to the specified Device Groups will be added to the log stream. `--device` and `--dg` options are cumulative. If neither the `--device` nor the `--dg` options are specified but there is a [Project file](#project-files) in the current directory, all of the devices assigned to the Device Group referenced by the [Project file](#project-files) are added |
 | --output | -z | No | Yes | Adjusts the [command's output](#command-output) |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
@@ -961,14 +1000,14 @@ impt product delete [--product <PRODUCT_IDENTIFIER>] [--builds] [--force] [--con
 
 Deletes the specified Product.
 
-The command fails if the Product has nay Device Groups and the `--force` option was not specified. Use either the `--force` option, or [`impt dg delete`](#device-group-delete) to delete the Product’s Device Groups.
+The command fails if the Product has any Device Groups and the `--force` option was not specified. Use either the `--force` option, or [`impt dg delete`](#device-group-delete) to delete the Product’s Device Groups.
 
 The user is asked to confirm the operation, unless confirmed automatically with the `--confirmed` option.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --product | -p | Yes/[Project](#project-files) | Yes | A [Product identifier](#product-identifier). If not specified, the Product referenced by the [Project file](#project-files) in the current directory is used (if there is no Project file, the command fails) |
-| --builds | -b | No | No | Additionally deletes all Deployments related to all of the Device Groups which belong to the Product, including Device Groups that were deleted previously |
+| --builds | -b | No | No | Additionally deletes all Deployments related to all of the Device Groups which belong to the Product, including Device Groups that were deleted previously. The command fails if any Deployment has *flagged* attribute set to `true` and the `--force` option was not specified. |
 | --force | -f | No | No | Deletes all of the Product’s Device Groups as with [`impt dg delete --force`](#device-group-delete) called for every one of the Product’s Device Groups |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
 | --output | -z | No | Yes | Adjusts the [command's output](#command-output) |
