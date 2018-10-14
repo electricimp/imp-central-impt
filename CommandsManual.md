@@ -891,7 +891,7 @@ The command allows you to add multiple devices to the newly created log stream. 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --device | -d | No | Yes | The [device identifier](#device-identifier) of the device to be added to the log stream. This option may be repeated multiple times to specify multiple devices |
-| --dg | -g | no/[Project](#project-files) | Yes | A [Device Group identifier](#device-group-identifier). This option may be repeated multiple times to specify multiple Device Groups. Logs from all of the devices assigned to the specified Device Groups will be added to the log stream. `--device` and `--dg` options are cumulative. If neither the `--device` nor the `--dg` options are specified but there is a [Project file](#project-files) in the current directory, all of the devices assigned to the Device Group referenced by the [Project file](#project-files) are added |
+| --dg | -g | No/[Project](#project-files) | Yes | A [Device Group identifier](#device-group-identifier). This option may be repeated multiple times to specify multiple Device Groups. Logs from all of the devices assigned to the specified Device Groups will be added to the log stream. `--device` and `--dg` options are cumulative. If neither the `--device` nor the `--dg` options are specified but there is a [Project file](#project-files) in the current directory, all of the devices assigned to the Device Group referenced by the [Project file](#project-files) are added |
 | --output | -z | No | Yes | Adjusts the [command's output](#command-output) |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
