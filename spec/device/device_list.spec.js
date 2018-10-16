@@ -124,8 +124,7 @@ describe(`impt device list test suite (output: ${outputMode ? outputMode : 'defa
             })).
             then(() => ImptTestHelper.deviceAssign(DEVICE_GROUP_NAME));
     }
-    if (!build_id) fail("TestSuiteInit error: Fail create build");
-
+    
     // delete all entities using in impt device list test suite
     function _testSuiteCleanUp() {
         return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx).
