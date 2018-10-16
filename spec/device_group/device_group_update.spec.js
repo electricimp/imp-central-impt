@@ -42,7 +42,7 @@ const DEVICE_GROUP_NEW_DESCR = 'impt new device group description';
 // Test suite for 'impt dg update' command.
 // Runs 'impt dg update' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
-    fdescribe(`impt device group update test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
+    describe(`impt device group update test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         let dg_id = null;
         let product_id = null;
         let deploy_id = null;
