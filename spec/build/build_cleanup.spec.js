@@ -34,15 +34,15 @@ const Identifier = require('../../lib/util/Identifier');
 const Util = require('util');
 const UserInterractor = require('../../lib/util/UserInteractor');
 
-const PRODUCT_NAME = '__impt_product';
-const DEVICE_GROUP_NAME = '__impt_device_group';
-const PRODUCT2_NAME = '__impt_product_2';
-const DEVICE_GROUP2_NAME = '__impt_device_group_2';
+const PRODUCT_NAME = '__impt_bld_product';
+const DEVICE_GROUP_NAME = '__impt_bld_device_group';
+const PRODUCT2_NAME = '__impt_bld_product_2';
+const DEVICE_GROUP2_NAME = '__impt_bld_device_group_2';
 
 // Test suite for 'impt build cleanup' command.
 // Runs 'impt build cleanup' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
-    describe('impt build cleanup test suite >', () => {
+    describe(`impt build cleanup test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         let product_id = null;
         let build_id = null;
         let build2_id = null;
@@ -67,7 +67,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 catch(error => done.fail(error));
         }, ImptTestHelper.TIMEOUT);
 
-        // custom matcher for search Device with expected properties in Device array
+        // custom matcher for search Build with expected properties in Build array
         let customMatcher = {
             toContainsBuild: function (util, customEqualityTesters) {
                 return {
@@ -121,6 +121,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         function _testSuiteInit() {
             return ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME}`, (commandOut) => {
                 product_id = ImptTestHelper.parseId(commandOut);
+                if (!product_id) fail("TestSuitInit error: Fail create product");
                 ImptTestHelper.emptyCheckEx(commandOut);
             }).
                 then(() => ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT2_NAME}`, (commandOut) => {
@@ -143,18 +144,22 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 })).
                 then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP_NAME}`, (commandOut) => {
                     build_id = ImptTestHelper.parseId(commandOut);
+                    if (!build_id) fail("TestInit error: Fail create build");
                     ImptTestHelper.emptyCheckEx(commandOut);
                 })).
                 then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP_NAME}`, (commandOut) => {
                     build2_id = ImptTestHelper.parseId(commandOut);
+                    if (!build2_id) fail("TestInit error: Fail create build");
                     ImptTestHelper.emptyCheckEx(commandOut);
                 })).
                 then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP2_NAME}`, (commandOut) => {
                     build3_id = ImptTestHelper.parseId(commandOut);
+                    if (!build3_id) fail("TestInit error: Fail create build");
                     ImptTestHelper.emptyCheckEx(commandOut);
                 })).
                 then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP2_NAME}`, (commandOut) => {
                     build4_id = ImptTestHelper.parseId(commandOut);
+                    if (!build4_id) fail("TestInit error: Fail create build");
                     ImptTestHelper.emptyCheckEx(commandOut);
                 })).
                 // delete device groups to generate zombie builds
@@ -192,7 +197,6 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         }
 
         describe('build cleanup positive tests >', () => {
-
             beforeEach((done) => {
                 _testInit().
                     then(done).
@@ -287,8 +291,6 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         });
 
         describe('build cleanup negative tests >', () => {
-
-
         });
     });
 });

@@ -33,15 +33,13 @@ const Util = require('util');
 const MessageHelper = require('../MessageHelper');
 const Shell = require('shelljs');
 
-const PRODUCT_NAME = '__impt_product';
-const DEVICE_GROUP_NAME = '__impt_device_group';
+const PRODUCT_NAME = '__impt_dev_product';
+const DEVICE_GROUP_NAME = '__impt_dev_device_group';
 
 // Test suite for 'impt device restart' command.
 // Runs 'impt device restart' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
-    describe('impt device restart test suite >', () => {
-        let dg_id = null;
-
+    describe(`impt device restart test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         beforeAll((done) => {
             ImptTestHelper.init().
                 then(_testSuiteCleanUp).
@@ -87,7 +85,6 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         }
 
         describe('device restart positive tests >', () => {
-
             it('restart device by device id', (done) => {
                 ImptTestHelper.runCommandEx(`impt device restart --device ${config.devices[0]} ${outputMode}`, (commandOut) => {
                     _checkSuccessRestartedDeviceMessage(commandOut, config.devices[0]);
@@ -135,7 +132,6 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         });
 
         describe('device group create negative tests >', () => {
-
             it('restart not exist device', (done) => {
                 ImptTestHelper.runCommandEx(`impt device restart -d not-exist-device ${outputMode}`, (commandOut) => {
                     MessageHelper.checkEntityNotFoundError(commandOut, MessageHelper.DEVICE, 'not-exist-device');

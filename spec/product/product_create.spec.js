@@ -32,8 +32,8 @@ const UserInterractor = require('../../lib/util/UserInteractor');
 const Util = require('util');
 const MessageHelper = require('../MessageHelper');
 
-const PRODUCT_NAME = '__impt_product';
-const PRODUCT_EXIST_NAME = '__impt_product_2';
+const PRODUCT_NAME = '__impt_pr_product';
+const PRODUCT_EXIST_NAME = '__impt_pr_product_2';
 
 const PRODUCT_DESCR = 'impt temp product description';
 const PRODUCT_EXIST_DESCR = 'impt temp product description 2';
@@ -74,18 +74,18 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         function _testCleanUp() {
             return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx);
         }
-        
-        // prepare test environment for impt product create test
+
+        // prepare test environment for impt product create test suite
         function _testSuiteInit() {
             return ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_EXIST_NAME} -s "${PRODUCT_EXIST_DESCR}"`, ImptTestHelper.emptyCheckEx);
         }
 
         // check command`s result by exec product info command
-        function _checkProductInfo(expectInfo) {
-            return ImptTestHelper.runCommandEx(`impt product info -p ${expectInfo && expectInfo.name ? expectInfo.name : PRODUCT_NAME}  ${outputMode}`, (commandOut) => {
-                ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_ID, `${expectInfo && expectInfo.id ? expectInfo.id : product_id}`);
-                ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_NAME, `${expectInfo && expectInfo.name ? expectInfo.name : PRODUCT_NAME}`);
-                ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_DESCRIPTION, `${expectInfo && expectInfo.descr ? expectInfo.descr : ''}`);
+        function _checkProductInfo(expectInfo = {}) {
+            return ImptTestHelper.runCommandEx(`impt product info -p ${expectInfo.name ? expectInfo.name : PRODUCT_NAME}  ${outputMode}`, (commandOut) => {
+                ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_ID, `${expectInfo.id ? expectInfo.id : product_id}`);
+                ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_NAME, `${expectInfo.name ? expectInfo.name : PRODUCT_NAME}`);
+                ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_DESCRIPTION, `${expectInfo.descr ? expectInfo.descr : ''}`);
                 ImptTestHelper.checkSuccessStatusEx(commandOut);
             });
         }
@@ -93,8 +93,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         // check successfuly created product output message 
         function _checkSuccessCreateProductMessage(commandOut, productName) {
             ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
-                `${Identifier.ENTITY_TYPE.TYPE_PRODUCT}\\s+` +
-                Util.format(`${UserInterractor.MESSAGES.ENTITY_CREATED}`, `"${productName}"`)
+                Util.format(`${UserInterractor.MESSAGES.ENTITY_CREATED}`,
+                    `${Identifier.ENTITY_TYPE.TYPE_PRODUCT} "${productName}"`)
             );
         }
 

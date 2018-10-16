@@ -32,8 +32,8 @@ const Identifier = require('../../lib/util/Identifier');
 const Util = require('util');
 const UserInterractor = require('../../lib/util/UserInteractor');
 
-const PRODUCT_NAME = '__impt_product';
-const DG_NAME = '__impt_device_group';
+const PRODUCT_NAME = '__impt_pr_product';
+const DEVICE_GROUP_NAME = '__impt_pr_device_group';
 
 const PRODUCT_DESCR = 'impt temp product description';
 
@@ -41,7 +41,6 @@ const PRODUCT_DESCR = 'impt temp product description';
 // Runs 'impt product delete' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
     describe(`impt product delete test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
-        const outputMode = '';
         let product_id = null;
 
         beforeAll((done) => {
@@ -167,11 +166,11 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
             // create project for test purposes
             function _testSuiteProjectInit() {
-                return ImptTestHelper.runCommandEx(`impt project create --product ${PRODUCT_NAME} --name ${DG_NAME} -q`, ImptTestHelper.emptyCheckEx);
+                return ImptTestHelper.runCommandEx(`impt project create --product ${PRODUCT_NAME} --name ${DEVICE_GROUP_NAME} -q`, ImptTestHelper.emptyCheckEx);
             }
 
             it('product delete by project', (done) => {
-                ImptTestHelper.runCommandEx(`impt product delete -q ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommandEx(`impt product delete -f -q ${outputMode}`, (commandOut) => {
                     _checkSuccessDeleteProductMessage(commandOut, product_id);
                     ImptTestHelper.checkSuccessStatusEx(commandOut);
                 }).

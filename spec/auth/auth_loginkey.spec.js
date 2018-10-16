@@ -36,7 +36,7 @@ const DEFAULT_ENDPOINT = 'https://api.electricimp.com/v5';
 // Test suite for 'impt auth login --lk<loginkey>', 'impt auth logout', 'impt auth info' commands.
 // Runs impt auth commands with different combinations of options.
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
-    describe('impt auth login by loginkey test suite >', () => {
+    describe(`impt auth login by loginkey test suite  (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         const auth = `--user ${config.email} --pwd ${config.password}`;
         const endpoint = config.apiEndpoint ? `${config.apiEndpoint}` : `${DEFAULT_ENDPOINT}`;
         let loginkey = null;
@@ -77,12 +77,12 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         }
 
 
-        function _checkLoginInfo(expectedInfo = {}) {
+        function _checkLoginInfo(expInfo = {}) {
             return ImptTestHelper.runCommandEx(`impt auth info`, (commandOut) => {
-                ImptTestHelper.checkAttributeEx(commandOut, 'endpoint', expectedInfo.epoint ? expectedInfo.epoint : endpoint);
-                ImptTestHelper.checkAttributeEx(commandOut, 'auto refresh', expectedInfo.refresh ? expectedInfo.refresh : 'true');
-                ImptTestHelper.checkAttributeEx(commandOut, 'Auth type', expectedInfo.auth ? expectedInfo.auth : 'Global Auth file');
-                ImptTestHelper.checkAttributeEx(commandOut, 'Email', expectedInfo.email ? expectedInfo.email : config.email);
+                ImptTestHelper.checkAttributeEx(commandOut, 'endpoint', expInfo.endpoint ? expInfo.endpoint : endpoint);
+                ImptTestHelper.checkAttributeEx(commandOut, 'auto refresh', expInfo.refresh ? expInfo.refresh : 'true');
+                ImptTestHelper.checkAttributeEx(commandOut, 'Auth type', expInfo.auth ? expInfo.auth : 'Global Auth file');
+                ImptTestHelper.checkAttributeEx(commandOut, 'Email', expInfo.email ? expInfo.email : config.email);
                 if (config.username) ImptTestHelper.checkAttributeEx(commandOut, 'Username', config.username);
                 if (config.accountid) ImptTestHelper.checkAttributeEx(commandOut, 'Account id', config.accountid);
                 ImptTestHelper.checkSuccessStatusEx(commandOut);

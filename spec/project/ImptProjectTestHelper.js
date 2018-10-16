@@ -31,8 +31,8 @@ const FS = require('fs');
 const config = require('../config');
 const ImptTestHelper = require('../ImptTestHelper');
 
-const PRODUCT_NAME = '__impt_product';
-const DG_NAME = '__impt_dg';
+const PRODUCT_NAME = '__impt_prj_product';
+const DG_NAME = '__impt_prj_device_group';
 const DG_DESCR = 'impt temp dg description';
 
 // Helper class for testing impt project command group.

@@ -33,11 +33,11 @@ const UserInterractor = require('../../lib/util/UserInteractor');
 const Shell = require('shelljs');
 const ProjectHelper = require('./ImptProjectTestHelper');
 
-const PRODUCT_NAME = '__impt_product';
-const DG_NAME = '__impt_dg';
+const PRODUCT_NAME = '__impt_prj_product';
+const DG_NAME = '__impt_prj_device_group';
 const DG_DESCR = 'impt temp dg description';
 
-const DG_NEW_NAME = '__impt_new_dg';
+const DG_NEW_NAME = '__impt_prj_new_dg';
 const DG_NEW_DESCR = 'impt new dg description';
 
 // Test suite for 'impt project update command.
@@ -61,13 +61,16 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 catch(error => done.fail(error));
         }, ImptTestHelper.TIMEOUT);
 
+        // prepare test environment for impt project update test
         function _testSuiteInit() {
             return ImptTestHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME}`, (commandOut) => {
                 product_id = ImptTestHelper.parseId(commandOut);
+                if (!product_id) fail("TestSuitInit error: Fail create product");
                 ImptTestHelper.emptyCheckEx(commandOut);
             }).
                 then(() => ImptTestHelper.runCommandEx(`impt dg create --name ${DG_NAME} --descr "${DG_DESCR}" --product ${PRODUCT_NAME} ${outputMode}`, (commandOut) => {
                     dg_id = ImptTestHelper.parseId(commandOut);
+                    if (!dg_id) fail("TestSuitInit error: Fail create device group");
                     ImptTestHelper.emptyCheckEx(commandOut);
                 })).
                 then(() => ImptTestHelper.runCommandEx(`impt project link --dg ${DG_NAME} ${outputMode}`, (commandOut) => {
@@ -75,6 +78,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 }));
         }
 
+        // prepare test environment for impt project update test
         function _testSuiteCleanUp() {
             return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -q`, (commandOut) => ImptTestHelper.emptyCheckEx).
             then(() => ImptTestHelper.runCommandEx(`impt project delete --all -q`, ImptTestHelper.emptyCheckEx));

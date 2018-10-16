@@ -32,13 +32,11 @@ const Identifier = require('../../lib/util/Identifier');
 const Util = require('util');
 const UserInterractor = require('../../lib/util/UserInteractor');
 
-const PRODUCT_NAME = '__impt_product';
-const PRODUCT_NEW_NAME = '__impt_new_product';
-
+const PRODUCT_NAME = '__impt_pr_product';
+const PRODUCT_NEW_NAME = '__impt_pr_new_product';
 const PRODUCT_DESCR = 'impt temp product description';
 const PRODUCT_NEW_DESCR = 'impt temp product new description';
-
-const DG_NAME = '__impt_device_group';
+const DEVICE_GROUP_NAME = '__impt_pr_device_group';
 
 // Test suite for 'impt product update' command.
 // Runs 'impt product update' command with different combinations of options,
@@ -86,17 +84,17 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         // check 'product successfully updated' output message 
         function _checkSuccessUpdateProductMessage(commandOut, product) {
             ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
-                `${Identifier.ENTITY_TYPE.TYPE_PRODUCT}\\s+` +
-                Util.format(`${UserInterractor.MESSAGES.ENTITY_UPDATED}`, `"${product}"`)
+                Util.format(`${UserInterractor.MESSAGES.ENTITY_UPDATED}`,
+                    `${Identifier.ENTITY_TYPE.TYPE_PRODUCT} "${product}"`)
             );
         }
 
         // check command`s result by exec product info command
-        function _checkProductInfo(expectInfo) {
-            return ImptTestHelper.runCommandEx(`impt product info -p ${expectInfo && expectInfo.name ? expectInfo.name : PRODUCT_NAME}  ${outputMode}`, (commandOut) => {
-                ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_ID, `${expectInfo && expectInfo.id ? expectInfo.id : product_id}`);
-                ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_NAME, `${expectInfo && expectInfo.name ? expectInfo.name : PRODUCT_NAME}`);
-                ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_DESCRIPTION, `${expectInfo && expectInfo.descr ? expectInfo.descr : ''}`);
+        function _checkProductInfo(expectInfo = {}) {
+            return ImptTestHelper.runCommandEx(`impt product info -p ${expectInfo.name ? expectInfo.name : PRODUCT_NAME}  ${outputMode}`, (commandOut) => {
+                ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_ID, `${expectInfo.id ? expectInfo.id : product_id}`);
+                ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_NAME, `${expectInfo.name ? expectInfo.name : PRODUCT_NAME}`);
+                ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_DESCRIPTION, `${expectInfo.descr ? expectInfo.descr : ''}`);
                 ImptTestHelper.checkSuccessStatusEx(commandOut);
             });
         }
@@ -237,7 +235,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
             // create project for test purposes
             function _testSuiteProjectInit() {
-                return ImptTestHelper.runCommandEx(`impt project create --product ${PRODUCT_NAME} --name ${DG_NAME}`, ImptTestHelper.emptyCheckEx);
+                return ImptTestHelper.runCommandEx(`impt project create --product ${PRODUCT_NAME} --name ${DEVICE_GROUP_NAME}`, ImptTestHelper.emptyCheckEx);
             }
 
             it('update product name and description by project', (done) => {

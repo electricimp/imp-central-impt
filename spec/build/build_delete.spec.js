@@ -34,14 +34,13 @@ const Util = require('util');
 const UserInterractor = require('../../lib/util/UserInteractor');
 const Shell = require('shelljs');
 
-const PRODUCT_NAME = '__impt_product';
-const DEVICE_GROUP_NAME = '__impt_device_group';
-const DEVICE_GROUP_DESCR = 'impt temp device group description';
+const PRODUCT_NAME = '__impt_bld_product';
+const DEVICE_GROUP_NAME = '__impt_bld_device_group';
 
-// Test suite for 'impt dg builds' command.
-// Runs 'impt dg builds' command with different combinations of options,
+// Test suite for 'impt build delete' command.
+// Runs 'impt build delete' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
-    describe('impt device group builds test suite >', () => {
+    describe(`impt device group builds test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         let build_id = null;
         let build_sha = null;
         let build2_id = null;
@@ -77,15 +76,19 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         function _testInit() {
             return ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
                 dg_id = ImptTestHelper.parseId(commandOut);
+                if (!dg_id) fail("TestInit error: Fail create device group");
                 ImptTestHelper.emptyCheckEx(commandOut)
             }).
                 then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP_NAME} -t build_tag -o build_origin  -x devicecode.nut`, (commandOut) => {
                     build_id = ImptTestHelper.parseId(commandOut);
+                    if (!build_id) fail("TestInit error: Fail create build");
                     build_sha = ImptTestHelper.parseSha(commandOut);
+                    if (!build_sha) fail("TestInit error: Fail parse build sha");
                     ImptTestHelper.emptyCheckEx(commandOut);
                 })).
                 then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP_NAME}`, (commandOut) => {
                     build2_id = ImptTestHelper.parseId(commandOut);
+                    if (!build2_id) fail("TestInit error: Fail create build");
                     ImptTestHelper.emptyCheckEx(commandOut);
                 })).
                 then(() => ImptTestHelper.runCommandEx(`impt dg update -g ${DEVICE_GROUP_NAME} -m ${build2_id}`, ImptTestHelper.emptyCheckEx));

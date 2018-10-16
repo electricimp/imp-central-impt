@@ -34,13 +34,13 @@ const Identifier = require('../../lib/util/Identifier');
 const Util = require('util');
 const UserInterractor = require('../../lib/util/UserInteractor');
 
-const PRODUCT_NAME = '__impt_product';
-const DEVICE_GROUP_NAME = '__impt_device_group';
+const PRODUCT_NAME = '__impt_bld_product';
+const DEVICE_GROUP_NAME = '__impt_bld_device_group';
 
 // Test suite for 'impt build deploy' command.
 // Runs 'impt build deploy' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
-    describe('impt build deploy test suite >', () => {
+    describe(`impt build deploy test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         let dg_id = null;
         let build_id = null;
 
@@ -59,18 +59,19 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 catch(error => done.fail(error));
         }, ImptTestHelper.TIMEOUT);
 
-        // prepare environment for build info command testing
+        // prepare environment for build deploy command testing
         function _testSuiteInit() {
             return ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
                 then(() => ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
                     dg_id = ImptTestHelper.parseId(commandOut);
+                    if (!dg_id) fail("TestSuitInit error: Fail create device group");
                     ImptTestHelper.emptyCheckEx(commandOut);
                 })).
                 then(() => Shell.cp('-Rf', `${__dirname}/fixtures/devicecode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER)).
                 then(() => Shell.cp('-Rf', `${__dirname}/fixtures/agentcode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER));
         }
 
-        // delete all entities using in impt build info test suite
+        // delete all entities using in impt build deploy test suite
         function _testSuiteCleanUp() {
             return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
         }
@@ -111,7 +112,6 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         }
 
         describe('build deploy positive tests >', () => {
-
             afterAll((done) => {
                 ImptTestHelper.projectDelete().
                     then(done).
@@ -161,7 +161,6 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         });
 
         describe('build deploy negative tests >', () => {
-
             it('build deploy by not exist project', (done) => {
                 ImptTestHelper.runCommandEx(`impt build deploy`, (commandOut) => {
                     MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, MessageHelper.DG);

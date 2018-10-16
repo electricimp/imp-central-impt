@@ -33,13 +33,13 @@ const Identifier = require('../../lib/util/Identifier');
 const Util = require('util');
 const UserInterractor = require('../../lib/util/UserInteractor');
 
-const PRODUCT_NAME = '__impt_product';
-const DEVICE_GROUP_NAME = '__impt_device_group';
+const PRODUCT_NAME = '__impt_bld_product';
+const DEVICE_GROUP_NAME = '__impt_bld_device_group';
 
 // Test suite for 'impt build get' command.
 // Runs 'impt build get' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
-    describe('impt build get test suite >', () => {
+    describe(`impt build get test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         let build_id = null;
         let build_sha = null;
 
@@ -67,7 +67,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP_NAME} -s early_build`, ImptTestHelper.emptyCheckEx)).
                 then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP_NAME} -s build_descr -x devicecode.nut -y agentcode.nut -t build_tag -o build_origin`, (commandOut) => {
                     build_id = ImptTestHelper.parseId(commandOut);
+                    if (!build_id) fail("TestSuiteInit error: Fail create build");
                     build_sha = ImptTestHelper.parseSha(commandOut);
+                    if (!build_sha) fail("TestSuiteInit error: Fail parse build sha");
                     ImptTestHelper.emptyCheckEx(commandOut);
                 }));
         }

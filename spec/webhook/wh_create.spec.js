@@ -31,13 +31,15 @@ const MessageHelper = require('../MessageHelper');
 const Identifier = require('../../lib/util/Identifier');
 const Util = require('util');
 const UserInterractor = require('../../lib/util/UserInteractor');
-const PRODUCT_NAME = '__impt_product';
-const DG_NAME = '__impt_device_group';
-const DG_NAME_2 = '__impt_device_group_2';
+const PRODUCT_NAME = '__impt_wh_product';
+const DG_NAME = '__impt_wh_device_group';
+const DG_NAME_2 = '__impt_wh_device_group_2';
 const WH_URL = 'http://example.com/wc/';
 
+// Test suite for 'impt webhook create' command.
+// Runs 'impt webhook create' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
-    describe('impt webhook create test suite >', () => {
+    describe(`impt webhook create test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         let dg_id = null;
         let wh_id = null;
 
@@ -73,6 +75,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             return ImptTestHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
                 then(() => ImptTestHelper.runCommandEx(`impt dg create --name ${DG_NAME} -p ${PRODUCT_NAME} `, (commandOut) => {
                     dg_id = ImptTestHelper.parseId(commandOut);
+                    if (!dg_id) fail("TestSuitInit error: Fail create device group");
                     ImptTestHelper.emptyCheckEx(commandOut);
                 })).
                 then(() => ImptTestHelper.runCommandEx(`impt project link --dg ${DG_NAME} -q`, (commandOut) => {
@@ -81,25 +84,25 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         }
 
         // check 'webhook successfuly created' output message 
-        function _checkSuccessCreateWebhookMessage(commandOut, webhookId) {
+        function _checkSuccessCreateWebhookMessage(commandOut, webhook) {
             ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
-                `${Identifier.ENTITY_TYPE.TYPE_WEBHOOK}\\s+` +
-                Util.format(`${UserInterractor.MESSAGES.ENTITY_CREATED}`, `"${webhookId}"`)
+                Util.format(`${UserInterractor.MESSAGES.ENTITY_CREATED}`,
+                    `${Identifier.ENTITY_TYPE.TYPE_WEBHOOK} "${webhook}"`)
             );
         }
 
 
         // check command`s result by exec webhook info command
-        function _checkWebhookInfo(expectInfo) {
-            return ImptTestHelper.runCommandEx(`impt webhook info --wh ${expectInfo && expectInfo.id ? expectInfo.id : wh_id} -z json`, (commandOut) => {
+        function _checkWebhookInfo(expectInfo = {}) {
+            return ImptTestHelper.runCommandEx(`impt webhook info --wh ${expectInfo.id ? expectInfo.id : wh_id} -z json`, (commandOut) => {
                 const json = JSON.parse(commandOut.output);
                 expect(json.Webhook).toBeDefined;
-                expect(json.Webhook.id).toBe(expectInfo && expectInfo.id ? expectInfo.id : wh_id);
-                expect(json.Webhook.url).toBe(expectInfo && expectInfo.url ? expectInfo.url : WH_URL);
-                expect(json.Webhook.event).toBe(expectInfo && expectInfo.deployment ? expectInfo.deployment : 'deployment');
-                expect(json.Webhook.content_type).toBe(expectInfo && expectInfo.mime ? expectInfo.mime : 'json');
-                expect(json.Webhook['Device Group'].id).toBe(expectInfo && expectInfo.dg_id ? expectInfo.dg_id : dg_id);
-                expect(json.Webhook['Device Group'].name).toBe(expectInfo && expectInfo.dg_name ? expectInfo.dg_name : DG_NAME);
+                expect(json.Webhook.id).toBe(expectInfo.id ? expectInfo.id : wh_id);
+                expect(json.Webhook.url).toBe(expectInfo.url ? expectInfo.url : WH_URL);
+                expect(json.Webhook.event).toBe(expectInfo.deployment ? expectInfo.deployment : 'deployment');
+                expect(json.Webhook.content_type).toBe(expectInfo.mime ? expectInfo.mime : 'json');
+                expect(json.Webhook['Device Group'].id).toBe(expectInfo.dg_id ? expectInfo.dg_id : dg_id);
+                expect(json.Webhook['Device Group'].name).toBe(expectInfo.dg_name ? expectInfo.dg_name : DG_NAME);
                 ImptTestHelper.checkSuccessStatusEx(commandOut);
             });
         }
@@ -110,7 +113,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 _checkSuccessCreateWebhookMessage(commandOut, wh_id);
                 ImptTestHelper.checkSuccessStatusEx(commandOut);
             }).
-                then(checkWebhookInfo).
+                then(_checkWebhookInfo).
                 then(done).
                 catch(error => done.fail(error));
         });
@@ -121,7 +124,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 _checkSuccessCreateWebhookMessage(commandOut, wh_id);
                 ImptTestHelper.checkSuccessStatusEx(commandOut);
             }).
-                then(checkWebhookInfo).
+                then(_checkWebhookInfo).
                 then(done).
                 catch(error => done.fail(error));
         });

@@ -32,14 +32,15 @@ const Identifier = require('../../lib/util/Identifier');
 const Util = require('util');
 const UserInterractor = require('../../lib/util/UserInteractor');
 
-const PRODUCT_NAME = '__impt_product';
-const DG_NAME = '__impt_device_group';
-const DG_NAME_2 = '__impt_device_group_2';
+const PRODUCT_NAME = '__impt_wh_product';
+const DG_NAME = '__impt_wh_device_group';
+const DG_NAME_2 = '__impt_wh_device_group_2';
 const WH_URL = 'http://example.com/wd/';
 
+// Test suite for 'impt webhook delete command.
+// Runs 'impt webhook delete' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
-    describe('impt webhook delete test suite >', () => {
-        let dg_id = null;
+    describe(`impt webhook delete test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         let wh_id = null;
 
         beforeAll((done) => {
@@ -67,21 +68,19 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         // prepare test environment for impt webhook delete test suite
         function _testSuiteInit() {
             return ImptTestHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
-                then(() => ImptTestHelper.runCommandEx(`impt dg create --name ${DG_NAME} -p ${PRODUCT_NAME} `, (commandOut) => {
-                    dg_id = ImptTestHelper.parseId(commandOut);
-                    ImptTestHelper.emptyCheckEx(commandOut);
-                })).
+                then(() => ImptTestHelper.runCommandEx(`impt dg create --name ${DG_NAME} -p ${PRODUCT_NAME} `, ImptTestHelper.emptyCheckEx)).
                 then(() => ImptTestHelper.runCommandEx(`impt webhook create --dg ${DG_NAME} --url ${WH_URL} --event deployment --mime json `, (commandOut) => {
                     wh_id = ImptTestHelper.parseId(commandOut);
-                    ImptTestHelper.emptyCheckEx(commandOut);
+                    if (!wh_id) fail("TestSuitInit error: Fail create webhook");
+                ImptTestHelper.emptyCheckEx(commandOut);
                 }));
         }
 
-        // _check 'webhook successfully deleted' output message 
+        // check 'webhook successfully deleted' output message 
         function _checkSuccessDeleteWebhookMessage(commandOut, webhookId) {
             ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
-                `${Identifier.ENTITY_TYPE.TYPE_WEBHOOK}\\s+` +
-                Util.format(`${UserInterractor.MESSAGES.ENTITY_DELETED}`, `"${webhookId}"`)
+                Util.format(`${UserInterractor.MESSAGES.ENTITY_DELETED}`,
+                    `${Identifier.ENTITY_TYPE.TYPE_WEBHOOK} "${webhookId}"`)
             );
         }
 

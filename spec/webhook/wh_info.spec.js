@@ -30,13 +30,14 @@ const ImptTestHelper = require('../ImptTestHelper');
 const MessageHelper = require('../MessageHelper');
 const Identifier = require('../../lib/util/Identifier');
 
-const PRODUCT_NAME = '__impt_product';
-const DG_NAME = '__impt_device_group';
+const PRODUCT_NAME = '__impt_wh_product';
+const DG_NAME = '__impt_wh_device_group';
 const WH_URL = 'http://example.com/wi/';
 
+// Test suite for 'impt webhook info command.
+// Runs 'impt webhook info' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
-    describe('impt webhook info test suite >', () => {
-
+    describe(`impt webhook info test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         let dg_id = null;
         let wh_id = null;
 
@@ -66,11 +67,13 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             return ImptTestHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
                 then(() => ImptTestHelper.runCommandEx(`impt dg create --name ${DG_NAME} -p ${PRODUCT_NAME} `, (commandOut) => {
                     dg_id = ImptTestHelper.parseId(commandOut);
+                    if (!dg_id) fail("TestSuitInit error: Fail create device group");
                     ImptTestHelper.emptyCheckEx(commandOut);
                 })).
                 then(() => ImptTestHelper.runCommandEx(`impt webhook create --dg ${DG_NAME} --url ${WH_URL} --event deployment --mime json `, (commandOut) => {
                     wh_id = ImptTestHelper.parseId(commandOut);
-                    ImptTestHelper.emptyCheckEx(commandOut);
+                    if (!wh_id) fail("TestSuitInit error: Fail create webhook");
+                ImptTestHelper.emptyCheckEx(commandOut);
                 }));
         }
 

@@ -30,13 +30,13 @@ const ImptTestHelper = require('../ImptTestHelper');
 const MessageHelper = require('../MessageHelper');
 const Shell = require('shelljs');
 
-const PRODUCT_NAME = '__impt_product';
-const DEVICE_GROUP_NAME = '__impt_device_group';
+const PRODUCT_NAME = '__impt_log_product';
+const DEVICE_GROUP_NAME = '__impt_log_device_group';
 
 // Test suite for 'impt log get' command.
 // Runs 'impt log get' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
-    describe('impt log get test suite >', () => {
+    describe(`impt log get test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         beforeAll((done) => {
             ImptTestHelper.init().
                 then(_testSuiteCleanUp).
@@ -156,7 +156,6 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         });
 
         describe('log get negative tests >', () => {
-
             it('log get by not exist project', (done) => {
                 ImptTestHelper.runCommandEx(`impt log get ${outputMode}`, (commandOut) => {
                     MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, MessageHelper.DEVICE);

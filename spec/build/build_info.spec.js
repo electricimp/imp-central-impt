@@ -34,12 +34,14 @@ const Identifier = require('../../lib/util/Identifier');
 const Util = require('util');
 const UserInterractor = require('../../lib/util/UserInteractor');
 
-const PRODUCT_NAME = '__impt_product';
-const DEVICE_GROUP_NAME = '__impt_device_group';
+const PRODUCT_NAME = '__impt_bld_product';
+const DEVICE_GROUP_NAME = '__impt_bld_device_group';
+
+const outputMode = '-z json';
 
 // Test suite for 'impt build info' command.
 // Runs 'impt build info' command with different combinations of options,
-describe('impt build info test suite >', () => {
+describe(`impt build info test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
     let product_id = null;
     let dg_id = null;
     let build_id = null;
@@ -64,17 +66,21 @@ describe('impt build info test suite >', () => {
     function _testSuiteInit() {
         return ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME}`, (commandOut) => {
             product_id = ImptTestHelper.parseId(commandOut);
+            if (!product_id) fail("TestSuitInit error: Fail create product");
             ImptTestHelper.emptyCheckEx(commandOut);
         }).
             then(() => ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
                 dg_id = ImptTestHelper.parseId(commandOut);
+                if (!dg_id) fail("TestSuitInit error: Fail create device group");
                 ImptTestHelper.emptyCheckEx(commandOut);
             })).
             then(() => Shell.cp('-Rf', `${__dirname}/fixtures/devicecode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER)).
             then(() => Shell.cp('-Rf', `${__dirname}/fixtures/agentcode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER)).
             then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP_NAME} -s build_descr -x devicecode.nut -y agentcode.nut -t build_tag -o build_origin`, (commandOut) => {
                 build_id = ImptTestHelper.parseId(commandOut);
+                if (!build_id) fail("TestSuiteInit error: Fail create build");
                 build_sha = ImptTestHelper.parseSha(commandOut);
+                if (!build_sha) fail("TestSuiteInit error: Fail parse build sha");
                 ImptTestHelper.emptyCheckEx(commandOut);
             }));
     }

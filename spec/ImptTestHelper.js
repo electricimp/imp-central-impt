@@ -194,19 +194,19 @@ class ImptTestHelper {
 
     // Checks if file exist in the TESTS_EXECUTION_FOLDER
     static checkFileExist(fileName) {
-        let files = Shell.find(`${TESTS_EXECUTION_FOLDER}/${fileName}`);
+        let files = Shell.find({ silent: true }, `${TESTS_EXECUTION_FOLDER}/${fileName}`);
         expect(files).toBeNonEmptyArray();
     }
 
     // Checks if file not exist in the TESTS_EXECUTION_FOLDER
     static checkFileNotExist(fileName) {
-        let files = Shell.find(`${TESTS_EXECUTION_FOLDER}/${fileName}`);
+        let files = Shell.find({ silent: true },`${TESTS_EXECUTION_FOLDER}/${fileName}`);
         expect(files.code).toBe(1);
     }
 
     static checkFileEqual(fileName, fileName2) {
-        let file = Shell.find(`${TESTS_EXECUTION_FOLDER}/${fileName}`);
-        let file2 = Shell.find(`${TESTS_EXECUTION_FOLDER}/${fileName2}`);
+        let file = Shell.find({ silent: true },`${TESTS_EXECUTION_FOLDER}/${fileName}`);
+        let file2 = Shell.find({ silent: true },`${TESTS_EXECUTION_FOLDER}/${fileName2}`);
         expect(file).toBeNonEmptyArray();
         expect(file2).toBeNonEmptyArray();
         file = Shell.cat(`${TESTS_EXECUTION_FOLDER}/${fileName}`);

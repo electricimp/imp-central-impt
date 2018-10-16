@@ -31,8 +31,8 @@ const FS = require('fs');
 const config = require('../config');
 const ImptTestHelper = require('../ImptTestHelper');
 
-const PRODUCT_NAME = '__impt_product';
-const DEVICE_GROUP_NAME = '__impt_device_group';
+const PRODUCT_NAME = '__impt_dg_product';
+const DEVICE_GROUP_NAME = '__impt_dg_device_group';
 const DEVICE_GROUP_DESCR = 'impt temp device group description';
 
 // Helper class for testing impt dg command group.
@@ -78,7 +78,6 @@ class ImptDgTestHelper {
             ImptTestHelper.checkSuccessStatusEx(commandOut);
         });
     }
-   
 }
 
 module.exports = ImptDgTestHelper;

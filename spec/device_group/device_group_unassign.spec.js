@@ -33,13 +33,13 @@ const Util = require('util');
 const MessageHelper = require('../MessageHelper');
 const ImptDgTestHelper = require('./ImptDgTestHelper');
 
-const PRODUCT_NAME = '__impt_product';
-const DEVICE_GROUP_NAME = '__impt_device_group';
+const PRODUCT_NAME = '__impt_dg_product';
+const DEVICE_GROUP_NAME = '__impt_dg_device_group';
 
 // Test suite for 'impt dg unassign' command.
 // Runs 'impt dg unassign' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
-    describe('impt device group unassign test suite >', () => {
+    describe(`impt device group unassign test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         let dg_id = null;
 
         beforeAll((done) => {
@@ -62,12 +62,13 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             return ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
                 then(() => ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
                     dg_id = ImptTestHelper.parseId(commandOut);
+                    if (!dg_id) fail("TestSuitInit error: Fail create device group");
                     ImptTestHelper.emptyCheckEx(commandOut);
                 }));
 
         }
 
-        // delete entities using in impt dg unassign test suite
+        // delete all entities using in impt dg unassign test suite
         function _testSuiteCleanUp() {
             return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx);
         }
@@ -144,7 +145,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         describe('project not exist preconditions >', () => {
             it('unassign device by not exist project', (done) => {
                 ImptTestHelper.runCommandEx(`impt dg unassign ${outputMode}`, (commandOut) => {
-                    MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, 'Device Group');
+                    MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, MessageHelper.DG);
                     ImptTestHelper.checkFailStatusEx(commandOut);
                 }).
                     then(done).
@@ -153,7 +154,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
             it('unassign device by not exist device group', (done) => {
                 ImptTestHelper.runCommandEx(`impt dg unassign -g not-exist-device-group ${outputMode}`, (commandOut) => {
-                    MessageHelper.checkEntityNotFoundError(commandOut, 'Device Group', 'not-exist-device-group');
+                    MessageHelper.checkEntityNotFoundError(commandOut, MessageHelper.DG, 'not-exist-device-group');
                     ImptTestHelper.checkFailStatusEx(commandOut);
                 }).
                     then(done).

@@ -33,14 +33,14 @@ const Identifier = require('../../lib/util/Identifier');
 const Util = require('util');
 const UserInterractor = require('../../lib/util/UserInteractor');
 
-const PRODUCT_NAME = '__impt_product';
-const DEVICE_GROUP_NAME = '__impt_device_group';
-const DEVICE_GROUP2_NAME = '__impt_device_group2';
+const PRODUCT_NAME = '__impt_log_product';
+const DEVICE_GROUP_NAME = '__impt_log_device_group';
+const DEVICE_GROUP2_NAME = '__impt_log_device_group_2';
 
 // Test suite for 'impt log stream' command.
 // Runs 'impt log stream' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
-    describe('impt log stream test suite >', () => {
+    describe(`impt log stream test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         beforeAll((done) => {
             ImptTestHelper.init().
                 then(_testSuiteCleanUp).
@@ -91,7 +91,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             );
         }
 
-        describe('log stream positive tests >', () => {
+        xdescribe('log stream positive tests >', () => {
             beforeAll((done) => {
                 ImptTestHelper.projectCreate(DEVICE_GROUP_NAME).
                     then(done).

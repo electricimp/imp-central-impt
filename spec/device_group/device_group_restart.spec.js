@@ -32,14 +32,14 @@ const UserInterractor = require('../../lib/util/UserInteractor');
 const Util = require('util');
 const MessageHelper = require('../MessageHelper');
 
-const PRODUCT_NAME = '__impt_product';
-const DEVICE_GROUP_NAME = '__impt_device_group';
+const PRODUCT_NAME = '__impt_dg_product';
+const DEVICE_GROUP_NAME = '__impt_dg_device_group';
 const DEVICE_GROUP_DESCR = 'impt temp device group description';
 
 // Test suite for 'impt dg restart' command.
 // Runs 'impt dg restart' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
-    describe('impt device group restart test suite >', () => {
+    describe(`impt device group restart test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         let dg_id = null;
 
         beforeAll((done) => {
@@ -62,6 +62,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             return ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
                 then(() => ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP_NAME} -s "${DEVICE_GROUP_DESCR}" -p ${PRODUCT_NAME}`, (commandOut) => {
                     dg_id = ImptTestHelper.parseId(commandOut);
+                    if (!dg_id) fail("TestSuitInit error: Fail create device group");
                     ImptTestHelper.emptyCheckEx(commandOut);
                 }));
         }
@@ -153,10 +154,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         });
 
         describe('device group create negative tests >', () => {
-
             it('restart device by not exist project', (done) => {
                 ImptTestHelper.runCommandEx(`impt dg restart ${outputMode}`, (commandOut) => {
-                    MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, 'Device Group');
+                    MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, MessageHelper.DG);
                     ImptTestHelper.checkFailStatusEx(commandOut);
                 }).
                     then(done).
@@ -165,7 +165,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
             it('restart device by not exist device group', (done) => {
                 ImptTestHelper.runCommandEx(`impt dg restart -g not-exist-device-group ${outputMode}`, (commandOut) => {
-                    MessageHelper.checkEntityNotFoundError(commandOut, 'Device Group', 'not-exist-device-group');
+                    MessageHelper.checkEntityNotFoundError(commandOut, MessageHelper.DG, 'not-exist-device-group');
                     ImptTestHelper.checkFailStatusEx(commandOut);
                 }).
                     then(done).

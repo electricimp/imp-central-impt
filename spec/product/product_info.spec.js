@@ -30,16 +30,14 @@ const ImptTestHelper = require('../ImptTestHelper');
 const MessageHelper = require('../MessageHelper');
 const Identifier = require('../../lib/util/Identifier');
 
-const PRODUCT_NAME = '__impt_product';
+const PRODUCT_NAME = '__impt_pr_product';
 const PRODUCT_DESCR = 'impt temp product description';
-
-const DG_NAME = '__impt_device_group';
+const DEVICE_GROUP_NAME = '__impt_pr_device_group';
 
 // Test suite for 'impt product info' command.
 // Runs 'impt product info' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
     describe(`impt product info test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
-        const outputMode = '';
         let product_id = null;
 
         beforeAll((done) => {
@@ -66,6 +64,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
         }
 
+        // delete all entities using in impt product info test suite
         function _testSuiteCleanUp() {
             return ImptTestHelper.runCommandEx(`impt product delete --product ${PRODUCT_NAME} --force --confirmed`, ImptTestHelper.emptyCheckEx);
         }
@@ -141,7 +140,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
             // create project for test purposes
             function _testSuiteProjectInit() {
-                return ImptTestHelper.runCommandEx(`impt project create --product ${PRODUCT_NAME} --name ${DG_NAME}`, ImptTestHelper.emptyCheckEx);
+                return ImptTestHelper.runCommandEx(`impt project create --product ${PRODUCT_NAME} --name ${DEVICE_GROUP_NAME}`, ImptTestHelper.emptyCheckEx);
             }
 
             it('product info by project', (done) => {

@@ -32,14 +32,14 @@ const Identifier = require('../../lib/util/Identifier');
 const UserInterractor = require('../../lib/util/UserInteractor');
 const Util = require('util');
 
-const PRODUCT_NAME = '__impt_product';
-const DEVICE_GROUP_NAME = '__impt_device_group';
-const DEVICE_NEW_NAME = '__impt_device';
+const PRODUCT_NAME = '__impt_dev_product';
+const DEVICE_GROUP_NAME = '__impt_dev_device_group';
+const DEVICE_NEW_NAME = '__impt_dev_device';
 
 // Test suite for 'impt device update' command.
 // Runs 'impt device update' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
-    describe('impt device update test suite >', () => {
+    describe(`impt device update test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         beforeAll((done) => {
             ImptTestHelper.init().
                 then(_testSuiteCleanUp).
@@ -62,13 +62,14 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 then(() => ImptTestHelper.deviceAssign(DEVICE_GROUP_NAME));
         }
 
-        // delete entities using in impt device update test suite
+        // delete all entities using in impt device update test suite
         function _testSuiteCleanUp() {
             return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx);
         }
+        
         // delete all entities using in impt device update test suite
         function _testCleanUp() {
-            return ImptTestHelper.runCommandEx(`impt device update -d ${config.devices[0]} --name ${config.devices[0]}`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommandEx(`impt device update -d ${config.devices[0]} --name ${config.devicenames[0]}`, ImptTestHelper.emptyCheckEx);
         }
 
         // check 'device successfully updated' output message 
@@ -116,8 +117,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('device update by device name', (done) => {
-                ImptTestHelper.runCommandEx(`impt device update --device ${config.devices[0]}  --name ${DEVICE_NEW_NAME} ${outputMode}`, (commandOut) => {
-                    _checkSuccessUpdatedDeviceMessage(commandOut, config.devices[0])
+                ImptTestHelper.runCommandEx(`impt device update --device ${config.devicenames[0]}  --name ${DEVICE_NEW_NAME} ${outputMode}`, (commandOut) => {
+                    _checkSuccessUpdatedDeviceMessage(commandOut, config.devicenames[0])
                     ImptTestHelper.checkSuccessStatusEx(commandOut);
                 }).
                     then(() => _checkDeviceInfo).
@@ -137,7 +138,6 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         });
 
         describe('impt device update negative tests >', () => {
-
             it('not exist device update', (done) => {
                 ImptTestHelper.runCommandEx(`impt device update -d not-exist-device -n ${DEVICE_NEW_NAME} ${outputMode}`, (commandOut) => {
                     MessageHelper.checkEntityNotFoundError(commandOut, MessageHelper.DEVICE, 'not-exist-device');

@@ -34,17 +34,16 @@ const UserInterractor = require('../../lib/util/UserInteractor');
 const Shell = require('shelljs');
 const ProjectHelper = require('./ImptProjectTestHelper');
 
-const PRODUCT_NAME = '__impt_product';
-const DG_NAME = '__impt_dg';
-
+const PRODUCT_NAME = '__impt_prj_product';
+const DG_NAME = '__impt_prj_device_group';
 const DG_DESCR = 'impt temp dg description';
 
 const DEFAULT_ENDPOINT = 'https://api.electricimp.com/v5';
+
 // Test suite for 'impt project link command.
 // Runs 'impt project link' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
     describe(`impt project link test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
-
         let product_id = null;
         let dg_id = null;
 
@@ -67,17 +66,21 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 catch(error => done.fail(error));
         }, ImptTestHelper.TIMEOUT);
 
+        // prepare test environment for impt project link test suite
         function _testSuiteInit() {
             return ImptTestHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME}`, (commandOut) => {
                 product_id = ImptTestHelper.parseId(commandOut);
+                if (!product_id) fail("TestSuitInit error: Fail create product");
                 ImptTestHelper.emptyCheckEx(commandOut);
             }).
                 then(() => ImptTestHelper.runCommandEx(`impt dg create --name ${DG_NAME} --descr "${DG_DESCR}" --product ${PRODUCT_NAME} ${outputMode}`, (commandOut) => {
                     dg_id = ImptTestHelper.parseId(commandOut);
+                    if (!dg_id) fail("TestSuitInit error: Fail create device group");
                     ImptTestHelper.emptyCheckEx(commandOut);
                 }));
         }
 
+         // delete all entities using in impt project link test suite
         function _testSuiteCleanUp() {
             return ImptTestHelper.runCommandEx(`impt project delete --files --confirmed`, (commandOut) => {
                 ImptTestHelper.emptyCheckEx(commandOut);
@@ -87,16 +90,16 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         // check successfuly created device source file output message 
         function _checkSuccessCreateDeviceSourceFileMessage(commandOut, fileName) {
             ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
-                `${UserInterractor.MESSAGES.PROJECT_DEVICE_SOURCE_FILE}\\s+` +
-                Util.format(`${UserInterractor.MESSAGES.ENTITY_CREATED}`, `"${fileName}"`)
+                Util.format(`${UserInterractor.MESSAGES.ENTITY_CREATED}`,
+                    `${UserInterractor.MESSAGES.PROJECT_DEVICE_SOURCE_FILE} "${fileName}"`)
             );
         }
 
         // check successfuly created agent source file output message 
         function _checkSuccessCreateAgentSourceFileMessage(commandOut, fileName) {
             ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
-                `${UserInterractor.MESSAGES.PROJECT_AGENT_SOURCE_FILE}\\s+` +
-                Util.format(`${UserInterractor.MESSAGES.ENTITY_CREATED}`, `"${fileName}"`)
+                Util.format(`${UserInterractor.MESSAGES.ENTITY_CREATED}`,
+                    `${UserInterractor.MESSAGES.PROJECT_AGENT_SOURCE_FILE} "${fileName}"`)
             );
         }
 
@@ -106,7 +109,6 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 `${UserInterractor.MESSAGES.PROJECT_LINKED}`
             );
         }
-
 
         it('project link to dg by id', (done) => {
             ImptTestHelper.runCommandEx(`impt project link --dg ${dg_id} --device-file dfile.nut ${outputMode}`, (commandOut) => {

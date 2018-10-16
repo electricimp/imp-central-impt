@@ -30,14 +30,14 @@ const ImptTestHelper = require('../ImptTestHelper');
 const lodash = require('lodash');
 const MessageHelper = require('../MessageHelper');
 
-const PRODUCT_NAME = '__impt_product';
-const DEVICE_GROUP_NAME = '__impt_device_group';
+const PRODUCT_NAME = '__impt_dg_product';
+const DEVICE_GROUP_NAME = '__impt_dg_device_group';
 const DEVICE_GROUP_DESCR = 'impt temp device group description';
 
 // Test suite for 'impt dg builds' command.
 // Runs 'impt dg builds' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
-    describe('impt device group builds test suite >', () => {
+    describe(`impt device group builds test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         let dg_id = null;
         let build_id = null;
         let build2_id = null;
@@ -100,11 +100,10 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             return ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
                 then(() => ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP_NAME} -s "${DEVICE_GROUP_DESCR}" -p ${PRODUCT_NAME}`, (commandOut) => {
                     dg_id = ImptTestHelper.parseId(commandOut);
+                    if (!dg_id) fail("TestSuitInit error: Fail create device group");
                     ImptTestHelper.emptyCheckEx(commandOut);
                 })).
                 then(() => ImptTestHelper.deviceAssign(DEVICE_GROUP_NAME));
-
-
         }
 
         // delete all entities using in impt dg builds test suite
@@ -115,14 +114,17 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         function _testInit() {
             return ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP_NAME} -f`, (commandOut) => {
                 build_id = ImptTestHelper.parseId(commandOut);
+                if (!build_id) fail("TestInit error: Fail create build");
                 ImptTestHelper.emptyCheckEx(commandOut);
             }).
                 then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP_NAME} -f`, (commandOut) => {
                     build2_id = ImptTestHelper.parseId(commandOut);
+                    if (!build2_id) fail("TestInit error: Fail create build");
                     ImptTestHelper.emptyCheckEx(commandOut);
                 })).
                 then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP_NAME}`, (commandOut) => {
                     build3_id = ImptTestHelper.parseId(commandOut);
+                    if (!build3_id) fail("TestInit error: Fail create build");
                     ImptTestHelper.emptyCheckEx(commandOut);
                 })).
                 then(() => ImptTestHelper.runCommandEx(`impt dg update -g ${DEVICE_GROUP_NAME} --min-supported-deployment  ${build2_id}`, (commandOut) => {
@@ -211,10 +213,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         });
 
         describe('device group builds negative tests >', () => {
-
             it('builds by not exist project', (done) => {
                 ImptTestHelper.runCommandEx(`impt dg builds ${outputMode}`, (commandOut) => {
-                    MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, 'Device Group');
+                    MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, MessageHelper.DG);
                     ImptTestHelper.checkFailStatusEx(commandOut);
                 }).
                     then(done).
@@ -223,7 +224,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
             it('builds by not exist device group', (done) => {
                 ImptTestHelper.runCommandEx(`impt dg builds -g not-exist-device-group ${outputMode}`, (commandOut) => {
-                    MessageHelper.checkEntityNotFoundError(commandOut, 'Device Group', 'not-exist-device-group');
+                    MessageHelper.checkEntityNotFoundError(commandOut, MessageHelper.DG, 'not-exist-device-group');
                     ImptTestHelper.checkFailStatusEx(commandOut);
                 }).
                     then(done).

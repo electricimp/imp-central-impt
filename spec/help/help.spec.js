@@ -28,8 +28,9 @@ require('jasmine-expect');
 
 const ImptTestHelper = require('../ImptTestHelper');
 const UserInterractor = require('../../lib/util/UserInteractor');
+const outputMode = '';
 
-describe('impt help pages test suite >', () => {
+describe(`impt help pages test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
     let tool = ['impt'];
     tool.impt = ['', 'auth', 'build', 'device', 'dg', 'log', 'loginkey', 'product', 'project', 'test', 'webhook'];
     tool.impt[''] = [''];

@@ -28,16 +28,13 @@ require('jasmine-expect');
 const config = require('../config');
 const ImptTestHelper = require('../ImptTestHelper');
 
-const PRODUCT_NAME = '__impt_product';
-const PRODUCT_NAME_2 = '__impt_product_2';
+const PRODUCT_NAME = '__impt_pr_product';
+const PRODUCT_NAME_2 = '__impt_pr_product_2';
 
 // Test suite for 'impt product list' command.
 // Runs 'impt product list' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
     describe(`impt product list test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
-        const outputMode = '';
-        let product_id = null;
-
         beforeAll((done) => {
             ImptTestHelper.init().
                 then(_testSuiteCleanUp).
@@ -53,11 +50,13 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 catch(error => done.fail(error));
         }, ImptTestHelper.TIMEOUT);
 
+        // prepare test environment for impt product list test
         function _testSuiteInit() {
             return ImptTestHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
                 then(() => ImptTestHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME_2}`, ImptTestHelper.emptyCheckEx));
         }
 
+        // delete all entities using in impt product list test suite
         function _testSuiteCleanUp() {
             return ImptTestHelper.runCommandEx(`impt product delete --product ${PRODUCT_NAME} --confirmed`, ImptTestHelper.emptyCheckEx).
                 then(() => ImptTestHelper.runCommandEx(`impt product delete --product ${PRODUCT_NAME_2} --confirmed`,

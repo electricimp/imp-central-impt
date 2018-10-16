@@ -32,14 +32,13 @@ const UserInterractor = require('../../lib/util/UserInteractor');
 const Util = require('util');
 const MessageHelper = require('../MessageHelper');
 
-const PRODUCT_NAME = '__impt_product';
-const DEVICE_GROUP_NAME = '__impt_device_group';
+const PRODUCT_NAME = '__impt_dev_product';
+const DEVICE_GROUP_NAME = '__impt_dev_device_group';
 
 // Test suite for 'impt device unassign' command.
 // Runs 'impt device unassign' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
-    describe('impt device unassign test suite >', () => {
-
+    describe(`impt device unassign test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         beforeAll((done) => {
             ImptTestHelper.init().
                 then(_testSuiteCleanUp).
@@ -61,7 +60,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 then(() => ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx));
         }
 
-        // delete entities using in impt device unassign test suite
+        // delete all entities using in impt device unassign test suite
         function _testSuiteCleanUp() {
             return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx);
         }
@@ -151,7 +150,6 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         });
 
         describe('device unassign positive tests >', () => {
-
             it('unassign not exist device', (done) => {
                 ImptTestHelper.runCommandEx(`impt device unassign -d not-exist-device ${outputMode}`, (commandOut) => {
                     MessageHelper.checkEntityNotFoundError(commandOut, MessageHelper.DEVICE, 'not-exist-device');

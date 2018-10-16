@@ -25,7 +25,6 @@
 'use strict';
 
 require('jasmine-expect');
-const config = require('../config');
 const ImptTestHelper = require('../ImptTestHelper');
 const MessageHelper = require('../MessageHelper');
 const Identifier = require('../../lib/util/Identifier');
@@ -33,9 +32,8 @@ const Util = require('util');
 const UserInterractor = require('../../lib/util/UserInteractor');
 const ProjectHelper = require('./ImptProjectTestHelper');
 
-const PRODUCT_NAME = '__impt_product';
-const DG_NAME = '__impt_dg';
-
+const PRODUCT_NAME = '__impt_prj_product';
+const DG_NAME = '__impt_prj_device_group';
 const DG_DESCR = 'impt temp dg description';
 
 // Test suite for 'impt project create command.
@@ -43,7 +41,6 @@ const DG_DESCR = 'impt temp dg description';
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
     describe(`impt project create test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         let product_id = null;
-        let dg_id = null;
 
         beforeAll((done) => {
             ImptTestHelper.init().
@@ -59,11 +56,13 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 catch(error => done.fail(error));
         }, ImptTestHelper.TIMEOUT);
 
+        // delete all entities using in impt project create test suite
         function _testSuiteCleanUp() {
             return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx).
                 then(() => ImptTestHelper.runCommandEx(`impt project delete --all --confirmed`, ImptTestHelper.emptyCheckEx));
         }
-
+        
+        // prepare test environment for impt project create test suite
         function _testSuiteInit() {
             return ImptTestHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME}`, (commandOut) => {
                 product_id = ImptTestHelper.parseId(commandOut);
@@ -180,7 +179,6 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         });
 
         describe('No exist product precondition >', () => {
-
             it('project create with not existing product', (done) => {
                 ImptTestHelper.runCommandEx(`impt project create --product not-exist-product --name ${DG_NAME} ${outputMode}`, (commandOut) => {
                     MessageHelper.checkEntityNotFoundError(commandOut, Identifier.ENTITY_TYPE.TYPE_PRODUCT, 'not-exist-product');

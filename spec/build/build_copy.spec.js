@@ -34,17 +34,17 @@ const Identifier = require('../../lib/util/Identifier');
 const Util = require('util');
 const UserInterractor = require('../../lib/util/UserInteractor');
 
-const PRODUCT_NAME = '__impt_product';
-const PRODUCT2_NAME = '__impt_product2';
-const DEVICE_GROUP_NAME = '__impt_device_group';
-const DEVICE_GROUP2_NAME = '__impt_device2_group';
+const PRODUCT_NAME = '__impt_bld_product';
+const PRODUCT2_NAME = '__impt_bld_product_2';
+const DEVICE_GROUP_NAME = '__impt_bld_device_group';
+const DEVICE_GROUP2_NAME = '__impt_bld_device_group_2';
 
 
 
 // Test suite for 'impt build copy' command.
 // Runs 'impt build copy' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
-    describe('impt build copy test suite >', () => {
+    describe(`impt build copy test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         let dg_id = null;
         let build_id = null;
         let build_sha = null;
@@ -111,7 +111,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 then(() => Shell.cp('-Rf', `${__dirname}/fixtures/devicecode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER)).
                 then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP_NAME} -x devicecode.nut -t build_tag -o build_origin`, (commandOut) => {
                     build_id = ImptTestHelper.parseId(commandOut);
+                    if (!build_id) fail("TestSuiteInit error: Fail create build");
                     build_sha = ImptTestHelper.parseSha(commandOut);
+                    if (!build_sha) fail("TestSuiteInit error: Fail parse build sha");
                     ImptTestHelper.emptyCheckEx(commandOut);
                 }));
         }
@@ -126,6 +128,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             return ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT2_NAME}`, ImptTestHelper.emptyCheckEx).
                 then(() => ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP2_NAME} -p ${PRODUCT2_NAME}`, (commandOut) => {
                     dg_id = ImptTestHelper.parseId(commandOut);
+                    if (!dg_id) fail("TestSuitInit error: Fail create device group");
                     ImptTestHelper.emptyCheckEx(commandOut);
                 }));
         }
@@ -268,7 +271,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
             it('build copy to not exist device group', (done) => {
                 ImptTestHelper.runCommandEx(`impt build copy -b ${build_id} -g not-exist-device-group ${outputMode}`, (commandOut) => {
-                    MessageHelper.checkEntityNotFoundError(commandOut, 'Device Group', 'not-exist-device-group');
+                    MessageHelper.checkEntityNotFoundError(commandOut, MessageHelper.DG, 'not-exist-device-group');
                     ImptTestHelper.checkFailStatusEx(commandOut);
                 }).
                     then(done).
@@ -277,7 +280,6 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         });
 
         describe('build copy negative tests >', () => {
-
             beforeEach((done) => {
                 _testInit().
                     then(done).

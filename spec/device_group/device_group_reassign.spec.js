@@ -33,15 +33,15 @@ const Util = require('util');
 const MessageHelper = require('../MessageHelper');
 const ImptDgTestHelper = require('./ImptDgTestHelper');
 
-const PRODUCT_NAME = '__impt_product';
-const PRODUCT_DST_NAME = '__impt_dst_product';
-const DEVICE_GROUP_NAME = '__impt_device_group';
-const DEVICE_GROUP_DST_NAME = '__impt_dst_device_group';
+const PRODUCT_NAME = '__impt_dg_product';
+const PRODUCT_DST_NAME = '__impt_dg_dst_product';
+const DEVICE_GROUP_NAME = '__impt_dg_device_group';
+const DEVICE_GROUP_DST_NAME = '__impt_dg_dst_device_group';
 
 // Test suite for 'impt dg reassign' command.
 // Runs 'impt dg reassign' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
-    describe('impt device group reassign test suite >', () => {
+    describe(`impt device group reassign test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         let dg_id = null;
         let dg_dst_id = null;
 
@@ -65,11 +65,13 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             return ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
                 then(() => ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
                     dg_id = ImptTestHelper.parseId(commandOut);
+                    if (!dg_id) fail("TestSuitInit error: Fail create device group");
                     ImptTestHelper.emptyCheckEx(commandOut);
                 })).
                 then(() => ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_DST_NAME}`, ImptTestHelper.emptyCheckEx)).
                 then(() => ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP_DST_NAME} -p ${PRODUCT_DST_NAME}`, (commandOut) => {
                     dg_dst_id = ImptTestHelper.parseId(commandOut);
+                    if (!dg_dst_id) fail("TestSuitInit error: Fail create device group");
                     ImptTestHelper.emptyCheckEx(commandOut);
                 }));
         }
@@ -166,7 +168,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         describe('device group reassign negative tests >', () => {
             it('reassign device to not exist project', (done) => {
                 ImptTestHelper.runCommandEx(`impt dg reassign --from ${DEVICE_GROUP_NAME} ${outputMode}`, (commandOut) => {
-                    MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, 'Device Group');
+                    MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, MessageHelper.DG);
                     ImptTestHelper.checkFailStatusEx(commandOut);
                 }).
                     then(done).
@@ -175,7 +177,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
             it('reassign device from not exist device group', (done) => {
                 ImptTestHelper.runCommandEx(`impt dg reassign --from not-exist-device-group --to ${DEVICE_GROUP_DST_NAME} ${outputMode}`, (commandOut) => {
-                    MessageHelper.checkEntityNotFoundError(commandOut, 'Device Group', 'not-exist-device-group');
+                    MessageHelper.checkEntityNotFoundError(commandOut, MessageHelper.DG, 'not-exist-device-group');
                     ImptTestHelper.checkFailStatusEx(commandOut);
                 }).
                     then(done).
@@ -184,7 +186,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
             it('reassign device to not exist device group', (done) => {
                 ImptTestHelper.runCommandEx(`impt dg reassign --to not-exist-device-group --from ${DEVICE_GROUP_NAME} ${outputMode}`, (commandOut) => {
-                    MessageHelper.checkEntityNotFoundError(commandOut, 'Device Group', 'not-exist-device-group');
+                    MessageHelper.checkEntityNotFoundError(commandOut, MessageHelper.DG, 'not-exist-device-group');
                     ImptTestHelper.checkFailStatusEx(commandOut);
                 }).
                     then(done).

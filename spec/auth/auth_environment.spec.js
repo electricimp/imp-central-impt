@@ -34,18 +34,17 @@ const Shell = require('shelljs');
 
 const DEFAULT_ENDPOINT = 'https://api.electricimp.com/v5';
 
-// Test suite for 'impt auth login --lk<loginkey>', 'impt auth logout', 'impt auth info' commands.
-// Runs impt auth commands with different combinations of options.
+// Test suite for 'impt auth info' command, using environment variables.
+// Runs impt auth info commands with different combinations of environment variables.
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
-    describe('impt auth using environment variables test suite >', () => {
-        const auth = `--user ${config.email} --pwd ${config.password}`;
+    describe(`impt auth using environment variables test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         const endpoint = config.apiEndpoint ? `${config.apiEndpoint}` : `${DEFAULT_ENDPOINT}`;
         let loginkey = null;
 
         beforeAll((done) => {
             ImptTestHelper.init(true).
                 then(_createLoginkey).
-                then(_copyAuthFile).
+                then(_prepAuthPath).
                 then(ImptAuthCommandsHelper.localLogout).
                 then(ImptAuthCommandsHelper.globalLogout).
                 then(done).
@@ -62,9 +61,10 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 catch(error => done.fail(error));
         }, ImptTestHelper.TIMEOUT);
 
-        function _copyAuthFile() {
+        function _prepAuthPath() {
             return new Promise((resolve, reject) => {
                 Shell.mkdir(`${ImptTestHelper.TESTS_EXECUTION_FOLDER}/Auth`);
+                Shell.mkdir(`${ImptTestHelper.TESTS_EXECUTION_FOLDER}/Empty`);
                 Shell.cp('-rf', `${ImptTestHelper.TESTS_EXECUTION_FOLDER}/.impt.auth`, `${ImptTestHelper.TESTS_EXECUTION_FOLDER}/Auth/.impt.auth`);
                 resolve();
             });
@@ -86,152 +86,205 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 ImptTestHelper.emptyCheckEx);
         }
 
-
-        function _checkLoginInfo(expectedInfo = {}) {
-            return ImptTestHelper.runCommandEx(`impt auth info`, (commandOut) => {
-                ImptTestHelper.checkAttributeEx(commandOut, 'endpoint', expectedInfo.epoint ? expectedInfo.epoint : endpoint);
-                ImptTestHelper.checkAttributeEx(commandOut, 'auto refresh', expectedInfo.refresh ? expectedInfo.refresh : 'true');
-                ImptTestHelper.checkAttributeEx(commandOut, 'Auth type', expectedInfo.auth ? expectedInfo.auth : 'Global Auth file');
-                ImptTestHelper.checkAttributeEx(commandOut, 'Email', expectedInfo.email ? expectedInfo.email : config.email);
-                if (config.username) ImptTestHelper.checkAttributeEx(commandOut, 'Username', config.username);
-                if (config.accountid) ImptTestHelper.checkAttributeEx(commandOut, 'Account id', config.accountid);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
-            });
+        function _checkLoginInfo(commandOut, expInfo = {}) {
+            ImptTestHelper.checkAttributeEx(commandOut, 'endpoint', expInfo.epoint ? expInfo.epoint : endpoint);
+            ImptTestHelper.checkAttributeEx(commandOut, 'auto refresh', expInfo.refresh ? expInfo.refresh : 'true');
+            ImptTestHelper.checkAttributeEx(commandOut, 'Auth type', expInfo.auth ? expInfo.auth : 'Global Auth file');
+            ImptTestHelper.checkAttributeEx(commandOut, 'Login method', expInfo.method ? expInfo.method : 'User/Password');
+            ImptTestHelper.checkAttributeEx(commandOut, 'Email', expInfo.email ? expInfo.email : config.email);
+            ImptTestHelper.checkAttributeEx(commandOut, 'Username', config.username);
+            ImptTestHelper.checkAttributeEx(commandOut, 'Account id', config.accountid);
         }
 
         describe('Tests with not auth preconditions >', () => {
-            afterEach((done) => {
-                ImptAuthCommandsHelper.globalLogout().
-                    then(ImptAuthCommandsHelper.localLogout).
-                    then(done).
-                    catch(error => done.fail(error));
-            }, ImptTestHelper.TIMEOUT);
-
-            it('test environment', (done) => {
+            it('Auth file path env info', (done) => {
                 ImptTestHelper.runCommandEx(`impt auth info ${outputMode}`,
-                    ImptTestHelper.checkSuccessStatusEx, { 'IMPT_AUTH_FILE_PATH': `${ImptTestHelper.TESTS_EXECUTION_FOLDER}/Auth` }).
-                    //then(_checkLoginInfo).
-                    //then(() => ImptAuthCommandsHelper.deleteEnvVariable('IMPT_USER')).
-                    //then(() => ImptAuthCommandsHelper.deleteEnvVariable('IMPT_PASSWORD')).
-                    then(done).
-                    catch(error => done.fail(error));
-            });
-
-            it('test environment', (done) => {
-                ImptTestHelper.runCommandEx(`impt auth info ${outputMode}`,
-                    ImptTestHelper.checkSuccessStatusEx, { 'IMPT_USER': config.username, 'IMPT_PASSWORD': config.password }).
-                    //then(_checkLoginInfo).
-                    //then(() => ImptAuthCommandsHelper.deleteEnvVariable('IMPT_USER')).
-                    //then(() => ImptAuthCommandsHelper.deleteEnvVariable('IMPT_PASSWORD')).
-                    then(done).
-                    catch(error => done.fail(error));
-            });
-
-            it('test environment', (done) => {
-                ImptTestHelper.runCommandEx(`impt auth info ${outputMode}`,
-                    ImptTestHelper.checkSuccessStatusEx, { 'IMPT_LOGINKEY': loginkey }).
-                    //then(_checkLoginInfo).
-                    //then(() => ImptAuthCommandsHelper.deleteEnvVariable('IMPT_USER')).
-                    //then(() => ImptAuthCommandsHelper.deleteEnvVariable('IMPT_PASSWORD')).
-                    then(done).
-                    catch(error => done.fail(error));
-            });
-
-            xit('clear loginkeys', (done) => {
-                let ids = null;
-                ImptTestHelper.runCommandEx(`impt loginkey list`,
                     (commandOut) => {
-                        ids = commandOut.output.match(new RegExp(/[0-9a-z]{16}/g));
+                        _checkLoginInfo(commandOut, { auth: `Auth file path:` });
+                        ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    }, { 'IMPT_AUTH_FILE_PATH': `${ImptTestHelper.TESTS_EXECUTION_FOLDER}/Auth` }).
+                    then(done).
+                    catch(error => done.fail(error));
+            });
 
+            it('Auth file path with loginkey env info', (done) => {
+                ImptTestHelper.runCommandEx(`impt auth info ${outputMode}`,
+                    (commandOut) => {
+                        _checkLoginInfo(commandOut, { auth: `Auth file path:` });
+                        ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    }, { 'IMPT_AUTH_FILE_PATH': `${ImptTestHelper.TESTS_EXECUTION_FOLDER}/Auth`, 'IMPT_LOGINKEY': loginkey }).
+                    then(done).
+                    catch(error => done.fail(error));
+            });
+
+            it('Auth file path with user env info', (done) => {
+                ImptTestHelper.runCommandEx(`impt auth info ${outputMode}`,
+                    (commandOut) => {
+                        ImptTestHelper.checkSuccessStatusEx(commandOut);
+                        _checkLoginInfo(commandOut, { auth: `Auth file path:` });
+                        ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    }, { 'IMPT_AUTH_FILE_PATH': `${ImptTestHelper.TESTS_EXECUTION_FOLDER}/Auth`, 'IMPT_USER': config.username }).
+                    then(done).
+                    catch(error => done.fail(error));
+            });
+
+            it('Auth loginkey env info', (done) => {
+                ImptTestHelper.runCommandEx(`impt auth info ${outputMode}`,
+                    (commandOut) => {
+                        _checkLoginInfo(commandOut, { auth: 'Environment variables', method: 'Login Key' });
+                        ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    }, { 'IMPT_LOGINKEY': loginkey }).
+                    then(done).
+                    catch(error => done.fail(error));
+            });
+
+            it('Auth loginkey with endpoint env info', (done) => {
+                ImptTestHelper.runCommandEx(`impt auth info ${outputMode}`,
+                    (commandOut) => {
+                        _checkLoginInfo(commandOut, { auth: 'Environment variables', method: 'Login Key' });
+                        ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    }, { 'IMPT_LOGINKEY': loginkey, 'IMPT_ENDPOINT': endpoint }).
+                    then(done).
+                    catch(error => done.fail(error));
+            });
+
+            it('Auth loginkey with user env info', (done) => {
+                ImptTestHelper.runCommandEx(`impt auth info ${outputMode}`,
+                    (commandOut) => {
+                        _checkLoginInfo(commandOut, { auth: 'Environment variables', method: 'Login Key' });
+                        ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    }, { 'IMPT_LOGINKEY': loginkey, 'IMPT_USER': config.username }).
+                    then(done).
+                    catch(error => done.fail(error));
+            });
+
+            it('Auth user pass env info', (done) => {
+                ImptTestHelper.runCommandEx(`impt auth info ${outputMode}`,
+                    (commandOut) => {
+                        _checkLoginInfo(commandOut, { auth: 'Environment variables' });
+                        ImptTestHelper.checkSuccessStatusEx(commandOut);
                     }, { 'IMPT_USER': config.username, 'IMPT_PASSWORD': config.password }).
-                    then(() => ids.forEach((key) => ImptTestHelper.runCommandEx(`impt loginkey delete --lk ${key} --pwd ${config.password} -q`,
-                        ImptTestHelper.emptyCheckEx))).
+                    then(done).
+                    catch(error => done.fail(error));
+            });
+
+            it('Auth user pass with endpoint env info', (done) => {
+                ImptTestHelper.runCommandEx(`impt auth info ${outputMode}`,
+                    (commandOut) => {
+                        _checkLoginInfo(commandOut, { auth: 'Environment variables' });
+                        ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    }, { 'IMPT_USER': config.username, 'IMPT_PASSWORD': config.password, 'IMPT_ENDPOINT': endpoint }).
+                    then(done).
+                    catch(error => done.fail(error));
+            });
+
+            it('Auth user without password env info', (done) => {
+                ImptTestHelper.runCommandEx(`impt auth info ${outputMode}`,
+                    (commandOut) => {
+                        ImptTestHelper.checkFailStatusEx(commandOut);
+                    }, { 'IMPT_USER': config.username }).
                     then(done).
                     catch(error => done.fail(error));
             });
         });
 
         describe('Tests with global auth preconditions >', () => {
-            beforeEach((done) => {
+            beforeAll((done) => {
                 ImptAuthCommandsHelper.globalLogin().
-                    then(ImptAuthCommandsHelper.localLogout).
                     then(done).
                     catch(error => done.fail(error));
             }, ImptTestHelper.TIMEOUT);
 
-            afterEach((done) => {
+            afterAll((done) => {
                 ImptAuthCommandsHelper.globalLogout().
-                    then(ImptAuthCommandsHelper.localLogout).
-                    then(done).
-                    catch(error => done.fail(error));
-            }, ImptTestHelper.TIMEOUT);
-        });
-
-        describe('Tests with global auth by loginkey preconditions >', () => {
-            beforeEach((done) => {
-                ImptAuthCommandsHelper.globalLoginByLoginkey(loginkey).
-                    then(ImptAuthCommandsHelper.localLogout).
                     then(done).
                     catch(error => done.fail(error));
             }, ImptTestHelper.TIMEOUT);
 
-            afterEach((done) => {
-                ImptAuthCommandsHelper.globalLogout().
-                    then(ImptAuthCommandsHelper.localLogout).
+            it('Auth file path env and global auth info', (done) => {
+                ImptTestHelper.runCommandEx(`impt auth info ${outputMode}`,
+                    (commandOut) => {
+                        _checkLoginInfo(commandOut, { auth: `Auth file path:` });
+                        ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    }, { 'IMPT_AUTH_FILE_PATH': `${ImptTestHelper.TESTS_EXECUTION_FOLDER}/Auth` }).
                     then(done).
                     catch(error => done.fail(error));
-            }, ImptTestHelper.TIMEOUT);
-        });
+            });
 
-        describe('Tests with login auth by loginkey preconditions >', () => {
-            beforeEach((done) => {
-                ImptAuthCommandsHelper.localLoginByLoginkey(loginkey).
-                    then(ImptAuthCommandsHelper.globalLogout).
+            it('Auth loginkey env and global auth info', (done) => {
+                ImptTestHelper.runCommandEx(`impt auth info ${outputMode}`,
+                    (commandOut) => {
+                        _checkLoginInfo(commandOut, { auth: 'Environment variables', method: 'Login Key' });
+                        ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    }, { 'IMPT_LOGINKEY': loginkey }).
                     then(done).
                     catch(error => done.fail(error));
-            }, ImptTestHelper.TIMEOUT);
+            });
 
-            afterEach((done) => {
-                ImptAuthCommandsHelper.globalLogout().
-                    then(ImptAuthCommandsHelper.localLogout).
+            it('Auth user pass env and global auth info', (done) => {
+                ImptTestHelper.runCommandEx(`impt auth info ${outputMode}`,
+                    (commandOut) => {
+                        _checkLoginInfo(commandOut, { auth: 'Environment variables' });
+                        ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    }, { 'IMPT_USER': config.username, 'IMPT_PASSWORD': config.password }).
                     then(done).
                     catch(error => done.fail(error));
-            }, ImptTestHelper.TIMEOUT);
-        });
+            });
 
-        describe('Tests with global temp loginkey auth preconditions >', () => {
-            beforeAll((done) => {
-                ImptTestHelper.runCommandEx(`impt auth login --lk ${loginkey} -t -q`, ImptTestHelper.emptyCheckEx).
-                    then(ImptAuthCommandsHelper.localLogout).
-                    then(done).
-                    catch(error => done.fail(error));
-            }, ImptTestHelper.TIMEOUT);
-
-
-        });
-
-        describe('Tests with global loginkey auth and endpoint preconditions >', () => {
-            beforeAll((done) => {
-                ImptTestHelper.runCommandEx(`impt auth login --lk ${loginkey}  -e ${endpoint} -q`, ImptTestHelper.emptyCheckEx).
-                    then(ImptAuthCommandsHelper.localLogout).
-                    then(done).
-                    catch(error => done.fail(error));
-            }, ImptTestHelper.TIMEOUT);
-
-            xit('check global endpoint loginkey auth info ', (done) => {
-                ImptTestHelper.runCommandEx(`impt auth info`, (commandOut) => {
-                    ImptTestHelper.checkAttributeEx(commandOut, 'endpoint', endpoint);
-                    ImptTestHelper.checkAttributeEx(commandOut, 'auto refresh', 'true');
-                    ImptTestHelper.checkAttributeEx(commandOut, 'Auth type', 'Global Auth file');
-                    ImptTestHelper.checkAttributeEx(commandOut, 'Login method', 'Login Key');
-                    ImptTestHelper.checkAttributeEx(commandOut, 'Email', config.email);
-                    if (config.username) ImptTestHelper.checkAttributeEx(commandOut, 'Username', config.username);
-                    if (config.accountid) ImptTestHelper.checkAttributeEx(commandOut, 'Account id', config.accountid);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
-                }).
+            it('Auth pass env and global auth info', (done) => {
+                ImptTestHelper.runCommandEx(`impt auth info ${outputMode}`,
+                    (commandOut) => {
+                        _checkLoginInfo(commandOut);
+                        ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    }, { 'IMPT_PASSWORD': config.password }).
                     then(done).
                     catch(error => done.fail(error));
             });
         });
+
+        describe('Tests with local auth preconditions >', () => {
+            beforeAll((done) => {
+                ImptAuthCommandsHelper.localLogin().
+                    then(done).
+                    catch(error => done.fail(error));
+            }, ImptTestHelper.TIMEOUT);
+
+            afterAll((done) => {
+                ImptAuthCommandsHelper.localLogout().
+                    then(done).
+                    catch(error => done.fail(error));
+            }, ImptTestHelper.TIMEOUT);
+
+            it('Auth file path env and local auth info', (done) => {
+                ImptTestHelper.runCommandEx(`impt auth info ${outputMode}`,
+                    (commandOut) => {
+                        _checkLoginInfo(commandOut, { auth: `Local Auth file` });
+                        ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    }, { 'IMPT_AUTH_FILE_PATH': `${ImptTestHelper.TESTS_EXECUTION_FOLDER}/Auth` }).
+                    then(done).
+                    catch(error => done.fail(error));
+            });
+
+            it('Auth loginkey env and local auth info', (done) => {
+                ImptTestHelper.runCommandEx(`impt auth info ${outputMode}`,
+                    (commandOut) => {
+                        _checkLoginInfo(commandOut, { auth: 'Local Auth file' });
+                        ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    }, { 'IMPT_LOGINKEY': loginkey }).
+                    then(done).
+                    catch(error => done.fail(error));
+            });
+
+            it('Auth user env and local auth info', (done) => {
+                ImptTestHelper.runCommandEx(`impt auth info ${outputMode}`,
+                    (commandOut) => {
+                        _checkLoginInfo(commandOut, { auth: 'Local Auth file' });
+                        ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    }, { 'IMPT_USER': config.username, 'IMPT_PASSWORD': config.password }).
+                    then(done).
+                    catch(error => done.fail(error));
+            });
+        });
+
     });
 });

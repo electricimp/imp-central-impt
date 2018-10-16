@@ -34,12 +34,12 @@ const UserInterractor = require('../../lib/util/UserInteractor');
 const Shell = require('shelljs');
 const ProjectHelper = require('./ImptProjectTestHelper');
 
-const PRODUCT_NAME = '__impt_product';
-const DG_NAME = '__impt_dg';
-
+const PRODUCT_NAME = '__impt_prj_product';
+const DG_NAME = '__impt_prj_device_group';
 const DG_DESCR = 'impt temp dg description';
 
 const DEFAULT_ENDPOINT = 'https://api.electricimp.com/v5';
+
 // Test suite for 'impt project create command.
 // Runs 'impt project create' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
@@ -61,28 +61,29 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 catch(error => done.fail(error));
         }, ImptTestHelper.TIMEOUT);
 
+         // delete all entities using in impt project info test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -q`, (commandOut) => ImptTestHelper.emptyCheckEx).
-            then(() => ImptTestHelper.runCommandEx(`impt project delete --all -q`, ImptTestHelper.emptyCheckEx));
+            return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx).
+                then(() => ImptTestHelper.runCommandEx(`impt project delete --all -q`, ImptTestHelper.emptyCheckEx));
         }
 
         describe('project exist preconditions >', () => {
-            let product_id = null;
-            let dg_id = null;
-
             beforeAll((done) => {
                 _testSuiteInit().
                     then(done).
                     catch(error => done.fail(error));
             }, ImptTestHelper.TIMEOUT);
 
+            // prepare test environment for impt project info test
             function _testSuiteInit() {
                 return ImptTestHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME}`, (commandOut) => {
                     product_id = ImptTestHelper.parseId(commandOut);
+                    if (!product_id) fail("TestSuitInit error: Fail create product");
                     ImptTestHelper.emptyCheckEx(commandOut);
                 }).
                     then(() => ImptTestHelper.runCommandEx(`impt dg create --name ${DG_NAME} --descr "${DG_DESCR}" --product ${PRODUCT_NAME} ${outputMode}`, (commandOut) => {
                         dg_id = ImptTestHelper.parseId(commandOut);
+                        if (!dg_id) fail("TestSuitInit error: Fail create device group");
                         ImptTestHelper.emptyCheckEx(commandOut);
                     })).
                     then(() => ImptTestHelper.runCommandEx(`impt project link --dg ${DG_NAME} ${outputMode}`, (commandOut) => {
@@ -154,7 +155,6 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             describe('project not exist preconditions with restore >', () => {
                 afterEach((done) => {
                     _testSuiteCleanUp().
-                        then(ImptTestHelper.cleanUp).
                         then(done).
                         catch(error => done.fail(error));
                 }, ImptTestHelper.TIMEOUT);

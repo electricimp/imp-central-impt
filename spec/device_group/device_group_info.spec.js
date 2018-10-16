@@ -29,12 +29,14 @@ const config = require('../config');
 const ImptTestHelper = require('../ImptTestHelper');
 const MessageHelper = require('../MessageHelper');
 
-const PRODUCT_NAME = '__impt_product';
-const DEVICE_GROUP_NAME = '__impt_device_group';
+const PRODUCT_NAME = '__impt_dg_product';
+const DEVICE_GROUP_NAME = '__impt_dg_device_group';
+
+const outputMode = '-z json';
 
 // Test suite for 'impt dg info' command.
 // Runs 'impt dg info' command with different combinations of options,
-describe('impt device group info test suite >', () => {
+describe(`impt device group info test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
     let dg_id = null;
     let product_id = null;
 
@@ -56,10 +58,12 @@ describe('impt device group info test suite >', () => {
     function _testSuiteInit() {
         return ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME}`, (commandOut) => {
             product_id = ImptTestHelper.parseId(commandOut);
+            if (!product_id) fail("TestSuitInit error: Fail create product");
             ImptTestHelper.emptyCheckEx(commandOut);
         }).
             then(() => ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
                 dg_id = ImptTestHelper.parseId(commandOut);
+                if (!dg_id) fail("TestSuitInit error: Fail create device group");
                 ImptTestHelper.emptyCheckEx(commandOut);
             })).
             then(() => ImptTestHelper.runCommandEx(`impt device assign -d ${config.devices[0]} -g ${DEVICE_GROUP_NAME} -q`, ImptTestHelper.emptyCheckEx)).
@@ -72,20 +76,20 @@ describe('impt device group info test suite >', () => {
     }
 
     // check base atributes of requested device group
-    function _checkDeviceGroupInfo(commandOut, expInfo) {
+    function _checkDeviceGroupInfo(commandOut, expInfo = {}) {
         const json = JSON.parse(commandOut.output);
         expect(json['Device Group']).toBeDefined();
-        expect(json['Device Group'].id).toBe(expInfo && expInfo.id ? expInfo.id : dg_id);
-        expect(json['Device Group'].name).toBe(expInfo && expInfo.name ? expInfo.name : DEVICE_GROUP_NAME);
+        expect(json['Device Group'].id).toBe(expInfo.id ? expInfo.id : dg_id);
+        expect(json['Device Group'].name).toBe(expInfo.name ? expInfo.name : DEVICE_GROUP_NAME);
         expect(json['Device Group'].type).toBe('development');
-        expect(json['Device Group'].Product.id).toBe(expInfo && expInfo.p_id ? expInfo.p_id : product_id);
-        expect(json['Device Group'].Product.name).toBe(expInfo && expInfo.p_name ? expInfo.p_name : PRODUCT_NAME);
+        expect(json['Device Group'].Product.id).toBe(expInfo.p_id ? expInfo.p_id : product_id);
+        expect(json['Device Group'].Product.name).toBe(expInfo.p_name ? expInfo.p_name : PRODUCT_NAME);
     }
 
     // check additional atributes of requested device group
-    function _checkDeviceGroupAdditionalInfo(commandOut, expInfo) {
+    function _checkDeviceGroupAdditionalInfo(commandOut, expInfo = {}) {
         const json = JSON.parse(commandOut.output);
-        expect(json['Device Group'].Devices[0].Device.id).toBe(expInfo && expInfo.dev_id ? expInfo.dev_id : config.devices[0]);
+        expect(json['Device Group'].Devices[0].Device.id).toBe(expInfo.dev_id ? expInfo.dev_id : config.devices[0]);
     }
 
     describe('device group info positive tests >', () => {
@@ -135,7 +139,7 @@ describe('impt device group info test suite >', () => {
     describe('device group delete negative tests  >', () => {
         it('device group info by not exist project', (done) => {
             ImptTestHelper.runCommandEx(`impt dg info`, (commandOut) => {
-                MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, 'Device Group');
+                MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, MessageHelper.DG);
                 ImptTestHelper.checkFailStatusEx(commandOut);
             }).
                 then(done).
@@ -144,7 +148,7 @@ describe('impt device group info test suite >', () => {
 
         it('not exist device group info', (done) => {
             ImptTestHelper.runCommandEx(`impt dg info --dg not-exist-device-group --full`, (commandOut) => {
-                MessageHelper.checkEntityNotFoundError(commandOut, 'Device Group', 'not-exist-device-group');
+                MessageHelper.checkEntityNotFoundError(commandOut, MessageHelper.DG, 'not-exist-device-group');
                 ImptTestHelper.checkFailStatusEx(commandOut);
             }).
                 then(done).

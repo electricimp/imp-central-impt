@@ -32,14 +32,13 @@ const Identifier = require('../../lib/util/Identifier');
 const Util = require('util');
 const UserInterractor = require('../../lib/util/UserInteractor');
 
-const PRODUCT_NAME = '__impt_product';
-const DEVICE_GROUP_NAME = '__impt_device_group';
+const PRODUCT_NAME = '__impt_dev_product';
+const DEVICE_GROUP_NAME = '__impt_dev_device_group';
 
 // Test suite for 'impt device remove' command.
 // Runs 'impt device remove' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
-    xdescribe('impt device remove test suite >', () => {
-
+    xdescribe(`impt device remove test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         beforeAll((done) => {
             ImptTestHelper.init().
                 then(_testSuiteCleanUp).

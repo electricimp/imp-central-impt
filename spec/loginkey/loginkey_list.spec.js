@@ -28,94 +28,90 @@ require('jasmine-expect');
 const config = require('../config');
 const ImptTestHelper = require('../ImptTestHelper');
 const lodash = require('lodash');
-const Identifier = require('../../lib/util/Identifier');
-const UserInterractor = require('../../lib/util/UserInteractor');
-const Util = require('util');
-const MessageHelper = require('../MessageHelper');
 
 const LOGINKEY_DESCR = 'impt temp loginkey description';
 
+const outputMode = '-z json';
+
 // Test suite for 'impt loginkey list' command.
 // Runs 'impt loginkey list' command with different combinations of options,
-ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
-    describe(`impt loginkey list test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
-        let loginkey_id = null;
-        let loginkey_id_2 = null;
+describe(`impt loginkey list test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
+    let loginkey_id = null;
+    let loginkey2_id = null;
 
-        // custom matcher for search Loginkey with expected properties in Loginkey array
-        let customMatcher = {
-            toContainLoginkey: function (util, customEqualityTesters) {
-                return {
-                    compare: function (LoginKeyArray, expected) {
-                        let result = {};
-                        if (expected === undefined) expected = {};
-                        lodash.map(LoginKeyArray, function (LoginKeyItem) {
-                            lodash.map(LoginKeyItem, function (LoginKeyProperties) {
-                                let compareFlag = true;
-                                lodash.map(LoginKeyProperties, function (value, key) {
-                                    compareFlag = compareFlag && (expected[key] === undefined ? true : util.equals(value, expected[key], customEqualityTesters));
-                                });
-                                // all properties matched
-                                if (compareFlag) result.pass = true;
+    // custom matcher for search Loginkey with expected properties in Loginkey array
+    let customMatcher = {
+        toContainLoginkey: function (util, customEqualityTesters) {
+            return {
+                compare: function (LoginKeyArray, expected) {
+                    let result = {};
+                    if (expected === undefined) expected = {};
+                    lodash.map(LoginKeyArray, function (LoginKeyItem) {
+                        lodash.map(LoginKeyItem, function (LoginKeyProperties) {
+                            let compareFlag = true;
+                            lodash.map(LoginKeyProperties, function (value, key) {
+                                compareFlag = compareFlag && (expected[key] === undefined ? true : util.equals(value, expected[key], customEqualityTesters));
                             });
+                            // all properties matched
+                            if (compareFlag) result.pass = true;
                         });
-                        return result;
-                    }
-                };
-            }
-        };
-
-        beforeAll((done) => {
-            ImptTestHelper.init().
-                then(_testSuiteInit).
-                then(() => jasmine.addMatchers(customMatcher)).
-                then(done).
-                catch(error => done.fail(error));
-        }, ImptTestHelper.TIMEOUT);
-
-        afterAll((done) => {
-            _testSuiteCleanUp().
-                then(ImptTestHelper.cleanUp).
-                then(done).
-                catch(error => done.fail(error));
-        }, ImptTestHelper.TIMEOUT);
-
-        // delete all entities using in impt loginkey list test suite
-        function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommandEx(`impt loginkey delete --lk ${loginkey_id} --pwd ${config.password} --confirmed`, ImptTestHelper.emptyCheckEx).
-                then(() => ImptTestHelper.runCommandEx(`impt loginkey delete --lk ${loginkey_id_2} --pwd ${config.password} --confirmed`, ImptTestHelper.emptyCheckEx));
+                    });
+                    return result;
+                }
+            };
         }
+    };
 
-        // prepare test environment for impt loginkey list test suite
-        function _testSuiteInit() {
-            return ImptTestHelper.runCommandEx(`impt loginkey create --pwd ${config.password} --descr "${LOGINKEY_DESCR}" ${outputMode}`, (commandOut) => {
-                loginkey_id = ImptTestHelper.parseId(commandOut);
-                if (!loginkey_id) fail("TestSuitInit error: Fail create loginkey");
+    beforeAll((done) => {
+        ImptTestHelper.init().
+            then(_testSuiteInit).
+            then(() => jasmine.addMatchers(customMatcher)).
+            then(done).
+            catch(error => done.fail(error));
+    }, ImptTestHelper.TIMEOUT);
+
+    afterAll((done) => {
+        _testSuiteCleanUp().
+            then(ImptTestHelper.cleanUp).
+            then(done).
+            catch(error => done.fail(error));
+    }, ImptTestHelper.TIMEOUT);
+
+    // delete all entities using in impt loginkey list test suite
+    function _testSuiteCleanUp() {
+        return ImptTestHelper.runCommandEx(`impt loginkey delete --lk ${loginkey_id} --pwd ${config.password} --confirmed`, ImptTestHelper.emptyCheckEx).
+            then(() => ImptTestHelper.runCommandEx(`impt loginkey delete --lk ${loginkey2_id} --pwd ${config.password} --confirmed`, ImptTestHelper.emptyCheckEx));
+    }
+
+    // prepare test environment for impt loginkey list test suite
+    function _testSuiteInit() {
+        return ImptTestHelper.runCommandEx(`impt loginkey create --pwd ${config.password} --descr "${LOGINKEY_DESCR}"`, (commandOut) => {
+            loginkey_id = ImptTestHelper.parseId(commandOut);
+            if (!loginkey_id) fail("TestSuitInit error: Fail create loginkey");
+            ImptTestHelper.emptyCheckEx(commandOut);
+        }).
+            then(() => ImptTestHelper.runCommandEx(`impt loginkey create --pwd ${config.password}`, (commandOut) => {
+                loginkey2_id = ImptTestHelper.parseId(commandOut);
+                if (!loginkey2_id) fail("TestSuitInit error: Fail create loginkey");
                 ImptTestHelper.emptyCheckEx(commandOut);
-            }).
-                then(() => ImptTestHelper.runCommandEx(`impt loginkey create --pwd ${config.password} ${outputMode}`, (commandOut) => {
-                    loginkey_id_2 = ImptTestHelper.parseId(commandOut);
-                    if (!loginkey_id_2) fail("TestSuitInit error: Fail create loginkey");
-                    ImptTestHelper.emptyCheckEx(commandOut);
-                }));
-        }
+            }));
+    }
 
-        // check loginkey exist in loginkey list
-        function _checkLoginkeyExist(commandOut, expectInfo) {
-            const json = JSON.parse(commandOut.output);
-            expect(json).toBeArrayOfObjects;
-            expect(json).toContainLoginkey(expectInfo);
-        }
+    // check loginkey exist in loginkey list
+    function _checkLoginkeyExist(commandOut, expectInfo) {
+        const json = JSON.parse(commandOut.output);
+        expect(json).toBeArrayOfObjects;
+        expect(json).toContainLoginkey(expectInfo);
+    }
 
-        it('loginkey list', (done) => {
-            ImptTestHelper.runCommandEx(`impt loginkey list -z json`, (commandOut) => {
-                _checkLoginkeyExist(commandOut);
-                _checkLoginkeyExist(commandOut, { id: loginkey_id, description: LOGINKEY_DESCR });
-                _checkLoginkeyExist(commandOut, { id: loginkey_id_2 });
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
-            }).
-                then(done).
-                catch(error => done.fail(error));
-        });
+    it('loginkey list', (done) => {
+        ImptTestHelper.runCommandEx(`impt loginkey list -z json`, (commandOut) => {
+            _checkLoginkeyExist(commandOut);
+            _checkLoginkeyExist(commandOut, { id: loginkey_id, description: LOGINKEY_DESCR });
+            _checkLoginkeyExist(commandOut, { id: loginkey2_id });
+            ImptTestHelper.checkSuccessStatusEx(commandOut);
+        }).
+            then(done).
+            catch(error => done.fail(error));
     });
 });

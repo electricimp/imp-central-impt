@@ -34,9 +34,8 @@ const UserInterractor = require('../../lib/util/UserInteractor');
 const Shell = require('shelljs');
 const ProjectHelper = require('./ImptProjectTestHelper');
 
-const PRODUCT_NAME = '__impt_product';
-const DG_NAME = '__impt_dg';
-
+const PRODUCT_NAME = '__impt_prj_product';
+const DG_NAME = '__impt_prj_device_group';
 const DG_DESCR = 'impt temp dg description';
 
 // Test suite for 'impt project delete command.
@@ -56,6 +55,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 catch(error => done.fail(error));
         }, ImptTestHelper.TIMEOUT);
 
+         // delete all entities using in impt project delete test suite
         function _testSuiteCleanUp() {
             return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx).
                then(() => ImptTestHelper.runCommandEx(`impt project delete --all -q`, ImptTestHelper.emptyCheckEx));
@@ -86,6 +86,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     catch(error => done.fail(error));
             }, ImptTestHelper.TIMEOUT);
 
+            // prepare test environment for impt project delete test
             function _testSuiteInit() {
                 return ImptTestHelper.runCommandEx(`impt project create --product ${PRODUCT_NAME} --create-product --name ${DG_NAME} --descr "${DG_DESCR}" ${outputMode}`, (commandOut) => {
                     ImptTestHelper.emptyCheckEx(commandOut);
@@ -166,7 +167,6 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         });
 
         describe('project not exist preconditions >', () => {
-
             beforeAll((done) => {
                 _testSuiteCleanUp().
                     then(done).

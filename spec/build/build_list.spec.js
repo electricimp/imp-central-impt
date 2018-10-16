@@ -30,15 +30,17 @@ const Shell = require('shelljs');
 const ImptTestHelper = require('../ImptTestHelper');
 const lodash = require('lodash');
 
-const PRODUCT_NAME = '__impt_product';
-const DEVICE_GROUP_NAME = '__impt_device_group';
-const PRODUCT2_NAME = '__impt_product_2';
-const DEVICE_GROUP2_NAME = '__impt_device_group_2';
-const DEVICE_GROUP3_NAME = '__impt_device_group_3';
+const PRODUCT_NAME = '__impt_bld_product';
+const DEVICE_GROUP_NAME = '__impt_bld_device_group';
+const PRODUCT2_NAME = '__impt_bld_product_2';
+const DEVICE_GROUP2_NAME = '__impt_bld_device_group_2';
+const DEVICE_GROUP3_NAME = '__impt_bld_device_group_3';
+
+const outputMode = '-z json';
 
 // Test suite for 'impt build list' command.
 // Runs 'impt build list' command with different combinations of options,
-describe('impt build list test suite >', () => {
+describe(`impt build list test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
     let dg_id = null;
     let product_id = null;
     let build_id = null;
@@ -62,7 +64,7 @@ describe('impt build list test suite >', () => {
             catch(error => done.fail(error));
     }, ImptTestHelper.TIMEOUT);
 
-    // custom matcher for search Device with expected properties in Device array
+    // custom matcher for search Build with expected properties in Build array
     let customMatcher = {
         toContainsBuild: function (util, customEqualityTesters) {
             return {
@@ -120,10 +122,12 @@ describe('impt build list test suite >', () => {
             })).
             then(() => ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT2_NAME}`, (commandOut) => {
                 product_id = ImptTestHelper.parseId(commandOut);
+                if (!product_id) fail("TestSuitInit error: Fail create product");
                 ImptTestHelper.emptyCheckEx(commandOut);
             })).
             then(() => ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP2_NAME} -p ${PRODUCT2_NAME}`, (commandOut) => {
                 dg_id = ImptTestHelper.parseId(commandOut);
+                if (!dg_id) fail("TestSuitInit error: Fail create device group");
                 ImptTestHelper.emptyCheckEx(commandOut);
             })).
             then(() => ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP3_NAME} -p ${PRODUCT2_NAME}`, (commandOut) => {
@@ -132,15 +136,19 @@ describe('impt build list test suite >', () => {
             then(() => Shell.cp('-Rf', `${__dirname}/fixtures/devicecode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER)).
             then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP_NAME} -t build_tag`, (commandOut) => {
                 build_id = ImptTestHelper.parseId(commandOut);
+                if (!build_id) fail("TestSuiteInit error: Fail create build");
                 ImptTestHelper.emptyCheckEx(commandOut);
             })).
             then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP2_NAME} -f -t build2_tag -x devicecode.nut`, (commandOut) => {
                 build2_id = ImptTestHelper.parseId(commandOut);
+                if (!build2_id) fail("TestSuiteInit error: Fail create build");
                 build2_sha = ImptTestHelper.parseSha(commandOut);
+                if (!build2_sha) fail("TestSuiteInit error: Fail parse build sha");
                 ImptTestHelper.emptyCheckEx(commandOut);
             })).
             then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP3_NAME} -t build3_tag`, (commandOut) => {
                 build3_id = ImptTestHelper.parseId(commandOut);
+                if (!build3_id) fail("TestSuiteInit error: Fail create build");
                 ImptTestHelper.emptyCheckEx(commandOut);
             })).
             then(() => ImptTestHelper.runCommandEx(`impt dg delete -g ${DEVICE_GROUP3_NAME} -q`, ImptTestHelper.emptyCheckEx));
@@ -284,6 +292,5 @@ describe('impt build list test suite >', () => {
     });
 
     describe('build list negative tests >', () => {
-
     });
 });

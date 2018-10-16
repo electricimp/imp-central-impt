@@ -82,8 +82,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         // check successfuly updated loginkey output message 
         function _checkSuccessUpdateLoginkeyMessage(commandOut, loginkey_id) {
             ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
-                `${Identifier.ENTITY_TYPE.TYPE_LOGIN_KEY}\\s+` +
-                Util.format(`${UserInterractor.MESSAGES.ENTITY_UPDATED}`, `"${loginkey_id}"`)
+                Util.format(`${UserInterractor.MESSAGES.ENTITY_UPDATED}`,
+                    `${Identifier.ENTITY_TYPE.TYPE_LOGIN_KEY} "${loginkey_id}"`)
             );
         }
 
