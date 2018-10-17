@@ -29,9 +29,8 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'info';
 const COMMAND_SECTION = 'auth';
-const COMMAND_SHORT_DESCR = 'Displays the status and the details of the current login.';
-const COMMAND_DESCRIPTION = 'Displays the status and the details of the tool authentication applicable to the current directory. ' +
-    'Whether Local or Global Auth File is used.';
+const COMMAND_SHORT_DESCR = 'Displays the status and the details of the authentication applicable to the current directory.';
+const COMMAND_DESCRIPTION = COMMAND_SHORT_DESCR;
 
 exports.command = COMMAND;
 
