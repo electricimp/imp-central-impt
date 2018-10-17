@@ -29,8 +29,8 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'logout';
 const COMMAND_SECTION = 'auth';
-const COMMAND_SHORT_DESCR = 'Global or local logout.';
-const COMMAND_DESCRIPTION = 'Global or local logout. Deletes Global or Local Auth File.';
+const COMMAND_SHORT_DESCR = 'Deletes the global or local auth file.';
+const COMMAND_DESCRIPTION = COMMAND_SHORT_DESCR;
 
 exports.command = COMMAND;
 
