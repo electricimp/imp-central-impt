@@ -48,9 +48,9 @@ describe('impt test run for stop-on-failure behavior >', () => {
 
     it('run test with stop-on-fail=true', (done) => {
         ImptTestCommandsHelper.createTestConfig('fixtures/stop_on_failure', { 'stop-on-fail' : true }).
-            then(() => ImptTestingHelper.runCommandEx('impt test run', (commandOut) => {
-                expect(commandOut).not.toBeEmptyString();
-                expect(commandOut).not.toMatch(/Using device test file "tests\/2\.device\.test\.nut"/);
+            then(() => ImptTestingHelper.runCommand('impt test run', (commandOut) => {
+                expect(commandOut.output).not.toBeEmptyString();
+                expect(commandOut.output).not.toMatch(/Using device test file "tests\/2\.device\.test\.nut"/);
                 ImptTestCommandsHelper.checkTestFailStatus(commandOut);
                 ImptTestingHelper.checkFailStatus(commandOut);
             })).
@@ -60,9 +60,9 @@ describe('impt test run for stop-on-failure behavior >', () => {
 
     it('run test with stop-on-fail=false', (done) => {
         ImptTestCommandsHelper.createTestConfig('fixtures/stop_on_failure', { 'stop-on-fail' : false }).
-            then(() => ImptTestingHelper.runCommandEx('impt test run', (commandOut) => {
-                expect(commandOut).not.toBeEmptyString();
-                expect(commandOut).toMatch(/Using device test file "tests\/2\.device\.test\.nut"/);
+            then(() => ImptTestingHelper.runCommand('impt test run', (commandOut) => {
+                expect(commandOut.output).not.toBeEmptyString();
+                expect(commandOut.output).toMatch(/Using device test file "tests\/2\.device\.test\.nut"/);
                 ImptTestCommandsHelper.checkTestFailStatus(commandOut);
                 ImptTestingHelper.checkFailStatus(commandOut);
             })).

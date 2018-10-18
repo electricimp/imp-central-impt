@@ -54,11 +54,11 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // prepare environment for impt log get command testing
         function _testSuiteInit() {
-            return ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
-                then(() => ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx)).
+            return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
+                then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx)).
                 then(() => ImptTestHelper.deviceAssign(DEVICE_GROUP_NAME)).
                 then(() => Shell.cp('-Rf', `${__dirname}/fixtures/devicecode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER)).
-                then(() => ImptTestHelper.runCommandEx(`impt build run -g ${DEVICE_GROUP_NAME} -x devicecode.nut`, ImptTestHelper.emptyCheckEx));
+                then(() => ImptTestHelper.runCommand(`impt build run -g ${DEVICE_GROUP_NAME} -x devicecode.nut`, ImptTestHelper.emptyCheckEx));
         }
 
         function _checkLogMessages(commandOut, messages = {}) {
@@ -75,7 +75,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // delete all entities using in impt log get test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
         }
 
         describe('log get positive tests >', () => {
@@ -94,7 +94,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             it('log get by project', (done) => {
                 ImptTestHelper.runCommandInteractive(`impt log get ${outputMode}`, (commandOut) => {
                     _checkLogMessages(commandOut, { startNumber: 1, endNumber: 20, count: 20 });
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
@@ -103,7 +103,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             it('log get by device id', (done) => {
                 ImptTestHelper.runCommandInteractive(`impt log get -d ${config.devices[0]} ${outputMode}`, (commandOut) => {
                     _checkLogMessages(commandOut, { startNumber: 1, endNumber: 20, count: 20 });
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
@@ -112,7 +112,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             it('log get by device mac', (done) => {
                 ImptTestHelper.runCommandInteractive(`impt log get -d ${config.devicemacs[0]} ${outputMode}`, (commandOut) => {
                     _checkLogMessages(commandOut, { startNumber: 1, endNumber: 20, count: 20 });
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
@@ -121,7 +121,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             it('log get by agent id', (done) => {
                 ImptTestHelper.runCommandInteractive(`impt log get -d ${config.deviceaids[0]} ${outputMode}`, (commandOut) => {
                     _checkLogMessages(commandOut, { startNumber: 1, endNumber: 20, count: 20 });
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
@@ -130,7 +130,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             it('log get by device name', (done) => {
                 ImptTestHelper.runCommandInteractive(`impt log get -d ${config.devicenames[0]} ${outputMode}`, (commandOut) => {
                     _checkLogMessages(commandOut, { startNumber: 1, endNumber: 20, count: 20 });
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
@@ -139,7 +139,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             it('log get with page size', (done) => {
                 ImptTestHelper.runCommandInteractive(`impt log get -d ${config.devices[0]} --page-size 4 ${outputMode}`, (commandOut) => {
                     _checkLogMessages(commandOut, { startNumber: 17, endNumber: 20, count: 4 });
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
@@ -148,7 +148,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             it('log get with page size and number', (done) => {
                 ImptTestHelper.runCommandInteractive(`impt log get -d ${config.devices[0]} --page-size 5 --page-number 3 ${outputMode}`, (commandOut) => {
                     _checkLogMessages(commandOut, { startNumber: 6, endNumber: 10, count: 5 });
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
@@ -157,74 +157,74 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         describe('log get negative tests >', () => {
             it('log get by not exist project', (done) => {
-                ImptTestHelper.runCommandEx(`impt log get ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt log get ${outputMode}`, (commandOut) => {
                     MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, MessageHelper.DEVICE);
-                    ImptTestHelper.checkFailStatusEx(commandOut);
+                    ImptTestHelper.checkFailStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('log get without device value', (done) => {
-                ImptTestHelper.runCommandEx(`impt log get ${outputMode} -d`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt log get ${outputMode} -d`, (commandOut) => {
                     MessageHelper.checkNotEnoughArgumentsError(commandOut, 'd');
-                    ImptTestHelper.checkFailStatusEx(commandOut);
+                    ImptTestHelper.checkFailStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommandEx(`impt log get ${outputMode} -d ""`, (commandOut) => {
+                    then(() => ImptTestHelper.runCommand(`impt log get ${outputMode} -d ""`, (commandOut) => {
                         MessageHelper.checkMissingArgumentValueError(commandOut, 'device');
-                        ImptTestHelper.checkFailStatusEx(commandOut);
+                        ImptTestHelper.checkFailStatus(commandOut);
                     })).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('log get with incorrect page size value', (done) => {
-                ImptTestHelper.runCommandEx(`impt log get -d ${config.devices[0]} ${outputMode} -s 0`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt log get -d ${config.devices[0]} ${outputMode} -s 0`, (commandOut) => {
                     MessageHelper.checkOptionPositiveValueError(commandOut, '--page-size');
-                    ImptTestHelper.checkFailStatusEx(commandOut);
+                    ImptTestHelper.checkFailStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommandEx(`impt log get -d ${config.devices[0]} ${outputMode} -s -4`, (commandOut) => {
+                    then(() => ImptTestHelper.runCommand(`impt log get -d ${config.devices[0]} ${outputMode} -s -4`, (commandOut) => {
                         MessageHelper.checkOptionPositiveValueError(commandOut, '--page-size');
-                        ImptTestHelper.checkFailStatusEx(commandOut);
+                        ImptTestHelper.checkFailStatus(commandOut);
                     })).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('log get with incorrect page number value', (done) => {
-                ImptTestHelper.runCommandEx(`impt log get -d ${config.devices[0]} ${outputMode} --page-number 0`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt log get -d ${config.devices[0]} ${outputMode} --page-number 0`, (commandOut) => {
                     MessageHelper.checkOptionPositiveValueError(commandOut, '--page-number');
-                    ImptTestHelper.checkFailStatusEx(commandOut);
+                    ImptTestHelper.checkFailStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommandEx(`impt log get -d ${config.devices[0]} ${outputMode} -n -4`, (commandOut) => {
+                    then(() => ImptTestHelper.runCommand(`impt log get -d ${config.devices[0]} ${outputMode} -n -4`, (commandOut) => {
                         MessageHelper.checkOptionPositiveValueError(commandOut, '--page-number');
-                        ImptTestHelper.checkFailStatusEx(commandOut);
+                        ImptTestHelper.checkFailStatus(commandOut);
                     })).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('log get without size and num values', (done) => {
-                ImptTestHelper.runCommandEx(`impt log get -d ${config.devices[0]} ${outputMode} -s`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt log get -d ${config.devices[0]} ${outputMode} -s`, (commandOut) => {
                     MessageHelper.checkNotEnoughArgumentsError(commandOut, 's');
-                    ImptTestHelper.checkFailStatusEx(commandOut);
+                    ImptTestHelper.checkFailStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommandEx(`impt log get -d ${config.devices[0]} ${outputMode} -n`, (commandOut) => {
+                    then(() => ImptTestHelper.runCommand(`impt log get -d ${config.devices[0]} ${outputMode} -n`, (commandOut) => {
                         MessageHelper.checkNotEnoughArgumentsError(commandOut, 'n');
-                        ImptTestHelper.checkFailStatusEx(commandOut);
+                        ImptTestHelper.checkFailStatus(commandOut);
                     })).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('log get without output value', (done) => {
-                ImptTestHelper.runCommandEx(`impt log get -d ${config.devices[0]} -z`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt log get -d ${config.devices[0]} -z`, (commandOut) => {
                     MessageHelper.checkNotEnoughArgumentsError(commandOut, 'z');
-                    ImptTestHelper.checkFailStatusEx(commandOut);
+                    ImptTestHelper.checkFailStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommandEx(`impt log get -d ${config.devices[0]} -z undefined`, (commandOut) => {
+                    then(() => ImptTestHelper.runCommand(`impt log get -d ${config.devices[0]} -z undefined`, (commandOut) => {
                         MessageHelper.checkInvalidValuesError(commandOut);
-                        ImptTestHelper.checkFailStatusEx(commandOut);
+                        ImptTestHelper.checkFailStatus(commandOut);
                     })).
                     then(done).
                     catch(error => done.fail(error));

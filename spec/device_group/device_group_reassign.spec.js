@@ -62,29 +62,29 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // prepare environment for device group reassign command testing
         function _testSuiteInit() {
-            return ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
-                then(() => ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
+            return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
+                then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
                     dg_id = ImptTestHelper.parseId(commandOut);
                     if (!dg_id) fail("TestSuitInit error: Fail create device group");
-                    ImptTestHelper.emptyCheckEx(commandOut);
+                    ImptTestHelper.emptyCheck(commandOut);
                 })).
-                then(() => ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_DST_NAME}`, ImptTestHelper.emptyCheckEx)).
-                then(() => ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP_DST_NAME} -p ${PRODUCT_DST_NAME}`, (commandOut) => {
+                then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_DST_NAME}`, ImptTestHelper.emptyCheckEx)).
+                then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_DST_NAME} -p ${PRODUCT_DST_NAME}`, (commandOut) => {
                     dg_dst_id = ImptTestHelper.parseId(commandOut);
                     if (!dg_dst_id) fail("TestSuitInit error: Fail create device group");
-                    ImptTestHelper.emptyCheckEx(commandOut);
+                    ImptTestHelper.emptyCheck(commandOut);
                 }));
         }
 
         // delete all entities using in impt dg reassign test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx).
-                then(() => ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_DST_NAME} -f -q`, ImptTestHelper.emptyCheckEx));
+            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx).
+                then(() => ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_DST_NAME} -f -q`, ImptTestHelper.emptyCheckEx));
         }
 
         // check 'device successfully reassigned' output message 
         function _checkSuccessReassignedDeviceMessage(commandOut, dg_from, dg_to) {
-            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+            ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
                 Util.format(`${UserInterractor.MESSAGES.DG_DEVICES_REASSIGNED}`,
                     `${Identifier.ENTITY_TYPE.TYPE_DEVICE_GROUP} "${dg_from}"`,
                     `${Identifier.ENTITY_TYPE.TYPE_DEVICE_GROUP} "${dg_to}"`)
@@ -93,7 +93,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // check 'device group has no devices' output message 
         function _checkNoDeviceMessage(commandOut, dg) {
-            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+            ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
                 Util.format(`${UserInterractor.MESSAGES.DG_NO_DEVICES}`,
                     `${Identifier.ENTITY_TYPE.TYPE_DEVICE_GROUP} "${dg}"`)
             );
@@ -120,10 +120,10 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             }, ImptTestHelper.TIMEOUT);
 
             it('reassign device by device group id', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg reassign --from ${dg_id} --to ${dg_dst_id} ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt dg reassign --from ${dg_id} --to ${dg_dst_id} ${outputMode}`, (commandOut) => {
                     _checkSuccessReassignedDeviceMessage(commandOut, dg_id, dg_dst_id);
-                    ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_ID, config.devices[0]);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkAttribute(commandOut, ImptTestHelper.ATTR_ID, config.devices[0]);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => ImptDgTestHelper.checkDeviceGroupHasNoDevice(dg_id)).
                     then(() => ImptDgTestHelper.checkDeviceGroupHasDevice(dg_dst_id)).
@@ -132,10 +132,10 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('reassign device by device group name', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg reassign --from ${DEVICE_GROUP_NAME} --to ${DEVICE_GROUP_DST_NAME} ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt dg reassign --from ${DEVICE_GROUP_NAME} --to ${DEVICE_GROUP_DST_NAME} ${outputMode}`, (commandOut) => {
                     _checkSuccessReassignedDeviceMessage(commandOut, DEVICE_GROUP_NAME, DEVICE_GROUP_DST_NAME);
-                    ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_ID, config.devices[0]);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkAttribute(commandOut, ImptTestHelper.ATTR_ID, config.devices[0]);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => ImptDgTestHelper.checkDeviceGroupHasNoDevice(dg_id)).
                     then(() => ImptDgTestHelper.checkDeviceGroupHasDevice(dg_dst_id)).
@@ -144,10 +144,10 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('reassign device by project', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg reassign --from ${dg_id} ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt dg reassign --from ${dg_id} ${outputMode}`, (commandOut) => {
                     _checkSuccessReassignedDeviceMessage(commandOut, dg_id, dg_dst_id);
-                    ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_ID, config.devices[0]);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkAttribute(commandOut, ImptTestHelper.ATTR_ID, config.devices[0]);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => ImptDgTestHelper.checkDeviceGroupHasNoDevice(dg_id)).
                     then(() => ImptDgTestHelper.checkDeviceGroupHasDevice(dg_dst_id)).
@@ -156,9 +156,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('reassign not exist device', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg reassign --from ${DEVICE_GROUP_DST_NAME} --to ${DEVICE_GROUP_NAME} ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt dg reassign --from ${DEVICE_GROUP_DST_NAME} --to ${DEVICE_GROUP_NAME} ${outputMode}`, (commandOut) => {
                     _checkNoDeviceMessage(commandOut, DEVICE_GROUP_DST_NAME)
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
@@ -167,27 +167,27 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         describe('device group reassign negative tests >', () => {
             it('reassign device to not exist project', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg reassign --from ${DEVICE_GROUP_NAME} ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt dg reassign --from ${DEVICE_GROUP_NAME} ${outputMode}`, (commandOut) => {
                     MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, MessageHelper.DG);
-                    ImptTestHelper.checkFailStatusEx(commandOut);
+                    ImptTestHelper.checkFailStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('reassign device from not exist device group', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg reassign --from not-exist-device-group --to ${DEVICE_GROUP_DST_NAME} ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt dg reassign --from not-exist-device-group --to ${DEVICE_GROUP_DST_NAME} ${outputMode}`, (commandOut) => {
                     MessageHelper.checkEntityNotFoundError(commandOut, MessageHelper.DG, 'not-exist-device-group');
-                    ImptTestHelper.checkFailStatusEx(commandOut);
+                    ImptTestHelper.checkFailStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('reassign device to not exist device group', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg reassign --to not-exist-device-group --from ${DEVICE_GROUP_NAME} ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt dg reassign --to not-exist-device-group --from ${DEVICE_GROUP_NAME} ${outputMode}`, (commandOut) => {
                     MessageHelper.checkEntityNotFoundError(commandOut, MessageHelper.DG, 'not-exist-device-group');
-                    ImptTestHelper.checkFailStatusEx(commandOut);
+                    ImptTestHelper.checkFailStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));

@@ -59,8 +59,8 @@ describe('impt test run for test server error scenario >', () => {
                     'tests/server-error2.device.nut'
                 ]
             }).
-            then(() => ImptTestingHelper.runCommandEx('impt test run', (commandOut) => {
-                expect(commandOut).not.toBeEmptyString();
+            then(() => ImptTestingHelper.runCommand('impt test run', (commandOut) => {
+                expect(commandOut.output).not.toBeEmptyString();
                 ImptTestCommandsHelper.checkTestSuccessStatus(commandOut);
                 ImptTestingHelper.checkSuccessStatus(commandOut);
             })).
@@ -77,9 +77,9 @@ describe('impt test run for test server error scenario >', () => {
                 'timeout': 40,
                 'test-file' : 'tests/server-index-access-failure.agent.nut'
             }).
-            then(() => ImptTestingHelper.runCommandEx('impt test run', (commandOut) => {
-                expect(commandOut).not.toBeEmptyString();
-                expect(commandOut).toMatch("the index 'fieldDoesNotExists' does not exist");
+            then(() => ImptTestingHelper.runCommand('impt test run', (commandOut) => {
+                expect(commandOut.output).not.toBeEmptyString();
+                expect(commandOut.output).toMatch("the index 'fieldDoesNotExists' does not exist");
                 ImptTestCommandsHelper.checkTestFailStatus(commandOut);
                 ImptTestingHelper.checkFailStatus(commandOut);
             })).
@@ -95,9 +95,9 @@ describe('impt test run for test server error scenario >', () => {
                 'timeout': 40,
                 'test-file' : 'tests/server-throw-exception.agent.nut'
             }).
-            then(() => ImptTestingHelper.runCommandEx('impt test run', (commandOut) => {
-                expect(commandOut).not.toBeEmptyString();
-                expect(commandOut).toMatch("unhandled exception");
+            then(() => ImptTestingHelper.runCommand('impt test run', (commandOut) => {
+                expect(commandOut.output).not.toBeEmptyString();
+                expect(commandOut.output).toMatch("unhandled exception");
                 ImptTestCommandsHelper.checkTestFailStatus(commandOut);
                 ImptTestingHelper.checkFailStatus(commandOut);
             })).

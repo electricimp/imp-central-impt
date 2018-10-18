@@ -63,30 +63,30 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // prepare test environment for impt project update test
         function _testSuiteInit() {
-            return ImptTestHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME}`, (commandOut) => {
+            return ImptTestHelper.runCommand(`impt product create --name ${PRODUCT_NAME}`, (commandOut) => {
                 product_id = ImptTestHelper.parseId(commandOut);
                 if (!product_id) fail("TestSuitInit error: Fail create product");
-                ImptTestHelper.emptyCheckEx(commandOut);
+                ImptTestHelper.emptyCheck(commandOut);
             }).
-                then(() => ImptTestHelper.runCommandEx(`impt dg create --name ${DG_NAME} --descr "${DG_DESCR}" --product ${PRODUCT_NAME} ${outputMode}`, (commandOut) => {
+                then(() => ImptTestHelper.runCommand(`impt dg create --name ${DG_NAME} --descr "${DG_DESCR}" --product ${PRODUCT_NAME} ${outputMode}`, (commandOut) => {
                     dg_id = ImptTestHelper.parseId(commandOut);
                     if (!dg_id) fail("TestSuitInit error: Fail create device group");
-                    ImptTestHelper.emptyCheckEx(commandOut);
+                    ImptTestHelper.emptyCheck(commandOut);
                 })).
-                then(() => ImptTestHelper.runCommandEx(`impt project link --dg ${DG_NAME} ${outputMode}`, (commandOut) => {
-                    ImptTestHelper.emptyCheckEx(commandOut);
+                then(() => ImptTestHelper.runCommand(`impt project link --dg ${DG_NAME} ${outputMode}`, (commandOut) => {
+                    ImptTestHelper.emptyCheck(commandOut);
                 }));
         }
 
         // prepare test environment for impt project update test
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -q`, (commandOut) => ImptTestHelper.emptyCheckEx).
-            then(() => ImptTestHelper.runCommandEx(`impt project delete --all -q`, ImptTestHelper.emptyCheckEx));
+            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, (commandOut) => ImptTestHelper.emptyCheckEx).
+            then(() => ImptTestHelper.runCommand(`impt project delete --all -q`, ImptTestHelper.emptyCheckEx));
         }
 
         // check 'project successfully updated' output message 
         function _checkSuccessUpdateProjectMessage(commandOut) {
-            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+            ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
                 Util.format(`${UserInterractor.MESSAGES.ENTITY_UPDATED}`, 'Project')
             );
         }
@@ -105,9 +105,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             }, ImptTestHelper.TIMEOUT);
 
             it('project update', (done) => {
-                ImptTestHelper.runCommandEx(`impt project update --name ${DG_NEW_NAME} --descr "${DG_NEW_DESCR}" --device-file dfile.nut --agent-file afile.nut ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt project update --name ${DG_NEW_NAME} --descr "${DG_NEW_DESCR}" --device-file dfile.nut --agent-file afile.nut ${outputMode}`, (commandOut) => {
                     _checkSuccessUpdateProjectMessage(commandOut);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => ProjectHelper.checkProjectInfo({
                         product_id: product_id, dg_id: dg_id,
@@ -127,9 +127,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             }, ImptTestHelper.TIMEOUT);
 
             it('project update without project file', (done) => {
-                ImptTestHelper.runCommandEx(`impt project update -n ${DG_NEW_NAME} ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt project update -n ${DG_NEW_NAME} ${outputMode}`, (commandOut) => {
                     MessageHelper.checkProjectNotFoundMessage(commandOut);
-                    ImptTestHelper.checkFailStatusEx(commandOut);
+                    ImptTestHelper.checkFailStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
@@ -144,9 +144,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
                 it('project update with not exist device group', (done) => {
                     Shell.cp('-Rf', `${__dirname}/fixtures/.impt.project`, ImptTestHelper.TESTS_EXECUTION_FOLDER);
-                    ImptTestHelper.runCommandEx(`impt project update -n ${DG_NEW_NAME} ${outputMode}`, (commandOut) => {
+                    ImptTestHelper.runCommand(`impt project update -n ${DG_NEW_NAME} ${outputMode}`, (commandOut) => {
                         MessageHelper.checkProjectDeviceGroupNotExistMessage(commandOut, 'not-exist-device-group')
-                        ImptTestHelper.checkFailStatusEx(commandOut);
+                        ImptTestHelper.checkFailStatus(commandOut);
                     }).
                         then(done).
                         catch(error => done.fail(error));

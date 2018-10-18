@@ -34,7 +34,7 @@ const UserInteractor = require('../lib/util/UserInteractor');
 const child_process = require('child_process');
 
 const TIMEOUT_MS = 300000;
-const TESTS_EXECUTION_FOLDER = `${__dirname}/../__test`;
+const TESTS_EXECUTION_FOLDER = `${__dirname}/../__test${process.env.TEF?process.env.TEF:''}`;
 const KEY_ANSWER = {
     CTRL_C: '\x03',
     ENTER: '\n',
@@ -98,7 +98,7 @@ class ImptTestHelper {
         FS.mkdirSync(TESTS_EXECUTION_FOLDER);
         if (login) {
             const endpoint = config.apiEndpoint ? `--endpoint ${config.apiEndpoint}` : '';
-            return ImptTestHelper.runCommandEx(
+            return ImptTestHelper.runCommand(
                 `impt auth login --local --user ${config.email} --pwd ${config.password} ${endpoint}`,
                 ImptTestHelper.checkSuccessStatus);
         }
@@ -114,22 +114,7 @@ class ImptTestHelper {
     }
 
     // Executes impt command and calls outputChecker function to check the command output
-    static runCommand(command, outputChecker) {
-        return new Promise((resolve, reject) => {
-            if (config.debug) {
-                console.log('Running command: ' + command);
-            }
-            Shell.cd(TESTS_EXECUTION_FOLDER);
-            Shell.exec(`node ${__dirname}/../bin/${command}`,
-                { silent: !config.debug },
-                (code, stdout, stderr) => {
-                    resolve(stdout.replace(/\u001b\[.*?m/g, ''));
-                }
-            );
-        }).then(outputChecker);
-    }
-
-    static runCommandEx(command, outputChecker, env = {}) {
+    static runCommand(command, outputChecker, env = {}) {
         return new Promise((resolve, reject) => {
             if (config.debug) {
                 console.log('Running command: ' + command);
@@ -215,69 +200,48 @@ class ImptTestHelper {
     }
 
     static projectCreate(dg, dfile = 'device.nut', afile = 'agent.nut') {
-        return ImptTestHelper.runCommandEx(`impt project link -g ${dg} -x ${dfile}  -y ${afile} -q`, ImptTestHelper.emptyCheckEx);
+        return ImptTestHelper.runCommand(`impt project link -g ${dg} -x ${dfile}  -y ${afile} -q`, ImptTestHelper.emptyCheckEx);
     }
 
     static projectDelete() {
-        return ImptTestHelper.runCommandEx(`impt project delete -f -q`, ImptTestHelper.emptyCheckEx);
+        return ImptTestHelper.runCommand(`impt project delete -f -q`, ImptTestHelper.emptyCheckEx);
     }
 
     static deviceAssign(dg) {
-        return ImptTestHelper.runCommandEx(`impt device assign -d ${config.devices[0]} -g ${dg} -q`, ImptTestHelper.emptyCheckEx);
+        return ImptTestHelper.runCommand(`impt device assign -d ${config.devices[0]} -g ${dg} -q`, ImptTestHelper.emptyCheckEx);
     }
 
     static deviceRestart() {
-        return ImptTestHelper.runCommandEx(`impt device restart -d ${config.devices[0]}`, ImptTestHelper.emptyCheckEx);
+        return ImptTestHelper.runCommand(`impt device restart -d ${config.devices[0]}`, ImptTestHelper.emptyCheckEx);
     }
 
     static deviceUnassign(dg) {
-        return ImptTestHelper.runCommandEx(`impt dg unassign -g ${dg}`, ImptTestHelper.emptyCheckEx);
-    }
-
-    // Checks IMPT COMMAND SUCCEEDS status of the command
-    static checkSuccessStatus(commandOut) {
-        expect(commandOut).toMatch('IMPT COMMAND SUCCEEDS');
-    }
-
-    // Checks IMPT COMMAND FAILS status of the command
-    static checkFailStatus(commandOut) {
-        expect(commandOut).not.toMatch(UserInteractor.ERRORS.ACCESS_FAILED);
-        expect(commandOut).toMatch('IMPT COMMAND FAILS');
-    }
-
-    // Does not check command status, just check 'Access to impCentral failed or timed out' error doesn't occur.
-    static emptyCheck(commandOut) {
-        expect(commandOut).not.toMatch(UserInteractor.ERRORS.ACCESS_FAILED);
-    }
-
-    // Checks if the command output contains the specified attribute name and value
-    static checkAttribute(commandOut, attrName, attrValue) {
-        expect(commandOut).toMatch(new RegExp(`${attrName}:\\s+${attrValue}`));
+        return ImptTestHelper.runCommand(`impt dg unassign -g ${dg}`, ImptTestHelper.emptyCheckEx);
     }
 
     // Checks success return code of the command
-    static checkSuccessStatusEx(commandOut) {
+    static checkSuccessStatus(commandOut) {
         expect(commandOut.code).toEqual(0);
     }
 
     // Checks fail return code of the command
-    static checkFailStatusEx(commandOut) {
+    static checkFailStatus(commandOut) {
         expect(commandOut.output).not.toMatch(UserInteractor.ERRORS.ACCESS_FAILED);
         expect(commandOut.code).not.toEqual(0);
     }
 
     // Does not check command status, just check 'Access to impCentral failed or timed out' error doesn't occur.
-    static emptyCheckEx(commandOut) {
+    static emptyCheck(commandOut) {
         expect(commandOut.output).not.toMatch(UserInteractor.ERRORS.ACCESS_FAILED);
     }
 
     // Checks if the command output contains the specified attribute name and value
-    static checkAttributeEx(commandOut, attrName, attrValue) {
+    static checkAttribute(commandOut, attrName, attrValue) {
         expect(commandOut.output).toMatch(new RegExp(`${attrName}"?:\\s+"?${attrValue}("|\\s)`));
     }
 
     // Checks if the command output contains the specified message for default or debug output mode
-    static checkOutputMessageEx(outputMode, commandOut, message) {
+    static checkOutputMessage(outputMode, commandOut, message) {
         const matcher = outputMode.match('-(z|-output)\\s+(json|minimal)');
         if (matcher && matcher.length) expect(true).toBeTrue;
         else expect(commandOut.output).toMatch(message.replace(new RegExp(/[()\\]/g), `\\$&`));

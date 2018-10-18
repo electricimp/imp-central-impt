@@ -52,11 +52,11 @@ describe('impt test run for error-before-start behavior >', () => {
     });
 
     it('run test', (done) => {
-        ImptTestingHelper.runCommandEx('impt test run', (commandOut) => {
-                expect(commandOut).not.toBeEmptyString();
-                expect(commandOut).toMatch(/warning\] Device is out of memory/);
-                expect(commandOut).toMatch(/error\] Session startup timeout/);
-                expect(commandOut).not.toMatch(/test\] Device is out of memory/);
+        ImptTestingHelper.runCommand('impt test run', (commandOut) => {
+                expect(commandOut.output).not.toBeEmptyString();
+                expect(commandOut.output).toMatch(/warning\] Device is out of memory/);
+                expect(commandOut.output).toMatch(/error\] Session startup timeout/);
+                expect(commandOut.output).not.toMatch(/test\] Device is out of memory/);
                 ImptTestCommandsHelper.checkTestFailStatus(commandOut);
                 ImptTestingHelper.checkFailStatus(commandOut);
             }).

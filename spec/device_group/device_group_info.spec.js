@@ -56,23 +56,23 @@ describe(`impt device group info test suite (output: ${outputMode ? outputMode :
 
     // prepare environment for device group info command testing
     function _testSuiteInit() {
-        return ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME}`, (commandOut) => {
+        return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, (commandOut) => {
             product_id = ImptTestHelper.parseId(commandOut);
             if (!product_id) fail("TestSuitInit error: Fail create product");
-            ImptTestHelper.emptyCheckEx(commandOut);
+            ImptTestHelper.emptyCheck(commandOut);
         }).
-            then(() => ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
+            then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
                 dg_id = ImptTestHelper.parseId(commandOut);
                 if (!dg_id) fail("TestSuitInit error: Fail create device group");
-                ImptTestHelper.emptyCheckEx(commandOut);
+                ImptTestHelper.emptyCheck(commandOut);
             })).
-            then(() => ImptTestHelper.runCommandEx(`impt device assign -d ${config.devices[0]} -g ${DEVICE_GROUP_NAME} -q`, ImptTestHelper.emptyCheckEx)).
-            then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP_NAME}`, ImptTestHelper.emptyCheckEx));
+            then(() => ImptTestHelper.runCommand(`impt device assign -d ${config.devices[0]} -g ${DEVICE_GROUP_NAME} -q`, ImptTestHelper.emptyCheckEx)).
+            then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME}`, ImptTestHelper.emptyCheckEx));
     }
 
     // delete all entities using in impt dg info test suite
     function _testSuiteCleanUp() {
-        return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
+        return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
     }
 
     // check base atributes of requested device group
@@ -107,29 +107,29 @@ describe(`impt device group info test suite (output: ${outputMode ? outputMode :
         }, ImptTestHelper.TIMEOUT);
 
         it('device group info by id', (done) => {
-            ImptTestHelper.runCommandEx(`impt dg info --dg ${dg_id} -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt dg info --dg ${dg_id} -z json`, (commandOut) => {
                 _checkDeviceGroupInfo(commandOut);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('device group full info by name', (done) => {
-            ImptTestHelper.runCommandEx(`impt dg info -g ${DEVICE_GROUP_NAME} --full -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt dg info -g ${DEVICE_GROUP_NAME} --full -z json`, (commandOut) => {
                 _checkDeviceGroupInfo(commandOut);
                 _checkDeviceGroupAdditionalInfo(commandOut);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('device group full info by project', (done) => {
-            ImptTestHelper.runCommandEx(`impt dg info -u -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt dg info -u -z json`, (commandOut) => {
                 _checkDeviceGroupInfo(commandOut);
                 _checkDeviceGroupAdditionalInfo(commandOut);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
@@ -138,18 +138,18 @@ describe(`impt device group info test suite (output: ${outputMode ? outputMode :
 
     describe('device group delete negative tests  >', () => {
         it('device group info by not exist project', (done) => {
-            ImptTestHelper.runCommandEx(`impt dg info`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt dg info`, (commandOut) => {
                 MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, MessageHelper.DG);
-                ImptTestHelper.checkFailStatusEx(commandOut);
+                ImptTestHelper.checkFailStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('not exist device group info', (done) => {
-            ImptTestHelper.runCommandEx(`impt dg info --dg not-exist-device-group --full`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt dg info --dg not-exist-device-group --full`, (commandOut) => {
                 MessageHelper.checkEntityNotFoundError(commandOut, MessageHelper.DG, 'not-exist-device-group');
-                ImptTestHelper.checkFailStatusEx(commandOut);
+                ImptTestHelper.checkFailStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));

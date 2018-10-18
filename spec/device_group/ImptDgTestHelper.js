@@ -42,31 +42,31 @@ class ImptDgTestHelper {
 
     // check device group has no device
     static checkDeviceGroupHasNoDevice(dg) {
-        return ImptTestHelper.runCommandEx(`impt dg info -g ${dg} -u -z json`, (commandOut) => {
+        return ImptTestHelper.runCommand(`impt dg info -g ${dg} -u -z json`, (commandOut) => {
             const json = JSON.parse(commandOut.output);
             expect(json['Device Group'].Devices).toBeUndefined();
-            ImptTestHelper.checkSuccessStatusEx(commandOut);
+            ImptTestHelper.checkSuccessStatus(commandOut);
         });
     }
 
     // check device group has device
     static checkDeviceGroupHasDevice(dg) {
-        return ImptTestHelper.runCommandEx(`impt dg info -g ${dg} -u -z json`, (commandOut) => {
+        return ImptTestHelper.runCommand(`impt dg info -g ${dg} -u -z json`, (commandOut) => {
             const json = JSON.parse(commandOut.output);
             expect(json['Device Group'].Devices[0].Device.id).toBe(config.devices[0]);
-            ImptTestHelper.checkSuccessStatusEx(commandOut);
+            ImptTestHelper.checkSuccessStatus(commandOut);
         });
     }
 
     // check device group not exist
     static checkDeviceGroupNotExist(dg) {
-        return ImptTestHelper.runCommandEx(`impt dg info --dg ${dg}`, ImptTestHelper.checkFailStatusEx);
+        return ImptTestHelper.runCommand(`impt dg info --dg ${dg}`, ImptTestHelper.checkFailStatusEx);
     }
 
     // check base atributes of requested device group
     // if device group has no description attr (in dg list command case) don`t check it
     static checkDeviceGroupInfo(expInfo = {}) {
-        return ImptTestHelper.runCommandEx(`impt dg info -g ${expInfo.id ? expInfo.id : DEVICE_GROUP_NAME}  -z json`, (commandOut) => {
+        return ImptTestHelper.runCommand(`impt dg info -g ${expInfo.id ? expInfo.id : DEVICE_GROUP_NAME}  -z json`, (commandOut) => {
             const json = JSON.parse(commandOut.output);
             expect(json['Device Group']).toBeDefined();
             expect(json['Device Group'].id).toBe(expInfo.id ? expInfo.id : json['Device Group'].id);
@@ -75,7 +75,7 @@ class ImptDgTestHelper {
             expect(json['Device Group'].type).toBe('development');
             expect(json['Device Group'].Product.id).toBe(expInfo.p_id ? expInfo.p_id : json['Device Group'].Product.id);
             expect(json['Device Group'].Product.name).toBe(expInfo.p_name ? expInfo.p_name : PRODUCT_NAME);
-            ImptTestHelper.checkSuccessStatusEx(commandOut);
+            ImptTestHelper.checkSuccessStatus(commandOut);
         });
     }
 }

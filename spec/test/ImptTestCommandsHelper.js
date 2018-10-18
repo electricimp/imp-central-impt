@@ -48,11 +48,11 @@ class ImptTestCommandsHelper {
 
     // Creates test Product and DG
     static createTestProductAndDG() {
-        return ImptTestingHelper.runCommandEx(`impt product create --name ${TEST_PRODUCT_NAME}`, ImptTestingHelper.checkSuccessStatus).
-            then(() => ImptTestingHelper.runCommandEx(
+        return ImptTestingHelper.runCommand(`impt product create --name ${TEST_PRODUCT_NAME}`, ImptTestingHelper.checkSuccessStatus).
+            then(() => ImptTestingHelper.runCommand(
                 `impt dg create --name ${TEST_DG_NAME} --product ${TEST_PRODUCT_NAME}`, ImptTestingHelper.checkSuccessStatus)).
             then(() => Promise.all(config.devices.map(deviceId => 
-                ImptTestingHelper.runCommandEx(
+                ImptTestingHelper.runCommand(
                     `impt device assign --device ${deviceId} --dg ${TEST_DG_NAME} --confirmed`, ImptTestingHelper.checkSuccessStatus))));
     }
 
@@ -72,24 +72,24 @@ class ImptTestCommandsHelper {
             return `${acc} ${option}`;
         }, '');
         const testCreateCommand = `impt test create --dg ${TEST_DG_NAME} --confirmed ${options}`;
-        return ImptTestingHelper.runCommandEx(testCreateCommand, ImptTestingHelper.checkSuccessStatus);
+        return ImptTestingHelper.runCommand(testCreateCommand, ImptTestingHelper.checkSuccessStatus);
     }
 
     // Removes test Product, DG and Deployments.
     static cleanUpTestEnvironment() {
-        return ImptTestingHelper.runCommandEx(
+        return ImptTestingHelper.runCommand(
             `impt product delete --product ${TEST_PRODUCT_NAME} --builds --force --confirmed`,
             ImptTestingHelper.emptyCheck);
     }
 
     // Checks success status of 'impt test run' command
     static checkTestSuccessStatus(commandOut) {
-        expect(commandOut).toMatch('Testing succeeded');
+        expect(commandOut.output).toMatch('Testing succeeded');
     }
 
     // Checks failure status of 'impt test run' command
     static checkTestFailStatus(commandOut) {
-        expect(commandOut).toMatch('Testing failed');
+        expect(commandOut.output).toMatch('Testing failed');
     }
 }
 

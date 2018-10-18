@@ -68,28 +68,28 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // prepare test environment for impt project link test suite
         function _testSuiteInit() {
-            return ImptTestHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME}`, (commandOut) => {
+            return ImptTestHelper.runCommand(`impt product create --name ${PRODUCT_NAME}`, (commandOut) => {
                 product_id = ImptTestHelper.parseId(commandOut);
                 if (!product_id) fail("TestSuitInit error: Fail create product");
-                ImptTestHelper.emptyCheckEx(commandOut);
+                ImptTestHelper.emptyCheck(commandOut);
             }).
-                then(() => ImptTestHelper.runCommandEx(`impt dg create --name ${DG_NAME} --descr "${DG_DESCR}" --product ${PRODUCT_NAME} ${outputMode}`, (commandOut) => {
+                then(() => ImptTestHelper.runCommand(`impt dg create --name ${DG_NAME} --descr "${DG_DESCR}" --product ${PRODUCT_NAME} ${outputMode}`, (commandOut) => {
                     dg_id = ImptTestHelper.parseId(commandOut);
                     if (!dg_id) fail("TestSuitInit error: Fail create device group");
-                    ImptTestHelper.emptyCheckEx(commandOut);
+                    ImptTestHelper.emptyCheck(commandOut);
                 }));
         }
 
          // delete all entities using in impt project link test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommandEx(`impt project delete --files --confirmed`, (commandOut) => {
-                ImptTestHelper.emptyCheckEx(commandOut);
+            return ImptTestHelper.runCommand(`impt project delete --files --confirmed`, (commandOut) => {
+                ImptTestHelper.emptyCheck(commandOut);
             });
         }
 
         // check successfuly created device source file output message 
         function _checkSuccessCreateDeviceSourceFileMessage(commandOut, fileName) {
-            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+            ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
                 Util.format(`${UserInterractor.MESSAGES.ENTITY_CREATED}`,
                     `${UserInterractor.MESSAGES.PROJECT_DEVICE_SOURCE_FILE} "${fileName}"`)
             );
@@ -97,7 +97,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // check successfuly created agent source file output message 
         function _checkSuccessCreateAgentSourceFileMessage(commandOut, fileName) {
-            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+            ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
                 Util.format(`${UserInterractor.MESSAGES.ENTITY_CREATED}`,
                     `${UserInterractor.MESSAGES.PROJECT_AGENT_SOURCE_FILE} "${fileName}"`)
             );
@@ -105,19 +105,19 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // check 'project successfully linkeded' output message 
         function _checkSuccessLinkedProjectMessage(commandOut) {
-            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+            ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
                 `${UserInterractor.MESSAGES.PROJECT_LINKED}`
             );
         }
 
         it('project link to dg by id', (done) => {
-            ImptTestHelper.runCommandEx(`impt project link --dg ${dg_id} --device-file dfile.nut ${outputMode}`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt project link --dg ${dg_id} --device-file dfile.nut ${outputMode}`, (commandOut) => {
                 _checkSuccessCreateDeviceSourceFileMessage(commandOut, 'dfile.nut');
                 _checkSuccessCreateAgentSourceFileMessage(commandOut, 'agent.nut');
                 _checkSuccessLinkedProjectMessage(commandOut);
                 ImptTestHelper.checkFileExist('dfile.nut');
                 ImptTestHelper.checkFileExist('agent.nut');
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(() => ProjectHelper.checkProjectInfo({ product_id: product_id, dg_id: dg_id, dfile: 'dfile.nut' })).
                 then(done).
@@ -125,13 +125,13 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         });
 
         it('project link to dg by name', (done) => {
-            ImptTestHelper.runCommandEx(`impt project link --dg ${DG_NAME} --agent-file afile.nut ${outputMode}`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt project link --dg ${DG_NAME} --agent-file afile.nut ${outputMode}`, (commandOut) => {
                 _checkSuccessCreateDeviceSourceFileMessage(commandOut, 'device.nut');
                 _checkSuccessCreateAgentSourceFileMessage(commandOut, 'afile.nut');
                 _checkSuccessLinkedProjectMessage(commandOut);
                 ImptTestHelper.checkFileExist('device.nut');
                 ImptTestHelper.checkFileExist('afile.nut');
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(() => ProjectHelper.checkProjectInfo({ product_id: product_id, dg_id: dg_id, afile: 'afile.nut' })).
                 then(done).

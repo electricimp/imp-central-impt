@@ -62,36 +62,36 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // prepare environment for build update command testing
         function _testSuiteInit() {
-            return ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
+            return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
                 then(() => Shell.cp('-Rf', `${__dirname}/fixtures/devicecode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER));
         }
 
         // delete all entities using in impt build update test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
         }
 
         function _testInit() {
-            return ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
+            return ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
                 dg_id = ImptTestHelper.parseId(commandOut);
                 if (!dg_id) fail("TestInit error: Fail create device group");
-                ImptTestHelper.emptyCheckEx(commandOut);
+                ImptTestHelper.emptyCheck(commandOut);
             }).
-                then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP_NAME} -x devicecode.nut -t build_tag  -t build_tag2 -t build_tag3 -o build_origin`, (commandOut) => {
+                then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME} -x devicecode.nut -t build_tag  -t build_tag2 -t build_tag3 -o build_origin`, (commandOut) => {
                     build_id = ImptTestHelper.parseId(commandOut);
                     if (!build_id) fail("TestInit error: Fail create build");
                     build_sha = ImptTestHelper.parseSha(commandOut);
                     if (!build_id) fail("TestInit error: Fail parse build sha");
-                    ImptTestHelper.emptyCheckEx(commandOut);
+                    ImptTestHelper.emptyCheck(commandOut);
                 }));
         }
 
         function _testCleanUp() {
-            return ImptTestHelper.runCommandEx(`impt dg delete -g ${DEVICE_GROUP_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommand(`impt dg delete -g ${DEVICE_GROUP_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
         }
 
         function _checkBuildInfo(expInfo = {}) {
-            return ImptTestHelper.runCommandEx(`impt build info -b ${expInfo.id ? expInfo.id : build_id} -z json`, (commandOut) => {
+            return ImptTestHelper.runCommand(`impt build info -b ${expInfo.id ? expInfo.id : build_id} -z json`, (commandOut) => {
                 const json = JSON.parse(commandOut.output);
                 expect(json.Deployment).toBeDefined;
                 expect(json.Deployment.id).toEqual(expInfo.id ? expInfo.id : build_id);
@@ -106,13 +106,13 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 }
                 if (expInfo.tag_cnt) expect(json.Deployment.tags.length).toEqual(expInfo.tag_cnt);
                 expect(json.Deployment['Device Group'].id).toEqual(expInfo.dg_id ? expInfo.dg_id : dg_id);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             });
         }
 
         // check 'deployment successfully updated' output message 
         function _checkSuccessUpdateDeploymentMessage(commandOut, deploy) {
-            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+            ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
                 Util.format(`${UserInterractor.MESSAGES.ENTITY_UPDATED}`,
                     `${Identifier.ENTITY_TYPE.TYPE_BUILD} "${deploy}"`
                 )
@@ -133,9 +133,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             }, ImptTestHelper.TIMEOUT);
 
             it('build update by id', (done) => {
-                ImptTestHelper.runCommandEx(`impt build update --build ${build_id} ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt build update --build ${build_id} ${outputMode}`, (commandOut) => {
                     _checkSuccessUpdateDeploymentMessage(commandOut, build_id);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => _checkBuildInfo).
                     then(done).
@@ -143,9 +143,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('build update flagged by sha', (done) => {
-                ImptTestHelper.runCommandEx(`impt build update -b ${build_sha} --flagged ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt build update -b ${build_sha} --flagged ${outputMode}`, (commandOut) => {
                     _checkSuccessUpdateDeploymentMessage(commandOut, build_sha);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => _checkBuildInfo({ flag: true })).
                     then(done).
@@ -153,9 +153,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('build update descr by tag', (done) => {
-                ImptTestHelper.runCommandEx(`impt build update -b build_tag --descr build_description ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt build update -b build_tag --descr build_description ${outputMode}`, (commandOut) => {
                     _checkSuccessUpdateDeploymentMessage(commandOut, 'build_tag');
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => _checkBuildInfo({ descr: 'build_description' })).
                     then(done).
@@ -163,9 +163,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('build update tag by origin', (done) => {
-                ImptTestHelper.runCommandEx(`impt build update -b build_origin --tag build_tag4 ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt build update -b build_origin --tag build_tag4 ${outputMode}`, (commandOut) => {
                     _checkSuccessUpdateDeploymentMessage(commandOut, 'build_origin');
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => _checkBuildInfo({ tag: 'build_tag4' })).
                     then(done).
@@ -174,9 +174,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
             it('build update remove tag by project', (done) => {
                 ImptTestHelper.projectCreate(DEVICE_GROUP_NAME).
-                    then(() => ImptTestHelper.runCommandEx(`impt build update --remove-tag build_tag2 ${outputMode}`, (commandOut) => {
+                    then(() => ImptTestHelper.runCommand(`impt build update --remove-tag build_tag2 ${outputMode}`, (commandOut) => {
                         _checkSuccessUpdateDeploymentMessage(commandOut, build_id);
-                        ImptTestHelper.checkSuccessStatusEx(commandOut);
+                        ImptTestHelper.checkSuccessStatus(commandOut);
                     })).
                     then(() => _checkBuildInfo({ tag: ['build_tag', 'build_tag3'], tag_cnt: 2 })).
                     then(ImptTestHelper.projectDelete).
@@ -185,9 +185,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('build update several tag', (done) => {
-                ImptTestHelper.runCommandEx(`impt build update -b ${build_id} -t build_tag4 -t build_tag5 ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt build update -b ${build_id} -t build_tag4 -t build_tag5 ${outputMode}`, (commandOut) => {
                     _checkSuccessUpdateDeploymentMessage(commandOut, build_id);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => _checkBuildInfo({ tag: ['build_tag4', 'build_tag5'], tag_cnt: 5 })).
                     then(done).
@@ -195,9 +195,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('build update remove several tag', (done) => {
-                ImptTestHelper.runCommandEx(`impt build update -b ${build_id} -r build_tag -r build_tag3 ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt build update -b ${build_id} -r build_tag -r build_tag3 ${outputMode}`, (commandOut) => {
                     _checkSuccessUpdateDeploymentMessage(commandOut, build_id);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => _checkBuildInfo({ tag: 'build_tag2', tag_cnt: 1 })).
                     then(done).
@@ -219,9 +219,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             }, ImptTestHelper.TIMEOUT);
 
             it('build update by not exist project', (done) => {
-                ImptTestHelper.runCommandEx(`impt build update ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt build update ${outputMode}`, (commandOut) => {
                     MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, MessageHelper.BUILD);
-                    ImptTestHelper.checkFailStatusEx(commandOut);
+                    ImptTestHelper.checkFailStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));

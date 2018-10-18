@@ -58,12 +58,12 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // prepare environment for impt log stream command testing
         function _testSuiteInit() {
-            return ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
-                then(() => ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx)).
-                then(() => ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP2_NAME} -p ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx)).
+            return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
+                then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx)).
+                then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP2_NAME} -p ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx)).
                 then(() => ImptTestHelper.deviceAssign(DEVICE_GROUP_NAME)).
                 then(() => Shell.cp('-Rf', `${__dirname}/fixtures/devicecode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER)).
-                then(() => ImptTestHelper.runCommandEx(`impt build run -g ${DEVICE_GROUP_NAME} -x devicecode.nut`, ImptTestHelper.emptyCheckEx));
+                then(() => ImptTestHelper.runCommand(`impt build run -g ${DEVICE_GROUP_NAME} -x devicecode.nut`, ImptTestHelper.emptyCheckEx));
         }
 
         function _checkLogMessages(commandOut, messages = {}) {
@@ -80,11 +80,11 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // delete all entities using in impt log stream test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
         }
 
         function _checkLogStreamOpenedMessage(commandOut, device) {
-            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+            ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
                 Util.format(`${UserInterractor.MESSAGES.LOG_STREAM_OPENED}`,
                     `${device}`
                 )
@@ -108,7 +108,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 Promise.all([
                     ImptTestHelper.runCommandWithTerminate(`impt log stream -d ${config.devices[0]} ${outputMode}`, (commandOut) => {
                         _checkLogStreamOpenedMessage(commandOut, config.devices[0]);
-                        ImptTestHelper.checkSuccessStatusEx(commandOut);
+                        ImptTestHelper.checkSuccessStatus(commandOut);
                     }),
                     ImptTestHelper.delayMs(5000).
                         then(ImptTestHelper.deviceRestart)
@@ -120,48 +120,48 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         describe('log stream negative tests >', () => {
             it('log stream by not exist project', (done) => {
-                ImptTestHelper.runCommandEx(`impt log stream ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt log stream ${outputMode}`, (commandOut) => {
                     MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, MessageHelper.DEVICE);
-                    ImptTestHelper.checkFailStatusEx(commandOut);
+                    ImptTestHelper.checkFailStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('log stream without device value', (done) => {
-                ImptTestHelper.runCommandEx(`impt log stream ${outputMode} -d`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt log stream ${outputMode} -d`, (commandOut) => {
                     MessageHelper.checkNotEnoughArgumentsError(commandOut, 'd');
-                    ImptTestHelper.checkFailStatusEx(commandOut);
+                    ImptTestHelper.checkFailStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommandEx(`impt log stream ${outputMode} -d ""`, (commandOut) => {
+                    then(() => ImptTestHelper.runCommand(`impt log stream ${outputMode} -d ""`, (commandOut) => {
                         MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, MessageHelper.DEVICE);
-                        ImptTestHelper.checkFailStatusEx(commandOut);
+                        ImptTestHelper.checkFailStatus(commandOut);
                     })).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('log stream without dg value', (done) => {
-                ImptTestHelper.runCommandEx(`impt log stream ${outputMode} -g`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt log stream ${outputMode} -g`, (commandOut) => {
                     MessageHelper.checkNotEnoughArgumentsError(commandOut, 'g');
-                    ImptTestHelper.checkFailStatusEx(commandOut);
+                    ImptTestHelper.checkFailStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommandEx(`impt log stream ${outputMode} -g ""`, (commandOut) => {
+                    then(() => ImptTestHelper.runCommand(`impt log stream ${outputMode} -g ""`, (commandOut) => {
                         MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, MessageHelper.DG);
-                        ImptTestHelper.checkFailStatusEx(commandOut);
+                        ImptTestHelper.checkFailStatus(commandOut);
                     })).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('log stream without output value', (done) => {
-                ImptTestHelper.runCommandEx(`impt log stream -d ${config.devices[0]} -z`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt log stream -d ${config.devices[0]} -z`, (commandOut) => {
                     MessageHelper.checkNotEnoughArgumentsError(commandOut, 'z');
-                    ImptTestHelper.checkFailStatusEx(commandOut);
+                    ImptTestHelper.checkFailStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommandEx(`impt log stream -d ${config.devices[0]} -z undefined`, (commandOut) => {
+                    then(() => ImptTestHelper.runCommand(`impt log stream -d ${config.devices[0]} -z undefined`, (commandOut) => {
                         MessageHelper.checkInvalidValuesError(commandOut);
-                        ImptTestHelper.checkFailStatusEx(commandOut);
+                        ImptTestHelper.checkFailStatus(commandOut);
                     })).
                     then(done).
                     catch(error => done.fail(error));

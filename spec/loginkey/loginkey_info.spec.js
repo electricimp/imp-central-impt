@@ -56,32 +56,32 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // delete all entities using in impt loginkey info test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommandEx(`impt loginkey delete --lk ${loginkey_id} --pwd ${config.password} --confirmed`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommand(`impt loginkey delete --lk ${loginkey_id} --pwd ${config.password} --confirmed`, ImptTestHelper.emptyCheckEx);
         }
 
         // prepare test environment for impt loginkey info test suite
         function _testSuiteInit() {
-            return ImptTestHelper.runCommandEx(`impt loginkey create --pwd ${config.password} --descr "${LOGINKEY_DESCR}" ${outputMode}`, (commandOut) => {
+            return ImptTestHelper.runCommand(`impt loginkey create --pwd ${config.password} --descr "${LOGINKEY_DESCR}" ${outputMode}`, (commandOut) => {
                 loginkey_id = ImptTestHelper.parseId(commandOut);
                 if (!loginkey_id) fail("TestSuitInit error: Fail create loginkey");
-                ImptTestHelper.emptyCheckEx(commandOut);
+                ImptTestHelper.emptyCheck(commandOut);
             });
         }
 
         it('loginkey info', (done) => {
-            ImptTestHelper.runCommandEx(`impt loginkey info --lk ${loginkey_id} ${outputMode}`, (commandOut) => {
-                ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_ID, loginkey_id);
-                ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_DESCRIPTION, LOGINKEY_DESCR);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+            ImptTestHelper.runCommand(`impt loginkey info --lk ${loginkey_id} ${outputMode}`, (commandOut) => {
+                ImptTestHelper.checkAttribute(commandOut, ImptTestHelper.ATTR_ID, loginkey_id);
+                ImptTestHelper.checkAttribute(commandOut, ImptTestHelper.ATTR_DESCRIPTION, LOGINKEY_DESCR);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('not exist loginkey info', (done) => {
-            ImptTestHelper.runCommandEx(`impt loginkey info --lk not-exist-loginkey ${outputMode}`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt loginkey info --lk not-exist-loginkey ${outputMode}`, (commandOut) => {
                 MessageHelper.checkEntityNotFoundError(commandOut, Identifier.ENTITY_TYPE.TYPE_LOGIN_KEY, 'not-exist-loginkey');
-                ImptTestHelper.checkFailStatusEx(commandOut);
+                ImptTestHelper.checkFailStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));

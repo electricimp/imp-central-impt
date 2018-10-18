@@ -62,29 +62,29 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // delete all entities using in impt webhook update  test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommandEx(`impt product delete --product ${PRODUCT_NAME} --force --confirmed`, ImptTestHelper.emptyCheckEx).
-                then(() => ImptTestHelper.runCommandEx(`impt dg delete --dg ${DG_NAME_2} -f `, ImptTestHelper.emptyCheckEx)).
-                then(() => ImptTestHelper.runCommandEx(`impt webhook delete --wh ${wh_id} -q`, ImptTestHelper.emptyCheckEx));
+            return ImptTestHelper.runCommand(`impt product delete --product ${PRODUCT_NAME} --force --confirmed`, ImptTestHelper.emptyCheckEx).
+                then(() => ImptTestHelper.runCommand(`impt dg delete --dg ${DG_NAME_2} -f `, ImptTestHelper.emptyCheckEx)).
+                then(() => ImptTestHelper.runCommand(`impt webhook delete --wh ${wh_id} -q`, ImptTestHelper.emptyCheckEx));
         }
 
         // prepare test environment for impt webhook update test suite
         function _testSuiteInit() {
-            return ImptTestHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
-                then(() => ImptTestHelper.runCommandEx(`impt dg create --name ${DG_NAME} -p ${PRODUCT_NAME} `, (commandOut) => {
+            return ImptTestHelper.runCommand(`impt product create --name ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
+                then(() => ImptTestHelper.runCommand(`impt dg create --name ${DG_NAME} -p ${PRODUCT_NAME} `, (commandOut) => {
                     dg_id = ImptTestHelper.parseId(commandOut);
                     if (!dg_id) fail("TestSuitInit error: Fail create device group");
-                    ImptTestHelper.emptyCheckEx(commandOut);
+                    ImptTestHelper.emptyCheck(commandOut);
                 })).
-                then(() => ImptTestHelper.runCommandEx(`impt webhook create --dg ${DG_NAME} --url ${WH_URL} --event deployment --mime json `, (commandOut) => {
+                then(() => ImptTestHelper.runCommand(`impt webhook create --dg ${DG_NAME} --url ${WH_URL} --event deployment --mime json `, (commandOut) => {
                     wh_id = ImptTestHelper.parseId(commandOut);
                     if (!wh_id) fail("TestSuitInit error: Fail create webhook");
-                    ImptTestHelper.emptyCheckEx(commandOut);
+                    ImptTestHelper.emptyCheck(commandOut);
                 }));
         }
 
         // check 'webhook successfully updated' output message 
         function _checkSuccessUpdateWebhookMessage(commandOut, webhookId) {
-            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+            ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
                 Util.format(`${UserInterractor.MESSAGES.ENTITY_UPDATED}`,
                     `${Identifier.ENTITY_TYPE.TYPE_WEBHOOK} "${webhookId}"`)
             );
@@ -92,7 +92,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // check command`s result by exec webhook info command
         function _checkWebhookInfo(expectInfo = {}) {
-            return ImptTestHelper.runCommandEx(`impt webhook info --wh ${expectInfo.id ? expectInfo.id : wh_id} -z json`, (commandOut) => {
+            return ImptTestHelper.runCommand(`impt webhook info --wh ${expectInfo.id ? expectInfo.id : wh_id} -z json`, (commandOut) => {
                 const json = JSON.parse(commandOut.output);
                 expect(json.Webhook).toBeDefined;
                 expect(json.Webhook.id).toBe(expectInfo.id ? expectInfo.id : wh_id);
@@ -101,14 +101,14 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 expect(json.Webhook.content_type).toBe(expectInfo.mime ? expectInfo.mime : 'json');
                 expect(json.Webhook['Device Group'].id).toBe(expectInfo.dg_id ? expectInfo.dg_id : dg_id);
                 expect(json.Webhook['Device Group'].name).toBe(expectInfo.dg_name ? expectInfo.dg_name : DG_NAME);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             });
         }
 
         it('webhook update without url and mime', (done) => {
-            ImptTestHelper.runCommandEx(`impt webhook update --wh ${wh_id} ${outputMode}`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt webhook update --wh ${wh_id} ${outputMode}`, (commandOut) => {
                 _checkSuccessUpdateWebhookMessage(commandOut, wh_id);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(_checkWebhookInfo).
                 then(done).
@@ -116,9 +116,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         });
 
         it('webhook update url and mime', (done) => {
-            ImptTestHelper.runCommandEx(`impt webhook update --wh ${wh_id} --url ${WH_URL_2} --mime urlencoded ${outputMode}`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt webhook update --wh ${wh_id} --url ${WH_URL_2} --mime urlencoded ${outputMode}`, (commandOut) => {
                 _checkSuccessUpdateWebhookMessage(commandOut, wh_id);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(() => { _checkWebhookInfo({ url: WH_URL_2, mime: 'urlencoded' }); }).
                 then(done).
@@ -126,9 +126,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         });
 
         it('update not exist webhook', (done) => {
-            ImptTestHelper.runCommandEx(`impt webhook update --wh not-exist-webhook --url ${WH_URL_2} ${outputMode}`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt webhook update --wh not-exist-webhook --url ${WH_URL_2} ${outputMode}`, (commandOut) => {
                 MessageHelper.checkEntityNotFoundError(commandOut, Identifier.ENTITY_TYPE.TYPE_WEBHOOK, 'not-exist-webhook');
-                ImptTestHelper.checkFailStatusEx(commandOut);
+                ImptTestHelper.checkFailStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));

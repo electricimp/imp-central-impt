@@ -59,22 +59,22 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // prepare environment for device group restart command testing
         function _testSuiteInit() {
-            return ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
-                then(() => ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP_NAME} -s "${DEVICE_GROUP_DESCR}" -p ${PRODUCT_NAME}`, (commandOut) => {
+            return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
+                then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -s "${DEVICE_GROUP_DESCR}" -p ${PRODUCT_NAME}`, (commandOut) => {
                     dg_id = ImptTestHelper.parseId(commandOut);
                     if (!dg_id) fail("TestSuitInit error: Fail create device group");
-                    ImptTestHelper.emptyCheckEx(commandOut);
+                    ImptTestHelper.emptyCheck(commandOut);
                 }));
         }
 
         // delete all entities using in impt dg restart test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx);
         }
 
         // check 'device group successfully restarted' output message 
         function _checkSuccessRestartedDeviceMessage(commandOut, dg) {
-            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+            ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
                 Util.format(`${UserInterractor.MESSAGES.DG_DEVICES_RESTARTED}`,
                     `${Identifier.ENTITY_TYPE.TYPE_DEVICE_GROUP} "${dg}"`)
             );
@@ -82,7 +82,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // check 'device group successfully coditional restarted' output message 
         function _checkSuccessCondRestartedDeviceMessage(commandOut, dg) {
-            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+            ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
                 Util.format(`${UserInterractor.MESSAGES.DG_DEVICES_COND_RESTARTED}`,
                     `${Identifier.ENTITY_TYPE.TYPE_DEVICE_GROUP} "${dg}"`)
             );
@@ -90,7 +90,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // check 'device group have no device' output message 
         function _checkNoDeviceMessage(commandOut, dg) {
-            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+            ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
                 Util.format(`${UserInterractor.MESSAGES.DG_NO_DEVICES}`,
                     `${Identifier.ENTITY_TYPE.TYPE_DEVICE_GROUP} "${dg}"`)
             );
@@ -112,41 +112,41 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             }, ImptTestHelper.TIMEOUT);
 
             it('restart device by device group id', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg restart --dg ${dg_id} ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt dg restart --dg ${dg_id} ${outputMode}`, (commandOut) => {
                     _checkSuccessRestartedDeviceMessage(commandOut, dg_id);
-                    ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_ID, config.devices[0]);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkAttribute(commandOut, ImptTestHelper.ATTR_ID, config.devices[0]);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('restart device by device group name', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg restart --dg ${DEVICE_GROUP_NAME} --conditional ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt dg restart --dg ${DEVICE_GROUP_NAME} --conditional ${outputMode}`, (commandOut) => {
                     _checkSuccessCondRestartedDeviceMessage(commandOut, DEVICE_GROUP_NAME);
-                    ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_ID, config.devices[0]);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkAttribute(commandOut, ImptTestHelper.ATTR_ID, config.devices[0]);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('restart device by project', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg restart ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt dg restart ${outputMode}`, (commandOut) => {
                     _checkSuccessRestartedDeviceMessage(commandOut, dg_id);
-                    ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_ID, config.devices[0]);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkAttribute(commandOut, ImptTestHelper.ATTR_ID, config.devices[0]);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             xit('restart device with log display', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg restart --dg ${DEVICE_GROUP_NAME} --log ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt dg restart --dg ${DEVICE_GROUP_NAME} --log ${outputMode}`, (commandOut) => {
                     _checkSuccessRestartedDeviceMessage(commandOut, DEVICE_GROUP_NAME);
                     // TODO: check interactive output
-                    ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_ID, config.devices[0]);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkAttribute(commandOut, ImptTestHelper.ATTR_ID, config.devices[0]);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
@@ -155,27 +155,27 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         describe('device group create negative tests >', () => {
             it('restart device by not exist project', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg restart ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt dg restart ${outputMode}`, (commandOut) => {
                     MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, MessageHelper.DG);
-                    ImptTestHelper.checkFailStatusEx(commandOut);
+                    ImptTestHelper.checkFailStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('restart device by not exist device group', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg restart -g not-exist-device-group ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt dg restart -g not-exist-device-group ${outputMode}`, (commandOut) => {
                     MessageHelper.checkEntityNotFoundError(commandOut, MessageHelper.DG, 'not-exist-device-group');
-                    ImptTestHelper.checkFailStatusEx(commandOut);
+                    ImptTestHelper.checkFailStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('restart not exist device', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg restart -g ${DEVICE_GROUP_NAME} ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt dg restart -g ${DEVICE_GROUP_NAME} ${outputMode}`, (commandOut) => {
                     _checkNoDeviceMessage(commandOut, DEVICE_GROUP_NAME)
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));

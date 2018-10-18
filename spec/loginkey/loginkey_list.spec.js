@@ -79,21 +79,21 @@ describe(`impt loginkey list test suite (output: ${outputMode ? outputMode : 'de
 
     // delete all entities using in impt loginkey list test suite
     function _testSuiteCleanUp() {
-        return ImptTestHelper.runCommandEx(`impt loginkey delete --lk ${loginkey_id} --pwd ${config.password} --confirmed`, ImptTestHelper.emptyCheckEx).
-            then(() => ImptTestHelper.runCommandEx(`impt loginkey delete --lk ${loginkey2_id} --pwd ${config.password} --confirmed`, ImptTestHelper.emptyCheckEx));
+        return ImptTestHelper.runCommand(`impt loginkey delete --lk ${loginkey_id} --pwd ${config.password} --confirmed`, ImptTestHelper.emptyCheckEx).
+            then(() => ImptTestHelper.runCommand(`impt loginkey delete --lk ${loginkey2_id} --pwd ${config.password} --confirmed`, ImptTestHelper.emptyCheckEx));
     }
 
     // prepare test environment for impt loginkey list test suite
     function _testSuiteInit() {
-        return ImptTestHelper.runCommandEx(`impt loginkey create --pwd ${config.password} --descr "${LOGINKEY_DESCR}"`, (commandOut) => {
+        return ImptTestHelper.runCommand(`impt loginkey create --pwd ${config.password} --descr "${LOGINKEY_DESCR}"`, (commandOut) => {
             loginkey_id = ImptTestHelper.parseId(commandOut);
             if (!loginkey_id) fail("TestSuitInit error: Fail create loginkey");
-            ImptTestHelper.emptyCheckEx(commandOut);
+            ImptTestHelper.emptyCheck(commandOut);
         }).
-            then(() => ImptTestHelper.runCommandEx(`impt loginkey create --pwd ${config.password}`, (commandOut) => {
+            then(() => ImptTestHelper.runCommand(`impt loginkey create --pwd ${config.password}`, (commandOut) => {
                 loginkey2_id = ImptTestHelper.parseId(commandOut);
                 if (!loginkey2_id) fail("TestSuitInit error: Fail create loginkey");
-                ImptTestHelper.emptyCheckEx(commandOut);
+                ImptTestHelper.emptyCheck(commandOut);
             }));
     }
 
@@ -105,11 +105,11 @@ describe(`impt loginkey list test suite (output: ${outputMode ? outputMode : 'de
     }
 
     it('loginkey list', (done) => {
-        ImptTestHelper.runCommandEx(`impt loginkey list -z json`, (commandOut) => {
+        ImptTestHelper.runCommand(`impt loginkey list -z json`, (commandOut) => {
             _checkLoginkeyExist(commandOut);
             _checkLoginkeyExist(commandOut, { id: loginkey_id, description: LOGINKEY_DESCR });
             _checkLoginkeyExist(commandOut, { id: loginkey2_id });
-            ImptTestHelper.checkSuccessStatusEx(commandOut);
+            ImptTestHelper.checkSuccessStatus(commandOut);
         }).
             then(done).
             catch(error => done.fail(error));

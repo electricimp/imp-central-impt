@@ -32,30 +32,30 @@ const ImptTestHelper = require('../ImptTestHelper');
 // Helper class for testing impt auth commands.
 class ImptAuthCommandsHelper {
     static localLogout() {
-        return ImptTestHelper.runCommandEx(`impt auth logout --local `, ImptTestHelper.emptyCheckEx);
+        return ImptTestHelper.runCommand(`impt auth logout --local `, ImptTestHelper.emptyCheckEx);
     }
 
     static globalLogout() {
-        return ImptTestHelper.runCommandEx(`impt auth logout`, ImptTestHelper.emptyCheckEx);
+        return ImptTestHelper.runCommand(`impt auth logout`, ImptTestHelper.emptyCheckEx);
     }
 
     static localLogin() {
-        return ImptTestHelper.runCommandEx(`impt auth login --local --user ${config.email} --pwd ${config.password} --confirmed`,
+        return ImptTestHelper.runCommand(`impt auth login --local --user ${config.email} --pwd ${config.password} --confirmed`,
             ImptTestHelper.emptyCheckEx);
     }
 
     static globalLogin() {
-        return ImptTestHelper.runCommandEx(`impt auth login --user ${config.email} --pwd ${config.password} --confirmed`,
+        return ImptTestHelper.runCommand(`impt auth login --user ${config.email} --pwd ${config.password} --confirmed`,
             ImptTestHelper.emptyCheckEx);
     }
 
     static globalLoginByLoginkey(loginkey) {
-        return ImptTestHelper.runCommandEx(`impt auth login --lk ${loginkey} --confirmed`,
+        return ImptTestHelper.runCommand(`impt auth login --lk ${loginkey} --confirmed`,
             ImptTestHelper.emptyCheckEx);
     }
 
     static localLoginByLoginkey(loginkey) {
-        return ImptTestHelper.runCommandEx(`impt auth login --lk ${loginkey} --local --confirmed`,
+        return ImptTestHelper.runCommand(`impt auth login --lk ${loginkey} --local --confirmed`,
             ImptTestHelper.emptyCheckEx);
     }
 }

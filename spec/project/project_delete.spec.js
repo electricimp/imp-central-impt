@@ -57,19 +57,19 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
          // delete all entities using in impt project delete test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx).
-               then(() => ImptTestHelper.runCommandEx(`impt project delete --all -q`, ImptTestHelper.emptyCheckEx));
+            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx).
+               then(() => ImptTestHelper.runCommand(`impt project delete --all -q`, ImptTestHelper.emptyCheckEx));
         }
 
         // check successfuly deleted project output message 
         function _checkSuccessDeletedProjectMessage(commandOut) {
-            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+            ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
                 Util.format(`${UserInterractor.MESSAGES.ENTITY_DELETED}`, 'Project'));
         }
 
         // check project not found output message 
         function _checkProjectNotExistMessage(commandOut) {
-            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+            ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
                 Util.format(`${UserInterractor.MESSAGES.NO_CONFIG_CURR_DIR_MSG}`, 'Project'));
         }
 
@@ -88,15 +88,15 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
             // prepare test environment for impt project delete test
             function _testSuiteInit() {
-                return ImptTestHelper.runCommandEx(`impt project create --product ${PRODUCT_NAME} --create-product --name ${DG_NAME} --descr "${DG_DESCR}" ${outputMode}`, (commandOut) => {
-                    ImptTestHelper.emptyCheckEx(commandOut);
+                return ImptTestHelper.runCommand(`impt project create --product ${PRODUCT_NAME} --create-product --name ${DG_NAME} --descr "${DG_DESCR}" ${outputMode}`, (commandOut) => {
+                    ImptTestHelper.emptyCheck(commandOut);
                 });
             }
 
             it('delete project', (done) => {
-                ImptTestHelper.runCommandEx(`impt project delete -q ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt project delete -q ${outputMode}`, (commandOut) => {
                     _checkSuccessDeletedProjectMessage(commandOut);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => {
                         ImptTestHelper.checkFileNotExist('.impt.project');
@@ -110,9 +110,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('delete project with entities', (done) => {
-                ImptTestHelper.runCommandEx(`impt project delete --entities -q ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt project delete --entities -q ${outputMode}`, (commandOut) => {
                     _checkSuccessDeletedProjectMessage(commandOut);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => {
                         ImptTestHelper.checkFileNotExist('.impt.project');
@@ -124,9 +124,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('delete project with files', (done) => {
-                ImptTestHelper.runCommandEx(`impt project delete --files -q ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt project delete --files -q ${outputMode}`, (commandOut) => {
                     _checkSuccessDeletedProjectMessage(commandOut);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => {
                         ImptTestHelper.checkFileNotExist('.impt.project');
@@ -138,9 +138,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('delete project with entities and files', (done) => {
-                ImptTestHelper.runCommandEx(`impt project delete --entities --files -q ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt project delete --entities --files -q ${outputMode}`, (commandOut) => {
                     _checkSuccessDeletedProjectMessage(commandOut);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => {
                         ImptTestHelper.checkFileNotExist('.impt.project');
@@ -152,9 +152,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('delete project with all', (done) => {
-                ImptTestHelper.runCommandEx(`impt project delete --all -q ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt project delete --all -q ${outputMode}`, (commandOut) => {
                     _checkSuccessDeletedProjectMessage(commandOut);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => {
                         ImptTestHelper.checkFileNotExist('.impt.project');
@@ -174,9 +174,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             }, ImptTestHelper.TIMEOUT);
 
             it('delete not exist project', (done) => {
-                ImptTestHelper.runCommandEx(`impt project delete -q ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt project delete -q ${outputMode}`, (commandOut) => {
                     _checkProjectNotExistMessage(commandOut);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));

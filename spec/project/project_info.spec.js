@@ -63,8 +63,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
          // delete all entities using in impt project info test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx).
-                then(() => ImptTestHelper.runCommandEx(`impt project delete --all -q`, ImptTestHelper.emptyCheckEx));
+            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx).
+                then(() => ImptTestHelper.runCommand(`impt project delete --all -q`, ImptTestHelper.emptyCheckEx));
         }
 
         describe('project exist preconditions >', () => {
@@ -76,23 +76,23 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
             // prepare test environment for impt project info test
             function _testSuiteInit() {
-                return ImptTestHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME}`, (commandOut) => {
+                return ImptTestHelper.runCommand(`impt product create --name ${PRODUCT_NAME}`, (commandOut) => {
                     product_id = ImptTestHelper.parseId(commandOut);
                     if (!product_id) fail("TestSuitInit error: Fail create product");
-                    ImptTestHelper.emptyCheckEx(commandOut);
+                    ImptTestHelper.emptyCheck(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommandEx(`impt dg create --name ${DG_NAME} --descr "${DG_DESCR}" --product ${PRODUCT_NAME} ${outputMode}`, (commandOut) => {
+                    then(() => ImptTestHelper.runCommand(`impt dg create --name ${DG_NAME} --descr "${DG_DESCR}" --product ${PRODUCT_NAME} ${outputMode}`, (commandOut) => {
                         dg_id = ImptTestHelper.parseId(commandOut);
                         if (!dg_id) fail("TestSuitInit error: Fail create device group");
-                        ImptTestHelper.emptyCheckEx(commandOut);
+                        ImptTestHelper.emptyCheck(commandOut);
                     })).
-                    then(() => ImptTestHelper.runCommandEx(`impt project link --dg ${DG_NAME} ${outputMode}`, (commandOut) => {
-                        ImptTestHelper.emptyCheckEx(commandOut);
+                    then(() => ImptTestHelper.runCommand(`impt project link --dg ${DG_NAME} ${outputMode}`, (commandOut) => {
+                        ImptTestHelper.emptyCheck(commandOut);
                     }));
             }
 
             it('project info', (done) => {
-                ImptTestHelper.runCommandEx(`impt project info -z json`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt project info -z json`, (commandOut) => {
                     const json = JSON.parse(commandOut.output);
                     expect(json.Project['Device file']).toBe(ProjectHelper.DEVICE_FILE);
                     expect(json.Project['Agent file']).toBe(ProjectHelper.AGENT_FILE);
@@ -102,14 +102,14 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     expect(json.Project['Device Group'].description).toBe(DG_DESCR);
                     expect(json.Project['Device Group'].Product.id).toBe(product_id);
                     expect(json.Project['Device Group'].Product.name).toBe(PRODUCT_NAME);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('project full info', (done) => {
-                ImptTestHelper.runCommandEx(`impt project info --full -z json`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt project info --full -z json`, (commandOut) => {
                     const endpoint = config.apiEndpoint ? `${config.apiEndpoint}` : `${DEFAULT_ENDPOINT}`;
                     const json = JSON.parse(commandOut.output);
                     // Project info
@@ -129,7 +129,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     expect(json.Auth['Username']).toBe(config.username);
                     expect(json.Auth['Email']).toBe(config.email);
                     expect(json.Auth['Account id']).toBe(config.accountid);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
@@ -144,9 +144,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             }, ImptTestHelper.TIMEOUT);
 
             it('project info without project file', (done) => {
-                ImptTestHelper.runCommandEx(`impt project info ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt project info ${outputMode}`, (commandOut) => {
                     MessageHelper.checkProjectNotFoundMessage(commandOut);
-                    ImptTestHelper.checkFailStatusEx(commandOut);
+                    ImptTestHelper.checkFailStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
@@ -161,9 +161,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
                 it('project info with not exist device group', (done) => {
                     Shell.cp('-Rf', `${__dirname}/fixtures/.impt.project`, ImptTestHelper.TESTS_EXECUTION_FOLDER);
-                    ImptTestHelper.runCommandEx(`impt project info ${outputMode}`, (commandOut) => {
+                    ImptTestHelper.runCommand(`impt project info ${outputMode}`, (commandOut) => {
                         MessageHelper.checkProjectDeviceGroupNotExistMessage(commandOut, 'not-exist-device-group')
-                        ImptTestHelper.checkFailStatusEx(commandOut);
+                        ImptTestHelper.checkFailStatus(commandOut);
                     }).
                         then(done).
                         catch(error => done.fail(error));

@@ -64,30 +64,30 @@ describe(`impt build info test suite (output: ${outputMode ? outputMode : 'defau
 
     // prepare environment for build info command testing
     function _testSuiteInit() {
-        return ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME}`, (commandOut) => {
+        return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, (commandOut) => {
             product_id = ImptTestHelper.parseId(commandOut);
             if (!product_id) fail("TestSuitInit error: Fail create product");
-            ImptTestHelper.emptyCheckEx(commandOut);
+            ImptTestHelper.emptyCheck(commandOut);
         }).
-            then(() => ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
+            then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
                 dg_id = ImptTestHelper.parseId(commandOut);
                 if (!dg_id) fail("TestSuitInit error: Fail create device group");
-                ImptTestHelper.emptyCheckEx(commandOut);
+                ImptTestHelper.emptyCheck(commandOut);
             })).
             then(() => Shell.cp('-Rf', `${__dirname}/fixtures/devicecode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER)).
             then(() => Shell.cp('-Rf', `${__dirname}/fixtures/agentcode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER)).
-            then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP_NAME} -s build_descr -x devicecode.nut -y agentcode.nut -t build_tag -o build_origin`, (commandOut) => {
+            then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME} -s build_descr -x devicecode.nut -y agentcode.nut -t build_tag -o build_origin`, (commandOut) => {
                 build_id = ImptTestHelper.parseId(commandOut);
                 if (!build_id) fail("TestSuiteInit error: Fail create build");
                 build_sha = ImptTestHelper.parseSha(commandOut);
                 if (!build_sha) fail("TestSuiteInit error: Fail parse build sha");
-                ImptTestHelper.emptyCheckEx(commandOut);
+                ImptTestHelper.emptyCheck(commandOut);
             }));
     }
 
     // delete all entities using in impt build info test suite
     function _testSuiteCleanUp() {
-        return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
+        return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
     }
 
     function _checkBuildInfo(commandOut) {
@@ -109,36 +109,36 @@ describe(`impt build info test suite (output: ${outputMode ? outputMode : 'defau
 
     describe('build info positive tests >', () => {
         it('build info by id', (done) => {
-            ImptTestHelper.runCommandEx(`impt build info --build ${build_id} -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt build info --build ${build_id} -z json`, (commandOut) => {
                 _checkBuildInfo(commandOut);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('build info by sha', (done) => {
-            ImptTestHelper.runCommandEx(`impt build info -b ${build_sha} -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt build info -b ${build_sha} -z json`, (commandOut) => {
                 _checkBuildInfo(commandOut);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('build info by tag', (done) => {
-            ImptTestHelper.runCommandEx(`impt build info -b build_tag -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt build info -b build_tag -z json`, (commandOut) => {
                 _checkBuildInfo(commandOut);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('build info by origin', (done) => {
-            ImptTestHelper.runCommandEx(`impt build info -b build_origin -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt build info -b build_origin -z json`, (commandOut) => {
                 _checkBuildInfo(commandOut);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
@@ -146,9 +146,9 @@ describe(`impt build info test suite (output: ${outputMode ? outputMode : 'defau
 
         it('build info by project', (done) => {
             ImptTestHelper.projectCreate(DEVICE_GROUP_NAME).
-                then(() => ImptTestHelper.runCommandEx(`impt build info -z json`, (commandOut) => {
+                then(() => ImptTestHelper.runCommand(`impt build info -z json`, (commandOut) => {
                     _checkBuildInfo(commandOut);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 })).
                 then(ImptTestHelper.projectDelete).
                 then(done).
@@ -158,18 +158,18 @@ describe(`impt build info test suite (output: ${outputMode ? outputMode : 'defau
 
     describe('build info negative tests >', () => {
         it('build info by not exist project', (done) => {
-            ImptTestHelper.runCommandEx(`impt build info`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt build info`, (commandOut) => {
                 MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, 'Deployment');
-                ImptTestHelper.checkFailStatusEx(commandOut);
+                ImptTestHelper.checkFailStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('not exist build info', (done) => {
-            ImptTestHelper.runCommandEx(`impt build info -b not-exist-deployment`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt build info -b not-exist-deployment`, (commandOut) => {
                 MessageHelper.checkEntityNotFoundError(commandOut, 'Deployment', 'not-exist-deployment');
-                ImptTestHelper.checkFailStatusEx(commandOut);
+                ImptTestHelper.checkFailStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));

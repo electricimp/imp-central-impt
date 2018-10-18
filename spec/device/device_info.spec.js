@@ -56,28 +56,28 @@ describe(`impt device info test suite (output: ${outputMode ? outputMode : 'defa
 
     // prepare environment for device info command testing
     function _testSuiteInit() {
-        return ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME}`, (commandOut) => {
+        return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, (commandOut) => {
             product_id = ImptTestHelper.parseId(commandOut);
             if (!product_id) fail("TestSuitInit error: Fail create product");
-            ImptTestHelper.emptyCheckEx(commandOut);
+            ImptTestHelper.emptyCheck(commandOut);
         }).
-            then(() => ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
+            then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
                 dg_id = ImptTestHelper.parseId(commandOut);
                 if (!dg_id) fail("TestSuitInit error: Fail create device group");
-                ImptTestHelper.emptyCheckEx(commandOut);
+                ImptTestHelper.emptyCheck(commandOut);
             })).
             then(() => ImptTestHelper.deviceAssign(DEVICE_GROUP_NAME)).
-            then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP_NAME}`, (commandOut) => {
+            then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME}`, (commandOut) => {
                 build_id = ImptTestHelper.parseId(commandOut);
                 if (!build_id) fail("TestSuiteInit error: Fail create build");
-                ImptTestHelper.emptyCheckEx(commandOut);
+                ImptTestHelper.emptyCheck(commandOut);
             }));
     }
 
     // delete all entities using in impt device info test suite
     function _testSuiteCleanUp() {
-        return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx).
-            then(() => ImptTestHelper.runCommandEx(`impt device unassign -d ${config.devices[0]}`, ImptTestHelper.emptyCheckEx));
+        return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx).
+            then(() => ImptTestHelper.runCommand(`impt device unassign -d ${config.devices[0]}`, ImptTestHelper.emptyCheckEx));
     }
 
     function _checkDeviceInfo(commandOut) {
@@ -107,36 +107,36 @@ describe(`impt device info test suite (output: ${outputMode ? outputMode : 'defa
         }, ImptTestHelper.TIMEOUT);
 
         it('device info by id', (done) => {
-            ImptTestHelper.runCommandEx(`impt device info --device ${config.devices[0]} -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt device info --device ${config.devices[0]} -z json`, (commandOut) => {
                 _checkDeviceInfo(commandOut);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('device info by name', (done) => {
-            ImptTestHelper.runCommandEx(`impt device info --device ${config.devicenames[0]} -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt device info --device ${config.devicenames[0]} -z json`, (commandOut) => {
                 _checkDeviceInfo(commandOut);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('device info by mac', (done) => {
-            ImptTestHelper.runCommandEx(`impt device info --device ${config.devicemacs[0]} -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt device info --device ${config.devicemacs[0]} -z json`, (commandOut) => {
                 _checkDeviceInfo(commandOut);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('device info by agent id', (done) => {
-            ImptTestHelper.runCommandEx(`impt device info --device ${config.deviceaids[0]} -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt device info --device ${config.deviceaids[0]} -z json`, (commandOut) => {
                 _checkDeviceInfo(commandOut);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
@@ -145,7 +145,7 @@ describe(`impt device info test suite (output: ${outputMode ? outputMode : 'defa
 
     describe('impt device info negative tests >', () => {
         it('unassigned device info', (done) => {
-            ImptTestHelper.runCommandEx(`impt device info --device ${config.devices[0]} -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt device info --device ${config.devices[0]} -z json`, (commandOut) => {
                 let json = JSON.parse(commandOut.output);
                 expect(json.Device.id).toBe(config.devices[0]);
                 expect(json.Device.name).toBe(config.devicenames[0]);
@@ -153,25 +153,25 @@ describe(`impt device info test suite (output: ${outputMode ? outputMode : 'defa
                 expect(json.Device.agent_id).toBeEmptyString();
                 expect(json.Device['Device Group']).toBeUndefined();
                 expect(json.Device['Product']).toBeUndefined();
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('not exist device info', (done) => {
-            ImptTestHelper.runCommandEx(`impt device info -d not-exist-device`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt device info -d not-exist-device`, (commandOut) => {
                 MessageHelper.checkEntityNotFoundError(commandOut, MessageHelper.DEVICE, 'not-exist-device');
-                ImptTestHelper.checkFailStatusEx(commandOut);
+                ImptTestHelper.checkFailStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('device info without device value', (done) => {
-            ImptTestHelper.runCommandEx(`impt device info -d`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt device info -d`, (commandOut) => {
                 MessageHelper.checkNotEnoughArgumentsError(commandOut, 'd');
-                ImptTestHelper.checkFailStatusEx(commandOut);
+                ImptTestHelper.checkFailStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));

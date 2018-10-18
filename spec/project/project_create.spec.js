@@ -58,29 +58,29 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // delete all entities using in impt project create test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx).
-                then(() => ImptTestHelper.runCommandEx(`impt project delete --all --confirmed`, ImptTestHelper.emptyCheckEx));
+            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx).
+                then(() => ImptTestHelper.runCommand(`impt project delete --all --confirmed`, ImptTestHelper.emptyCheckEx));
         }
         
         // prepare test environment for impt project create test suite
         function _testSuiteInit() {
-            return ImptTestHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME}`, (commandOut) => {
+            return ImptTestHelper.runCommand(`impt product create --name ${PRODUCT_NAME}`, (commandOut) => {
                 product_id = ImptTestHelper.parseId(commandOut);
                 if (!product_id) fail("TestSuitInit error: Fail create product");
-                ImptTestHelper.emptyCheckEx(commandOut);
+                ImptTestHelper.emptyCheck(commandOut);
             });
         }
 
         // check successfuly created product output message 
         function _checkSuccessCreateProductMessage(commandOut, productName) {
-            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+            ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
                 Util.format(`${UserInterractor.MESSAGES.ENTITY_CREATED}`,
                     `${Identifier.ENTITY_TYPE.TYPE_PRODUCT} "${productName}"`)
             );
         }
         // check successfuly created device group output message 
         function _checkSuccessCreateDeviceGroupMessage(commandOut, deviceGroupName) {
-            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+            ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
                 Util.format(`${UserInterractor.MESSAGES.ENTITY_CREATED}`,
                     `${Identifier.ENTITY_TYPE.TYPE_DEVICE_GROUP} "${deviceGroupName}"`)
             );
@@ -88,7 +88,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // check successfuly created device source file output message 
         function _checkSuccessCreateDeviceSourceFileMessage(commandOut, fileName) {
-            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+            ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
                 Util.format(`${UserInterractor.MESSAGES.ENTITY_CREATED}`,
                     `${UserInterractor.MESSAGES.PROJECT_DEVICE_SOURCE_FILE} "${fileName}"`)
             );
@@ -96,7 +96,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // check successfuly created agent source file output message 
         function _checkSuccessCreateAgentSourceFileMessage(commandOut, fileName) {
-            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+            ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
                 Util.format(`${UserInterractor.MESSAGES.ENTITY_CREATED}`,
                     `${UserInterractor.MESSAGES.PROJECT_AGENT_SOURCE_FILE} "${fileName}"`)
             );
@@ -104,7 +104,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // check 'project successfully created' output message 
         function _checkSuccessCreateProjectMessage(commandOut) {
-            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+            ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
                 Util.format(`${UserInterractor.MESSAGES.ENTITY_CREATED}`, 'Project')
             );
         }
@@ -123,14 +123,14 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             }, ImptTestHelper.TIMEOUT);
 
             it('project create by product id', (done) => {
-                ImptTestHelper.runCommandEx(`impt project create --product ${product_id} --name ${DG_NAME} --descr "${DG_DESCR}" ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt project create --product ${product_id} --name ${DG_NAME} --descr "${DG_DESCR}" ${outputMode}`, (commandOut) => {
                     _checkSuccessCreateDeviceGroupMessage(commandOut, DG_NAME);
                     _checkSuccessCreateDeviceSourceFileMessage(commandOut, ProjectHelper.DEVICE_FILE);
                     _checkSuccessCreateAgentSourceFileMessage(commandOut, ProjectHelper.AGENT_FILE);
                     _checkSuccessCreateProjectMessage(commandOut);
                     ImptTestHelper.checkFileExist(ProjectHelper.DEVICE_FILE);
                     ImptTestHelper.checkFileExist(ProjectHelper.AGENT_FILE);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => ProjectHelper.checkProjectInfo({ product_id: product_id })).
                     then(done).
@@ -138,14 +138,14 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('project create by product name with device file', (done) => {
-                ImptTestHelper.runCommandEx(`impt project create --product ${PRODUCT_NAME} --name ${DG_NAME} --descr "${DG_DESCR}" --device-file dfile.nut ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt project create --product ${PRODUCT_NAME} --name ${DG_NAME} --descr "${DG_DESCR}" --device-file dfile.nut ${outputMode}`, (commandOut) => {
                     _checkSuccessCreateDeviceGroupMessage(commandOut, DG_NAME);
                     _checkSuccessCreateDeviceSourceFileMessage(commandOut, 'dfile.nut');
                     _checkSuccessCreateAgentSourceFileMessage(commandOut, ProjectHelper.AGENT_FILE);
                     _checkSuccessCreateProjectMessage(commandOut);
                     ImptTestHelper.checkFileExist('dfile.nut');
                     ImptTestHelper.checkFileExist(ProjectHelper.AGENT_FILE);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => ProjectHelper.checkProjectInfo({ product_id: product_id, dfile: 'dfile.nut' })).
                     then(done).
@@ -153,14 +153,14 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('project create by product name with agent file', (done) => {
-                ImptTestHelper.runCommandEx(`impt project create --product ${PRODUCT_NAME} --name ${DG_NAME} --descr "${DG_DESCR}" --agent-file afile.nut ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt project create --product ${PRODUCT_NAME} --name ${DG_NAME} --descr "${DG_DESCR}" --agent-file afile.nut ${outputMode}`, (commandOut) => {
                     _checkSuccessCreateDeviceGroupMessage(commandOut, DG_NAME);
                     _checkSuccessCreateDeviceSourceFileMessage(commandOut, ProjectHelper.DEVICE_FILE);
                     _checkSuccessCreateAgentSourceFileMessage(commandOut, 'afile.nut');
                     _checkSuccessCreateProjectMessage(commandOut);
                     ImptTestHelper.checkFileExist(ProjectHelper.DEVICE_FILE);
                     ImptTestHelper.checkFileExist('afile.nut');
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => ProjectHelper.checkProjectInfo({ product_id: product_id, afile: 'afile.nut' })).
                     then(done).
@@ -168,9 +168,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('project create without product value', (done) => {
-                ImptTestHelper.runCommandEx(`impt project create ${outputMode} --product`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt project create ${outputMode} --product`, (commandOut) => {
                     MessageHelper.checkNotEnoughArgumentsError(commandOut, 'product');
-                    ImptTestHelper.checkFailStatusEx(commandOut);
+                    ImptTestHelper.checkFailStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
@@ -180,9 +180,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         describe('No exist product precondition >', () => {
             it('project create with not existing product', (done) => {
-                ImptTestHelper.runCommandEx(`impt project create --product not-exist-product --name ${DG_NAME} ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt project create --product not-exist-product --name ${DG_NAME} ${outputMode}`, (commandOut) => {
                     MessageHelper.checkEntityNotFoundError(commandOut, Identifier.ENTITY_TYPE.TYPE_PRODUCT, 'not-exist-product');
-                    ImptTestHelper.checkFailStatusEx(commandOut);
+                    ImptTestHelper.checkFailStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
@@ -196,7 +196,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 }, ImptTestHelper.TIMEOUT);
 
                 it('project create with product creating', (done) => {
-                    ImptTestHelper.runCommandEx(`impt project create --product ${PRODUCT_NAME} --create-product --name ${DG_NAME} --descr "${DG_DESCR}" ${outputMode}`, (commandOut) => {
+                    ImptTestHelper.runCommand(`impt project create --product ${PRODUCT_NAME} --create-product --name ${DG_NAME} --descr "${DG_DESCR}" ${outputMode}`, (commandOut) => {
                         _checkSuccessCreateProductMessage(commandOut, PRODUCT_NAME);
                         _checkSuccessCreateDeviceGroupMessage(commandOut, DG_NAME);
                         _checkSuccessCreateDeviceSourceFileMessage(commandOut, ProjectHelper.DEVICE_FILE);
@@ -204,7 +204,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                         _checkSuccessCreateProjectMessage(commandOut);
                         ImptTestHelper.checkFileExist(ProjectHelper.DEVICE_FILE);
                         ImptTestHelper.checkFileExist(ProjectHelper.AGENT_FILE);
-                        ImptTestHelper.checkSuccessStatusEx(commandOut);
+                        ImptTestHelper.checkSuccessStatus(commandOut);
                     }).
                         then(ProjectHelper.checkProjectInfo).
                         then(done).

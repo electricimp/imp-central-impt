@@ -67,91 +67,91 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // delete all entities using in impt product delete test
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx);
         }
 
         // prepare test environment for impt product delete test
         function _testSuiteInit() {
-            return ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME} -s "${PRODUCT_DESCR}"`, (commandOut) => {
+            return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME} -s "${PRODUCT_DESCR}"`, (commandOut) => {
                 product_id = ImptTestHelper.parseId(commandOut);
                 if (!product_id) fail("TestSuitInit error: Fail create product");
-                ImptTestHelper.emptyCheckEx(commandOut);
+                ImptTestHelper.emptyCheck(commandOut);
             });
         }
 
         // check 'product successfully deleted' output message 
         function _checkSuccessDeleteProductMessage(commandOut, product) {
-            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+            ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
                 Util.format(`${UserInterractor.MESSAGES.ENTITY_DELETED}`,
                     `${Identifier.ENTITY_TYPE.TYPE_PRODUCT} "${product}"`)
             );
         }
 
         it('product delete without confirmation', (done) => {
-            ImptTestHelper.runCommandEx(`impt product delete --product ${PRODUCT_NAME} ${outputMode}`, (commandOut) => {
-                ImptTestHelper.checkFailStatusEx(commandOut);
+            ImptTestHelper.runCommand(`impt product delete --product ${PRODUCT_NAME} ${outputMode}`, (commandOut) => {
+                ImptTestHelper.checkFailStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('product delete by name', (done) => {
-            ImptTestHelper.runCommandEx(`impt product delete --product ${PRODUCT_NAME} --confirmed ${outputMode}`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt product delete --product ${PRODUCT_NAME} --confirmed ${outputMode}`, (commandOut) => {
                 _checkSuccessDeleteProductMessage(commandOut, PRODUCT_NAME);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
-                then(() => ImptTestHelper.runCommandEx(`impt product info -p ${PRODUCT_NAME} ${outputMode}`, (commandOut) => {
+                then(() => ImptTestHelper.runCommand(`impt product info -p ${PRODUCT_NAME} ${outputMode}`, (commandOut) => {
                     MessageHelper.checkEntityNotFoundError(commandOut, Identifier.ENTITY_TYPE.TYPE_PRODUCT, PRODUCT_NAME);
-                    ImptTestHelper.checkFailStatusEx(commandOut);
+                    ImptTestHelper.checkFailStatus(commandOut);
                 })).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('product delete by id', (done) => {
-            ImptTestHelper.runCommandEx(`impt product delete -p ${product_id} -q ${outputMode}`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt product delete -p ${product_id} -q ${outputMode}`, (commandOut) => {
                 _checkSuccessDeleteProductMessage(commandOut, product_id);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
-                then(() => ImptTestHelper.runCommandEx(`impt product info -p ${product_id} ${outputMode}`, (commandOut) => {
+                then(() => ImptTestHelper.runCommand(`impt product info -p ${product_id} ${outputMode}`, (commandOut) => {
                     MessageHelper.checkEntityNotFoundError(commandOut, Identifier.ENTITY_TYPE.TYPE_PRODUCT, product_id);
-                    ImptTestHelper.checkFailStatusEx(commandOut);
+                    ImptTestHelper.checkFailStatus(commandOut);
                 })).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('product delete by empty name', (done) => {
-            ImptTestHelper.runCommandEx(`impt product delete -p "" -q ${outputMode}`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt product delete -p "" -q ${outputMode}`, (commandOut) => {
                 MessageHelper.checkMissingArgumentValueError(commandOut, 'product');
-                ImptTestHelper.checkFailStatusEx(commandOut);
+                ImptTestHelper.checkFailStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('product delete by name without value', (done) => {
-            ImptTestHelper.runCommandEx(`impt product delete -q ${outputMode} -p`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt product delete -q ${outputMode} -p`, (commandOut) => {
                 MessageHelper.checkNotEnoughArgumentsError(commandOut, 'p');
-                ImptTestHelper.checkFailStatusEx(commandOut);
+                ImptTestHelper.checkFailStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('delete not exist product', (done) => {
-            ImptTestHelper.runCommandEx(`impt product delete -p not-exist-product -q ${outputMode}`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt product delete -p not-exist-product -q ${outputMode}`, (commandOut) => {
                 MessageHelper.checkEntityNotFoundError(commandOut, Identifier.ENTITY_TYPE.TYPE_PRODUCT, 'not-exist-product');
-                ImptTestHelper.checkFailStatusEx(commandOut);
+                ImptTestHelper.checkFailStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('product delete by not exist project', (done) => {
-            ImptTestHelper.runCommandEx(`impt product delete -q ${outputMode}`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt product delete -q ${outputMode}`, (commandOut) => {
                 MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, 'Product');
-                ImptTestHelper.checkFailStatusEx(commandOut);
+                ImptTestHelper.checkFailStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
@@ -166,26 +166,26 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
             // create project for test purposes
             function _testSuiteProjectInit() {
-                return ImptTestHelper.runCommandEx(`impt project create --product ${PRODUCT_NAME} --name ${DEVICE_GROUP_NAME} -q`, ImptTestHelper.emptyCheckEx);
+                return ImptTestHelper.runCommand(`impt project create --product ${PRODUCT_NAME} --name ${DEVICE_GROUP_NAME} -q`, ImptTestHelper.emptyCheckEx);
             }
 
             it('product delete by project', (done) => {
-                ImptTestHelper.runCommandEx(`impt product delete -f -q ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt product delete -f -q ${outputMode}`, (commandOut) => {
                     _checkSuccessDeleteProductMessage(commandOut, product_id);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommandEx(`impt product info -p ${PRODUCT_NAME} ${outputMode}`, (commandOut) => {
+                    then(() => ImptTestHelper.runCommand(`impt product info -p ${PRODUCT_NAME} ${outputMode}`, (commandOut) => {
                         MessageHelper.checkEntityNotFoundError(commandOut, Identifier.ENTITY_TYPE.TYPE_PRODUCT, PRODUCT_NAME);
-                        ImptTestHelper.checkFailStatusEx(commandOut);
+                        ImptTestHelper.checkFailStatus(commandOut);
                     })).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('delete product with device group', (done) => {
-                ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -q ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -q ${outputMode}`, (commandOut) => {
                     MessageHelper.checkDependedDeviceGroupExistMessage(commandOut)
-                    ImptTestHelper.checkFailStatusEx(commandOut);
+                    ImptTestHelper.checkFailStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));

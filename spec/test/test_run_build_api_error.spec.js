@@ -49,15 +49,15 @@ describe('impt test run for build-api-error behavior >', () => {
     }, ImptTestingHelper.TIMEOUT);
 
     it('run test', (done) => {
-        ImptTestingHelper.runCommandEx('impt test run', (commandOut) => {
-                expect(commandOut).not.toBeEmptyString();
+        ImptTestingHelper.runCommand('impt test run', (commandOut) => {
+                expect(commandOut.output).not.toBeEmptyString();
                 // verify that "Compilation Error" error occured
-                expect(commandOut).toMatch(/Compilation Error/);
+                expect(commandOut.output).toMatch(/Compilation Error/);
 
                 // verify that 2 sessions started
                 // which means that compilation error has not stopped the command
-                expect(commandOut).toMatch(/Using device test file "tests\/1\-device\.test\.nut"\n/);
-                expect(commandOut).toMatch(/Using device test file "tests\/2\-device\.test\.nut"\n/);
+                expect(commandOut.output).toMatch(/Using device test file "tests\/1\-device\.test\.nut"\n/);
+                expect(commandOut.output).toMatch(/Using device test file "tests\/2\-device\.test\.nut"\n/);
 
                 ImptTestCommandsHelper.checkTestFailStatus(commandOut);
                 ImptTestingHelper.checkFailStatus(commandOut);

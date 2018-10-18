@@ -58,35 +58,35 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // prepare environment for device assign command testing
         function _testSuiteInit() {
-            return ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
-                then(() => ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
+            return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
+                then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
                     dg_id = ImptTestHelper.parseId(commandOut);
                     if (!dg_id) fail("TestSuitInit error: Fail create device group");
-                    ImptTestHelper.emptyCheckEx(commandOut);
+                    ImptTestHelper.emptyCheck(commandOut);
                 }));
         }
 
         // delete all entities using in impt device assign test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
         }
 
         function _testCleanUp() {
-            return ImptTestHelper.runCommandEx(`impt device unassign -d ${config.devices[0]}`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommand(`impt device unassign -d ${config.devices[0]}`, ImptTestHelper.emptyCheckEx);
         }
 
         // check if device is assigned to specified device group
         function _checkAssignDevice() {
-            return ImptTestHelper.runCommandEx(`impt device info --device ${config.devices[0]} -z json`, (commandOut) => {
+            return ImptTestHelper.runCommand(`impt device info --device ${config.devices[0]} -z json`, (commandOut) => {
                 let json = JSON.parse(commandOut.output);
                 expect(json.Device['Device Group'].id).toBe(dg_id);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             });
         }
 
         // check if device is assigned to specified device group already
         function _checkAlreadyAssignedDeviceMessage(commandOut, device, dg) {
-            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+            ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
                 Util.format(`${UserInterractor.MESSAGES.DEVICE_ALREADY_ASSIGNED_TO_DG}`,
                     `${Identifier.ENTITY_TYPE.TYPE_DEVICE} "${device}"`,
                     `${Identifier.ENTITY_TYPE.TYPE_DEVICE_GROUP} "${dg}"`)
@@ -95,7 +95,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // check 'device successfully assigned' output message 
         function _checkSuccessAssignedDeviceMessage(commandOut, device, dg) {
-            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+            ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
                 Util.format(`${UserInterractor.MESSAGES.DEVICE_ASSIGNED_TO_DG}`,
                     `${Identifier.ENTITY_TYPE.TYPE_DEVICE} "${device}"`,
                     `${Identifier.ENTITY_TYPE.TYPE_DEVICE_GROUP} "${dg}"`)
@@ -122,9 +122,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             }, ImptTestHelper.TIMEOUT);
 
             it('device assign to dg by name', (done) => {
-                ImptTestHelper.runCommandEx(`impt device assign --device ${config.devices[0]} --dg ${DEVICE_GROUP_NAME} --confirmed ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt device assign --device ${config.devices[0]} --dg ${DEVICE_GROUP_NAME} --confirmed ${outputMode}`, (commandOut) => {
                     _checkSuccessAssignedDeviceMessage(commandOut, config.devices[0], DEVICE_GROUP_NAME);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => _checkAssignDevice).
                     then(done).
@@ -132,9 +132,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('device assign to dg by id', (done) => {
-                ImptTestHelper.runCommandEx(`impt device assign -d ${config.devicemacs[0]} -g ${dg_id} -q ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt device assign -d ${config.devicemacs[0]} -g ${dg_id} -q ${outputMode}`, (commandOut) => {
                     _checkSuccessAssignedDeviceMessage(commandOut, config.devicemacs[0], dg_id);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => _checkAssignDevice).
                     then(done).
@@ -142,9 +142,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('device assign to project', (done) => {
-                ImptTestHelper.runCommandEx(`impt device assign -d ${config.devices[0]} -q ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt device assign -d ${config.devices[0]} -q ${outputMode}`, (commandOut) => {
                     _checkSuccessAssignedDeviceMessage(commandOut, config.devices[0], dg_id);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => _checkAssignDevice).
                     then(done).
@@ -152,10 +152,10 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('repeat device assign', (done) => {
-                ImptTestHelper.runCommandEx(`impt device assign -d ${config.devices[0]} -g ${dg_id} -q ${outputMode}`, ImptTestHelper.checkEmptyEx).
-                    then(() => ImptTestHelper.runCommandEx(`impt device assign -d ${config.devices[0]} -g ${dg_id} -q ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt device assign -d ${config.devices[0]} -g ${dg_id} -q ${outputMode}`, ImptTestHelper.checkEmptyEx).
+                    then(() => ImptTestHelper.runCommand(`impt device assign -d ${config.devices[0]} -g ${dg_id} -q ${outputMode}`, (commandOut) => {
                         _checkAlreadyAssignedDeviceMessage(commandOut, config.devices[0], dg_id);
-                        ImptTestHelper.checkSuccessStatusEx(commandOut);
+                        ImptTestHelper.checkSuccessStatus(commandOut);
                     })).
                     then(() => _checkAssignDevice).
                     then(done).
@@ -165,18 +165,18 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         describe('device assign negative tests >', () => {
             it('device assign to not exist project', (done) => {
-                ImptTestHelper.runCommandEx(`impt device assign -d ${config.devices[0]} -q ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt device assign -d ${config.devices[0]} -q ${outputMode}`, (commandOut) => {
                     MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, MessageHelper.DG);
-                    ImptTestHelper.checkFailStatusEx(commandOut);
+                    ImptTestHelper.checkFailStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('device assign to not exist device group', (done) => {
-                ImptTestHelper.runCommandEx(`impt device assign -d ${config.devices[0]} -g not-exist-device-group -q ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt device assign -d ${config.devices[0]} -g not-exist-device-group -q ${outputMode}`, (commandOut) => {
                     MessageHelper.checkEntityNotFoundError(commandOut, MessageHelper.DG, 'not-exist-device-group');
-                    ImptTestHelper.checkFailStatusEx(commandOut);
+                    ImptTestHelper.checkFailStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));

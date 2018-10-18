@@ -60,34 +60,34 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // delete all entities using in impt loginkey create test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommandEx(`impt loginkey delete --lk ${loginkey_id} --pwd ${config.password} --confirmed`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommand(`impt loginkey delete --lk ${loginkey_id} --pwd ${config.password} --confirmed`, ImptTestHelper.emptyCheckEx);
         }
 
         // check command`s result by exec loginkey info command
         function _checkLoginkeyInfo(expectInfo = {}) {
-            return ImptTestHelper.runCommandEx(`impt loginkey info --lk ${expectInfo.id ? expectInfo.id : loginkey_id}  ${outputMode}`, (commandOut) => {
-                ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_ID, `${expectInfo.id ? expectInfo.id : loginkey_id}`);
-                ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_DESCRIPTION, `${expectInfo.descr ? expectInfo.descr : ''}`);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+            return ImptTestHelper.runCommand(`impt loginkey info --lk ${expectInfo.id ? expectInfo.id : loginkey_id}  ${outputMode}`, (commandOut) => {
+                ImptTestHelper.checkAttribute(commandOut, ImptTestHelper.ATTR_ID, `${expectInfo.id ? expectInfo.id : loginkey_id}`);
+                ImptTestHelper.checkAttribute(commandOut, ImptTestHelper.ATTR_DESCRIPTION, `${expectInfo.descr ? expectInfo.descr : ''}`);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             });
         }
 
         // check successfuly created loginkey output message 
         function _checkSuccessCreateLoginkeyMessage(commandOut, loginkey_id) {
-            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+            ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
                 Util.format(`${UserInterractor.MESSAGES.ENTITY_CREATED}`,
                     `${Identifier.ENTITY_TYPE.TYPE_LOGIN_KEY} "${loginkey_id}"`)
             );
         }
 
         it('loginkey create', (done) => {
-            ImptTestHelper.runCommandEx(`impt loginkey create --pwd ${config.password} --descr "${LOGINKEY_DESCR}" ${outputMode}`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt loginkey create --pwd ${config.password} --descr "${LOGINKEY_DESCR}" ${outputMode}`, (commandOut) => {
                 loginkey_id = ImptTestHelper.parseId(commandOut);
                 expect(loginkey_id).not.toBeNull;
                 _checkSuccessCreateLoginkeyMessage(commandOut, loginkey_id);
-                ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_ID, loginkey_id);
-                ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_DESCRIPTION, LOGINKEY_DESCR);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkAttribute(commandOut, ImptTestHelper.ATTR_ID, loginkey_id);
+                ImptTestHelper.checkAttribute(commandOut, ImptTestHelper.ATTR_DESCRIPTION, LOGINKEY_DESCR);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(() => _checkLoginkeyInfo({ descr: LOGINKEY_DESCR })).
                 then(done).
@@ -95,12 +95,12 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         });
 
         it('loginkey create without description', (done) => {
-            ImptTestHelper.runCommandEx(`impt loginkey create --pwd ${config.password} ${outputMode}`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt loginkey create --pwd ${config.password} ${outputMode}`, (commandOut) => {
                 loginkey_id = ImptTestHelper.parseId(commandOut);
                 expect(loginkey_id).not.toBeNull;
                 _checkSuccessCreateLoginkeyMessage(commandOut, loginkey_id);
-                ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_ID, loginkey_id);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkAttribute(commandOut, ImptTestHelper.ATTR_ID, loginkey_id);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(_checkLoginkeyInfo).
                 then(done).
@@ -108,8 +108,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         });
 
         it('loginkey create without password', (done) => {
-            ImptTestHelper.runCommandEx(`impt loginkey create ${outputMode}`, (commandOut) => {
-                ImptTestHelper.checkFailStatusEx(commandOut);
+            ImptTestHelper.runCommand(`impt loginkey create ${outputMode}`, (commandOut) => {
+                ImptTestHelper.checkFailStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));

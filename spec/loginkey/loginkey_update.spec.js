@@ -67,61 +67,61 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // delete all entities using in impt loginkey update test
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommandEx(`impt loginkey delete --lk ${loginkey_id} --pwd ${config.password} --confirmed`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommand(`impt loginkey delete --lk ${loginkey_id} --pwd ${config.password} --confirmed`, ImptTestHelper.emptyCheckEx);
         }
 
         // prepare test environment for impt loginkey update test
         function _testSuiteInit() {
-            return ImptTestHelper.runCommandEx(`impt loginkey create --pwd ${config.password} --descr "${LOGINKEY_DESCR}" ${outputMode}`, (commandOut) => {
+            return ImptTestHelper.runCommand(`impt loginkey create --pwd ${config.password} --descr "${LOGINKEY_DESCR}" ${outputMode}`, (commandOut) => {
                 loginkey_id = ImptTestHelper.parseId(commandOut);
                 if (!loginkey_id) fail("TestSuitInit error: Fail create loginkey");
-                ImptTestHelper.emptyCheckEx(commandOut);
+                ImptTestHelper.emptyCheck(commandOut);
             });
         }
 
         // check successfuly updated loginkey output message 
         function _checkSuccessUpdateLoginkeyMessage(commandOut, loginkey_id) {
-            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+            ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
                 Util.format(`${UserInterractor.MESSAGES.ENTITY_UPDATED}`,
                     `${Identifier.ENTITY_TYPE.TYPE_LOGIN_KEY} "${loginkey_id}"`)
             );
         }
 
         it('loginkey update description', (done) => {
-            ImptTestHelper.runCommandEx(`impt loginkey update --lk ${loginkey_id} --pwd ${config.password} --descr "${LOGINKEY_NEW_DESCR}" ${outputMode}`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt loginkey update --lk ${loginkey_id} --pwd ${config.password} --descr "${LOGINKEY_NEW_DESCR}" ${outputMode}`, (commandOut) => {
                 _checkSuccessUpdateLoginkeyMessage(commandOut, loginkey_id);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
-                then(() => ImptTestHelper.runCommandEx(`impt loginkey info --lk ${loginkey_id} ${outputMode}`, (commandOut) => {
-                    ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_ID, loginkey_id);
-                    ImptTestHelper.checkAttributeEx(commandOut, ImptTestHelper.ATTR_DESCRIPTION, LOGINKEY_NEW_DESCR);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                then(() => ImptTestHelper.runCommand(`impt loginkey info --lk ${loginkey_id} ${outputMode}`, (commandOut) => {
+                    ImptTestHelper.checkAttribute(commandOut, ImptTestHelper.ATTR_ID, loginkey_id);
+                    ImptTestHelper.checkAttribute(commandOut, ImptTestHelper.ATTR_DESCRIPTION, LOGINKEY_NEW_DESCR);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 })).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('loginkey update without new value', (done) => {
-            ImptTestHelper.runCommandEx(`impt loginkey update --lk ${loginkey_id} --pwd ${config.password} ${outputMode}`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt loginkey update --lk ${loginkey_id} --pwd ${config.password} ${outputMode}`, (commandOut) => {
                 MessageHelper.checkMissingArgumentsError(commandOut, 'descr');
-                ImptTestHelper.checkFailStatusEx(commandOut);
+                ImptTestHelper.checkFailStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('loginkey update description without password', (done) => {
-            ImptTestHelper.runCommandEx(`impt loginkey update --lk ${loginkey_id} --descr "${LOGINKEY_NEW_DESCR}" ${outputMode}`, (commandOut) => {
-                ImptTestHelper.checkFailStatusEx(commandOut);
+            ImptTestHelper.runCommand(`impt loginkey update --lk ${loginkey_id} --descr "${LOGINKEY_NEW_DESCR}" ${outputMode}`, (commandOut) => {
+                ImptTestHelper.checkFailStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('not exist loginkey update', (done) => {
-            ImptTestHelper.runCommandEx(`impt loginkey update --lk not-exist-loginkey --pwd ${config.password} --descr "${LOGINKEY_NEW_DESCR}" ${outputMode}`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt loginkey update --lk not-exist-loginkey --pwd ${config.password} --descr "${LOGINKEY_NEW_DESCR}" ${outputMode}`, (commandOut) => {
                 MessageHelper.checkEntityNotFoundError(commandOut, Identifier.ENTITY_TYPE.TYPE_LOGIN_KEY, 'not-exist-loginkey');
-                ImptTestHelper.checkFailStatusEx(commandOut);
+                ImptTestHelper.checkFailStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));

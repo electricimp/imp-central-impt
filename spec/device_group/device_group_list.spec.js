@@ -90,23 +90,23 @@ describe(`impt device group list test suite (output: ${outputMode ? outputMode :
 
     // prepare environment for device group list command testing
     function _testSuiteInit() {
-        return ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME}`, (commandOut) => {
+        return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, (commandOut) => {
             product_id = ImptTestHelper.parseId(commandOut);
             if (!product_id) fail("TestSuitInit error: Fail create product");
-            ImptTestHelper.emptyCheckEx(commandOut);
+            ImptTestHelper.emptyCheck(commandOut);
         }).
-            then(() => ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx)).
-            then(() => ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME2}`, ImptTestHelper.emptyCheckEx)).
-            then(() => ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP_NAME2} -p ${PRODUCT_NAME2}`, ImptTestHelper.emptyCheckEx)).
-            then(() => ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME3}`, ImptTestHelper.emptyCheckEx)).
-            then(() => ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP_NAME3} -p ${PRODUCT_NAME3}`, ImptTestHelper.emptyCheckEx));
+            then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx)).
+            then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME2}`, ImptTestHelper.emptyCheckEx)).
+            then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME2} -p ${PRODUCT_NAME2}`, ImptTestHelper.emptyCheckEx)).
+            then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME3}`, ImptTestHelper.emptyCheckEx)).
+            then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME3} -p ${PRODUCT_NAME3}`, ImptTestHelper.emptyCheckEx));
     }
 
     // delete all entities using in impt dg list test suite
     function _testSuiteCleanUp() {
-        return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx).
-            then(() => ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME2} -f -q`, ImptTestHelper.emptyCheckEx)).
-            then(() => ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME3} -f -q`, ImptTestHelper.emptyCheckEx));
+        return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx).
+            then(() => ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME2} -f -q`, ImptTestHelper.emptyCheckEx)).
+            then(() => ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME3} -f -q`, ImptTestHelper.emptyCheckEx));
     }
 
     function _checkDeviceGroupExist(commandOut, expInfo) {
@@ -124,75 +124,75 @@ describe(`impt device group list test suite (output: ${outputMode ? outputMode :
 
     describe('device group list positive tests >', () => {
         it('device group list by owner me', (done) => {
-            ImptTestHelper.runCommandEx(`impt dg list --owner me -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt dg list --owner me -z json`, (commandOut) => {
                 _checkDeviceGroupExist(commandOut, { name: `${DEVICE_GROUP_NAME}`, Project: { name: `${PRODUCT_NAME}` } });
                 _checkDeviceGroupExist(commandOut, { name: `${DEVICE_GROUP_NAME2}`, Project: { name: `${PRODUCT_NAME2}` } });
                 _checkDeviceGroupExist(commandOut, { name: `${DEVICE_GROUP_NAME3}`, Project: { name: `${PRODUCT_NAME3}` } });
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('device group list by owner name', (done) => {
-            ImptTestHelper.runCommandEx(`impt dg list --owner ${config.username} --dg-type development -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt dg list --owner ${config.username} --dg-type development -z json`, (commandOut) => {
                 _checkDeviceGroupExist(commandOut, { name: `${DEVICE_GROUP_NAME}`, Project: { name: `${PRODUCT_NAME}` } });
                 _checkDeviceGroupExist(commandOut, { name: `${DEVICE_GROUP_NAME2}`, Project: { name: `${PRODUCT_NAME2}` } });
                 _checkDeviceGroupExist(commandOut, { name: `${DEVICE_GROUP_NAME3}`, Project: { name: `${PRODUCT_NAME3}` } });
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('device group list by owner email', (done) => {
-            ImptTestHelper.runCommandEx(`impt dg list --owner ${config.email} -y development -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt dg list --owner ${config.email} -y development -z json`, (commandOut) => {
                 _checkDeviceGroupExist(commandOut, { name: `${DEVICE_GROUP_NAME}`, Project: { name: `${PRODUCT_NAME}` } });
                 _checkDeviceGroupExist(commandOut, { name: `${DEVICE_GROUP_NAME2}`, Project: { name: `${PRODUCT_NAME2}` } });
                 _checkDeviceGroupExist(commandOut, { name: `${DEVICE_GROUP_NAME3}`, Project: { name: `${PRODUCT_NAME3}` } });
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('device group list by owner id', (done) => {
-            ImptTestHelper.runCommandEx(`impt dg list --owner ${config.accountid} -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt dg list --owner ${config.accountid} -z json`, (commandOut) => {
                 _checkDeviceGroupExist(commandOut, { name: `${DEVICE_GROUP_NAME}`, Project: { name: `${PRODUCT_NAME}` } });
                 _checkDeviceGroupExist(commandOut, { name: `${DEVICE_GROUP_NAME2}`, Project: { name: `${PRODUCT_NAME2}` } });
                 _checkDeviceGroupExist(commandOut, { name: `${DEVICE_GROUP_NAME3}`, Project: { name: `${PRODUCT_NAME3}` } });
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('device group list by product id', (done) => {
-            ImptTestHelper.runCommandEx(`impt dg list --product ${product_id} -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt dg list --product ${product_id} -z json`, (commandOut) => {
                 _checkDeviceGroupExist(commandOut, { name: `${DEVICE_GROUP_NAME}`, Project: { name: `${PRODUCT_NAME}` } });
                 _checkDeviceGroupCount(commandOut, 1);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('device group list by product name', (done) => {
-            ImptTestHelper.runCommandEx(`impt dg list -p ${PRODUCT_NAME2} -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt dg list -p ${PRODUCT_NAME2} -z json`, (commandOut) => {
                 _checkDeviceGroupExist(commandOut, { name: `${DEVICE_GROUP_NAME2}`, Project: { name: `${PRODUCT_NAME2}` } });
                 _checkDeviceGroupCount(commandOut, 1);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('device group list by several product name', (done) => {
-            ImptTestHelper.runCommandEx(`impt dg list -p ${PRODUCT_NAME2} -p ${PRODUCT_NAME3} -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt dg list -p ${PRODUCT_NAME2} -p ${PRODUCT_NAME3} -z json`, (commandOut) => {
                 _checkDeviceGroupExist(commandOut, { name: `${DEVICE_GROUP_NAME2}`, Project: { name: `${PRODUCT_NAME2}` } });
                 _checkDeviceGroupExist(commandOut, { name: `${DEVICE_GROUP_NAME3}`, Project: { name: `${PRODUCT_NAME3}` } });
                 _checkDeviceGroupCount(commandOut, 2);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));

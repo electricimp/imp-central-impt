@@ -49,7 +49,7 @@ class ImptProjectTestHelper {
 
     // check command`s result by exec project info command
     static checkProjectInfo(expectInfo = {}) {
-        return ImptTestHelper.runCommandEx(`impt project info -z json`, (commandOut) => {
+        return ImptTestHelper.runCommand(`impt project info -z json`, (commandOut) => {
             const json = JSON.parse(commandOut.output);
             expect(json.Project).toBeDefined;
             expect(json.Project['Device file']).toBe(expectInfo.dfile ? expectInfo.dfile : ImptProjectTestHelper.DEVICE_FILE);
@@ -60,7 +60,7 @@ class ImptProjectTestHelper {
             expect(json.Project['Device Group'].description).toBe(expectInfo.dg_descr ? expectInfo.dg_descr : DG_DESCR);
             expect(json.Project['Device Group'].Product.id).toBe(expectInfo.product_id ? expectInfo.product_id : json.Project['Device Group'].Product.id);
             expect(json.Project['Device Group'].Product.name).toBe(expectInfo.product_name ? expectInfo.product_name : PRODUCT_NAME);
-            ImptTestHelper.checkSuccessStatusEx(commandOut);
+            ImptTestHelper.checkSuccessStatus(commandOut);
         });
     }
 
@@ -78,17 +78,17 @@ class ImptProjectTestHelper {
 
     // Checks if project`s entities exists
     static checkProjectsEntitiesExists(expEntities = {}) {
-        return ImptTestHelper.runCommandEx(`impt product info -p ${expEntities.product_name ? expEntities.product_name : PRODUCT_NAME}`,
+        return ImptTestHelper.runCommand(`impt product info -p ${expEntities.product_name ? expEntities.product_name : PRODUCT_NAME}`,
             ImptTestHelper.checkSuccessStatusEx).
-            then(() => ImptTestHelper.runCommandEx(`impt dg info -g ${expEntities.dg_name ? expEntities.dg_name : DG_NAME}`,
+            then(() => ImptTestHelper.runCommand(`impt dg info -g ${expEntities.dg_name ? expEntities.dg_name : DG_NAME}`,
                 ImptTestHelper.checkSuccessStatusEx));
     }
 
     // Checks if project`s entities not exists
     static checkProjectsEntitiesNotExists(expEntities = {}) {
-        return ImptTestHelper.runCommandEx(`impt product info -p ${expEntities.product_name ? expEntities.product_name : PRODUCT_NAME}`,
+        return ImptTestHelper.runCommand(`impt product info -p ${expEntities.product_name ? expEntities.product_name : PRODUCT_NAME}`,
             ImptTestHelper.checkFailStatusEx).
-            then(() => ImptTestHelper.runCommandEx(`impt dg info -g ${expEntities.dg_name ? expEntities.dg_name : DG_NAME}`,
+            then(() => ImptTestHelper.runCommand(`impt dg info -g ${expEntities.dg_name ? expEntities.dg_name : DG_NAME}`,
                 ImptTestHelper.checkFailStatusEx));
     }
 }

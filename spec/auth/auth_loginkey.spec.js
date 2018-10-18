@@ -61,31 +61,31 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         }, ImptTestHelper.TIMEOUT);
 
         function _createLoginkey() {
-            return ImptTestHelper.runCommandEx(`impt loginkey create --pwd ${config.password}`, (commandOut) => {
+            return ImptTestHelper.runCommand(`impt loginkey create --pwd ${config.password}`, (commandOut) => {
                 const idMatcher = commandOut.output.match(new RegExp(`[0-9a-z]{16}`));
                 if (idMatcher && idMatcher.length > 0) {
                     loginkey = idMatcher[0];
                 }
                 else fail("TestSuitInit error: Fail create loginkey");
-                ImptTestHelper.emptyCheckEx(commandOut);
+                ImptTestHelper.emptyCheck(commandOut);
             });
         }
 
         function _deleteLoginkey() {
-            return ImptTestHelper.runCommandEx(`impt loginkey delete --lk ${loginkey} --pwd ${config.password} -q`,
+            return ImptTestHelper.runCommand(`impt loginkey delete --lk ${loginkey} --pwd ${config.password} -q`,
                 ImptTestHelper.emptyCheckEx);
         }
 
 
         function _checkLoginInfo(expInfo = {}) {
-            return ImptTestHelper.runCommandEx(`impt auth info`, (commandOut) => {
-                ImptTestHelper.checkAttributeEx(commandOut, 'endpoint', expInfo.endpoint ? expInfo.endpoint : endpoint);
-                ImptTestHelper.checkAttributeEx(commandOut, 'auto refresh', expInfo.refresh ? expInfo.refresh : 'true');
-                ImptTestHelper.checkAttributeEx(commandOut, 'Auth type', expInfo.auth ? expInfo.auth : 'Global Auth file');
-                ImptTestHelper.checkAttributeEx(commandOut, 'Email', expInfo.email ? expInfo.email : config.email);
-                if (config.username) ImptTestHelper.checkAttributeEx(commandOut, 'Username', config.username);
-                if (config.accountid) ImptTestHelper.checkAttributeEx(commandOut, 'Account id', config.accountid);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+            return ImptTestHelper.runCommand(`impt auth info`, (commandOut) => {
+                ImptTestHelper.checkAttribute(commandOut, 'endpoint', expInfo.endpoint ? expInfo.endpoint : endpoint);
+                ImptTestHelper.checkAttribute(commandOut, 'auto refresh', expInfo.refresh ? expInfo.refresh : 'true');
+                ImptTestHelper.checkAttribute(commandOut, 'Auth type', expInfo.auth ? expInfo.auth : 'Global Auth file');
+                ImptTestHelper.checkAttribute(commandOut, 'Email', expInfo.email ? expInfo.email : config.email);
+                if (config.username) ImptTestHelper.checkAttribute(commandOut, 'Username', config.username);
+                if (config.accountid) ImptTestHelper.checkAttribute(commandOut, 'Account id', config.accountid);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             });
         }
 
@@ -98,7 +98,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             }, ImptTestHelper.TIMEOUT);
 
             it('global auth login by loginkey', (done) => {
-                ImptTestHelper.runCommandEx(`impt auth login --lk ${loginkey} ${outputMode}`,
+                ImptTestHelper.runCommand(`impt auth login --lk ${loginkey} ${outputMode}`,
                     ImptTestHelper.checkSuccessStatusEx).
                     then(_checkLoginInfo).
                     then(done).
@@ -106,7 +106,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('global temp auth login by loginkey', (done) => {
-                ImptTestHelper.runCommandEx(`impt auth login --temp --lk ${loginkey} ${outputMode}`,
+                ImptTestHelper.runCommand(`impt auth login --temp --lk ${loginkey} ${outputMode}`,
                     ImptTestHelper.checkSuccessStatusEx).
                     then(() => _checkLoginInfo({ refresh: 'false' })).
                     then(done).
@@ -114,7 +114,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('local temp auth login by loginkey', (done) => {
-                ImptTestHelper.runCommandEx(`impt auth login --temp --local --lk ${loginkey} ${outputMode}`,
+                ImptTestHelper.runCommand(`impt auth login --temp --local --lk ${loginkey} ${outputMode}`,
                     ImptTestHelper.checkSuccessStatusEx).
                     then(() => _checkLoginInfo({ auth: 'Local Auth file', refresh: 'false' })).
                     then(done).
@@ -122,7 +122,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('local auth login by loginkey with endpoint', (done) => {
-                ImptTestHelper.runCommandEx(`impt auth login --local --endpoint ${endpoint} --lk ${loginkey} ${outputMode}`,
+                ImptTestHelper.runCommand(`impt auth login --local --endpoint ${endpoint} --lk ${loginkey} ${outputMode}`,
                     ImptTestHelper.checkSuccessStatusEx).
                     then(() => _checkLoginInfo({ auth: 'Local Auth file' })).
                     then(done).
@@ -130,7 +130,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('global auth login by loginkey with endpoint', (done) => {
-                ImptTestHelper.runCommandEx(`impt auth login --lk ${loginkey} --endpoint ${endpoint} ${outputMode}`,
+                ImptTestHelper.runCommand(`impt auth login --lk ${loginkey} --endpoint ${endpoint} ${outputMode}`,
                     ImptTestHelper.checkSuccessStatusEx).
                     then(_checkLoginInfo).
                     then(done).
@@ -138,7 +138,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('global temp auth login by loginkey with endpoint', (done) => {
-                ImptTestHelper.runCommandEx(`impt auth login --lk ${loginkey} --temp --endpoint ${endpoint} ${outputMode}`,
+                ImptTestHelper.runCommand(`impt auth login --lk ${loginkey} --temp --endpoint ${endpoint} ${outputMode}`,
                     ImptTestHelper.checkSuccessStatusEx).
                     then(() => _checkLoginInfo({ refresh: 'false' })).
                     then(done).
@@ -146,9 +146,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('global auth login without loginkey', (done) => {
-                ImptTestHelper.runCommandEx(`impt auth login ${outputMode} --lk`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt auth login ${outputMode} --lk`, (commandOut) => {
                     MessageHelper.checkNotEnoughArgumentsError(commandOut, 'lk');
-                    ImptTestHelper.checkFailStatusEx(commandOut);
+                    ImptTestHelper.checkFailStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
@@ -171,7 +171,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             }, ImptTestHelper.TIMEOUT);
 
             it('repeated global temp auth login with confirm', (done) => {
-                ImptTestHelper.runCommandEx(`impt auth login --temp --lk ${loginkey} -q ${outputMode}`,
+                ImptTestHelper.runCommand(`impt auth login --temp --lk ${loginkey} -q ${outputMode}`,
                     ImptTestHelper.checkSuccessStatusEx).
                     then(() => _checkLoginInfo({ refresh: 'false' })).
                     then(done).
@@ -179,7 +179,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('repeated global auth login with endpoint and confirm', (done) => {
-                ImptTestHelper.runCommandEx(`impt auth login --temp --endpoint ${endpoint} --lk ${loginkey} -q ${outputMode}`,
+                ImptTestHelper.runCommand(`impt auth login --temp --endpoint ${endpoint} --lk ${loginkey} -q ${outputMode}`,
                     ImptTestHelper.checkSuccessStatusEx).
                     then(() => _checkLoginInfo).
                     then(done).
@@ -187,7 +187,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('repeated local temp auth login with confirm', (done) => {
-                ImptTestHelper.runCommandEx(`impt auth login --temp --local --lk ${loginkey} -q ${outputMode}`,
+                ImptTestHelper.runCommand(`impt auth login --temp --local --lk ${loginkey} -q ${outputMode}`,
                     ImptTestHelper.checkSuccessStatusEx).
                     then(() => _checkLoginInfo({ auth: 'Local Auth file', refresh: 'false' })).
                     then(done).
@@ -211,7 +211,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             }, ImptTestHelper.TIMEOUT);
 
             it('repeated global auth login with confirm', (done) => {
-                ImptTestHelper.runCommandEx(`impt auth login ${auth} -q ${outputMode}`,
+                ImptTestHelper.runCommand(`impt auth login ${auth} -q ${outputMode}`,
                     ImptTestHelper.checkSuccessStatusEx).
                     then(_checkLoginInfo).
                     then(done).
@@ -219,7 +219,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('repeated global auth login with endpoint and confirm', (done) => {
-                ImptTestHelper.runCommandEx(`impt auth login --endpoint ${endpoint} ${auth} -q ${outputMode}`,
+                ImptTestHelper.runCommand(`impt auth login --endpoint ${endpoint} ${auth} -q ${outputMode}`,
                     ImptTestHelper.checkSuccessStatusEx).
                     then(_checkLoginInfo).
                     then(done).
@@ -227,7 +227,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('repeated global temp auth login with confirm', (done) => {
-                ImptTestHelper.runCommandEx(`impt auth login --temp ${auth} -q ${outputMode}`,
+                ImptTestHelper.runCommand(`impt auth login --temp ${auth} -q ${outputMode}`,
                     ImptTestHelper.checkSuccessStatusEx).
                     then(() => _checkLoginInfo({ refresh: 'false' })).
                     then(done).
@@ -235,7 +235,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('repeated local auth login with confirm', (done) => {
-                ImptTestHelper.runCommandEx(`impt auth login -l ${auth} -q ${outputMode}`,
+                ImptTestHelper.runCommand(`impt auth login -l ${auth} -q ${outputMode}`,
                     ImptTestHelper.checkSuccessStatusEx).
                     then(() => _checkLoginInfo({ auth: 'Local Auth file' })).
                     then(done).
@@ -243,7 +243,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('repeated local auth login with endpoint and confirm', (done) => {
-                ImptTestHelper.runCommandEx(`impt auth login -l --endpoint ${endpoint} ${auth} -q ${outputMode}`,
+                ImptTestHelper.runCommand(`impt auth login -l --endpoint ${endpoint} ${auth} -q ${outputMode}`,
                     ImptTestHelper.checkSuccessStatusEx).
                     then(() => _checkLoginInfo({ auth: 'Local Auth file' })).
                     then(done).
@@ -251,7 +251,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('repeated local temp auth login with confirm', (done) => {
-                ImptTestHelper.runCommandEx(`impt auth login -l --temp ${auth} -q ${outputMode}`,
+                ImptTestHelper.runCommand(`impt auth login -l --temp ${auth} -q ${outputMode}`,
                     ImptTestHelper.checkSuccessStatusEx).
                     then(() => _checkLoginInfo({ auth: 'Local Auth file', refresh: 'false' })).
                     then(done).
@@ -259,15 +259,15 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('check global loginkey auth info', (done) => {
-                ImptTestHelper.runCommandEx(`impt auth info  ${outputMode}`, (commandOut) => {
-                    ImptTestHelper.checkAttributeEx(commandOut, 'endpoint', endpoint);
-                    ImptTestHelper.checkAttributeEx(commandOut, 'auto refresh', 'true');
-                    ImptTestHelper.checkAttributeEx(commandOut, 'Auth type', 'Global Auth file');
-                    ImptTestHelper.checkAttributeEx(commandOut, 'Login method', 'Login Key');
-                    ImptTestHelper.checkAttributeEx(commandOut, 'Email', config.email);
-                    if (config.username) ImptTestHelper.checkAttributeEx(commandOut, 'Username', config.username);
-                    if (config.accountid) ImptTestHelper.checkAttributeEx(commandOut, 'Account id', config.accountid);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.runCommand(`impt auth info  ${outputMode}`, (commandOut) => {
+                    ImptTestHelper.checkAttribute(commandOut, 'endpoint', endpoint);
+                    ImptTestHelper.checkAttribute(commandOut, 'auto refresh', 'true');
+                    ImptTestHelper.checkAttribute(commandOut, 'Auth type', 'Global Auth file');
+                    ImptTestHelper.checkAttribute(commandOut, 'Login method', 'Login Key');
+                    ImptTestHelper.checkAttribute(commandOut, 'Email', config.email);
+                    if (config.username) ImptTestHelper.checkAttribute(commandOut, 'Username', config.username);
+                    if (config.accountid) ImptTestHelper.checkAttribute(commandOut, 'Account id', config.accountid);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
@@ -292,15 +292,15 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             }, ImptTestHelper.TIMEOUT);
 
             it('check local loginkey auth info ', (done) => {
-                ImptTestHelper.runCommandEx(`impt auth info  ${outputMode}`, (commandOut) => {
-                    ImptTestHelper.checkAttributeEx(commandOut, 'endpoint', endpoint);
-                    ImptTestHelper.checkAttributeEx(commandOut, 'auto refresh', 'true');
-                    ImptTestHelper.checkAttributeEx(commandOut, 'Auth type', 'Local Auth file');
-                    ImptTestHelper.checkAttributeEx(commandOut, 'Login method', 'Login Key');
-                    ImptTestHelper.checkAttributeEx(commandOut, 'Email', config.email);
-                    if (config.username) ImptTestHelper.checkAttributeEx(commandOut, 'Username', config.username);
-                    if (config.accountid) ImptTestHelper.checkAttributeEx(commandOut, 'Account id', config.accountid);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.runCommand(`impt auth info  ${outputMode}`, (commandOut) => {
+                    ImptTestHelper.checkAttribute(commandOut, 'endpoint', endpoint);
+                    ImptTestHelper.checkAttribute(commandOut, 'auto refresh', 'true');
+                    ImptTestHelper.checkAttribute(commandOut, 'Auth type', 'Local Auth file');
+                    ImptTestHelper.checkAttribute(commandOut, 'Login method', 'Login Key');
+                    ImptTestHelper.checkAttribute(commandOut, 'Email', config.email);
+                    if (config.username) ImptTestHelper.checkAttribute(commandOut, 'Username', config.username);
+                    if (config.accountid) ImptTestHelper.checkAttribute(commandOut, 'Account id', config.accountid);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
@@ -309,21 +309,21 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         describe('Tests with global temp loginkey auth preconditions >', () => {
             beforeAll((done) => {
-                ImptTestHelper.runCommandEx(`impt auth login --lk ${loginkey} -t -q`, ImptTestHelper.emptyCheckEx).
+                ImptTestHelper.runCommand(`impt auth login --lk ${loginkey} -t -q`, ImptTestHelper.emptyCheckEx).
                     then(ImptAuthCommandsHelper.localLogout).
                     then(done).
                     catch(error => done.fail(error));
             }, ImptTestHelper.TIMEOUT);
 
             it('check global temp loginkey auth info ', (done) => {
-                ImptTestHelper.runCommandEx(`impt auth info`, (commandOut) => {
-                    ImptTestHelper.checkAttributeEx(commandOut, 'endpoint', endpoint);
-                    ImptTestHelper.checkAttributeEx(commandOut, 'auto refresh', 'false');
-                    ImptTestHelper.checkAttributeEx(commandOut, 'Auth type', 'Global Auth file');
-                    ImptTestHelper.checkAttributeEx(commandOut, 'Email', config.email);
-                    if (config.username) ImptTestHelper.checkAttributeEx(commandOut, 'Username', config.username);
-                    if (config.accountid) ImptTestHelper.checkAttributeEx(commandOut, 'Account id', config.accountid);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.runCommand(`impt auth info`, (commandOut) => {
+                    ImptTestHelper.checkAttribute(commandOut, 'endpoint', endpoint);
+                    ImptTestHelper.checkAttribute(commandOut, 'auto refresh', 'false');
+                    ImptTestHelper.checkAttribute(commandOut, 'Auth type', 'Global Auth file');
+                    ImptTestHelper.checkAttribute(commandOut, 'Email', config.email);
+                    if (config.username) ImptTestHelper.checkAttribute(commandOut, 'Username', config.username);
+                    if (config.accountid) ImptTestHelper.checkAttribute(commandOut, 'Account id', config.accountid);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
@@ -332,22 +332,22 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         describe('Tests with global loginkey auth and endpoint preconditions >', () => {
             beforeAll((done) => {
-                ImptTestHelper.runCommandEx(`impt auth login --lk ${loginkey}  -e ${endpoint} -q`, ImptTestHelper.emptyCheckEx).
+                ImptTestHelper.runCommand(`impt auth login --lk ${loginkey}  -e ${endpoint} -q`, ImptTestHelper.emptyCheckEx).
                     then(ImptAuthCommandsHelper.localLogout).
                     then(done).
                     catch(error => done.fail(error));
             }, ImptTestHelper.TIMEOUT);
 
             it('check global endpoint loginkey auth info ', (done) => {
-                ImptTestHelper.runCommandEx(`impt auth info`, (commandOut) => {
-                    ImptTestHelper.checkAttributeEx(commandOut, 'endpoint', endpoint);
-                    ImptTestHelper.checkAttributeEx(commandOut, 'auto refresh', 'true');
-                    ImptTestHelper.checkAttributeEx(commandOut, 'Auth type', 'Global Auth file');
-                    ImptTestHelper.checkAttributeEx(commandOut, 'Login method', 'Login Key');
-                    ImptTestHelper.checkAttributeEx(commandOut, 'Email', config.email);
-                    if (config.username) ImptTestHelper.checkAttributeEx(commandOut, 'Username', config.username);
-                    if (config.accountid) ImptTestHelper.checkAttributeEx(commandOut, 'Account id', config.accountid);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.runCommand(`impt auth info`, (commandOut) => {
+                    ImptTestHelper.checkAttribute(commandOut, 'endpoint', endpoint);
+                    ImptTestHelper.checkAttribute(commandOut, 'auto refresh', 'true');
+                    ImptTestHelper.checkAttribute(commandOut, 'Auth type', 'Global Auth file');
+                    ImptTestHelper.checkAttribute(commandOut, 'Login method', 'Login Key');
+                    ImptTestHelper.checkAttribute(commandOut, 'Email', config.email);
+                    if (config.username) ImptTestHelper.checkAttribute(commandOut, 'Username', config.username);
+                    if (config.accountid) ImptTestHelper.checkAttribute(commandOut, 'Account id', config.accountid);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));

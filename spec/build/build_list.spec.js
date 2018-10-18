@@ -116,175 +116,175 @@ describe(`impt build list test suite (output: ${outputMode ? outputMode : 'defau
 
     // prepare environment for build list command testing
     function _testSuiteInit() {
-        return ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
-            then(() => ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
-                ImptTestHelper.emptyCheckEx(commandOut);
+        return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
+            then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
+                ImptTestHelper.emptyCheck(commandOut);
             })).
-            then(() => ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT2_NAME}`, (commandOut) => {
+            then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT2_NAME}`, (commandOut) => {
                 product_id = ImptTestHelper.parseId(commandOut);
                 if (!product_id) fail("TestSuitInit error: Fail create product");
-                ImptTestHelper.emptyCheckEx(commandOut);
+                ImptTestHelper.emptyCheck(commandOut);
             })).
-            then(() => ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP2_NAME} -p ${PRODUCT2_NAME}`, (commandOut) => {
+            then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP2_NAME} -p ${PRODUCT2_NAME}`, (commandOut) => {
                 dg_id = ImptTestHelper.parseId(commandOut);
                 if (!dg_id) fail("TestSuitInit error: Fail create device group");
-                ImptTestHelper.emptyCheckEx(commandOut);
+                ImptTestHelper.emptyCheck(commandOut);
             })).
-            then(() => ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP3_NAME} -p ${PRODUCT2_NAME}`, (commandOut) => {
-                ImptTestHelper.emptyCheckEx(commandOut);
+            then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP3_NAME} -p ${PRODUCT2_NAME}`, (commandOut) => {
+                ImptTestHelper.emptyCheck(commandOut);
             })).
             then(() => Shell.cp('-Rf', `${__dirname}/fixtures/devicecode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER)).
-            then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP_NAME} -t build_tag`, (commandOut) => {
+            then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME} -t build_tag`, (commandOut) => {
                 build_id = ImptTestHelper.parseId(commandOut);
                 if (!build_id) fail("TestSuiteInit error: Fail create build");
-                ImptTestHelper.emptyCheckEx(commandOut);
+                ImptTestHelper.emptyCheck(commandOut);
             })).
-            then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP2_NAME} -f -t build2_tag -x devicecode.nut`, (commandOut) => {
+            then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP2_NAME} -f -t build2_tag -x devicecode.nut`, (commandOut) => {
                 build2_id = ImptTestHelper.parseId(commandOut);
                 if (!build2_id) fail("TestSuiteInit error: Fail create build");
                 build2_sha = ImptTestHelper.parseSha(commandOut);
                 if (!build2_sha) fail("TestSuiteInit error: Fail parse build sha");
-                ImptTestHelper.emptyCheckEx(commandOut);
+                ImptTestHelper.emptyCheck(commandOut);
             })).
-            then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP3_NAME} -t build3_tag`, (commandOut) => {
+            then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP3_NAME} -t build3_tag`, (commandOut) => {
                 build3_id = ImptTestHelper.parseId(commandOut);
                 if (!build3_id) fail("TestSuiteInit error: Fail create build");
-                ImptTestHelper.emptyCheckEx(commandOut);
+                ImptTestHelper.emptyCheck(commandOut);
             })).
-            then(() => ImptTestHelper.runCommandEx(`impt dg delete -g ${DEVICE_GROUP3_NAME} -q`, ImptTestHelper.emptyCheckEx));
+            then(() => ImptTestHelper.runCommand(`impt dg delete -g ${DEVICE_GROUP3_NAME} -q`, ImptTestHelper.emptyCheckEx));
     }
 
     // delete all entities using in impt build list test suite
     function _testSuiteCleanUp() {
-        return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx).
-            then(() => ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT2_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx));
+        return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx).
+            then(() => ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT2_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx));
     }
 
     // check 'no deployments found' output message 
     function _checkNoDeploymentsFoundMessage(commandOut) {
-        ImptTestHelper.checkOutputMessageEx('', commandOut,
+        ImptTestHelper.checkOutputMessage('', commandOut,
             'No Deployments are found.');
     }
 
     describe('build list positive tests >', () => {
         it('build list by owner me and dg type', (done) => {
-            ImptTestHelper.runCommandEx(`impt build list --owner me --dg-type development -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt build list --owner me --dg-type development -z json`, (commandOut) => {
                 expect(commandOut).toContainsBuild({ id: build_id });
                 expect(commandOut).toContainsBuild({ id: build2_id });
                 expect(commandOut).toBuildCountMore(1);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('build list by owner id and product id', (done) => {
-            ImptTestHelper.runCommandEx(`impt build list --owner ${config.accountid} --product ${product_id} -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt build list --owner ${config.accountid} --product ${product_id} -z json`, (commandOut) => {
                 expect(commandOut).toContainsBuild({ id: build2_id });
                 expect(commandOut).toContainsBuild({ id: build3_id });
                 expect(commandOut).toBuildCountEqual(2);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('build list by owner name and product name', (done) => {
-            ImptTestHelper.runCommandEx(`impt build list --owner ${config.username} --product ${PRODUCT2_NAME} -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt build list --owner ${config.username} --product ${PRODUCT2_NAME} -z json`, (commandOut) => {
                 expect(commandOut).toContainsBuild({ id: build2_id });
                 expect(commandOut).toContainsBuild({ id: build3_id });
                 expect(commandOut).toBuildCountEqual(2);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('build list by owner email and dg id', (done) => {
-            ImptTestHelper.runCommandEx(`impt build list --owner ${config.email} --dg ${dg_id} -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt build list --owner ${config.email} --dg ${dg_id} -z json`, (commandOut) => {
                 expect(commandOut).toContainsBuild({ id: build2_id });
                 expect(commandOut).toBuildCountEqual(1);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('build list by dg name and sha', (done) => {
-            ImptTestHelper.runCommandEx(`impt build list --dg ${DEVICE_GROUP2_NAME} --sha ${build2_sha} -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt build list --dg ${DEVICE_GROUP2_NAME} --sha ${build2_sha} -z json`, (commandOut) => {
                 expect(commandOut).toContainsBuild({ id: build2_id });
                 expect(commandOut).toBuildCountEqual(1);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('build list by sha and tag', (done) => {
-            ImptTestHelper.runCommandEx(`impt build list --sha ${build2_sha} --tag build2_tag  -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt build list --sha ${build2_sha} --tag build2_tag  -z json`, (commandOut) => {
                 expect(commandOut).toContainsBuild({ id: build2_id });
                 expect(commandOut).toBuildCountEqual(1);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('build list by several tags', (done) => {
-            ImptTestHelper.runCommandEx(`impt build list -t build2_tag -t build_tag  -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt build list -t build2_tag -t build_tag  -z json`, (commandOut) => {
                 expect(commandOut).toContainsBuild({ id: build_id });
                 expect(commandOut).toContainsBuild({ id: build2_id });
                 expect(commandOut).toBuildCountEqual(2);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('build list by product id and flagged', (done) => {
-            ImptTestHelper.runCommandEx(`impt build list -p ${product_id} --flagged -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt build list -p ${product_id} --flagged -z json`, (commandOut) => {
                 expect(commandOut).toContainsBuild({ id: build2_id });
                 expect(commandOut).toBuildCountEqual(1);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('build list by product id and unflagged', (done) => {
-            ImptTestHelper.runCommandEx(`impt build list -p ${product_id} --unflagged -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt build list -p ${product_id} --unflagged -z json`, (commandOut) => {
                 expect(commandOut).toContainsBuild({ id: build3_id });
                 expect(commandOut).toBuildCountEqual(1);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('build list by product id  and zombie', (done) => {
-            ImptTestHelper.runCommandEx(`impt build list -p ${product_id} --zombie -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt build list -p ${product_id} --zombie -z json`, (commandOut) => {
                 expect(commandOut).toContainsBuild({ id: build3_id });
                 expect(commandOut).toBuildCountEqual(1);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('build list by product id and not zombie', (done) => {
-            ImptTestHelper.runCommandEx(`impt build list -p ${product_id} --non-zombie -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt build list -p ${product_id} --non-zombie -z json`, (commandOut) => {
                 expect(commandOut).toContainsBuild({ id: build2_id });
                 expect(commandOut).toBuildCountEqual(1);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('build list by not exist owner', (done) => {
-            ImptTestHelper.runCommandEx(`impt build list -o not-exist-owner`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt build list -o not-exist-owner`, (commandOut) => {
                 _checkNoDeploymentsFoundMessage(commandOut);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));

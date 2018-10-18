@@ -64,43 +64,43 @@ class MessageHelper {
     }
 
     static checkDuplicateResourceError(commandOut, entity) {
-        ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
+        ImptTestHelper.checkAttribute(commandOut, UserInterractor.ERRORS.ERROR,
             `Duplicate Resource: ${entity}s must have unique names.`
         );
     }
 
     static checkMissingArgumentsError(commandOut, names) {
-        ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
+        ImptTestHelper.checkAttribute(commandOut, UserInterractor.ERRORS.ERROR,
             `Missing required argument: ${names}`
         );
     }
 
     static checkNotEnoughArgumentsError(commandOut, option) {
-        ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
+        ImptTestHelper.checkAttribute(commandOut, UserInterractor.ERRORS.ERROR,
             `Not enough arguments following: ${option}`
         );
     }
 
     static checkMissingArgumentValueError(commandOut, option) {
-        ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
+        ImptTestHelper.checkAttribute(commandOut, UserInterractor.ERRORS.ERROR,
             `Missing argument value: ${option}`
         );
     }
 
     static checkInvalidValuesError(commandOut) {
-        ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
+        ImptTestHelper.checkAttribute(commandOut, UserInterractor.ERRORS.ERROR,
             'Invalid values:'
         );
     }
 
     static checkInvalidUrlError(commandOut) {
-        ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
+        ImptTestHelper.checkAttribute(commandOut, UserInterractor.ERRORS.ERROR,
             `Invalid URL: The provided URL is invalid.`
         );
     }
 
     static checkOptionPositiveValueError(commandOut, option) {
-        ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
+        ImptTestHelper.checkAttribute(commandOut, UserInterractor.ERRORS.ERROR,
             `Option "${option}" must have a positive integer value.`
         );
     }
@@ -108,55 +108,55 @@ class MessageHelper {
 
 
     static checkProjectDeviceGroupNotExistMessage(commandOut, deviceGroup) {
-        ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
+        ImptTestHelper.checkAttribute(commandOut, UserInterractor.ERRORS.ERROR,
             `Device Group "${deviceGroup}", saved in Project File, does not exist anymore.`
         );
     }
 
     static checkProjectNotFoundMessage(commandOut) {
-        ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
+        ImptTestHelper.checkAttribute(commandOut, UserInterractor.ERRORS.ERROR,
             `Project File is not found in the current directory.`
         );
     }
 
     static checkDependedDeviceGroupExistMessage(commandOut) {
-        ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
+        ImptTestHelper.checkAttribute(commandOut, UserInterractor.ERRORS.ERROR,
             `Dependent Devicegroups Exist: Cannot delete a product with associated devicegroups.`
         );
     }
 
     static checkNoIdentifierIsSpecifiedMessage(commandOut, entity) {
-        ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
+        ImptTestHelper.checkAttribute(commandOut, UserInterractor.ERRORS.ERROR,
             Util.format(`${UserInterractor.ERRORS.NO_IDENTIFIER}`, entity)
         );
     }
 
     static checkEntityNotFoundError(commandOut, entity, name) {
-        ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
+        ImptTestHelper.checkAttribute(commandOut, UserInterractor.ERRORS.ERROR,
             Util.format(`${UserInterractor.ERRORS.ENTITY_NOT_FOUND}`, entity, name)
         );
     }
 
     static checkDeleteFlaggedDeploymentMessage(commandOut) {
-        ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
+        ImptTestHelper.checkAttribute(commandOut, UserInterractor.ERRORS.ERROR,
             `Resource Flagged: You cannot delete flagged deployments; set the flagged attribute to false and try again.`
         );
     }
 
     static checkDeleteMinSupportedDeploymentMessage(commandOut, build, dg) {
-        ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
+        ImptTestHelper.checkAttribute(commandOut, UserInterractor.ERRORS.ERROR,
             Util.format(`${UserInterractor.ERRORS.BUILD_DELETE_ERR}`, `${Identifier.ENTITY_TYPE.TYPE_BUILD} "${build}"`, `${Identifier.ENTITY_TYPE.TYPE_DEVICE_GROUP} "${dg}"`)
         );
     }
 
     static checkBuildDeployFileNotFoundMessage(commandOut, filetype, file) {
-        ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
+        ImptTestHelper.checkAttribute(commandOut, UserInterractor.ERRORS.ERROR,
             Util.format(`${UserInterractor.ERRORS.BUILD_DEPLOY_FILE_NOT_FOUND}`, `${filetype}`, `${file}`)
         );
     }
 
     static checkOptionMustBeSpecifiedMessage(commandOut, option) {
-        ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
+        ImptTestHelper.checkAttribute(commandOut, UserInterractor.ERRORS.ERROR,
             Util.format(`${UserInterractor.ERRORS.CMD_REQUIRED_OPTION}`, `${option}`)
         );
     }

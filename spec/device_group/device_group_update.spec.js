@@ -65,41 +65,41 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // prepare environment for device group update command test suite
         function _testSuiteInit() {
-            return ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME}`, (commandOut) => {
+            return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, (commandOut) => {
                 product_id = ImptTestHelper.parseId(commandOut);
                 if (!product_id) fail("TestSuitInit error: Fail create product");
-                ImptTestHelper.emptyCheckEx(commandOut);
+                ImptTestHelper.emptyCheck(commandOut);
             });
         }
 
         // prepare environment for each device group update test
         function _testInit() {
-            return ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP_NAME} -s "${DEVICE_GROUP_DESCR}" -p ${PRODUCT_NAME}`, (commandOut) => {
+            return ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -s "${DEVICE_GROUP_DESCR}" -p ${PRODUCT_NAME}`, (commandOut) => {
                 dg_id = ImptTestHelper.parseId(commandOut);
                 if (!dg_id) fail("TestInit error: Fail create device group");
-                ImptTestHelper.emptyCheckEx(commandOut);
+                ImptTestHelper.emptyCheck(commandOut);
             }).
-                then(() => ImptTestHelper.runCommandEx(`impt build deploy --dg ${dg_id}`, (commandOut) => {
+                then(() => ImptTestHelper.runCommand(`impt build deploy --dg ${dg_id}`, (commandOut) => {
                     deploy_id = ImptTestHelper.parseId(commandOut);
                     if (!deploy_id) fail("TestInit error: Fail create build");
-                    ImptTestHelper.emptyCheckEx(commandOut);
+                    ImptTestHelper.emptyCheck(commandOut);
                 }));
         }
 
         // delete all entities using in impt dg update test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
         }
 
         // delete device group using in impt dg update test
         function _testCleanUp() {
-            return ImptTestHelper.runCommandEx(`impt dg delete --dg ${DEVICE_GROUP_NAME} -f -q`, ImptTestHelper.emptyCheckEx).
-                then(() => ImptTestHelper.runCommandEx(`impt dg delete --dg ${DEVICE_GROUP_NEW_NAME} -f -q`, ImptTestHelper.emptyCheckEx));
+            return ImptTestHelper.runCommand(`impt dg delete --dg ${DEVICE_GROUP_NAME} -f -q`, ImptTestHelper.emptyCheckEx).
+                then(() => ImptTestHelper.runCommand(`impt dg delete --dg ${DEVICE_GROUP_NEW_NAME} -f -q`, ImptTestHelper.emptyCheckEx));
         }
 
         // check 'device group successfully updated' output message 
         function _checkSuccessUpdatedDeviceGroupMessage(commandOut, dg) {
-            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+            ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
                 Util.format(`${UserInterractor.MESSAGES.ENTITY_UPDATED}`,
                     `${Identifier.ENTITY_TYPE.TYPE_DEVICE_GROUP} "${dg}"`)
             );
@@ -107,7 +107,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // check 'min sup deployment successfully updated' output message 
         function _checkSuccessUpdatedMinSupDeploymentMessage(commandOut, dg) {
-            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+            ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
                 Util.format(`${UserInterractor.MESSAGES.DG_MIN_SUPPORTED_DEPLOYMENT_UPDATED}`,
                     `${Identifier.ENTITY_TYPE.TYPE_DEVICE_GROUP} "${dg}"`)
             );
@@ -134,9 +134,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             }, ImptTestHelper.TIMEOUT);
 
             it('update device group by id whitout new value', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg update --dg ${dg_id} ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt dg update --dg ${dg_id} ${outputMode}`, (commandOut) => {
                     _checkSuccessUpdatedDeviceGroupMessage(commandOut, dg_id);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => ImptDgTestHelper.checkDeviceGroupInfo({ id: dg_id, p_id: product_id })).
                     then(done).
@@ -144,9 +144,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('update device group by name', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg update --dg ${DEVICE_GROUP_NAME} --name ${DEVICE_GROUP_NEW_NAME} ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt dg update --dg ${DEVICE_GROUP_NAME} --name ${DEVICE_GROUP_NEW_NAME} ${outputMode}`, (commandOut) => {
                     _checkSuccessUpdatedDeviceGroupMessage(commandOut, DEVICE_GROUP_NAME);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => ImptDgTestHelper.checkDeviceGroupInfo({ id: dg_id, p_id: product_id, name: DEVICE_GROUP_NEW_NAME })).
                     then(done).
@@ -154,10 +154,10 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('update device group by project', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg update -n ${DEVICE_GROUP_NEW_NAME} -s "${DEVICE_GROUP_NEW_DESCR}" --min-supported-deployment  ${deploy_id} ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt dg update -n ${DEVICE_GROUP_NEW_NAME} -s "${DEVICE_GROUP_NEW_DESCR}" --min-supported-deployment  ${deploy_id} ${outputMode}`, (commandOut) => {
                     _checkSuccessUpdatedDeviceGroupMessage(commandOut, dg_id);
                     _checkSuccessUpdatedMinSupDeploymentMessage(commandOut, dg_id);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => ImptDgTestHelper.checkDeviceGroupInfo({ id: dg_id, p_id: product_id, name: DEVICE_GROUP_NEW_NAME, descr: DEVICE_GROUP_NEW_DESCR })).
                     then(done).
@@ -167,18 +167,18 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         describe('device group create negative tests >', () => {
             it('update device group by not exist project', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg update -n ${DEVICE_GROUP_NEW_NAME} -s "${DEVICE_GROUP_NEW_DESCR}" ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt dg update -n ${DEVICE_GROUP_NEW_NAME} -s "${DEVICE_GROUP_NEW_DESCR}" ${outputMode}`, (commandOut) => {
                     MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, MessageHelper.DG);
-                    ImptTestHelper.checkFailStatusEx(commandOut);
+                    ImptTestHelper.checkFailStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('update not exist device group', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg update -g not-exist-device-group -s "${DEVICE_GROUP_NEW_DESCR}" ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt dg update -g not-exist-device-group -s "${DEVICE_GROUP_NEW_DESCR}" ${outputMode}`, (commandOut) => {
                     MessageHelper.checkEntityNotFoundError(commandOut, MessageHelper.DG, 'not-exist-device-group');
-                    ImptTestHelper.checkFailStatusEx(commandOut);
+                    ImptTestHelper.checkFailStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));

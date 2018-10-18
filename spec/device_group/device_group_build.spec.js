@@ -97,45 +97,45 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // prepare environment for device group builds command testing
         function _testSuiteInit() {
-            return ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
-                then(() => ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP_NAME} -s "${DEVICE_GROUP_DESCR}" -p ${PRODUCT_NAME}`, (commandOut) => {
+            return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
+                then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -s "${DEVICE_GROUP_DESCR}" -p ${PRODUCT_NAME}`, (commandOut) => {
                     dg_id = ImptTestHelper.parseId(commandOut);
                     if (!dg_id) fail("TestSuitInit error: Fail create device group");
-                    ImptTestHelper.emptyCheckEx(commandOut);
+                    ImptTestHelper.emptyCheck(commandOut);
                 })).
                 then(() => ImptTestHelper.deviceAssign(DEVICE_GROUP_NAME));
         }
 
         // delete all entities using in impt dg builds test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
         }
 
         function _testInit() {
-            return ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP_NAME} -f`, (commandOut) => {
+            return ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME} -f`, (commandOut) => {
                 build_id = ImptTestHelper.parseId(commandOut);
                 if (!build_id) fail("TestInit error: Fail create build");
-                ImptTestHelper.emptyCheckEx(commandOut);
+                ImptTestHelper.emptyCheck(commandOut);
             }).
-                then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP_NAME} -f`, (commandOut) => {
+                then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME} -f`, (commandOut) => {
                     build2_id = ImptTestHelper.parseId(commandOut);
                     if (!build2_id) fail("TestInit error: Fail create build");
-                    ImptTestHelper.emptyCheckEx(commandOut);
+                    ImptTestHelper.emptyCheck(commandOut);
                 })).
-                then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP_NAME}`, (commandOut) => {
+                then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME}`, (commandOut) => {
                     build3_id = ImptTestHelper.parseId(commandOut);
                     if (!build3_id) fail("TestInit error: Fail create build");
-                    ImptTestHelper.emptyCheckEx(commandOut);
+                    ImptTestHelper.emptyCheck(commandOut);
                 })).
-                then(() => ImptTestHelper.runCommandEx(`impt dg update -g ${DEVICE_GROUP_NAME} --min-supported-deployment  ${build2_id}`, (commandOut) => {
-                    ImptTestHelper.emptyCheckEx(commandOut);
+                then(() => ImptTestHelper.runCommand(`impt dg update -g ${DEVICE_GROUP_NAME} --min-supported-deployment  ${build2_id}`, (commandOut) => {
+                    ImptTestHelper.emptyCheck(commandOut);
                 }));
         }
 
         function _testCleanUp() {
-            return ImptTestHelper.runCommandEx(`impt build delete -b ${build_id} -f -q`, ImptTestHelper.emptyCheckEx).
-                then(() => ImptTestHelper.runCommandEx(`impt build delete -b ${build2_id} -f -q`, ImptTestHelper.emptyCheckEx)).
-                then(() => ImptTestHelper.runCommandEx(`impt build delete -b ${build3_id} -f -q`, ImptTestHelper.emptyCheckEx));
+            return ImptTestHelper.runCommand(`impt build delete -b ${build_id} -f -q`, ImptTestHelper.emptyCheckEx).
+                then(() => ImptTestHelper.runCommand(`impt build delete -b ${build2_id} -f -q`, ImptTestHelper.emptyCheckEx)).
+                then(() => ImptTestHelper.runCommand(`impt build delete -b ${build3_id} -f -q`, ImptTestHelper.emptyCheckEx));
         }
 
         describe('device group build positive tests >', () => {
@@ -164,48 +164,48 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             }, ImptTestHelper.TIMEOUT);
 
             it('builds by device group id', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg builds --dg ${dg_id} -z json`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt dg builds --dg ${dg_id} -z json`, (commandOut) => {
                     const json = JSON.parse(commandOut.output);
                     expect(json).toContainsFlaggedDeployment(build_id);
                     expect(json).toContainsFlaggedDeployment(build2_id);
                     expect(json).toContainsDeployment(build3_id);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('unflag builds by device group name', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg builds --dg ${DEVICE_GROUP_NAME} --unflag -z json`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt dg builds --dg ${DEVICE_GROUP_NAME} --unflag -z json`, (commandOut) => {
                     const json = JSON.parse(commandOut.output);
                     expect(json).toContainsDeployment(build_id);
                     expect(json).toContainsDeployment(build2_id);
                     expect(json).toContainsDeployment(build3_id);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('unflag old builds by device group name', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg builds --dg ${DEVICE_GROUP_NAME} --unflag-old -z json`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt dg builds --dg ${DEVICE_GROUP_NAME} --unflag-old -z json`, (commandOut) => {
                     const json = JSON.parse(commandOut.output);
                     expect(json).toContainsDeployment(build_id);
                     expect(json).toContainsFlaggedDeployment(build2_id);
                     expect(json).toContainsDeployment(build3_id);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('remove builds by project', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg builds --remove -q -z json`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt dg builds --remove -q -z json`, (commandOut) => {
                     const json = JSON.parse(commandOut.output);
                     expect(json).not.toContainsDeployment(build_id);
                     expect(json).toContainsFlaggedDeployment(build2_id);
                     expect(json).toContainsDeployment(build3_id);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
@@ -214,18 +214,18 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         describe('device group builds negative tests >', () => {
             it('builds by not exist project', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg builds ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt dg builds ${outputMode}`, (commandOut) => {
                     MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, MessageHelper.DG);
-                    ImptTestHelper.checkFailStatusEx(commandOut);
+                    ImptTestHelper.checkFailStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('builds by not exist device group', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg builds -g not-exist-device-group ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt dg builds -g not-exist-device-group ${outputMode}`, (commandOut) => {
                     MessageHelper.checkEntityNotFoundError(commandOut, MessageHelper.DG, 'not-exist-device-group');
-                    ImptTestHelper.checkFailStatusEx(commandOut);
+                    ImptTestHelper.checkFailStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));

@@ -60,39 +60,39 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // delete all entities using in impt webhook delete  test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommandEx(`impt product delete --product ${PRODUCT_NAME} --force --confirmed`, ImptTestHelper.emptyCheckEx).
-                then(() => ImptTestHelper.runCommandEx(`impt dg delete --dg ${DG_NAME_2} -f `, ImptTestHelper.emptyCheckEx)).
-                then(() => ImptTestHelper.runCommandEx(`impt webhook delete --wh ${wh_id} -q`, ImptTestHelper.emptyCheckEx));
+            return ImptTestHelper.runCommand(`impt product delete --product ${PRODUCT_NAME} --force --confirmed`, ImptTestHelper.emptyCheckEx).
+                then(() => ImptTestHelper.runCommand(`impt dg delete --dg ${DG_NAME_2} -f `, ImptTestHelper.emptyCheckEx)).
+                then(() => ImptTestHelper.runCommand(`impt webhook delete --wh ${wh_id} -q`, ImptTestHelper.emptyCheckEx));
         }
 
         // prepare test environment for impt webhook delete test suite
         function _testSuiteInit() {
-            return ImptTestHelper.runCommandEx(`impt product create --name ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
-                then(() => ImptTestHelper.runCommandEx(`impt dg create --name ${DG_NAME} -p ${PRODUCT_NAME} `, ImptTestHelper.emptyCheckEx)).
-                then(() => ImptTestHelper.runCommandEx(`impt webhook create --dg ${DG_NAME} --url ${WH_URL} --event deployment --mime json `, (commandOut) => {
+            return ImptTestHelper.runCommand(`impt product create --name ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
+                then(() => ImptTestHelper.runCommand(`impt dg create --name ${DG_NAME} -p ${PRODUCT_NAME} `, ImptTestHelper.emptyCheckEx)).
+                then(() => ImptTestHelper.runCommand(`impt webhook create --dg ${DG_NAME} --url ${WH_URL} --event deployment --mime json `, (commandOut) => {
                     wh_id = ImptTestHelper.parseId(commandOut);
                     if (!wh_id) fail("TestSuitInit error: Fail create webhook");
-                ImptTestHelper.emptyCheckEx(commandOut);
+                ImptTestHelper.emptyCheck(commandOut);
                 }));
         }
 
         // check 'webhook successfully deleted' output message 
         function _checkSuccessDeleteWebhookMessage(commandOut, webhookId) {
-            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+            ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
                 Util.format(`${UserInterractor.MESSAGES.ENTITY_DELETED}`,
                     `${Identifier.ENTITY_TYPE.TYPE_WEBHOOK} "${webhookId}"`)
             );
         }
 
         it('webhook delete', (done) => {
-            ImptTestHelper.runCommandEx(`impt webhook delete --wh ${wh_id} --confirmed ${outputMode}`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt webhook delete --wh ${wh_id} --confirmed ${outputMode}`, (commandOut) => {
                 _checkSuccessDeleteWebhookMessage(commandOut, wh_id);
-                ImptTestHelper.checkSuccessStatusEx(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(() => {
-                    ImptTestHelper.runCommandEx(`impt webhook info --wh ${wh_id} ${outputMode}`, (commandOut) => {
+                    ImptTestHelper.runCommand(`impt webhook info --wh ${wh_id} ${outputMode}`, (commandOut) => {
                         MessageHelper.checkEntityNotFoundError(commandOut, Identifier.ENTITY_TYPE.TYPE_WEBHOOK, wh_id);
-                        ImptTestHelper.checkFailStatusEx(commandOut);
+                        ImptTestHelper.checkFailStatus(commandOut);
                     });
                 }).
                 then(done).
@@ -100,14 +100,14 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         });
 
         it('webhook delete without id', (done) => {
-            ImptTestHelper.runCommandEx(`impt webhook delete --wh `, (commandOut) => {
+            ImptTestHelper.runCommand(`impt webhook delete --wh `, (commandOut) => {
                 MessageHelper.checkNotEnoughArgumentsError(commandOut, 'wh');
-                ImptTestHelper.checkFailStatusEx(commandOut);
+                ImptTestHelper.checkFailStatus(commandOut);
             }).
                 then(() => {
-                    ImptTestHelper.runCommandEx(`impt webhook delete --confirmed `, (commandOut) => {
+                    ImptTestHelper.runCommand(`impt webhook delete --confirmed `, (commandOut) => {
                         MessageHelper.checkMissingArgumentsError(commandOut, 'wh');
-                        ImptTestHelper.checkFailStatusEx(commandOut);
+                        ImptTestHelper.checkFailStatus(commandOut);
                     });
                 }).
                 then(done).
@@ -115,9 +115,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         });
 
         it('delete not exist webhook', (done) => {
-            ImptTestHelper.runCommandEx(`impt webhook delete --wh not-exist-webhook ${outputMode}`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt webhook delete --wh not-exist-webhook ${outputMode}`, (commandOut) => {
                 MessageHelper.checkEntityNotFoundError(commandOut, Identifier.ENTITY_TYPE.TYPE_WEBHOOK, 'not-exist-webhook');
-                ImptTestHelper.checkFailStatusEx(commandOut);
+                ImptTestHelper.checkFailStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));

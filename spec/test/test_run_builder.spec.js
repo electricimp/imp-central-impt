@@ -54,8 +54,8 @@ describe('impt test run for Builder syntax scenario >', () => {
     }, ImptTestingHelper.TIMEOUT);
 
     it('run test', (done) => {
-        ImptTestingHelper.runCommandEx('impt test run', (commandOut) => {
-                expect(commandOut).not.toBeEmptyString();
+        ImptTestingHelper.runCommand('impt test run', (commandOut) => {
+                expect(commandOut.output).not.toBeEmptyString();
                 ImptTestCommandsHelper.checkTestSuccessStatus(commandOut);
                 ImptTestingHelper.checkSuccessStatus(commandOut);
             }).

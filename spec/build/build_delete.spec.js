@@ -63,44 +63,44 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // prepare environment for build delete command testing
         function _testSuiteInit() {
-            return ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
+            return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
                 then(() => Shell.cp('-Rf', `${__dirname}/fixtures/devicecode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER));
 
         }
 
         // delete all entities using in impt build delete test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
         }
 
         function _testInit() {
-            return ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
+            return ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
                 dg_id = ImptTestHelper.parseId(commandOut);
                 if (!dg_id) fail("TestInit error: Fail create device group");
-                ImptTestHelper.emptyCheckEx(commandOut)
+                ImptTestHelper.emptyCheck(commandOut)
             }).
-                then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP_NAME} -t build_tag -o build_origin  -x devicecode.nut`, (commandOut) => {
+                then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME} -t build_tag -o build_origin  -x devicecode.nut`, (commandOut) => {
                     build_id = ImptTestHelper.parseId(commandOut);
                     if (!build_id) fail("TestInit error: Fail create build");
                     build_sha = ImptTestHelper.parseSha(commandOut);
                     if (!build_sha) fail("TestInit error: Fail parse build sha");
-                    ImptTestHelper.emptyCheckEx(commandOut);
+                    ImptTestHelper.emptyCheck(commandOut);
                 })).
-                then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP_NAME}`, (commandOut) => {
+                then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME}`, (commandOut) => {
                     build2_id = ImptTestHelper.parseId(commandOut);
                     if (!build2_id) fail("TestInit error: Fail create build");
-                    ImptTestHelper.emptyCheckEx(commandOut);
+                    ImptTestHelper.emptyCheck(commandOut);
                 })).
-                then(() => ImptTestHelper.runCommandEx(`impt dg update -g ${DEVICE_GROUP_NAME} -m ${build2_id}`, ImptTestHelper.emptyCheckEx));
+                then(() => ImptTestHelper.runCommand(`impt dg update -g ${DEVICE_GROUP_NAME} -m ${build2_id}`, ImptTestHelper.emptyCheckEx));
         }
 
         function _testCleanUp() {
-            return ImptTestHelper.runCommandEx(`impt dg delete -g ${DEVICE_GROUP_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommand(`impt dg delete -g ${DEVICE_GROUP_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
         }
 
         // check 'deployment successfully deleted' output message 
         function _checkSuccessDeleteDeploymentMessage(commandOut, deploy) {
-            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+            ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
                 Util.format(`${UserInterractor.MESSAGES.ENTITY_DELETED}`,
                     `${Identifier.ENTITY_TYPE.TYPE_BUILD} "${deploy}"`)
             );
@@ -120,49 +120,49 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             }, ImptTestHelper.TIMEOUT);
 
             it('build delete by id', (done) => {
-                ImptTestHelper.runCommandEx(`impt build delete --build ${build_id} --confirmed ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt build delete --build ${build_id} --confirmed ${outputMode}`, (commandOut) => {
                     _checkSuccessDeleteDeploymentMessage(commandOut, build_id);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommandEx(`impt build info -b ${build_id}`, ImptTestHelper.checkFailStatusEx)).
+                    then(() => ImptTestHelper.runCommand(`impt build info -b ${build_id}`, ImptTestHelper.checkFailStatusEx)).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('build delete by sha', (done) => {
-                ImptTestHelper.runCommandEx(`impt build delete -b ${build_sha} -q ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt build delete -b ${build_sha} -q ${outputMode}`, (commandOut) => {
                     _checkSuccessDeleteDeploymentMessage(commandOut, build_sha);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommandEx(`impt build info -b ${build_id}`, ImptTestHelper.checkFailStatusEx)).
+                    then(() => ImptTestHelper.runCommand(`impt build info -b ${build_id}`, ImptTestHelper.checkFailStatusEx)).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('build delete by tag', (done) => {
-                ImptTestHelper.runCommandEx(`impt build delete -b build_tag -q ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt build delete -b build_tag -q ${outputMode}`, (commandOut) => {
                     _checkSuccessDeleteDeploymentMessage(commandOut, 'build_tag');
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommandEx(`impt build info -b ${build_id}`, ImptTestHelper.checkFailStatusEx)).
+                    then(() => ImptTestHelper.runCommand(`impt build info -b ${build_id}`, ImptTestHelper.checkFailStatusEx)).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('build delete by origin', (done) => {
-                ImptTestHelper.runCommandEx(`impt build delete -b build_origin -q ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt build delete -b build_origin -q ${outputMode}`, (commandOut) => {
                     _checkSuccessDeleteDeploymentMessage(commandOut, 'build_origin');
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommandEx(`impt build info -b ${build_id}`, ImptTestHelper.checkFailStatusEx)).
+                    then(() => ImptTestHelper.runCommand(`impt build info -b ${build_id}`, ImptTestHelper.checkFailStatusEx)).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('min supported build delete', (done) => {
-                ImptTestHelper.runCommandEx(`impt build delete -b  ${build2_id}  -q ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt build delete -b  ${build2_id}  -q ${outputMode}`, (commandOut) => {
                     MessageHelper.checkDeleteMinSupportedDeploymentMessage(commandOut, build2_id, dg_id);
-                    ImptTestHelper.checkFailStatusEx(commandOut);
+                    ImptTestHelper.checkFailStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
@@ -176,24 +176,24 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 }, ImptTestHelper.TIMEOUT);
 
                 function _flaggedBuild() {
-                    return ImptTestHelper.runCommandEx(`impt build update -b ${build_id} -f ${outputMode}`, ImptTestHelper.checkEmptyEx);
+                    return ImptTestHelper.runCommand(`impt build update -b ${build_id} -f ${outputMode}`, ImptTestHelper.checkEmptyEx);
                 }
 
                 it('flagged build delete', (done) => {
-                    ImptTestHelper.runCommandEx(`impt build delete -b  ${build_id} -q ${outputMode}`, (commandOut) => {
+                    ImptTestHelper.runCommand(`impt build delete -b  ${build_id} -q ${outputMode}`, (commandOut) => {
                         MessageHelper.checkDeleteFlaggedDeploymentMessage(commandOut);
-                        ImptTestHelper.checkFailStatusEx(commandOut);
+                        ImptTestHelper.checkFailStatus(commandOut);
                     }).
                         then(done).
                         catch(error => done.fail(error));
                 });
 
                 it('flagged build force delete', (done) => {
-                    ImptTestHelper.runCommandEx(`impt build delete -b  ${build_id} --force -q ${outputMode}`, (commandOut) => {
+                    ImptTestHelper.runCommand(`impt build delete -b  ${build_id} --force -q ${outputMode}`, (commandOut) => {
                         _checkSuccessDeleteDeploymentMessage(commandOut, build_id);
-                        ImptTestHelper.checkSuccessStatusEx(commandOut);
+                        ImptTestHelper.checkSuccessStatus(commandOut);
                     }).
-                        then(() => ImptTestHelper.runCommandEx(`impt build info -b ${build_id}`, ImptTestHelper.checkFailStatusEx)).
+                        then(() => ImptTestHelper.runCommand(`impt build info -b ${build_id}`, ImptTestHelper.checkFailStatusEx)).
                         then(done).
                         catch(error => done.fail(error));
                 });

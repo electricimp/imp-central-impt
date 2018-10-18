@@ -60,26 +60,26 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // prepare environment for device group delete command test suite 
         function _testSuiteInit() {
-            return ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx);
         }
 
         // prepare environment for device group delete command test 
         function _testInit() {
-            return ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
+            return ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
                 dg_id = ImptTestHelper.parseId(commandOut);
                 if (!dg_id) fail("TestInit error: Fail create device group");
-                ImptTestHelper.emptyCheckEx(commandOut);
+                ImptTestHelper.emptyCheck(commandOut);
             });
         }
 
         // delete all entities using in impt dg delete test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
         }
 
         // check 'device group successfully deleted' output message 
         function _checkSuccessDeleteDeviceGroupMessage(commandOut, dg) {
-            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+            ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
                 Util.format(`${UserInterractor.MESSAGES.ENTITY_DELETED}`,
                     `${Identifier.ENTITY_TYPE.TYPE_DEVICE_GROUP} "${dg}"`)
             );
@@ -87,7 +87,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // check 'deployment successfully deleted' output message 
         function _checkSuccessDeleteDeploymentMessage(commandOut, deploy) {
-            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+            ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
                 Util.format(`${UserInterractor.MESSAGES.ENTITY_DELETED}`,
                     `${Identifier.ENTITY_TYPE.TYPE_BUILD} "${deploy}"`)
             );
@@ -95,7 +95,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // check 'deployment successfully updated' output message 
         function _checkSuccessUpdateDeploymentMessage(commandOut, deploy) {
-            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+            ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
                 Util.format(`${UserInterractor.MESSAGES.ENTITY_UPDATED}`,
                     `${Identifier.ENTITY_TYPE.TYPE_BUILD} "${deploy}"`)
             );
@@ -116,9 +116,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             }, ImptTestHelper.TIMEOUT);
 
             it('delete device group by id', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg delete --dg ${dg_id} -q ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt dg delete --dg ${dg_id} -q ${outputMode}`, (commandOut) => {
                     _checkSuccessDeleteDeviceGroupMessage(commandOut, dg_id);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => ImptDgTestHelper.checkDeviceGroupNotExist(dg_id)).
                     then(done).
@@ -126,9 +126,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('delete device group by name', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg delete --dg ${DEVICE_GROUP_NAME} -q ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt dg delete --dg ${DEVICE_GROUP_NAME} -q ${outputMode}`, (commandOut) => {
                     _checkSuccessDeleteDeviceGroupMessage(commandOut, DEVICE_GROUP_NAME);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => ImptDgTestHelper.checkDeviceGroupNotExist(DEVICE_GROUP_NAME)).
                     then(done).
@@ -136,9 +136,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('delete device group by project', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg delete -q ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt dg delete -q ${outputMode}`, (commandOut) => {
                     _checkSuccessDeleteDeviceGroupMessage(commandOut, dg_id);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => ImptDgTestHelper.checkDeviceGroupNotExist(dg_id)).
                     then(done).
@@ -147,23 +147,23 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
             describe('device group delete with builds tests  >', () => {
                 beforeEach((done) => {
-                    ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP_NAME} -f`, (commandOut) => {
+                    ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME} -f`, (commandOut) => {
                         build_id = ImptTestHelper.parseId(commandOut);
                         if (!build_id) fail("TestInit error: Fail create build");
-                        ImptTestHelper.emptyCheckEx(commandOut);
+                        ImptTestHelper.emptyCheck(commandOut);
                     }).
                         then(done).
                         catch(error => done.fail(error));
                 }, ImptTestHelper.TIMEOUT);
 
                 it('force delete device group by name', (done) => {
-                    ImptTestHelper.runCommandEx(`impt dg delete --dg ${DEVICE_GROUP_NAME} --force -q ${outputMode}`, (commandOut) => {
+                    ImptTestHelper.runCommand(`impt dg delete --dg ${DEVICE_GROUP_NAME} --force -q ${outputMode}`, (commandOut) => {
                         _checkSuccessDeleteDeviceGroupMessage(commandOut, DEVICE_GROUP_NAME);
-                        ImptTestHelper.checkSuccessStatusEx(commandOut);
+                        ImptTestHelper.checkSuccessStatus(commandOut);
                     }).
-                        then(() => ImptTestHelper.runCommandEx(`impt build info -b ${build_id} ${outputMode}`, (commandOut) => {
-                            ImptTestHelper.checkAttributeEx(commandOut, 'flagged', 'false');
-                            ImptTestHelper.checkSuccessStatusEx(commandOut);
+                        then(() => ImptTestHelper.runCommand(`impt build info -b ${build_id} ${outputMode}`, (commandOut) => {
+                            ImptTestHelper.checkAttribute(commandOut, 'flagged', 'false');
+                            ImptTestHelper.checkSuccessStatus(commandOut);
                         })).
                         then(() => ImptDgTestHelper.checkDeviceGroupNotExist(DEVICE_GROUP_NAME)).
                         then(done).
@@ -171,14 +171,14 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 });
 
                 it('delete device group with builds', (done) => {
-                    ImptTestHelper.runCommandEx(`impt dg delete --dg ${DEVICE_GROUP_NAME} -f --builds -q ${outputMode}`, (commandOut) => {
+                    ImptTestHelper.runCommand(`impt dg delete --dg ${DEVICE_GROUP_NAME} -f --builds -q ${outputMode}`, (commandOut) => {
                         _checkSuccessDeleteDeviceGroupMessage(commandOut, DEVICE_GROUP_NAME);
                         _checkSuccessUpdateDeploymentMessage(commandOut, build_id);
                         _checkSuccessDeleteDeploymentMessage(commandOut, build_id);
-                        ImptTestHelper.checkSuccessStatusEx(commandOut);
+                        ImptTestHelper.checkSuccessStatus(commandOut);
                     }).
-                        then(() => ImptTestHelper.runCommandEx(`impt build info -b ${build_id} ${outputMode}`, (commandOut) => {
-                            ImptTestHelper.checkFailStatusEx(commandOut);
+                        then(() => ImptTestHelper.runCommand(`impt build info -b ${build_id} ${outputMode}`, (commandOut) => {
+                            ImptTestHelper.checkFailStatus(commandOut);
                         })).
                         then(() => ImptDgTestHelper.checkDeviceGroupNotExist(DEVICE_GROUP_NAME)).
                         then(done).
@@ -189,36 +189,36 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         describe('device group delete negative tests  >', () => {
             it('delete device group by not exist project', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg delete -q ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt dg delete -q ${outputMode}`, (commandOut) => {
                     MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, MessageHelper.DG);
-                    ImptTestHelper.checkFailStatusEx(commandOut);
+                    ImptTestHelper.checkFailStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('delete device group by empty name', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg delete --dg "" -q ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt dg delete --dg "" -q ${outputMode}`, (commandOut) => {
                     MessageHelper.checkMissingArgumentValueError(commandOut, 'dg');
-                    ImptTestHelper.checkFailStatusEx(commandOut);
+                    ImptTestHelper.checkFailStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('delete device group without dg value', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg delete -q ${outputMode} --dg`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt dg delete -q ${outputMode} --dg`, (commandOut) => {
                     MessageHelper.checkNotEnoughArgumentsError(commandOut, 'dg');
-                    ImptTestHelper.checkFailStatusEx(commandOut);
+                    ImptTestHelper.checkFailStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('delete not exist device group', (done) => {
-                ImptTestHelper.runCommandEx(`impt dg delete -q ${outputMode} --dg not-exist-device-group`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt dg delete -q ${outputMode} --dg not-exist-device-group`, (commandOut) => {
                     MessageHelper.checkEntityNotFoundError(commandOut, MessageHelper.DG, 'not-exist-device-group');
-                    ImptTestHelper.checkFailStatusEx(commandOut);
+                    ImptTestHelper.checkFailStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));

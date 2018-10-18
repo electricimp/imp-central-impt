@@ -104,43 +104,43 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // prepare environment for build copy command testing
         function _testSuiteInit() {
-            return ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
-                then(() => ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
-                    ImptTestHelper.emptyCheckEx(commandOut);
+            return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
+                then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
+                    ImptTestHelper.emptyCheck(commandOut);
                 })).
                 then(() => Shell.cp('-Rf', `${__dirname}/fixtures/devicecode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER)).
-                then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP_NAME} -x devicecode.nut -t build_tag -o build_origin`, (commandOut) => {
+                then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME} -x devicecode.nut -t build_tag -o build_origin`, (commandOut) => {
                     build_id = ImptTestHelper.parseId(commandOut);
                     if (!build_id) fail("TestSuiteInit error: Fail create build");
                     build_sha = ImptTestHelper.parseSha(commandOut);
                     if (!build_sha) fail("TestSuiteInit error: Fail parse build sha");
-                    ImptTestHelper.emptyCheckEx(commandOut);
+                    ImptTestHelper.emptyCheck(commandOut);
                 }));
         }
 
         // delete all entities using in impt build copy test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx).
-                then(() => ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT2_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx));
+            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx).
+                then(() => ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT2_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx));
         }
 
         function _testInit() {
-            return ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT2_NAME}`, ImptTestHelper.emptyCheckEx).
-                then(() => ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP2_NAME} -p ${PRODUCT2_NAME}`, (commandOut) => {
+            return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT2_NAME}`, ImptTestHelper.emptyCheckEx).
+                then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP2_NAME} -p ${PRODUCT2_NAME}`, (commandOut) => {
                     dg_id = ImptTestHelper.parseId(commandOut);
                     if (!dg_id) fail("TestSuitInit error: Fail create device group");
-                    ImptTestHelper.emptyCheckEx(commandOut);
+                    ImptTestHelper.emptyCheck(commandOut);
                 }));
         }
 
         function _testCleanUp() {
-            return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT2_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT2_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
 
         }
 
         // check 'deployment successfully copied' output message 
         function _checkSuccessCopyDeploymentMessage(commandOut, fromdeploy, todeploy) {
-            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+            ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
                 Util.format(`${UserInterractor.MESSAGES.BUILD_COPIED}`,
                     `${Identifier.ENTITY_TYPE.TYPE_BUILD} "${fromdeploy}"`,
                     `${Identifier.ENTITY_TYPE.TYPE_BUILD} "${todeploy}"`
@@ -150,7 +150,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // check 'deployment successfully created' output message 
         function _checkSuccessCreateDeploymentMessage(commandOut, deploy) {
-            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+            ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
                 Util.format(`${UserInterractor.MESSAGES.ENTITY_CREATED}`,
                     `${Identifier.ENTITY_TYPE.TYPE_BUILD} "${deploy}"`
                 )
@@ -192,87 +192,87 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             }, ImptTestHelper.TIMEOUT);
 
             it('build copy by id', (done) => {
-                ImptTestHelper.runCommandEx(`impt build copy --build ${build_id} --dg ${dg_id} ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt build copy --build ${build_id} --dg ${dg_id} ${outputMode}`, (commandOut) => {
                     //parse build id of created deployment
                     new_build_id = _parseBuildId(commandOut);
                     _checkSuccessCreateDeploymentMessage(commandOut, new_build_id);
                     _checkSuccessCopyDeploymentMessage(commandOut, build_id, new_build_id);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommandEx(`impt dg builds -g ${DEVICE_GROUP2_NAME} -z json`, (commandOut) => {
-                        ImptTestHelper.checkAttributeEx(commandOut, 'sha', build_sha);
-                        ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    then(() => ImptTestHelper.runCommand(`impt dg builds -g ${DEVICE_GROUP2_NAME} -z json`, (commandOut) => {
+                        ImptTestHelper.checkAttribute(commandOut, 'sha', build_sha);
+                        ImptTestHelper.checkSuccessStatus(commandOut);
                     })).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('build copy by sha', (done) => {
-                ImptTestHelper.runCommandEx(`impt build copy --build ${build_sha} --dg ${dg_id} ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt build copy --build ${build_sha} --dg ${dg_id} ${outputMode}`, (commandOut) => {
                     new_build_id = _parseBuildId(commandOut);
                     _checkSuccessCreateDeploymentMessage(commandOut, new_build_id);
                     _checkSuccessCopyDeploymentMessage(commandOut, build_sha, new_build_id);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommandEx(`impt dg builds -g ${DEVICE_GROUP2_NAME} -z json`, (commandOut) => {
-                        ImptTestHelper.checkAttributeEx(commandOut, 'sha', build_sha);
-                        ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    then(() => ImptTestHelper.runCommand(`impt dg builds -g ${DEVICE_GROUP2_NAME} -z json`, (commandOut) => {
+                        ImptTestHelper.checkAttribute(commandOut, 'sha', build_sha);
+                        ImptTestHelper.checkSuccessStatus(commandOut);
                     })).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('build copy by tag', (done) => {
-                ImptTestHelper.runCommandEx(`impt build copy --build build_tag --dg ${dg_id} --all ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt build copy --build build_tag --dg ${dg_id} --all ${outputMode}`, (commandOut) => {
                     new_build_id = _parseBuildId(commandOut);
                     _checkSuccessCreateDeploymentMessage(commandOut, new_build_id);
                     _checkSuccessCopyDeploymentMessage(commandOut, 'build_tag', new_build_id);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommandEx(`impt dg builds -g ${DEVICE_GROUP2_NAME} -z json`, (commandOut) => {
-                        ImptTestHelper.checkAttributeEx(commandOut, 'sha', build_sha);
+                    then(() => ImptTestHelper.runCommand(`impt dg builds -g ${DEVICE_GROUP2_NAME} -z json`, (commandOut) => {
+                        ImptTestHelper.checkAttribute(commandOut, 'sha', build_sha);
                         expect(commandOut.output).toMatch('build_tag');
-                        ImptTestHelper.checkSuccessStatusEx(commandOut);
+                        ImptTestHelper.checkSuccessStatus(commandOut);
                     })).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('build copy by origin', (done) => {
-                ImptTestHelper.runCommandEx(`impt build copy --build build_origin --dg ${dg_id} --all ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt build copy --build build_origin --dg ${dg_id} --all ${outputMode}`, (commandOut) => {
                     new_build_id = _parseBuildId(commandOut);
                     _checkSuccessCreateDeploymentMessage(commandOut, new_build_id);
                     _checkSuccessCopyDeploymentMessage(commandOut, 'build_origin', new_build_id);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommandEx(`impt dg builds -g ${DEVICE_GROUP2_NAME} -z json`, (commandOut) => {
-                        ImptTestHelper.checkAttributeEx(commandOut, 'sha', build_sha);
-                        ImptTestHelper.checkAttributeEx(commandOut, 'origin', 'build_origin');
-                        ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    then(() => ImptTestHelper.runCommand(`impt dg builds -g ${DEVICE_GROUP2_NAME} -z json`, (commandOut) => {
+                        ImptTestHelper.checkAttribute(commandOut, 'sha', build_sha);
+                        ImptTestHelper.checkAttribute(commandOut, 'origin', 'build_origin');
+                        ImptTestHelper.checkSuccessStatus(commandOut);
                     })).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('build copy by project', (done) => {
-                ImptTestHelper.runCommandEx(`impt build copy --dg ${dg_id} ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt build copy --dg ${dg_id} ${outputMode}`, (commandOut) => {
                     new_build_id = _parseBuildId(commandOut);
                     _checkSuccessCreateDeploymentMessage(commandOut, new_build_id);
                     _checkSuccessCopyDeploymentMessage(commandOut, build_id, new_build_id);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommandEx(`impt dg builds -g ${DEVICE_GROUP2_NAME} -z json`, (commandOut) => {
-                        ImptTestHelper.checkAttributeEx(commandOut, 'sha', build_sha);
-                        ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    then(() => ImptTestHelper.runCommand(`impt dg builds -g ${DEVICE_GROUP2_NAME} -z json`, (commandOut) => {
+                        ImptTestHelper.checkAttribute(commandOut, 'sha', build_sha);
+                        ImptTestHelper.checkSuccessStatus(commandOut);
                     })).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('build copy to not exist device group', (done) => {
-                ImptTestHelper.runCommandEx(`impt build copy -b ${build_id} -g not-exist-device-group ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt build copy -b ${build_id} -g not-exist-device-group ${outputMode}`, (commandOut) => {
                     MessageHelper.checkEntityNotFoundError(commandOut, MessageHelper.DG, 'not-exist-device-group');
-                    ImptTestHelper.checkFailStatusEx(commandOut);
+                    ImptTestHelper.checkFailStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
@@ -293,9 +293,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             }, ImptTestHelper.TIMEOUT);
 
             it('build copy by not exist project', (done) => {
-                ImptTestHelper.runCommandEx(`impt build copy -g ${dg_id} ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt build copy -g ${dg_id} ${outputMode}`, (commandOut) => {
                     MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, 'Deployment');
-                    ImptTestHelper.checkFailStatusEx(commandOut);
+                    ImptTestHelper.checkFailStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));

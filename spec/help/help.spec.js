@@ -61,11 +61,11 @@ describe(`impt help pages test suite (output: ${outputMode ? outputMode : 'defau
     tool.forEach((imptool) => {
         // negative test for tool
         it(`${imptool} without command group`, (done) => {
-            ImptTestHelper.runCommandEx(`${imptool}`, (commandOut) => {
+            ImptTestHelper.runCommand(`${imptool}`, (commandOut) => {
                 expect(commandOut.output).toMatch(`Usage: ${imptool}\\s*(\\<|\\[|-)`);
-                ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
+                ImptTestHelper.checkAttribute(commandOut, UserInterractor.ERRORS.ERROR,
                     UserInterractor.ERRORS.CMD_UNKNOWN);
-                ImptTestHelper.checkFailStatusEx(commandOut);
+                ImptTestHelper.checkFailStatus(commandOut);
             }).
                 then(done).
                 catch(error => done.fail(error));
@@ -73,11 +73,11 @@ describe(`impt help pages test suite (output: ${outputMode ? outputMode : 'defau
         tool[imptool].forEach((commandGroup) => {
             // negative test for each command group 
             it(`${imptool} ${commandGroup} without command`, (done) => {
-                ImptTestHelper.runCommandEx(`${imptool} ${commandGroup}`, (commandOut) => {
+                ImptTestHelper.runCommand(`${imptool} ${commandGroup}`, (commandOut) => {
                     expect(commandOut.output).toMatch(`Usage: ${imptool}\\s*${commandGroup}\\s*(\\<|\\[|-)`);
-                    ImptTestHelper.checkAttributeEx(commandOut, UserInterractor.ERRORS.ERROR,
+                    ImptTestHelper.checkAttribute(commandOut, UserInterractor.ERRORS.ERROR,
                         UserInterractor.ERRORS.CMD_UNKNOWN);
-                    ImptTestHelper.checkFailStatusEx(commandOut);
+                    ImptTestHelper.checkFailStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
@@ -85,9 +85,9 @@ describe(`impt help pages test suite (output: ${outputMode ? outputMode : 'defau
             tool[imptool][commandGroup].forEach((command) => {
                 // positive tests for all
                 it(`${imptool} ${commandGroup} ${command} help page`, (done) => {
-                    ImptTestHelper.runCommandEx(`${imptool} ${commandGroup} ${command} -h`, (commandOut) => {
+                    ImptTestHelper.runCommand(`${imptool} ${commandGroup} ${command} -h`, (commandOut) => {
                         expect(commandOut.output).toMatch(`Usage: ${imptool}\\s*${commandGroup}\\s*${command}\\s*(\\<|\\[|-)`);
-                        ImptTestHelper.checkSuccessStatusEx(commandOut);
+                        ImptTestHelper.checkSuccessStatus(commandOut);
                     }).
                         then(done).
                         catch(error => done.fail(error));

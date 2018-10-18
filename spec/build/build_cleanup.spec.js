@@ -119,70 +119,70 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // prepare environment for build cleanup command testing
         function _testSuiteInit() {
-            return ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT_NAME}`, (commandOut) => {
+            return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, (commandOut) => {
                 product_id = ImptTestHelper.parseId(commandOut);
                 if (!product_id) fail("TestSuitInit error: Fail create product");
-                ImptTestHelper.emptyCheckEx(commandOut);
+                ImptTestHelper.emptyCheck(commandOut);
             }).
-                then(() => ImptTestHelper.runCommandEx(`impt product create -n ${PRODUCT2_NAME}`, (commandOut) => {
-                    ImptTestHelper.emptyCheckEx(commandOut);
+                then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT2_NAME}`, (commandOut) => {
+                    ImptTestHelper.emptyCheck(commandOut);
                 }));
         }
 
         // delete all entities using in impt build cleanup test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx).
-                then(() => ImptTestHelper.runCommandEx(`impt product delete -p ${PRODUCT2_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx));
+            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx).
+                then(() => ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT2_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx));
         }
 
         function _testInit() {
-            return ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
-                ImptTestHelper.emptyCheckEx(commandOut);
+            return ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
+                ImptTestHelper.emptyCheck(commandOut);
             }).
-                then(() => ImptTestHelper.runCommandEx(`impt dg create -n ${DEVICE_GROUP2_NAME} -p ${PRODUCT2_NAME}`, (commandOut) => {
-                    ImptTestHelper.emptyCheckEx(commandOut);
+                then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP2_NAME} -p ${PRODUCT2_NAME}`, (commandOut) => {
+                    ImptTestHelper.emptyCheck(commandOut);
                 })).
-                then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP_NAME}`, (commandOut) => {
+                then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME}`, (commandOut) => {
                     build_id = ImptTestHelper.parseId(commandOut);
                     if (!build_id) fail("TestInit error: Fail create build");
-                    ImptTestHelper.emptyCheckEx(commandOut);
+                    ImptTestHelper.emptyCheck(commandOut);
                 })).
-                then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP_NAME}`, (commandOut) => {
+                then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME}`, (commandOut) => {
                     build2_id = ImptTestHelper.parseId(commandOut);
                     if (!build2_id) fail("TestInit error: Fail create build");
-                    ImptTestHelper.emptyCheckEx(commandOut);
+                    ImptTestHelper.emptyCheck(commandOut);
                 })).
-                then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP2_NAME}`, (commandOut) => {
+                then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP2_NAME}`, (commandOut) => {
                     build3_id = ImptTestHelper.parseId(commandOut);
                     if (!build3_id) fail("TestInit error: Fail create build");
-                    ImptTestHelper.emptyCheckEx(commandOut);
+                    ImptTestHelper.emptyCheck(commandOut);
                 })).
-                then(() => ImptTestHelper.runCommandEx(`impt build deploy -g ${DEVICE_GROUP2_NAME}`, (commandOut) => {
+                then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP2_NAME}`, (commandOut) => {
                     build4_id = ImptTestHelper.parseId(commandOut);
                     if (!build4_id) fail("TestInit error: Fail create build");
-                    ImptTestHelper.emptyCheckEx(commandOut);
+                    ImptTestHelper.emptyCheck(commandOut);
                 })).
                 // delete device groups to generate zombie builds
-                then(() => ImptTestHelper.runCommandEx(`impt dg delete -g ${DEVICE_GROUP_NAME} -q`, ImptTestHelper.emptyCheckEx)).
-                then(() => ImptTestHelper.runCommandEx(`impt dg delete -g ${DEVICE_GROUP2_NAME} -q`, ImptTestHelper.emptyCheckEx)).
+                then(() => ImptTestHelper.runCommand(`impt dg delete -g ${DEVICE_GROUP_NAME} -q`, ImptTestHelper.emptyCheckEx)).
+                then(() => ImptTestHelper.runCommand(`impt dg delete -g ${DEVICE_GROUP2_NAME} -q`, ImptTestHelper.emptyCheckEx)).
                 // set flagged attribute for some zombie builds
-                then(() => ImptTestHelper.runCommandEx(`impt build update -b ${build_id} -f`, ImptTestHelper.emptyCheckEx)).
-                then(() => ImptTestHelper.runCommandEx(`impt build update -b ${build3_id} -f`, ImptTestHelper.emptyCheckEx));
+                then(() => ImptTestHelper.runCommand(`impt build update -b ${build_id} -f`, ImptTestHelper.emptyCheckEx)).
+                then(() => ImptTestHelper.runCommand(`impt build update -b ${build3_id} -f`, ImptTestHelper.emptyCheckEx));
         }
 
         function _testCleanUp() {
-            return ImptTestHelper.runCommandEx(`impt build cleanup -u -q`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommand(`impt build cleanup -u -q`, ImptTestHelper.emptyCheckEx);
         }
 
         // check 'no deployments found' output message 
         function _checkNoDeploymentsFoundMessage(commandOut) {
-            ImptTestHelper.checkOutputMessageEx(outputMode, commandOut,
+            ImptTestHelper.checkOutputMessage(outputMode, commandOut,
                 'No Deployments are found.');
         }
 
         // check 'deployment successfully deleted' output message 
         function _checkSuccessDeleteDeploymentMessage(commandOut, deploy) {
-            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+            ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
                 Util.format(`${UserInterractor.MESSAGES.ENTITY_DELETED}`,
                     `${Identifier.ENTITY_TYPE.TYPE_BUILD} "${deploy}"`)
             );
@@ -190,7 +190,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // check 'deployment successfully updated' output message 
         function _checkSuccessUpdatedDeploymentMessage(commandOut, deploy) {
-            ImptTestHelper.checkOutputMessageEx(`${outputMode}`, commandOut,
+            ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
                 Util.format(`${UserInterractor.MESSAGES.ENTITY_UPDATED}`,
                     `${Identifier.ENTITY_TYPE.TYPE_BUILD} "${deploy}"`)
             );
@@ -210,80 +210,80 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             }, ImptTestHelper.TIMEOUT);
 
             it('build cleanup by product id', (done) => {
-                ImptTestHelper.runCommandEx(`impt build cleanup --product ${product_id} -q ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt build cleanup --product ${product_id} -q ${outputMode}`, (commandOut) => {
                     _checkSuccessDeleteDeploymentMessage(commandOut, build2_id);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommandEx(`impt build list --zombie -z json`, (commandOut) => {
+                    then(() => ImptTestHelper.runCommand(`impt build list --zombie -z json`, (commandOut) => {
                         expect(commandOut).toContainsBuild({ id: build_id });
                         expect(commandOut).not.toContainsBuild({ id: build2_id });
                         expect(commandOut).toContainsBuild({ id: build3_id });
                         expect(commandOut).toContainsBuild({ id: build4_id });
                         expect(commandOut).toBuildCountEqual(3);
-                        ImptTestHelper.checkSuccessStatusEx(commandOut);
+                        ImptTestHelper.checkSuccessStatus(commandOut);
                     })).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('flagged build cleanup by product name', (done) => {
-                ImptTestHelper.runCommandEx(`impt build cleanup --product ${PRODUCT_NAME} -u -q ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt build cleanup --product ${PRODUCT_NAME} -u -q ${outputMode}`, (commandOut) => {
                     _checkSuccessUpdatedDeploymentMessage(commandOut, build_id);
                     _checkSuccessDeleteDeploymentMessage(commandOut, build_id);
                     _checkSuccessDeleteDeploymentMessage(commandOut, build2_id);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommandEx(`impt build list --zombie -z json`, (commandOut) => {
+                    then(() => ImptTestHelper.runCommand(`impt build list --zombie -z json`, (commandOut) => {
                         expect(commandOut).not.toContainsBuild({ id: build_id });
                         expect(commandOut).not.toContainsBuild({ id: build2_id });
                         expect(commandOut).toContainsBuild({ id: build3_id });
                         expect(commandOut).toContainsBuild({ id: build4_id });
                         expect(commandOut).toBuildCountEqual(2);
-                        ImptTestHelper.checkSuccessStatusEx(commandOut);
+                        ImptTestHelper.checkSuccessStatus(commandOut);
                     })).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('build cleanup', (done) => {
-                ImptTestHelper.runCommandEx(`impt build cleanup -q ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt build cleanup -q ${outputMode}`, (commandOut) => {
                     _checkSuccessDeleteDeploymentMessage(commandOut, build2_id);
                     _checkSuccessDeleteDeploymentMessage(commandOut, build4_id);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommandEx(`impt build list --zombie -z json`, (commandOut) => {
+                    then(() => ImptTestHelper.runCommand(`impt build list --zombie -z json`, (commandOut) => {
                         expect(commandOut).toContainsBuild({ id: build_id });
                         expect(commandOut).toContainsBuild({ id: build3_id });
                         expect(commandOut).not.toContainsBuild({ id: build2_id });
                         expect(commandOut).not.toContainsBuild({ id: build4_id });
-                        ImptTestHelper.checkSuccessStatusEx(commandOut);
+                        ImptTestHelper.checkSuccessStatus(commandOut);
                     })).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('flagged build cleanup', (done) => {
-                ImptTestHelper.runCommandEx(`impt build cleanup -u -q ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt build cleanup -u -q ${outputMode}`, (commandOut) => {
                     _checkSuccessUpdatedDeploymentMessage(commandOut, build_id);
                     _checkSuccessUpdatedDeploymentMessage(commandOut, build3_id);
                     _checkSuccessDeleteDeploymentMessage(commandOut, build_id);
                     _checkSuccessDeleteDeploymentMessage(commandOut, build2_id);
                     _checkSuccessDeleteDeploymentMessage(commandOut, build3_id);
                     _checkSuccessDeleteDeploymentMessage(commandOut, build4_id);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommandEx(`impt build list --zombie -z json`, (commandOut) => {
+                    then(() => ImptTestHelper.runCommand(`impt build list --zombie -z json`, (commandOut) => {
                         expect(commandOut).toBuildCountEqual(0);
-                        ImptTestHelper.checkSuccessStatusEx(commandOut);
+                        ImptTestHelper.checkSuccessStatus(commandOut);
                     })).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('build cleanup by not exist product', (done) => {
-                ImptTestHelper.runCommandEx(`impt build cleanup -p not-exist-product -u -q ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt build cleanup -p not-exist-product -u -q ${outputMode}`, (commandOut) => {
                     _checkNoDeploymentsFoundMessage(commandOut);
-                    ImptTestHelper.checkSuccessStatusEx(commandOut);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(done).
                     catch(error => done.fail(error));
