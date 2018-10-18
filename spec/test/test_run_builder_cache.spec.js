@@ -54,7 +54,7 @@ describe('impt test run for Builder cache scenario >', () => {
     function createGitHubConfig() {
         if (config.githubUser && config.githubToken) {
             gitHubConfigName = '.impt.github';
-            return ImptTestingHelper.runCommand(
+            return ImptTestingHelper.runCommandEx(
                 `impt test github --github-config ${gitHubConfigName} --user ${config.githubUser} --pwd ${config.githubToken} --confirmed`,
                 ImptTestingHelper.checkSuccessStatus);
         }
@@ -71,7 +71,7 @@ describe('impt test run for Builder cache scenario >', () => {
                 'test-file' : 'tests/builder.agent.nut',
                 'github-config' : gitHubConfigName
             }).
-            then(() => ImptTestingHelper.runCommand('impt test run', (commandOut) => {
+            then(() => ImptTestingHelper.runCommandEx('impt test run', (commandOut) => {
                 expect(Shell.test('-e', '.builder-cache')).toBe(false);
                 ImptTestCommandsHelper.checkTestSuccessStatus(commandOut);
                 ImptTestingHelper.checkSuccessStatus(commandOut);
@@ -91,7 +91,7 @@ describe('impt test run for Builder cache scenario >', () => {
                 'builder-cache' : true,
                 'github-config' : gitHubConfigName
             }).
-            then(() => ImptTestingHelper.runCommand('impt test run', (commandOut) => {
+            then(() => ImptTestingHelper.runCommandEx('impt test run', (commandOut) => {
                 expect(Shell.test('-e', '.builder-cache')).toBe(true);
                 ImptTestCommandsHelper.checkTestSuccessStatus(commandOut);
                 ImptTestingHelper.checkSuccessStatus(commandOut);
@@ -112,7 +112,7 @@ describe('impt test run for Builder cache scenario >', () => {
                 'builder-cache' : false,
                 'github-config' : gitHubConfigName
             }).
-            then(() => ImptTestingHelper.runCommand('impt test run --clear-cache', (commandOut) => {
+            then(() => ImptTestingHelper.runCommandEx('impt test run --clear-cache', (commandOut) => {
                 expect(Shell.test('-e', '.builder-cache')).toBe(false);
                 ImptTestCommandsHelper.checkTestSuccessStatus(commandOut);
                 ImptTestingHelper.checkSuccessStatus(commandOut);

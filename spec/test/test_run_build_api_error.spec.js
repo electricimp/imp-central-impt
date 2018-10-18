@@ -49,7 +49,7 @@ describe('impt test run for build-api-error behavior >', () => {
     }, ImptTestingHelper.TIMEOUT);
 
     it('run test', (done) => {
-        ImptTestingHelper.runCommand('impt test run', (commandOut) => {
+        ImptTestingHelper.runCommandEx('impt test run', (commandOut) => {
                 expect(commandOut).not.toBeEmptyString();
                 // verify that "Compilation Error" error occured
                 expect(commandOut).toMatch(/Compilation Error/);

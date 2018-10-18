@@ -49,7 +49,7 @@ describe('impt test run for agent-only scenario >', () => {
     }, ImptTestingHelper.TIMEOUT);
 
     it('run test', (done) => {
-        ImptTestingHelper.runCommand('impt test run', (commandOut) => {
+        ImptTestingHelper.runCommandEx('impt test run', (commandOut) => {
                 expect(commandOut).not.toBeEmptyString();
                 expect(commandOut).toMatch(/Test session is agent-only\n/);
                 ImptTestCommandsHelper.checkTestSuccessStatus(commandOut);

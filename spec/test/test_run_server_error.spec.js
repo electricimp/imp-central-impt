@@ -59,7 +59,7 @@ describe('impt test run for test server error scenario >', () => {
                     'tests/server-error2.device.nut'
                 ]
             }).
-            then(() => ImptTestingHelper.runCommand('impt test run', (commandOut) => {
+            then(() => ImptTestingHelper.runCommandEx('impt test run', (commandOut) => {
                 expect(commandOut).not.toBeEmptyString();
                 ImptTestCommandsHelper.checkTestSuccessStatus(commandOut);
                 ImptTestingHelper.checkSuccessStatus(commandOut);
@@ -77,7 +77,7 @@ describe('impt test run for test server error scenario >', () => {
                 'timeout': 40,
                 'test-file' : 'tests/server-index-access-failure.agent.nut'
             }).
-            then(() => ImptTestingHelper.runCommand('impt test run', (commandOut) => {
+            then(() => ImptTestingHelper.runCommandEx('impt test run', (commandOut) => {
                 expect(commandOut).not.toBeEmptyString();
                 expect(commandOut).toMatch("the index 'fieldDoesNotExists' does not exist");
                 ImptTestCommandsHelper.checkTestFailStatus(commandOut);
@@ -95,7 +95,7 @@ describe('impt test run for test server error scenario >', () => {
                 'timeout': 40,
                 'test-file' : 'tests/server-throw-exception.agent.nut'
             }).
-            then(() => ImptTestingHelper.runCommand('impt test run', (commandOut) => {
+            then(() => ImptTestingHelper.runCommandEx('impt test run', (commandOut) => {
                 expect(commandOut).not.toBeEmptyString();
                 expect(commandOut).toMatch("unhandled exception");
                 ImptTestCommandsHelper.checkTestFailStatus(commandOut);

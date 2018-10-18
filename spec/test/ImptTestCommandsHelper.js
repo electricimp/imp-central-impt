@@ -48,11 +48,11 @@ class ImptTestCommandsHelper {
 
     // Creates test Product and DG
     static createTestProductAndDG() {
-        return ImptTestingHelper.runCommand(`impt product create --name ${TEST_PRODUCT_NAME}`, ImptTestingHelper.checkSuccessStatus).
-            then(() => ImptTestingHelper.runCommand(
+        return ImptTestingHelper.runCommandEx(`impt product create --name ${TEST_PRODUCT_NAME}`, ImptTestingHelper.checkSuccessStatus).
+            then(() => ImptTestingHelper.runCommandEx(
                 `impt dg create --name ${TEST_DG_NAME} --product ${TEST_PRODUCT_NAME}`, ImptTestingHelper.checkSuccessStatus)).
             then(() => Promise.all(config.devices.map(deviceId => 
-                ImptTestingHelper.runCommand(
+                ImptTestingHelper.runCommandEx(
                     `impt device assign --device ${deviceId} --dg ${TEST_DG_NAME} --confirmed`, ImptTestingHelper.checkSuccessStatus))));
     }
 
@@ -72,12 +72,12 @@ class ImptTestCommandsHelper {
             return `${acc} ${option}`;
         }, '');
         const testCreateCommand = `impt test create --dg ${TEST_DG_NAME} --confirmed ${options}`;
-        return ImptTestingHelper.runCommand(testCreateCommand, ImptTestingHelper.checkSuccessStatus);
+        return ImptTestingHelper.runCommandEx(testCreateCommand, ImptTestingHelper.checkSuccessStatus);
     }
 
     // Removes test Product, DG and Deployments.
     static cleanUpTestEnvironment() {
-        return ImptTestingHelper.runCommand(
+        return ImptTestingHelper.runCommandEx(
             `impt product delete --product ${TEST_PRODUCT_NAME} --builds --force --confirmed`,
             ImptTestingHelper.emptyCheck);
     }

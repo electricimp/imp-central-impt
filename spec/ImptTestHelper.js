@@ -98,7 +98,7 @@ class ImptTestHelper {
         FS.mkdirSync(TESTS_EXECUTION_FOLDER);
         if (login) {
             const endpoint = config.apiEndpoint ? `--endpoint ${config.apiEndpoint}` : '';
-            return ImptTestHelper.runCommand(
+            return ImptTestHelper.runCommandEx(
                 `impt auth login --local --user ${config.email} --pwd ${config.password} ${endpoint}`,
                 ImptTestHelper.checkSuccessStatus);
         }

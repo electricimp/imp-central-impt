@@ -51,7 +51,7 @@ describe('impt test run for external-command scenario >', () => {
         ImptTestCommandsHelper.createTestConfig(
             'fixtures/external_command',
             { 'test-file' : 'tests/exit-code.*.test.nut' }).
-            then(() => ImptTestingHelper.runCommand('impt test run', (commandOut) => {
+            then(() => ImptTestingHelper.runCommandEx('impt test run', (commandOut) => {
                 expect(commandOut).not.toBeEmptyString();
                 expect(commandOut).toMatch(/\> \"?external command output\"?/);
                 expect(commandOut).toMatch(/External command failed with exit code 125/);
@@ -69,7 +69,7 @@ describe('impt test run for external-command scenario >', () => {
                 'timeout' : 1,
                 'test-file' : 'tests/timeout.*.test.nut'
             }).
-            then(() => ImptTestingHelper.runCommand('impt test run', (commandOut) => {
+            then(() => ImptTestingHelper.runCommandEx('impt test run', (commandOut) => {
                 expect(commandOut).not.toBeEmptyString();
                 expect(commandOut).not.toMatch(/\> external command output/);
                 expect(commandOut).toMatch(/External command timed out/);

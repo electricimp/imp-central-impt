@@ -47,7 +47,7 @@ describe('impt test run for Agent code and device code together scenario >', () 
     }, ImptTestingHelper.TIMEOUT);
 
     it('run test', (done) => {
-        ImptTestingHelper.runCommand('impt test run --tests :MyTestCase::testMe_1', (commandOut) => {
+        ImptTestingHelper.runCommandEx('impt test run --tests :MyTestCase::testMe_1', (commandOut) => {
                 expect(commandOut).not.toBeEmptyString();
                 expect(commandOut).not.toMatch(/MyTestCase::testMe\(\)\n/);
                 expect(commandOut).toMatch(/MyTestCase::testMe_1\(\)\n/);
