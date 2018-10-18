@@ -31,8 +31,8 @@ const UserInteractor = require('../../../lib/util/UserInteractor');
 
 const COMMAND = 'login';
 const COMMAND_SECTION = 'auth';
-const COMMAND_SHORT_DESCR = 'Global or local login.';
-const COMMAND_DESCRIPTION = 'Global or local login. Creates Global or Local Auth File.';
+const COMMAND_SHORT_DESCR = 'Creates the global or local auth file.';
+const COMMAND_DESCRIPTION = COMMAND_SHORT_DESCR;
 
 exports.command = COMMAND;
 

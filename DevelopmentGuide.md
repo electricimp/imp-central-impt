@@ -312,7 +312,7 @@ IMPT COMMAND SUCCEEDS
 
 ### Project Information ###
 
-You can get the status of your Project configuration &mdash; the referenced Device Group, its Product, the linked source files, etc. &mdash; with [`impt project info`](./CommandsManual.md#project-info). The option `--full` provides you even more details: for example, information about devices added to your Project, the login status of the Project directory (as per [`impt auth info`](./CommandsManual.md#auth-info)).
+You can get the status of your Project configuration &mdash; the referenced Device Group, its Product, the linked source files, etc. &mdash; with [`impt project info`](./CommandsManual.md#project-info). The option `--full` provides you even more details: for example, information about devices added to your Project, the authentication status of the Project directory (as per [`impt auth info`](./CommandsManual.md#auth-info)).
 
 Use [`impt product info`](./CommandsManual.md#product-info) with the option `--full` to review the full structure of the Product related by your Project.
 
@@ -350,8 +350,8 @@ Project:
         agent_id:      T1oUmIZ3At_N
         device_online: true
 Auth:
+  Auth type:                 Global Auth file
   impCentral API endpoint:   https://api.electricimp.com/v5
-  Auth file:                 Global
   Access token auto refresh: true
   Login method:              User/Password
   Username:                  username
@@ -366,7 +366,7 @@ Your Project can be easily shared, copied or moved: just copy the whole director
 
 **Note:** the Project directory may also include a [local auth file](./CommandsManual.md#local-auth-file), which you may not wish to share.
 
-On the contrary, if you do want to share or copy the authentication information along with your Project but the directory does not include a [local auth file](./CommandsManual.md#local-auth-file) (ie. you use global login), call [`impt auth login`](./CommandsManual.md#auth-login) with the option `--local` and with the same credentials and endpoint as you used for global login. A [local auth file](./CommandsManual.md#local-auth-file) will be created and you will be able to copy it alongside the other Project files.
+On the contrary, if you do want to share or copy the authentication information along with your Project but the directory does not include a [local auth file](./CommandsManual.md#local-auth-file), call [`impt auth login`](./CommandsManual.md#auth-login) with the option `--local` and with the credentials and endpoint you would like to share. A [local auth file](./CommandsManual.md#local-auth-file) will be created and you will be able to copy it alongside the other Project files.
 
 ### Deleting a Project ###
 
@@ -439,7 +439,7 @@ IMPT COMMAND SUCCEEDS
 
 ### Develop Application Firmware ###
 
-1. Log in to the impCentral API using global login (ie. the [global auth file](./CommandsManual.md#global-auth-file))
+1. Log in to the impCentral API by creating the [global auth file](./CommandsManual.md#global-auth-file))
 
 ```
 > impt auth login --user username --pwd password
