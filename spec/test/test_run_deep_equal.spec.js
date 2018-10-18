@@ -46,7 +46,7 @@ describe('impt test run for deep-equal scenario >', () => {
             catch(error => done.fail(error));
     }, ImptTestingHelper.TIMEOUT);
 
-    it('run test', (done) => {
+    xit('run test', (done) => {
         ImptTestingHelper.runCommandEx('impt test run', (commandOut) => {
                 expect(commandOut).not.toBeEmptyString();
                 expect(commandOut).toMatch(/Missing slot \[a\.b\.c\] in actual value/);

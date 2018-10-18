@@ -61,7 +61,7 @@ describe('impt test run for Builder cache scenario >', () => {
         return Promise.resolve();
     }
 
-    it('run test without builder-cache option in the project config', (done) => {
+    xit('run test without builder-cache option in the project config', (done) => {
         ImptTestCommandsHelper.createTestConfig(
             'fixtures/builder_cache',
             {
@@ -80,7 +80,7 @@ describe('impt test run for Builder cache scenario >', () => {
             catch(error => done.fail(error));
     });
 
-    it('run test with builder-cache option in the project config', (done) => {
+    xit('run test with builder-cache option in the project config', (done) => {
         ImptTestCommandsHelper.createTestConfig(
             'fixtures/builder_cache',
             {
@@ -100,7 +100,7 @@ describe('impt test run for Builder cache scenario >', () => {
             catch(error => done.fail(error));
     });
 
-    it('run test with --clear-cache and without builder-cache option in the project config', (done) => {
+    xit('run test with --clear-cache and without builder-cache option in the project config', (done) => {
         expect(Shell.test('-e', '.builder-cache')).toBe(true);
         ImptTestCommandsHelper.createTestConfig(
             'fixtures/builder_cache',

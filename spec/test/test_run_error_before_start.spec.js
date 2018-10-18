@@ -51,7 +51,7 @@ describe('impt test run for error-before-start behavior >', () => {
         jasmine.DEFAULT_TIMEOUT_INTERVAL = ImptTestingHelper.TIMEOUT * (config.devices.length > 0 ? config.devices.length : 1);
     });
 
-    it('run test', (done) => {
+    xit('run test', (done) => {
         ImptTestingHelper.runCommandEx('impt test run', (commandOut) => {
                 expect(commandOut).not.toBeEmptyString();
                 expect(commandOut).toMatch(/warning\] Device is out of memory/);

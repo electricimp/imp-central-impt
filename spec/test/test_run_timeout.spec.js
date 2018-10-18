@@ -46,7 +46,7 @@ describe('impt test run for timeout behavior >', () => {
             catch(error => done.fail(error));
     }, ImptTestingHelper.TIMEOUT);
 
-    it('run test with too small timeout', (done) => {
+    xit('run test with too small timeout', (done) => {
         ImptTestCommandsHelper.createTestConfig('fixtures/timeout', { 'timeout' : 3 }).
             then(() => ImptTestingHelper.runCommandEx('impt test run', (commandOut) => {
                 expect(commandOut).not.toBeEmptyString();
@@ -59,7 +59,7 @@ describe('impt test run for timeout behavior >', () => {
     });
 
     // checks that timeout is applied to every test method, not to the whole session
-    it('run test with appropriate timeout', (done) => {
+    xit('run test with appropriate timeout', (done) => {
         ImptTestCommandsHelper.createTestConfig('fixtures/timeout', { 'timeout' : 10 }).
             then(() => ImptTestingHelper.runCommandEx('impt test run', (commandOut) => {
                 expect(commandOut).not.toBeEmptyString();
