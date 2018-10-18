@@ -53,7 +53,7 @@ describe('impt test run for Builder syntax scenario >', () => {
             catch(error => done.fail(error));
     }, ImptTestingHelper.TIMEOUT);
 
-    xit('run test', (done) => {
+    it('run test', (done) => {
         ImptTestingHelper.runCommandEx('impt test run', (commandOut) => {
                 expect(commandOut).not.toBeEmptyString();
                 ImptTestCommandsHelper.checkTestSuccessStatus(commandOut);

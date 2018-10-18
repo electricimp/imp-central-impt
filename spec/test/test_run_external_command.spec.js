@@ -47,7 +47,7 @@ describe('impt test run for external-command scenario >', () => {
             catch(error => done.fail(error));
     }, ImptTestingHelper.TIMEOUT);
 
-    xit('run exit-code test', (done) => {
+    it('run exit-code test', (done) => {
         ImptTestCommandsHelper.createTestConfig(
             'fixtures/external_command',
             { 'test-file' : 'tests/exit-code.*.test.nut' }).
@@ -62,7 +62,7 @@ describe('impt test run for external-command scenario >', () => {
             catch(error => done.fail(error));
     });
 
-    xit('run timeout test', (done) => {
+    it('run timeout test', (done) => {
         ImptTestCommandsHelper.createTestConfig(
             'fixtures/external_command',
             {

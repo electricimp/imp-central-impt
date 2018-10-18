@@ -46,7 +46,7 @@ describe('impt test run for stop-on-failure behavior >', () => {
             catch(error => done.fail(error));
     }, ImptTestingHelper.TIMEOUT);
 
-    xit('run test with stop-on-fail=true', (done) => {
+    it('run test with stop-on-fail=true', (done) => {
         ImptTestCommandsHelper.createTestConfig('fixtures/stop_on_failure', { 'stop-on-fail' : true }).
             then(() => ImptTestingHelper.runCommandEx('impt test run', (commandOut) => {
                 expect(commandOut).not.toBeEmptyString();
@@ -58,7 +58,7 @@ describe('impt test run for stop-on-failure behavior >', () => {
             catch(error => done.fail(error));
     });
 
-    xit('run test with stop-on-fail=false', (done) => {
+    it('run test with stop-on-fail=false', (done) => {
         ImptTestCommandsHelper.createTestConfig('fixtures/stop_on_failure', { 'stop-on-fail' : false }).
             then(() => ImptTestingHelper.runCommandEx('impt test run', (commandOut) => {
                 expect(commandOut).not.toBeEmptyString();

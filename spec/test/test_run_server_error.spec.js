@@ -45,7 +45,7 @@ describe('impt test run for test server error scenario >', () => {
             catch(error => done.fail(error));
     }, ImptTestingHelper.TIMEOUT);
 
-    xit('run test with agent and device test errors', (done) => {
+    it('run test with agent and device test errors', (done) => {
         ImptTestCommandsHelper.createTestConfig(
             'fixtures/server_error',
             {
@@ -69,7 +69,7 @@ describe('impt test run for test server error scenario >', () => {
     });
 
     // Negative test cases
-    xit('run test with field does not exist', (done) => {
+    it('run test with field does not exist', (done) => {
         ImptTestCommandsHelper.createTestConfig(
             'fixtures/server_error',
             {
@@ -87,7 +87,7 @@ describe('impt test run for test server error scenario >', () => {
             catch(error => done.fail(error));
     });
 
-    xit('run test with unhandled exception', (done) => {
+    it('run test with unhandled exception', (done) => {
         ImptTestCommandsHelper.createTestConfig(
             'fixtures/server_error',
             {
