@@ -3,11 +3,6 @@
 [Google Doc](https://docs.google.com/spreadsheets/d/1sAOkKtzRiPov6Yq6fYbqpluihLuWpczDOkmuQCYFb9c/edit?usp=sharing)
 
 <sub>
-# impt tests summary table  
-
-[Google Doc](https://docs.google.com/spreadsheets/d/1sAOkKtzRiPov6Yq6fYbqpluihLuWpczDOkmuQCYFb9c/edit?usp=sharing)
-
-<sub>
 <table>
 <tr>
 <th>Precondition</th>
