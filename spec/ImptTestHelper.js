@@ -179,14 +179,12 @@ class ImptTestHelper {
 
     // Checks if file exist in the TESTS_EXECUTION_FOLDER
     static checkFileExist(fileName) {
-        let files = Shell.find({ silent: true }, `${TESTS_EXECUTION_FOLDER}/${fileName}`);
-        expect(files).toBeNonEmptyArray();
+        expect(Shell.test('-e', `${TESTS_EXECUTION_FOLDER}/${fileName}`)).toBe(true);
     }
 
     // Checks if file not exist in the TESTS_EXECUTION_FOLDER
     static checkFileNotExist(fileName) {
-        let files = Shell.find({ silent: true },`${TESTS_EXECUTION_FOLDER}/${fileName}`);
-        expect(files.code).toBe(1);
+        expect(Shell.test('-e', `${TESTS_EXECUTION_FOLDER}/${fileName}`)).not.toBe(true);
     }
 
     static checkFileEqual(fileName, fileName2) {
