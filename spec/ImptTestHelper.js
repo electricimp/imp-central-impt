@@ -208,11 +208,11 @@ class ImptTestHelper {
     }
 
     static deviceAssign(dg) {
-        return ImptTestHelper.runCommand(`impt device assign -d ${config.devices[0]} -g ${dg} -q`, ImptTestHelper.emptyCheckEx);
+        return ImptTestHelper.runCommand(`impt device assign -d ${config.devices[config.deviceidx]} -g ${dg} -q`, ImptTestHelper.emptyCheckEx);
     }
 
     static deviceRestart() {
-        return ImptTestHelper.runCommand(`impt device restart -d ${config.devices[0]}`, ImptTestHelper.emptyCheckEx);
+        return ImptTestHelper.runCommand(`impt device restart -d ${config.devices[config.deviceidx]}`, ImptTestHelper.emptyCheckEx);
     }
 
     static deviceUnassign(dg) {

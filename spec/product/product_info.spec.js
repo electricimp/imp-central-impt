@@ -30,9 +30,9 @@ const ImptTestHelper = require('../ImptTestHelper');
 const MessageHelper = require('../MessageHelper');
 const Identifier = require('../../lib/util/Identifier');
 
-const PRODUCT_NAME = '__impt_pr_product';
+const PRODUCT_NAME = `__impt_pr_product${config.suffix}`;
 const PRODUCT_DESCR = 'impt temp product description';
-const DEVICE_GROUP_NAME = '__impt_pr_device_group';
+const DEVICE_GROUP_NAME = `__impt_pr_device_group${config.suffix}`;
 
 // Test suite for 'impt product info' command.
 // Runs 'impt product info' command with different combinations of options,

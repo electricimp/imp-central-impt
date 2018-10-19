@@ -29,8 +29,8 @@ const config = require('../config');
 const ImptTestHelper = require('../ImptTestHelper');
 const MessageHelper = require('../MessageHelper');
 
-const PRODUCT_NAME = '__impt_dev_product';
-const DEVICE_GROUP_NAME = '__impt_dev_device_group';
+const PRODUCT_NAME = `__impt_dev_product${config.suffix}`;
+const DEVICE_GROUP_NAME = `__impt_dev_device_group${config.suffix}`;
 
 const outputMode = '-z json';
 
@@ -77,15 +77,15 @@ describe(`impt device info test suite (output: ${outputMode ? outputMode : 'defa
     // delete all entities using in impt device info test suite
     function _testSuiteCleanUp() {
         return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx).
-            then(() => ImptTestHelper.runCommand(`impt device unassign -d ${config.devices[0]}`, ImptTestHelper.emptyCheckEx));
+            then(() => ImptTestHelper.runCommand(`impt device unassign -d ${config.devices[config.deviceidx]}`, ImptTestHelper.emptyCheckEx));
     }
 
     function _checkDeviceInfo(commandOut) {
         let json = JSON.parse(commandOut.output);
-        expect(json.Device.id).toBe(config.devices[0]);
-        expect(json.Device.name).toBe(config.devicenames[0]);
-        expect(json.Device.mac_address).toBe(config.devicemacs[0]);
-        expect(json.Device.agent_id).toBe(config.deviceaids[0]);
+        expect(json.Device.id).toBe(config.devices[config.deviceidx]);
+        expect(json.Device.name).toBe(config.devicenames[config.deviceidx]);
+        expect(json.Device.mac_address).toBe(config.devicemacs[config.deviceidx]);
+        expect(json.Device.agent_id).toBe(config.deviceaids[config.deviceidx]);
         expect(json.Device['Device Group'].id).toBe(dg_id);
         expect(json.Device['Device Group'].name).toBe(DEVICE_GROUP_NAME);
         expect(json.Device['Device Group']['Current Deployment'].id).toBe(build_id);
@@ -107,7 +107,7 @@ describe(`impt device info test suite (output: ${outputMode ? outputMode : 'defa
         }, ImptTestHelper.TIMEOUT);
 
         it('device info by id', (done) => {
-            ImptTestHelper.runCommand(`impt device info --device ${config.devices[0]} -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt device info --device ${config.devices[config.deviceidx]} -z json`, (commandOut) => {
                 _checkDeviceInfo(commandOut);
                 ImptTestHelper.checkSuccessStatus(commandOut);
             }).
@@ -116,7 +116,7 @@ describe(`impt device info test suite (output: ${outputMode ? outputMode : 'defa
         });
 
         it('device info by name', (done) => {
-            ImptTestHelper.runCommand(`impt device info --device ${config.devicenames[0]} -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt device info --device ${config.devicenames[config.deviceidx]} -z json`, (commandOut) => {
                 _checkDeviceInfo(commandOut);
                 ImptTestHelper.checkSuccessStatus(commandOut);
             }).
@@ -125,7 +125,7 @@ describe(`impt device info test suite (output: ${outputMode ? outputMode : 'defa
         });
 
         it('device info by mac', (done) => {
-            ImptTestHelper.runCommand(`impt device info --device ${config.devicemacs[0]} -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt device info --device ${config.devicemacs[config.deviceidx]} -z json`, (commandOut) => {
                 _checkDeviceInfo(commandOut);
                 ImptTestHelper.checkSuccessStatus(commandOut);
             }).
@@ -134,7 +134,7 @@ describe(`impt device info test suite (output: ${outputMode ? outputMode : 'defa
         });
 
         it('device info by agent id', (done) => {
-            ImptTestHelper.runCommand(`impt device info --device ${config.deviceaids[0]} -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt device info --device ${config.deviceaids[config.deviceidx]} -z json`, (commandOut) => {
                 _checkDeviceInfo(commandOut);
                 ImptTestHelper.checkSuccessStatus(commandOut);
             }).
@@ -145,11 +145,11 @@ describe(`impt device info test suite (output: ${outputMode ? outputMode : 'defa
 
     describe('impt device info negative tests >', () => {
         it('unassigned device info', (done) => {
-            ImptTestHelper.runCommand(`impt device info --device ${config.devices[0]} -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt device info --device ${config.devices[config.deviceidx]} -z json`, (commandOut) => {
                 let json = JSON.parse(commandOut.output);
-                expect(json.Device.id).toBe(config.devices[0]);
-                expect(json.Device.name).toBe(config.devicenames[0]);
-                expect(json.Device.mac_address).toBe(config.devicemacs[0]);
+                expect(json.Device.id).toBe(config.devices[config.deviceidx]);
+                expect(json.Device.name).toBe(config.devicenames[config.deviceidx]);
+                expect(json.Device.mac_address).toBe(config.devicemacs[config.deviceidx]);
                 expect(json.Device.agent_id).toBeEmptyString();
                 expect(json.Device['Device Group']).toBeUndefined();
                 expect(json.Device['Product']).toBeUndefined();

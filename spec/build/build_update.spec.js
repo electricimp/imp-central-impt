@@ -34,8 +34,8 @@ const Identifier = require('../../lib/util/Identifier');
 const Util = require('util');
 const UserInterractor = require('../../lib/util/UserInteractor');
 
-const PRODUCT_NAME = '__impt_bld_product';
-const DEVICE_GROUP_NAME = '__impt_bld_device_group';
+const PRODUCT_NAME = `__impt_bld_product${config.suffix}`;
+const DEVICE_GROUP_NAME = `__impt_bld_device_group${config.suffix}`;
 
 // Test suite for 'impt build update' command.
 // Runs 'impt build update' command with different combinations of options,

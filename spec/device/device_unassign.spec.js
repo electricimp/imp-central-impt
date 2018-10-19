@@ -32,8 +32,8 @@ const UserInterractor = require('../../lib/util/UserInteractor');
 const Util = require('util');
 const MessageHelper = require('../MessageHelper');
 
-const PRODUCT_NAME = '__impt_dev_product';
-const DEVICE_GROUP_NAME = '__impt_dev_device_group';
+const PRODUCT_NAME = `__impt_dev_product${config.suffix}`;
+const DEVICE_GROUP_NAME = `__impt_dev_device_group${config.suffix}`;
 
 // Test suite for 'impt device unassign' command.
 // Runs 'impt device unassign' command with different combinations of options,
@@ -67,7 +67,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // check if device is unassigned
         function _checkUnassignDevice() {
-            return ImptTestHelper.runCommand(`impt device info --device ${config.devices[0]} -z json`, (commandOut) => {
+            return ImptTestHelper.runCommand(`impt device info --device ${config.devices[config.deviceidx]} -z json`, (commandOut) => {
                 let json = JSON.parse(commandOut.output);
                 expect(json.Device['Device Group']).toBeUndefined();
                 ImptTestHelper.checkSuccessStatus(commandOut);
@@ -98,8 +98,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             }, ImptTestHelper.TIMEOUT);
 
             it('unassign device by device id', (done) => {
-                ImptTestHelper.runCommand(`impt device unassign -d ${config.devices[0]} ${outputMode}`, (commandOut) => {
-                    _checkSuccessUnassignedDeviceMessage(commandOut, config.devices[0]);
+                ImptTestHelper.runCommand(`impt device unassign -d ${config.devices[config.deviceidx]} ${outputMode}`, (commandOut) => {
+                    _checkSuccessUnassignedDeviceMessage(commandOut, config.devices[config.deviceidx]);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => _checkUnassignDevice).
@@ -108,8 +108,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('unassign device by device name', (done) => {
-                ImptTestHelper.runCommand(`impt device unassign -d ${config.devices[0]} ${outputMode}`, (commandOut) => {
-                    _checkSuccessUnassignedDeviceMessage(commandOut, config.devices[0]);
+                ImptTestHelper.runCommand(`impt device unassign -d ${config.devices[config.deviceidx]} ${outputMode}`, (commandOut) => {
+                    _checkSuccessUnassignedDeviceMessage(commandOut, config.devices[config.deviceidx]);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => _checkUnassignDevice).
@@ -118,8 +118,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('unassign device by device mac', (done) => {
-                ImptTestHelper.runCommand(`impt device unassign -d ${config.devicemacs[0]} ${outputMode}`, (commandOut) => {
-                    _checkSuccessUnassignedDeviceMessage(commandOut, config.devicemacs[0]);
+                ImptTestHelper.runCommand(`impt device unassign -d ${config.devicemacs[config.deviceidx]} ${outputMode}`, (commandOut) => {
+                    _checkSuccessUnassignedDeviceMessage(commandOut, config.devicemacs[config.deviceidx]);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => _checkUnassignDevice).
@@ -128,8 +128,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('unassign device by agent id', (done) => {
-                ImptTestHelper.runCommand(`impt device unassign -d ${config.deviceaids[0]} ${outputMode}`, (commandOut) => {
-                    _checkSuccessUnassignedDeviceMessage(commandOut, config.deviceaids[0]);
+                ImptTestHelper.runCommand(`impt device unassign -d ${config.deviceaids[config.deviceidx]} ${outputMode}`, (commandOut) => {
+                    _checkSuccessUnassignedDeviceMessage(commandOut, config.deviceaids[config.deviceidx]);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => _checkUnassignDevice).
@@ -138,9 +138,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('repeat unassign device', (done) => {
-                ImptTestHelper.runCommand(`impt device unassign -d ${config.devices[0]} ${outputMode}`, ImptTestHelper.emptyCheckEx).
-                    then(() => ImptTestHelper.runCommand(`impt device unassign -d ${config.devices[0]} ${outputMode}`, (commandOut) => {
-                        _checkAlreadyUnassignedDeviceMessage(commandOut, config.devices[0]);
+                ImptTestHelper.runCommand(`impt device unassign -d ${config.devices[config.deviceidx]} ${outputMode}`, ImptTestHelper.emptyCheckEx).
+                    then(() => ImptTestHelper.runCommand(`impt device unassign -d ${config.devices[config.deviceidx]} ${outputMode}`, (commandOut) => {
+                        _checkAlreadyUnassignedDeviceMessage(commandOut, config.devices[config.deviceidx]);
                         ImptTestHelper.checkSuccessStatus(commandOut);
                     })).
                     then(() => _checkUnassignDevice).

@@ -34,8 +34,8 @@ const Util = require('util');
 const UserInterractor = require('../../lib/util/UserInteractor');
 const Shell = require('shelljs');
 
-const PRODUCT_NAME = '__impt_bld_product';
-const DEVICE_GROUP_NAME = '__impt_bld_device_group';
+const PRODUCT_NAME = `__impt_bld_product${config.suffix}`;
+const DEVICE_GROUP_NAME = `__impt_bld_device_group${config.suffix}`;
 
 // Test suite for 'impt build delete' command.
 // Runs 'impt build delete' command with different combinations of options,

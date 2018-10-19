@@ -34,8 +34,8 @@ const UserInterractor = require('../../lib/util/UserInteractor');
 const Shell = require('shelljs');
 const ProjectHelper = require('./ImptProjectTestHelper');
 
-const PRODUCT_NAME = '__impt_prj_product';
-const DG_NAME = '__impt_prj_device_group';
+const PRODUCT_NAME = `__impt_prj_product${config.suffix}`;
+const DG_NAME = `__impt_prj_device_group${config.suffix}`;
 const DG_DESCR = 'impt temp dg description';
 
 const DEFAULT_ENDPOINT = 'https://api.electricimp.com/v5';

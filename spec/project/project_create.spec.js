@@ -25,6 +25,7 @@
 'use strict';
 
 require('jasmine-expect');
+const config = require('../config');
 const ImptTestHelper = require('../ImptTestHelper');
 const MessageHelper = require('../MessageHelper');
 const Identifier = require('../../lib/util/Identifier');
@@ -32,8 +33,8 @@ const Util = require('util');
 const UserInterractor = require('../../lib/util/UserInteractor');
 const ProjectHelper = require('./ImptProjectTestHelper');
 
-const PRODUCT_NAME = '__impt_prj_product';
-const DG_NAME = '__impt_prj_device_group';
+const PRODUCT_NAME = `__impt_prj_product${config.suffix}`;
+const DG_NAME = `__impt_prj_device_group${config.suffix}`;
 const DG_DESCR = 'impt temp dg description';
 
 // Test suite for 'impt project create command.

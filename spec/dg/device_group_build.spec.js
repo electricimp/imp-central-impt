@@ -30,8 +30,8 @@ const ImptTestHelper = require('../ImptTestHelper');
 const lodash = require('lodash');
 const MessageHelper = require('../MessageHelper');
 
-const PRODUCT_NAME = '__impt_dg_product';
-const DEVICE_GROUP_NAME = '__impt_dg_device_group';
+const PRODUCT_NAME = `__impt_dg_product${config.suffix}`;
+const DEVICE_GROUP_NAME = `__impt_dg_device_group${config.suffix}`;
 const DEVICE_GROUP_DESCR = 'impt temp device group description';
 
 // Test suite for 'impt dg builds' command.

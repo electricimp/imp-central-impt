@@ -29,13 +29,13 @@ const config = require('../config');
 const ImptTestHelper = require('../ImptTestHelper');
 const lodash = require('lodash');
 
-const PRODUCT_NAME = '__impt_dg_product';
-const PRODUCT_NAME2 = '__impt_dg_product_2';
-const PRODUCT_NAME3 = '__impt_dg_product_3';
+const PRODUCT_NAME = `__impt_dg_product${config.suffix}`;
+const PRODUCT_NAME2 = `__impt_dg_product_2${config.suffix}`;
+const PRODUCT_NAME3 = `__impt_dg_product_3${config.suffix}`;
 
-const DEVICE_GROUP_NAME = '__impt_dg_device_group';
-const DEVICE_GROUP_NAME2 = '__impt_dg_device_group_2';
-const DEVICE_GROUP_NAME3 = '__impt_dg_device_group_3';
+const DEVICE_GROUP_NAME = `__impt_dg_device_group${config.suffix}`;
+const DEVICE_GROUP_NAME2 = `__impt_dg_device_group_2${config.suffix}`;
+const DEVICE_GROUP_NAME3 = `__impt_dg_device_group_3${config.suffix}`;
 
 const outputMode = '-z json';
 

@@ -32,11 +32,11 @@ const Identifier = require('../../lib/util/Identifier');
 const Util = require('util');
 const UserInterractor = require('../../lib/util/UserInteractor');
 
-const PRODUCT_NAME = '__impt_pr_product';
-const PRODUCT_NEW_NAME = '__impt_pr_new_product';
+const PRODUCT_NAME = `__impt_pr_product${config.suffix}`;
+const PRODUCT_NEW_NAME = `__impt_pr_new_product${config.suffix}`;
 const PRODUCT_DESCR = 'impt temp product description';
 const PRODUCT_NEW_DESCR = 'impt temp product new description';
-const DEVICE_GROUP_NAME = '__impt_pr_device_group';
+const DEVICE_GROUP_NAME = `__impt_pr_device_group${config.suffix}`;
 
 // Test suite for 'impt product update' command.
 // Runs 'impt product update' command with different combinations of options,

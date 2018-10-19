@@ -32,9 +32,9 @@ const Identifier = require('../../lib/util/Identifier');
 const UserInterractor = require('../../lib/util/UserInteractor');
 const Util = require('util');
 
-const PRODUCT_NAME = '__impt_dev_product';
-const DEVICE_GROUP_NAME = '__impt_dev_device_group';
-const DEVICE_NEW_NAME = '__impt_dev_device';
+const PRODUCT_NAME = `__impt_dev_product${config.suffix}`;
+const DEVICE_GROUP_NAME = `__impt_dev_device_group${config.suffix}`;
+const DEVICE_NEW_NAME = `__impt_dev_device${config.suffix}`;
 
 // Test suite for 'impt device update' command.
 // Runs 'impt device update' command with different combinations of options,
@@ -69,7 +69,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         
         // delete all entities using in impt device update test suite
         function _testCleanUp() {
-            return ImptTestHelper.runCommand(`impt device update -d ${config.devices[0]} --name ${config.devicenames[0]}`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommand(`impt device update -d ${config.devices[config.deviceidx]} --name ${config.devicenames[config.deviceidx]}`, ImptTestHelper.emptyCheckEx);
         }
 
         // check 'device successfully updated' output message 
@@ -81,9 +81,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         }
 
         function _checkDeviceInfo() {
-            ImptTestHelper.runCommand(`impt device info --device ${config.devices[0]} -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt device info --device ${config.devices[config.deviceidx]} -z json`, (commandOut) => {
                 let json = JSON.parse(commandOut.output);
-                expect(json.Device.id).toBe(config.devices[0]);
+                expect(json.Device.id).toBe(config.devices[config.deviceidx]);
                 expect(json.Device.name).toBe(DEVICE_NEW_NAME);
                 ImptTestHelper.checkSuccessStatus(commandOut);
             });
@@ -97,8 +97,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             }, ImptTestHelper.TIMEOUT);
 
             it('device update by device id', (done) => {
-                ImptTestHelper.runCommand(`impt device update --device ${config.devices[0]}  --name ${DEVICE_NEW_NAME} ${outputMode}`, (commandOut) => {
-                    _checkSuccessUpdatedDeviceMessage(commandOut, config.devices[0])
+                ImptTestHelper.runCommand(`impt device update --device ${config.devices[config.deviceidx]}  --name ${DEVICE_NEW_NAME} ${outputMode}`, (commandOut) => {
+                    _checkSuccessUpdatedDeviceMessage(commandOut, config.devices[config.deviceidx])
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => _checkDeviceInfo).
@@ -107,8 +107,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('device update by device mac', (done) => {
-                ImptTestHelper.runCommand(`impt device update --device ${config.devicemacs[0]}  --name ${DEVICE_NEW_NAME} ${outputMode}`, (commandOut) => {
-                    _checkSuccessUpdatedDeviceMessage(commandOut, config.devicemacs[0])
+                ImptTestHelper.runCommand(`impt device update --device ${config.devicemacs[config.deviceidx]}  --name ${DEVICE_NEW_NAME} ${outputMode}`, (commandOut) => {
+                    _checkSuccessUpdatedDeviceMessage(commandOut, config.devicemacs[config.deviceidx])
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => _checkDeviceInfo).
@@ -117,8 +117,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('device update by device name', (done) => {
-                ImptTestHelper.runCommand(`impt device update --device ${config.devicenames[0]}  --name ${DEVICE_NEW_NAME} ${outputMode}`, (commandOut) => {
-                    _checkSuccessUpdatedDeviceMessage(commandOut, config.devicenames[0])
+                ImptTestHelper.runCommand(`impt device update --device ${config.devicenames[config.deviceidx]}  --name ${DEVICE_NEW_NAME} ${outputMode}`, (commandOut) => {
+                    _checkSuccessUpdatedDeviceMessage(commandOut, config.devicenames[config.deviceidx])
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => _checkDeviceInfo).
@@ -127,8 +127,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('device update by agent id', (done) => {
-                ImptTestHelper.runCommand(`impt device update --device ${config.deviceaids[0]}  --name ${DEVICE_NEW_NAME} ${outputMode}`, (commandOut) => {
-                    _checkSuccessUpdatedDeviceMessage(commandOut, config.deviceaids[0])
+                ImptTestHelper.runCommand(`impt device update --device ${config.deviceaids[config.deviceidx]}  --name ${DEVICE_NEW_NAME} ${outputMode}`, (commandOut) => {
+                    _checkSuccessUpdatedDeviceMessage(commandOut, config.deviceaids[config.deviceidx])
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => _checkDeviceInfo).
@@ -148,7 +148,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('device update without new value', (done) => {
-                ImptTestHelper.runCommand(`impt device update --device ${config.devices[0]} ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt device update --device ${config.devices[config.deviceidx]} ${outputMode}`, (commandOut) => {
                     MessageHelper.checkMissingArgumentsError(commandOut, 'name');
                     ImptTestHelper.checkFailStatus(commandOut);
                 }).

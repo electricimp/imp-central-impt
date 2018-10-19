@@ -30,11 +30,11 @@ const Shell = require('shelljs');
 const ImptTestHelper = require('../ImptTestHelper');
 const lodash = require('lodash');
 
-const PRODUCT_NAME = '__impt_bld_product';
-const DEVICE_GROUP_NAME = '__impt_bld_device_group';
-const PRODUCT2_NAME = '__impt_bld_product_2';
-const DEVICE_GROUP2_NAME = '__impt_bld_device_group_2';
-const DEVICE_GROUP3_NAME = '__impt_bld_device_group_3';
+const PRODUCT_NAME = `__impt_bld_product${config.suffix}`;
+const DEVICE_GROUP_NAME = `__impt_bld_device_group${config.suffix}`;
+const PRODUCT2_NAME = `__impt_bld_product_2${config.suffix}`;
+const DEVICE_GROUP2_NAME = `__impt_bld_device_group_2${config.suffix}`;
+const DEVICE_GROUP3_NAME = `__impt_bld_device_group_3${config.suffix}`;
 
 const outputMode = '-z json';
 

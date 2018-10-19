@@ -33,9 +33,9 @@ const Identifier = require('../../lib/util/Identifier');
 const Util = require('util');
 const UserInterractor = require('../../lib/util/UserInteractor');
 
-const PRODUCT_NAME = '__impt_log_product';
-const DEVICE_GROUP_NAME = '__impt_log_device_group';
-const DEVICE_GROUP2_NAME = '__impt_log_device_group_2';
+const PRODUCT_NAME = `__impt_log_product${config.suffix}`;
+const DEVICE_GROUP_NAME = `__impt_log_device_group${config.suffix}`;
+const DEVICE_GROUP2_NAME = `__impt_log_device_group_2${config.suffix}`;
 
 // Test suite for 'impt log stream' command.
 // Runs 'impt log stream' command with different combinations of options,
@@ -106,8 +106,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
             it('log stream by device id', (done) => {
                 Promise.all([
-                    ImptTestHelper.runCommandWithTerminate(`impt log stream -d ${config.devices[0]} ${outputMode}`, (commandOut) => {
-                        _checkLogStreamOpenedMessage(commandOut, config.devices[0]);
+                    ImptTestHelper.runCommandWithTerminate(`impt log stream -d ${config.devices[config.deviceidx]} ${outputMode}`, (commandOut) => {
+                        _checkLogStreamOpenedMessage(commandOut, config.devices[config.deviceidx]);
                         ImptTestHelper.checkSuccessStatus(commandOut);
                     }),
                     ImptTestHelper.delayMs(5000).
@@ -155,11 +155,11 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('log stream without output value', (done) => {
-                ImptTestHelper.runCommand(`impt log stream -d ${config.devices[0]} -z`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt log stream -d ${config.devices[config.deviceidx]} -z`, (commandOut) => {
                     MessageHelper.checkNotEnoughArgumentsError(commandOut, 'z');
                     ImptTestHelper.checkFailStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommand(`impt log stream -d ${config.devices[0]} -z undefined`, (commandOut) => {
+                    then(() => ImptTestHelper.runCommand(`impt log stream -d ${config.devices[config.deviceidx]} -z undefined`, (commandOut) => {
                         MessageHelper.checkInvalidValuesError(commandOut);
                         ImptTestHelper.checkFailStatus(commandOut);
                     })).

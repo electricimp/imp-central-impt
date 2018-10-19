@@ -29,8 +29,8 @@ const config = require('../config');
 const ImptTestHelper = require('../ImptTestHelper');
 const MessageHelper = require('../MessageHelper');
 
-const PRODUCT_NAME = '__impt_dg_product';
-const DEVICE_GROUP_NAME = '__impt_dg_device_group';
+const PRODUCT_NAME = `__impt_dg_product${config.suffix}`;
+const DEVICE_GROUP_NAME = `__impt_dg_device_group${config.suffix}`;
 
 const outputMode = '-z json';
 
@@ -66,7 +66,7 @@ describe(`impt device group info test suite (output: ${outputMode ? outputMode :
                 if (!dg_id) fail("TestSuitInit error: Fail create device group");
                 ImptTestHelper.emptyCheck(commandOut);
             })).
-            then(() => ImptTestHelper.runCommand(`impt device assign -d ${config.devices[0]} -g ${DEVICE_GROUP_NAME} -q`, ImptTestHelper.emptyCheckEx)).
+            then(() => ImptTestHelper.runCommand(`impt device assign -d ${config.devices[config.deviceidx]} -g ${DEVICE_GROUP_NAME} -q`, ImptTestHelper.emptyCheckEx)).
             then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME}`, ImptTestHelper.emptyCheckEx));
     }
 
@@ -89,7 +89,7 @@ describe(`impt device group info test suite (output: ${outputMode ? outputMode :
     // check additional atributes of requested device group
     function _checkDeviceGroupAdditionalInfo(commandOut, expInfo = {}) {
         const json = JSON.parse(commandOut.output);
-        expect(json['Device Group'].Devices[0].Device.id).toBe(expInfo.dev_id ? expInfo.dev_id : config.devices[0]);
+        expect(json['Device Group'].Devices[0].Device.id).toBe(expInfo.dev_id ? expInfo.dev_id : config.devices[config.deviceidx]);
     }
 
     describe('device group info positive tests >', () => {

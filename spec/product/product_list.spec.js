@@ -28,8 +28,8 @@ require('jasmine-expect');
 const config = require('../config');
 const ImptTestHelper = require('../ImptTestHelper');
 
-const PRODUCT_NAME = '__impt_pr_product';
-const PRODUCT_NAME_2 = '__impt_pr_product_2';
+const PRODUCT_NAME = `__impt_pr_product${config.suffix}`;
+const PRODUCT_NAME_2 = `__impt_pr_product_2${config.suffix}`;
 
 // Test suite for 'impt product list' command.
 // Runs 'impt product list' command with different combinations of options,

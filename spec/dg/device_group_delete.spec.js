@@ -33,8 +33,8 @@ const Util = require('util');
 const MessageHelper = require('../MessageHelper');
 const ImptDgTestHelper = require('./ImptDgTestHelper');
 
-const PRODUCT_NAME = '__impt_dg_product';
-const DEVICE_GROUP_NAME = '__impt_dg_device_group';
+const PRODUCT_NAME = `__impt_dg_product${config.suffix}`;
+const DEVICE_GROUP_NAME = `__impt_dg_device_group${config.suffix}`;
 
 // Test suite for 'impt dg delete ' command.
 // Runs 'impt dg delete' command with different combinations of options,

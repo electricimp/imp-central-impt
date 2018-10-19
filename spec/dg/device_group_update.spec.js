@@ -33,9 +33,9 @@ const Util = require('util');
 const MessageHelper = require('../MessageHelper');
 const ImptDgTestHelper = require('./ImptDgTestHelper');
 
-const PRODUCT_NAME = '__impt_dg_product';
-const DEVICE_GROUP_NAME = '__impt_dg_device_group';
-const DEVICE_GROUP_NEW_NAME = '__impt_dg_new_device_group';
+const PRODUCT_NAME = `__impt_dg_product${config.suffix}`;
+const DEVICE_GROUP_NAME = `__impt_dg_device_group${config.suffix}`;
+const DEVICE_GROUP_NEW_NAME = `__impt_dg_new_device_group${config.suffix}`;
 const DEVICE_GROUP_DESCR = 'impt temp device group description';
 const DEVICE_GROUP_NEW_DESCR = 'impt new device group description';
 

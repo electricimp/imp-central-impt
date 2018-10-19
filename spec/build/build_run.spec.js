@@ -34,8 +34,8 @@ const Identifier = require('../../lib/util/Identifier');
 const Util = require('util');
 const UserInterractor = require('../../lib/util/UserInteractor');
 
-const PRODUCT_NAME = '__impt_bld_product';
-const DEVICE_GROUP_NAME = '__impt_bld_device_group';
+const PRODUCT_NAME = `__impt_bld_product${config.suffix}`;
+const DEVICE_GROUP_NAME = `__impt_bld_device_group${config.suffix}`;
 
 // Test suite for 'impt build run' command.
 // Runs 'impt build run' command with different combinations of options,
@@ -65,7 +65,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     if (!dg_id) fail("TestSuitInit error: Fail create device group");
                     ImptTestHelper.emptyCheck(commandOut);
                 })).
-                then(() => ImptTestHelper.runCommand(`impt device assign -d ${config.devices[0]} -g ${DEVICE_GROUP_NAME} -q`, ImptTestHelper.emptyCheckEx)).
+                then(() => ImptTestHelper.runCommand(`impt device assign -d ${config.devices[config.deviceidx]} -g ${DEVICE_GROUP_NAME} -q`, ImptTestHelper.emptyCheckEx)).
                 then(() => Shell.cp('-Rf', `${__dirname}/fixtures/devicecode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER)).
                 then(() => Shell.cp('-Rf', `${__dirname}/fixtures/agentcode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER));
         }

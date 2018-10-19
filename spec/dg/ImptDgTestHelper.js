@@ -31,8 +31,8 @@ const FS = require('fs');
 const config = require('../config');
 const ImptTestHelper = require('../ImptTestHelper');
 
-const PRODUCT_NAME = '__impt_dg_product';
-const DEVICE_GROUP_NAME = '__impt_dg_device_group';
+const PRODUCT_NAME = `__impt_dg_product${config.suffix}`;
+const DEVICE_GROUP_NAME = `__impt_dg_device_group${config.suffix}`;
 const DEVICE_GROUP_DESCR = 'impt temp device group description';
 
 // Helper class for testing impt dg command group.
@@ -53,7 +53,7 @@ class ImptDgTestHelper {
     static checkDeviceGroupHasDevice(dg) {
         return ImptTestHelper.runCommand(`impt dg info -g ${dg} -u -z json`, (commandOut) => {
             const json = JSON.parse(commandOut.output);
-            expect(json['Device Group'].Devices[0].Device.id).toBe(config.devices[0]);
+            expect(json['Device Group'].Devices[0].Device.id).toBe(config.devices[config.deviceidx]);
             ImptTestHelper.checkSuccessStatus(commandOut);
         });
     }

@@ -32,10 +32,10 @@ const Identifier = require('../../lib/util/Identifier');
 const Util = require('util');
 const UserInterractor = require('../../lib/util/UserInteractor');
 
-const PRODUCT_NAME = '__impt_wh_product';
-const PRODUCT_NAME_2 = '__impt_wh_product_2';
-const DG_NAME = '__impt_wh_device_group';
-const DG_NAME_2 = '__impt_wh_device_group_2';
+const PRODUCT_NAME = `__impt_wh_product${config.suffix}`;
+const PRODUCT_NAME_2 = `__impt_wh_product_2${config.suffix}`;
+const DG_NAME = `__impt_wh_device_group${config.suffix}`;
+const DG_NAME_2 = `__impt_wh_device_group_2${config.suffix}`;
 const WH_URL = 'http://example.com/wl/';
 const WH_URL_2 = 'http://example.com/wl2/';
 

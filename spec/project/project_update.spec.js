@@ -33,11 +33,11 @@ const UserInterractor = require('../../lib/util/UserInteractor');
 const Shell = require('shelljs');
 const ProjectHelper = require('./ImptProjectTestHelper');
 
-const PRODUCT_NAME = '__impt_prj_product';
-const DG_NAME = '__impt_prj_device_group';
+const PRODUCT_NAME = `__impt_prj_product${config.suffix}`;
+const DG_NAME = `__impt_prj_device_group${config.suffix}`;
 const DG_DESCR = 'impt temp dg description';
 
-const DG_NEW_NAME = '__impt_prj_new_dg';
+const DG_NEW_NAME = `__impt_prj_new_dg${config.suffix}`;
 const DG_NEW_DESCR = 'impt new dg description';
 
 // Test suite for 'impt project update command.

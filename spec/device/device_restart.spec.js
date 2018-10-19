@@ -33,8 +33,8 @@ const Util = require('util');
 const MessageHelper = require('../MessageHelper');
 const Shell = require('shelljs');
 
-const PRODUCT_NAME = '__impt_dev_product';
-const DEVICE_GROUP_NAME = '__impt_dev_device_group';
+const PRODUCT_NAME = `__impt_dev_product${config.suffix}`;
+const DEVICE_GROUP_NAME = `__impt_dev_device_group${config.suffix}`;
 
 // Test suite for 'impt device restart' command.
 // Runs 'impt device restart' command with different combinations of options,
@@ -86,8 +86,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         describe('device restart positive tests >', () => {
             it('restart device by device id', (done) => {
-                ImptTestHelper.runCommand(`impt device restart --device ${config.devices[0]} ${outputMode}`, (commandOut) => {
-                    _checkSuccessRestartedDeviceMessage(commandOut, config.devices[0]);
+                ImptTestHelper.runCommand(`impt device restart --device ${config.devices[config.deviceidx]} ${outputMode}`, (commandOut) => {
+                    _checkSuccessRestartedDeviceMessage(commandOut, config.devices[config.deviceidx]);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(done).
@@ -95,8 +95,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('restart device by device name', (done) => {
-                ImptTestHelper.runCommand(`impt device restart -d ${config.devices[0]} ${outputMode}`, (commandOut) => {
-                    _checkSuccessRestartedDeviceMessage(commandOut, config.devices[0]);
+                ImptTestHelper.runCommand(`impt device restart -d ${config.devices[config.deviceidx]} ${outputMode}`, (commandOut) => {
+                    _checkSuccessRestartedDeviceMessage(commandOut, config.devices[config.deviceidx]);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(done).
@@ -104,8 +104,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('restart device by device mac', (done) => {
-                ImptTestHelper.runCommand(`impt device restart -d ${config.devicemacs[0]} ${outputMode}`, (commandOut) => {
-                    _checkSuccessRestartedDeviceMessage(commandOut, config.devicemacs[0]);
+                ImptTestHelper.runCommand(`impt device restart -d ${config.devicemacs[config.deviceidx]} ${outputMode}`, (commandOut) => {
+                    _checkSuccessRestartedDeviceMessage(commandOut, config.devicemacs[config.deviceidx]);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(done).
@@ -113,8 +113,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('conditional restart device by agent id', (done) => {
-                ImptTestHelper.runCommand(`impt device restart -c -d ${config.deviceaids[0]} ${outputMode}`, (commandOut) => {
-                    _checkSuccessCondRestartedDeviceMessage(commandOut, config.deviceaids[0]);
+                ImptTestHelper.runCommand(`impt device restart -c -d ${config.deviceaids[config.deviceidx]} ${outputMode}`, (commandOut) => {
+                    _checkSuccessCondRestartedDeviceMessage(commandOut, config.deviceaids[config.deviceidx]);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(done).
@@ -122,8 +122,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             xit('restart device with log', (done) => {
-                ImptTestHelper.runCommandInteractive(`impt device restart -l -d ${config.devices[0]} ${outputMode}`, (commandOut) => {
-                    _checkSuccessRestartedDeviceMessage(commandOut, config.devices[0]);
+                ImptTestHelper.runCommandInteractive(`impt device restart -l -d ${config.devices[config.deviceidx]} ${outputMode}`, (commandOut) => {
+                    _checkSuccessRestartedDeviceMessage(commandOut, config.devices[config.deviceidx]);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(done).

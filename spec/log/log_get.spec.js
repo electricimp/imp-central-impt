@@ -30,8 +30,8 @@ const ImptTestHelper = require('../ImptTestHelper');
 const MessageHelper = require('../MessageHelper');
 const Shell = require('shelljs');
 
-const PRODUCT_NAME = '__impt_log_product';
-const DEVICE_GROUP_NAME = '__impt_log_device_group';
+const PRODUCT_NAME = `__impt_log_product${config.suffix}`;
+const DEVICE_GROUP_NAME = `__impt_log_device_group${config.suffix}`;
 
 // Test suite for 'impt log get' command.
 // Runs 'impt log get' command with different combinations of options,
@@ -101,7 +101,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('log get by device id', (done) => {
-                ImptTestHelper.runCommandInteractive(`impt log get -d ${config.devices[0]} ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommandInteractive(`impt log get -d ${config.devices[config.deviceidx]} ${outputMode}`, (commandOut) => {
                     _checkLogMessages(commandOut, { startNumber: 1, endNumber: 20, count: 20 });
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
@@ -110,7 +110,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('log get by device mac', (done) => {
-                ImptTestHelper.runCommandInteractive(`impt log get -d ${config.devicemacs[0]} ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommandInteractive(`impt log get -d ${config.devicemacs[config.deviceidx]} ${outputMode}`, (commandOut) => {
                     _checkLogMessages(commandOut, { startNumber: 1, endNumber: 20, count: 20 });
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
@@ -119,7 +119,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('log get by agent id', (done) => {
-                ImptTestHelper.runCommandInteractive(`impt log get -d ${config.deviceaids[0]} ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommandInteractive(`impt log get -d ${config.deviceaids[config.deviceidx]} ${outputMode}`, (commandOut) => {
                     _checkLogMessages(commandOut, { startNumber: 1, endNumber: 20, count: 20 });
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
@@ -128,7 +128,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('log get by device name', (done) => {
-                ImptTestHelper.runCommandInteractive(`impt log get -d ${config.devicenames[0]} ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommandInteractive(`impt log get -d ${config.devicenames[config.deviceidx]} ${outputMode}`, (commandOut) => {
                     _checkLogMessages(commandOut, { startNumber: 1, endNumber: 20, count: 20 });
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
@@ -137,7 +137,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('log get with page size', (done) => {
-                ImptTestHelper.runCommandInteractive(`impt log get -d ${config.devices[0]} --page-size 4 ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommandInteractive(`impt log get -d ${config.devices[config.deviceidx]} --page-size 4 ${outputMode}`, (commandOut) => {
                     _checkLogMessages(commandOut, { startNumber: 17, endNumber: 20, count: 4 });
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
@@ -146,7 +146,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('log get with page size and number', (done) => {
-                ImptTestHelper.runCommandInteractive(`impt log get -d ${config.devices[0]} --page-size 5 --page-number 3 ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommandInteractive(`impt log get -d ${config.devices[config.deviceidx]} --page-size 5 --page-number 3 ${outputMode}`, (commandOut) => {
                     _checkLogMessages(commandOut, { startNumber: 6, endNumber: 10, count: 5 });
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
@@ -179,11 +179,11 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('log get with incorrect page size value', (done) => {
-                ImptTestHelper.runCommand(`impt log get -d ${config.devices[0]} ${outputMode} -s 0`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt log get -d ${config.devices[config.deviceidx]} ${outputMode} -s 0`, (commandOut) => {
                     MessageHelper.checkOptionPositiveValueError(commandOut, '--page-size');
                     ImptTestHelper.checkFailStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommand(`impt log get -d ${config.devices[0]} ${outputMode} -s -4`, (commandOut) => {
+                    then(() => ImptTestHelper.runCommand(`impt log get -d ${config.devices[config.deviceidx]} ${outputMode} -s -4`, (commandOut) => {
                         MessageHelper.checkOptionPositiveValueError(commandOut, '--page-size');
                         ImptTestHelper.checkFailStatus(commandOut);
                     })).
@@ -192,11 +192,11 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('log get with incorrect page number value', (done) => {
-                ImptTestHelper.runCommand(`impt log get -d ${config.devices[0]} ${outputMode} --page-number 0`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt log get -d ${config.devices[config.deviceidx]} ${outputMode} --page-number 0`, (commandOut) => {
                     MessageHelper.checkOptionPositiveValueError(commandOut, '--page-number');
                     ImptTestHelper.checkFailStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommand(`impt log get -d ${config.devices[0]} ${outputMode} -n -4`, (commandOut) => {
+                    then(() => ImptTestHelper.runCommand(`impt log get -d ${config.devices[config.deviceidx]} ${outputMode} -n -4`, (commandOut) => {
                         MessageHelper.checkOptionPositiveValueError(commandOut, '--page-number');
                         ImptTestHelper.checkFailStatus(commandOut);
                     })).
@@ -205,11 +205,11 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('log get without size and num values', (done) => {
-                ImptTestHelper.runCommand(`impt log get -d ${config.devices[0]} ${outputMode} -s`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt log get -d ${config.devices[config.deviceidx]} ${outputMode} -s`, (commandOut) => {
                     MessageHelper.checkNotEnoughArgumentsError(commandOut, 's');
                     ImptTestHelper.checkFailStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommand(`impt log get -d ${config.devices[0]} ${outputMode} -n`, (commandOut) => {
+                    then(() => ImptTestHelper.runCommand(`impt log get -d ${config.devices[config.deviceidx]} ${outputMode} -n`, (commandOut) => {
                         MessageHelper.checkNotEnoughArgumentsError(commandOut, 'n');
                         ImptTestHelper.checkFailStatus(commandOut);
                     })).
@@ -218,11 +218,11 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('log get without output value', (done) => {
-                ImptTestHelper.runCommand(`impt log get -d ${config.devices[0]} -z`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt log get -d ${config.devices[config.deviceidx]} -z`, (commandOut) => {
                     MessageHelper.checkNotEnoughArgumentsError(commandOut, 'z');
                     ImptTestHelper.checkFailStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommand(`impt log get -d ${config.devices[0]} -z undefined`, (commandOut) => {
+                    then(() => ImptTestHelper.runCommand(`impt log get -d ${config.devices[config.deviceidx]} -z undefined`, (commandOut) => {
                         MessageHelper.checkInvalidValuesError(commandOut);
                         ImptTestHelper.checkFailStatus(commandOut);
                     })).

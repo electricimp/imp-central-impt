@@ -30,8 +30,8 @@ const Shell = require('shelljs');
 const config = require('../config');
 const ImptTestingHelper = require('../ImptTestHelper');
 
-const TEST_PRODUCT_NAME = '__impt_test_run_product';
-const TEST_DG_NAME = '__impt_test_run_dg';
+const TEST_PRODUCT_NAME = `__impt_test_run_product${config.suffix}`;
+const TEST_DG_NAME = `__impt_test_run_dg${config.suffix}`;
 
 // Helper class for 'impt test' commands testing.
 // Contains common methods for impt test commands execution:

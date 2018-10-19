@@ -32,8 +32,8 @@ const Identifier = require('../../lib/util/Identifier');
 const Util = require('util');
 const UserInterractor = require('../../lib/util/UserInteractor');
 
-const PRODUCT_NAME = '__impt_pr_product';
-const DEVICE_GROUP_NAME = '__impt_pr_device_group';
+const PRODUCT_NAME = `__impt_pr_product${config.suffix}`;
+const DEVICE_GROUP_NAME = `__impt_pr_device_group${config.suffix}`;
 
 const PRODUCT_DESCR = 'impt temp product description';
 

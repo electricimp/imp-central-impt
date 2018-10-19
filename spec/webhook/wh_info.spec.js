@@ -30,8 +30,8 @@ const ImptTestHelper = require('../ImptTestHelper');
 const MessageHelper = require('../MessageHelper');
 const Identifier = require('../../lib/util/Identifier');
 
-const PRODUCT_NAME = '__impt_wh_product';
-const DG_NAME = '__impt_wh_device_group';
+const PRODUCT_NAME = `__impt_wh_product${config.suffix}`;
+const DG_NAME = `__impt_wh_device_group${config.suffix}`;
 const WH_URL = 'http://example.com/wi/';
 
 // Test suite for 'impt webhook info command.

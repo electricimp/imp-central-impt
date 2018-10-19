@@ -32,8 +32,8 @@ const UserInterractor = require('../../lib/util/UserInteractor');
 const Util = require('util');
 const MessageHelper = require('../MessageHelper');
 
-const PRODUCT_NAME = '__impt_pr_product';
-const PRODUCT_EXIST_NAME = '__impt_pr_product_2';
+const PRODUCT_NAME = `__impt_pr_product${config.suffix}`;
+const PRODUCT_EXIST_NAME = `__impt_pr_product_2${config.suffix}`;
 
 const PRODUCT_DESCR = 'impt temp product description';
 const PRODUCT_EXIST_DESCR = 'impt temp product description 2';
