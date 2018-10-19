@@ -17,7 +17,7 @@
 <th>Test name</th>
 </tr>
 <tr><td>not auth</td><td>u/p</td><td colspan="4"><td>default</td><td></td><td>auth/auth_user_pwd.spec.js</td><td>global auth login</td></tr>
-<tr><td>not auth</td><td>u/p</td><td></td><td></td><td></td><td>Y</td><td>default</td><td></td><td>auth/auth_user_pwd.spec.js</td><td>global auth login with confirm</td></tr>
+<tr><td>not auth</td><td>u/p</td><td></td><td></td><td></td><td>Y</td><td>default</td><td></td><td>auth/auth_user_pwd.spec.js</td><td>global auth login <br> with confirm</td></tr>
 <tr><td>not auth</td><td>u/p</td><td></td><td></td><td>Y</td><td></td><td>default</td><td></td><td>auth/auth_user_pwd.spec.js</td><td>global auth login with endpoint</td></tr>
 <tr><td>not auth</td><td>u/p</td><td></td><td></td><td>Y</td><td>Y</td><td>default</td><td></td><td>auth/auth_user_pwd.spec.js</td><td>global auth login with endpoint and confirm</td></tr>
 <tr><td>not auth</td><td>u/p</td><td></td><td>Y</td><td></td><td></td><td>default</td><td></td><td>auth/auth_user_pwd.spec.js</td><td>global temp auth login</td></tr>
