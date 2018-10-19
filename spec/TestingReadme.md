@@ -32,7 +32,7 @@ Note, at this moment some tests for *impt test run* command need to be run eithe
 
 ## Execute Tests in parallel ##
 
-In order to decrease runtime, each command group test suite can be executing with others in parallel. But bear in mind that some command group suits(dg, build, device etc.) will be failed if you use the same device for ones. For prevent, you should have several devices and specify them by IMPT_DEVICE_IDX (by default index 0 is used) variable or execute these test suite in one thread using one device sequentially. Also you must specify IMPT_TEF variable for each thread.
+In order to decrease runtime, each command group test suite can be executing with others in parallel. But bear in mind that some command group suits(dg, build, device etc.) will be failed if you use the same device for ones. For prevent, you should have several devices and specify them by IMPT_DEVICE_IDX (by default index 0 is used) variable or execute these test suites in one thread using one device sequentially. Also you must specify IMPT_TEF variable for each thread.
 For example:
 
     npm test --filter `**/build/*[sS]pec.js` IMPT_TEF=build
