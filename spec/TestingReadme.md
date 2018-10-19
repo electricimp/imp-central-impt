@@ -7,13 +7,23 @@ There are [Jasmine](https://www.npmjs.com/package/jasmine) tests in the [spec fo
 1. Clone or download the latest version of *imp-central-impt* repository to a local *imp-central-impt* folder. For example, by a command `git clone --recursive https://github.com/electricimp/imp-central-impt.git imp-central-impt`
 1. Install imp-central-impt dependencies by calling `npm install` command from your local *imp-central-impt* folder.
 1. Set the mandatory environment variables:
-    - **IMPT_USER_EMAIL** - impCentral account username or email address.
-    - **IMPT_USER_PASSWORD** - the account password.
+    - **IMPT_USER_ID** - impCentral account ID.
+    - **IMPT_USER_NAME** - impCentral account username.
+    - **IMPT_USER_EMAIL** - impCentral account email address.
+    - **IMPT_USER_PASSWORD** - impCentral account password.
     - **IMPT_DEVICE_IDS** - comma separated list of Device IDs that will be used for tests execution.
+    - **IMPT_DEVICE_NAMES** - comma separated list of Device names that will be used for tests execution.
+    - **IMPT_DEVICE_MACS** - comma separated list of Device MACs that will be used for tests execution.
+    - **IMPT_DEVICE_AGENTIDS** - comma separated list of Agent IDs that will be used for tests execution.
+    
+    ***NOTE*** - all IMPT_DEVICE variables must be in same order.
 1. If needed, set optional environment variables:
     - **IMPT_DEBUG** - if *true*, displays additional output of the command execution (default: *false*).
     - **IMPT_ENDPOINT** - impCentral API endpoint (default: *https://api.electricimp.com/v5*). You need to specify it when working with a private impCentral installation.
     - **IMPT_GITHUB_USER** / **IMPT_GITHUB_TOKEN** - a GitHub account username / password or personal access token. You need to specify them when you got `GitHub rate limit reached` error.
+    - **IMPT_DEVICE_IDX** - Index of Device list specified in IMPT_DEVICE_* variables that will be used for tests execution, first by default.You need to specify them for used different device in parallel executing tests.
+    - **IMPT_SUFFIX** - Additional custom suffix for test entity names.You need to specify them for prevent collaborator's entity names collision additionaly.
+    - **IMPT_TEF** - Custom test suffix for execution directory name.You need to specify them for execute some tests in parallel.
 1. Alternatively, instead of the environment variables setting, you can directly specify the values of the corresponding variables in your local [imp-central-impt/spec/config.js file](../spec/config.js).
 1. Run the tests by calling `npm test` command from your local *imp-central-impt* folder.
 
