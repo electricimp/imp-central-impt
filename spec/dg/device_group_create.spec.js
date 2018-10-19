@@ -36,7 +36,7 @@ const ImptDgTestHelper = require('./ImptDgTestHelper');
 const PRODUCT_NAME = `__impt_dg_product${config.suffix}`;
 const DEVICE_GROUP_NAME = `__impt_dg_device_group${config.suffix}`;
 const DEVICE_GROUP_DESCR = 'impt temp device group description';
-
+const DEVICE_GROUP_EXIST_NAME = `dg_exist_name${config.suffix}`;
 
 // Test suite for 'impt dg create' command.
 // Runs 'impt dg create' command with different combinations of options,
@@ -67,7 +67,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 if (!product_id) fail("TestSuitInit error: Fail create product");
                 ImptTestHelper.emptyCheck(commandOut);
             }).
-                then(() => ImptTestHelper.runCommand(`impt dg create -n dg_exist_name -p ${PRODUCT_NAME}`, (commandOut) => {
+                then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_EXIST_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
+                    dg_id = ImptTestHelper.parseId(commandOut);
+                    if (!dg_id) fail("TestSuitInit error: Fail create device group");
                     ImptTestHelper.emptyCheck(commandOut);
                 }));
         }
@@ -92,7 +94,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         describe('device group create positive tests >', () => {
             beforeAll((done) => {
-                ImptTestHelper.projectCreate('dg_exist_name').
+                ImptTestHelper.projectCreate(DEVICE_GROUP_EXIST_NAME).
                     then(done).
                     catch(error => done.fail(error));
             }, ImptTestHelper.TIMEOUT);
@@ -140,7 +142,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     catch(error => done.fail(error));
             });
 
-            it('device group create by project', (done) => {
+            fit('device group create by project', (done) => {
                 ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -s "${DEVICE_GROUP_DESCR}" ${outputMode}`, (commandOut) => {
                     dg_id = ImptTestHelper.parseId(commandOut);
                     expect(dg_id).not.toBeNull;
@@ -156,7 +158,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         describe('device group create negative tests >', () => {
             it('device group create by not exist project', (done) => {
                 ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} ${outputMode}`, (commandOut) => {
-                    MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, 'Product');
+                    MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, MessageHelper.PRODUCT);
                     ImptTestHelper.checkFailStatus(commandOut);
                 }).
                     then(done).
@@ -165,7 +167,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
             it('device group create by not exist product', (done) => {
                 ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p not-exist-product ${outputMode}`, (commandOut) => {
-                    MessageHelper.checkEntityNotFoundError(commandOut, 'Product', 'not-exist-product');
+                    MessageHelper.checkEntityNotFoundError(commandOut, MessageHelper.PRODUCT, 'not-exist-product');
                     ImptTestHelper.checkFailStatus(commandOut);
                 }).
                     then(done).
@@ -173,7 +175,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('create duplicate device group', (done) => {
-                ImptTestHelper.runCommand(`impt dg create -n dg_exist_name -p ${PRODUCT_NAME} ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_EXIST_NAME} -p ${PRODUCT_NAME} ${outputMode}`, (commandOut) => {
                     MessageHelper.checkDuplicateResourceError(commandOut, 'Devicegroup');
                     ImptTestHelper.checkFailStatus(commandOut);
                 }).

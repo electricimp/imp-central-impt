@@ -150,7 +150,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         it('product delete by not exist project', (done) => {
             ImptTestHelper.runCommand(`impt product delete -q ${outputMode}`, (commandOut) => {
-                MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, 'Product');
+                MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, MessageHelper.PRODUCT);
                 ImptTestHelper.checkFailStatus(commandOut);
             }).
                 then(done).
