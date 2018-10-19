@@ -16,7 +16,8 @@ There are [Jasmine](https://www.npmjs.com/package/jasmine) tests in the [spec fo
     - **IMPT_DEVICE_MACS** - comma separated list of Device MACs that will be used for tests execution.
     - **IMPT_DEVICE_AGENTIDS** - comma separated list of Agent IDs that will be used for tests execution.
     
-    ***NOTE*** - all IMPT_DEVICE_* variables must be in same order.
+    
+    ***NOTE*** - all **IMPT_DEVICE** variables must be in same order.
 1. If needed, set optional environment variables:
     - **IMPT_DEBUG** - if *true*, displays additional output of the command execution (default: *false*).
     - **IMPT_ENDPOINT** - impCentral API endpoint (default: *https://api.electricimp.com/v5*). You need to specify it when working with a private impCentral installation.
@@ -31,10 +32,11 @@ Note, at this moment some tests for *impt test run* command need to be run eithe
 
 ## Execute Tests in parallel ##
 
-In order to decrease runtime, each command group test suite can be executing with others in parallel. But bear in mind that some coomand group suits(dg, build, device etc.) will be failed if you use the same device for ones. For prevent, you should have several devices and specify them by IMPT_DEVICE_IDX (by default index 0 is used) variable or execute these test suite in one thread using one device sequentially. Also you must specify IMPT_TEF variable for each thread.
+In order to decrease runtime, each command group test suite can be executing with others in parallel. But bear in mind that some command group suits(dg, build, device etc.) will be failed if you use the same device for ones. For prevent, you should have several devices and specify them by IMPT_DEVICE_IDX (by default index 0 is used) variable or execute these test suite in one thread using one device sequentially. Also you must specify IMPT_TEF variable for each thread.
 For example:
+
     npm test --filter `**/build/*[sS]pec.js` IMPT_TEF=build
-    npm test --filter `**/dg/*[sS]pec.js` IMPT_TEF=dg IMPT_DEVICE_IDX=1   
+    npm test --filter `**/dg/*[sS]pec.js` IMPT_TEF=dg IMPT_DEVICE_IDX=1  
     npm test --filter `**/device/*[sS]pec.js` IMPT_TEF=device IMPT_DEVICE_IDX=2   
 
 ## Tests Running Management ##
