@@ -142,7 +142,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     catch(error => done.fail(error));
             });
 
-            fit('device group create by project', (done) => {
+            it('device group create by project', (done) => {
                 ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -s "${DEVICE_GROUP_DESCR}" ${outputMode}`, (commandOut) => {
                     dg_id = ImptTestHelper.parseId(commandOut);
                     expect(dg_id).not.toBeNull;
