@@ -60,7 +60,8 @@ Using one device:
     start cmd /k "npm test --filter **/product/*.spec.js IMPT_TEF_SUFFIX=product" 
     start cmd /k "npm test --filter **/webhook/*.spec.js IMPT_TEF_SUFFIX=webhook"
     start cmd /k "npm test --filter **/project/*.spec.js IMPT_TEF_SUFFIX=project"
-
+    start cmd /k "npm test --filter **/help/*.spec.js IMPT_TEF_SUFFIX=help"
+    
 (OS Linux)
 
     npm test --filter **/build/*.spec.js  **/log/*.spec.js **/dg/*.spec.js **/device/*.spec.js **/test/*.spec.js IMPT_TEF_SUFFIX=build &
@@ -68,7 +69,8 @@ Using one device:
     npm test --filter **/loginkey/*.spec.js IMPT_TEF_SUFFIX=loginkey &
     npm test --filter **/product/*.spec.js IMPT_TEF_SUFFIX=product & 
     npm test --filter **/webhook/*.spec.js IMPT_TEF_SUFFIX=webhook &
-    npm test --filter **/project/*.spec.js IMPT_TEF_SUFFIX=project"
+    npm test --filter **/project/*.spec.js IMPT_TEF_SUFFIX=project &
+    npm test --filter **/help/*.spec.js IMPT_TEF_SUFFIX=help
 
 Using several devices:
 
@@ -83,6 +85,7 @@ Using several devices:
     start cmd /k "npm test --filter **/product/*.spec.js IMPT_TEF_SUFFIX=product" 
     start cmd /k "npm test --filter **/webhook/*.spec.js IMPT_TEF_SUFFIX=webhook"
     start cmd /k "npm test --filter **/project/*.spec.js IMPT_TEF_SUFFIX=project"
+    start cmd /k "npm test --filter **/help/*.spec.js IMPT_TEF_SUFFIX=help"
     start cmd /k "npm test --filter **/test/*.spec.js IMPT_TEF_SUFFIX=test"
 
 (OS Linux)
@@ -96,6 +99,7 @@ Using several devices:
     npm test --filter **/product/*.spec.js IMPT_TEF_SUFFIX=product &
     npm test --filter **/webhook/*.spec.js IMPT_TEF_SUFFIX=webhook &
     npm test --filter **/project/*.spec.js IMPT_TEF_SUFFIX=project &
+    npm test --filter **/help/*.spec.js IMPT_TEF_SUFFIX=help &
     npm test --filter **/test/*.spec.js IMPT_TEF_SUFFIX=test
 
 ## Tests Running Management ##
