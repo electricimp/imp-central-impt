@@ -17,7 +17,7 @@ There are [Jasmine](https://www.npmjs.com/package/jasmine) tests in the [spec fo
     - **IMPT_DEVICE_AGENTIDS** - comma separated list of Agent IDs that will be used for tests execution.
     
     
-    ***NOTE*** - all **IMPT_DEVICE** variables must be in same order.
+    ***NOTE*** - all **IMPT_DEVICE** variable values must be in same order.
 1. If needed, set optional environment variables:
     - **IMPT_DEBUG** - if *true*, displays additional output of the command execution (default: *false*).
     - **IMPT_ENDPOINT** - impCentral API endpoint (default: *https://api.electricimp.com/v5*). You need to specify it when working with a private impCentral installation.
