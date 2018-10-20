@@ -112,7 +112,6 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         it('webhook create by dg id', (done) => {
             ImptTestHelper.runCommand(`impt webhook create --dg ${dg_id} --url ${WH_URL} --event deployment --mime json ${outputMode}`, (commandOut) => {
                 wh_id = ImptTestHelper.parseId(commandOut);
-                console.log(wh_id);
                 _checkSuccessCreateWebhookMessage(commandOut, wh_id);
                 ImptTestHelper.checkSuccessStatus(commandOut);
             }).
