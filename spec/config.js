@@ -26,13 +26,13 @@
 
 
 exports.username = process.env.IMPT_USER_NAME;
-exports.accountid = process.env.IMPT_ACCOUNT_ID
+exports.accountid = process.env.IMPT_USER_ID
 exports.email = process.env.IMPT_USER_EMAIL;
 exports.password = process.env.IMPT_USER_PASSWORD;
 exports.devices = process.env.IMPT_DEVICE_IDS ? process.env.IMPT_DEVICE_IDS.split(',') : [];
-exports.devicemacs = process.env.IMPT_DEVICE_MAC ? process.env.IMPT_DEVICE_MAC.split(',') : [];
-exports.deviceaids = process.env.IMPT_DEVICE_AGENTID ? process.env.IMPT_DEVICE_AGENTID.split(',') : [];
-exports.devicenames = process.env.IMPT_DEVICE_NAME ? process.env.IMPT_DEVICE_NAME.split(',') : [];
+exports.devicemacs = process.env.IMPT_DEVICE_MACS ? process.env.IMPT_DEVICE_MACS.split(',') : [];
+exports.deviceaids = process.env.IMPT_DEVICE_AGENTIDS ? process.env.IMPT_DEVICE_AGENTIDS.split(',') : [];
+exports.devicenames = process.env.IMPT_DEVICE_NAMES ? process.env.IMPT_DEVICE_NAMES.split(',') : [];
 
 
 // output modes for run tests in addition to default mode  
@@ -44,4 +44,4 @@ exports.apiEndpoint = process.env.IMPT_ENDPOINT;
 exports.githubUser = process.env.IMPT_GITHUB_USER;
 exports.githubToken = process.env.IMPT_GITHUB_TOKEN;
 exports.deviceidx = process.env.IMPT_DEVICE_IDX ? process.env.IMPT_DEVICE_IDX : 0;
-exports.suffix = process.env.IMPT_SUFFIX ? `_${process.env.IMPT_ACCOUNT_ID.slice(0,8)}_${process.env.IMPT_SUFFIX}` : `_${process.env.IMPT_ACCOUNT_ID.slice(0,8)}`;
+exports.suffix = process.env.IMPT_SUFFIX ? `_${process.env.IMPT_USER_ID.slice(0,8)}_${process.env.IMPT_SUFFIX}` : `_${process.env.IMPT_USER_ID.slice(0,8)}`;
