@@ -39,6 +39,8 @@ const WH_URL = 'http://example.com/wc/';
 // Test suite for 'impt webhook create' command.
 // Runs 'impt webhook create' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
+    // skip debug outputmode
+    if (outputMode == '-z debug') return;
     describe(`impt webhook create test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         let dg_id = null;
         let wh_id = null;
@@ -110,6 +112,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         it('webhook create by dg id', (done) => {
             ImptTestHelper.runCommand(`impt webhook create --dg ${dg_id} --url ${WH_URL} --event deployment --mime json ${outputMode}`, (commandOut) => {
                 wh_id = ImptTestHelper.parseId(commandOut);
+                console.log(wh_id);
                 _checkSuccessCreateWebhookMessage(commandOut, wh_id);
                 ImptTestHelper.checkSuccessStatus(commandOut);
             }).
