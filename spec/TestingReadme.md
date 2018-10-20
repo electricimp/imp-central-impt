@@ -52,6 +52,8 @@ For parallel execute current test set you can use next script:
 
 Using one device:
 
+(OS Windows)
+
     start cmd /k "npm test --filter **/build/*.spec.js  **/log/*.spec.js **/dg/*.spec.js **/device/*.spec.js **/test/*.spec.js IMPT_TEF_SUFFIX=build"
     start cmd /k "npm test --filter **/auth/*.spec.js IMPT_TEF_SUFFIX=auth"
     start cmd /k "npm test --filter **/loginkey/*.spec.js IMPT_TEF_SUFFIX=loginkey"
@@ -59,7 +61,18 @@ Using one device:
     start cmd /k "npm test --filter **/webhook/*.spec.js IMPT_TEF_SUFFIX=webhook"
     start cmd /k "npm test --filter **/project/*.spec.js IMPT_TEF_SUFFIX=project"
 
+(OS Linux)
+
+    npm test --filter **/build/*.spec.js  **/log/*.spec.js **/dg/*.spec.js **/device/*.spec.js **/test/*.spec.js IMPT_TEF_SUFFIX=build &
+    npm test --filter **/auth/*.spec.js IMPT_TEF_SUFFIX=auth &
+    npm test --filter **/loginkey/*.spec.js IMPT_TEF_SUFFIX=loginkey &
+    npm test --filter **/product/*.spec.js IMPT_TEF_SUFFIX=product & 
+    npm test --filter **/webhook/*.spec.js IMPT_TEF_SUFFIX=webhook &
+    npm test --filter **/project/*.spec.js IMPT_TEF_SUFFIX=project"
+
 Using several devices:
+
+(OS Windows)
 
     start cmd /k "npm test --filter **/build/*.spec.js  IMPT_TEF_SUFFIX=build"
     start cmd /k "npm test --filter **/log/*.spec.js IMPT_TEF_SUFFIX=log IMPT_DEVICE_IDX=1"
@@ -70,6 +83,19 @@ Using several devices:
     start cmd /k "npm test --filter **/product/*.spec.js IMPT_TEF_SUFFIX=product" 
     start cmd /k "npm test --filter **/webhook/*.spec.js IMPT_TEF_SUFFIX=webhook"
     start cmd /k "npm test --filter **/project/*.spec.js IMPT_TEF_SUFFIX=project"
+
+(OS Linux)
+
+    npm test --filter **/build/*.spec.js  IMPT_TEF_SUFFIX=build &
+    npm test --filter **/log/*.spec.js IMPT_TEF_SUFFIX=log IMPT_DEVICE_IDX=1 &
+    npm test --filter **/dg/*.spec.js IMPT_TEF_SUFFIX=dg IMPT_DEVICE_IDX=2 &
+    npm test --filter **/device/*.spec.js IMPT_TEF_SUFFIX=device IMPT_DEVICE_IDX=3 &
+    npm test --filter **/auth/*.spec.js IMPT_TEF_SUFFIX=auth &
+    npm test --filter **/loginkey/*.spec.js IMPT_TEF_SUFFIX=loginkey &
+    npm test --filter **/product/*.spec.js IMPT_TEF_SUFFIX=product &
+    npm test --filter **/webhook/*.spec.js IMPT_TEF_SUFFIX=webhook &
+    npm test --filter **/project/*.spec.js IMPT_TEF_SUFFIX=project
+
 
 ## Tests Running Management ##
 
