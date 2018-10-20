@@ -35,8 +35,8 @@ const UserInterractor = require('../../lib/util/UserInteractor');
 const PRODUCT_NAME = `__impt_wh_product${config.suffix}`;
 const DG_NAME = `__impt_wh_device_group${config.suffix}`;
 const DG_NAME_2 = `__impt_wh_device_group_2${config.suffix}`;
-const WH_URL = 'http://example.com/wu/';
-const WH_URL_2 = 'http://example.com/wu2/';
+const WH_URL = `http://example.com/wu/${config.suffix}`;
+const WH_URL_2 = `http://example.com/wu2/${config.suffix}`;
 
 // Test suite for 'impt webhook update command.
 // Runs 'impt webhook update' command with different combinations of options,

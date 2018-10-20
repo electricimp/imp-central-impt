@@ -35,7 +35,7 @@ const UserInterractor = require('../../lib/util/UserInteractor');
 const PRODUCT_NAME = `__impt_wh_product${config.suffix}`;
 const DG_NAME = `__impt_wh_device_group${config.suffix}`;
 const DG_NAME_2 = `__impt_wh_device_group_2${config.suffix}`;
-const WH_URL = 'http://example.com/wd/';
+const WH_URL = `http://example.com/wd/${config.suffix}`;
 
 // Test suite for 'impt webhook delete command.
 // Runs 'impt webhook delete' command with different combinations of options,

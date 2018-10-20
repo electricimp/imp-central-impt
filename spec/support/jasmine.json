@@ -1,7 +1,8 @@
 {
     "spec_dir": "spec",
     "spec_files": [
-      "test/*[sS]pec.js"
+      "**/*[sS]pec.js",
+      "!device/device_restart.[sS]pec.js"
     ],
     "helpers": [
       "helpers/**/*.js"

@@ -32,7 +32,7 @@ const Identifier = require('../../lib/util/Identifier');
 
 const PRODUCT_NAME = `__impt_wh_product${config.suffix}`;
 const DG_NAME = `__impt_wh_device_group${config.suffix}`;
-const WH_URL = 'http://example.com/wi/';
+const WH_URL = `http://example.com/wi/${config.suffix}`;
 
 // Test suite for 'impt webhook info command.
 // Runs 'impt webhook info' command with different combinations of options,
