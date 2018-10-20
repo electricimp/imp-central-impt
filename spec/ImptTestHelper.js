@@ -235,14 +235,14 @@ class ImptTestHelper {
 
     // Checks if the command output contains the specified attribute name and value
     static checkAttribute(commandOut, attrName, attrValue) {
-        expect(commandOut.output).toMatch(new RegExp(`${attrName}"?:\\s+"?${attrValue}("|\\s)`));
+        expect(commandOut.output).toMatch(new RegExp(`${attrName}"?:\\s+"?${attrValue.replace(new RegExp(/"/g),'\\\\?"')}"?`));
     }
 
     // Checks if the command output contains the specified message for default or debug output mode
     static checkOutputMessage(outputMode, commandOut, message) {
         const matcher = outputMode.match('-(z|-output)\\s+(json|minimal)');
         if (matcher && matcher.length) expect(true).toBeTrue;
-        else expect(commandOut.output).toMatch(message.replace(new RegExp(/[()\\]/g), `\\$&`));
+        else expect(commandOut.output).toMatch(new RegExp(message.replace(new RegExp(/[()\\]/g), `\\$&`).replace(new RegExp(/"/g),'\\\\?"')));
     }
 
     // parse ID from command output and return id value if success, otherwise return null
