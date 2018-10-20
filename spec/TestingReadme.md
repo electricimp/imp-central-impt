@@ -24,7 +24,7 @@ There are [Jasmine](https://www.npmjs.com/package/jasmine) tests in the [spec fo
     - **IMPT_GITHUB_USER** / **IMPT_GITHUB_TOKEN** - a GitHub account username / password or personal access token. You need to specify them when you got `GitHub rate limit reached` error.
     - **IMPT_DEVICE_IDX** - Index of Device list specified in IMPT_DEVICE_* variables that will be used for tests execution, first by default.You need to specify them for used different device in parallel executing tests.
     - **IMPT_SUFFIX** - Additional custom suffix for test entity names.You need to specify them for prevent collaborator's entity names collision additionaly.
-    - **IMPT_TEF** - Custom test suffix for execution directory name.You need to specify them for execute some tests in parallel.
+    - **IMPT_TEF** - Custom suffix for test execution directory name.You need to specify them for execute some tests in parallel.
 1. Alternatively, instead of the environment variables setting, you can directly specify the values of the corresponding variables in your local [imp-central-impt/spec/config.js file](../spec/config.js).
 1. Run the tests by calling `npm test` command from your local *imp-central-impt* folder.
 
