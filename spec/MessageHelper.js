@@ -105,8 +105,6 @@ class MessageHelper {
         );
     }
 
-
-
     static checkProjectDeviceGroupNotExistMessage(commandOut, deviceGroup) {
         ImptTestHelper.checkAttribute(commandOut, UserInterractor.ERRORS.ERROR,
             `Device Group "${deviceGroup}", saved in Project File, does not exist anymore.`
@@ -160,7 +158,6 @@ class MessageHelper {
             Util.format(`${UserInterractor.ERRORS.CMD_REQUIRED_OPTION}`, `${option}`)
         );
     }
-
 }
 
 module.exports = MessageHelper;

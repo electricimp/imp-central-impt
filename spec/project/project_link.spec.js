@@ -43,6 +43,7 @@ const DEFAULT_ENDPOINT = 'https://api.electricimp.com/v5';
 // Test suite for 'impt project link command.
 // Runs 'impt project link' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
+    if (outputMode === '-z debug') return;
     describe(`impt project link test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         let product_id = null;
         let dg_id = null;

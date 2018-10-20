@@ -43,6 +43,7 @@ const DEFAULT_ENDPOINT = 'https://api.electricimp.com/v5';
 // Test suite for 'impt project create command.
 // Runs 'impt project create' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
+    if (outputMode === '-z debug') return;
     describe(`impt project info test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         let product_id = null;
         let dg_id = null;
@@ -61,7 +62,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 catch(error => done.fail(error));
         }, ImptTestHelper.TIMEOUT);
 
-         // delete all entities using in impt project info test suite
+        // delete all entities using in impt project info test suite
         function _testSuiteCleanUp() {
             return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx).
                 then(() => ImptTestHelper.runCommand(`impt project delete --all -q`, ImptTestHelper.emptyCheckEx));

@@ -43,6 +43,7 @@ const DG_NEW_DESCR = 'impt new dg description';
 // Test suite for 'impt project update command.
 // Runs 'impt project update' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
+    if (outputMode === '-z debug') return;
     describe(`impt project update test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         let product_id = null;
         let dg_id = null;
