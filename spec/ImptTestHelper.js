@@ -188,10 +188,8 @@ class ImptTestHelper {
     }
 
     static checkFileEqual(fileName, fileName2) {
-        let file = Shell.find({ silent: true },`${TESTS_EXECUTION_FOLDER}/${fileName}`);
-        let file2 = Shell.find({ silent: true },`${TESTS_EXECUTION_FOLDER}/${fileName2}`);
-        expect(file).toBeNonEmptyArray();
-        expect(file2).toBeNonEmptyArray();
+        expect(Shell.test('-e', `${TESTS_EXECUTION_FOLDER}/${fileName}`)).not.toBe(true);
+        expect(Shell.test('-e', `${TESTS_EXECUTION_FOLDER}/${fileName2}`)).not.toBe(true);
         file = Shell.cat(`${TESTS_EXECUTION_FOLDER}/${fileName}`);
         file2 = Shell.cat(`${TESTS_EXECUTION_FOLDER}/${fileName2}`);
         expect(file).toEqual(file2);
