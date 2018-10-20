@@ -34,13 +34,42 @@ Note, at this moment some tests for *impt test run* command need to be run eithe
 In order to decrease a time of the tests execution, the tests for different command groups can be executed in parallel, in different threads. You must specify **IMPT_TEF_SUFFIX** variable for each thread.
 Bear in mind that tests for some command groups (dg, build, device etc.) will fail if you use the same device for them. To prevent this, you should
 - either use several devices and assign a concrete device to concrete thread via **IMPT_DEVICE_IDX** variable (by default index 0 is used),
-- or execute these tests in one thread sequentially.
 
 For example:
 
-    npm test --filter `**/build/*[sS]pec.js` IMPT_TEF=build
-    npm test --filter `**/dg/*[sS]pec.js` IMPT_TEF=dg IMPT_DEVICE_IDX=1  
-    npm test --filter `**/device/*[sS]pec.js` IMPT_TEF=device IMPT_DEVICE_IDX=2   
+    npm test --filter `**/build/*[sS]pec.js` IMPT_TEF_SUFFIX=build
+    npm test --filter `**/dg/*[sS]pec.js` IMPT_TEF_SUFFIX=dg IMPT_DEVICE_IDX=1  
+    npm test --filter `**/device/*[sS]pec.js` IMPT_TEF_SUFFIX=device IMPT_DEVICE_IDX=2  
+
+- or execute these tests in one thread sequentially.
+
+For example:
+    
+    npm test --filter `**/build/*[sS]pec.js` `**/dg/*[sS]pec.js` `**/device/*[sS]pec.js` IMPT_TEF_SUFFIX=device  
+ 
+
+For parallel execute current test set you can use next script:
+
+Using one device:
+
+    start cmd /k "npm test --filter **/build/*.spec.js  **/log/*.spec.js **/dg/*.spec.js **/device/*.spec.js **/test/*.spec.js IMPT_TEF_SUFFIX=build"
+    start cmd /k "npm test --filter **/auth/*.spec.js IMPT_TEF_SUFFIX=auth"
+    start cmd /k "npm test --filter **/loginkey/*.spec.js IMPT_TEF_SUFFIX=loginkey"
+    start cmd /k "npm test --filter **/product/*.spec.js IMPT_TEF_SUFFIX=product" 
+    start cmd /k "npm test --filter **/webhook/*.spec.js IMPT_TEF_SUFFIX=webhook"
+    start cmd /k "npm test --filter **/project/*.spec.js IMPT_TEF_SUFFIX=project"
+
+Using several devices:
+
+    start cmd /k "npm test --filter **/build/*.spec.js  IMPT_TEF_SUFFIX=build"
+    start cmd /k "npm test --filter **/log/*.spec.js IMPT_TEF_SUFFIX=log IMPT_DEVICE_IDX=1"
+    start cmd /k "npm test --filter **/dg/*.spec.js IMPT_TEF_SUFFIX=dg IMPT_DEVICE_IDX=2"
+    start cmd /k "npm test --filter **/device/*.spec.js IMPT_TEF_SUFFIX=device IMPT_DEVICE_IDX=3"
+    start cmd /k "npm test --filter **/auth/*.spec.js IMPT_TEF_SUFFIX=auth"
+    start cmd /k "npm test --filter **/loginkey/*.spec.js IMPT_TEF_SUFFIX=loginkey"
+    start cmd /k "npm test --filter **/product/*.spec.js IMPT_TEF_SUFFIX=product" 
+    start cmd /k "npm test --filter **/webhook/*.spec.js IMPT_TEF_SUFFIX=webhook"
+    start cmd /k "npm test --filter **/project/*.spec.js IMPT_TEF_SUFFIX=project"
 
 ## Tests Running Management ##
 
