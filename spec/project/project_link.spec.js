@@ -49,19 +49,21 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         beforeAll((done) => {
             ImptTestHelper.init().
+                then(_testSuiteCleanUp).
                 then(_testSuiteInit).
                 then(done).
                 catch(error => done.fail(error));
         }, ImptTestHelper.TIMEOUT);
 
         afterAll((done) => {
-            ImptTestHelper.cleanUp().
+            _testSuiteCleanUp().
+                then(ImptTestHelper.cleanUp).
                 then(done).
                 catch(error => done.fail(error));
         }, ImptTestHelper.TIMEOUT);
 
         afterEach((done) => {
-            _testSuiteCleanUp().
+            _testCleanUp().
                 then(done).
                 catch(error => done.fail(error));
         }, ImptTestHelper.TIMEOUT);
@@ -80,8 +82,14 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 }));
         }
 
-         // delete all entities using in impt project link test suite
+        // delete all entities using in impt project link test suite
         function _testSuiteCleanUp() {
+            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -b -f -q`, (commandOut) => {
+                ImptTestHelper.emptyCheck(commandOut);
+            });
+        }
+
+        function _testCleanUp() {
             return ImptTestHelper.runCommand(`impt project delete --files --confirmed`, (commandOut) => {
                 ImptTestHelper.emptyCheck(commandOut);
             });
