@@ -72,16 +72,16 @@
 
 ## auth info ##
 
-
 <table>
 <sub>
-<tr align="center"  valign="center">
+<tr align="center">
 <th height="30" colspan="4"><sub>Precondition</sub></th>
 <th colspan="2"><sub>Command options</sub></th>
 <th rowspan="2"><sub>Test name</sub></th>
 </sub>
+</tr>
 <sub>
-<tr align="center"  valign="center">
+<tr align="center">
 <th height="30"><sub>auth</sub></th>
 <th><sub>env</sub></th>
 <th><sub>temp</sub></th>
@@ -123,12 +123,13 @@
 
 <table>
 <sub>
-<tr align="center"  valign="center">
+<tr align="center">
 <th height="30" rowspan="2"><sub>Precondition</sub></th>
 <th colspan="7"><sub>Command options</sub></th>
 <th rowspan="2"><sub>Test name</sub></th>
 </sub>
-  <sub>
+</tr> 
+<sub>
 <tr align="center"  valign="center">
 <th height="30"><sub>auth</sub></th>
 <th><sub>local</sub></th>
@@ -139,7 +140,7 @@
 <th><sub>help</sub></th>
 </sub>
 </tr>
-<tr align="center" ><td height="30"><sub>not auth</sub></td><td><sub>u/p</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./auth/auth_user_pwd.spec.js>global login</sub></td></tr>
+<tr align="center" ><td height="30"><sub>not auth</sub></td><td><sub>u/p</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./auth//auth_user_pwd.spec.js>global login</sub></td></tr>
 <tr align="center" ><td height="30"><sub>not auth</sub></td><td><sub>u/p</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./auth/auth_user_pwd.spec.js>global login with confirm</sub></td></tr>
 <tr align="center" ><td height="30"><sub>not auth</sub></td><td><sub>u/p</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./auth/auth_user_pwd.spec.js>global login with endpoint</sub></td></tr>
 <tr align="center" ><td height="30"><sub>not auth</sub></td><td><sub>u/p</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./auth/auth_user_pwd.spec.js>global login with endpoint and confirm</sub></td></tr>
@@ -194,6 +195,7 @@
 <th colspan="3"><sub>Command options</sub></th>
 <th rowspan="2"><sub>Test name</sub></th>
 </sub>
+</tr>
 <sub>
 <tr align="center">
 <th height="30"><sub>auth</sub></th>
@@ -204,6 +206,7 @@
 <th><sub>help</sub></th>
 </sub>
 </tr>
+
 <tr align="center" valign="center"><td height="30"><sub>not auth</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./auth/auth_user_pwd.spec.js>global logout without login</sub></td></tr>
 <tr align="center" valign="center"><td height="30"><sub>not auth</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./auth/auth_user_pwd.spec.js>local logout without login</sub></td></tr>
 <tr align="center" valign="center"><td height="30"><sub>not auth</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub>Y</sub></td><td align="left"><sub><a href=./help/help.spec.js>impt help pages test suite</sub></td></tr>
@@ -215,3 +218,7 @@
 <tr align="center" valign="center"><td height="30"><sub>local u/p auth</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./auth/auth_user_pwd.spec.js>global logout with local login</sub></td></tr>
 <tr align="center" valign="center"><td height="30"><sub>local u/p auth</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>w/o value</sub></td><td><sub></sub></td><td align="left"><sub><a href=./auth/auth_user_pwd.spec.js>global logout without output value</sub></td></tr>
 </table>
+
+
+  
+  
