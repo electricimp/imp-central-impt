@@ -524,3 +524,208 @@
 <tr align="center" ><td height="30"><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub>Y</sub></td><td align="left"><sub><a href=./help/help.spec.js>help/help.spec.js:<br>impt help pages test suite</sub></td></tr>
 <tr align="center" ><td height="30"><sub>project<br>not exist</sub></td><td><sub>project</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_update.spec.js>build/build_update.spec.js:<br>build update by not exist project</sub></td></tr>
 </table>
+
+## Impt device command group ##
+
+## device assign ##
+
+<table>
+<sub>
+<tr align="center"  valign="center">
+<th height="30" rowspan="2"><sub>Precondition</sub></th>
+<th colspan="5"><sub>Command options</sub></th>
+<th rowspan="2"><sub>Test name</sub></th>
+</sub>
+</tr>
+<sub>
+<tr align="center"  valign="center">
+<th height="30"><sub>device</sub></th>
+<th><sub>dg</sub></th>
+<th><sub>confirmed</sub></th>
+<th><sub>output</sub></th>
+<th><sub>help</sub></th>
+</sub>
+</tr>
+<tr align="center" ><td height="30"><sub></sub></td><td align="left"><sub>id</sub></td><td><sub>name</sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_assign.spec.js>device/device_assign.spec.js:<br>device assign to dg by name</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td align="left"><sub>mac</sub></td><td><sub>id</sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_assign.spec.js>device/device_assign.spec.js:<br>device assign to dg by id</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td align="left"><sub>name</sub></td><td><sub>project</sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_assign.spec.js>device/device_assign.spec.js:<br>device assign to project</sub></td></tr>
+<tr align="center" ><td height="30"><sub>device<br>assigned</sub></td><td align="left"><sub>id</sub></td><td><sub>name</sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_assign.spec.js>device/device_assign.spec.js:<br>repeat device assign</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td align="left"><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub>Y</sub></td><td align="left"><sub><a href=./help/help.spec.js>help/help.spec.js:<br>impt help pages test suite</sub></td></tr>
+<tr align="center" ><td height="30"><sub>project<br>not exist</sub></td><td align="left"><sub>id</sub></td><td><sub>project</sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_assign.spec.js>device/device_assign.spec.js:<br>device assign to not exist project</sub></td></tr>
+<tr align="center" ><td height="30"><sub>dg<br>not exist</sub></td><td align="left"><sub>id</sub></td><td><sub>name</sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_assign.spec.js>device/device_assign.spec.js:<br>device assign to not exist device group</sub></td></tr>
+</table>
+ 
+## device info ##
+
+<table>
+<sub>
+<tr align="center"  valign="center">
+<th height="30" rowspan="2"><sub>Precondition</sub></th>
+<th colspan="3"><sub>Command options</sub></th>
+<th rowspan="2"><sub>Test name</sub></th>
+</sub>
+</tr>
+<sub>
+<tr align="center"  valign="center">
+<th height="30"><sub>device</sub></th>
+<th><sub>output</sub></th>
+<th><sub>help</sub></th>
+</sub>
+</tr>
+<tr align="center" ><td height="30"><sub></sub></td><td align="left"><sub>id</sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_info.spec.js>device/device_info.spec.js:<br>device info by id</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td align="left"><sub>mac</sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_info.spec.js>device/device_info.spec.js:<br>device info by mac</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td align="left"><sub>agent id</sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_info.spec.js>device/device_info.spec.js:<br>device info by agent id</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td align="left"><sub>name</sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_info.spec.js>device/device_info.spec.js:<br>device info by name</sub></td></tr>
+<tr align="center" ><td height="30"><sub>unassigned<br>device</sub></td><td align="left"><sub></sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_info.spec.js>device/device_info.spec.js:<br>unassigned device info</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td align="left"><sub></sub></td><td><sub>default</sub></td><td><sub>Y</sub></td><td align="left"><sub><a href=./help/help.spec.js>help/help.spec.js:<br>impt help pages test suite</sub></td></tr>
+<tr align="center" ><td height="30"><sub>device<br>not exist</sub></td><td align="left"><sub>name</sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_info.spec.js>device/device_info.spec.js:<br>not exist device info</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td align="left"><sub>w/o value</sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_info.spec.js>device/device_info.spec.js:<br>device info without device value</sub></td></tr>
+</table>
+
+## device list ##
+
+<table>
+<sub>
+<tr align="center"  valign="center">
+<th height="30" colspan="10"><sub>Command options</sub></th>
+<th rowspan="2"><sub>Test name</sub></th>
+</sub>
+</tr>
+<sub>
+<tr align="center"  valign="center">
+<th height="30"><sub>owner</sub></th>
+<th><sub>product</sub></th>
+<th><sub>dg</sub></th>
+<th><sub>dg-type</sub></th>
+<th><sub>unassigned</sub></th>
+<th><sub>assigned</sub></th>
+<th><sub>offline</sub></th>
+<th><sub>online</sub></th>
+<th><sub>output</sub></th>
+<th><sub>help</sub></th>
+</sub>
+</tr>
+<tr align="center" ><td height="30"><sub>me</sub></td><td align="left"><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_list.spec.js>device/device_list.spec.js:<br>device list by owner me</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td align="left"><sub>id</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_list.spec.js>device/device_list.spec.js:<br>device list by product id</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td align="left"><sub>name</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_list.spec.js>device/device_list.spec.js:<br>device list by product name</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td align="left"><sub></sub></td><td><sub>id</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_list.spec.js>device/device_list.spec.js:<br>device list by dg id</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td align="left"><sub></sub></td><td><sub></sub></td><td><sub>development</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_list.spec.js>device/device_list.spec.js:<br>device list by dg type</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td align="left"><sub>name</sub></td><td><sub>id</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_list.spec.js>device/device_list.spec.js:<br>device list by product name and dg id</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td align="left"><sub></sub></td><td><sub>x2</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_list.spec.js>device/device_list.spec.js:<br>device list by two dg</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td align="left"><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_list.spec.js>device/device_list.spec.js:<br>assigned device list</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td align="left"><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_list.spec.js>device/device_list.spec.js:<br>unassigned device list</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td align="left"><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub></sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_list.spec.js>device/device_list.spec.js:<br>online device list</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td align="left"><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_list.spec.js>device/device_list.spec.js:<br>offline device list</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td align="left"><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>Y</sub></td><td align="left"><sub><a href=./help/help.spec.js>help/help.spec.js:<br>impt help pages test suite</sub></td></tr>
+</table>
+
+## device remove ##
+
+<table>
+<sub>
+<tr align="center"  valign="center">
+<th height="30" rowspan="2"><sub>Precondition</sub></th>
+<th colspan="5"><sub>Command options</sub></th>
+<th rowspan="2"><sub>Test name</sub></th>
+</sub>
+</tr>
+<sub>
+<tr align="center"  valign="center">
+<th height="30"><sub>device</sub></th>
+<th><sub>force</sub></th>
+<th><sub>confirmed</sub></th>
+<th><sub>output</sub></th>
+<th><sub>help</sub></th>
+</sub>
+</tr>
+<tr align="center" ><td height="30"><sub>device<br>unassigned</sub></td><td align="left"><sub>id</sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_remove.spec.js>device/device_remove.spec.js:<br>remove device by id</sub></td></tr>
+<tr align="center" ><td height="30"><sub>device<br>unassigned</sub></td><td align="left"><sub>mac</sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_remove.spec.js>device/device_remove.spec.js:<br>remove device by mac</sub></td></tr>
+<tr align="center" ><td height="30"><sub>device<br>unassigned</sub></td><td align="left"><sub>agent id</sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_remove.spec.js>device/device_remove.spec.js:<br>remove device by agent id</sub></td></tr>
+<tr align="center" ><td height="30"><sub>device<br>unassigned</sub></td><td align="left"><sub>name</sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_remove.spec.js>device/device_remove.spec.js:<br>remove device by name</sub></td></tr>
+<tr align="center" ><td height="30"><sub>device<br>assigned</sub></td><td align="left"><sub>id</sub></td><td><sub>Y</sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_remove.spec.js>device/device_remove.spec.js:<br>force remove assigned device</sub></td></tr>
+<tr align="center" ><td height="30"><sub>device<br>assigned</sub></td><td align="left"><sub>id</sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_remove.spec.js>device/device_remove.spec.js:<br>remove assigned device</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td align="left"><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>Y</sub></td><td align="left"><sub><a href=./help/help.spec.js>help/help.spec.js:<br>impt help pages test suite</sub></td></tr>
+</table>
+
+## device restart ##
+
+<table>
+<sub>
+<tr align="center"  valign="center">
+<th height="30" rowspan="2"><sub>Precondition</sub></th>
+<th colspan="5"><sub>Command options</sub></th>
+<th rowspan="2"><sub>Test name</sub></th>
+</sub>
+</tr>
+<sub>
+<tr align="center"  valign="center">
+<th height="30"><sub>device</sub></th>
+<th><sub>conditional</sub></th>
+<th><sub>log</sub></th>
+<th><sub>output</sub></th>
+<th><sub>help</sub></th>
+</sub>
+</tr>
+<tr align="center" ><td height="30"><sub></sub></td><td align="left"><sub>id</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_restart.spec.js>device/device_restart.spec.js:<br>restart device by device id</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td align="left"><sub>mac</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_restart.spec.js>device/device_restart.spec.js:<br>restart device by device mac</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td align="left"><sub>agent id</sub></td><td><sub>Y</sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_restart.spec.js>device/device_restart.spec.js:<br>restart device by agent id</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td align="left"><sub>name</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_restart.spec.js>device/device_restart.spec.js:<br>restart device by device name</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td align="left"><sub>name</sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_restart.spec.js>device/device_restart.spec.js:<br>restart device with log</sub></td></tr>
+<tr align="center" ><td height="30"><sub>device<br>not exist</sub></td><td align="left"><sub>name</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_restart.spec.js>device/device_restart.spec.js:<br>restart not exist device</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td align="left"><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>Y</sub></td><td align="left"><sub><a href=./help/help.spec.js>help/help.spec.js:<br>impt help pages test suite</sub></td></tr>
+</table>
+
+## device unassign ##
+
+<table>
+<sub>
+<tr align="center"  valign="center">
+<th height="30" rowspan="2"><sub>Precondition</sub></th>
+<th colspan="5"><sub>Command options</sub></th>
+<th rowspan="2"><sub>Test name</sub></th>
+</sub>
+</tr>
+<sub>
+<tr align="center"  valign="center">
+<th height="30"><sub>device</sub></th>
+<th><sub>unbond</sub></th>
+<th><sub>output</sub></th>
+<th><sub>help</sub></th>
+</sub>
+</tr>
+<tr align="center" ><td height="30"><sub>device<br>assigned</sub></td><td align="left"><sub>id</sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_unassign.spec.js>device/device_unassign.spec.js:<br>unassign device by device id</sub></td></tr>
+<tr align="center" ><td height="30"><sub>device<br>assigned</sub></td><td align="left"><sub>mac</sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_unassign.spec.js>device/device_unassign.spec.js:<br>unassign device by device mac</sub></td></tr>
+<tr align="center" ><td height="30"><sub>device<br>assigned</sub></td><td align="left"><sub>agent id</sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_unassign.spec.js>device/device_unassign.spec.js:<br>unassign device by agent id</sub></td></tr>
+<tr align="center" ><td height="30"><sub>device<br>assigned</sub></td><td align="left"><sub>name</sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_unassign.spec.js>device/device_unassign.spec.js:<br>unassign device by device name</sub></td></tr>
+<tr align="center" ><td height="30"><sub>device<br>assigned</sub></td><td align="left"><sub>name</sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_unassign.spec.js>device/device_unassign.spec.js:<br>repeat unassign device</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td align="left"><sub></sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub>Y</sub></td><td align="left"><sub><a href=./help/help.spec.js>help/help.spec.js:<br>impt help pages test suite</sub></td></tr>
+<tr align="center" ><td height="30"><sub>device<br>not exist</sub></td><td align="left"><sub>name</sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_unassign.spec.js>device/device_unassign.spec.js:<br>unassign not exist device</sub></td></tr>
+</table>
+
+## device update ##
+
+<table>
+<sub>
+<tr align="center"  valign="center">
+<th height="30" rowspan="2"><sub>Precondition</sub></th>
+<th colspan="5"><sub>Command options</sub></th>
+<th rowspan="2"><sub>Test name</sub></th>
+</sub>
+</tr>
+<sub>
+<tr align="center"  valign="center">
+<th height="30"><sub>device</sub></th>
+<th><sub>name</sub></th>
+<th><sub>output</sub></th>
+<th><sub>help</sub></th>
+</sub>
+</tr>
+<tr align="center" ><td height="30"><sub></sub></td><td align="left"><sub>id</sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_update.spec.js>device/device_update.spec.js:<br>device update by device id</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td align="left"><sub>mac</sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_update.spec.js>device/device_update.spec.js:<br>device update by device mac</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td align="left"><sub>agent id</sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_update.spec.js>device/device_update.spec.js:<br>device update by agent id</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td align="left"><sub>name</sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_update.spec.js>device/device_update.spec.js:<br>device update by device name</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td align="left"><sub></sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub>Y</sub></td><td align="left"><sub><a href=./help/help.spec.js>help/help.spec.js:<br>impt help pages test suite</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td align="left"><sub>name</sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_update.spec.js>device/device_update.spec.js:<br>device update without new value</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td align="left"><sub></sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_update.spec.js>device/device_update.spec.js:<br>device update without device value</sub></td></tr>
+<tr align="center" ><td height="30"><sub>device<br>not exist</sub></td><td align="left"><sub>name</sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_update.spec.js>device/device_update.spec.js:<br>not exist device update</sub></td></tr>
+</table>
