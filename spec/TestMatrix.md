@@ -217,3 +217,310 @@
 <tr align="center" valign="center"><td height="30"><sub>local u/p auth</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./auth/auth_user_pwd.spec.js>auth/auth_user_pwd.spec.js:<br>global logout with local login</sub></td></tr>
 <tr align="center" valign="center"><td height="30"><sub>local u/p auth</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>w/o value</sub></td><td><sub></sub></td><td align="left"><sub><a href=./auth/auth_user_pwd.spec.js>:<br>global logout without output value</sub></td></tr>
 </table>
+
+## Impt build command group ##
+
+## build cleanup ##
+
+<table>
+<sub>
+<tr align="center">
+<th height="30" rowspan="2"><sub>Precondition</sub></th>
+<th colspan="5"><sub>Command options</sub></th>
+<th rowspan="2"><sub>Test name</sub></th>
+</sub>
+</tr>
+<sub>
+<tr align="center">
+<th height="30"><sub>product</sub></th>
+<th><sub>unflag</sub></th>
+<th><sub>confirmed</sub></th>
+<th><sub>output</sub></th>
+<th><sub>help</sub></th>
+</sub>
+</tr>
+
+<tr align="center" ><td height="30"><sub>zombie builds<br>exist for<br>product</sub></td><td><sub>id</sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_cleanup.spec.js>build/build_cleanup.spec.js:<br>build cleanup by product id</sub></td></tr>
+<tr align="center" ><td height="30"><sub>zombie builds<br>exist for<br>product</sub></td><td><sub>name</sub></td><td><sub>Y</sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_cleanup.spec.js>build/build_cleanup.spec.js:<br>flagged build cleanup by product name</sub></td></tr>
+<tr align="center" ><td height="30"><sub>zombie builds<br>exist for<br>other product</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_cleanup.spec.js>build/build_cleanup.spec.js:<br>build cleanup</sub></td></tr>
+<tr align="center" ><td height="30"><sub>zombie builds<br>exist for<br>other product</sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_cleanup.spec.js>build/build_cleanup.spec.js:<br>flagged build cleanup</sub></td></tr>
+<tr align="center" ><td height="30"><sub>product<br>not exist</sub></td><td><sub>name</sub></td><td><sub>Y</sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_cleanup.spec.js>build/build_cleanup.spec.js:<br>build cleanup by not exist product</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>Y</sub></td><td align="left"><sub><a href=./help/help.spec.js>help/help.spec.js:<br>impt help pages test suite</sub></td></tr>
+</table>
+
+## build copy ##
+
+<table>
+<sub>
+<tr align="center">
+<th height="30" rowspan="2"><sub>Precondition</sub></th>
+<th colspan="5"><sub>Command options</sub></th>
+<th rowspan="2"><sub>Test name</sub></th>
+</sub>
+</tr>
+<sub>
+<tr align="center">
+<th height="30"><sub>build</sub></th>
+<th><sub>dg</sub></th>
+<th><sub>all</sub></th>
+<th><sub>output</sub></th>
+<th><sub>help</sub></th>
+</sub>
+</tr>
+
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>id</sub></td><td><sub>id</sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_copy.spec.js>build/build_copy.spec.js:<br>build copy by id</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>sha</sub></td><td><sub>id</sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_copy.spec.js>build/build_copy.spec.js:<br>build copy by sha</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>tag</sub></td><td><sub>name</sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_copy.spec.js>build/build_copy.spec.js:<br>build copy by tag</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>origin</sub></td><td><sub>name</sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_copy.spec.js>build/build_copy.spec.js:<br>build copy by origin</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>project</sub></td><td><sub>name</sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_copy.spec.js>build/build_copy.spec.js:<br>build copy by project</sub></td></tr>
+<tr align="center" ><td height="30"><sub>project<br>not exist</sub></td><td><sub>project</sub></td><td><sub>name</sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_copy.spec.js>build/build_copy.spec.js:<br>build copy by not exist project</sub></td></tr>
+<tr align="center" ><td height="30"><sub>dg not exist</sub></td><td><sub>id</sub></td><td><sub>name</sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_copy.spec.js>build/build_copy.spec.js:<br>build copy to not exist dg</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub>Y</sub></td><td align="left"><sub><a href=./help/help.spec.js>help/help.spec.js:<br>impt help pages test suite</sub></td></tr>
+</table>
+
+## build delete ##
+
+<table>
+<sub>
+<tr align="center">
+<th height="30" rowspan="2"><sub>Precondition</sub></th>
+<th colspan="5"><sub>Command options</sub></th>
+<th rowspan="2"><sub>Test name</sub></th>
+</sub>
+</tr>
+<sub>
+<tr align="center">
+<th height="30"><sub>build</sub></th>
+<th><sub>force</sub></th>
+<th><sub>confirmed</sub></th>
+<th><sub>output</sub></th>
+<th><sub>help</sub></th>
+</sub>
+</tr>
+
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>id</sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_delete.spec.js>build/build_delete.spec.js:<br>build delete by id</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>sha</sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_delete.spec.js>build/build_delete.spec.js:<br>build delete by sha</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>tag</sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_delete.spec.js>build/build_delete.spec.js:<br>build delete by tag</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>origin</sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_delete.spec.js>build/build_delete.spec.js:<br>build delete by origin</sub></td></tr>
+<tr align="center" ><td height="30"><sub>build<br>flagged </sub></td><td><sub>id</sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_delete.spec.js>build/build_delete.spec.js:<br>flagged build delete</sub></td></tr>
+<tr align="center" ><td height="30"><sub>build<br>flagged </sub></td><td><sub>id</sub></td><td><sub>Y</sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_delete.spec.js>build/build_delete.spec.js:<br>flagged build force delete</sub></td></tr>
+<tr align="center" ><td height="30"><sub>dg<br>min-sup-dep</sub></td><td><sub>id</sub></td><td><sub>Y</sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_delete.spec.js>build/build_delete.spec.js:<br>min supported build delete</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub>Y</sub></td><td align="left"><sub><a href=./help/help.spec.js>help/help.spec.js:<br>impt help pages test suite</sub></td></tr>
+</table>
+
+## build deploy ##
+
+<table>
+<sub>
+<tr align="center">
+<th height="30" rowspan="2"><sub>Precondition</sub></th>
+<th colspan="9"><sub>Command options</sub></th>
+<th rowspan="2"><sub>Test name</sub></th>
+</sub>
+</tr>
+<sub>
+<tr align="center">
+<th height="30"><sub>dg</sub></th>
+<th><sub>device<br>file</sub></th>
+<th><sub>agent<br>file</sub></th>
+<th><sub>descr</sub></th>
+<th><sub>origin</sub></th>
+<th><sub>tag</sub></th>
+<th><sub>flagged</sub></th>
+<th><sub>output</sub></th>
+<th><sub>help</sub></th>
+</sub>
+</tr>
+
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>id</sub></td><td><sub>name</sub></td><td><sub>name</sub></td><td><sub>Y</sub></td><td><sub>Y</sub></td><td><sub>Y</sub></td><td><sub>Y</sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_deploy.spec.js>build/build_deploy.spec.js:<br>build deploy by dg id</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>name</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>2x</sub></td><td><sub></sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_deploy.spec.js>build/build_deploy.spec.js:<br>build deploy by dg name</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>project</sub></td><td><sub>project</sub></td><td><sub>project</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_deploy.spec.js>build/build_deploy.spec.js:<br>build deploy by project</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td align="left"><sub><a href=./help/help.spec.js>help/help.spec.js:<br>impt help pages test suite</sub></td></tr>
+<tr align="center" ><td height="30"><sub>project<br>not exist</sub></td><td><sub>project</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_deploy.spec.js>build/build_deploy.spec.js:<br>build deploy by not exist project</sub></td></tr>
+<tr align="center" ><td height="30"><sub>d-file<br>not exist</sub></td><td><sub>id</sub></td><td><sub>name</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_deploy.spec.js>build/build_deploy.spec.js:<br>build deploy by not exist device group</sub></td></tr>
+<tr align="center" ><td height="30"><sub>a-file<br>not exist</sub></td><td><sub>id</sub></td><td><sub></sub></td><td><sub>name</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_deploy.spec.js>build/build_deploy.spec.js:<br>build deploy with not exist device file</sub></td></tr>
+<tr align="center" ><td height="30"><sub>dg not exist</sub></td><td><sub>name</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_deploy.spec.js>build/build_deploy.spec.js:<br>build deploy with not exist agent file</sub></td></tr>
+</table>
+
+
+
+## build get ##
+
+<table>
+<sub>
+<tr align="center">
+<th height="30" rowspan="2"><sub>Precondition</sub></th>
+<th colspan="8"><sub>Command options</sub></th>
+<th rowspan="2"><sub>Test name</sub></th>
+</sub>
+</tr>
+<sub>
+<tr align="center">
+<th height="30"><sub>build</sub></th>
+<th><sub>device<br>file</sub></th>
+<th><sub>agent<br>file</sub></th>
+<th><sub>device<br>only</sub></th>
+<th><sub>agent<br>only</sub></th>
+<th><sub>confirmed</sub></th>
+<th><sub>output</sub></th>
+<th><sub>help</sub></th>
+</sub>
+</tr>
+
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>id</sub></td><td><sub>name</sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_get.spec.js>build/build_get.spec.js:<br>build get by build id</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>sha</sub></td><td><sub></sub></td><td><sub>name</sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_get.spec.js>build/build_get.spec.js:<br>build get by build sha</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>tag</sub></td><td><sub>name</sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_get.spec.js>build/build_get.spec.js:<br>build get by build tag</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>origin</sub></td><td><sub></sub></td><td><sub>name</sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_get.spec.js>build/build_get.spec.js:<br>build get by build origin</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>project</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_get.spec.js>build/build_get.spec.js:<br>build get by project</sub></td></tr>
+<tr align="center" ><td height="30"><sub>project<br>not exist</sub></td><td><sub>project</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_get.spec.js>build/build_get.spec.js:<br>build get by not exist project</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>id</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_get.spec.js>build/build_get.spec.js:<br>build get without device and agent file</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>id</sub></td><td><sub>name</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_get.spec.js>build/build_get.spec.js:<br>build get without agent file</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub>Y</sub></td><td align="left"><sub><a href=./help/help.spec.js>help/help.spec.js:<br>impt help pages test suite</sub></td></tr>
+</table>
+
+
+## build info ##
+
+<table>
+<sub>
+<tr align="center">
+<th height="30" rowspan="2"><sub>Precondition</sub></th>
+<th colspan="3"><sub>Command options</sub></th>
+<th rowspan="2"><sub>Test name</sub></th>
+</sub>
+</tr>
+<sub>
+<tr align="center">
+<th height="30"><sub>build</sub></th>
+<th><sub>output</sub></th>
+<th><sub>help</sub></th>
+</sub>
+</tr>
+
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>id</sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_info.spec.js>build/build_info.spec.js:<br>build info by id</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>sha</sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_info.spec.js>build/build_info.spec.js:<br>build info by sha</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>tag</sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_info.spec.js>build/build_info.spec.js:<br>build info by tag</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>origin</sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_info.spec.js>build/build_info.spec.js:<br>build info by origin</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>project</sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_info.spec.js>build/build_info.spec.js:<br>build info by project</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub>Y</sub></td><td align="left"><sub><a href=./help/help.spec.js>help/help.spec.js:<br>impt help pages test suite</sub></td></tr>
+<tr align="center" ><td height="30"><sub>project<br>not exist</sub></td><td><sub>project</sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_info.spec.js>build/build_info.spec.js:<br>build info by not exist project</sub></td></tr>
+<tr align="center" ><td height="30"><sub>build<br>not exist</sub></td><td><sub>id</sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_info.spec.js>build/build_info.spec.js:<br>not exist build info</sub></td></tr>
+</table>
+
+
+## build list ##
+
+<table>
+<sub>
+<tr align="center">
+<th height="30" rowspan="2"><sub>Precondition</sub></th>
+<th colspan="12"><sub>Command options</sub></th>
+<th rowspan="2"><sub>Test name</sub></th>
+</sub>
+</tr>
+<sub>
+<tr align="center">
+<th height="30"><sub>owner</sub></th>
+<th><sub>product</sub></th>
+<th><sub>dg</sub></th>
+<th><sub>dg<br>type</sub></th>
+<th><sub>sha</sub></th>
+<th><sub>tag</sub></th>
+<th><sub>flagged</sub></th>
+<th><sub>unflagged</sub></th>
+<th><sub>non<br>zombie</sub></th>
+<th><sub>zombie</sub></th>
+<th><sub>output</sub></th>
+<th><sub>help</sub></th>
+</sub>
+</tr>
+
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>me</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>development</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>*json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_list.spec.js>build/build_list.spec.js:<br>build list by owner me and dg type</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>id</sub></td><td><sub>id</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>*json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_list.spec.js>build/build_list.spec.js:<br>build list by owner id and product id</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>name</sub></td><td><sub>name</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>*json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_list.spec.js>build/build_list.spec.js:<br>build list by owner name and product name</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>email</sub></td><td><sub></sub></td><td><sub>id</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>*json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_list.spec.js>build/build_list.spec.js:<br>build list by owner email and dg id</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>name</sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>*json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_list.spec.js>build/build_list.spec.js:<br>build list by dg name and sha</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub>Y</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>*json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_list.spec.js>build/build_list.spec.js:<br>build list by sha and tag</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>2x</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>*json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_list.spec.js>build/build_list.spec.js:<br>build list by several tags</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub></sub></td><td><sub>id</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>*json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_list.spec.js>build/build_list.spec.js:<br>build list by product id and flagged</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub></sub></td><td><sub>id</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>*json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_list.spec.js>build/build_list.spec.js:<br>build list by product id and unflagged</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub></sub></td><td><sub>id</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub></sub></td><td><sub>*json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_list.spec.js>build/build_list.spec.js:<br>build list by product id and zombie</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub></sub></td><td><sub>id</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub>*json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_list.spec.js>build/build_list.spec.js:<br>build list by product id and not zombie</sub></td></tr>
+<tr align="center" ><td height="30"><sub>owner<br>not exist</sub></td><td><sub>name</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>*json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_list.spec.js>build/build_list.spec.js:<br>build list by not exist owner</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub>Y</sub></td><td align="left"><sub><a href=./help/help.spec.js>help/help.spec.js:<br>impt help pages test suite</sub></td></tr>
+</table>
+
+## build run ##
+
+<table>
+<sub>
+<tr align="center">
+<th height="30" rowspan="2"><sub>Precondition</sub></th>
+<th colspan="11"><sub>Command options</sub></th>
+<th rowspan="2"><sub>Test name</sub></th>
+</sub>
+</tr>
+<sub>
+<tr align="center">
+<th height="30"><sub>dg</sub></th>
+<th><sub>device<br>file</sub></th>
+<th><sub>agent<br>file</sub></th>
+<th><sub>descr</sub></th>
+<th><sub>origin</sub></th>
+<th><sub>tag</sub></th>
+<th><sub>flagged</sub></th>
+<th><sub>cond<br>restart</sub></th>
+<th><sub>log</sub></th>
+<th><sub>output</sub></th>
+<th><sub>help</sub></th>
+</sub>
+</tr>
+
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>id</sub></td><td><sub>name</sub></td><td><sub>name</sub></td><td><sub>Y</sub></td><td><sub>Y</sub></td><td><sub>Y</sub></td><td><sub>Y</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_run.spec.js>build/build_run.spec.js:<br>build run by dg id</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>name</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>2x</sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub></sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_run.spec.js>build/build_run.spec.js:<br>build run by dg name</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>project</sub></td><td><sub>project</sub></td><td><sub>project</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_run.spec.js>build/build_run.spec.js:<br>build run by project</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub>Y</sub></td><td align="left"><sub><a href=./help/help.spec.js>help/help.spec.js:<br>impt help pages test suite</sub></td></tr>
+<tr align="center" ><td height="30"><sub>project<br>not exist</sub></td><td><sub>project</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_run.spec.js>build/build_run.spec.js:<br>build run by not exist project</sub></td></tr>
+<tr align="center" ><td height="30"><sub>d-file<br>not exist</sub></td><td><sub>name</sub></td><td><sub>name</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_run.spec.js>build/build_run.spec.js:<br>build run with not exist device file</sub></td></tr>
+<tr align="center" ><td height="30"><sub>a-file<br>not exist</sub></td><td><sub>name</sub></td><td><sub></sub></td><td><sub>name</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_run.spec.js>build/build_run.spec.js:<br>build run with not exist agent file</sub></td></tr>
+<tr align="center" ><td height="30"><sub>dg<br>not exist</sub></td><td><sub>name</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_run.spec.js>build/build_run.spec.js:<br>build run by not exist device group</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>w/o value</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_run.spec.js>build/build_run.spec.js:<br>build run without dg value</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>name</sub></td><td><sub>w/o value</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_run.spec.js>build/build_run.spec.js:<br>build run without device file value</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>name</sub></td><td><sub></sub></td><td><sub>w/o value</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_run.spec.js>build/build_run.spec.js:<br>build run without agent file value</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>name</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>w/o value</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_run.spec.js>build/build_run.spec.js:<br>build run without description value</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>name</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>w/o value</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_run.spec.js>build/build_run.spec.js:<br>build run without origin value</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>name</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>w/o value</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>json</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_run.spec.js>build/build_run.spec.js:<br>build run without tag value</sub></td></tr>
+</table>
+
+## build update ##
+
+<table>
+<sub>
+<tr align="center">
+<th height="30" rowspan="2"><sub>Precondition</sub></th>
+<th colspan="7"><sub>Command options</sub></th>
+<th rowspan="2"><sub>Test name</sub></th>
+</sub>
+</tr>
+<sub>
+<tr align="center">
+<th height="30"><sub>build</sub></th>
+<th><sub>descr</sub></th>
+<th><sub>tag</sub></th>
+<th><sub>remove<br>tag</sub></th>
+<th><sub>flagged</sub></th>
+<th><sub>output</sub></th>
+<th><sub>help</sub></th>
+</sub>
+</tr>
+
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>id</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>defaut</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_update.spec.js>build/build_update.spec.js:<br>build update by id</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>sha</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_update.spec.js>build/build_update.spec.js:<br>build update flagged by sha</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>tag</sub></td><td><sub>Y</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_update.spec.js>build/build_update.spec.js:<br>build update descr by tag</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>origin</sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_update.spec.js>build/build_update.spec.js:<br>build update tag by origin</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>project</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>Y</sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_update.spec.js>build/build_update.spec.js:<br>build update remove tag by project</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>id</sub></td><td><sub></sub></td><td><sub>3x</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_update.spec.js>build/build_update.spec.js:<br>build update several tag</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub>id</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>2x</sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_update.spec.js>build/build_update.spec.js:<br>build update remove several tag</sub></td></tr>
+<tr align="center" ><td height="30"><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub>Y</sub></td><td align="left"><sub><a href=./help/help.spec.js>help/help.spec.js:<br>impt help pages test suite</sub></td></tr>
+<tr align="center" ><td height="30"><sub>project<br>not exist</sub></td><td><sub>project</sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub></sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./build/build_update.spec.js>build/build_update.spec.js:<br>build update by not exist project</sub></td></tr>
+</table>
