@@ -38,7 +38,11 @@ const PRODUCT_NAME = `__impt_bld_product${config.suffix}`;
 const PRODUCT2_NAME = `__impt_bld_product_2${config.suffix}`;
 const DEVICE_GROUP_NAME = `__impt_bld_device_group${config.suffix}`;
 const DEVICE_GROUP2_NAME = `__impt_bld_device_group_2${config.suffix}`;
-
+const BUILD_TAG = `build_tag${config.suffix}`;
+const BUILD2_TAG = `build2_tag${config.suffix}`;
+const BUILD3_TAG = `build3_tag${config.suffix}`;
+const BUILD4_TAG = `build4_tag${config.suffix}`;
+const BUILD_ORIGIN = `build_origin${config.suffix}`;
 
 
 // Test suite for 'impt build copy' command.
@@ -109,7 +113,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     ImptTestHelper.emptyCheck(commandOut);
                 })).
                 then(() => Shell.cp('-Rf', `${__dirname}/fixtures/devicecode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER)).
-                then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME} -x devicecode.nut -t build_tag -o build_origin`, (commandOut) => {
+                then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME} -x devicecode.nut -t ${BUILD_TAG} -o ${BUILD_ORIGIN} `, (commandOut) => {
                     build_id = ImptTestHelper.parseId(commandOut);
                     if (!build_id) fail("TestSuiteInit error: Fail create build");
                     build_sha = ImptTestHelper.parseSha(commandOut);
@@ -223,15 +227,15 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('build copy by tag', (done) => {
-                ImptTestHelper.runCommand(`impt build copy --build build_tag --dg ${dg_id} --all ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt build copy --build ${BUILD_TAG} --dg ${dg_id} --all ${outputMode}`, (commandOut) => {
                     new_build_id = _parseBuildId(commandOut);
                     _checkSuccessCreateDeploymentMessage(commandOut, new_build_id);
-                    _checkSuccessCopyDeploymentMessage(commandOut, 'build_tag', new_build_id);
+                    _checkSuccessCopyDeploymentMessage(commandOut, BUILD_TAG, new_build_id);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => ImptTestHelper.runCommand(`impt dg builds -g ${DEVICE_GROUP2_NAME} -z json`, (commandOut) => {
                         ImptTestHelper.checkAttribute(commandOut, 'sha', build_sha);
-                        expect(commandOut.output).toMatch('build_tag');
+                        expect(commandOut.output).toMatch(BUILD_TAG);
                         ImptTestHelper.checkSuccessStatus(commandOut);
                     })).
                     then(done).
@@ -239,15 +243,15 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('build copy by origin', (done) => {
-                ImptTestHelper.runCommand(`impt build copy --build build_origin --dg ${dg_id} --all ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt build copy --build ${BUILD_ORIGIN}  --dg ${dg_id} --all ${outputMode}`, (commandOut) => {
                     new_build_id = _parseBuildId(commandOut);
                     _checkSuccessCreateDeploymentMessage(commandOut, new_build_id);
-                    _checkSuccessCopyDeploymentMessage(commandOut, 'build_origin', new_build_id);
+                    _checkSuccessCopyDeploymentMessage(commandOut, BUILD_ORIGIN, new_build_id);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => ImptTestHelper.runCommand(`impt dg builds -g ${DEVICE_GROUP2_NAME} -z json`, (commandOut) => {
                         ImptTestHelper.checkAttribute(commandOut, 'sha', build_sha);
-                        ImptTestHelper.checkAttribute(commandOut, 'origin', 'build_origin');
+                        ImptTestHelper.checkAttribute(commandOut, 'origin', BUILD_ORIGIN);
                         ImptTestHelper.checkSuccessStatus(commandOut);
                     })).
                     then(done).

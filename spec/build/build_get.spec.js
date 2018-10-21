@@ -35,6 +35,11 @@ const UserInterractor = require('../../lib/util/UserInteractor');
 
 const PRODUCT_NAME = `__impt_bld_product${config.suffix}`;
 const DEVICE_GROUP_NAME = `__impt_bld_device_group${config.suffix}`;
+const BUILD_TAG = `build_tag${config.suffix}`;
+const BUILD2_TAG = `build2_tag${config.suffix}`;
+const BUILD3_TAG = `build3_tag${config.suffix}`;
+const BUILD4_TAG = `build4_tag${config.suffix}`;
+const BUILD_ORIGIN = `build_origin${config.suffix}`;
 
 // Test suite for 'impt build get' command.
 // Runs 'impt build get' command with different combinations of options,
@@ -65,7 +70,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 then(() => Shell.cp('-Rf', `${__dirname}/fixtures/devicecode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER)).
                 then(() => Shell.cp('-Rf', `${__dirname}/fixtures/agentcode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER)).
                 then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME} -s early_build`, ImptTestHelper.emptyCheckEx)).
-                then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME} -s build_descr -x devicecode.nut -y agentcode.nut -t build_tag -o build_origin`, (commandOut) => {
+                then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME} -s build_descr -x devicecode.nut -y agentcode.nut -t ${BUILD_TAG} -o ${BUILD_ORIGIN} `, (commandOut) => {
                     build_id = ImptTestHelper.parseId(commandOut);
                     if (!build_id) fail("TestSuiteInit error: Fail create build");
                     build_sha = ImptTestHelper.parseSha(commandOut);
@@ -109,8 +114,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             }, ImptTestHelper.TIMEOUT);
 
             it('build get by build tag', (done) => {
-                ImptTestHelper.runCommand(`impt build get -b build_tag -x devicereaded.nut -i -q ${outputMode}`, (commandOut) => {
-                    _checkSourceFilesDownloadedSuccessfulyMessage(commandOut, 'build_tag');
+                ImptTestHelper.runCommand(`impt build get -b ${BUILD_TAG} -x devicereaded.nut -i -q ${outputMode}`, (commandOut) => {
+                    _checkSourceFilesDownloadedSuccessfulyMessage(commandOut, BUILD_TAG);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => ImptTestHelper.checkFileEqual('devicereaded.nut', 'devicecode.nut')).
@@ -119,8 +124,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             }, ImptTestHelper.TIMEOUT);
 
             it('build get by build origin', (done) => {
-                ImptTestHelper.runCommand(`impt build get -b build_origin -y agentreaded.nut -j -q ${outputMode}`, (commandOut) => {
-                    _checkSourceFilesDownloadedSuccessfulyMessage(commandOut, 'build_origin');
+                ImptTestHelper.runCommand(`impt build get -b ${BUILD_ORIGIN}  -y agentreaded.nut -j -q ${outputMode}`, (commandOut) => {
+                    _checkSourceFilesDownloadedSuccessfulyMessage(commandOut, BUILD_ORIGIN);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => ImptTestHelper.checkFileEqual('agentreaded.nut', 'agentcode.nut')).

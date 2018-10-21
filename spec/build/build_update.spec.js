@@ -36,6 +36,12 @@ const UserInterractor = require('../../lib/util/UserInteractor');
 
 const PRODUCT_NAME = `__impt_bld_product${config.suffix}`;
 const DEVICE_GROUP_NAME = `__impt_bld_device_group${config.suffix}`;
+const BUILD_TAG = `build_tag${config.suffix}`;
+const BUILD2_TAG = `build2_tag${config.suffix}`;
+const BUILD3_TAG = `build3_tag${config.suffix}`;
+const BUILD4_TAG = `build4_tag${config.suffix}`;
+const BUILD5_TAG = `build5_tag${config.suffix}`;
+const BUILD_ORIGIN = `build_origin${config.suffix}`;
 
 // Test suite for 'impt build update' command.
 // Runs 'impt build update' command with different combinations of options,
@@ -77,7 +83,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 if (!dg_id) fail("TestInit error: Fail create device group");
                 ImptTestHelper.emptyCheck(commandOut);
             }).
-                then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME} -x devicecode.nut -t build_tag  -t build_tag2 -t build_tag3 -o build_origin`, (commandOut) => {
+                then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME} -x devicecode.nut -t ${BUILD_TAG}  -t ${BUILD2_TAG} -t ${BUILD3_TAG} -o ${BUILD_ORIGIN} `, (commandOut) => {
                     build_id = ImptTestHelper.parseId(commandOut);
                     if (!build_id) fail("TestInit error: Fail create build");
                     build_sha = ImptTestHelper.parseSha(commandOut);
@@ -153,8 +159,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('build update descr by tag', (done) => {
-                ImptTestHelper.runCommand(`impt build update -b build_tag --descr build_description ${outputMode}`, (commandOut) => {
-                    _checkSuccessUpdateDeploymentMessage(commandOut, 'build_tag');
+                ImptTestHelper.runCommand(`impt build update -b ${BUILD_TAG} --descr build_description ${outputMode}`, (commandOut) => {
+                    _checkSuccessUpdateDeploymentMessage(commandOut, BUILD_TAG);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => _checkBuildInfo({ descr: 'build_description' })).
@@ -163,43 +169,43 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('build update tag by origin', (done) => {
-                ImptTestHelper.runCommand(`impt build update -b build_origin --tag build_tag4 ${outputMode}`, (commandOut) => {
-                    _checkSuccessUpdateDeploymentMessage(commandOut, 'build_origin');
+                ImptTestHelper.runCommand(`impt build update -b ${BUILD_ORIGIN}  --tag ${BUILD4_TAG}  ${outputMode}`, (commandOut) => {
+                    _checkSuccessUpdateDeploymentMessage(commandOut, BUILD_ORIGIN);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => _checkBuildInfo({ tag: 'build_tag4' })).
+                    then(() => _checkBuildInfo({ tag: BUILD4_TAG })).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('build update remove tag by project', (done) => {
                 ImptTestHelper.projectCreate(DEVICE_GROUP_NAME).
-                    then(() => ImptTestHelper.runCommand(`impt build update --remove-tag build_tag2 ${outputMode}`, (commandOut) => {
+                    then(() => ImptTestHelper.runCommand(`impt build update --remove-tag ${BUILD2_TAG} ${outputMode}`, (commandOut) => {
                         _checkSuccessUpdateDeploymentMessage(commandOut, build_id);
                         ImptTestHelper.checkSuccessStatus(commandOut);
                     })).
-                    then(() => _checkBuildInfo({ tag: ['build_tag', 'build_tag3'], tag_cnt: 2 })).
+                    then(() => _checkBuildInfo({ tag: [BUILD_TAG, BUILD3_TAG], tag_cnt: 2 })).
                     then(ImptTestHelper.projectDelete).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('build update several tag', (done) => {
-                ImptTestHelper.runCommand(`impt build update -b ${build_id} -t build_tag4 -t build_tag5 ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt build update -b ${build_id} -t ${BUILD4_TAG}  -t ${BUILD5_TAG}  ${outputMode}`, (commandOut) => {
                     _checkSuccessUpdateDeploymentMessage(commandOut, build_id);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => _checkBuildInfo({ tag: ['build_tag4', 'build_tag5'], tag_cnt: 5 })).
+                    then(() => _checkBuildInfo({ tag: [BUILD4_TAG, BUILD5_TAG], tag_cnt: 5 })).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('build update remove several tag', (done) => {
-                ImptTestHelper.runCommand(`impt build update -b ${build_id} -r build_tag -r build_tag3 ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt build update -b ${build_id} -r ${BUILD_TAG} -r ${BUILD3_TAG} ${outputMode}`, (commandOut) => {
                     _checkSuccessUpdateDeploymentMessage(commandOut, build_id);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => _checkBuildInfo({ tag: 'build_tag2', tag_cnt: 1 })).
+                    then(() => _checkBuildInfo({ tag: BUILD2_TAG, tag_cnt: 1 })).
                     then(done).
                     catch(error => done.fail(error));
             });

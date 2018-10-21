@@ -36,6 +36,11 @@ const UserInterractor = require('../../lib/util/UserInteractor');
 
 const PRODUCT_NAME = `__impt_bld_product${config.suffix}`;
 const DEVICE_GROUP_NAME = `__impt_bld_device_group${config.suffix}`;
+const BUILD_TAG = `build_tag${config.suffix}`;
+const BUILD2_TAG = `build2_tag${config.suffix}`;
+const BUILD3_TAG = `build3_tag${config.suffix}`;
+const BUILD4_TAG = `build4_tag${config.suffix}`;
+const BUILD_ORIGIN = `build_origin${config.suffix}`;
 
 const outputMode = '-z json';
 
@@ -76,7 +81,7 @@ describe(`impt build info test suite (output: ${outputMode ? outputMode : 'defau
             })).
             then(() => Shell.cp('-Rf', `${__dirname}/fixtures/devicecode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER)).
             then(() => Shell.cp('-Rf', `${__dirname}/fixtures/agentcode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER)).
-            then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME} -s build_descr -x devicecode.nut -y agentcode.nut -t build_tag -o build_origin`, (commandOut) => {
+            then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME} -s build_descr -x devicecode.nut -y agentcode.nut -t ${BUILD_TAG} -o ${BUILD_ORIGIN} `, (commandOut) => {
                 build_id = ImptTestHelper.parseId(commandOut);
                 if (!build_id) fail("TestSuiteInit error: Fail create build");
                 build_sha = ImptTestHelper.parseSha(commandOut);
@@ -96,8 +101,8 @@ describe(`impt build info test suite (output: ${outputMode ? outputMode : 'defau
         expect(json.Deployment.sha).toEqual(build_sha);
         expect(json.Deployment.description).toEqual('build_descr');
         expect(json.Deployment.flagged).toEqual(false);
-        expect(json.Deployment.tags).toContain('build_tag');
-        expect(json.Deployment.origin).toEqual('build_origin');
+        expect(json.Deployment.tags).toContain(BUILD_TAG);
+        expect(json.Deployment.origin).toEqual(BUILD_ORIGIN);
         expect(json.Deployment['Device Group'].id).toEqual(dg_id);
         expect(json.Deployment['Device Group'].type).toEqual('development');
         expect(json.Deployment['Device Group'].name).toEqual(DEVICE_GROUP_NAME);
@@ -127,7 +132,7 @@ describe(`impt build info test suite (output: ${outputMode ? outputMode : 'defau
         });
 
         it('build info by tag', (done) => {
-            ImptTestHelper.runCommand(`impt build info -b build_tag -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt build info -b ${BUILD_TAG} -z json`, (commandOut) => {
                 _checkBuildInfo(commandOut);
                 ImptTestHelper.checkSuccessStatus(commandOut);
             }).
@@ -136,7 +141,7 @@ describe(`impt build info test suite (output: ${outputMode ? outputMode : 'defau
         });
 
         it('build info by origin', (done) => {
-            ImptTestHelper.runCommand(`impt build info -b build_origin -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt build info -b ${BUILD_ORIGIN}  -z json`, (commandOut) => {
                 _checkBuildInfo(commandOut);
                 ImptTestHelper.checkSuccessStatus(commandOut);
             }).

@@ -36,6 +36,11 @@ const UserInterractor = require('../../lib/util/UserInteractor');
 
 const PRODUCT_NAME = `__impt_bld_product${config.suffix}`;
 const DEVICE_GROUP_NAME = `__impt_bld_device_group${config.suffix}`;
+const BUILD_TAG = `build_tag${config.suffix}`;
+const BUILD2_TAG = `build2_tag${config.suffix}`;
+const BUILD3_TAG = `build3_tag${config.suffix}`;
+const BUILD4_TAG = `build4_tag${config.suffix}`;
+const BUILD_ORIGIN = `build_origin${config.suffix}`;
 
 // Test suite for 'impt build deploy' command.
 // Runs 'impt build deploy' command with different combinations of options,
@@ -119,13 +124,13 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             }, ImptTestHelper.TIMEOUT);
 
             it('build deploy by dg id', (done) => {
-                ImptTestHelper.runCommand(`impt build deploy --dg ${dg_id} -x devicecode.nut -y agentcode.nut --descr build_descr --tag build_tag --origin build_origin --flagged ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt build deploy --dg ${dg_id} -x devicecode.nut -y agentcode.nut --descr build_descr --tag ${BUILD_TAG} --origin ${BUILD_ORIGIN}  --flagged ${outputMode}`, (commandOut) => {
                     build_id = ImptTestHelper.parseId(commandOut);
                     _checkSuccessCreateDeploymentMessage(commandOut, build_id);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => _checkBuildInfo({
-                        descr: 'build_descr', flag: true, tag: 'build_tag', origin: 'build_origin',
+                        descr: 'build_descr', flag: true, tag: BUILD_TAG, origin: BUILD_ORIGIN,
                         dcode: 'server.log\\(\\"Device', acode: 'server.log\\(\\"Agent'
                     })).
                     then(done).
@@ -133,12 +138,12 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('build deploy by dg name', (done) => {
-                ImptTestHelper.runCommand(`impt build deploy --dg ${DEVICE_GROUP_NAME} --tag build_tag --tag build_tag2 ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt build deploy --dg ${DEVICE_GROUP_NAME} --tag ${BUILD_TAG} --tag ${BUILD2_TAG} ${outputMode}`, (commandOut) => {
                     build_id = ImptTestHelper.parseId(commandOut);
                     _checkSuccessCreateDeploymentMessage(commandOut, build_id);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => _checkBuildInfo({ descr: '', flag: false, origin: '', tag: ['build_tag', 'build_tag2'] })).
+                    then(() => _checkBuildInfo({ descr: '', flag: false, origin: '', tag: [BUILD_TAG, BUILD2_TAG] })).
                     then(done).
                     catch(error => done.fail(error));
             });

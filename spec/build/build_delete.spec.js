@@ -36,6 +36,11 @@ const Shell = require('shelljs');
 
 const PRODUCT_NAME = `__impt_bld_product${config.suffix}`;
 const DEVICE_GROUP_NAME = `__impt_bld_device_group${config.suffix}`;
+const BUILD_TAG = `build_tag${config.suffix}`;
+const BUILD2_TAG = `build2_tag${config.suffix}`;
+const BUILD3_TAG = `build3_tag${config.suffix}`;
+const BUILD4_TAG = `build4_tag${config.suffix}`;
+const BUILD_ORIGIN = `build_origin${config.suffix}`;
 
 // Test suite for 'impt build delete' command.
 // Runs 'impt build delete' command with different combinations of options,
@@ -79,7 +84,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 if (!dg_id) fail("TestInit error: Fail create device group");
                 ImptTestHelper.emptyCheck(commandOut)
             }).
-                then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME} -t build_tag -o build_origin  -x devicecode.nut`, (commandOut) => {
+                then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME} -t ${BUILD_TAG} -o ${BUILD_ORIGIN}   -x devicecode.nut`, (commandOut) => {
                     build_id = ImptTestHelper.parseId(commandOut);
                     if (!build_id) fail("TestInit error: Fail create build");
                     build_sha = ImptTestHelper.parseSha(commandOut);
@@ -140,8 +145,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('build delete by tag', (done) => {
-                ImptTestHelper.runCommand(`impt build delete -b build_tag -q ${outputMode}`, (commandOut) => {
-                    _checkSuccessDeleteDeploymentMessage(commandOut, 'build_tag');
+                ImptTestHelper.runCommand(`impt build delete -b ${BUILD_TAG} -q ${outputMode}`, (commandOut) => {
+                    _checkSuccessDeleteDeploymentMessage(commandOut, BUILD_TAG);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => ImptTestHelper.runCommand(`impt build info -b ${build_id}`, ImptTestHelper.checkFailStatusEx)).
@@ -150,8 +155,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('build delete by origin', (done) => {
-                ImptTestHelper.runCommand(`impt build delete -b build_origin -q ${outputMode}`, (commandOut) => {
-                    _checkSuccessDeleteDeploymentMessage(commandOut, 'build_origin');
+                ImptTestHelper.runCommand(`impt build delete -b ${BUILD_ORIGIN}  -q ${outputMode}`, (commandOut) => {
+                    _checkSuccessDeleteDeploymentMessage(commandOut, BUILD_ORIGIN);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => ImptTestHelper.runCommand(`impt build info -b ${build_id}`, ImptTestHelper.checkFailStatusEx)).

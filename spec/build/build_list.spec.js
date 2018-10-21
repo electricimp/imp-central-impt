@@ -35,6 +35,11 @@ const DEVICE_GROUP_NAME = `__impt_bld_device_group${config.suffix}`;
 const PRODUCT2_NAME = `__impt_bld_product_2${config.suffix}`;
 const DEVICE_GROUP2_NAME = `__impt_bld_device_group_2${config.suffix}`;
 const DEVICE_GROUP3_NAME = `__impt_bld_device_group_3${config.suffix}`;
+const BUILD_TAG = `build_tag${config.suffix}`;
+const BUILD2_TAG = `build2_tag${config.suffix}`;
+const BUILD3_TAG = `build3_tag${config.suffix}`;
+const BUILD4_TAG = `build4_tag${config.suffix}`;
+const BUILD_ORIGIN = `build_origin${config.suffix}`;
 
 const outputMode = '-z json';
 
@@ -134,19 +139,19 @@ describe(`impt build list test suite (output: ${outputMode ? outputMode : 'defau
                 ImptTestHelper.emptyCheck(commandOut);
             })).
             then(() => Shell.cp('-Rf', `${__dirname}/fixtures/devicecode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER)).
-            then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME} -t build_tag`, (commandOut) => {
+            then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME} -t ${BUILD_TAG}`, (commandOut) => {
                 build_id = ImptTestHelper.parseId(commandOut);
                 if (!build_id) fail("TestSuiteInit error: Fail create build");
                 ImptTestHelper.emptyCheck(commandOut);
             })).
-            then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP2_NAME} -f -t build2_tag -x devicecode.nut`, (commandOut) => {
+            then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP2_NAME} -f -t ${BUILD2_TAG} -x devicecode.nut`, (commandOut) => {
                 build2_id = ImptTestHelper.parseId(commandOut);
                 if (!build2_id) fail("TestSuiteInit error: Fail create build");
                 build2_sha = ImptTestHelper.parseSha(commandOut);
                 if (!build2_sha) fail("TestSuiteInit error: Fail parse build sha");
                 ImptTestHelper.emptyCheck(commandOut);
             })).
-            then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP3_NAME} -t build3_tag`, (commandOut) => {
+            then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP3_NAME} -t ${BUILD3_TAG}`, (commandOut) => {
                 build3_id = ImptTestHelper.parseId(commandOut);
                 if (!build3_id) fail("TestSuiteInit error: Fail create build");
                 ImptTestHelper.emptyCheck(commandOut);
@@ -221,7 +226,7 @@ describe(`impt build list test suite (output: ${outputMode ? outputMode : 'defau
         });
 
         it('build list by sha and tag', (done) => {
-            ImptTestHelper.runCommand(`impt build list --sha ${build2_sha} --tag build2_tag  -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt build list --sha ${build2_sha} --tag ${BUILD2_TAG}  -z json`, (commandOut) => {
                 expect(commandOut).toContainsBuild({ id: build2_id });
                 expect(commandOut).toBuildCountEqual(1);
                 ImptTestHelper.checkSuccessStatus(commandOut);
@@ -231,7 +236,7 @@ describe(`impt build list test suite (output: ${outputMode ? outputMode : 'defau
         });
 
         it('build list by several tags', (done) => {
-            ImptTestHelper.runCommand(`impt build list -t build2_tag -t build_tag  -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt build list -t ${BUILD2_TAG} -t ${BUILD_TAG}  -z json`, (commandOut) => {
                 expect(commandOut).toContainsBuild({ id: build_id });
                 expect(commandOut).toContainsBuild({ id: build2_id });
                 expect(commandOut).toBuildCountEqual(2);
