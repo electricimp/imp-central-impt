@@ -102,6 +102,11 @@ Using several devices:
     npm test --filter **/help/*.spec.js IMPT_TEF_SUFFIX=help &
     npm test --filter **/test/*.spec.js IMPT_TEF_SUFFIX=test
 
+## Limitations ##
+
+- Device remove command tests can not be execute automaticaly, because impt have no command for add device to account. Due this fact device must added to account manualy after each test.
+- Count of login key is limit up to 10. Be shure that you have enought quantity free login key slots for test execute.
+
 ## Tests Running Management ##
 
 A set of tests to run is specified by a pattern of the file names which is defined as a value of the `"spec_files"` key in your local [imp-central-impt/spec/support/jasmine.json](../spec/support/jasmine.json) file. By default it is:
