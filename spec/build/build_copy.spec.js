@@ -211,7 +211,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     catch(error => done.fail(error));
             });
 
-            it('build copy by sha', (done) => {
+            xit('build copy by sha', (done) => {
                 ImptTestHelper.runCommand(`impt build copy --build ${build_sha} --dg ${dg_id} ${outputMode}`, (commandOut) => {
                     new_build_id = _parseBuildId(commandOut);
                     _checkSuccessCreateDeploymentMessage(commandOut, new_build_id);

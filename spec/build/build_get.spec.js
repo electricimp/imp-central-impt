@@ -103,7 +103,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     catch(error => done.fail(error));
             }, ImptTestHelper.TIMEOUT);
 
-            it('build get by build sha', (done) => {
+            xit('build get by build sha', (done) => {
                 ImptTestHelper.runCommand(`impt build get -b ${build_sha} --agent-file agentreaded.nut --agent-only -q ${outputMode}`, (commandOut) => {
                     _checkSourceFilesDownloadedSuccessfulyMessage(commandOut, build_sha);
                     ImptTestHelper.checkSuccessStatus(commandOut);

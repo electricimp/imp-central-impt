@@ -34,7 +34,7 @@ const UserInteractor = require('../lib/util/UserInteractor');
 const child_process = require('child_process');
 
 const TIMEOUT_MS = 300000;
-const TESTS_EXECUTION_FOLDER = `${__dirname}/../__test${process.env.IMPT_TEF_SUFFIX?process.env.IMPT_TEF_SUFFIX:''}`;
+const TESTS_EXECUTION_FOLDER = `${__dirname}/../__test${process.env.IMPT_FOLDER_SUFFIX?process.env.IMPT_FOLDER_SUFFIX:''}`;
 const KEY_ANSWER = {
     CTRL_C: '\x03',
     ENTER: '\n',

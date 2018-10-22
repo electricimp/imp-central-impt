@@ -122,7 +122,7 @@ describe(`impt build info test suite (output: ${outputMode ? outputMode : 'defau
                 catch(error => done.fail(error));
         });
 
-        it('build info by sha', (done) => {
+        xit('build info by sha', (done) => {
             ImptTestHelper.runCommand(`impt build info -b ${build_sha} -z json`, (commandOut) => {
                 _checkBuildInfo(commandOut);
                 ImptTestHelper.checkSuccessStatus(commandOut);
