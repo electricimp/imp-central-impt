@@ -22,8 +22,8 @@ There are [Jasmine](https://www.npmjs.com/package/jasmine) tests in the [spec fo
     - **IMPT_ENDPOINT** - impCentral API endpoint (default: *https://api.electricimp.com/v5*). You need to specify it when working with a private impCentral installation.
     - **IMPT_GITHUB_USER** / **IMPT_GITHUB_TOKEN** - a GitHub account username / password or personal access token. You need to specify them when you got `GitHub rate limit reached` error.
     - **IMPT_SUFFIX** - Additional custom suffix for entity names created and used during testing. To prevent collisions due to identical entity names in collaborator's accounts the tests try to create unique entity names by adding a suffix with the first 8 symbols of the current account Id. If needed, you may specify an additional suffix via this variable.
-    - **IMPT_TEF_SUFFIX** - Custom suffix for test execution folder name. You need to specify it for [Parallel Tests Execution](#parallel-tests-execution).
-    - **IMPT_DEVICE_IDX** - Index (starting from 0) of the value (i.e. a particular device) in the **IMPT_DEVICE_\*** variables. You may need to specify it for [Parallel Tests Execution](#parallel-tests-execution).
+    - **IMPT_FOLDER_SUFFIX** - Custom suffix for test execution folder name. You need to specify it for [Parallel Tests Execution](#parallel-tests-execution).
+    - **IMPT_DEVICE_IDX** - Index (starting from 0) of the value (i.e. a particular device) in the **IMPT_DEVICE_\*** variables. You may need to specify it for select other device from your device list.
 1. Alternatively, instead of the environment variables setting, you can directly specify the values of the corresponding variables in your local [imp-central-impt/spec/config.js file](../spec/config.js).
 1. Run the tests by calling `npm test` command from your local *imp-central-impt* folder.
 
@@ -31,76 +31,58 @@ Note, at this moment some tests for *impt test run* command need to be run eithe
 
 ## Parallel Tests Execution ##
 
-In order to decrease a time of the tests execution, the tests for different command groups can be executed in parallel, in different threads. You must specify **IMPT_TEF_SUFFIX** variable for each thread.
-Bear in mind that tests for some command groups (dg, build, device etc.) will fail if you use the same device for them. To prevent this, you should
-- either use several devices and assign a concrete device to concrete thread via **IMPT_DEVICE_IDX** variable (by default index 0 is used),
+In order to decrease a time of the tests execution, the tests for some different command groups can be executed in parallel, in different threads. You must specify **IMPT_FOLDER_SUFFIX** variable for each thread.
+
+Command groups auth,loginkey,product,project and webhook can be execute in parallel.
 
 For example:
 
-    npm test --filter `**/build/*[sS]pec.js` IMPT_TEF_SUFFIX=build
-    npm test --filter `**/dg/*[sS]pec.js` IMPT_TEF_SUFFIX=dg IMPT_DEVICE_IDX=1  
-    npm test --filter `**/device/*[sS]pec.js` IMPT_TEF_SUFFIX=device IMPT_DEVICE_IDX=2  
+(OS Windows)
 
-- or execute these tests in one thread sequentially.
+    start cmd /k "npm test --filter **/auth/*.spec.js IMPT_FOLDER_SUFFIX=auth"
+    start cmd /k "npm test --filter **/loginkey/*.spec.js IMPT_FOLDER_SUFFIX=loginkey"
+    start cmd /k "npm test --filter **/product/*.spec.js IMPT_FOLDER_SUFFIX=product" 
+
+(OS Linux)
+
+    npm test --filter **/auth/*.spec.js IMPT_FOLDER_SUFFIX=auth &
+    npm test --filter **/loginkey/*.spec.js IMPT_FOLDER_SUFFIX=loginkey &
+    npm test --filter **/product/*.spec.js IMPT_FOLDER_SUFFIX=product & 
+  
+Command groups test for build, log, device and device group using device and deployments can not execute in parallel. And must be execute sequentially.
 
 For example:
-    
-    npm test --filter `**/build/*[sS]pec.js` `**/dg/*[sS]pec.js` `**/device/*[sS]pec.js` IMPT_TEF_SUFFIX=device  
- 
-
-For parallel execute current test set you can use next script:
-
-Using one device:
 
 (OS Windows)
 
-    start cmd /k "npm test --filter **/build/*.spec.js  **/log/*.spec.js **/dg/*.spec.js **/device/*.spec.js **/test/*.spec.js IMPT_TEF_SUFFIX=build"
-    start cmd /k "npm test --filter **/auth/*.spec.js IMPT_TEF_SUFFIX=auth"
-    start cmd /k "npm test --filter **/loginkey/*.spec.js IMPT_TEF_SUFFIX=loginkey"
-    start cmd /k "npm test --filter **/product/*.spec.js IMPT_TEF_SUFFIX=product" 
-    start cmd /k "npm test --filter **/webhook/*.spec.js IMPT_TEF_SUFFIX=webhook"
-    start cmd /k "npm test --filter **/project/*.spec.js IMPT_TEF_SUFFIX=project"
-    start cmd /k "npm test --filter **/help/*.spec.js IMPT_TEF_SUFFIX=help"
-    
+    start cmd /k "npm test --filter **/build/*.spec.js  **/log/*.spec.js **/dg/*.spec.js **/device/*.spec.js IMPT_FOLDER_SUFFIX=build"
+
 (OS Linux)
 
-    npm test --filter **/build/*.spec.js  **/log/*.spec.js **/dg/*.spec.js **/device/*.spec.js **/test/*.spec.js IMPT_TEF_SUFFIX=build &
-    npm test --filter **/auth/*.spec.js IMPT_TEF_SUFFIX=auth &
-    npm test --filter **/loginkey/*.spec.js IMPT_TEF_SUFFIX=loginkey &
-    npm test --filter **/product/*.spec.js IMPT_TEF_SUFFIX=product & 
-    npm test --filter **/webhook/*.spec.js IMPT_TEF_SUFFIX=webhook &
-    npm test --filter **/project/*.spec.js IMPT_TEF_SUFFIX=project &
-    npm test --filter **/help/*.spec.js IMPT_TEF_SUFFIX=help
+    npm test --filter **/build/*.spec.js  **/log/*.spec.js **/dg/*.spec.js **/device/*.spec.js IMPT_FOLDER_SUFFIX=build 
 
-Using several devices:
+For fastest executing current test set you can use next scripts:
 
 (OS Windows)
 
-    start cmd /k "npm test --filter **/build/*.spec.js  IMPT_TEF_SUFFIX=build"
-    start cmd /k "npm test --filter **/log/*.spec.js IMPT_TEF_SUFFIX=log IMPT_DEVICE_IDX=1"
-    start cmd /k "npm test --filter **/dg/*.spec.js IMPT_TEF_SUFFIX=dg IMPT_DEVICE_IDX=2"
-    start cmd /k "npm test --filter **/device/*.spec.js IMPT_TEF_SUFFIX=device IMPT_DEVICE_IDX=3"
-    start cmd /k "npm test --filter **/auth/*.spec.js IMPT_TEF_SUFFIX=auth"
-    start cmd /k "npm test --filter **/loginkey/*.spec.js IMPT_TEF_SUFFIX=loginkey"
-    start cmd /k "npm test --filter **/product/*.spec.js IMPT_TEF_SUFFIX=product" 
-    start cmd /k "npm test --filter **/webhook/*.spec.js IMPT_TEF_SUFFIX=webhook"
-    start cmd /k "npm test --filter **/project/*.spec.js IMPT_TEF_SUFFIX=project"
-    start cmd /k "npm test --filter **/help/*.spec.js IMPT_TEF_SUFFIX=help"
-    start cmd /k "npm test --filter **/test/*.spec.js IMPT_TEF_SUFFIX=test"
-
+    start cmd /k "npm test --filter **/build/*.spec.js  **/log/*.spec.js **/dg/*.spec.js **/device/*.spec.js **/test/*.spec.js IMPT_FOLDER_SUFFIX=build"
+    start cmd /k "npm test --filter **/auth/*.spec.js IMPT_FOLDER_SUFFIX=auth"
+    start cmd /k "npm test --filter **/loginkey/*.spec.js IMPT_FOLDER_SUFFIX=loginkey"
+    start cmd /k "npm test --filter **/product/*.spec.js IMPT_FOLDER_SUFFIX=product" 
+    start cmd /k "npm test --filter **/webhook/*.spec.js IMPT_FOLDER_SUFFIX=webhook"
+    start cmd /k "npm test --filter **/project/*.spec.js IMPT_FOLDER_SUFFIX=project"
+    start cmd /k "npm test --filter **/help/*.spec.js IMPT_FOLDER_SUFFIX=help"
+    
 (OS Linux)
 
-    npm test --filter **/build/*.spec.js  IMPT_TEF_SUFFIX=build &
-    npm test --filter **/log/*.spec.js IMPT_TEF_SUFFIX=log IMPT_DEVICE_IDX=1 &
-    npm test --filter **/dg/*.spec.js IMPT_TEF_SUFFIX=dg IMPT_DEVICE_IDX=2 &
-    npm test --filter **/device/*.spec.js IMPT_TEF_SUFFIX=device IMPT_DEVICE_IDX=3 &
-    npm test --filter **/auth/*.spec.js IMPT_TEF_SUFFIX=auth &
-    npm test --filter **/loginkey/*.spec.js IMPT_TEF_SUFFIX=loginkey &
-    npm test --filter **/product/*.spec.js IMPT_TEF_SUFFIX=product &
-    npm test --filter **/webhook/*.spec.js IMPT_TEF_SUFFIX=webhook &
-    npm test --filter **/project/*.spec.js IMPT_TEF_SUFFIX=project &
-    npm test --filter **/help/*.spec.js IMPT_TEF_SUFFIX=help &
-    npm test --filter **/test/*.spec.js IMPT_TEF_SUFFIX=test
+    #/bin/sh
+    npm test --filter **/build/*.spec.js  **/log/*.spec.js **/dg/*.spec.js **/device/*.spec.js IMPT_FOLDER_SUFFIX=build &
+    npm test --filter **/auth/*.spec.js IMPT_FOLDER_SUFFIX=auth &
+    npm test --filter **/loginkey/*.spec.js IMPT_FOLDER_SUFFIX=loginkey &
+    npm test --filter **/product/*.spec.js IMPT_FOLDER_SUFFIX=product & 
+    npm test --filter **/webhook/*.spec.js IMPT_FOLDER_SUFFIX=webhook &
+    npm test --filter **/project/*.spec.js IMPT_FOLDER_SUFFIX=project &
+    npm test --filter **/help/*.spec.js IMPT_FOLDER_SUFFIX=help
 
 ## Limitations ##
 
@@ -144,7 +126,7 @@ Every test suite must delete all impCentral entities (Products, Device Groups, D
 
 For example:
 
-    const PRODUCT_NAME = `__impt_wh_product${config.suffix}`;
+    const PRODUCT_NAME = `__impt_new_test_product${config.suffix}`;
     
 If a test suite needs a new input parameter (eg. an unbound key or a Webhook url) it should be provided via a new environment variable. The environment variable must be documented in this readme file.
 
