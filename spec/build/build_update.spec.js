@@ -148,7 +148,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     catch(error => done.fail(error));
             });
 
-            it('build update flagged by sha', (done) => {
+            xit('build update flagged by sha', (done) => {
                 ImptTestHelper.runCommand(`impt build update -b ${build_sha} --flagged ${outputMode}`, (commandOut) => {
                     _checkSuccessUpdateDeploymentMessage(commandOut, build_sha);
                     ImptTestHelper.checkSuccessStatus(commandOut);

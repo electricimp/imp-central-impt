@@ -134,7 +134,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     catch(error => done.fail(error));
             });
 
-            it('build delete by sha', (done) => {
+            xit('build delete by sha', (done) => {
                 ImptTestHelper.runCommand(`impt build delete -b ${build_sha} -q ${outputMode}`, (commandOut) => {
                     _checkSuccessDeleteDeploymentMessage(commandOut, build_sha);
                     ImptTestHelper.checkSuccessStatus(commandOut);
