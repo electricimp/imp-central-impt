@@ -1,5 +1,10 @@
 # impt Test Summary Table #
 
+## Introduction
+
+There are current test set grouped by [impt command](#List-of-Tested-Commands).
+Each impt command has own table of test info, contained precondition and option. Tests described by normal font are positive, negative tests are described bold font.   
+
 ## List of main non-covered features ##
 
 - Production 
