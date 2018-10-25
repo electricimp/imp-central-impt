@@ -729,3 +729,245 @@
 <tr align="center" ><td height="30"><sub></sub></td><td align="left"><sub></sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_update.spec.js>device/device_update.spec.js:<br>device update without device value</sub></td></tr>
 <tr align="center" ><td height="30"><sub>device<br>not exist</sub></td><td align="left"><sub>name</sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td><sub></sub></td><td align="left"><sub><a href=./device/device_update.spec.js>device/device_update.spec.js:<br>not exist device update</sub></td></tr>
 </table>
+
+## Impt dg command group ##
+
+## dg create ##
+
+<table><tbody><tr><td
+ colspan="1" rowspan="2"><sub>Precondition</sub></td><td
+ colspan="7" rowspan="1"><sub>Options</sub></td><td
+ colspan="1" rowspan="2"><sub>Test name</sub></td></tr>
+<tr><td><sub>name</sub></td><td><sub>dg-type</sub></td><td><sub>product</sub></td><td><sub>descr</sub></td><td><sub>target</sub></td><td><sub>output</sub></td><td><sub>help</sub></td></tr>
+<tr><td></td><td><sub>Y</sub></td><td></td><td><sub>id</sub></td><td><sub>Y</sub></td><td></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_create.spec.js">dg/device_group_create.spec.js:<br>device
+group create by product id</a></sub></td></tr>
+<tr><td></td><td><sub>Y</sub></td><td><sub>development</sub></td><td><sub>name</sub></td><td><sub>Y</sub></td><td></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_create.spec.js">dg/device_group_create.spec.js:<br>device
+group create by product name</a></sub></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td><sub>default</sub></td><td><sub>Y</sub></td><td><sub><a
+ href="./help/help.spec.js">help/help.spec.js:<br>impt
+help pages test suite</a></sub></td></tr>
+<tr><td><sub>project exist</sub></td><td><sub>Y</sub></td><td></td><td><sub>project</sub></td><td><sub>Y</sub></td><td></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_create.spec.js">dg/device_group_create.spec.js:<br>device
+group create by project</a></sub></td></tr>
+<tr><td><sub>project not exist</sub></td><td><sub>Y</sub></td><td></td><td><sub>project</sub></td><td></td><td></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_create.spec.js">dg/device_group_create.spec.js:<br>device
+group create by not exist project</a></sub></td></tr>
+<tr><td><sub>dg exist already</sub></td><td><sub>Y</sub></td><td></td><td><sub>name</sub></td><td></td><td></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_create.spec.js">dg/device_group_create.spec.js:<br>create
+duplicate device group</a></sub></td></tr>
+<tr><td><sub>product not exist</sub></td><td><sub>Y</sub></td><td></td><td><sub>name</sub></td><td></td><td></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_create.spec.js">dg/device_group_create.spec.js:<br>device
+group create by not exist product</a></sub></td></tr>
+</tbody></table> ## dg delete ## <table>
+<tbody><tr><td colspan="1" rowspan="2"><sub>Precondition</sub></td><td
+ colspan="6" rowspan="1"><sub>Options</sub></td><td
+ colspan="1" rowspan="2"><sub>Test name</sub></td></tr>
+<tr><td><sub>dg</sub></td><td><sub>builds</sub></td><td><sub>force</sub></td><td><sub>confirmed</sub></td><td><sub>output</sub></td><td><sub>help</sub></td></tr>
+<tr><td></td><td><sub>id</sub></td><td></td><td></td><td><sub>Y</sub></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_delete.spec.js">dg/device_group_delete.spec.js:<br>delete
+device group by id</a></sub></td></tr>
+<tr><td></td><td><sub>name</sub></td><td></td><td></td><td><sub>Y</sub></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_delete.spec.js">dg/device_group_delete.spec.js:<br>delete
+device group by name</a></sub></td></tr>
+<tr><td><sub>project exist</sub></td><td><sub>project</sub></td><td></td><td></td><td><sub>Y</sub></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_delete.spec.js">dg/device_group_delete.spec.js:<br>delete
+device group by project</a></sub></td></tr>
+<tr><td></td><td><sub>name</sub></td><td></td><td><sub>Y</sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_delete.spec.js">dg/device_group_delete.spec.js:<br>force
+delete device group by name</a></sub></td></tr>
+<tr><td></td><td><sub>name</sub></td><td><sub>Y</sub></td><td><sub>Y</sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_delete.spec.js">dg/device_group_delete.spec.js:<br>delete
+device group with builds</a></sub></td></tr>
+<tr><td><sub>project not exist</sub></td><td><sub>project</sub></td><td></td><td></td><td><sub>Y</sub></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_delete.spec.js">dg/device_group_delete.spec.js:<br>delete
+device group by not exist project</a></sub></td></tr>
+<tr><td><sub>dg not exist</sub></td><td><sub>name</sub></td><td></td><td></td><td><sub>Y</sub></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_delete.spec.js">dg/device_group_delete.spec.js:<br>delete
+not exist device group</a></sub></td></tr>
+<tr><td></td><td><sub>empty</sub></td><td></td><td></td><td><sub>Y</sub></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_delete.spec.js">dg/device_group_delete.spec.js:<br>delete
+device group by empty name</a></sub></td></tr>
+<tr><td></td><td><sub>w/o value</sub></td><td></td><td></td><td><sub>Y</sub></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_delete.spec.js">dg/device_group_delete.spec.js:<br>delete
+device group without dg value</a></sub></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td><sub>default</sub></td><td><sub>Y</sub></td><td><sub><a
+ href="./help/help.spec.js">help/help.spec.js:<br>impt
+help pages test suite</a></sub></td></tr>
+</tbody></table> ## dg info ## <table>
+<tbody><tr><td colspan="1" rowspan="2"><sub>Precondition</sub></td><td
+ colspan="4" rowspan="1"><sub>Options</sub></td><td
+ colspan="1" rowspan="2"><sub>Test name</sub></td></tr>
+<tr><td><sub>dg</sub></td><td><sub>full</sub></td><td><sub>output</sub></td><td><sub>help</sub></td></tr>
+<tr><td></td><td><sub>id</sub></td><td></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_info.spec.js">dg/device_group_info.spec.js:<br>device
+group info by id</a></sub></td></tr>
+<tr><td></td><td><sub>name</sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_info.spec.js">dg/device_group_info.spec.js:<br>device
+group full info by name</a></sub></td></tr>
+<tr><td><sub>project exist</sub></td><td><sub>project</sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_info.spec.js">dg/device_group_info.spec.js:<br>device
+group full info by project</a></sub></td></tr>
+<tr><td><sub>project not exist</sub></td><td><sub>project</sub></td><td></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_info.spec.js">dg/device_group_info.spec.js:<br>device
+group info by not exist project</a></sub></td></tr>
+<tr><td><sub>dg not exist</sub></td><td><sub>name</sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_info.spec.js">dg/device_group_info.spec.js:<br>not
+exist device group info</a></sub></td></tr>
+<tr><td></td><td></td><td></td><td><sub>default</sub></td><td><sub>Y</sub></td><td><sub><a
+ href="./help/help.spec.js">help/help.spec.js:<br>impt
+help pages test suite</a></sub></td></tr>
+</tbody></table> ## dg list ## <table>
+<tbody><tr><td colspan="1" rowspan="2"><sub>Precondition</sub></td><td
+ colspan="5" rowspan="1"><sub>Options</sub></td><td
+ colspan="1" rowspan="2"><sub>Test name</sub></td></tr>
+<tr><td><sub>owner</sub></td><td><sub>product</sub></td><td><sub>dg-type</sub></td><td><sub>output</sub></td><td><sub>help</sub></td></tr>
+<tr><td></td><td><sub>me</sub></td><td></td><td></td><td><sub>json</sub></td><td></td><td><sub><a
+ href="./dg/device_group_list.spec.js">dg/device_group_list.spec.js:<br>device
+group list by owner me</a></sub></td></tr>
+<tr><td></td><td><sub>id</sub></td><td></td><td></td><td><sub>json</sub></td><td></td><td><sub><a
+ href="./dg/device_group_list.spec.js">dg/device_group_list.spec.js:<br>device
+group list by owner id</a></sub></td></tr>
+<tr><td></td><td><sub>name</sub></td><td></td><td><sub>deployment</sub></td><td><sub>json</sub></td><td></td><td><sub><a
+ href="./dg/device_group_list.spec.js">dg/device_group_list.spec.js:<br>device
+group list by owner name</a></sub></td></tr>
+<tr><td></td><td><sub>email</sub></td><td></td><td><sub>deployment</sub></td><td><sub>json</sub></td><td></td><td><sub><a
+ href="./dg/device_group_list.spec.js">dg/device_group_list.spec.js:<br>device
+group list by owner email</a></sub></td></tr>
+<tr><td></td><td></td><td><sub>id</sub></td><td></td><td><sub>json</sub></td><td></td><td><sub><a
+ href="./dg/device_group_list.spec.js">dg/device_group_list.spec.js:<br>device
+group list by product id</a></sub></td></tr>
+<tr><td></td><td></td><td><sub>name</sub></td><td></td><td><sub>json</sub></td><td></td><td><sub><a
+ href="./dg/device_group_list.spec.js">dg/device_group_list.spec.js:<br>device
+group list by product name</a></sub></td></tr>
+<tr><td></td><td></td><td><sub>2x</sub></td><td></td><td><sub>json</sub></td><td></td><td><sub><a
+ href="./dg/device_group_list.spec.js">dg/device_group_list.spec.js:<br>device
+group list by several product name</a></sub></td></tr>
+<tr><td></td><td></td><td></td><td></td><td><sub>default</sub></td><td><sub>Y</sub></td><td><sub><a
+ href="./help/help.spec.js">help/help.spec.js:<br>impt
+help pages test suite</a></sub></td></tr>
+</tbody></table> ## dg update ## <table>
+<tbody><tr><td colspan="1" rowspan="2"><sub>Precondition</sub></td><td
+ colspan="8" rowspan="1"><sub>Options</sub></td><td
+ colspan="1" rowspan="2"><sub>Test name</sub></td></tr>
+<tr><td><sub>dg</sub></td><td><sub>name</sub></td><td><sub>desc</sub></td><td><sub>target</sub></td><td><sub>load
+code</sub></td><td><sub>min sup depl</sub></td><td><sub>output</sub></td><td><sub>help</sub></td></tr>
+<tr><td></td><td><sub>id</sub></td><td></td><td></td><td></td><td></td><td></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_update.spec.js">dg/device_group_update.spec.js:<br>dg/device_group_update.spec.js</a></sub></td></tr>
+<tr><td></td><td><sub>name</sub></td><td><sub>Y</sub></td><td><sub>Y</sub></td><td></td><td></td><td></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_update.spec.js">dg/device_group_update.spec.js:<br>dg/device_group_update.spec.js</a></sub></td></tr>
+<tr><td><sub>project exist</sub></td><td><sub>project</sub></td><td></td><td><sub>Y</sub></td><td></td><td></td><td><sub>Y</sub></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_update.spec.js">dg/device_group_update.spec.js:<br>dg/device_group_update.spec.js</a></sub></td></tr>
+<tr><td><sub>project not exist</sub></td><td><sub>project</sub></td><td><sub>Y</sub></td><td></td><td></td><td></td><td></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_update.spec.js">dg/device_group_update.spec.js:<br>dg/device_group_update.spec.js</a></sub></td></tr>
+<tr><td><sub>dg not exist</sub></td><td><sub>name</sub></td><td><sub>Y</sub></td><td></td><td></td><td></td><td></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_update.spec.js">dg/device_group_update.spec.js:<br>dg/device_group_update.spec.js</a></sub></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td><sub>default</sub></td><td><sub>Y</sub></td><td><sub><a
+ href="./help/help.spec.js">help/help.spec.js:<br>help/help.spec.js</a></sub></td></tr>
+</tbody></table> ## dg builds ## <table>
+<tbody><tr><td colspan="1" rowspan="2"><sub>Precondition</sub></td><td
+ colspan="7" rowspan="1"><sub>Options</sub></td><td
+ colspan="1" rowspan="2"><sub>Test name</sub></td></tr>
+<tr><td><sub>dg</sub></td><td><sub>unflag</sub></td><td><sub>unflag
+old</sub></td><td><sub>remove</sub></td><td><sub>confirmed</sub></td><td><sub>output</sub></td><td><sub>help</sub></td></tr>
+<tr><td></td><td><sub>id</sub></td><td></td><td></td><td></td><td></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_builds.spec.js">dg/device_group_builds.spec.js:<br>dg/device_group_builds.spec.js</a></sub></td></tr>
+<tr><td></td><td><sub>name</sub></td><td><sub>Y</sub></td><td></td><td></td><td></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_builds.spec.js">dg/device_group_builds.spec.js:<br>dg/device_group_builds.spec.js</a></sub></td></tr>
+<tr><td></td><td><sub>name</sub></td><td></td><td><sub>Y</sub></td><td></td><td></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_builds.spec.js">dg/device_group_builds.spec.js:<br>dg/device_group_builds.spec.js</a></sub></td></tr>
+<tr><td><sub>project exist</sub></td><td><sub>project</sub></td><td></td><td></td><td><sub>Y</sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_builds.spec.js">dg/device_group_builds.spec.js:<br>dg/device_group_builds.spec.js</a></sub></td></tr>
+<tr><td><sub>project not exist</sub></td><td><sub>project</sub></td><td></td><td></td><td></td><td></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_builds.spec.js">dg/device_group_builds.spec.js:<br>dg/device_group_builds.spec.js</a></sub></td></tr>
+<tr><td><sub>dg not exist</sub></td><td><sub>name</sub></td><td></td><td></td><td></td><td></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_builds.spec.js">dg/device_group_builds.spec.js:<br>dg/device_group_builds.spec.js</a></sub></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td><td><sub>default</sub></td><td><sub>Y</sub></td><td><sub><a
+ href="./help/help.spec.js">help/help.spec.js:<br>help/help.spec.js</a></sub></td></tr>
+</tbody></table> ## dg restart ## <table>
+<tbody><tr><td colspan="1" rowspan="2"><sub>Precondition</sub></td><td
+ colspan="5" rowspan="1"><sub>Options</sub></td><td
+ colspan="1" rowspan="2"><sub>Test name</sub></td></tr>
+<tr><td><sub>dg</sub></td><td><sub>conditional</sub></td><td><sub>log</sub></td><td><sub>output</sub></td><td><sub>help</sub></td></tr>
+<tr><td></td><td><sub>id</sub></td><td></td><td></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_restart.spec.js">dg/device_group_restart.spec.js:<br>restart
+device by device group id</a></sub></td></tr>
+<tr><td></td><td><sub>name</sub></td><td><sub>Y</sub></td><td></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_restart.spec.js">dg/device_group_restart.spec.js:<br>restart
+device by device group name</a></sub></td></tr>
+<tr><td></td><td><sub>project</sub></td><td></td><td></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_restart.spec.js">dg/device_group_restart.spec.js:<br>restart
+device by project</a></sub></td></tr>
+<tr><td></td><td><sub>name</sub></td><td></td><td><sub>Y</sub></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_restart.spec.js">dg/device_group_restart.spec.js:<br>restart
+device with log display</a></sub></td></tr>
+<tr><td><sub>project not exist</sub></td><td><sub>project</sub></td><td></td><td></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_restart.spec.js">dg/device_group_restart.spec.js:<br>restart
+device by not exist project</a></sub></td></tr>
+<tr><td><sub>dg not exist</sub></td><td><sub>name</sub></td><td></td><td></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_restart.spec.js">dg/device_group_restart.spec.js:<br>restart
+device by not exist device group</a></sub></td></tr>
+<tr><td><sub>no devices</sub></td><td><sub>name</sub></td><td></td><td></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_restart.spec.js">dg/device_group_restart.spec.js:<br>restart
+not exist device</a></sub></td></tr>
+<tr><td></td><td></td><td></td><td></td><td><sub>default</sub></td><td><sub>Y</sub></td><td><sub><a
+ href="./help/help.spec.js">help/help.spec.js:<br>impt
+help pages test suite</a></sub></td></tr>
+</tbody></table> ## dg reassign ## <table>
+<tbody><tr><td colspan="1" rowspan="2"><sub>Precondition</sub></td><td
+ colspan="4" rowspan="1"><sub>Options</sub></td><td
+ colspan="1" rowspan="2"><sub>Test name</sub></td></tr>
+<tr><td><sub>from</sub></td><td><sub>to</sub></td><td><sub>output</sub></td><td><sub>help</sub></td></tr>
+<tr><td></td><td><sub>id</sub></td><td><sub>id</sub></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_reassign.spec.js">dg/device_group_reassign.spec.js:<br>reassign
+device by device group id</a></sub></td></tr>
+<tr><td></td><td><sub>name</sub></td><td><sub>name</sub></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_reassign.spec.js">dg/device_group_reassign.spec.js:<br>reassign
+device by device group name</a></sub></td></tr>
+<tr><td></td><td><sub>name</sub></td><td><sub>project</sub></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_reassign.spec.js">dg/device_group_reassign.spec.js:<br>reassign
+device by project</a></sub></td></tr>
+<tr><td><sub>from dg not exist</sub></td><td><sub>name</sub></td><td><sub>name</sub></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_reassign.spec.js">dg/device_group_reassign.spec.js:<br>reassign
+device from not exist device group</a></sub></td></tr>
+<tr><td><sub>to dg not exist</sub></td><td><sub>name</sub></td><td><sub>name</sub></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_reassign.spec.js">dg/device_group_reassign.spec.js:<br>reassign
+device to not exist device group</a></sub></td></tr>
+<tr><td><sub>dg without device</sub></td><td><sub>name</sub></td><td><sub>name</sub></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_reassign.spec.js">dg/device_group_reassign.spec.js:<br>reassign
+not exist device</a></sub></td></tr>
+<tr><td><sub>project not exist</sub></td><td><sub>name</sub></td><td><sub>project</sub></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_reassign.spec.js">dg/device_group_reassign.spec.js:<br>reassign
+device to not exist project</a></sub></td></tr>
+<tr><td></td><td></td><td></td><td><sub>default</sub></td><td><sub>Y</sub></td><td><sub><a
+ href="./help/help.spec.js">help/help.spec.js:<br>impt
+help pages test suite</a></sub></td></tr>
+</tbody></table> ## dg unassign ## <table>
+<tbody><tr><th colspan="1" rowspan="2"><sub>Precondition</sub></th><th
+ colspan="4" rowspan="1" align="center"><sub>Options</sub></th><td
+ colspan="1" rowspan="2"><sub>Test name</sub></td></tr>
+<tr><th><sub>dg</sub></th><th><sub>unbond</sub></th><th><sub>output</sub></th><th><sub>help</sub></th></tr>
+<tr><td></td><td><sub>id</sub></td><td></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_unassign.spec.js">dg/device_group_unassign.spec.js:<br>unassign
+device by device group id</a></sub></td></tr>
+<tr><td></td><td><sub>name</sub></td><td></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_unassign.spec.js">dg/device_group_unassign.spec.js:<br>unassign
+device by device group name</a></sub></td></tr>
+<tr><td><sub>project exist</sub></td><td><sub>project</sub></td><td></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_unassign.spec.js">dg/device_group_unassign.spec.js:<br>unassign
+device by project</a></sub></td></tr>
+<tr><td><sub>project not exist</sub></td><td><sub>project</sub></td><td></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_unassign.spec.js">dg/device_group_unassign.spec.js:<br>unassign
+device by not exist project</a></sub></td></tr>
+<tr><td><sub>dg not exist</sub></td><td><sub>name</sub></td><td></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_unassign.spec.js">dg/device_group_unassign.spec.js:<br>unassign
+device by not exist device group</a></sub></td></tr>
+<tr><td><sub>dg without device</sub></td><td><sub>name</sub></td><td></td><td><sub>default</sub></td><td></td><td><sub><a
+ href="./dg/device_group_unassign.spec.js">dg/device_group_unassign.spec.js:<br>unassign
+not exist device</a></sub></td></tr>
+<tr><td></td><td></td><td></td><td><sub>default</sub></td><td><sub>Y</sub></td><td><sub><a
+ href="./help/help.spec.js">help/help.spec.js:<br>impt
+help pages test suite</a></sub></td></tr>
+</tbody></table>
+
