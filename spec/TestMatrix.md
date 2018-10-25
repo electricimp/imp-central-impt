@@ -1127,3 +1127,1219 @@ value</sub></th><th></th><th align="left"><sub><a
 stream without output value</a></sub></th></tr>
 </tbody></table>
 
+## Impt loginkey command group ##
+
+## loginkey create ##
+
+<table>
+<tbody><tr align="left"><th colspan="1" rowspan="2"><sub>Precondition</sub></th><th colspan="4" rowspan="1"><sub>Options</sub></th><th colspan="1" rowspan="2" align="left"><sub>Test
+name</sub></th></tr>
+<tr align="left"><th><sub>pass</sub></th><th><sub>desc</sub></th><th><sub>output</sub></th><th><sub>help</sub></th></tr>
+<tr align="left"><td></td><td><sub>Y</sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td></td><td align="left"><sub><a href="./loginkey/loginkey_create.spec.js">loginkey_create.spec.js:<br>loginkey
+create</a></sub></td></tr>
+<tr align="left"><td></td><td><sub>Y</sub></td><td></td><td><sub>default</sub></td><td></td><td align="left"><sub><a href="./loginkey/loginkey_create.spec.js">loginkey_create.spec.js:<br>loginkey
+create without description</a></sub></td></tr>
+<tr align="left"><td></td><td></td><td><sub>Y</sub></td><td><sub>default</sub></td><td></td><td align="left"><sub><a href="./loginkey/loginkey_create.spec.js">loginkey_create.spec.js:<br>loginkey
+create without password</a></sub></td></tr>
+<tr align="left"><td></td><td></td><td></td><td><sub>default</sub></td><td><sub>Y</sub></td><td align="left"><sub><a href="./help/help.spec.js">help/help.spec.js:<br>impt
+help pages test suite</a></sub></td></tr>
+</tbody></table>
+
+## loginkey delete ##
+
+ <table>
+<tbody><tr align="left"><th colspan="1" rowspan="2"><sub>Precondition</sub></th><th colspan="5" rowspan="1"><sub>Options</sub></th><th colspan="1" rowspan="2" align="left"><sub>Test
+name</sub></th></tr>
+<tr align="left"><th><sub>lk</sub></th><th><sub>pass</sub></th><th><sub>confirmed</sub></th><th><sub>output</sub></th><th><sub>help</sub></th></tr>
+<tr align="left"><td colspan="1" rowspan="1"></td><td><sub>Y</sub></td><td><sub>Y</sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td></td><td align="left"><sub><a href="./loginkey/loginkey_delete.spec.js">loginkey_delete.spec.js:<br>loginkey
+delete</a></sub></td></tr>
+<tr align="left"><td rowspan="1"></td><td><sub>Y</sub></td><td></td><td><sub>Y</sub></td><td><sub>default</sub></td><td></td><td align="left"><sub><a href="./loginkey/loginkey_delete.spec.js">loginkey_delete.spec.js:<br>loginkey
+delete without password</a></sub></td></tr>
+<tr align="left"><td></td><td><sub>Y</sub></td><td><sub>Y</sub></td><td></td><td><sub>default</sub></td><td></td><td align="left"><sub><a href="./loginkey/loginkey_delete.spec.js">loginkey_delete.spec.js:<br>loginkey
+delete without confirmation</a></sub></td></tr>
+<tr align="left"><th><sub>lk not exist</sub></th><th><sub>Y</sub></th><th><sub>Y</sub></th><th><sub>Y</sub></th><th><sub>default</sub></th><th></th><th align="left"><sub><a href="./loginkey/loginkey_delete.spec.js">loginkey_delete.spec.js:<br>not
+exist loginkey delete</a></sub></th></tr>
+<tr align="left"><td></td><td></td><td></td><td></td><td><sub>default</sub></td><td><sub>Y</sub></td><td align="left"><sub><a href="./help/help.spec.js">help/help.spec.js:<br>impt
+help pages test suite</a></sub></td></tr>
+</tbody></table>
+
+## loginkey info ##
+
+ <table>
+<tbody><tr align="left"><th colspan="1" rowspan="2"><sub>Precondition</sub></th><th colspan="3" rowspan="1"><sub>Options</sub></th><th colspan="1" rowspan="2" align="left"><sub>Test
+name</sub></th></tr>
+<tr align="left"><th><sub>lk</sub></th><th><sub>output</sub></th><th><sub>help</sub></th></tr>
+<tr align="left"><td><sub>lk id exist</sub></td><td><sub>lk
+id</sub></td><td><sub>default</sub></td><td></td><td align="left"><sub><a href="./loginkey/loginkey_info.spec.js">loginkey_info.spec.js:<br>loginkey
+info</a></sub></td></tr>
+<tr align="left"><th><sub>lk id not exist</sub></th><th><sub>lk
+id</sub></th><th><sub>default</sub></th><th></th><th align="left"><sub><a href="./loginkey/loginkey_info.spec.js">loginkey_info.spec.js:<br>not
+exist loginkey info</a></sub></th></tr>
+<tr align="left"><td></td><td></td><td><sub>default</sub></td><td><sub>Y</sub></td><td align="left"><sub><a href="./help/help.spec.js">help/help.spec.js:<br>impt
+help pages test suite</a></sub></td></tr>
+</tbody></table>
+
+## loginkey list ## <table>
+
+<tbody><tr align="left"><th colspan="1" rowspan="2"><sub>Precondition</sub></th><th colspan="2" rowspan="1"><sub>Options</sub></th><th colspan="1" rowspan="2" align="left"><sub>Test
+name</sub></th></tr>
+<tr align="left"><th><sub>output</sub></th><th><sub>help</sub></th></tr>
+<tr left="" align=""><td><sub>several
+lk exist</sub></td><td><sub>json</sub></td><td></td><td left="" align=""><sub><a href="./loginkey/loginkey_list.spec.js">loginkey_list.spec.js:<br>loginkey
+list</a></sub></td></tr>
+<tr align="left"><td></td><td><sub>default</sub></td><td><sub>Y</sub></td><td align="left"><sub><a href="./help/help.spec.js">help/help.spec.js:<br>impt
+help pages test suite</a></sub></td></tr>
+</tbody><tbody></tbody></table>
+
+## loginkey update ##
+
+<table>
+<tbody><tr align="left"><th colspan="1" rowspan="2"><sub>Precondition</sub></th><th colspan="5" rowspan="1"><sub>Options</sub></th><th colspan="1" rowspan="2" align="left"><sub>Test
+name</sub></th></tr>
+<tr align="left"><th><sub>lk</sub></th><th><sub>pass</sub></th><th><sub>desc</sub></th><th><sub>output</sub></th><th><sub>help</sub></th></tr>
+<tr align="left"><td colspan="1" rowspan="1"></td><td><sub>Y</sub></td><td><sub>Y</sub></td><td><sub>Y</sub></td><td><sub>default</sub></td><td></td><td align="left"><sub><a href="./loginkey/loginkey_update.spec.js">loginkey_update.spec.js:<br>loginkey
+update description</a></sub></td></tr>
+<tr align="left"><td rowspan="1"></td><th><sub>Y</sub></th><th><sub>Y</sub></th><th></th><th><sub>default</sub></th><th></th><th align="left"><sub><a href="./loginkey/loginkey_update.spec.js">loginkey_update.spec.js:<br>loginkey
+update without new values</a></sub></th></tr>
+<tr align="left"><td></td><th><sub>Y</sub></th><th></th><th><sub>Y</sub></th><th><sub>default</sub></th><th></th><th align="left"><sub><a href="./loginkey/loginkey_update.spec.js">loginkey_update.spec.js:<br>loginkey
+update description without password</a></sub></th></tr>
+<tr align="left"><th><sub>lk not exist</sub></th><th><sub>Y</sub></th><th><sub>Y</sub></th><th><sub>Y</sub></th><th><sub>default</sub></th><th></th><th align="left"><sub><a href="./loginkey/loginkey_update.spec.js">loginkey_update.spec.js:<br>not
+exist loginkey update</a></sub></th></tr>
+<tr align="left"><td></td><td></td><td></td><td></td><td><sub>default</sub></td><td><sub>Y</sub></td><td align="left"><sub><a href="./help/help.spec.js">help/help.spec.js:<br>impt
+help pages test suite</a></sub></td></tr>
+</tbody></table>
+
+## Impt product command group ##
+
+## product create ##
+
+<table>
+  <tbody>
+    <tr>
+      <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
+      <th colspan="4" rowspan="1"><sub>Options</sub></th>
+      <th colspan="1" rowspan="2"><sub>Test
+name</sub></th>
+    </tr>
+    <tr>
+      <th><sub>name</sub></th>
+      <th><sub>desc</sub></th>
+      <th><sub>output</sub></th>
+      <th><sub>help</sub></th>
+    </tr>
+    <tr align="center">
+      <td><sub>descr exist</sub></td>
+      <td><sub>Y</sub></td>
+      <td><sub>Y</sub></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./%22product/product_create.spec.js%22">product/product_create.spec.js:<br>
+product create with duplicated description</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td colspan="1" rowspan="5"><sub>name
+not exist</sub></td>
+      <td><sub>Y</sub></td>
+      <td><sub>Y</sub></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./product/product_create.spec.js">product/product_create.spec.js:<br>
+product create</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td><sub>Y</sub></td>
+      <td></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./product/product_create.spec.js">product/product_create.spec.js:<br>
+product create without description</a></sub></td>
+    </tr>
+    <tr align="center">
+      <th><sub>Y</sub></th>
+      <th></th>
+      <th><sub>w/o value</sub></th>
+      <th></th>
+      <th style="text-align: left;"><sub><a
+ href="./product/product_create.spec.js">product/product_create.spec.js:<br>
+product create without output value</a></sub></th>
+    </tr>
+    <tr align="center">
+      <th><sub>Y</sub></th>
+      <th></th>
+      <th><sub>undefined</sub></th>
+      <th></th>
+      <th style="text-align: left;"><sub><a
+ href="./product/product_create.spec.js">product/product_create.spec.js:<br>
+product create without output value</a></sub></th>
+    </tr>
+    <tr align="center">
+      <th><sub>Y</sub></th>
+      <th><sub>empty</sub></th>
+      <th><sub>default</sub></th>
+      <th></th>
+      <th style="text-align: left;"><sub><a
+ href="./product/product_create.spec.js">product/product_create.spec.js:<br>
+product create with empty description</a></sub></th>
+    </tr>
+    <tr align="center">
+      <td colspan="1" rowspan="2"><sub>name
+exist</sub></td>
+      <th><sub>Y</sub></th>
+      <th></th>
+      <th><sub>default</sub></th>
+      <th></th>
+      <th style="text-align: left;"><sub><a
+ href="./product/product_create.spec.js">product/product_create.spec.js:<br>
+create duplicated product</a></sub></th>
+    </tr>
+    <tr align="center">
+      <th><sub>Y</sub></th>
+      <th><sub>Y</sub></th>
+      <th><sub>default</sub></th>
+      <th></th>
+      <th style="text-align: left;"><sub><a
+ href="./product/product_create.spec.js">product/product_create.spec.js:<br>
+create duplicated product with description</a></sub></th>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <th></th>
+      <th></th>
+      <th><sub>default</sub></th>
+      <th></th>
+      <th style="text-align: left;"><sub><a
+ href="./product/product_create.spec.js">product/product_create.spec.js:<br>
+product create without name</a></sub></th>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <th></th>
+      <th><sub>Y</sub></th>
+      <th><sub>default</sub></th>
+      <th></th>
+      <th style="text-align: left;"><sub><a
+ href="./product/product_create.spec.js">product/product_create.spec.js:<br>
+product create without name</a></sub></th>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <th><sub>empty</sub></th>
+      <th></th>
+      <th><sub>default</sub></th>
+      <th></th>
+      <th style="text-align: left;"><sub><a
+ href="./product/product_create.spec.js">product/product_create.spec.js:<br>
+product create with empty name</a></sub></th>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <th><sub>w/o value</sub></th>
+      <th></th>
+      <th><sub>default</sub></th>
+      <th></th>
+      <th style="text-align: left;"><sub><a
+ href="./product/product_create.spec.js">product/product_create.spec.js:<br>
+product create with empty name</a></sub></th>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <th><sub>Y</sub></th>
+      <th><sub>w/o value</sub></th>
+      <th><sub>default</sub></th>
+      <th></th>
+      <th style="text-align: left;"><sub><a
+ href="./product/product_create.spec.js">product/product_create.spec.js:<br>
+product create without description value</a></sub></th>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><sub>default</sub></td>
+      <td><sub>Y</sub></td>
+      <td align="left"><sub><a
+ href="./help/help.spec.js">help/help.spec.js:<br>
+impt help pages test suite</a></sub></td>
+    </tr>
+  </tbody>
+</table>
+
+## product delete ##
+
+<table>
+  <tbody>
+    <tr>
+      <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
+      <th colspan="6" rowspan="1"><sub>Options</sub></th>
+      <th colspan="1" rowspan="2"><sub>Test
+name</sub></th>
+    </tr>
+    <tr>
+      <th><sub>product</sub></th>
+      <th><sub>build</sub></th>
+      <th><sub>force</sub></th>
+      <th><sub>confirmed</sub></th>
+      <th><sub>output</sub></th>
+      <th><sub>help</sub></th>
+    </tr>
+    <tr align="center">
+      <td colspan="1" rowspan="3"><sub>product
+exist</sub></td>
+      <td><sub>name</sub></td>
+      <td></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./product/product_delete.spec.js">product/product_delete.spec.js:<br>
+product delete by name</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td><sub>id</sub></td>
+      <td></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./product/product_delete.spec.js">product/product_delete.spec.js:<br>
+product delete by id</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td><sub>name</sub></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./product/product_delete.spec.js">product/product_delete.spec.js:<br>
+product delete without confirmation</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td><sub>empty</sub></td>
+      <td></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./product/product_delete.spec.js">product/product_delete.spec.js:<br>
+product delete by empty name</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td><sub>w/o value</sub></td>
+      <td></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./product/product_delete.spec.js">product/product_delete.spec.js:<br>
+product delete by name without value</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td colspan="1" rowspan="2"><sub>product
+with<br>
+devicegroup</sub></td>
+      <td><sub>project</sub></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td><sub>Y</sub></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./product/product_delete.spec.js">product/product_delete.spec.js:<br>
+product delete by project</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td><sub>name</sub></td>
+      <td></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./product/product_delete.spec.js">product/product_delete.spec.js:<br>
+delete product with devicegroup</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><sub>default</sub></td>
+      <td><sub>Y</sub></td>
+      <td align="left"><sub><a
+ href="./help/help.spec.js">help/help.spec.js:<br>
+impt help pages test suite</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td><sub>product not exist</sub></td>
+      <td><sub>name</sub></td>
+      <td></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./product/product_delete.spec.js">product/product_delete.spec.js:<br>
+delete not exist product</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td><sub>project not exist</sub></td>
+      <td><sub>project</sub></td>
+      <td></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./product/product_delete.spec.js">product/product_delete.spec.js:<br>
+product delete by not exist project</a></sub></td>
+    </tr>
+  </tbody>
+</table>
+
+## product info ##
+
+<table>
+  <tbody>
+    <tr>
+      <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
+      <th colspan="4" rowspan="1"><sub>Options</sub></th>
+      <th colspan="1" rowspan="2"><sub>Test
+name</sub></th>
+    </tr>
+    <tr>
+      <th><sub>product</sub></th>
+      <th><sub>full</sub></th>
+      <th><sub>output</sub></th>
+      <th><sub>help</sub></th>
+    </tr>
+    <tr align="center">
+      <td colspan="1" rowspan="4"><sub>product
+exist</sub></td>
+      <td><sub>name</sub></td>
+      <td></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./product/product_info.spec.js">product/product_info.spec.js:<br>
+product info by name</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td><sub>id</sub></td>
+      <td></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./product/product_info.spec.js">product/product_info.spec.js:<br>
+product info by id</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td><sub>project</sub></td>
+      <td></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./product/product_info.spec.js">product/product_info.spec.js:<br>
+product info by project</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td><sub>name</sub></td>
+      <td><sub>Y</sub></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./product/product_info.spec.js">product/product_info.spec.js:<br>
+product full info by name</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <th><sub>name</sub></th>
+      <th></th>
+      <th><sub>w/o value</sub></th>
+      <th></th>
+      <th style="text-align: left;"><sub><a
+ href="./product/product_info.spec.js">product/product_info.spec.js:<br>
+product info without output value</a></sub></th>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <th></th>
+      <th></th>
+      <th><sub>default</sub></th>
+      <th></th>
+      <th style="text-align: left;"><sub><a
+ href="./product/product_info.spec.js">product/product_info.spec.js:<br>
+product info without product name</a></sub></th>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <th><sub>empty</sub></th>
+      <th></th>
+      <th><sub>default</sub></th>
+      <th></th>
+      <th style="text-align: left;"><sub><a
+ href="./product/product_info.spec.js">product/product_info.spec.js:<br>
+product info with empty product name</a></sub></th>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <th><sub>w/o value</sub></th>
+      <th></th>
+      <th><sub>default</sub></th>
+      <th></th>
+      <th style="text-align: left;"><sub><a
+ href="./product/product_info.spec.js">product/product_info.spec.js:<br>
+product info with empty product name</a></sub></th>
+    </tr>
+    <tr align="center">
+      <td><sub>product<br>
+not exist</sub></td>
+      <th><sub>name</sub></th>
+      <th></th>
+      <th><sub>default</sub></th>
+      <th></th>
+      <th style="text-align: left;"><sub><a
+ href="./product/product_info.spec.js">product/product_info.spec.js:<br>
+not exist product info</a></sub></th>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><sub>default</sub></td>
+      <td><sub>Y</sub></td>
+      <td align="left"><sub><a
+ href="./help/help.spec.js">help/help.spec.js:<br>
+impt help pages test suite</a></sub></td>
+    </tr>
+  </tbody>
+</table>
+
+## product list ##
+
+<table>
+  <tbody>
+    <tr>
+      <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
+      <th colspan="3" rowspan="1"><sub>Options</sub></th>
+      <th colspan="1" rowspan="2"><sub>Test
+name</sub></th>
+    </tr>
+    <tr>
+      <th><sub>owner</sub></th>
+      <th><sub>output</sub></th>
+      <th><sub>help</sub></th>
+    </tr>
+    <tr align="center">
+      <td><sub>product exist</sub></td>
+      <td></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./product/product_info.spec.js">product/product_info.spec.js:<br>
+product list</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td><sub>me</sub></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./product/product_info.spec.js">product/product_info.spec.js:<br>
+product list with owner by me</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td><sub>name</sub></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./product/product_info.spec.js">product/product_info.spec.js:<br>
+product list with owner by name</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td><sub>email</sub></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./product/product_info.spec.js">product/product_info.spec.js:<br>
+product list with owner by email</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td><sub>id</sub></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./product/product_info.spec.js">product/product_info.spec.js:<br>
+product list with owner by id</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <th><sub>w/o value</sub></th>
+      <th><sub>default</sub></th>
+      <th></th>
+      <th style="text-align: left;"><sub><a
+ href="./product/product_info.spec.js">product/product_info.spec.js:<br>
+product list without owner value</a></sub></th>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <th></th>
+      <th><sub>w/o value</sub></th>
+      <th></th>
+      <th style="text-align: left;"><sub><a
+ href="./product/product_info.spec.js">product/product_info.spec.js:<br>
+product list without output value</a></sub></th>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td></td>
+      <td><sub>default</sub></td>
+      <td><sub>Y</sub></td>
+      <td align="left"><sub><a
+ href="./help/help.spec.js">help/help.spec.js:<br>
+impt help pages test suite</a></sub></td>
+    </tr>
+  </tbody>
+</table>
+
+## product update ##
+
+<table>
+  <tbody>
+    <tr>
+      <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
+      <th colspan="5" rowspan="1"><sub>Options</sub></th>
+      <th colspan="1" rowspan="2"><sub>Test
+name</sub></th>
+    </tr>
+    <tr>
+      <th><sub>product</sub></th>
+      <th><sub>name</sub></th>
+      <th><sub>desc</sub></th>
+      <th><sub>output</sub></th>
+      <th><sub>help</sub></th>
+    </tr>
+    <tr align="center">
+      <td colspan="1" rowspan="7"><sub>product
+exist</sub></td>
+      <td><sub>name</sub></td>
+      <td><sub>Y</sub></td>
+      <td></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./product/product_update.spec.js">product/product_update.spec.js:<br>
+update product name </a></sub></td>
+    </tr>
+    <tr align="center">
+      <td><sub>name</sub></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./product/product_update.spec.js">product/product_update.spec.js:<br>
+update product description </a></sub></td>
+    </tr>
+    <tr align="center">
+      <td><sub>name</sub></td>
+      <td><sub>Y</sub></td>
+      <td><sub>Y</sub></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./product/product_update.spec.js">product/product_update.spec.js:<br>
+update product name and description </a></sub></td>
+    </tr>
+    <tr align="center">
+      <td><sub>name</sub></td>
+      <td></td>
+      <td><sub>empty</sub></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./product/product_update.spec.js">product/product_update.spec.js:<br>
+update product to empty description</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td><sub>id</sub></td>
+      <td><sub>Y</sub></td>
+      <td></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./product/product_update.spec.js">product/product_update.spec.js:<br>
+update product name by id</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td><sub>project</sub></td>
+      <td><sub>Y</sub></td>
+      <td></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./product/product_update.spec.js">product/product_update.spec.js:<br>
+update product name and description by project</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td><sub>name</sub></td>
+      <td></td>
+      <td></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./product/product_update.spec.js">product/product_update.spec.js:<br>
+update product without new values</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <th><sub>name</sub></th>
+      <th><sub>empty</sub></th>
+      <th></th>
+      <th><sub>default</sub></th>
+      <th></th>
+      <th style="text-align: left;"><sub><a
+ href="./product/product_update.spec.js">product/product_update.spec.js:<br>
+update product to empty name</a></sub></th>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <th><sub>name</sub></th>
+      <th><sub>w/o value</sub></th>
+      <th></th>
+      <th><sub>default</sub></th>
+      <th></th>
+      <th style="text-align: left;"><sub><a
+ href="./product/product_update.spec.js">product/product_update.spec.js:<br>
+update product to name without value</a></sub></th>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <th><sub>name</sub></th>
+      <th></th>
+      <th><sub>w/o value</sub></th>
+      <th><sub>default</sub></th>
+      <th></th>
+      <th style="text-align: left;"><sub><a
+ href="./product/product_update.spec.js">product/product_update.spec.js:<br>
+update product to description without value</a></sub></th>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <th><sub>empty</sub></th>
+      <th><sub>Y</sub></th>
+      <th></th>
+      <th><sub>default</sub></th>
+      <th></th>
+      <th style="text-align: left;"><sub><a
+ href="./product/product_update.spec.js">product/product_update.spec.js:<br>
+update product by empty name</a></sub></th>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <th><sub>w/o value</sub></th>
+      <th><sub>Y</sub></th>
+      <th></th>
+      <th><sub>default</sub></th>
+      <th></th>
+      <th style="text-align: left;"><sub><a
+ href="./product/product_update.spec.js">product/product_update.spec.js:<br>
+update product by name without value</a></sub></th>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <th><sub>name</sub></th>
+      <th><sub>Y</sub></th>
+      <th></th>
+      <th><sub>w/o value</sub></th>
+      <th></th>
+      <th style="text-align: left;"><sub><a
+ href="./product/product_update.spec.js">product/product_update.spec.js:<br>
+update product without output value</a></sub></th>
+    </tr>
+    <tr align="center">
+      <td><sub>product
+not exist</sub></td>
+      <th><sub>name</sub></th>
+      <th><sub>Y</sub></th>
+      <th></th>
+      <th><sub>default</sub></th>
+      <th></th>
+      <th align="left"><sub><a
+ href="./product/product_update.spec.js">product/product_update.spec.js:<br>
+update not existing product</a></sub></th>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><sub>default</sub></td>
+      <td><sub>Y</sub></td>
+      <td align="left"><sub><a
+ href="./help/help.spec.js">help/help.spec.js:<br>
+impt help pages test suite</a></sub></td>
+    </tr>
+  </tbody><tbody>
+  </tbody>
+</table>
+
+## Impt project command group ##
+
+## project create ##
+
+<table>
+  <tbody>
+    <tr>
+      <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
+      <th colspan="10" rowspan="1"><sub>Options</sub></th>
+      <th colspan="1" rowspan="2"><sub>Test
+name</sub></th>
+    </tr>
+    <tr>
+      <th><sub>product / create</sub></th>
+      <th><sub>name</sub></th>
+      <th><sub>desc</sub></th>
+      <th><sub>d-file</sub></th>
+      <th><sub>a-file</sub></th>
+      <th><sub>pre-factory</sub></th>
+      <th><sub>target/create</sub></th>
+      <th><sub>confirmed</sub></th>
+      <th><sub>output</sub></th>
+      <th><sub>help</sub></th>
+    </tr>
+    <tr align="left">
+      <td><sub>product exist</sub></td>
+      <td><sub>id</sub></td>
+      <td><sub>Y</sub></td>
+      <td><sub>Y</sub></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./project/project_create.spec.js">project_create.spec.js:<br>
+project create by product id</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td><sub>name</sub></td>
+      <td><sub>Y</sub></td>
+      <td><sub>Y</sub></td>
+      <td><sub>Y</sub></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./project/project_create.spec.js">project_create.spec.js:<br>
+project create by product name with device file</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td><sub>name</sub></td>
+      <td><sub>Y</sub></td>
+      <td><sub>Y</sub></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./project/project_create.spec.js">project_create.spec.js:<br>
+project create by product name with agent file</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td><sub>product<br>
+not exist</sub></td>
+      <td><sub>name / Y</sub></td>
+      <td><sub>Y</sub></td>
+      <td><sub>Y</sub></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./project/project_create.spec.js">project_create.spec.js:<br>
+project create with product creating</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td><sub>name</sub></td>
+      <td><sub>Y</sub></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./project/project_create.spec.js">project_create.spec.js:<br>
+project create with not existing product</a></sub></td>
+    </tr>
+    <tr align="center">
+      <th></th>
+      <th><sub>w/o value</sub></th>
+      <th><sub>Y</sub></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th><sub>Y</sub></th>
+      <th><sub>default</sub></th>
+      <th></th>
+      <th style="text-align: left;"><sub><a
+ href="./project/project_create.spec.js">project_create.spec.js:<br>
+project create without product value</a></sub></th>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><sub>default</sub></td>
+      <td><sub>Y</sub></td>
+      <td align="left"><sub><a
+ href="./help/help.spec.js">help/help.spec.js:<br>
+impt help pages test suite</a></sub></td>
+    </tr>
+  </tbody>
+</table>
+
+## project delete ##
+
+<table>
+  <tbody>
+    <tr>
+      <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
+      <th colspan="6" rowspan="1"><sub>Options</sub></th>
+      <th colspan="1" rowspan="2"><sub>Test
+name</sub></th>
+    </tr>
+    <tr>
+      <th><sub>entities</sub></th>
+      <th><sub>files</sub></th>
+      <th><sub>all</sub></th>
+      <th><sub>confirmed</sub></th>
+      <th><sub>output</sub></th>
+      <th><sub>help</sub></th>
+    </tr>
+    <tr align="center">
+      <td><sub>project<br>
+exist</sub></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./project/project_delete.spec.js">project_delete.spec.js:<br>
+delete project</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./project/project_delete.spec.js">project_delete.spec.js:<br>
+delete project with entities</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./project/project_delete.spec.js">project_delete.spec.js:<br>
+delete project with files</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td><sub>Y</sub></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./project/project_delete.spec.js">project_delete.spec.js:<br>
+delete project with all</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td><sub>Y</sub></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./project/project_delete.spec.js">project_delete.spec.js:<br>
+delete project with entities and files</a></sub></td>
+    </tr>
+    <tr align="center">
+      <th><sub>project<br>
+not exist</sub></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th><sub>Y</sub></th>
+      <th><sub>default</sub></th>
+      <th></th>
+      <th style="text-align: left;"><sub><a
+ href="./project/project_delete.spec.js">project_delete.spec.js:<br>
+delete not exist project</a></sub></th>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><sub>default</sub></td>
+      <td><sub>Y</sub></td>
+      <td align="left"><sub><a
+ href="./help/help.spec.js">help/help.spec.js:<br>
+impt help pages test suite</a></sub></td>
+    </tr>
+  </tbody>
+</table>
+
+## project info ##
+
+<table>
+  <tbody>
+    <tr>
+      <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
+      <th colspan="3" rowspan="1"><sub>Options</sub></th>
+      <th colspan="1" rowspan="2"><sub>Test
+name</sub></th>
+    </tr>
+    <tr>
+      <th><sub>full</sub></th>
+      <th><sub>output</sub></th>
+      <th><sub>help</sub></th>
+    </tr>
+    <tr align="center">
+      <td><sub>project<br>
+exist</sub></td>
+      <td></td>
+      <td><sub>json</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./project/project_info.spec.js">project_info.spec.js:<br>
+project info</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td><sub>json</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./project/project_info.spec.js">project_info.spec.js:<br>
+project full info</a></sub></td>
+    </tr>
+    <tr align="center">
+      <th><sub>dg not exist</sub></th>
+      <th><sub>Y</sub></th>
+      <th><sub>default</sub></th>
+      <th></th>
+      <th style="text-align: left;"><sub><a
+ href="./project/project_info.spec.js">project_info.spec.js:<br>
+project info with not exist device group</a></sub></th>
+    </tr>
+    <tr align="center">
+      <th><sub>project<br>
+not exist</sub></th>
+      <th></th>
+      <th><sub>default</sub></th>
+      <th></th>
+      <th style="text-align: left;"><sub><a
+ href="./project/project_info.spec.js">project_info.spec.js:<br>
+project info without project file</a></sub></th>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td></td>
+      <td><sub>default</sub></td>
+      <td><sub>Y</sub></td>
+      <td align="left"><sub><a
+ href="./help/help.spec.js">help/help.spec.js:<br>
+impt help pages test suite</a></sub></td>
+    </tr>
+  </tbody>
+</table>
+
+## project link ##
+
+<table>
+  <tbody>
+    <tr>
+      <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
+      <th colspan="6" rowspan="1"><sub>Options</sub></th>
+      <th colspan="1" rowspan="2"><sub>Test
+name</sub></th>
+    </tr>
+    <tr>
+      <th><sub>dg</sub></th>
+      <th><sub>d-file</sub></th>
+      <th><sub>a -file</sub></th>
+      <th><sub>confirmed</sub></th>
+      <th><sub>output</sub></th>
+      <th><sub>help</sub></th>
+    </tr>
+    <tr align="center">
+      <td><sub>dg exist</sub></td>
+      <td><sub>id</sub></td>
+      <td><sub>Y</sub></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./project/project_link.spec.js">project_link.spec.js:<br>
+project link to dg by id</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td><sub>name</sub></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td><sub>Y</sub></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./project/project_link.spec.js">project_link.spec.js:<br>
+project link to dg by name</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><sub>default</sub></td>
+      <td><sub>Y</sub></td>
+      <td align="left"><sub><a
+ href="./help/help.spec.js">help/help.spec.js:<br>
+impt help pages test suite</a></sub></td>
+    </tr>
+  </tbody>
+</table>
+
+## project update ##
+
+<table>
+  <tbody>
+    <tr>
+      <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
+      <th colspan="7" rowspan="1"><sub>Options</sub></th>
+      <th colspan="1" rowspan="2"><sub>Test
+name</sub></th>
+    </tr>
+    <tr>
+      <th><sub>name</sub></th>
+      <th><sub>desc</sub></th>
+      <th><sub>d-file</sub></th>
+      <th><sub>a -file</sub></th>
+      <th><sub>target</sub></th>
+      <th><sub>output</sub></th>
+      <th><sub>help</sub></th>
+    </tr>
+    <tr align="center">
+      <td><sub>project<br>
+exist</sub></td>
+      <td><sub>Y</sub></td>
+      <td><sub>Y</sub></td>
+      <td><sub>Y</sub></td>
+      <td><sub>Y</sub></td>
+      <td></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./project/project_update.spec.js">project_update.spec.js:<br>
+prodject update</a></sub></td>
+    </tr>
+    <tr align="center">
+      <th><sub>dg not exist</sub></th>
+      <th><sub>Y</sub></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th><sub>default</sub></th>
+      <th></th>
+      <th style="text-align: left;"><sub><a
+ href="./project/project_update.spec.js">project_update.spec.js:<br>
+project update without project file</a></sub></th>
+    </tr>
+    <tr align="center">
+      <th><sub>project<br>
+not exist</sub></th>
+      <th><sub>Y</sub></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th><sub>default</sub></th>
+      <th></th>
+      <th style="text-align: left;"><sub><a
+ href="./project/project_update.spec.js">project_update.spec.js:<br>
+project update with not exist device group</a></sub></th>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><sub>default</sub></td>
+      <td><sub>Y</sub></td>
+      <td align="left"><sub><a
+ href="./help/help.spec.js">help/help.spec.js:<br>
+impt help pages test suite</a></sub></td>
+    </tr>
+  </tbody>
+</table>
+
