@@ -1,5 +1,15 @@
 # impt Test Summary Table #
 
+## List of main non-covered features ##
+
+- Production 
+- Collaboration
+- Pre-factory, pre-production, factory and production device group types
+- Log stream positive tests
+- Interactive user input tests
+- Indetified by build sha tests
+- Impt test command tests
+
 ## List of Tested Commands ##
 
 **[impt auth info](#auth-info)**<br>
@@ -1001,5 +1011,119 @@ code</sub></th><th><sub>min sup depl</sub></th><th><sub>output</sub></th><th><su
  href="./dg/device_group_update.spec.js">dg/device_group_update.spec.js:<br>dg/device_group_update.spec.js</a></sub></td></tr>
 <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td><sub>default</sub></td><td><sub>Y</sub></td><td><sub><a
  href="./help/help.spec.js">help/help.spec.js:<br>help/help.spec.js</a></sub></td></tr>
+</tbody></table>
+
+## Impt log command group ##
+
+## log get ##
+
+<table><tbody><tr><th colspan="1"
+ rowspan="2"><sub>Precondition</sub></th><th
+ colspan="5" rowspan="1"><sub>Options</sub></th><th
+ colspan="1" rowspan="2" align="left"><sub>Test
+name</sub></th></tr>
+<tr><th><sub>device</sub></th><th><sub>p-size</sub></th><th><sub>p-num</sub></th><th><sub>output</sub></th><th><sub>help</sub></th></tr>
+<tr align="left"><td><sub>one device in project</sub></td><td><sub>project</sub></td><td></td><td></td><td><sub>default</sub></td><td></td><td
+ left="" align=""><sub><a
+ href="./log/log_get.spec.js">log/log_get.spec.js:<br>log
+get by project</a></sub></td></tr>
+<tr align="left"><td></td><td><sub>device id</sub></td><td></td><td></td><td><sub>default</sub></td><td></td><td
+ align="left"><sub><a href="./log/log_get.spec.js">log/log_get.spec.js:<br>log
+get by device id</a></sub></td></tr>
+<tr align="left"><td></td><td><sub>mac adr</sub></td><td></td><td></td><td><sub>default</sub></td><td></td><td
+ align="left"><sub><a href="./log/log_get.spec.js">log/log_get.spec.js:<br>log
+get by device mac</a></sub></td></tr>
+<tr align="left"><td></td><td><sub>agent id</sub></td><td></td><td></td><td><sub>default</sub></td><td></td><td
+ align="left"><sub><a href="./log/log_get.spec.js">log/log_get.spec.js:<br>log
+get by agent id</a></sub></td></tr>
+<tr align="left"><td></td><td><sub>name</sub></td><td></td><td></td><td><sub>default</sub></td><td></td><td
+ align="left"><sub><a href="./log/log_get.spec.js">log/log_get.spec.js:<br>log
+get by device name</a></sub></td></tr>
+<tr align="left"><td></td><td><sub>device id</sub></td><td><sub>4</sub></td><td></td><td><sub>default</sub></td><td></td><td
+ align="left"><sub><a href="./log/log_get.spec.js">log/log_get.spec.js:<br>log
+get with page size</a></sub></td></tr>
+<tr align="left"><td></td><td><sub>device id</sub></td><td><sub>4</sub></td><td><sub>3</sub></td><td><sub>default</sub></td><td></td><td
+ align="left"><sub><a href="./log/log_get.spec.js">log/log_get.spec.js:<br>log
+get with page size and number</a></sub></td></tr>
+<tr align="left"><td></td><td></td><td></td><td></td><td><sub>default</sub></td><td><sub>Y</sub></td><td
+ align="left"><sub><a href="./help/help.spec.js">help/help.spec.js:<br>impt
+help pages test suite</a></sub></td></tr>
+<tr align="left"><th><sub>project not exist</sub></th><th><sub>project</sub></th><th></th><th></th><th><sub>default</sub></th><th></th><th
+ align="left"><sub><a href="./log/log_get.spec.js">log/log_get.spec.js:<br>log
+get by not exist project</a></sub></th></tr>
+<tr align="left"><th></th><th><sub>w/o value</sub></th><th></th><th></th><th><sub>default</sub></th><th></th><th
+ align="left"><sub><a href="./log/log_get.spec.js">log/log_get.spec.js:<br>log
+get without device value</a></sub></th></tr>
+<tr align="left"><th></th><th><sub>empty</sub></th><th></th><th></th><th><sub>default</sub></th><th></th><th
+ align="left"><sub><a href="./log/log_get.spec.js">log/log_get.spec.js:<br>log
+get without device value</a></sub></th></tr>
+<tr align="left"><th></th><th><sub>device id</sub></th><th><sub>-4;0</sub></th><th></th><th><sub>default</sub></th><th></th><th
+ align="left"><sub><a href="./log/log_get.spec.js">log/log_get.spec.js:<br>log
+get with incorrect page size value</a></sub></th></tr>
+<tr align="left"><th></th><th><sub>device id</sub></th><th></th><th><sub>-3;0</sub></th><th><sub>default</sub></th><th></th><th
+ align="left"><sub><a href="./log/log_get.spec.js">log/log_get.spec.js:<br>log
+get with incorrect page number value</a></sub></th></tr>
+<tr align="left"><th></th><th><sub>device id</sub></th><th><sub>w/o
+value</sub></th><th></th><th><sub>default</sub></th><th></th><th
+ align="left"><sub><a href="./log/log_get.spec.js">log/log_get.spec.js:<br>log
+get without size and num values</a></sub></th></tr>
+<tr align="left"><th></th><th><sub>device id</sub></th><th></th><th><sub>w/o
+value</sub></th><th><sub>default</sub></th><th></th><th
+ align="left"><sub><a href="./log/log_get.spec.js">log/log_get.spec.js:<br>log
+get without size and num values</a></sub></th></tr>
+<tr align="left"><th></th><th><sub>device id</sub></th><th></th><th></th><th><sub>invalid
+value</sub></th><th></th><th align="left"><sub><a
+ href="./log/log_get.spec.js">log/log_get.spec.js:<br>log
+get without output value</a></sub></th></tr>
+<tr align="left"><th></th><th><sub>device id</sub></th><th></th><th></th><th><sub>w/o
+value</sub></th><th></th><th align="left"><sub><a
+ href="./log/log_get.spec.js">log/log_get.spec.js:<br>log
+get without output value</a></sub></th></tr>
+</tbody></table> 
+
+## log stream ## 
+
+<table>
+<tbody><tr><th colspan="1" rowspan="2"><sub>Precondition</sub></th><th
+ colspan="4" rowspan="1"><sub>Options</sub></th><th
+ colspan="1" rowspan="2" align="left"><sub>Test
+name</sub></th></tr>
+<tr><th><sub>device</sub></th><th><sub>dg</sub></th><th><sub>output</sub></th><th><sub>help</sub></th></tr>
+<tr align="left"><td></td><td><sub>device id</sub></td><td></td><td><sub>default</sub></td><td></td><td
+ align="left"><sub>planned</sub></td></tr>
+<tr align="left"><td></td><td><sub>mac adr</sub></td><td></td><td><sub>default</sub></td><td></td><td
+ align="left"><sub>planned</sub></td></tr>
+<tr align="left"><td></td><td><sub>agent id</sub></td><td></td><td><sub>default</sub></td><td></td><td
+ align="left"><sub>planned</sub></td></tr>
+<tr align="left"><td></td><td><sub>name</sub></td><td></td><td><sub>default</sub></td><td></td><td
+ align="left"><sub>planned</sub></td></tr>
+<tr align="left"><td></td><td></td><td><sub>name</sub></td><td><sub>default</sub></td><td></td><td
+ align="left"><sub>planned</sub></td></tr>
+<tr align="left"><td></td><td></td><td><sub>id</sub></td><td><sub>default</sub></td><td></td><td
+ align="left"><sub>planned</sub></td></tr>
+<tr align="left"><td></td><td></td><td></td><td><sub>default</sub></td><td><sub>Y</sub></td><td
+ align="left"><sub><a href="./help/help.spec.js">help/help.spec.js:<br>impt
+help pages test suite</a></sub></td></tr>
+<tr align="left"><th><sub>project not exist</sub></th><th></th><th><sub>project</sub></th><th><sub>default</sub></th><th></th><th
+ align="left"><sub><a href="./log/log_stream.spec.js">log/log_stream.spec.js:<br>log
+stream by not exist project</a></sub></th></tr>
+<tr align="left"><th></th><th><sub>w/o value</sub></th><th></th><th><sub>default</sub></th><th></th><th
+ align="left"><sub><a href="./log/log_stream.spec.js">log/log_stream.spec.js:<br>log
+stream without device value</a></sub></th></tr>
+<tr align="left"><th></th><th><sub>empty</sub></th><th></th><th><sub>default</sub></th><th></th><th
+ align="left"><sub><a href="./log/log_stream.spec.js">log/log_stream.spec.js:<br>log
+stream without device value</a></sub></th></tr>
+<tr align="left"><th></th><th></th><th><sub>w/o
+value</sub></th><th><sub>default</sub></th><th></th><th
+ align="left"><sub><a href="./log/log_stream.spec.js">log/log_stream.spec.js:<br>log
+stream without dg value</a></sub></th></tr>
+<tr align="left"><th></th><th><sub>device id</sub></th><th></th><th><sub>invalid
+value</sub></th><th></th><th align="left"><sub><a
+ href="./log/log_stream.spec.js">log/log_stream.spec.js:<br>log
+stream without output value</a></sub></th></tr>
+<tr align="left"><th></th><th><sub>device id</sub></th><th></th><th><sub>w/o
+value</sub></th><th></th><th align="left"><sub><a
+ href="./log/log_stream.spec.js">log/log_stream.spec.js:<br>log
+stream without output value</a></sub></th></tr>
 </tbody></table>
 
