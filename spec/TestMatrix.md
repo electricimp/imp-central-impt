@@ -3254,7 +3254,7 @@ impt help pages test suite</a></sub></td>
   </sub><tbody>
     <tr align="center" valign="center">
       <th rowspan="2" height="30"><sub>Precondition</sub></th>
-      <th colspan="5"><sub>Command options</sub></th>
+      <th colspan="4"><sub>Command options</sub></th>
       <th rowspan="2"><sub>Test name</sub></th>
     </tr>
     <sub>
@@ -3350,7 +3350,7 @@ unassign not exist device</a></sub></td>
   </sub><tbody>
     <tr align="center" valign="center">
       <th rowspan="2" height="30"><sub>Precondition</sub></th>
-      <th colspan="5"><sub>Command options</sub></th>
+      <th colspan="4"><sub>Command options</sub></th>
       <th rowspan="2"><sub>Test name</sub></th>
     </tr>
     <sub>
