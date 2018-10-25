@@ -70,7 +70,7 @@ exports.builder = function (yargs) {
                 Options.GITHUB_CONFIG, Options.BUILDER_CONFIG, Options.ENTITIES)
         },
         [Options.CONFIRMED] : false,
-        [Options.DEBUG] : false
+        [Options.OUTPUT] : false
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))

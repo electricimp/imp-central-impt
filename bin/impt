@@ -46,6 +46,5 @@ Yargs
         else {
             UserInteractor.printErrorWithStatus(msg);
         }
-        process.exit(1);
     })
     .argv

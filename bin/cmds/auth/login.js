@@ -31,33 +31,14 @@ const UserInteractor = require('../../../lib/util/UserInteractor');
 
 const COMMAND = 'login';
 const COMMAND_SECTION = 'auth';
-const COMMAND_SHORT_DESCR = 'Global or local login.';
-const COMMAND_DESCRIPTION = 'Global or local login. Creates Global or Local Auth File.';
+const COMMAND_SHORT_DESCR = 'Creates the global or local auth file.';
+const COMMAND_DESCRIPTION = COMMAND_SHORT_DESCR;
 
 exports.command = COMMAND;
 
 exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
-    const formattedCommandOptions = Options.getFormattedCommandOptions(
-        '%s (%s | %s) %s',
-        {
-            [Options.LOCAL] : false,
-            [Options.ENDPOINT] : false,
-        },
-        {
-            [Options.USER] : true,
-            [Options.PASSWORD] : true,
-        },
-        {
-            [Options.LOGIN_KEY] : true
-        },
-        {
-            [Options.TEMP] : false,
-            [Options.CONFIRMED] : false,
-            [Options.DEBUG] : false,
-        });
-
     const options = Options.getOptions({
         [Options.LOCAL] : false,
         [Options.ENDPOINT] : false,
@@ -66,22 +47,40 @@ exports.builder = function (yargs) {
         [Options.LOGIN_KEY] : false,
         [Options.TEMP] : false,
         [Options.CONFIRMED] : false,
-        [Options.DEBUG] : false
+        [Options.OUTPUT] : false
     });
+
+    const formattedCommandOptions = Options.getFormattedCommandOptions(
+        '%s [%s [%s] | %s] %s',
+        {
+            [Options.LOCAL] : false,
+            [Options.ENDPOINT] : false,
+        },
+        {
+            [Options.USER] : true
+        },
+        {
+            [Options.PASSWORD] : true
+        },
+        {
+            [Options.LOGIN_KEY] : true
+        },
+        {
+            [Options.TEMP] : false,
+            [Options.CONFIRMED] : false,
+            [Options.OUTPUT] : false,
+        });
 
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, formattedCommandOptions))
         .options(options)
         .check(function (argv) {
             const opts = new Options(argv);
-            if (!opts.user && !opts.loginKey) {
-                return new Errors.CommandSyntaxError(UserInteractor.ERRORS.CMD_REQUIRED_OPTIONS, Options.USER, Options.LOGIN_KEY);
-            }
             if (opts.user && opts.loginKey) {
                 return new Errors.CommandSyntaxError(UserInteractor.ERRORS.CMD_MUTUALLY_EXCLUSIVE_OPTIONS, Options.USER, Options.LOGIN_KEY);
             }
-            if (opts.user && opts.password === undefined) {
-                return new Errors.CommandSyntaxError(UserInteractor.ERRORS.CMD_REQUIRED_OPTION, Options.PASSWORD);
+            if (opts.user === undefined && opts.password) {
+                return new Errors.CommandSyntaxError(UserInteractor.ERRORS.CMD_COOPERATIVE_OPTIONS, Options.PASSWORD, Options.USER);
             }
             return Options.checkOptions(argv, options);
         })

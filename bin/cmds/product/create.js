@@ -48,7 +48,7 @@ exports.builder = function (yargs) {
             describe : 'Description of the Product.',
             _usage : '<product_description>'
         },
-        [Options.DEBUG] : false
+        [Options.OUTPUT] : false
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))

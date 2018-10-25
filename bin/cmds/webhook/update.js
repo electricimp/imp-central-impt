@@ -48,7 +48,7 @@ exports.builder = function (yargs) {
             demandOption : false,
             describe : 'New MIME content-type of the event data.'
         },
-        [Options.DEBUG] : false
+        [Options.OUTPUT] : false
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))

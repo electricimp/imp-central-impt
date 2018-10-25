@@ -49,19 +49,19 @@ This guide contains two main parts:
 
 A ‘test file’ is a file containing ‘test cases’.
 
-A test case is a class inheriting from the *ImpTestCase* class defined by the [*impUnit*](https://github.com/electricimp/impUnit) framework. There can be several test cases in a test file.
+A ‘test case’ is a class inherited from the *ImpTestCase* class defined by the [*impUnit*](https://github.com/electricimp/impUnit) framework. There can be several test cases in a test file.
 
 A ‘test method’ (or simply called a ‘test’) is one of a test case’s methods. It should be prefixed by *test*, eg. *testEverythingOk()*. There can be several test methods (tests) in a test case.
 
 Every test may be uniquely identified or specified by the corresponding test file name, test case name and test method name.
 
-A ‘test project’ is an entity which combines test files intended to test a Squirrel library or other Squirrel code. Each test project is defined by one ‘test configuration’, which is embodied in a [‘test configuration file’](./CommandsManual.md#test-configuration-file). A test configuration indicates the test files which are part of the test project; the Device Group to which test devices are assigned and the test code deployed; the source file(s) with the Squirrel code which is going to be tested; and other settings required to build and run the tests.
+A ‘test project’ is an entity which combines test files intended to test a Squirrel library or other Squirrel code. Each test project is defined by one ‘test configuration’, which is embodied in a [‘test configuration file’](./CommandsManual.md#test-configuration-files). A test configuration indicates the test files which are part of the test project; the Device Group to which test devices are assigned and the test code deployed; the source file(s) with the Squirrel code which is going to be tested; and other settings required to build and run the tests.
 
-There must be only one [test configuration file](./CommandsManual.md#test-configuration-file) in a directory. Sub-directories may contain test configuration files too but this is not recommended.
+There must be only one [test configuration file](./CommandsManual.md#test-configuration-files) in a directory. Sub-directories may contain test configuration files too but this is not recommended.
 
-The ‘test home’ is the directory where the [test configuration file](./CommandsManual.md#test-configuration-file) is located. All of the files located in the test home and all of its sub-directories are considered as test files belonging to the corresponding test project if their names match the patterns specified in the test configuration.
+The ‘test home’ is the directory where the [test configuration file](./CommandsManual.md#test-configuration-files) is located. All of the files located in the test home and all of its sub-directories are considered as test files belonging to the corresponding test project if their names match the patterns specified in the test configuration.
 
-**Note** The test project entity has no any relation to the development Project entity described in the [*impt* Development Guide](./DevelopmentGuide.md). A [Project file](./CommandsManual.md#project-file) and a [test configuration file](./CommandsManual.md#test-configuration-file) may coexist in the same directory.
+**Note:** the test project entity has no any relation to the development Project entity described in the [*impt* Development Guide](./DevelopmentGuide.md). A [Project file](./CommandsManual.md#project-files) and a [test configuration file](./CommandsManual.md#test-configuration-files) may coexist in the same directory.
 
 A ‘test session’ is a run of a set of tests from one test file on one device. That may include all of the tests from all of the test cases from the test file, or a subset of all the tests in the test file. Running the same set of tests on another device is another test session.
 
@@ -103,8 +103,8 @@ You need to perform the following steps to write your tests:
   - Every test method name should start with *test*. Test methods may have identical names if they are in different test cases. There are no other rules for test method naming, but bear in mind that [running selective tests](#running-selective-tests) can have an impact on test method naming.
   - A test case may have several test methods (tests).
   - Additionally, any test case may have *setUp()* and *tearDown()* methods:
-    - If it exists, *setUp()* is called by the tool before any other methods in the test case. It may be used to perform environment setup before test execution.
-    - If it exists, *tearDown()* is called by the tool after all other methods in the test case. It may be used to clean the environment after test execution.
+    - If it exists, *setUp()* is called by the tool before any other methods in the test case. It may be used to perform environment setup before the test case execution.
+    - If it exists, *tearDown()* is called by the tool after all other methods in the test case. It may be used to clean the environment after the test case execution.
   - All test methods other than *setUp()* and *tearDown()* in one test case are chosen for execution by the tool in an arbitrary order, ie. your tests should be independent and not assume any particular order of execution.
 
 A test method may be run synchronously (the default) or [asynchronously](#asynchronous-testing).
@@ -146,7 +146,7 @@ A test file is intended to test either device or agent code, so the opposite sid
 
 For example, `"Test1.agent.test.nut"` (a test file with test cases for agent code) would be partnered with  `"Test1.device.nut"` (the corresponding partner file with emulation of the device side of the interaction).
 
-**Note** It is sufficient that only the test file is selected for the run, ie. it satisfies the test file search pattern defined during [test configuration](#test-configuration). The corresponding partner file will be added to the test session automatically.
+**Note:** it is sufficient that only the test file is selected for the run, ie. it satisfies the test file search pattern defined during [test configuration](#test-configuration). The corresponding partner file will be added to the test session automatically.
 
 **Example**
 
@@ -477,22 +477,29 @@ class TestCase1 extends ImpTestCase {
 
 ### Test Device Group ###
 
-To run your tests you need to have one or more devices associated with your account and assigned to the Device Group to which your tests will be deployed. These then are the tasks you should perform in order to prepare your devices for testing:
+To run your tests you need to have one or more devices associated with your account and assigned to the Device Group to which your tests will be deployed. These are the tasks you should perform in order to prepare your devices for testing:
 
 1. Prepare a Product. If you already have a Product, note its ID or name. If you do not have a Product, create a new one with [`impt product create`](./CommandsManual.md#product-create):
 
     ```
     > impt product create --name MyTestProduct
     Product "MyTestProduct" is created successfully.
+    Product:
+      id:   a83ecc00-cb39-d950-9a60-96694403ab9d
+      name: MyTestProduct
     IMPT COMMAND SUCCEEDS
     ```
 
 2. Prepare a Device Group. If you already have a Device Group, note its ID or name. If you do not have a Device Group, create a new one with [`impt dg create`](./CommandsManual.md#device-group-create). You need to specify the Product when creating the Device Group.
-    You may use a Device Group of any [type](./CommandsManual#device-group-type), but it is recommended that you use a Development Device Group.
+    You may use a Device Group of any [type](./CommandsManual.md#device-group-type), but it is recommended that you use a Development Device Group.
 
     ```
     > impt dg create --name MyTestDG --product MyTestProduct
     Device Group "MyTestDG" is created successfully.
+    Device Group:
+      id:   e4bf84dd-7cc6-147e-9b42-b08812912b99
+      type: development
+      name: MyTestDG
     IMPT COMMAND SUCCEEDS
     ```
 
@@ -508,13 +515,13 @@ To run your tests you need to have one or more devices associated with your acco
 
 ### Test Configuration ###
 
-Before running the tests you should create a test configuration for your test project: call [`impt test create`](./CommandsManual.md#test-create) from the test home. If a [test configuration file](./CommandsManual.md#test-configuration-file) already exists in that directory, it will be deleted (if confirmed by you) and the new configuration will be created from scratch in its place.
+Before running the tests you should create a test configuration for your test project: call [`impt test create`](./CommandsManual.md#test-create) from the test home. If a [test configuration file](./CommandsManual.md#test-configuration-files) already exists in that directory, it will be deleted (if confirmed by you) and the new configuration will be created from scratch in its place.
 
 The configuration settings include:
 
 - `--dg` &mdash; the Device Group identifier. Your tests will run on all of the devices assigned to that Device Group. You may specify the Device Group by its ID or its name.
 
-- `--device-file`, `--agent-file` &mdash; The device and agent source code which is deployed along with the tests. Usually, it is the source code of a library or other Squirrel which you are planning to test.
+- `--device-file`, `--agent-file` &mdash; The device and agent source code which is deployed along with the tests. Usually, it is the source code of a library or other Squirrel code which you are planning to test.
 
 - `--test-file` &mdash; The test file name or the pattern which specifies the test file(s) included in your test project. You may repeat this option to specify several file names and/or patterns. The values of the repeated option are combined by logical OR. The default pattern is detailed in the [command’s spec](./CommandsManual.md#test-create).
 
@@ -528,61 +535,61 @@ The configuration settings include:
 
 ```
 > impt test create --dg MyTestDG --agent-file MyLibrary.agent.lib.nut
-Test Configuration File is created successfully.
-Test Configuration info:
-Test files:       *.test.nut, tests/**/*.test.nut
-Agent file:       MyLibrary.agent.lib.nut
-Stop on failure:  false
-Timeout:          30
-Allow disconnect: false
-Builder cache:    false
-Device Group:
-  id:      e4bf84dd-7cc6-147e-9b42-b08812912b99
-  type:    development
-  name:    MyTestDG
-  Product:
-    id:   a83ecc00-cb39-d950-9a60-96694403ab9d
-    name: MyTestProduct
-  Devices:
-    Device:
-      id:            234776801163a9ee
-      name:          myDevice1
-      mac_address:   0c:2a:69:05:0d:62
-      agent_id:      T1oUmIZ3At_N
-      device_online: true
+Test Configuration is created successfully.
+Test Configuration:
+  Test files:       *.test.nut, tests/**/*.test.nut
+  Agent file:       MyLibrary.agent.lib.nut
+  Stop on failure:  false
+  Timeout:          30
+  Allow disconnect: false
+  Builder cache:    false
+  Device Group:
+    id:      e4bf84dd-7cc6-147e-9b42-b08812912b99
+    type:    development
+    name:    MyTestDG
+    Product:
+      id:   a83ecc00-cb39-d950-9a60-96694403ab9d
+      name: MyTestProduct
+    Devices:
+      Device:
+        id:            234776801163a9ee
+        name:          myDevice1
+        mac_address:   0c:2a:69:05:0d:62
+        agent_id:      T1oUmIZ3At_N
+        device_online: true
 IMPT COMMAND SUCCEEDS
 ```
 
 #### Updating the Configuration ####
 
-You may update the test configuration by calling [`impt test update`](./CommandsManual.md#test-update). The existing [test configuration file](./CommandsManual.md#test-configuration-file) will be updated with the new settings. The new `--test-file` option value(s) completely replace any existing setting.
+You may update the test configuration by calling [`impt test update`](./CommandsManual.md#test-update). The existing [test configuration file](./CommandsManual.md#test-configuration-files) will be updated with the new settings. The new `--test-file` option value(s) completely replace any existing setting.
 
 **Example**
 
 ```
 > impt test update --timeout 60 --builder-cache true
-Test Configuration File is updated successfully.
-Test Configuration info:
-Test files:       *.test.nut, tests/**/*.test.nut
-Agent file:       MyLibrary.agent.lib.nut
-Stop on failure:  false
-Timeout:          60
-Allow disconnect: false
-Builder cache:    true
-Device Group:
-  id:      e4bf84dd-7cc6-147e-9b42-b08812912b99
-  type:    development
-  name:    MyTestDG
-  Product:
-    id:   a83ecc00-cb39-d950-9a60-96694403ab9d
-    name: MyTestProduct
-  Devices:
-    Device:
-      id:            234776801163a9ee
-      name:          myDevice1
-      mac_address:   0c:2a:69:05:0d:62
-      agent_id:      T1oUmIZ3At_N
-      device_online: true
+Test Configuration is updated successfully.
+Test Configuration:
+  Test files:       *.test.nut, tests/**/*.test.nut
+  Agent file:       MyLibrary.agent.lib.nut
+  Stop on failure:  false
+  Timeout:          60
+  Allow disconnect: false
+  Builder cache:    true
+  Device Group:
+    id:      e4bf84dd-7cc6-147e-9b42-b08812912b99
+    type:    development
+    name:    MyTestDG
+    Product:
+      id:   a83ecc00-cb39-d950-9a60-96694403ab9d
+      name: MyTestProduct
+    Devices:
+      Device:
+        id:            234776801163a9ee
+        name:          myDevice1
+        mac_address:   0c:2a:69:05:0d:62
+        agent_id:      T1oUmIZ3At_N
+        device_online: true
 IMPT COMMAND SUCCEEDS
 ```
 
@@ -592,27 +599,27 @@ You may also display the current test configuration by calling [`impt test info`
 
 ```
 > impt test info
-Test Configuration info:
-Test files:       *.test.nut, tests/**/*.test.nut
-Agent file:       MyLibrary.agent.lib.nut
-Stop on failure:  false
-Timeout:          60
-Allow disconnect: false
-Builder cache:    true
-Device Group:
-  id:      e4bf84dd-7cc6-147e-9b42-b08812912b99
-  type:    development
-  name:    MyTestDG
-  Product:
-    id:   a83ecc00-cb39-d950-9a60-96694403ab9d
-    name: MyTestProduct
-  Devices:
-    Device:
-      id:            234776801163a9ee
-      name:          myDevice1
-      mac_address:   0c:2a:69:05:0d:62
-      agent_id:      T1oUmIZ3At_N
-      device_online: true
+Test Configuration:
+  Test files:       *.test.nut, tests/**/*.test.nut
+  Agent file:       MyLibrary.agent.lib.nut
+  Stop on failure:  false
+  Timeout:          60
+  Allow disconnect: false
+  Builder cache:    true
+  Device Group:
+    id:      e4bf84dd-7cc6-147e-9b42-b08812912b99
+    type:    development
+    name:    MyTestDG
+    Product:
+      id:   a83ecc00-cb39-d950-9a60-96694403ab9d
+      name: MyTestProduct
+    Devices:
+      Device:
+        id:            234776801163a9ee
+        name:          myDevice1
+        mac_address:   0c:2a:69:05:0d:62
+        agent_id:      T1oUmIZ3At_N
+        device_online: true
 IMPT COMMAND SUCCEEDS
 ```
 
@@ -635,7 +642,7 @@ For unauthenticated requests, the GitHub API allows you to make [up to 60 reques
 ```
 > impt test github --github-config github.conf --user github_username
     --pwd github_password
-GitHub credentials Configuration File is created successfully.
+GitHub credentials Configuration is created successfully.
 IMPT COMMAND SUCCEEDS
 ```
 
@@ -645,66 +652,88 @@ To run your configured test project’s tests, call [`impt test run`](./Commands
 
 By default, the tool searches for all test files according to the file names and/or patterns specified in the [test configuration](#test-configuration) file. The search starts from the test home and includes all sub-directories. The tool looks for all test cases in the files it discovers. All test methods in all located test cases are considered as viable tests for execution. For a particular run, you may select a subset of test files, test cases and test methods by specifying the `--tests` option; see [here](#running-selective-tests) for more details.
 
-Every selected test file is a source for building and deploying code, so there will be as many different builds as there are selected test files for execution. Test files (builds) run in an arbitrary order.
+Every selected test file is a source of a new build (Deployment), so there will be as many different builds as there are selected test files for execution. Test files (builds) run in an arbitrary order.
 
 Every test file (build) runs on all devices currently assigned to the Device Group specified in the [test configuration](#test-configuration) file one by one: no device is run until the previous device has completed testing. Devices are chosen in an arbitrary order. A test file (build) running on one device is called a test session. When the build completes on the last device, the next test file (build) starts running on the same set of devices, again one after the other.
 
-Every test is treated as failed if an error is thrown or a timeout, as defined in the [test configuration](#test-configuration) file, occurs during the test execution. Otherwise the test is treated as passed. If at least one test in a test session fails, the test session is treated as failed. If the [test configuration](#test-configuration) has the `stop-on-fail` setting set to `true`, test execution ends after the first failed test.
-
 You may clear the [*Builder* cache](#builder-cache) before the tests starts by setting the `--clear-cache` option. If the *Builder* cache is enabled in the [test configuration](#test-configuration) file, it will then be re-created during the test run.
 
-You may run the tests in [debug mode](#debug-mode) by specifying the `--debug` option.
+You may run the tests in [debug mode](#debug-mode) by specifying the `--output debug` option.
 
-**Example**
+A test is treated as failed if an error is thrown or a timeout, as defined in the [test configuration](#test-configuration) file, occurs during the test execution. Otherwise the test is treated as passed. If at least one test in a test session fails, the test session is treated as failed. If the [test configuration](#test-configuration) has the `stop-on-fail` setting set to `true`, test execution ends after the first failed test.
+
+When all tests are passed, the [`impt test run`](./CommandsManual.md#test-run) command outputs `IMPT COMMAND SUCCEEDS` phrase and returns zero exit code. Otherwise, it outputs `IMPT COMMAND FAILS` phrase and returns non-zero exit code.
+
+**Example - testing failed**
 
 ```
 > impt test run
-[info] Started at 22 Jan 2018 22:47:04 GMT+0300
-[+0.01/0.01s info] Found 2 test files:
+[info] Started at 09 Mar 2018 18:58:31 GMT+0300
+[+0.01/0.01s info] Found 1 test file:
         tests/TestFile1.test.nut
-        tests/TestFile2.test.nut
 [+0.02/0.00s info] Using agent source file: MyLibrary.agent.lib.nut
 [+0.02/0.00s info] Have no device source file, using blank
-[+0.63/0.61s info] Using device test file tests/TestFile1.test.nut
-[+0.66/0.03s info] Using DeviceGroup MyTestDG [e4bf84dd-7cc6-147e-9b42-b08812912b99]
-Deployment "2587b907-afa7-8c72-a4a5-a8f0407018b5" is created successfully.
-[+1.83/1.17s info] Created deployment: 2587b907-afa7-8c72-a4a5-a8f0407018b5
+[+0.72/0.70s info] Using device test file "tests/TestFile1.test.nut"
+[+0.76/0.04s info] Using DeviceGroup "MyTestDG" [ece0ef8d-fbb1-6bdf-e2b8-02776e2fdf41]
+Deployment "d28fb08b-44f2-d995-db1e-73a863c33a03" is created successfully.
+[+2.89/2.13s info] Created deployment: d28fb08b-44f2-d995-db1e-73a863c33a03
 
-[+1.83/0.00s info] Starting test session eight-inside
-[+1.83/0.00s info] Using device myDevice1 [234776801163a9ee] (1/1)
-[+1.83/0.00s info] Using device test file tests/TestFile1.test.nut
-Restart request for Device "234776801163a9ee" is successful.
-[+5.00/3.17s info] Device code space usage: 16.8%
-[+9.12/4.12s test] MyTestCase_1::testMe()
-[+9.13/0.00s test] Success
-[+9.13/0.00s test] MyTestCase_1::testMe_1()
-[+9.56/0.43s test] Failure: Failed to assert that condition is true
-[+9.56/0.00s test] MyTestCase::testMe()
-[+9.56/0.00s test] Success
-[+9.57/0.00s test] MyTestCase::testMe_1()
-[+9.57/0.01s test] Success
-[+9.57/0.00s test] Tests: 4, Assertions: 4, Failures: 1
-[+9.58/0.00s info] Session eight-inside failed
-[+9.58/0.00s info] Using device test file tests/TestFile2.test.nut
-[+9.61/0.03s info] Using DeviceGroup MyTestDG [e4bf84dd-7cc6-147e-9b42-b08812912b99]
-Deployment "3c0ef686-6200-59e1-cc39-ec8ca788a482" is created successfully.
-[+10.70/1.09s info] Created deployment: 3c0ef686-6200-59e1-cc39-ec8ca788a482
+[+2.89/0.00s test] Starting test session "world-dawn"
+[+2.89/0.00s info] Using device myDevice1 [234776801163a9ee] (1/1)
+[+2.89/0.00s info] Using device test file "tests/TestFile1.test.nut"
+Device "234776801163a9ee" is assigned successfully to Device Group "ece0ef8d-fbb1-6bdf-e2b8-02776e2fdf41".
+[+6.03/3.14s info] Device code space usage: 17.0%
+[+11.19/5.15s test] MyTestCase_1::testMe_1()
+[+11.19/0.00s test] Success
+[+11.66/0.47s test] MyTestCase::setUp()
+[+11.66/0.00s test] Success: We're ready
+[+11.66/0.00s test] MyTestCase::testMe_1()
+[+11.67/0.00s test] Failure: Expected value: 1, got: 10
+[+11.67/0.00s test] MyTestCase::testMe()
+[+11.67/0.00s test] Success
+[+11.67/0.00s test] MyTestCase::tearDown()
+[+11.67/0.00s test] Success
+[+11.68/0.00s test] Tests: 3, Assertions: 3, Failures: 1
+[+11.68/0.00s test] Session "world-dawn" failed
 
-[+10.70/0.00s info] Starting test session round-angle
-[+10.70/0.00s info] Using device myDevice1 [234776801163a9ee] (1/1)
-[+10.70/0.00s info] Using device test file tests/TestFile2.test.nut
-Restart request for Device "234776801163a9ee" is successful.
-[+14.71/4.01s info] Device code space usage: 16.8%
-[+18.78/4.07s test] MyTestCase::setUp()
-[+18.78/0.00s test] Success: We're ready
-[+18.78/0.00s test] MyTestCase::testMe_1()
-[+18.78/0.00s test] Success
-[+19.23/0.45s test] MyTestCase::testMe()
-[+19.23/0.01s test] Failure: Expected value: 1, got: 10
-[+19.23/0.00s test] Tests: 2, Assertions: 2, Failures: 1
-[+19.24/0.00s info] Session round-angle failed
+[+11.68/0.00s info] Testing failed
+Error: Testing failed
+IMPT COMMAND FAILS
+```
 
-[+19.24/0.00s info] Testing failed
+**Example - all tests are passed**
+
+```
+> impt test run
+[info] Started at 09 Mar 2018 19:00:25 GMT+0300
+[+0.01/0.01s info] Found 1 test file:
+        tests/TestFile1.test.nut
+[+0.01/0.00s info] Using agent source file: MyLibrary.agent.lib.nut
+[+0.01/0.00s info] Have no device source file, using blank
+[+0.86/0.84s info] Using device test file "tests/TestFile1.test.nut"
+[+0.90/0.04s info] Using DeviceGroup "MyTestDG" [ece0ef8d-fbb1-6bdf-e2b8-02776e2fdf41]
+Deployment "03b7f0d3-f5df-9bd9-b856-5d5e3b9fd8e7" is created successfully.
+[+2.12/1.23s info] Created deployment: 03b7f0d3-f5df-9bd9-b856-5d5e3b9fd8e7
+
+[+2.13/0.00s test] Starting test session "industry-grain"
+[+2.13/0.00s info] Using device myDevice1 [234776801163a9ee] (1/1)
+[+2.13/0.00s info] Using device test file "tests/TestFile1.test.nut"
+Device "234776801163a9ee" is assigned successfully to Device Group "ece0ef8d-fbb1-6bdf-e2b8-02776e2fdf41".
+[+5.36/3.23s info] Device code space usage: 17.0%
+[+9.94/4.58s test] MyTestCase_1::testMe_1()
+[+9.94/0.00s test] Success
+[+9.94/0.00s test] MyTestCase::setUp()
+[+9.94/0.00s test] Success: We're ready
+[+9.94/0.00s test] MyTestCase::testMe_1()
+[+9.94/0.00s test] Success
+[+9.95/0.00s test] MyTestCase::testMe()
+[+9.95/0.00s test] Success
+[+10.16/0.21s test] MyTestCase::tearDown()
+[+10.16/0.00s test] Success
+[+10.16/0.00s test] Tests: 3, Assertions: 3, Failures: 0
+[+10.16/0.00s test] Session "industry-grain" succeeded
+
+[+10.17/0.00s info] Testing succeeded
 IMPT COMMAND SUCCEEDS
 ```
 
@@ -753,7 +782,7 @@ In this example:
 
 ### Debug Mode ###
 
-You may run your tests in debug mode by specifying the `--debug` option of the [`impt test run`](./CommandsManual.md#test-delete) command. In this mode:
+You may run your tests in debug mode by specifying the `--output debug` option of the [`impt test run`](./CommandsManual.md#test-run) command. In this mode:
 
 - All communications with the [impCentral API](https://apidoc.electricimp.com) are displayed in the console.
 - All communications with the [*impUnit* test framework](https://github.com/electricimp/impUnit) are displayed in the console.
@@ -762,37 +791,33 @@ You may run your tests in debug mode by specifying the `--debug` option of the [
 **Example**
 
 ```
-> impt test run --tests TestFile1:MyTestCase::testMe --debug
+> impt test run --tests TestFile1:MyTestCase::testMe --output debug
 ...
 [info] Started at 22 Jan 2018 22:49:25 GMT+0300
-[debug:TestHelper] Skipping found test tests/TestFile2.test.nut
-[debug:TestHelper] Test files found: [ { name: 'tests/TestFile1.test.nut',
-    path: 'C:\\impt\\test\\tests\\TestFile1.test.nut',
-    type: 'device' } ]
+[debug:TestHelper] Skipping found test "tests/TestFile2.test.nut"
 [+0.02/0.02s info] Found 1 test file:
         tests/TestFile1.test.nut
-[debug:TestHelper] Agent source code file path: MyLibrary.agent.lib.nut
 [+0.03/0.00s info] Using agent source file: MyLibrary.agent.lib.nut
 [+0.03/0.00s info] Have no device source file, using blank
 ...
-[+1.16/1.13s info] Using device test file tests/TestFile1.test.nut
+[+1.16/1.13s info] Using device test file "tests/TestFile1.test.nut"
 [debug:TestHelper] Agent code size: 53 bytes
 [debug:TestHelper] Device code size: 22207 bytes
-[+1.19/0.04s info] Using DeviceGroup MyTestDG [e4bf84dd-7cc6-147e-9b42-b08812912b99]
+[+1.19/0.04s info] Using DeviceGroup "MyTestDG" [e4bf84dd-7cc6-147e-9b42-b08812912b99]
 ...
 Deployment "e46e138c-9053-db40-e9de-f299e7c2908e" is created successfully.
 [+3.04/1.85s info] Created deployment: e46e138c-9053-db40-e9de-f299e7c2908e
 
-[+3.04/0.00s info] Starting test session paint-influence
+[+3.04/0.00s test] Starting test session "paint-influence"
 [+3.05/0.00s info] Using device myDevice1 [234776801163a9ee] (1/1)
-[+3.05/0.00s info] Using device test file tests/TestFile1.test.nut
+[+3.05/0.00s info] Using device test file "tests/TestFile1.test.nut"
 [debug:TestHelper] Agent code size: 53 bytes
 [debug:TestHelper] Device code size: 22207 bytes
 [debug:TestWatchdog] Watchdog "session-start" started
 ...
 Doing the request with options:
 {
-  "url": "https://api.electricimp.com/v5/devices/234776801163a9ee/restart",
+  "url": "https://api.electricimp.com/v5/devicegroups/e4bf84dd-7cc6-147e-9b42-b08812912b99/relationships/devices",
   "method": "POST",
   "headers": {
     "Content-type": "application/vnd.api+json",
@@ -800,7 +825,14 @@ Doing the request with options:
   },
   "json": true,
   "qs": null,
-  "body": null,
+  "body": {
+    "data": [
+      {
+        "type": "device",
+        "id": "234776801163a9ee"
+      }
+    ]
+  },
   "qsStringifyOptions": {
     "arrayFormat": "repeat"
   }
@@ -808,8 +840,7 @@ Doing the request with options:
 
 Response code: 204
 Response body: undefined
-Restart request for Device "234776801163a9ee" is successful.
-[debug:TestSession] Device restarted
+Device "234776801163a9ee" is assigned successfully to Device Group "e4bf84dd-7cc6-147e-9b42-b08812912b99".
 [debug:TestLogsParser] Log line received: {"device_id":"234776801163a9ee","ts":"2018-01-22T19:49:30.423Z","log_type":"development","type":"status","msg":"Agent restarted: reload."}
 [debug:TestLogsParser] Log line received: {"device_id":"234776801163a9ee","ts":"2018-01-22T19:49:30.673Z","log_type":"development","type":"status","msg":"Agent restarted: new_bytecode_version."}
 [debug:TestLogsParser] Log line received: {"device_id":"234776801163a9ee","ts":"2018-01-22T19:49:30.667Z","log_type":"development","type":"status","msg":"Downloading new code; 16.83% program storage used"}
@@ -833,8 +864,8 @@ Restart request for Device "234776801163a9ee" is successful.
 [debug:TestWatchdog] Watchdog "test-messages" stopped
 [debug:TestWatchdog] Watchdog "test-messages" started
 [debug:TestWatchdog] Watchdog "test-messages" stopped
-[+10.51/0.01s info] Tests: 1, Assertions: 1, Failures: 0
-[+10.51/0.00s info] Session paint-influence succeeded
+[+10.51/0.01s test] Tests: 1, Assertions: 1, Failures: 0
+[+10.51/0.00s test] Session paint-influence succeeded
 [debug:TestWatchdog] Watchdog "session-start" stopped
 [debug:TestWatchdog] Watchdog "test-messages" stopped
 
@@ -844,7 +875,7 @@ IMPT COMMAND SUCCEEDS
 
 ### Cleaning Up ###
 
-After testing is complete, you may want to clean the various entities created during testing. If you want to delete your test project, call [`impt test delete`](./CommandsManual.md#test-run) from the test home. This deletes the [test configuration file](./CommandsManual.md#test-configuration-file), the *Builder* cache directory and any debug information. By specifying additional options you may also delete the GitHub credentials file, any file containing *Builder* variables, and impCentral API entities (Device Group, Deployments, Product) which were used or created during testing. Please see the [delete command’s spec](./CommandsManual.md#test-delete) for more information.
+After testing is complete, you may want to clean the various entities created during testing. If you want to delete your test project, call [`impt test delete`](./CommandsManual.md#test-delete) from the test home. This deletes the [test configuration file](./CommandsManual.md#test-configuration-files), the *Builder* cache directory and any debug information. By specifying additional options you may also delete the GitHub credentials file, any file containing *Builder* variables, and impCentral API entities (Device Group, Deployments, Product) which were used or created during testing. Please see the [delete command’s spec](./CommandsManual.md#test-delete) for more information.
 
 **Example**
 
@@ -934,7 +965,7 @@ Deployment "f44511f9-f1a0-a892-a4b8-53f48880d6c7" is deleted successfully.
 IMPT COMMAND SUCCEEDS
 ```
 
-If you only want to unassign the devices from the testing Device Group, use [`impt dg unassign`](./CommandsManual.md#dg-unassign) or [`impt device unassign`](./CommandsManual.md#device-unassign).
+If you only want to unassign the devices from the testing Device Group, use [`impt dg unassign`](./CommandsManual.md#device-group-unassign) or [`impt device unassign`](./CommandsManual.md#device-unassign).
 
 **Example**
 

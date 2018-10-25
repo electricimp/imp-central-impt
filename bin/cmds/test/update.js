@@ -96,7 +96,7 @@ exports.builder = function (yargs) {
             default : undefined,
             _usage: '[<builder_file_name>]'
         },
-        [Options.DEBUG] : false
+        [Options.OUTPUT] : false
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))

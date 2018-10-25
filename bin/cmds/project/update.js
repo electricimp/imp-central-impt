@@ -68,7 +68,7 @@ exports.builder = function (yargs) {
                 ' as the Device Group referenced by Project File.',
                 Options.DG_TYPE_PRE_FACTORY, Options.DG_TYPE_PRE_PRODUCTION)
         },
-        [Options.DEBUG] : false
+        [Options.OUTPUT] : false
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))

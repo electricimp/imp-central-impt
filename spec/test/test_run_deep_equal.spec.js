@@ -49,11 +49,11 @@ describe('impt test run for deep-equal scenario >', () => {
     it('run test', (done) => {
         ImptTestingHelper.runCommand('impt test run', (commandOut) => {
                 expect(commandOut).not.toBeEmptyString();
-                expect(commandOut).toMatch(/Missing slot \[a\.b\.c\] in actual value\n/);
-                expect(commandOut).toMatch(/Extra slot \[a\.b\.d\] in actual value\n/);
-                expect(commandOut).toMatch(/At \[a\.b\.c\]: expected \"3\", got \"100\"\n/);
+                expect(commandOut).toMatch(/Missing slot \[a\.b\.c\] in actual value/);
+                expect(commandOut).toMatch(/Extra slot \[a\.b\.d\] in actual value/);
+                expect(commandOut).toMatch(/At \[a\.b\.c\]: expected \"3\", got \"100\"/);
                 ImptTestCommandsHelper.checkTestFailStatus(commandOut);
-                ImptTestingHelper.checkSuccessStatus(commandOut);
+                ImptTestingHelper.checkFailStatus(commandOut);
             }).
             then(done).
             catch(error => done.fail(error));
