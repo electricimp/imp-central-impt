@@ -732,7 +732,7 @@
 
 ## Impt dg command group ##
 
-## dg create ##
+## device group create ##
 
 <table><tbody><tr><td
  colspan="1" rowspan="2"><sub>Precondition</sub></td><td
@@ -760,7 +760,11 @@ duplicate device group</a></sub></td></tr>
 <tr><td><sub>product not exist</sub></td><td><sub>Y</sub></td><td></td><td><sub>name</sub></td><td></td><td></td><td><sub>default</sub></td><td></td><td><sub><a
  href="./dg/device_group_create.spec.js">dg/device_group_create.spec.js:<br>device
 group create by not exist product</a></sub></td></tr>
-</tbody></table> ## dg delete ## <table>
+</tbody></table>
+
+## device group delete ## 
+
+<table>
 <tbody><tr><td colspan="1" rowspan="2"><sub>Precondition</sub></td><td
  colspan="6" rowspan="1"><sub>Options</sub></td><td
  colspan="1" rowspan="2"><sub>Test name</sub></td></tr>
@@ -795,7 +799,11 @@ device group without dg value</a></sub></td></tr>
 <tr><td></td><td></td><td></td><td></td><td></td><td><sub>default</sub></td><td><sub>Y</sub></td><td><sub><a
  href="./help/help.spec.js">help/help.spec.js:<br>impt
 help pages test suite</a></sub></td></tr>
-</tbody></table> ## dg info ## <table>
+</tbody></table>
+
+## device group info ##
+
+<table>
 <tbody><tr><td colspan="1" rowspan="2"><sub>Precondition</sub></td><td
  colspan="4" rowspan="1"><sub>Options</sub></td><td
  colspan="1" rowspan="2"><sub>Test name</sub></td></tr>
@@ -818,7 +826,11 @@ exist device group info</a></sub></td></tr>
 <tr><td></td><td></td><td></td><td><sub>default</sub></td><td><sub>Y</sub></td><td><sub><a
  href="./help/help.spec.js">help/help.spec.js:<br>impt
 help pages test suite</a></sub></td></tr>
-</tbody></table> ## dg list ## <table>
+</tbody></table>
+
+## device group list ##
+
+<table>
 <tbody><tr><td colspan="1" rowspan="2"><sub>Precondition</sub></td><td
  colspan="5" rowspan="1"><sub>Options</sub></td><td
  colspan="1" rowspan="2"><sub>Test name</sub></td></tr>
@@ -847,7 +859,11 @@ group list by several product name</a></sub></td></tr>
 <tr><td></td><td></td><td></td><td></td><td><sub>default</sub></td><td><sub>Y</sub></td><td><sub><a
  href="./help/help.spec.js">help/help.spec.js:<br>impt
 help pages test suite</a></sub></td></tr>
-</tbody></table> ## dg update ## <table>
+</tbody></table>
+
+## device group update ##
+
+<table>
 <tbody><tr><td colspan="1" rowspan="2"><sub>Precondition</sub></td><td
  colspan="8" rowspan="1"><sub>Options</sub></td><td
  colspan="1" rowspan="2"><sub>Test name</sub></td></tr>
@@ -865,7 +881,11 @@ code</sub></td><td><sub>min sup depl</sub></td><td><sub>output</sub></td><td><su
  href="./dg/device_group_update.spec.js">dg/device_group_update.spec.js:<br>dg/device_group_update.spec.js</a></sub></td></tr>
 <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td><sub>default</sub></td><td><sub>Y</sub></td><td><sub><a
  href="./help/help.spec.js">help/help.spec.js:<br>help/help.spec.js</a></sub></td></tr>
-</tbody></table> ## dg builds ## <table>
+</tbody></table> 
+
+## device group builds ##
+
+<table>
 <tbody><tr><td colspan="1" rowspan="2"><sub>Precondition</sub></td><td
  colspan="7" rowspan="1"><sub>Options</sub></td><td
  colspan="1" rowspan="2"><sub>Test name</sub></td></tr>
@@ -885,7 +905,11 @@ old</sub></td><td><sub>remove</sub></td><td><sub>confirmed</sub></td><td><sub>ou
  href="./dg/device_group_builds.spec.js">dg/device_group_builds.spec.js:<br>dg/device_group_builds.spec.js</a></sub></td></tr>
 <tr><td></td><td></td><td></td><td></td><td></td><td></td><td><sub>default</sub></td><td><sub>Y</sub></td><td><sub><a
  href="./help/help.spec.js">help/help.spec.js:<br>help/help.spec.js</a></sub></td></tr>
-</tbody></table> ## dg restart ## <table>
+</tbody></table>
+
+## device group restart ##
+
+<table>
 <tbody><tr><td colspan="1" rowspan="2"><sub>Precondition</sub></td><td
  colspan="5" rowspan="1"><sub>Options</sub></td><td
  colspan="1" rowspan="2"><sub>Test name</sub></td></tr>
@@ -914,7 +938,11 @@ not exist device</a></sub></td></tr>
 <tr><td></td><td></td><td></td><td></td><td><sub>default</sub></td><td><sub>Y</sub></td><td><sub><a
  href="./help/help.spec.js">help/help.spec.js:<br>impt
 help pages test suite</a></sub></td></tr>
-</tbody></table> ## dg reassign ## <table>
+</tbody></table> 
+
+## device group reassign ##
+
+<table>
 <tbody><tr><td colspan="1" rowspan="2"><sub>Precondition</sub></td><td
  colspan="4" rowspan="1"><sub>Options</sub></td><td
  colspan="1" rowspan="2"><sub>Test name</sub></td></tr>
@@ -943,11 +971,19 @@ device to not exist project</a></sub></td></tr>
 <tr><td></td><td></td><td></td><td><sub>default</sub></td><td><sub>Y</sub></td><td><sub><a
  href="./help/help.spec.js">help/help.spec.js:<br>impt
 help pages test suite</a></sub></td></tr>
-</tbody></table> ## dg unassign ## <table>
-<tbody><tr><th colspan="1" rowspan="2"><sub>Precondition</sub></th><th
- colspan="4" rowspan="1" align="center"><sub>Options</sub></th><td
- colspan="1" rowspan="2"><sub>Test name</sub></td></tr>
+</tbody></table>
+
+## device group unassign ##
+
+<table>
+<tbody>
+ <tr>
+  <th colspan="1" rowspan="2">
+  <sub>Precondition</sub></th>
+  <th colspan="4" rowspan="1" align="center"><sub>Options</sub></th>
+  <th colspan="1" rowspan="2"><sub>Test name</sub></th></tr>
 <tr><th><sub>dg</sub></th><th><sub>unbond</sub></th><th><sub>output</sub></th><th><sub>help</sub></th></tr>
+
 <tr><td></td><td><sub>id</sub></td><td></td><td><sub>default</sub></td><td></td><td><sub><a
  href="./dg/device_group_unassign.spec.js">dg/device_group_unassign.spec.js:<br>unassign
 device by device group id</a></sub></td></tr>
@@ -969,5 +1005,6 @@ not exist device</a></sub></td></tr>
 <tr><td></td><td></td><td></td><td><sub>default</sub></td><td><sub>Y</sub></td><td><sub><a
  href="./help/help.spec.js">help/help.spec.js:<br>impt
 help pages test suite</a></sub></td></tr>
-</tbody></table>
+</tbody>
+</table>
 
