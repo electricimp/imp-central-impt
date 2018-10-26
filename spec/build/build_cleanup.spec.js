@@ -120,6 +120,16 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     }
                 };
             },
+            toBuildCountEqualOrMore: function () {
+                return {
+                    compare: function (commandOut, expected) {
+                        let result = { pass: false };
+                        const BuildArray = JSON.parse(commandOut.output);
+                        if (Array.isArray(BuildArray) && BuildArray.length >= expected) result.pass = true;
+                        return result;
+                    }
+                };
+            },
         };
 
         // prepare environment for build cleanup command testing
@@ -176,7 +186,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         }
 
         function _testCleanUp() {
-            return ImptTestHelper.runCommand(`impt build cleanup -u -q`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommand(`impt build cleanup -p ${PRODUCT_NAME} -u -q`, ImptTestHelper.emptyCheckEx).
+            then(()=>ImptTestHelper.runCommand(`impt build cleanup -p ${PRODUCT2_NAME} -u -q`, ImptTestHelper.emptyCheckEx));
         }
 
         // check 'no deployments found' output message 
@@ -219,12 +230,12 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     _checkSuccessDeleteDeploymentMessage(commandOut, build2_id);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommand(`impt build list --zombie -z json`, (commandOut) => {
+                    then(() => ImptTestHelper.runCommand(`impt build list -o me --zombie -z json`, (commandOut) => {
                         expect(commandOut).toContainsBuild({ id: build_id });
                         expect(commandOut).not.toContainsBuild({ id: build2_id });
                         expect(commandOut).toContainsBuild({ id: build3_id });
                         expect(commandOut).toContainsBuild({ id: build4_id });
-                        expect(commandOut).toBuildCountEqual(3);
+                        expect(commandOut).toBuildCountEqualOrMore(3);
                         ImptTestHelper.checkSuccessStatus(commandOut);
                     })).
                     then(done).
@@ -238,12 +249,12 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     _checkSuccessDeleteDeploymentMessage(commandOut, build2_id);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommand(`impt build list --zombie -z json`, (commandOut) => {
+                    then(() => ImptTestHelper.runCommand(`impt build list  -o me --zombie -z json`, (commandOut) => {
                         expect(commandOut).not.toContainsBuild({ id: build_id });
                         expect(commandOut).not.toContainsBuild({ id: build2_id });
                         expect(commandOut).toContainsBuild({ id: build3_id });
                         expect(commandOut).toContainsBuild({ id: build4_id });
-                        expect(commandOut).toBuildCountEqual(2);
+                        expect(commandOut).toBuildCountEqualOrMore(2);
                         ImptTestHelper.checkSuccessStatus(commandOut);
                     })).
                     then(done).
@@ -256,7 +267,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     _checkSuccessDeleteDeploymentMessage(commandOut, build4_id);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommand(`impt build list --zombie -z json`, (commandOut) => {
+                    then(() => ImptTestHelper.runCommand(`impt build list -o me --zombie -z json`, (commandOut) => {
                         expect(commandOut).toContainsBuild({ id: build_id });
                         expect(commandOut).toContainsBuild({ id: build3_id });
                         expect(commandOut).not.toContainsBuild({ id: build2_id });
@@ -277,7 +288,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     _checkSuccessDeleteDeploymentMessage(commandOut, build4_id);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommand(`impt build list --zombie -z json`, (commandOut) => {
+                    then(() => ImptTestHelper.runCommand(`impt build list -o me --zombie -z json`, (commandOut) => {
                         expect(commandOut).toBuildCountEqual(0);
                         ImptTestHelper.checkSuccessStatus(commandOut);
                     })).
