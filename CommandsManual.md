@@ -441,8 +441,8 @@ The user is asked to confirm the operation if the files with the specified names
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --build | -b | Yes/[Project](#project-files) | Yes | A [Build identifier](#build-identifier). If not specified, the most recent Deployment for the Device Group referenced by the [Project file](#project-files) in the current directory is used (if there is no Project file, the command fails) |
-| --device-file | -x | No | Yes | The device source code file name. If not specified, the file referenced by the [Project file](#project-files) in the current directory is used; if there is no Project file and the `--agent-only` option is not specified, the code fails. If the specified file does not exist, the command fails |
-| --agent-file | -y | No | Yes | The agent source code file name. If not specified, the file referenced by the [Project file](#project-files) in the current directory is used; if there is no Project file and the `--device-only` option is not specified, the code fails. If the specified file does not exist, the command fails |
+| --device-file | -x | No | Yes | The device source code file name. If not specified, the file referenced by the [Project file](#project-files) in the current directory is used; if there is no Project file and the `--agent-only` option is not specified, the command fails |
+| --agent-file | -y | No | Yes | The agent source code file name. If not specified, the file referenced by the [Project file](#project-files) in the current directory is used; if there is no Project file and the `--device-only` option is not specified, the command fails |
 | --device-only | -i | No | No | Downloads the source code for the device only |
 | --agent-only | -j | No | No | Downloads the source code for the agent only |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
