@@ -97,7 +97,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         }
 
         describe('Tests with not auth preconditions >', () => {
-            it('Auth file path env info', (done) => {
+            it('auth file path env info', (done) => {
                 ImptTestHelper.runCommand(`impt auth info ${outputMode}`,
                     (commandOut) => {
                         _checkLoginInfo(commandOut, { auth: `Auth file path:` });
@@ -107,7 +107,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     catch(error => done.fail(error));
             });
 
-            it('Auth file path with loginkey env info', (done) => {
+            it('auth file path with loginkey env info', (done) => {
                 ImptTestHelper.runCommand(`impt auth info ${outputMode}`,
                     (commandOut) => {
                         _checkLoginInfo(commandOut, { auth: `Auth file path:` });
@@ -117,7 +117,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     catch(error => done.fail(error));
             });
 
-            it('Auth file path with user env info', (done) => {
+            it('auth file path with user env info', (done) => {
                 ImptTestHelper.runCommand(`impt auth info ${outputMode}`,
                     (commandOut) => {
                         ImptTestHelper.checkSuccessStatus(commandOut);
@@ -128,7 +128,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     catch(error => done.fail(error));
             });
 
-            it('Auth loginkey env info', (done) => {
+            it('auth loginkey env info', (done) => {
                 ImptTestHelper.runCommand(`impt auth info ${outputMode}`,
                     (commandOut) => {
                         _checkLoginInfo(commandOut, { auth: 'Environment variables', method: 'Login Key' });
@@ -138,7 +138,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     catch(error => done.fail(error));
             });
 
-            it('Auth loginkey with endpoint env info', (done) => {
+            it('auth loginkey with endpoint env info', (done) => {
                 ImptTestHelper.runCommand(`impt auth info ${outputMode}`,
                     (commandOut) => {
                         _checkLoginInfo(commandOut, { auth: 'Environment variables', method: 'Login Key' });
@@ -148,7 +148,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     catch(error => done.fail(error));
             });
 
-            it('Auth loginkey with user env info', (done) => {
+            it('auth loginkey with user env info', (done) => {
                 ImptTestHelper.runCommand(`impt auth info ${outputMode}`,
                     (commandOut) => {
                         _checkLoginInfo(commandOut, { auth: 'Environment variables', method: 'Login Key' });
@@ -158,7 +158,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     catch(error => done.fail(error));
             });
 
-            it('Auth user pass env info', (done) => {
+            it('auth user pass env info', (done) => {
                 ImptTestHelper.runCommand(`impt auth info ${outputMode}`,
                     (commandOut) => {
                         _checkLoginInfo(commandOut, { auth: 'Environment variables' });
@@ -168,7 +168,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     catch(error => done.fail(error));
             });
 
-            it('Auth user pass with endpoint env info', (done) => {
+            it('auth user pass with endpoint env info', (done) => {
                 ImptTestHelper.runCommand(`impt auth info ${outputMode}`,
                     (commandOut) => {
                         _checkLoginInfo(commandOut, { auth: 'Environment variables' });
@@ -178,7 +178,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     catch(error => done.fail(error));
             });
 
-            it('Auth user without password env info', (done) => {
+            it('auth user without password env info', (done) => {
                 ImptTestHelper.runCommand(`impt auth info ${outputMode}`,
                     (commandOut) => {
                         ImptTestHelper.checkFailStatus(commandOut);
@@ -201,7 +201,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     catch(error => done.fail(error));
             }, ImptTestHelper.TIMEOUT);
 
-            it('Auth file path env and global auth info', (done) => {
+            it('auth file path env and global auth info', (done) => {
                 ImptTestHelper.runCommand(`impt auth info ${outputMode}`,
                     (commandOut) => {
                         _checkLoginInfo(commandOut, { auth: `Auth file path:` });
@@ -211,7 +211,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     catch(error => done.fail(error));
             });
 
-            it('Auth loginkey env and global auth info', (done) => {
+            it('auth loginkey env and global auth info', (done) => {
                 ImptTestHelper.runCommand(`impt auth info ${outputMode}`,
                     (commandOut) => {
                         _checkLoginInfo(commandOut, { auth: 'Environment variables', method: 'Login Key' });
@@ -221,7 +221,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     catch(error => done.fail(error));
             });
 
-            it('Auth user pass env and global auth info', (done) => {
+            it('auth user pass env and global auth info', (done) => {
                 ImptTestHelper.runCommand(`impt auth info ${outputMode}`,
                     (commandOut) => {
                         _checkLoginInfo(commandOut, { auth: 'Environment variables' });
@@ -231,7 +231,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     catch(error => done.fail(error));
             });
 
-            it('Auth pass env and global auth info', (done) => {
+            it('auth pass env and global auth info', (done) => {
                 ImptTestHelper.runCommand(`impt auth info ${outputMode}`,
                     (commandOut) => {
                         _checkLoginInfo(commandOut);
@@ -255,7 +255,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     catch(error => done.fail(error));
             }, ImptTestHelper.TIMEOUT);
 
-            it('Auth file path env and local auth info', (done) => {
+            it('auth file path env and local auth info', (done) => {
                 ImptTestHelper.runCommand(`impt auth info ${outputMode}`,
                     (commandOut) => {
                         _checkLoginInfo(commandOut, { auth: `Local Auth file` });
@@ -265,7 +265,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     catch(error => done.fail(error));
             });
 
-            it('Auth loginkey env and local auth info', (done) => {
+            it('auth loginkey env and local auth info', (done) => {
                 ImptTestHelper.runCommand(`impt auth info ${outputMode}`,
                     (commandOut) => {
                         _checkLoginInfo(commandOut, { auth: 'Local Auth file' });
@@ -275,7 +275,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     catch(error => done.fail(error));
             });
 
-            it('Auth user env and local auth info', (done) => {
+            it('auth user env and local auth info', (done) => {
                 ImptTestHelper.runCommand(`impt auth info ${outputMode}`,
                     (commandOut) => {
                         _checkLoginInfo(commandOut, { auth: 'Local Auth file' });

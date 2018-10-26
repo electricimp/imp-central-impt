@@ -81,15 +81,13 @@ Each impt command has own table of test info, contained precondition and used co
 ## auth info ##
 
 <table>
-  <sub>
-  </sub><tbody>
+  <tbody>
     <tr align="center">
       <th colspan="4"><sub>Precondition</sub></th>
       <th colspan="2"><sub>Command options</sub></th>
       <th rowspan="2"><sub>Test name</sub></th>
     </tr>
-    <sub>
-    </sub><tr align="center">
+    <tr align="center">
       <th><sub>auth</sub></th>
       <th><sub>env</sub></th>
       <th><sub>temp</sub></th>
@@ -98,7 +96,7 @@ Each impt command has own table of test info, contained precondition and used co
       <th><sub>help</sub></th>
     </tr>
     <tr align="center">
-      <td><sub>not<br>
+      <td rowspan="11"><sub>not<br>
 auth</sub></td>
       <td align="left"><sub>IMPT_AUTH_FILE_PATH</sub></td>
       <td></td>
@@ -107,12 +105,10 @@ auth</sub></td>
       <td></td>
       <td align="left"><sub><a
  href="./auth/auth_environment.spec.js">auth/auth_environment.spec.js:<br>
-Auth file path env info</a></sub></td>
+auth file path env info</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>not<br>
-auth</sub></td>
-      <td align="left"><sub>IMPT_AUTH_FILE_PATH<br>
+     <td align="left"><sub>IMPT_AUTH_FILE_PATH<br>
 IMPT_LOGINKEY</sub></td>
       <td></td>
       <td></td>
@@ -120,11 +116,9 @@ IMPT_LOGINKEY</sub></td>
       <td></td>
       <td align="left"><sub><a
  href="./auth/auth_environment.spec.js">auth/auth_environment.spec.js:<br>
-Auth file path with loginkey env info</a></sub></td>
+auth file path with loginkey env info</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>not<br>
-auth</sub></td>
       <td align="left"><sub>IMPT_AUTH_FILE_PATH<br>
 IMPT_USER</sub></td>
       <td></td>
@@ -133,11 +127,9 @@ IMPT_USER</sub></td>
       <td></td>
       <td align="left"><sub><a
  href="./auth/auth_environment.spec.js">auth/auth_environment.spec.js:<br>
-Auth file path with user env info</a></sub></td>
+auth file path with user env info</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>not<br>
-auth</sub></td>
       <td align="left"><sub>IMPT_LOGINKEY</sub></td>
       <td></td>
       <td></td>
@@ -145,11 +137,9 @@ auth</sub></td>
       <td></td>
       <td align="left"><sub><a
  href="./auth/auth_environment.spec.js">auth/auth_environment.spec.js:<br>
-Auth loginkey env info</a></sub></td>
+auth loginkey env info</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>not<br>
-auth</sub></td>
       <td align="left"><sub>IMPT_LOGINKEY<br>
 IMPT_ENDPOINT</sub></td>
       <td></td>
@@ -158,11 +148,9 @@ IMPT_ENDPOINT</sub></td>
       <td></td>
       <td align="left"><sub><a
  href="./auth/auth_environment.spec.js">auth/auth_environment.spec.js:<br>
-Auth loginkey with endpoint env info</a></sub></td>
+auth loginkey with endpoint env info</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>not<br>
-auth</sub></td>
       <td align="left"><sub>IMPT_LOGINKEY<br>
 IMPT_USER</sub></td>
       <td></td>
@@ -171,11 +159,9 @@ IMPT_USER</sub></td>
       <td></td>
       <td align="left"><sub><a
  href="./auth/auth_environment.spec.js">auth/auth_environment.spec.js:<br>
-Auth loginkey with user env info</a></sub></td>
+auth loginkey with user env info</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>not<br>
-auth</sub></td>
       <td align="left"><sub>IMPT_USER<br>
 IMPT_PASSWORD</sub></td>
       <td></td>
@@ -184,11 +170,9 @@ IMPT_PASSWORD</sub></td>
       <td></td>
       <td align="left"><sub><a
  href="./auth/auth_environment.spec.js">auth/auth_environment.spec.js:<br>
-Auth user pass env info</a></sub></td>
+auth user pass env info</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>not<br>
-auth</sub></td>
       <td align="left"><sub>IMPT_USER<br>
 IMPT_PASSWORD<br>
 IMPT_ENDPOINT</sub></td>
@@ -198,11 +182,9 @@ IMPT_ENDPOINT</sub></td>
       <td></td>
       <td align="left"><sub><a
  href="./auth/auth_environment.spec.js">auth/auth_environment.spec.js:<br>
-Auth user pass with endpoint env info</a></sub></td>
+auth user pass with endpoint env info</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>not<br>
-auth</sub></td>
       <td align="left"><sub>IMPT_USER</sub></td>
       <td></td>
       <td></td>
@@ -210,12 +192,10 @@ auth</sub></td>
       <td></td>
       <td align="left"><sub><a
  href="./auth/auth_environment.spec.js">auth/auth_environment.spec.js:<br>
-Auth user without password env info</a></sub></td>
+auth user without password env info</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>not<br>
-auth</sub></td>
-      <td align="left"></td>
+      <td></td>
       <td></td>
       <td></td>
       <td><sub>default</sub></td>
@@ -225,9 +205,7 @@ auth</sub></td>
 auth info without login</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>not<br>
-auth</sub></td>
-      <td align="left"></td>
+      <td></td>
       <td></td>
       <td></td>
       <td><sub>default</sub></td>
@@ -237,44 +215,38 @@ auth</sub></td>
 impt help pages test suite</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>global<br>
+      <td rowspan="7"><sub>global<br>
 user/pass</sub></td>
-      <td align="left"></td>
+      <td></td>
       <td></td>
       <td></td>
       <td><sub>default</sub></td>
       <td></td>
       <td align="left"><sub><a
  href="./auth/auth_user_pwd.spec.js">auth/auth_user_pwd.spec.js:<br>
-check global auth info </a></sub></td>
+global auth info</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>global<br>
-user/pass</sub></td>
-      <td align="left"></td>
+      <td></td>
       <td><sub>Y</sub></td>
       <td></td>
       <td><sub>default</sub></td>
       <td></td>
       <td align="left"><sub><a
  href="./auth/auth_user_pwd.spec.js">auth/auth_user_pwd.spec.js:<br>
-check temp global auth info </a></sub></td>
+global temp auth info</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>global<br>
-user/pass</sub></td>
-      <td align="left"></td>
+      <td></td>
       <td></td>
       <td><sub>Y</sub></td>
       <td><sub>default</sub></td>
       <td></td>
       <td align="left"><sub><a
  href="./auth/auth_user_pwd.spec.js">auth/auth_user_pwd.spec.js:<br>
-check global auth info with endpoint login</a></sub></td>
+global endpoint auth info</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>global<br>
-user/pass</sub></td>
       <td align="left"><sub>IMPT_AUTH_FILE_PATH</sub></td>
       <td></td>
       <td></td>
@@ -282,11 +254,9 @@ user/pass</sub></td>
       <td></td>
       <td align="left"><sub><a
  href="./auth/auth_environment.spec.js">auth/auth_environment.spec.js:<br>
-Auth file path env and global auth info</a></sub></td>
+auth file path env and global auth info</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>global<br>
-user/pass</sub></td>
       <td align="left"><sub>IMPT_LOGINKEY</sub></td>
       <td></td>
       <td></td>
@@ -294,11 +264,9 @@ user/pass</sub></td>
       <td></td>
       <td align="left"><sub><a
  href="./auth/auth_environment.spec.js">auth/auth_environment.spec.js:<br>
-Auth loginkey env and global auth info</a></sub></td>
+auth loginkey env and global auth info</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>global<br>
-user/pass</sub></td>
       <td align="left"><sub>IMPT_USER</sub></td>
       <td></td>
       <td></td>
@@ -306,11 +274,9 @@ user/pass</sub></td>
       <td></td>
       <td align="left"><sub><a
  href="./auth/auth_environment.spec.js">auth/auth_environment.spec.js:<br>
-Auth user pass env and global auth info</a></sub></td>
+auth user pass env and global auth info</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>global<br>
-user/pass</sub></td>
       <td align="left"><sub>IMPT_PASSWORD</sub></td>
       <td></td>
       <td></td>
@@ -318,71 +284,65 @@ user/pass</sub></td>
       <td></td>
       <td align="left"><sub><a
  href="./auth/auth_environment.spec.js">auth/auth_environment.spec.js:<br>
-Auth pass env and global auth info</a></sub></td>
+auth pass env and global auth info</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>global<br>
+      <td rowspan="3"><sub>global<br>
 login key</sub></td>
-      <td align="left"></td>
+      <td></td>
       <td></td>
       <td></td>
       <td><sub>default</sub></td>
       <td></td>
       <td align="left"><sub><a
  href="./auth/auth_loginkey.spec.js">auth/auth_loginkey.spec.js:<br>
-check global loginkey auth info </a></sub></td>
+global loginkey auth info</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>global<br>
-login key</sub></td>
-      <td align="left"></td>
+      <td></td>
       <td><sub>Y</sub></td>
       <td></td>
       <td><sub>default</sub></td>
       <td></td>
       <td align="left"><sub><a
  href="./auth/auth_loginkey.spec.js">auth/auth_loginkey.spec.js:<br>
-check temp global loginkey auth info </a></sub></td>
+global temp loginkey auth info</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>global<br>
-login key</sub></td>
-      <td align="left"></td>
+      <td></td>
       <td></td>
       <td><sub>Y</sub></td>
       <td><sub>default</sub></td>
       <td></td>
       <td align="left"><sub><a
  href="./auth/auth_loginkey.spec.js">auth/auth_loginkey.spec.js:<br>
-check global loginkey auth info with endpoint login</a></sub></td>
+global loginkey with endpoint auth info</a></sub></td>
     </tr>
     <tr align="center">
       <td><sub>local<br>
 login key</sub></td>
-      <td align="left"></td>
+      <td></td>
       <td></td>
       <td></td>
       <td><sub>default</sub></td>
       <td></td>
       <td align="left"><sub><a
  href="./auth/auth_loginkey.spec.js">auth/auth_loginkey.spec.js:<br>
-check local loginkey auth info </a></sub></td>
+local loginkey auth info</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>local<br>
+      <td rowspan ="5"><sub>local<br>
 user/pass</sub></td>
-      <td align="left"></td>
+      <td></td>
       <td></td>
       <td></td>
       <td><sub>default</sub></td>
       <td></td>
       <td align="left"><sub><a
  href="./auth/auth_user_pwd.spec.js">auth/auth_user_pwd.spec.js:<br>
-check local auth info </a></sub></td>
+local auth info</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>local<br>
-user/pass</sub></td>
       <td align="left"><sub>IMPT_AUTH_FILE_PATH</sub></td>
       <td></td>
       <td></td>
@@ -390,11 +350,9 @@ user/pass</sub></td>
       <td></td>
       <td align="left"><sub><a
  href="./auth/auth_environment.spec.js">auth/auth_environment.spec.js:<br>
-Auth file path env and local auth info</a></sub></td>
+auth file path env and local auth info</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>local<br>
-user/pass</sub></td>
       <td align="left"><sub>IMPT_LOGINKEY</sub></td>
       <td></td>
       <td></td>
@@ -402,11 +360,9 @@ user/pass</sub></td>
       <td></td>
       <td align="left"><sub><a
  href="./auth/auth_environment.spec.js">auth/auth_environment.spec.js:<br>
-Auth loginkey env and local auth info</a></sub></td>
+auth loginkey env and local auth info</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>local<br>
-user/pass</sub></td>
       <td align="left"><sub>IMPT_USER</sub></td>
       <td></td>
       <td></td>
@@ -414,12 +370,10 @@ user/pass</sub></td>
       <td></td>
       <td align="left"><sub><a
  href="./auth/auth_environment.spec.js">auth/auth_environment.spec.js:<br>
-Auth user env and local auth info</a></sub></td>
+auth user env and local auth info</a></sub></td>
     </tr>
     <tr align="center">
-      <th><sub>local<br>
-user/pass</sub></th>
-      <th align="left"></th>
+      <th></th>
       <th></th>
       <th></th>
       <th><sub>w/o value</sub></th>
@@ -434,14 +388,13 @@ auth info without output value</a></sub></th>
 ## auth login ##
 
 <table>
-  <sub>
-  </sub><tbody>
+  <tbody>
     <tr align="center">
       <th rowspan="2"><sub>Precondition</sub></th>
       <th colspan="7"><sub>Command options</sub></th>
       <th rowspan="2"><sub>Test name</sub></th>
     </tr>
-    <tr align="center" valign="center">
+    <tr align="center">
       <th><sub>auth</sub></th>
       <th><sub>local</sub></th>
       <th><sub>temp</sub></th>
@@ -451,7 +404,7 @@ auth info without output value</a></sub></th>
       <th><sub>help</sub></th>
     </tr>
     <tr align="center">
-      <td><sub>not<br>
+      <td rowspan="27"><sub>not<br>
 auth</sub></td>
       <td><sub>user<br>
 pass</sub></td>
@@ -466,8 +419,6 @@ pass</sub></td>
 global login</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>not<br>
-auth</sub></td>
       <td><sub>user<br>
 pass</sub></td>
       <td></td>
@@ -481,8 +432,6 @@ pass</sub></td>
 global login with confirm</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>not<br>
-auth</sub></td>
       <td><sub>user<br>
 pass</sub></td>
       <td></td>
@@ -496,8 +445,6 @@ pass</sub></td>
 global login with endpoint</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>not<br>
-auth</sub></td>
       <td><sub>user<br>
 pass</sub></td>
       <td></td>
@@ -511,9 +458,7 @@ pass</sub></td>
 global login with endpoint and confirm</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>not<br>
-auth</sub></td>
-      <td><sub>user<br>
+     <td><sub>user<br>
 pass</sub></td>
       <td></td>
       <td><sub>Y</sub></td>
@@ -526,8 +471,6 @@ pass</sub></td>
 global temp login</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>not<br>
-auth</sub></td>
       <td><sub>user<br>
 pass</sub></td>
       <td></td>
@@ -541,8 +484,6 @@ pass</sub></td>
 global temp login with confirm</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>not<br>
-auth</sub></td>
       <td><sub>user<br>
 pass</sub></td>
       <td></td>
@@ -556,8 +497,6 @@ pass</sub></td>
 global temp login with endpoint</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>not<br>
-auth</sub></td>
       <td><sub>user<br>
 pass</sub></td>
       <td></td>
@@ -571,8 +510,6 @@ pass</sub></td>
 global temp login with endpoint and confirm</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>not<br>
-auth</sub></td>
       <td><sub>user<br>
 pass</sub></td>
       <td><sub>Y</sub></td>
@@ -586,8 +523,6 @@ pass</sub></td>
 local login</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>not<br>
-auth</sub></td>
       <td><sub>user<br>
 pass</sub></td>
       <td><sub>Y</sub></td>
@@ -601,8 +536,6 @@ pass</sub></td>
 local login with confirm</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>not<br>
-auth</sub></td>
       <td><sub>user<br>
 pass</sub></td>
       <td><sub>Y</sub></td>
@@ -616,8 +549,6 @@ pass</sub></td>
 local login with endpoint</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>not<br>
-auth</sub></td>
       <td><sub>user<br>
 pass</sub></td>
       <td><sub>Y</sub></td>
@@ -631,8 +562,6 @@ pass</sub></td>
 local login with endpoint and confirm</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>not<br>
-auth</sub></td>
       <td><sub>user<br>
 pass</sub></td>
       <td><sub>Y</sub></td>
@@ -646,8 +575,6 @@ pass</sub></td>
 local temp login</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>not<br>
-auth</sub></td>
       <td><sub>user<br>
 pass</sub></td>
       <td><sub>Y</sub></td>
@@ -661,8 +588,6 @@ pass</sub></td>
 local temp login with confirm</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>not<br>
-auth</sub></td>
       <td><sub>user<br>
 pass</sub></td>
       <td><sub>Y</sub></td>
@@ -676,8 +601,6 @@ pass</sub></td>
 local temp login with endpoint</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>not<br>
-auth</sub></td>
       <td><sub>user<br>
 pass</sub></td>
       <td><sub>Y</sub></td>
@@ -691,8 +614,6 @@ pass</sub></td>
 local temp login with endpoint and confirm</a></sub></td>
     </tr>
     <tr align="center">
-      <th><sub>not<br>
-auth</sub></th>
       <th><sub>user<br>
 pass</sub></th>
       <th></th>
@@ -706,8 +627,6 @@ pass</sub></th>
 login without output argument</a></sub></th>
     </tr>
     <tr align="center">
-      <th><sub>not<br>
-auth</sub></th>
       <th><sub>user<br>
 pass</sub></th>
       <th></th>
@@ -721,8 +640,6 @@ pass</sub></th>
 login without endpoint argument</a></sub></th>
     </tr>
     <tr align="center">
-      <th><sub>not<br>
-auth</sub></th>
       <th><sub>user<br>
 pass<br>
 w/o value </sub></th>
@@ -737,8 +654,6 @@ w/o value </sub></th>
 login without user/password</a></sub></th>
     </tr>
     <tr align="center">
-      <td><sub>not<br>
-auth</sub></td>
       <td><sub>lk</sub></td>
       <td></td>
       <td></td>
@@ -751,8 +666,6 @@ auth</sub></td>
 global loginkey login by loginkey</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>not<br>
-auth</sub></td>
       <td><sub>lk</sub></td>
       <td></td>
       <td><sub>Y</sub></td>
@@ -765,8 +678,6 @@ auth</sub></td>
 global temp loginkey login by loginkey</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>not<br>
-auth</sub></td>
       <td><sub>lk</sub></td>
       <td></td>
       <td></td>
@@ -779,8 +690,6 @@ auth</sub></td>
 global loginkey login by loginkey with endpoint</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>not<br>
-auth</sub></td>
       <td><sub>lk</sub></td>
       <td><sub>Y</sub></td>
       <td><sub>Y</sub></td>
@@ -793,8 +702,6 @@ auth</sub></td>
 local temp loginkey login by loginkey</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>not<br>
-auth</sub></td>
       <td><sub>lk</sub></td>
       <td><sub>Y</sub></td>
       <td></td>
@@ -807,8 +714,6 @@ auth</sub></td>
 local loginkey login by loginkey with endpoint</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>not<br>
-auth</sub></td>
       <td><sub>lk</sub></td>
       <td></td>
       <td><sub>Y</sub></td>
@@ -821,8 +726,6 @@ auth</sub></td>
 global temp loginkey login by loginkey with endpoint</a></sub></td>
     </tr>
     <tr align="center">
-      <th><sub>not<br>
-auth</sub></th>
       <th><sub>lk w/o value</sub></th>
       <th></th>
       <th></th>
@@ -835,9 +738,7 @@ auth</sub></th>
 global loginkey login without loginkey</a></sub></th>
     </tr>
     <tr align="center">
-      <td><sub>not<br>
-auth</sub></td>
-      <td></td>
+     <td></td>
       <td></td>
       <td></td>
       <td></td>
@@ -849,7 +750,7 @@ auth</sub></td>
 impt help pages test suite</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>global<br>
+      <td rowspan="7"><sub>global<br>
 user/pass</sub></td>
       <td><sub>user<br>
 pass</sub></td>
@@ -864,9 +765,7 @@ pass</sub></td>
 repeated global login with confirm</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>global<br>
-user/pass</sub></td>
-      <td><sub>user<br>
+          <td><sub>user<br>
 pass</sub></td>
       <td></td>
       <td></td>
@@ -879,9 +778,7 @@ pass</sub></td>
 repeated global login with endpoint and confirm</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>global<br>
-user/pass</sub></td>
-      <td><sub>user<br>
+     <td><sub>user<br>
 pass</sub></td>
       <td></td>
       <td><sub>Y</sub></td>
@@ -894,8 +791,6 @@ pass</sub></td>
 repeated global temp login with confirm</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>global<br>
-user/pass</sub></td>
       <td><sub>user<br>
 pass</sub></td>
       <td></td>
@@ -909,8 +804,6 @@ pass</sub></td>
 repeated global temp login with endpoint and confirm</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>global<br>
-user/pass</sub></td>
       <td><sub>lk</sub></td>
       <td></td>
       <td><sub>Y</sub></td>
@@ -923,8 +816,6 @@ user/pass</sub></td>
 repeated global temp loginkey login with confirm</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>global<br>
-user/pass</sub></td>
       <td><sub>lk</sub></td>
       <td></td>
       <td></td>
@@ -937,8 +828,6 @@ user/pass</sub></td>
 repeated global loginkey login with endpoint and confirm</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>global<br>
-user/pass</sub></td>
       <td><sub>lk</sub></td>
       <td><sub>Y</sub></td>
       <td><sub>Y</sub></td>
@@ -951,7 +840,7 @@ user/pass</sub></td>
 repeated local temp loginkey login with confirm</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>global<br>
+      <td rowspan="6"><sub>global<br>
 login key</sub></td>
       <td><sub>user<br>
 pass</sub></td>
@@ -966,8 +855,6 @@ pass</sub></td>
 repeated global login with confirm</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>global<br>
-login key</sub></td>
       <td><sub>user<br>
 pass</sub></td>
       <td></td>
@@ -981,8 +868,6 @@ pass</sub></td>
 repeated global login with endpoint and confirm</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>global<br>
-login key</sub></td>
       <td><sub>user<br>
 pass</sub></td>
       <td></td>
@@ -996,8 +881,6 @@ pass</sub></td>
 repeated global temp login with confirm</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>global<br>
-login key</sub></td>
       <td><sub>user<br>
 pass</sub></td>
       <td><sub>Y</sub></td>
@@ -1011,8 +894,6 @@ pass</sub></td>
 repeated local login with confirm</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>global<br>
-login key</sub></td>
       <td><sub>user<br>
 pass</sub></td>
       <td><sub>Y</sub></td>
@@ -1026,8 +907,6 @@ pass</sub></td>
 repeated local login with endpoint and confirm</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>global<br>
-login key</sub></td>
       <td><sub>user<br>
 pass</sub></td>
       <td><sub>Y</sub></td>
@@ -1041,7 +920,7 @@ pass</sub></td>
 repeated local temp login with confirm</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>local<br>
+      <td rowspan="4"><sub>local<br>
 user/pass</sub></td>
       <td><sub>user<br>
 pass</sub></td>
@@ -1056,8 +935,6 @@ pass</sub></td>
 repeated local login with confirm</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>local<br>
-user/pass</sub></td>
       <td><sub>user<br>
 pass</sub></td>
       <td><sub>Y</sub></td>
@@ -1071,8 +948,6 @@ pass</sub></td>
 repeated local login with endpoint and confirm</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>local<br>
-user/pass</sub></td>
       <td><sub>user<br>
 pass</sub></td>
       <td><sub>Y</sub></td>
@@ -1086,8 +961,6 @@ pass</sub></td>
 repeated local temp login with confirm</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>local<br>
-user/pass</sub></td>
       <td><sub>user<br>
 pass</sub></td>
       <td><sub>Y</sub></td>
@@ -1122,9 +995,9 @@ repeated local temp login with endpoint and confirm</a></sub></td>
       <th><sub>output</sub></th>
       <th><sub>help</sub></th>
     </tr>
-    <tr align="center" valign="center">
-      <td><sub>not<br>
-auth</sub></td>
+    <tr align="center">
+      <td rowspan="3"><sub>not<br>
+      auth</sub></td>
       <td></td>
       <td></td>
       <td></td>
@@ -1134,10 +1007,8 @@ auth</sub></td>
  href="./auth/auth_user_pwd.spec.js">auth/auth_user_pwd.spec.js:<br>
 global logout without login</a></sub></td>
     </tr>
-    <tr align="center" valign="center">
-      <td><sub>not<br>
-auth</sub></td>
-      <td></td>
+    <tr align="center">
+     <td></td>
       <td></td>
       <td><sub>Y</sub></td>
       <td><sub>default</sub></td>
@@ -1146,9 +1017,7 @@ auth</sub></td>
  href="./auth/auth_user_pwd.spec.js">help/help.spec.js:<br>
 local logout without login</a></sub></td>
     </tr>
-    <tr align="center" valign="center">
-      <td><sub>not<br>
-auth</sub></td>
+    <tr align="center">
       <td></td>
       <td></td>
       <td></td>
@@ -1158,8 +1027,8 @@ auth</sub></td>
  href="./help/help.spec.js">auth/auth_user_pwd.spec.js:<br>
 impt help pages test suite</a></sub></td>
     </tr>
-    <tr align="center" valign="center">
-      <td><sub>global<br>
+    <tr align="center">
+      <td rowspan="4"><sub>global<br>
 user/pass</sub></td>
       <td></td>
       <td></td>
@@ -1170,9 +1039,7 @@ user/pass</sub></td>
  href="./auth/auth_user_pwd.spec.js">auth/auth_user_pwd.spec.js:<br>
 global logout</a></sub></td>
     </tr>
-    <tr align="center" valign="center">
-      <td><sub>global<br>
-user/pass</sub></td>
+    <tr align="center">
       <td></td>
       <td></td>
       <td><sub>Y</sub></td>
@@ -1182,9 +1049,7 @@ user/pass</sub></td>
  href="./auth/auth_user_pwd.spec.js">auth/auth_user_pwd.spec.js:<br>
 local logout with global login</a></sub></td>
     </tr>
-    <tr align="center" valign="center">
-      <td><sub>global<br>
-user/pass</sub></td>
+    <tr align="center">
       <td><sub>Y</sub></td>
       <td></td>
       <td></td>
@@ -1194,9 +1059,7 @@ user/pass</sub></td>
  href="./auth/auth_user_pwd.spec.js">auth/auth_user_pwd.spec.js:<br>
 global logout with temp login</a></sub></td>
     </tr>
-    <tr align="center" valign="center">
-      <td><sub>global<br>
-user/pass</sub></td>
+    <tr align="center">
       <td></td>
       <td><sub>Y</sub></td>
       <td></td>
@@ -1206,8 +1069,8 @@ user/pass</sub></td>
  href="./auth/auth_user_pwd.spec.js">auth/auth_user_pwd.spec.js:<br>
 global logout with endpoint login</a></sub></td>
     </tr>
-    <tr align="center" valign="center">
-      <td><sub>local<br>
+    <tr align="center">
+      <td rowspan="3"><sub>local<br>
 user/pass</sub></td>
       <td></td>
       <td></td>
@@ -1218,9 +1081,7 @@ user/pass</sub></td>
  href="./auth/auth_user_pwd.spec.js">auth/auth_user_pwd.spec.js:<br>
 local logout</a></sub></td>
     </tr>
-    <tr align="center" valign="center">
-      <td><sub>local<br>
-user/pass</sub></td>
+    <tr align="center">
       <td></td>
       <td></td>
       <td></td>
@@ -1230,9 +1091,7 @@ user/pass</sub></td>
  href="./auth/auth_user_pwd.spec.js">auth/auth_user_pwd.spec.js:<br>
 global logout with local login</a></sub></td>
     </tr>
-    <tr align="center" valign="center">
-      <th><sub>local<br>
-user/pass</sub></th>
+    <tr align="center">
       <th></th>
       <th></th>
       <th></th>
@@ -2649,13 +2508,13 @@ build update by not exist project</a></sub></th>
 <table>
   <sub>
   </sub><tbody>
-    <tr align="center" valign="center">
+    <tr align="center">
       <th rowspan="2" height="30"><sub>Precondition</sub></th>
       <th colspan="5"><sub>Command options</sub></th>
       <th rowspan="2"><sub>Test name</sub></th>
     </tr>
     <sub>
-    </sub><tr align="center" valign="center">
+    </sub><tr align="center">
       <th height="30"><sub>device</sub></th>
       <th><sub>dg</sub></th>
       <th><sub>confirmed</sub></th>
@@ -2709,7 +2568,7 @@ repeat device assign</a></sub></td>
     </tr>
     <tr align="center">
       <td height="30"></td>
-      <td align="left"></td>
+      <td></td>
       <td></td>
       <td></td>
       <td><sub>default</sub></td>
@@ -2750,13 +2609,13 @@ device assign to not exist device group</a></sub></td>
 <table>
   <sub>
   </sub><tbody>
-    <tr align="center" valign="center">
+    <tr align="center">
       <th rowspan="2" height="30"><sub>Precondition</sub></th>
       <th colspan="3"><sub>Command options</sub></th>
       <th rowspan="2"><sub>Test name</sub></th>
     </tr>
     <sub>
-    </sub><tr align="center" valign="center">
+    </sub><tr align="center">
       <th height="30"><sub>device</sub></th>
       <th><sub>output</sub></th>
       <th><sub>help</sub></th>
@@ -2800,7 +2659,7 @@ device info by name</a></sub></td>
     <tr align="center">
       <td height="30"><sub>unassigned<br>
 device</sub></td>
-      <td align="left"></td>
+      <td></td>
       <td><sub>json</sub></td>
       <td></td>
       <td align="left"><sub><a
@@ -2809,7 +2668,7 @@ unassigned device info</a></sub></td>
     </tr>
     <tr align="center">
       <td height="30"></td>
-      <td align="left"></td>
+      <td></td>
       <td><sub>default</sub></td>
       <td><sub>Y</sub></td>
       <td align="left"><sub><a
@@ -2843,13 +2702,13 @@ device info without device value</a></sub></td>
 <table>
   <sub>
   </sub><tbody>
-    <tr align="center" valign="center">
+    <tr align="center">
       <th colspan="10" height="30"><sub>Command
 options</sub></th>
       <th rowspan="2"><sub>Test name</sub></th>
     </tr>
     <sub>
-    </sub><tr align="center" valign="center">
+    </sub><tr align="center">
       <th height="30"><sub>owner</sub></th>
       <th><sub>product</sub></th>
       <th><sub>dg</sub></th>
@@ -2863,7 +2722,7 @@ options</sub></th>
     </tr>
     <tr align="center">
       <td height="30"><sub>me</sub></td>
-      <td align="left"></td>
+      <td></td>
       <td></td>
       <td></td>
       <td></td>
@@ -2908,7 +2767,7 @@ device list by product name</a></sub></td>
     </tr>
     <tr align="center">
       <td height="30"></td>
-      <td align="left"></td>
+      <td></td>
       <td><sub>id</sub></td>
       <td></td>
       <td></td>
@@ -2923,7 +2782,7 @@ device list by dg id</a></sub></td>
     </tr>
     <tr align="center">
       <td height="30"></td>
-      <td align="left"></td>
+      <td></td>
       <td></td>
       <td><sub>development</sub></td>
       <td></td>
@@ -2953,7 +2812,7 @@ device list by product name and dg id</a></sub></td>
     </tr>
     <tr align="center">
       <td height="30"></td>
-      <td align="left"></td>
+      <td></td>
       <td><sub>x2</sub></td>
       <td></td>
       <td></td>
@@ -2968,7 +2827,7 @@ device list by two dg</a></sub></td>
     </tr>
     <tr align="center">
       <td height="30"></td>
-      <td align="left"></td>
+      <td></td>
       <td></td>
       <td></td>
       <td><sub>Y</sub></td>
@@ -2983,7 +2842,7 @@ assigned device list</a></sub></td>
     </tr>
     <tr align="center">
       <td height="30"></td>
-      <td align="left"></td>
+      <td></td>
       <td></td>
       <td></td>
       <td></td>
@@ -2998,7 +2857,7 @@ unassigned device list</a></sub></td>
     </tr>
     <tr align="center">
       <td height="30"></td>
-      <td align="left"></td>
+      <td></td>
       <td></td>
       <td></td>
       <td></td>
@@ -3013,7 +2872,7 @@ online device list</a></sub></td>
     </tr>
     <tr align="center">
       <td height="30"></td>
-      <td align="left"></td>
+      <td></td>
       <td></td>
       <td></td>
       <td></td>
@@ -3028,7 +2887,7 @@ offline device list</a></sub></td>
     </tr>
     <tr align="center">
       <td height="30"></td>
-      <td align="left"></td>
+      <td></td>
       <td></td>
       <td></td>
       <td></td>
@@ -3049,13 +2908,13 @@ impt help pages test suite</a></sub></td>
 <table>
   <sub>
   </sub><tbody>
-    <tr align="center" valign="center">
+    <tr align="center">
       <th rowspan="2" height="30"><sub>Precondition</sub></th>
       <th colspan="5"><sub>Command options</sub></th>
       <th rowspan="2"><sub>Test name</sub></th>
     </tr>
     <sub>
-    </sub><tr align="center" valign="center">
+    </sub><tr align="center">
       <th height="30"><sub>device</sub></th>
       <th><sub>force</sub></th>
       <th><sub>confirmed</sub></th>
@@ -3136,7 +2995,7 @@ remove assigned device</a></sub></td>
     </tr>
     <tr align="center">
       <td height="30"></td>
-      <td align="left"></td>
+      <td></td>
       <td></td>
       <td></td>
       <td></td>
@@ -3153,13 +3012,13 @@ impt help pages test suite</a></sub></td>
 <table>
   <sub>
   </sub><tbody>
-    <tr align="center" valign="center">
+    <tr align="center">
       <th rowspan="2" height="30"><sub>Precondition</sub></th>
       <th colspan="5"><sub>Command options</sub></th>
       <th rowspan="2"><sub>Test name</sub></th>
     </tr>
     <sub>
-    </sub><tr align="center" valign="center">
+    </sub><tr align="center">
       <th height="30"><sub>device</sub></th>
       <th><sub>conditional</sub></th>
       <th><sub>log</sub></th>
@@ -3235,7 +3094,7 @@ restart not exist device</a></sub></td>
     </tr>
     <tr align="center">
       <td height="30"></td>
-      <td align="left"></td>
+      <td></td>
       <td></td>
       <td></td>
       <td></td>
@@ -3252,13 +3111,13 @@ impt help pages test suite</a></sub></td>
 <table>
   <sub>
   </sub><tbody>
-    <tr align="center" valign="center">
+    <tr align="center">
       <th rowspan="2" height="30"><sub>Precondition</sub></th>
       <th colspan="4"><sub>Command options</sub></th>
       <th rowspan="2"><sub>Test name</sub></th>
     </tr>
     <sub>
-    </sub><tr align="center" valign="center">
+    </sub><tr align="center">
       <th height="30"><sub>device</sub></th>
       <th><sub>unbond</sub></th>
       <th><sub>output</sub></th>
@@ -3321,7 +3180,7 @@ repeat unassign device</a></sub></td>
     </tr>
     <tr align="center">
       <td height="30"></td>
-      <td align="left"></td>
+      <td></td>
       <td></td>
       <td><sub>default</sub></td>
       <td><sub>Y</sub></td>
@@ -3348,13 +3207,13 @@ unassign not exist device</a></sub></td>
 <table>
   <sub>
   </sub><tbody>
-    <tr align="center" valign="center">
+    <tr align="center">
       <th rowspan="2" height="30"><sub>Precondition</sub></th>
       <th colspan="4"><sub>Command options</sub></th>
       <th rowspan="2"><sub>Test name</sub></th>
     </tr>
     <sub>
-    </sub><tr align="center" valign="center">
+    </sub><tr align="center">
       <th height="30"><sub>device</sub></th>
       <th><sub>name</sub></th>
       <th><sub>output</sub></th>
@@ -3402,7 +3261,7 @@ device update by device name</a></sub></td>
     </tr>
     <tr align="center">
       <td height="30"></td>
-      <td align="left"></td>
+      <td></td>
       <td></td>
       <td><sub>default</sub></td>
       <td><sub>Y</sub></td>
@@ -3422,7 +3281,7 @@ device update without new value</a></sub></td>
     </tr>
     <tr align="center">
       <td height="30"></td>
-      <td align="left"></td>
+      <td></td>
       <td><sub>Y</sub></td>
       <td><sub>default</sub></td>
       <td></td>
