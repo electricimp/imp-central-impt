@@ -2,20 +2,27 @@
 
 ## Introduction
 
-There are current test set grouped by [impt command](#List-of-Tested-Commands).
-Each impt command has own table of test info, contained precondition and used command option. Normal font table records are positive tests,othercase bold font table records are negative tests.   
+This doc lists and describes the existing tests for *impt*.
 
-## List of main non-covered features ##
+The test descriptions are grouped by the [impt commands](#list-of-tested-commands).
 
-- Production 
-- Collaboration
-- Pre-factory, pre-production, factory and production device group types
-- Log stream positive tests
-- Interactive user input tests
-- Indetified by build sha tests
-- Impt test command tests
+The tests for each command have their own table which describes:
+- preconditions,
+- command options,
+- reference to the test source code.
 
-## List of Tested Commands ##
+The normal font indicates positive tests, the **bold font** indicates negative tests.   
+
+## List Of Non-Covered Features ##
+
+- Production features, including `pre-factory`, `pre-production`, `factory` and `production` device group types.
+- Collaboration features.
+- Positive tests for `impt log stream`.
+- Tests for interactive user input.
+- Tests for builds identification by `sha` attribute.
+- Tests for `impt test` command group.
+
+## List Of Tested Commands ##
 
 **[impt auth info](#auth-info)**<br>
 **[impt auth login](#auth-login)**<br>
