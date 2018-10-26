@@ -51,10 +51,14 @@ class ImptTestCommandsHelper {
         return ImptTestingHelper.runCommand(`impt product create --name ${TEST_PRODUCT_NAME}`, ImptTestingHelper.checkSuccessStatus).
             then(() => ImptTestingHelper.runCommand(
                 `impt dg create --name ${TEST_DG_NAME} --product ${TEST_PRODUCT_NAME}`, ImptTestingHelper.checkSuccessStatus)).
-            then(() => Promise.all(config.devices.map(deviceId => 
+            then(() =>  
                 ImptTestingHelper.runCommand(
-                    `impt device assign --device ${deviceId} --dg ${TEST_DG_NAME} --confirmed`, ImptTestingHelper.checkSuccessStatus))));
-    }
+                    `impt device assign --device ${config.devices[config.deviceidx]} --dg ${TEST_DG_NAME} --confirmed`, ImptTestingHelper.checkSuccessStatus));
+    /*                then(() => Promise.all(config.devices.map(deviceId => 
+                        ImptTestingHelper.runCommand(
+                            `impt device assign --device ${deviceId} --dg ${TEST_DG_NAME} --confirmed`, ImptTestingHelper.checkSuccessStatus))));
+            */
+                }
 
     // Copies test files to the tests execution folder and creates test config.
     // Keys of testCreateOptions are optional 'impt test run' command options

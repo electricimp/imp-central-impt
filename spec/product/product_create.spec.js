@@ -46,6 +46,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         beforeAll((done) => {
             ImptTestHelper.init().
+                then(_testCleanUp).
                 then(_testSuiteCleanUp).
                 then(_testSuiteInit).
                 then(done).

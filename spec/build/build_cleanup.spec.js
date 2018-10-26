@@ -26,10 +26,8 @@
 
 require('jasmine-expect');
 const config = require('../config');
-const Shell = require('shelljs');
 const ImptTestHelper = require('../ImptTestHelper');
 const lodash = require('lodash');
-const MessageHelper = require('../MessageHelper');
 const Identifier = require('../../lib/util/Identifier');
 const Util = require('util');
 const UserInterractor = require('../../lib/util/UserInteractor');
@@ -38,11 +36,6 @@ const PRODUCT_NAME = `__impt_bld_product${config.suffix}`;
 const DEVICE_GROUP_NAME = `__impt_bld_device_group${config.suffix}`;
 const PRODUCT2_NAME = `__impt_bld_product_2${config.suffix}`;
 const DEVICE_GROUP2_NAME = `__impt_bld_device_group_2${config.suffix}`;
-const BUILD_TAG = `build_tag${config.suffix}`;
-const BUILD2_TAG = `build2_tag${config.suffix}`;
-const BUILD3_TAG = `build3_tag${config.suffix}`;
-const BUILD4_TAG = `build4_tag${config.suffix}`;
-const BUILD_ORIGIN = `build_origin${config.suffix}`;
 
 // Test suite for 'impt build cleanup' command.
 // Runs 'impt build cleanup' command with different combinations of options,
