@@ -1,72 +1,72 @@
 # impt Commands Manual #
 
-## List of Commands ##
+## List Of Commands ##
 
-**[impt auth info](#auth-info)**<br>
-**[impt auth login](#auth-login)**<br>
-**[impt auth logout](#auth-logout)**<br>
+**[impt auth info](#auth-info)**<br />
+**[impt auth login](#auth-login)**<br />
+**[impt auth logout](#auth-logout)**<br />
 
-**[impt build cleanup](#build-cleanup)**<br>
-**[impt build copy](#build-copy)**<br>
-**[impt build delete](#build-delete)**<br>
-**[impt build deploy](#build-deploy)**<br>
-**[impt build get](#build-get)**<br>
-**[impt build info](#build-info)**<br>
-**[impt build list](#build-list)**<br>
-**[impt build run](#build-run)**<br>
-**[impt build update](#build-update)**<br>
+**[impt build cleanup](#build-cleanup)**<br />
+**[impt build copy](#build-copy)**<br />
+**[impt build delete](#build-delete)**<br />
+**[impt build deploy](#build-deploy)**<br />
+**[impt build get](#build-get)**<br />
+**[impt build info](#build-info)**<br />
+**[impt build list](#build-list)**<br />
+**[impt build run](#build-run)**<br />
+**[impt build update](#build-update)**<br />
 
-**[impt device assign](#device-assign)**<br>
-**[impt device info](#device-info)**<br>
-**[impt device list](#device-list)**<br>
-**[impt device remove](#device-remove)**<br>
-**[impt device restart](#device-restart)**<br>
-**[impt device unassign](#device-unassign)**<br>
-**[impt device update](#device-update)**<br>
+**[impt device assign](#device-assign)**<br />
+**[impt device info](#device-info)**<br />
+**[impt device list](#device-list)**<br />
+**[impt device remove](#device-remove)**<br />
+**[impt device restart](#device-restart)**<br />
+**[impt device unassign](#device-unassign)**<br />
+**[impt device update](#device-update)**<br />
 
-**[impt dg builds](#device-group-builds)**<br>
-**[impt dg create](#device-group-create)**<br>
-**[impt dg delete](#device-group-delete)**<br>
-**[impt dg info](#device-group-info)**<br>
-**[impt dg list](#device-group-list)**<br>
-**[impt dg reassign](#device-group-reassign)**<br>
-**[impt dg restart](#device-group-restart)**<br>
-**[impt dg unassign](#device-group-unassign)**<br>
-**[impt dg update](#device-group-update)**<br>
+**[impt dg builds](#device-group-builds)**<br />
+**[impt dg create](#device-group-create)**<br />
+**[impt dg delete](#device-group-delete)**<br />
+**[impt dg info](#device-group-info)**<br />
+**[impt dg list](#device-group-list)**<br />
+**[impt dg reassign](#device-group-reassign)**<br />
+**[impt dg restart](#device-group-restart)**<br />
+**[impt dg unassign](#device-group-unassign)**<br />
+**[impt dg update](#device-group-update)**<br />
 
-**[impt log get](#log-get)**<br>
-**[impt log stream](#log-stream)**<br>
+**[impt log get](#log-get)**<br />
+**[impt log stream](#log-stream)**<br />
 
-**[impt loginkey create](#login-key-create)**<br>
-**[impt loginkey delete](#login-key-delete)**<br>
-**[impt loginkey info](#login-key-info)**<br>
-**[impt loginkey list](#login-key-list)**<br>
-**[impt loginkey update](#login-key-update)**<br>
+**[impt loginkey create](#login-key-create)**<br />
+**[impt loginkey delete](#login-key-delete)**<br />
+**[impt loginkey info](#login-key-info)**<br />
+**[impt loginkey list](#login-key-list)**<br />
+**[impt loginkey update](#login-key-update)**<br />
 
-**[impt product create](#product-create)**<br>
-**[impt product delete](#product-delete)**<br>
-**[impt product info](#product-info)**<br>
-**[impt product list](#product-list)**<br>
-**[impt product update](#product-update)**<br>
+**[impt product create](#product-create)**<br />
+**[impt product delete](#product-delete)**<br />
+**[impt product info](#product-info)**<br />
+**[impt product list](#product-list)**<br />
+**[impt product update](#product-update)**<br />
 
-**[impt project create](#project-create)**<br>
-**[impt project delete](#project-delete)**<br>
-**[impt project info](#project-info)**<br>
-**[impt project link](#project-link)**<br>
-**[impt project update](#project-update)**<br>
+**[impt project create](#project-create)**<br />
+**[impt project delete](#project-delete)**<br />
+**[impt project info](#project-info)**<br />
+**[impt project link](#project-link)**<br />
+**[impt project update](#project-update)**<br />
 
-**[impt test create](#test-create)**<br>
-**[impt test delete](#test-delete)**<br>
-**[impt test github](#test-github)**<br>
-**[impt test info](#test-info)**<br>
-**[impt test run](#test-run)**<br>
-**[impt test update](#test-update)**<br>
+**[impt test create](#test-create)**<br />
+**[impt test delete](#test-delete)**<br />
+**[impt test github](#test-github)**<br />
+**[impt test info](#test-info)**<br />
+**[impt test run](#test-run)**<br />
+**[impt test update](#test-update)**<br />
 
-**[impt webhook create](#webhook-create)**<br>
-**[impt webhook delete](#webhook-delete)**<br>
-**[impt webhook info](#webhook-info)**<br>
-**[impt webhook list](#webhook-list)**<br>
-**[impt webhook update](#webhook-update)**<br>
+**[impt webhook create](#webhook-create)**<br />
+**[impt webhook delete](#webhook-delete)**<br />
+**[impt webhook info](#webhook-info)**<br />
+**[impt webhook list](#webhook-list)**<br />
+**[impt webhook update](#webhook-update)**<br />
 
 ## Contents ##
 
@@ -118,14 +118,14 @@ The `--help` option (alias: `-h`) can be used with a fully or a partially specif
 
 ## Command Output ##
 
-The `--output <mode>` option (alias: `-z`) can be used to adjust an output generated by a command. If the option is not specified the default verbose output is generated.
+The `--output <mode>` option (alias: `-z`) can be used to adjust the output generated by a command. If the option is not specified, the default verbose output is generated.
 
 The `--output` option has the following `<mode>` values:
 
 | Value | Description |
 | --- | --- |
 | minimal | Only minimal output, mandated by the command, is generated; no additional colors are used in the output |
-| json | The same as the `minimal` value, but all information (except user interaction) is displayed in the JSON format |
+| json | The same as `minimal`, but all information (except user interaction) is displayed in the JSON format |
 | debug | Debug information is added to the default output |
 
 ## Entity Identification ##
@@ -209,7 +209,7 @@ A local auth file is an auth file located in the directory from where an *impt* 
 
 ### Global Auth File ###
 
-The global auth file is located in the tool specific place. There can be none or only one global auth file per *impt* installation.
+There can be none or only one global auth file per *impt* installation.
 
 ## Auth Environment Variables ##
 
@@ -229,28 +229,28 @@ This is how *impt* determines a context (authentication and other settings) for 
     - The command is executed in the context defined by this file.
     - If the file is broken, the command fails.
   
-2. Otherwise, if `IMPT_AUTH_FILE_PATH` environment variable is set:
+2. Otherwise, if the `IMPT_AUTH_FILE_PATH` environment variable is set:
     - The command is executed in the context defined by the auth file in the directory referenced by this environment variable.
     - If the file does not exist or is broken, the command fails.
 
-3. Otherwise, if `IMPT_LOGINKEY` environment variable is set:
+3. Otherwise, if the `IMPT_LOGINKEY` environment variable is set:
     - *impt* tries to login using the specified login key and then the command is executed in the context of this login.
-    - If multi-factor authentication is enabled for the account, the user is additionally asked to input a one-time password.
+    - If multi-factor authentication is enabled for the account, the user is asked to enter a one-time password.
     - If the login fails, the command fails.
-    - If `IMPT_ENDPOINT` environment variable is set, it's value is used as an impCentral API endpoint. Else, the default endpoint (`https://api.electricimp.com/v5`) is used.
+    - If the `IMPT_ENDPOINT` environment variable is set, its value is used as the impCentral API endpoint. Otherwise the default endpoint (`https://api.electricimp.com/v5`) is used.
 
-4. Otherwise, if `IMPT_USER` environment variable is set:
+4. Otherwise, if the `IMPT_USER` environment variable is set:
     - *impt* tries to login using the specified account identifier (user) and a password and then the command is executed in the context of this login.
-    - If `IMPT_PASSWORD` environment variable is set, it's value is used as a password. Else, the user is asked to input the password.
-    - If multi-factor authentication is enabled for the account, the user is additionally asked to input a one-time password.
+    - If the `IMPT_PASSWORD` environment variable is set, its value is used as a password. Otherwise the user is asked to input the password.
+    - If multi-factor authentication is enabled for the account, the user is asked to enter a one-time password.
     - If the login fails, the command fails.
-    - If `IMPT_ENDPOINT` environment variable is set, it's value is used as an impCentral API endpoint. Else, the default endpoint (`https://api.electricimp.com/v5`) is used.
+    - If the `IMPT_ENDPOINT` environment variable is set, its value is used as the impCentral API endpoint. Otherwise the default endpoint (`https://api.electricimp.com/v5`) is used.
 
 5. Otherwise, if the [global auth file](#global-auth-file) exists:
     - The command is executed in the context defined by this file.
     - If the file is broken, the command fails.
 
-6. Otherwise, the command fails (no authentication information is found to execute the command).
+6. Otherwise, the command fails (as no authentication information has been found to execute the command).
 
 ## Project Files ##
 
@@ -296,6 +296,7 @@ impt auth login [--local] [--endpoint <endpoint_url>]
 Creates the [global](#global-auth-file) or [local](#local-auth-file) auth file.
 
 The options for one, and only one, of the following authentication methods may be specified in the command:
+
 - Using an account identifier and password (`--user` and `--pwd` options).
 - Using a [login key](#login-key-manipulation-commands) (`--lk` option).
 
@@ -310,7 +311,7 @@ The user is asked to confirm the operation if the corresponding auth file alread
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --local | -l | No | No | If specified, creates or replaces a [local auth file](#local-auth-file) in the current directory. If not specified, creates or replaces the [global auth file](#global-auth-file) |
-| --endpoint | -e | No | Yes | An impCentral API endpoint (the API base URL). Default: `https://api.electricimp.com/v5` |
+| --endpoint | -e | No | Yes | The base impCentral API URL. Default: `https://api.electricimp.com/v5` |
 | --user | -u | No | Yes | The account identifier: a username or an email address |
 | --pwd | -w | No | Yes | The account password. If specified, the `--user` option must be specified too |
 | --lk | -k | No | Yes | A login key for the account |
@@ -440,8 +441,8 @@ The user is asked to confirm the operation if the files with the specified names
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --build | -b | Yes/[Project](#project-files) | Yes | A [Build identifier](#build-identifier). If not specified, the most recent Deployment for the Device Group referenced by the [Project file](#project-files) in the current directory is used (if there is no Project file, the command fails) |
-| --device-file | -x | No | Yes | Name of a file to where download the source code for IMP device. If not specified, the file referenced by the [Project file](#project-files) in the current directory is used (if there is no Project file and `--agent-only` option is not specified, the command fails) |
-| --agent-file | -y | No | Yes | Name of a file to where download the source code for IMP agent. If not specified, the file referenced by the [Project file](#project-files) in the current directory is used (if there is no Project file and `--device-only` option is not specified, the command fails) |
+| --device-file | -x | No | Yes | The device source code file name. If not specified, the file referenced by the [Project file](#project-files) in the current directory is used; if there is no Project file and the `--agent-only` option is not specified, the command fails |
+| --agent-file | -y | No | Yes | The agent source code file name. If not specified, the file referenced by the [Project file](#project-files) in the current directory is used; if there is no Project file and the `--device-only` option is not specified, the command fails |
 | --device-only | -i | No | No | Downloads the source code for the device only |
 | --agent-only | -j | No | No | Downloads the source code for the agent only |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
@@ -909,7 +910,7 @@ Creates a new login key for the current account.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --pwd | -w | No | Yes | The account password. If the option is not specified, the user is asked to input the account password |
+| --pwd | -w | No | Yes | The account password. If no password is specified, the user is asked to input one |
 | --descr | -s | No | Yes | An optional description of the login key, eg. `"John's key"` |
 | --output | -z | No | Yes | Adjusts the [command's output](#command-output) |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
@@ -925,7 +926,7 @@ Deletes the specified login key. The user is asked to confirm the operation, unl
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --lk | -k | Yes | Yes | The login key ID |
-| --pwd | -w | No | Yes | The account password. If the option is not specified, the user is asked to input the account password |
+| --pwd | -w | No | Yes | The account password. If no password is specified, the user is asked to input one |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
 | --output | -z | No | Yes | Adjusts the [command's output](#command-output) |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
@@ -969,7 +970,7 @@ Updates the specified login key’s description.
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --lk | -k | Yes | Yes | The login key ID |
-| --pwd | -w | No | Yes | The account password. If the option is not specified, the user is asked to input the account password |
+| --pwd | -w | No | Yes | The account password. If no password is specified, the user is asked to input one |
 | --descr | -s | Yes | Yes | The login key’s new description |
 | --output | -z | No | Yes | Adjusts the [command's output](#command-output) |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
@@ -1007,7 +1008,7 @@ The user is asked to confirm the operation, unless confirmed automatically with 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --product | -p | Yes/[Project](#project-files) | Yes | A [Product identifier](#product-identifier). If not specified, the Product referenced by the [Project file](#project-files) in the current directory is used (if there is no Project file, the command fails) |
-| --builds | -b | No | No | Additionally deletes all Deployments related to all of the Device Groups which belong to the Product, including Device Groups that were deleted previously. The command fails if any Deployment has *flagged* attribute set to `true` and the `--force` option was not specified. |
+| --builds | -b | No | No | Additionally deletes all Deployments related to all of the Device Groups which belong to the Product, including Device Groups that were deleted previously. The command fails if any Deployment has its *flagged* attribute set to `true` and the `--force` option was not specified |
 | --force | -f | No | No | Deletes all of the Product’s Device Groups as with [`impt dg delete --force`](#device-group-delete) called for every one of the Product’s Device Groups |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
 | --output | -z | No | Yes | Adjusts the [command's output](#command-output) |
@@ -1275,7 +1276,7 @@ impt test github --github-config <github_credentials_file_name> [--user <github_
 
 Creates or updates a GitHub credentials file.
 
-**Note**, this command does NOT include the created or updated GitHub credentials file into any [test configuration file](#test-configuration-files). Use [`impt test create`](#test-create) or [`impt test update`](#test-update) commands to apply the GitHub credentials to tests.
+**Note** This command does **not** write the created or updated GitHub credentials file to any [test configuration file](#test-configuration-files). Use [`impt test create`](#test-create) or [`impt test update`](#test-update) to apply the GitHub credentials to tests.
 
 The user is asked to confirm the operation if the specified GitHub credentials file already exists, unless confirmed automatically with the `--confirmed` option. If confirmed, the existing GitHub credentials file is overwritten.
 
@@ -1285,7 +1286,7 @@ If the `--user` option is not specified, the user is asked to input the GitHub c
 | --- | --- | --- | --- | --- |
 | --github-config | -i | Yes | Yes | A path to the GitHub credentials file. A relative or absolute path can be used |
 | --user | -u | No | Yes | A GitHub account username |
-| --pwd | -w | No | Yes | A GitHub account password or personal access token. If specified, the `--user` option must be specified too |
+| --pwd | -w | No | Yes | A GitHub account password or personal access token. If specified, the `--user` option must also be specified |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
 | --output | -z | No | Yes | Adjusts the [command's output](#command-output) |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
@@ -1315,7 +1316,7 @@ Runs the tests specified by the [test configuration file](#test-configuration-fi
 | --- | --- | --- | --- | --- |
 | --tests | -t | No | Yes | A pattern to select the tests. Allows you to select specific test files, test cases and/or test methods for execution. The syntax of the pattern: *[testFile][:testCase][::testMethod]*, where *testFile* may include a relative path as well as [regular expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions). If the option is omitted, all tests from all test files specified in the [test configuration file](#test-configuration-files) are executed |
 | --clear-cache | -e | No | No | Clears the local `.builder-cache` directory if it exists |
-| --output | -z | No | Yes | Adjusts the [command's output](#command-output). `--output debug` runs the tests in the debug mode |
+| --output | -z | No | Yes | Adjusts the [command's output](#command-output). Use `--output debug` to run the tests in debug mode |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 #### Test Update ####
@@ -1386,7 +1387,9 @@ The user is asked to confirm the operation unless confirmed automatically with t
 
 #### Webhook Info ####
 
-`impt webhook info --wh <webhook_id> [--output <mode>] [--help]`
+```
+impt webhook info --wh <webhook_id> [--output <mode>] [--help]
+```
 
 Displays information about the specified webhook.
 
@@ -1439,9 +1442,9 @@ Updates the specified webhook with a new target URL and/or MIME content-type. Fa
 | --output | -z | No | Yes | Adjusts the [command's output](#command-output) |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
-## List of Aliases ##
+## List Of Aliases ##
 
-| Command<br>Option<br>Alias | Command Option<br>Full Name(s) |
+| Command<br />Option<br />Alias | Command Option<br />Full Name(s) |
 | --- | --- |
 | -a | --all, --assigned, --allow-disconnect |
 | -b | --build, --builds |
