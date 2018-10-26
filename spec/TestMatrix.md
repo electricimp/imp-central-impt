@@ -3,7 +3,7 @@
 ## Introduction
 
 There are current test set grouped by [impt command](#List-of-Tested-Commands).
-Each impt command has own table of test info, contained precondition and option. Tests described by normal font are positive, negative tests are described bold font.   
+Each impt command has own table of test info, contained precondition and used command option. Bold font table records are positive tests,othercase normal font table records are negative tests.   
 
 ## List of main non-covered features ##
 
@@ -3452,7 +3452,7 @@ not exist device update</a></sub></td>
   <tbody>
     <tr>
       <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
-      <th colspan="7" rowspan="1"><sub>Options</sub></th>
+      <th colspan="7" rowspan="1"><sub>Command options</sub></th>
       <th colspan="1" rowspan="2"><sub>Test
 name</sub></th>
     </tr>
@@ -3559,7 +3559,7 @@ help/help.spec.js</a></sub></td>
   <tbody>
     <tr>
       <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
-      <th colspan="7" rowspan="1"><sub>Options</sub></th>
+      <th colspan="7" rowspan="1"><sub>Command options</sub></th>
       <th colspan="1" rowspan="2"><sub>Test
 name</sub></th>
     </tr>
@@ -3672,7 +3672,7 @@ group create by not exist product</a></sub></td>
   <tbody>
     <tr>
       <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
-      <th colspan="6" rowspan="1"><sub>Options</sub></th>
+      <th colspan="6" rowspan="1"><sub>Command options</sub></th>
       <th colspan="1" rowspan="2"><sub>Test
 name</sub></th>
     </tr>
@@ -3813,7 +3813,7 @@ help pages test suite</a></sub></td>
   <tbody>
     <tr>
       <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
-      <th colspan="4" rowspan="1"><sub>Options</sub></th>
+      <th colspan="4" rowspan="1"><sub>Command options</sub></th>
       <th colspan="1" rowspan="2"><sub>Test
 name</sub></th>
     </tr>
@@ -3892,7 +3892,7 @@ help pages test suite</a></sub></td>
   <tbody>
     <tr>
       <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
-      <th colspan="5" rowspan="1"><sub>Options</sub></th>
+      <th colspan="5" rowspan="1"><sub>Command options</sub></th>
       <th colspan="1" rowspan="2"><sub>Test
 name</sub></th>
     </tr>
@@ -4000,7 +4000,7 @@ help pages test suite</a></sub></td>
   <tbody>
     <tr>
       <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
-      <th colspan="4" rowspan="1"><sub>Options</sub></th>
+      <th colspan="4" rowspan="1"><sub>Command options</sub></th>
       <th colspan="1" rowspan="2"><sub>Test
 name</sub></th>
     </tr>
@@ -4106,7 +4106,7 @@ help pages test suite</a></sub></td>
   <tbody>
     <tr>
       <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
-      <th colspan="5" rowspan="1"><sub>Options</sub></th>
+      <th colspan="5" rowspan="1"><sub>Command options</sub></th>
       <th colspan="1" rowspan="2"><sub>Test
 name</sub></th>
     </tr>
@@ -4221,7 +4221,7 @@ help pages test suite</a></sub></td>
   <tbody>
     <tr>
       <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
-      <th colspan="4" rowspan="1" align="center"><sub>Options</sub></th>
+      <th colspan="4" rowspan="1" align="center"><sub>Command options</sub></th>
       <th colspan="1" rowspan="2"><sub>Test
 name</sub></th>
     </tr>
@@ -4316,7 +4316,7 @@ help pages test suite</a></sub></td>
   <tbody>
     <tr>
       <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
-      <th colspan="8" rowspan="1"><sub>Options</sub></th>
+      <th colspan="8" rowspan="1"><sub>Command options</sub></th>
       <th colspan="1" rowspan="2"><sub>Test
 name</sub></th>
     </tr>
@@ -4420,7 +4420,7 @@ help/help.spec.js</a></sub></td>
   <tbody>
     <tr>
       <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
-      <th colspan="5" rowspan="1"><sub>Options</sub></th>
+      <th colspan="5" rowspan="1"><sub>Command options</sub></th>
       <th colspan="1" rowspan="2" align="left"><sub>Test
 name</sub></th>
     </tr>
@@ -4648,7 +4648,7 @@ get without output value</a></sub></th>
   <tbody>
     <tr>
       <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
-      <th colspan="4" rowspan="1"><sub>Options</sub></th>
+      <th colspan="4" rowspan="1"><sub>Command options</sub></th>
       <th colspan="1" rowspan="2" align="left"><sub>Test
 name</sub></th>
     </tr>
@@ -4797,7 +4797,7 @@ stream without output value</a></sub></th>
   <tbody>
     <tr align="left">
       <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
-      <th colspan="4" rowspan="1"><sub>Options</sub></th>
+      <th colspan="4" rowspan="1"><sub>Command options</sub></th>
       <th colspan="1" rowspan="2" align="left"><sub>Test
 name</sub></th>
     </tr>
@@ -4860,7 +4860,7 @@ help pages test suite</a></sub></td>
   <tbody>
     <tr align="left">
       <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
-      <th colspan="5" rowspan="1"><sub>Options</sub></th>
+      <th colspan="5" rowspan="1"><sub>Command options</sub></th>
       <th colspan="1" rowspan="2" align="left"><sub>Test
 name</sub></th>
     </tr>
@@ -4940,7 +4940,7 @@ help pages test suite</a></sub></td>
   <tbody>
     <tr align="left">
       <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
-      <th colspan="3" rowspan="1"><sub>Options</sub></th>
+      <th colspan="3" rowspan="1"><sub>Command options</sub></th>
       <th colspan="1" rowspan="2" align="left"><sub>Test
 name</sub></th>
     </tr>
@@ -4990,7 +4990,7 @@ help pages test suite</a></sub></td>
   <tbody>
     <tr align="left">
       <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
-      <th colspan="2" rowspan="1"><sub>Options</sub></th>
+      <th colspan="2" rowspan="1"><sub>Command options</sub></th>
       <th colspan="1" rowspan="2" align="left"><sub>Test
 name</sub></th>
     </tr>
@@ -5027,7 +5027,7 @@ help pages test suite</a></sub></td>
   <tbody>
     <tr align="left">
       <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
-      <th colspan="5" rowspan="1"><sub>Options</sub></th>
+      <th colspan="5" rowspan="1"><sub>Command options</sub></th>
       <th colspan="1" rowspan="2" align="left"><sub>Test
 name</sub></th>
     </tr>
@@ -5095,8 +5095,7 @@ exist loginkey update</a></sub></th>
       <td><sub>Y</sub></td>
       <td align="left"><sub><a
  href="./help/help.spec.js">help/help.spec.js:<br>
-impt
-help pages test suite</a></sub></td>
+impt help pages test suite</a></sub></td>
     </tr>
   </tbody>
 </table>
@@ -5109,7 +5108,7 @@ help pages test suite</a></sub></td>
   <tbody>
     <tr>
       <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
-      <th colspan="4" rowspan="1"><sub>Options</sub></th>
+      <th colspan="4" rowspan="1"><sub>Command options</sub></th>
       <th colspan="1" rowspan="2"><sub>Test
 name</sub></th>
     </tr>
@@ -5126,7 +5125,7 @@ name</sub></th>
       <td><sub>default</sub></td>
       <td></td>
       <td align="left"><sub><a
- href="./%22product/product_create.spec.js%22">product/product_create.spec.js:<br>
+ href="./product/product_create.spec.js">product/product_create.spec.js:<br>
 product create with duplicated description</a></sub></td>
     </tr>
     <tr align="center">
@@ -5265,7 +5264,7 @@ impt help pages test suite</a></sub></td>
   <tbody>
     <tr>
       <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
-      <th colspan="6" rowspan="1"><sub>Options</sub></th>
+      <th colspan="6" rowspan="1"><sub>Command options</sub></th>
       <th colspan="1" rowspan="2"><sub>Test
 name</sub></th>
     </tr>
@@ -5406,7 +5405,7 @@ product delete by not exist project</a></sub></td>
   <tbody>
     <tr>
       <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
-      <th colspan="4" rowspan="1"><sub>Options</sub></th>
+      <th colspan="4" rowspan="1"><sub>Command options</sub></th>
       <th colspan="1" rowspan="2"><sub>Test
 name</sub></th>
     </tr>
@@ -5524,7 +5523,7 @@ impt help pages test suite</a></sub></td>
   <tbody>
     <tr>
       <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
-      <th colspan="3" rowspan="1"><sub>Options</sub></th>
+      <th colspan="3" rowspan="1"><sub>Command options</sub></th>
       <th colspan="1" rowspan="2"><sub>Test
 name</sub></th>
     </tr>
@@ -5614,7 +5613,7 @@ impt help pages test suite</a></sub></td>
   <tbody>
     <tr>
       <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
-      <th colspan="5" rowspan="1"><sub>Options</sub></th>
+      <th colspan="5" rowspan="1"><sub>Command options</sub></th>
       <th colspan="1" rowspan="2"><sub>Test
 name</sub></th>
     </tr>
@@ -5798,7 +5797,7 @@ impt help pages test suite</a></sub></td>
   <tbody>
     <tr>
       <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
-      <th colspan="10" rowspan="1"><sub>Options</sub></th>
+      <th colspan="10" rowspan="1"><sub>Command options</sub></th>
       <th colspan="1" rowspan="2"><sub>Test
 name</sub></th>
     </tr>
@@ -5809,7 +5808,7 @@ name</sub></th>
       <th><sub>d-file</sub></th>
       <th><sub>a-file</sub></th>
       <th><sub>pre-factory</sub></th>
-      <th><sub>target/create</sub></th>
+      <th><sub>target/<br>create</sub></th>
       <th><sub>confirmed</sub></th>
       <th><sub>output</sub></th>
       <th><sub>help</sub></th>
@@ -5936,7 +5935,7 @@ impt help pages test suite</a></sub></td>
   <tbody>
     <tr>
       <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
-      <th colspan="6" rowspan="1"><sub>Options</sub></th>
+      <th colspan="6" rowspan="1"><sub>Command options</sub></th>
       <th colspan="1" rowspan="2"><sub>Test
 name</sub></th>
     </tr>
@@ -6043,7 +6042,7 @@ impt help pages test suite</a></sub></td>
   <tbody>
     <tr>
       <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
-      <th colspan="3" rowspan="1"><sub>Options</sub></th>
+      <th colspan="3" rowspan="1"><sub>Command options</sub></th>
       <th colspan="1" rowspan="2"><sub>Test
 name</sub></th>
     </tr>
@@ -6108,7 +6107,7 @@ impt help pages test suite</a></sub></td>
   <tbody>
     <tr>
       <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
-      <th colspan="6" rowspan="1"><sub>Options</sub></th>
+      <th colspan="6" rowspan="1"><sub>Command options</sub></th>
       <th colspan="1" rowspan="2"><sub>Test
 name</sub></th>
     </tr>
@@ -6165,7 +6164,7 @@ impt help pages test suite</a></sub></td>
   <tbody>
     <tr>
       <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
-      <th colspan="7" rowspan="1"><sub>Options</sub></th>
+      <th colspan="7" rowspan="1"><sub>Command options</sub></th>
       <th colspan="1" rowspan="2"><sub>Test
 name</sub></th>
     </tr>
@@ -6243,7 +6242,7 @@ impt help pages test suite</a></sub></td>
   <tbody>
     <tr>
       <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
-      <th colspan="6" rowspan="1"><sub>Options</sub></th>
+      <th colspan="6" rowspan="1"><sub>Command options</sub></th>
       <th colspan="1" rowspan="2"><sub>Test
 name</sub></th>
     </tr>
@@ -6336,7 +6335,7 @@ impt help pages test suite</a></sub></td>
   <tbody>
     <tr>
       <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
-      <th colspan="4" rowspan="1"><sub>Options</sub></th>
+      <th colspan="4" rowspan="1"><sub>Command options</sub></th>
       <th colspan="1" rowspan="2"><sub>Test
 name&gt;</sub></th>
     </tr>
@@ -6395,7 +6394,7 @@ impt help pages test suite</a></sub></td>
   <tbody>
     <tr>
       <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
-      <th colspan="3" rowspan="1"><sub>Options</sub></th>
+      <th colspan="3" rowspan="1"><sub>Command options</sub></th>
       <th colspan="1" rowspan="2"><sub>Test
 name</sub></th>
     </tr>
@@ -6440,7 +6439,7 @@ impt help pages test suite</a></sub></td>
   <tbody>
     <tr>
       <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
-      <th colspan="8" rowspan="1"><sub>Options</sub></th>
+      <th colspan="8" rowspan="1"><sub>Command options</sub></th>
       <th colspan="1" rowspan="2"><sub>Test
 name</sub></th>
     </tr>
@@ -6563,7 +6562,7 @@ impt help pages test suite</a></sub></td>
   <tbody>
     <tr>
       <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
-      <th colspan="5" rowspan="1"><sub>Options</sub></th>
+      <th colspan="5" rowspan="1"><sub>Command options</sub></th>
       <th colspan="1" rowspan="2"><sub>Test
 name</sub></th>
     </tr>
