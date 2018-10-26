@@ -3,7 +3,7 @@
 ## Introduction
 
 There are current test set grouped by [impt command](#List-of-Tested-Commands).
-Each impt command has own table of test info, contained precondition and used command option. Bold font table records are positive tests,othercase normal font table records are negative tests.   
+Each impt command has own table of test info, contained precondition and used command option. Normal font table records are positive tests,othercase bold font table records are negative tests.   
 
 ## List of main non-covered features ##
 
