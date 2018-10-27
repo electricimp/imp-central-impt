@@ -282,7 +282,10 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => ImptTestHelper.runCommand(`impt build list -o me --zombie -z json`, (commandOut) => {
-                        expect(commandOut).toBuildCountEqual(0);
+                        expect(commandOut).not.toContainsBuild({ id: build_id });
+                        expect(commandOut).not.toContainsBuild({ id: build3_id });
+                        expect(commandOut).not.toContainsBuild({ id: build2_id });
+                        expect(commandOut).not.toContainsBuild({ id: build4_id });
                         ImptTestHelper.checkSuccessStatus(commandOut);
                     })).
                     then(done).
