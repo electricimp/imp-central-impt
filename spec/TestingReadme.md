@@ -156,3 +156,6 @@ There is a common util files
 
 The files may be extended by adding more reusable methods during new tests development.
 
+## Test Matrix ##
+
+The list and details of the existing tests as described in the [Test Matrix document](./TestMatrix.md).
