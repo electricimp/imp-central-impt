@@ -137,15 +137,13 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 _checkSuccessCreateWebhookMessage(commandOut, wh_id);
                 ImptTestHelper.checkSuccessStatus(commandOut);
             }).
-                then(() => {
-                    _checkWebhookInfo({ mime: 'urlencoded' });
-                }).
+                then(() => _checkWebhookInfo({ mime: 'urlencoded' })).
                 then(done).
                 catch(error => done.fail(error));
         });
 
         it('webhook create with invalid url', (done) => {
-            ImptTestHelper.runCommand(`impt webhook create --url invalidurl --event deployment --mime urlencoded ${outputMode}`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt webhook create --dg ${DG_NAME} --url invalidurl --event deployment --mime urlencoded ${outputMode}`, (commandOut) => {
                 MessageHelper.checkInvalidUrlError(commandOut);
                 ImptTestHelper.checkFailStatus(commandOut);
             }).
