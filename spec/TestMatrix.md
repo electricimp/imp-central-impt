@@ -11,7 +11,13 @@ The tests for each command have their own table which describes:
 - command options,
 - reference to the test source code.
 
-The normal font indicates positive tests, the **bold font** indicates negative tests.   
+The normal font indicates positive tests, the **bold font** indicates negative tests.
+
+For add new test describe there are two ways:
+At first, you can edit this file online using git editor features.Just add new tr section by copy any exist and change
+values.
+
+And other, you can use external desktop editor (for example free version [MarkdownPad2](http://markdownpad.com/)) for edit TestMatrix.md file.
 
 ## List Of Non-Covered Features ##
 
