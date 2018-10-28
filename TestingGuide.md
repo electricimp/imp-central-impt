@@ -372,7 +372,7 @@ Performs a deep comparison of tables, arrays and classes.
 
 ```squirrel
 // OK
-this.assertDeepEqual({"a" : { "b" : 1 }}, {"a" : { "b" : 0 }});
+this.assertDeepEqual({"a" : { "b" : 1 }}, {"a" : { "b" : 1 }});
 
 // Failure: Missing slot [a.b] in actual value
 this.assertDeepEqual({"a" : { "b" : 1 }}, {"a" : { "_b" : 0 }});
