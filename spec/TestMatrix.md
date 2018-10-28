@@ -11,9 +11,7 @@ The tests for each command have their own table which describes:
 - command options,
 - reference to the test source code.
 
-The normal font indicates positive tests, the **bold font** indicates negative tests.
-
-To add a new test into a table - add a new `<tr>` section - copy an existing one and update the values. You can do it online using the git editor or use an external desktop editor (eg. free version of [MarkdownPad2](http://markdownpad.com/)).
+The normal font indicates positive tests, the **bold font** indicates negative tests.   
 
 ## List Of Non-Covered Features ##
 

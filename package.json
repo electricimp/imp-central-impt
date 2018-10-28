@@ -1,6 +1,6 @@
 {
   "name": "imp-central-impt",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "impt - command line tool for the Electric Imp impCentral API",
   "main": "bin/impt",
   "engines": {
@@ -30,19 +30,19 @@
   },
   "homepage": "https://github.com/electricimp/imp-central-impt",
   "dependencies": {
-    "imp-central-api": "latest",
-    "prompt-sync": "^4.1.6",
-    "colors": "^1.1.2",
-    "yargs": "10.0.3",
-    "osenv": "^0.1.3",
-    "cli-spinner": "^0.2.5",
     "Builder": "^2.2.2",
+    "cli-spinner": "^0.2.5",
+    "colors": "^1.3.2",
     "dateformat": "^1.0.12",
     "glob": "^6.0.4",
+    "hoek": "^5.0.4",
+    "imp-central-api": "^1.3.1",
+    "osenv": "^0.1.3",
+    "prompt-sync": "^4.1.6",
     "random-words": "0.0.1",
     "randomstring": "^1.1.3",
     "sprintf-js": "^1.0.3",
-    "hoek": "^5.0.3"
+    "yargs": "10.0.3"
   },
   "scripts": {
     "test": "jasmine"
