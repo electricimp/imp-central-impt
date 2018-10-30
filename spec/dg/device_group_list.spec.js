@@ -43,6 +43,8 @@ const outputMode = '-z json';
 // Runs 'impt dg list' command with different combinations of options,
 describe(`impt device group list test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
     let product_id = null;
+    let email = null;
+    let userid = null;
 
     // custom matcher for search Device Group with expected properties in Device Group array
     let customMatcher = {
@@ -90,11 +92,18 @@ describe(`impt device group list test suite (output: ${outputMode ? outputMode :
 
     // prepare environment for device group list command testing
     function _testSuiteInit() {
-        return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, (commandOut) => {
-            product_id = ImptTestHelper.parseId(commandOut);
-            if (!product_id) fail("TestSuitInit error: Fail create product");
-            ImptTestHelper.emptyCheck(commandOut);
+        return ImptTestHelper.getAuthInfo((commandOut) => {
+            if (commandOut && commandOut.email && commandOut.userid) {
+                email = commandOut.email;
+                userid = commandOut.userid;
+            }
+            else fail("TestSuitInit error: Fail get addition auth attributes");
         }).
+            then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, (commandOut) => {
+                product_id = ImptTestHelper.parseId(commandOut);
+                if (!product_id) fail("TestSuitInit error: Fail create product");
+                ImptTestHelper.emptyCheck(commandOut);
+            })).
             then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx)).
             then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME2}`, ImptTestHelper.emptyCheckEx)).
             then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME2} -p ${PRODUCT_NAME2}`, ImptTestHelper.emptyCheckEx)).
@@ -146,7 +155,7 @@ describe(`impt device group list test suite (output: ${outputMode ? outputMode :
         });
 
         it('device group list by owner email', (done) => {
-            ImptTestHelper.runCommand(`impt dg list --owner ${config.email} -y development -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt dg list --owner ${email} -y development -z json`, (commandOut) => {
                 _checkDeviceGroupExist(commandOut, { name: `${DEVICE_GROUP_NAME}`, Project: { name: `${PRODUCT_NAME}` } });
                 _checkDeviceGroupExist(commandOut, { name: `${DEVICE_GROUP_NAME2}`, Project: { name: `${PRODUCT_NAME2}` } });
                 _checkDeviceGroupExist(commandOut, { name: `${DEVICE_GROUP_NAME3}`, Project: { name: `${PRODUCT_NAME3}` } });
@@ -157,7 +166,7 @@ describe(`impt device group list test suite (output: ${outputMode ? outputMode :
         });
 
         it('device group list by owner id', (done) => {
-            ImptTestHelper.runCommand(`impt dg list --owner ${config.accountid} -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt dg list --owner ${userid} -z json`, (commandOut) => {
                 _checkDeviceGroupExist(commandOut, { name: `${DEVICE_GROUP_NAME}`, Project: { name: `${PRODUCT_NAME}` } });
                 _checkDeviceGroupExist(commandOut, { name: `${DEVICE_GROUP_NAME2}`, Project: { name: `${PRODUCT_NAME2}` } });
                 _checkDeviceGroupExist(commandOut, { name: `${DEVICE_GROUP_NAME3}`, Project: { name: `${PRODUCT_NAME3}` } });

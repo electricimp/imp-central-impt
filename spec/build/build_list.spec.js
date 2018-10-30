@@ -52,6 +52,8 @@ describe(`impt build list test suite (output: ${outputMode ? outputMode : 'defau
     let build2_id = null;
     let build2_sha = null;
     let build3_id = null;
+    let email = null;
+    let userid = null;
 
     beforeAll((done) => {
         ImptTestHelper.init().
@@ -121,7 +123,14 @@ describe(`impt build list test suite (output: ${outputMode ? outputMode : 'defau
 
     // prepare environment for build list command testing
     function _testSuiteInit() {
-        return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
+        return ImptTestHelper.getAuthInfo((commandOut) => {
+            if (commandOut && commandOut.email && commandOut.userid) {
+                email = commandOut.email;
+                userid = commandOut.userid;
+            }
+            else fail("TestSuitInit error: Fail get addition auth attributes");
+        }).
+            then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx)).
             then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
                 ImptTestHelper.emptyCheck(commandOut);
             })).
@@ -184,7 +193,7 @@ describe(`impt build list test suite (output: ${outputMode ? outputMode : 'defau
         });
 
         it('build list by owner id and product id', (done) => {
-            ImptTestHelper.runCommand(`impt build list --owner ${config.accountid} --product ${product_id} -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt build list --owner ${userid} --product ${product_id} -z json`, (commandOut) => {
                 expect(commandOut).toContainsBuild({ id: build2_id });
                 expect(commandOut).toContainsBuild({ id: build3_id });
                 expect(commandOut).toBuildCountEqual(2);
@@ -206,7 +215,7 @@ describe(`impt build list test suite (output: ${outputMode ? outputMode : 'defau
         });
 
         it('build list by owner email and dg id', (done) => {
-            ImptTestHelper.runCommand(`impt build list --owner ${config.email} --dg ${dg_id} -z json`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt build list --owner ${email} --dg ${dg_id} -z json`, (commandOut) => {
                 expect(commandOut).toContainsBuild({ id: build2_id });
                 expect(commandOut).toBuildCountEqual(1);
                 ImptTestHelper.checkSuccessStatus(commandOut);

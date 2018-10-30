@@ -37,7 +37,7 @@ const DEFAULT_ENDPOINT = 'https://api.electricimp.com/v5';
 // Runs impt auth commands with different combinations of options.
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
     describe(`impt auth login by loginkey test suite  (output: ${outputMode ? outputMode : 'default'}) >`, () => {
-        const auth = `--user ${config.email} --pwd ${config.password}`;
+        const auth = `--user ${config.username} --pwd ${config.password}`;
         const endpoint = config.apiEndpoint ? `${config.apiEndpoint}` : `${DEFAULT_ENDPOINT}`;
         let loginkey = null;
 
@@ -82,9 +82,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 ImptTestHelper.checkAttribute(commandOut, 'endpoint', expInfo.endpoint ? expInfo.endpoint : endpoint);
                 ImptTestHelper.checkAttribute(commandOut, 'auto refresh', expInfo.refresh ? expInfo.refresh : 'true');
                 ImptTestHelper.checkAttribute(commandOut, 'Auth type', expInfo.auth ? expInfo.auth : 'Global Auth file');
-                ImptTestHelper.checkAttribute(commandOut, 'Email', expInfo.email ? expInfo.email : config.email);
-                if (config.username) ImptTestHelper.checkAttribute(commandOut, 'Username', config.username);
-                if (config.accountid) ImptTestHelper.checkAttribute(commandOut, 'Account id', config.accountid);
+                ImptTestHelper.checkAttribute(commandOut, 'Username', config.username);
                 ImptTestHelper.checkSuccessStatus(commandOut);
             });
         }
@@ -264,9 +262,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     ImptTestHelper.checkAttribute(commandOut, 'auto refresh', 'true');
                     ImptTestHelper.checkAttribute(commandOut, 'Auth type', 'Global Auth file');
                     ImptTestHelper.checkAttribute(commandOut, 'Login method', 'Login Key');
-                    ImptTestHelper.checkAttribute(commandOut, 'Email', config.email);
-                    if (config.username) ImptTestHelper.checkAttribute(commandOut, 'Username', config.username);
-                    if (config.accountid) ImptTestHelper.checkAttribute(commandOut, 'Account id', config.accountid);
+                    ImptTestHelper.checkAttribute(commandOut, 'Username', config.username);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(done).
@@ -297,9 +293,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     ImptTestHelper.checkAttribute(commandOut, 'auto refresh', 'true');
                     ImptTestHelper.checkAttribute(commandOut, 'Auth type', 'Local Auth file');
                     ImptTestHelper.checkAttribute(commandOut, 'Login method', 'Login Key');
-                    ImptTestHelper.checkAttribute(commandOut, 'Email', config.email);
-                    if (config.username) ImptTestHelper.checkAttribute(commandOut, 'Username', config.username);
-                    if (config.accountid) ImptTestHelper.checkAttribute(commandOut, 'Account id', config.accountid);
+                    ImptTestHelper.checkAttribute(commandOut, 'Username', config.username);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(done).
@@ -320,9 +314,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     ImptTestHelper.checkAttribute(commandOut, 'endpoint', endpoint);
                     ImptTestHelper.checkAttribute(commandOut, 'auto refresh', 'false');
                     ImptTestHelper.checkAttribute(commandOut, 'Auth type', 'Global Auth file');
-                    ImptTestHelper.checkAttribute(commandOut, 'Email', config.email);
-                    if (config.username) ImptTestHelper.checkAttribute(commandOut, 'Username', config.username);
-                    if (config.accountid) ImptTestHelper.checkAttribute(commandOut, 'Account id', config.accountid);
+                    ImptTestHelper.checkAttribute(commandOut, 'Username', config.username);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(done).
@@ -344,9 +336,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     ImptTestHelper.checkAttribute(commandOut, 'auto refresh', 'true');
                     ImptTestHelper.checkAttribute(commandOut, 'Auth type', 'Global Auth file');
                     ImptTestHelper.checkAttribute(commandOut, 'Login method', 'Login Key');
-                    ImptTestHelper.checkAttribute(commandOut, 'Email', config.email);
-                    if (config.username) ImptTestHelper.checkAttribute(commandOut, 'Username', config.username);
-                    if (config.accountid) ImptTestHelper.checkAttribute(commandOut, 'Account id', config.accountid);
+                    ImptTestHelper.checkAttribute(commandOut, 'Username', config.username);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(done).

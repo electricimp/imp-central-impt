@@ -35,6 +35,9 @@ const PRODUCT_NAME_2 = `__impt_pr_product_2${config.suffix}`;
 // Runs 'impt product list' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
     describe(`impt product list test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
+        let email = null;
+        let userid = null;
+
         beforeAll((done) => {
             ImptTestHelper.init().
                 then(_testSuiteCleanUp).
@@ -52,7 +55,14 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // prepare test environment for impt product list test
         function _testSuiteInit() {
-            return ImptTestHelper.runCommand(`impt product create --name ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
+            return ImptTestHelper.getAuthInfo((commandOut) => {
+                if (commandOut && commandOut.email && commandOut.userid) {
+                    email = commandOut.email;
+                    userid = commandOut.userid;
+                }
+                else fail("TestSuitInit error: Fail get addition auth attributes");
+            }).
+                then(() => ImptTestHelper.runCommand(`impt product create --name ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx)).
                 then(() => ImptTestHelper.runCommand(`impt product create --name ${PRODUCT_NAME_2}`, ImptTestHelper.emptyCheckEx));
         }
 
@@ -94,7 +104,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         });
 
         it('product list with owner by email', (done) => {
-            ImptTestHelper.runCommand(`impt product list --owner ${config.email} ${outputMode}`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt product list --owner ${email} ${outputMode}`, (commandOut) => {
                 expect(commandOut.output).toMatch(`${PRODUCT_NAME}`);
                 expect(commandOut.output).toMatch(`${PRODUCT_NAME_2}`);
                 ImptTestHelper.checkSuccessStatus(commandOut);
@@ -104,7 +114,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         });
 
         it('product list with owner by id', (done) => {
-            ImptTestHelper.runCommand(`impt product list --owner ${config.accountid} ${outputMode}`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt product list --owner ${userid} ${outputMode}`, (commandOut) => {
                 expect(commandOut.output).toMatch(`${PRODUCT_NAME}`);
                 expect(commandOut.output).toMatch(`${PRODUCT_NAME_2}`);
                 ImptTestHelper.checkSuccessStatus(commandOut);

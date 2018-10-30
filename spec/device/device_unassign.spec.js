@@ -39,6 +39,10 @@ const DEVICE_GROUP_NAME = `__impt_dev_device_group${config.suffix}`;
 // Runs 'impt device unassign' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
     describe(`impt device unassign test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
+        let device_mac = null;
+        let device_name = null;
+        let agent_id = null;
+
         beforeAll((done) => {
             ImptTestHelper.init().
                 then(_testSuiteCleanUp).
@@ -56,7 +60,15 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // prepare environment for device group unassign command test suite 
         function _testSuiteInit() {
-            return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
+            return ImptTestHelper.getDeviceAttrs(PRODUCT_NAME,DEVICE_GROUP_NAME,(commandOut) => {
+                if (commandOut && commandOut.mac) {
+                    device_mac = commandOut.mac;
+                    device_name = commandOut.name;
+                    agent_id = commandOut.agentid;
+                }
+                else fail("TestSuitInit error: Fail get addition device attributes");
+            }).
+                then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx)).
                 then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx));
         }
 
@@ -118,8 +130,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('unassign device by device mac', (done) => {
-                ImptTestHelper.runCommand(`impt device unassign -d ${config.devicemacs[config.deviceidx]} ${outputMode}`, (commandOut) => {
-                    _checkSuccessUnassignedDeviceMessage(commandOut, config.devicemacs[config.deviceidx]);
+                ImptTestHelper.runCommand(`impt device unassign -d ${device_mac} ${outputMode}`, (commandOut) => {
+                    _checkSuccessUnassignedDeviceMessage(commandOut, device_mac);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => _checkUnassignDevice).
@@ -128,8 +140,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('unassign device by agent id', (done) => {
-                ImptTestHelper.runCommand(`impt device unassign -d ${config.deviceaids[config.deviceidx]} ${outputMode}`, (commandOut) => {
-                    _checkSuccessUnassignedDeviceMessage(commandOut, config.deviceaids[config.deviceidx]);
+                ImptTestHelper.runCommand(`impt device unassign -d ${agent_id} ${outputMode}`, (commandOut) => {
+                    _checkSuccessUnassignedDeviceMessage(commandOut, agent_id);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => _checkUnassignDevice).

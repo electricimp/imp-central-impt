@@ -122,7 +122,6 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             it('reassign device by device group id', (done) => {
                 ImptTestHelper.runCommand(`impt dg reassign --from ${dg_id} --to ${dg_dst_id} ${outputMode}`, (commandOut) => {
                     _checkSuccessReassignedDeviceMessage(commandOut, dg_id, dg_dst_id);
-                    ImptTestHelper.checkAttribute(commandOut, ImptTestHelper.ATTR_ID, config.devices[config.deviceidx]);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => ImptDgTestHelper.checkDeviceGroupHasNoDevice(dg_id)).
@@ -134,7 +133,6 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             it('reassign device by device group name', (done) => {
                 ImptTestHelper.runCommand(`impt dg reassign --from ${DEVICE_GROUP_NAME} --to ${DEVICE_GROUP_DST_NAME} ${outputMode}`, (commandOut) => {
                     _checkSuccessReassignedDeviceMessage(commandOut, DEVICE_GROUP_NAME, DEVICE_GROUP_DST_NAME);
-                    ImptTestHelper.checkAttribute(commandOut, ImptTestHelper.ATTR_ID, config.devices[config.deviceidx]);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => ImptDgTestHelper.checkDeviceGroupHasNoDevice(dg_id)).
@@ -146,7 +144,6 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             it('reassign device by project', (done) => {
                 ImptTestHelper.runCommand(`impt dg reassign --from ${dg_id} ${outputMode}`, (commandOut) => {
                     _checkSuccessReassignedDeviceMessage(commandOut, dg_id, dg_dst_id);
-                    ImptTestHelper.checkAttribute(commandOut, ImptTestHelper.ATTR_ID, config.devices[config.deviceidx]);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => ImptDgTestHelper.checkDeviceGroupHasNoDevice(dg_id)).

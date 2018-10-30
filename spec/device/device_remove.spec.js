@@ -39,6 +39,10 @@ const DEVICE_GROUP_NAME = `__impt_dev_device_group${config.suffix}`;
 // Runs 'impt device remove' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
     xdescribe(`impt device remove test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
+        let device_mac = null;
+        let device_name = null;
+        let agent_id = null;
+
         beforeAll((done) => {
             ImptTestHelper.init().
                 then(_testSuiteCleanUp).
@@ -62,7 +66,15 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // prepare environment for device remove command testing
         function _testSuiteInit() {
-            return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
+            return ImptTestHelper.getDeviceAttrs(PRODUCT_NAME,DEVICE_GROUP_NAME,(commandOut) => {
+                if (commandOut && commandOut.mac) {
+                    device_mac = commandOut.mac;
+                    device_name = commandOut.name;
+                    agent_id = commandOut.agentid;
+                }
+                else fail("TestSuitInit error: Fail get addition device attributes");
+            }).
+                then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx)).
                 then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx));
         }
 
@@ -113,31 +125,31 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('remove device by mac', (done) => {
-                ImptTestHelper.runCommand(`impt device remove -d ${config.devicemacs[config.deviceidx]} -q ${outputMode}`, (commandOut) => {
-                    _checkSuccessDeleteDeviceMessage(commandOut, config.devicemacs[config.deviceidx]);
+                ImptTestHelper.runCommand(`impt device remove -d ${device_mac} -q ${outputMode}`, (commandOut) => {
+                    _checkSuccessDeleteDeviceMessage(commandOut, device_mac);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommand(`impt device info -d ${config.devicemacs[config.deviceidx]}`, ImptTestHelper.checkFailStatusEx)).
+                    then(() => ImptTestHelper.runCommand(`impt device info -d ${config.devices[config.deviceidx]}`, ImptTestHelper.checkFailStatusEx)).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('remove device by agent id', (done) => {
-                ImptTestHelper.runCommand(`impt device remove -d ${config.deviceaids[config.deviceidx]} -q ${outputMode}`, (commandOut) => {
-                    _checkSuccessDeleteDeviceMessage(commandOut, config.deviceaids[config.deviceidx]);
+                ImptTestHelper.runCommand(`impt device remove -d ${agent_id} -q ${outputMode}`, (commandOut) => {
+                    _checkSuccessDeleteDeviceMessage(commandOut, agent_id);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommand(`impt device info -d ${config.deviceaids[config.deviceidx]}`, ImptTestHelper.checkFailStatusEx)).
+                    then(() => ImptTestHelper.runCommand(`impt device info -d ${config.devices[config.deviceidx]}`, ImptTestHelper.checkFailStatusEx)).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('remove device by name', (done) => {
-                ImptTestHelper.runCommand(`impt device remove -d ${config.devicenames[config.deviceidx]} -q ${outputMode}`, (commandOut) => {
-                    _checkSuccessDeleteDeviceMessage(commandOut, config.devicenames[config.deviceidx]);
+                ImptTestHelper.runCommand(`impt device remove -d ${device_name} -q ${outputMode}`, (commandOut) => {
+                    _checkSuccessDeleteDeviceMessage(commandOut, device_name);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommand(`impt device info -d ${config.devicenames[config.deviceidx]}`, ImptTestHelper.checkFailStatusEx)).
+                    then(() => ImptTestHelper.runCommand(`impt device info -d ${config.devices[config.deviceidx]}`, ImptTestHelper.checkFailStatusEx)).
                     then(done).
                     catch(error => done.fail(error));
             });

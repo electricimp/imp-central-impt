@@ -47,10 +47,13 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
     describe(`impt project info test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         let product_id = null;
         let dg_id = null;
+        let email = null;
+        let userid = null;
 
         beforeAll((done) => {
             ImptTestHelper.init().
                 then(_testSuiteCleanUp).
+                then(_testSuiteInit).
                 then(done).
                 catch(error => done.fail(error));
         }, ImptTestHelper.TIMEOUT);
@@ -61,6 +64,17 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 then(done).
                 catch(error => done.fail(error));
         }, ImptTestHelper.TIMEOUT);
+
+        // prepare test environment for impt project info test suite
+        function _testSuiteInit() {
+            return ImptTestHelper.getAuthInfo((commandOut) => {
+                if (commandOut && commandOut.email && commandOut.userid) {
+                    email = commandOut.email;
+                    userid = commandOut.userid;
+                }
+                else fail("TestSuitInit error: Fail get addition auth attributes");
+            });
+        }
 
         // delete all entities using in impt project info test suite
         function _testSuiteCleanUp() {
@@ -128,8 +142,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     expect(json.Auth['Access token auto refresh']).toBe(true);
                     expect(json.Auth['Login method']).toBe('User/Password');
                     expect(json.Auth['Username']).toBe(config.username);
-                    expect(json.Auth['Email']).toBe(config.email);
-                    expect(json.Auth['Account id']).toBe(config.accountid);
+                    expect(json.Auth['Email']).toBe(email);
+                    expect(json.Auth['Account id']).toBe(userid);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(done).

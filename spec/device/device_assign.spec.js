@@ -40,6 +40,10 @@ const DEVICE_GROUP_NAME = `__impt_dev_device_group${config.suffix}`;
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
     describe(`impt device assign test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         let dg_id = null;
+        let device_mac = null;
+        let device_name = null;
+        let agent_id = null;
+
 
         beforeAll((done) => {
             ImptTestHelper.init().
@@ -58,7 +62,15 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // prepare environment for device assign command testing
         function _testSuiteInit() {
-            return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
+            return ImptTestHelper.getDeviceAttrs(PRODUCT_NAME,DEVICE_GROUP_NAME,(commandOut) => {
+                if (commandOut && commandOut.mac) {
+                    device_mac = commandOut.mac;
+                    device_name = commandOut.name;
+                    agent_id = commandOut.agentid;
+                }
+                else fail("TestSuitInit error: Fail get addition device attributes");
+            }).
+                then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx)).
                 then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
                     dg_id = ImptTestHelper.parseId(commandOut);
                     if (!dg_id) fail("TestSuitInit error: Fail create device group");
@@ -79,6 +91,10 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         function _checkAssignDevice() {
             return ImptTestHelper.runCommand(`impt device info --device ${config.devices[config.deviceidx]} -z json`, (commandOut) => {
                 let json = JSON.parse(commandOut.output);
+                expect(json.Device.id).toBe(config.devices[config.deviceidx]);
+                expect(json.Device.mac_address).toBe(device_mac);
+                expect(json.Device.name).toBe(device_name);
+                expect(json.Device.agent_id).toBe(agent_id);
                 expect(json.Device['Device Group'].id).toBe(dg_id);
                 ImptTestHelper.checkSuccessStatus(commandOut);
             });
@@ -103,18 +119,6 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         }
 
         describe('device assign positive tests >', () => {
-            beforeAll((done) => {
-                ImptTestHelper.projectCreate(DEVICE_GROUP_NAME).
-                    then(done).
-                    catch(error => done.fail(error));
-            }, ImptTestHelper.TIMEOUT);
-
-            afterAll((done) => {
-                ImptTestHelper.projectDelete().
-                    then(done).
-                    catch(error => done.fail(error));
-            }, ImptTestHelper.TIMEOUT);
-
             afterEach((done) => {
                 _testCleanUp().
                     then(done).
@@ -126,27 +130,29 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     _checkSuccessAssignedDeviceMessage(commandOut, config.devices[config.deviceidx], DEVICE_GROUP_NAME);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => _checkAssignDevice).
+                    then(_checkAssignDevice).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('device assign to dg by id', (done) => {
-                ImptTestHelper.runCommand(`impt device assign -d ${config.devicemacs[config.deviceidx]} -g ${dg_id} -q ${outputMode}`, (commandOut) => {
-                    _checkSuccessAssignedDeviceMessage(commandOut, config.devicemacs[config.deviceidx], dg_id);
+                ImptTestHelper.runCommand(`impt device assign -d ${device_mac} -g ${dg_id} -q ${outputMode}`, (commandOut) => {
+                    _checkSuccessAssignedDeviceMessage(commandOut, device_mac, dg_id);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => _checkAssignDevice).
+                    then(_checkAssignDevice).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('device assign to project', (done) => {
-                ImptTestHelper.runCommand(`impt device assign -d ${config.devices[config.deviceidx]} -q ${outputMode}`, (commandOut) => {
-                    _checkSuccessAssignedDeviceMessage(commandOut, config.devices[config.deviceidx], dg_id);
-                    ImptTestHelper.checkSuccessStatus(commandOut);
-                }).
-                    then(() => _checkAssignDevice).
+                ImptTestHelper.projectCreate(DEVICE_GROUP_NAME).
+                    then(() => ImptTestHelper.runCommand(`impt device assign -d ${config.devices[config.deviceidx]} -q ${outputMode}`, (commandOut) => {
+                        _checkSuccessAssignedDeviceMessage(commandOut, config.devices[config.deviceidx], dg_id);
+                        ImptTestHelper.checkSuccessStatus(commandOut);
+                    })).
+                    then(_checkAssignDevice).
+                    then(ImptTestHelper.projectDelete).
                     then(done).
                     catch(error => done.fail(error));
             });
@@ -157,7 +163,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                         _checkAlreadyAssignedDeviceMessage(commandOut, config.devices[config.deviceidx], dg_id);
                         ImptTestHelper.checkSuccessStatus(commandOut);
                     })).
-                    then(() => _checkAssignDevice).
+                    then(_checkAssignDevice).
                     then(done).
                     catch(error => done.fail(error));
             });

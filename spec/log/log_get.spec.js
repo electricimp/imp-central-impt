@@ -37,6 +37,10 @@ const DEVICE_GROUP_NAME = `__impt_log_device_group${config.suffix}`;
 // Runs 'impt log get' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
     describe(`impt log get test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
+        let device_mac = null;
+        let device_name = null;
+        let agent_id = null;
+
         beforeAll((done) => {
             ImptTestHelper.init().
                 then(_testSuiteCleanUp).
@@ -54,7 +58,15 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // prepare environment for impt log get command testing
         function _testSuiteInit() {
-            return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
+            return ImptTestHelper.getDeviceAttrs(PRODUCT_NAME,DEVICE_GROUP_NAME,(commandOut) => {
+                if (commandOut && commandOut.mac) {
+                    device_mac = commandOut.mac;
+                    device_name = commandOut.name;
+                    agent_id = commandOut.agentid;
+                }
+                else fail("TestSuitInit error: Fail get addition device attributes");
+            }).
+                then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx)).
                 then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx)).
                 then(() => ImptTestHelper.deviceAssign(DEVICE_GROUP_NAME)).
                 then(() => Shell.cp('-Rf', `${__dirname}/fixtures/devicecode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER)).
@@ -110,7 +122,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('log get by device mac', (done) => {
-                ImptTestHelper.runCommandInteractive(`impt log get -d ${config.devicemacs[config.deviceidx]} ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommandInteractive(`impt log get -d ${device_mac} ${outputMode}`, (commandOut) => {
                     _checkLogMessages(commandOut, { startNumber: 1, endNumber: 20, count: 20 });
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
@@ -119,7 +131,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('log get by agent id', (done) => {
-                ImptTestHelper.runCommandInteractive(`impt log get -d ${config.deviceaids[config.deviceidx]} ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommandInteractive(`impt log get -d ${agent_id} ${outputMode}`, (commandOut) => {
                     _checkLogMessages(commandOut, { startNumber: 1, endNumber: 20, count: 20 });
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
@@ -128,7 +140,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('log get by device name', (done) => {
-                ImptTestHelper.runCommandInteractive(`impt log get -d ${config.devicenames[config.deviceidx]} ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommandInteractive(`impt log get -d ${device_name} ${outputMode}`, (commandOut) => {
                     _checkLogMessages(commandOut, { startNumber: 1, endNumber: 20, count: 20 });
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).

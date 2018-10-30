@@ -34,7 +34,7 @@ const UserInteractor = require('../lib/util/UserInteractor');
 const child_process = require('child_process');
 
 const TIMEOUT_MS = 300000;
-const TESTS_EXECUTION_FOLDER = `${__dirname}/../__test${process.env.IMPT_FOLDER_SUFFIX?process.env.IMPT_FOLDER_SUFFIX:''}`;
+const TESTS_EXECUTION_FOLDER = `${__dirname}/../__test${process.env.IMPT_FOLDER_SUFFIX ? process.env.IMPT_FOLDER_SUFFIX : ''}`;
 const KEY_ANSWER = {
     CTRL_C: '\x03',
     ENTER: '\n',
@@ -99,7 +99,7 @@ class ImptTestHelper {
         if (login) {
             const endpoint = config.apiEndpoint ? `--endpoint ${config.apiEndpoint}` : '';
             return ImptTestHelper.runCommand(
-                `impt auth login --local --user ${config.email} --pwd ${config.password} ${endpoint}`,
+                `impt auth login --local --user ${config.username} --pwd ${config.password} ${endpoint}`,
                 ImptTestHelper.checkSuccessStatus);
         }
         return Promise.resolve();
@@ -177,6 +177,77 @@ class ImptTestHelper {
         });
     }
 
+    static getDeviceAttrs(product, dg, output) {
+        let jsonInfo = null;
+        return ImptTestHelper.runCommand(`impt product create -n ${product}`, ImptTestHelper.emptyCheckEx).
+            then(() => ImptTestHelper.runCommand(`impt dg create -n ${dg} -p ${product}`, ImptTestHelper.emptyCheck)).
+            then(() => ImptTestHelper.runCommand(`impt device assign -d ${config.devices[config.deviceidx]} -g ${dg} -q`, ImptTestHelper.emptyCheckEx)).
+            then(() => ImptTestHelper.runCommand(`impt build deploy -g ${dg}`, ImptTestHelper.emptyCheckEx)).
+            then(() => ImptTestHelper.runCommand(`impt device info -d ${config.devices[config.deviceidx]} -z json`, (commandOut) => {
+                jsonInfo = commandOut.output;
+                ImptTestHelper.emptyCheck(commandOut);
+            })).
+            then(() => ImptTestHelper.runCommand(`impt product delete -p ${product} -f -b -q`, ImptTestHelper.emptyCheckEx)).
+            then(() => {
+                return new Promise((resolve) => {
+                    let json = JSON.parse(jsonInfo);
+                    if (json.Device) {
+                        let device_mac = json.Device.mac_address;
+                        let device_name = json.Device.name;
+                        let agent_id = json.Device.agent_id;
+                        resolve({ mac: device_mac, name: device_name, agentid: agent_id });
+                    }
+                    else
+                        resolve(null);
+                })
+            }).
+            then(output);
+    }
+
+    static getAuthAttrs(output) {
+        let jsonInfo = null;
+        return ImptTestHelper.runCommand(`impt auth info -z json`, (commandOut) => {
+            jsonInfo = commandOut.output;
+            ImptTestHelper.emptyCheck(commandOut);
+        }).
+            then(() => {
+                return new Promise((resolve) => {
+                    let json = JSON.parse(jsonInfo);
+                    if (json.Auth) {
+                        let auth_email = json.Auth.Email;
+                        let user_id = json.Auth['Account id'];
+                        resolve({ email: auth_email, id: user_id });
+                    }
+                    else
+                        resolve(null);
+                })
+            }).
+            then(output);
+    }
+
+    static getAuthAttrsWithLogin(output) {
+        let jsonInfo = null;
+        return ImptTestHelper.runCommand(`impt auth -l -u ${config.username} -w ${config.password} -q`, ImptTestHelper.emptyCheckEx).
+            then(() => ImptTestHelper.runCommand(`impt auth info -z json`, (commandOut) => {
+                jsonInfo = commandOut.output;
+                ImptTestHelper.emptyCheck(commandOut);
+            })).
+            then(() => ImptTestHelper.runCommand(`impt auth logout -l`, ImptTestHelper.emptyCheckEx)).
+            then(() => {
+                return new Promise((resolve) => {
+                    let json = JSON.parse(jsonInfo);
+                    if (json.Auth) {
+                        let auth_email = json.Auth.Email;
+                        let user_id = json.Auth['Account id'];
+                        resolve({ email: auth_email, id: user_id });
+                    }
+                    else
+                        resolve(null);
+                })
+            }).
+            then(output);
+    }
+
     // Checks if file exist in the TESTS_EXECUTION_FOLDER
     static checkFileExist(fileName) {
         expect(Shell.test('-e', `${TESTS_EXECUTION_FOLDER}/${fileName}`)).toBe(true);
@@ -233,14 +304,14 @@ class ImptTestHelper {
 
     // Checks if the command output contains the specified attribute name and value
     static checkAttribute(commandOut, attrName, attrValue) {
-        expect(commandOut.output).toMatch(new RegExp(`${attrName}"?:\\s+"?${attrValue.replace(new RegExp(/"/g),'\\\\?"')}"?`));
+        expect(commandOut.output).toMatch(new RegExp(`${attrName}"?:\\s+"?${attrValue.replace(new RegExp(/"/g), '\\\\?"')}"?`));
     }
 
     // Checks if the command output contains the specified message for default or debug output mode
     static checkOutputMessage(outputMode, commandOut, message) {
         const matcher = outputMode.match('-(z|-output)\\s+(json|minimal)');
         if (matcher && matcher.length) expect(true).toBeTrue;
-        else expect(commandOut.output).toMatch(new RegExp(message.replace(new RegExp(/[()\\]/g), `\\$&`).replace(new RegExp(/"/g),'\\\\?"')));
+        else expect(commandOut.output).toMatch(new RegExp(message.replace(new RegExp(/[()\\]/g), `\\$&`).replace(new RegExp(/"/g), '\\\\?"')));
     }
 
     // parse ID from command output and return id value if success, otherwise return null

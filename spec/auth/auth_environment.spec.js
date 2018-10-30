@@ -91,9 +91,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             ImptTestHelper.checkAttribute(commandOut, 'auto refresh', expInfo.refresh ? expInfo.refresh : 'true');
             ImptTestHelper.checkAttribute(commandOut, 'Auth type', expInfo.auth ? expInfo.auth : 'Global Auth file');
             ImptTestHelper.checkAttribute(commandOut, 'Login method', expInfo.method ? expInfo.method : 'User/Password');
-            ImptTestHelper.checkAttribute(commandOut, 'Email', expInfo.email ? expInfo.email : config.email);
             ImptTestHelper.checkAttribute(commandOut, 'Username', config.username);
-            ImptTestHelper.checkAttribute(commandOut, 'Account id', config.accountid);
         }
 
         describe('Tests with not auth preconditions >', () => {

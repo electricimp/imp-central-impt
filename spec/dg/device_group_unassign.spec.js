@@ -111,7 +111,6 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             it('unassign device by device group id', (done) => {
                 ImptTestHelper.runCommand(`impt dg unassign --dg ${dg_id} ${outputMode}`, (commandOut) => {
                     _checkSuccessUnassignedDeviceMessage(commandOut, dg_id);
-                    ImptTestHelper.checkAttribute(commandOut, ImptTestHelper.ATTR_ID, config.devices[config.deviceidx]);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => ImptDgTestHelper.checkDeviceGroupHasNoDevice(dg_id)).
@@ -122,7 +121,6 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             it('unassign device by device group name', (done) => {
                 ImptTestHelper.runCommand(`impt dg unassign --dg ${DEVICE_GROUP_NAME} ${outputMode}`, (commandOut) => {
                     _checkSuccessUnassignedDeviceMessage(commandOut, DEVICE_GROUP_NAME);
-                    ImptTestHelper.checkAttribute(commandOut, ImptTestHelper.ATTR_ID, config.devices[config.deviceidx]);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => ImptDgTestHelper.checkDeviceGroupHasNoDevice(dg_id)).
@@ -133,7 +131,6 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             it('unassign device by project', (done) => {
                 ImptTestHelper.runCommand(`impt dg unassign ${outputMode}`, (commandOut) => {
                     _checkSuccessUnassignedDeviceMessage(commandOut, dg_id);
-                    ImptTestHelper.checkAttribute(commandOut, ImptTestHelper.ATTR_ID, config.devices[config.deviceidx]);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => ImptDgTestHelper.checkDeviceGroupHasNoDevice(dg_id)).

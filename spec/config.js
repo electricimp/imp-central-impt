@@ -24,16 +24,9 @@
 
 'use strict';
 
-
 exports.username = process.env.IMPT_USER_NAME;
-exports.accountid = process.env.IMPT_USER_ID
-exports.email = process.env.IMPT_USER_EMAIL;
 exports.password = process.env.IMPT_USER_PASSWORD;
 exports.devices = process.env.IMPT_DEVICE_IDS ? process.env.IMPT_DEVICE_IDS.split(',') : [];
-exports.devicemacs = process.env.IMPT_DEVICE_MACS ? process.env.IMPT_DEVICE_MACS.split(',') : [];
-exports.deviceaids = process.env.IMPT_DEVICE_AGENTIDS ? process.env.IMPT_DEVICE_AGENTIDS.split(',') : [];
-exports.devicenames = process.env.IMPT_DEVICE_NAMES ? process.env.IMPT_DEVICE_NAMES.split(',') : [];
-
 
 // output modes for run tests in addition to default mode  
 exports.outputModes = process.env.IMPT_OUTPUT_MODES ? process.env.IMPT_OUTPUT_MODES.split(',') : [];

@@ -40,12 +40,12 @@ class ImptAuthCommandsHelper {
     }
 
     static localLogin() {
-        return ImptTestHelper.runCommand(`impt auth login --local --user ${config.email} --pwd ${config.password} --confirmed`,
+        return ImptTestHelper.runCommand(`impt auth login --local --user ${config.username} --pwd ${config.password} --confirmed`,
             ImptTestHelper.emptyCheckEx);
     }
 
     static globalLogin() {
-        return ImptTestHelper.runCommand(`impt auth login --user ${config.email} --pwd ${config.password} --confirmed`,
+        return ImptTestHelper.runCommand(`impt auth login --user ${config.username} --pwd ${config.password} --confirmed`,
             ImptTestHelper.emptyCheckEx);
     }
 

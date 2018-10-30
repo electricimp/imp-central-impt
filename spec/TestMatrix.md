@@ -2552,7 +2552,7 @@ device assign to dg by id</a></sub></td>
     </tr>
     <tr align="center">
       <td height="30"></td>
-      <td align="left"><sub>name</sub></td>
+      <td align="left"><sub>agent id</sub></td>
       <td><sub>project</sub></td>
       <td><sub>Y</sub></td>
       <td><sub>default</sub></td>

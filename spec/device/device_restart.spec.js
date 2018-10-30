@@ -36,110 +36,123 @@ const Shell = require('shelljs');
 const PRODUCT_NAME = `__impt_dev_product${config.suffix}`;
 const DEVICE_GROUP_NAME = `__impt_dev_device_group${config.suffix}`;
 
+const outputMode = '';
+
 // Test suite for 'impt device restart' command.
 // Runs 'impt device restart' command with different combinations of options,
-ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
-    describe(`impt device restart test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
-        beforeAll((done) => {
-            ImptTestHelper.init().
-                then(_testSuiteCleanUp).
-                then(_testSuiteInit).
+describe(`impt device restart test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
+    let device_mac = null;
+    let device_name = null;
+    let agent_id = null;
+
+    beforeAll((done) => {
+        ImptTestHelper.init().
+            then(_testSuiteCleanUp).
+            then(_testSuiteInit).
+            then(done).
+            catch(error => done.fail(error));
+    }, ImptTestHelper.TIMEOUT);
+
+    afterAll((done) => {
+        _testSuiteCleanUp().
+            then(ImptTestHelper.cleanUp).
+            then(done).
+            catch(error => done.fail(error));
+    }, ImptTestHelper.TIMEOUT);
+
+    // prepare environment for device restart command testing
+    function _testSuiteInit() {
+        return ImptTestHelper.getDeviceAttrs(PRODUCT_NAME, DEVICE_GROUP_NAME, (commandOut) => {
+            if (commandOut && commandOut.mac) {
+                device_mac = commandOut.mac;
+                device_name = commandOut.name;
+                agent_id = commandOut.agentid;
+            }
+            else fail("TestSuitInit error: Fail get addition device attributes");
+        }).
+            then(() => ImptTestHelper.runCommand(`impt project create --product ${PRODUCT_NAME} --create-product --name ${DEVICE_GROUP_NAME}  ${outputMode}`, ImptTestHelper.emptyCheckEx)).
+            then(() => Shell.cp('-Rf', `${__dirname}/fixtures/device.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER)).
+            then(() => ImptTestHelper.deviceAssign(DEVICE_GROUP_NAME)).
+            then(() => ImptTestHelper.runCommand(`impt build run`, ImptTestHelper.emptyCheckEx));
+    }
+
+    // delete all entities using in impt device restart test suite
+    function _testSuiteCleanUp() {
+        return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx);
+    }
+
+    // check 'device successfully restarted' output message 
+    function _checkSuccessRestartedDeviceMessage(commandOut, device) {
+        ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
+            Util.format(`${UserInterractor.MESSAGES.DEVICE_RESTARTED}`,
+                `${Identifier.ENTITY_TYPE.TYPE_DEVICE} "${device}"`)
+        );
+    }
+
+    // check 'device successfully coditional restarted' output message 
+    function _checkSuccessCondRestartedDeviceMessage(commandOut, device) {
+        ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
+            Util.format(`${UserInterractor.MESSAGES.DEVICE_COND_RESTARTED}`,
+                `${Identifier.ENTITY_TYPE.TYPE_DEVICE} "${device}"`)
+        );
+    }
+
+    describe('device restart positive tests >', () => {
+        it('restart device by device id', (done) => {
+            ImptTestHelper.runCommand(`impt device restart --device ${config.devices[config.deviceidx]} ${outputMode}`, (commandOut) => {
+                _checkSuccessRestartedDeviceMessage(commandOut, config.devices[config.deviceidx]);
+                ImptTestHelper.checkSuccessStatus(commandOut);
+            }).
                 then(done).
                 catch(error => done.fail(error));
-        }, ImptTestHelper.TIMEOUT);
-
-        afterAll((done) => {
-            _testSuiteCleanUp().
-                then(ImptTestHelper.cleanUp).
-                then(done).
-                catch(error => done.fail(error));
-        }, ImptTestHelper.TIMEOUT);
-
-        // prepare environment for device restart command testing
-        function _testSuiteInit() {
-            return ImptTestHelper.runCommand(`impt project create --product ${PRODUCT_NAME} --create-product --name ${DEVICE_GROUP_NAME}  ${outputMode}`, ImptTestHelper.emptyCheckEx).
-                then(() => Shell.cp('-Rf', `${__dirname}/fixtures/device.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER)).
-                then(() => ImptTestHelper.deviceAssign(DEVICE_GROUP_NAME)).
-                then(() => ImptTestHelper.runCommand(`impt build run`, ImptTestHelper.emptyCheckEx));
-        }
-
-        // delete all entities using in impt device restart test suite
-        function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx);
-        }
-
-        // check 'device successfully restarted' output message 
-        function _checkSuccessRestartedDeviceMessage(commandOut, device) {
-            ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
-                Util.format(`${UserInterractor.MESSAGES.DEVICE_RESTARTED}`,
-                    `${Identifier.ENTITY_TYPE.TYPE_DEVICE} "${device}"`)
-            );
-        }
-
-        // check 'device successfully coditional restarted' output message 
-        function _checkSuccessCondRestartedDeviceMessage(commandOut, device) {
-            ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
-                Util.format(`${UserInterractor.MESSAGES.DEVICE_COND_RESTARTED}`,
-                    `${Identifier.ENTITY_TYPE.TYPE_DEVICE} "${device}"`)
-            );
-        }
-
-        describe('device restart positive tests >', () => {
-            it('restart device by device id', (done) => {
-                ImptTestHelper.runCommand(`impt device restart --device ${config.devices[config.deviceidx]} ${outputMode}`, (commandOut) => {
-                    _checkSuccessRestartedDeviceMessage(commandOut, config.devices[config.deviceidx]);
-                    ImptTestHelper.checkSuccessStatus(commandOut);
-                }).
-                    then(done).
-                    catch(error => done.fail(error));
-            });
-
-            it('restart device by device name', (done) => {
-                ImptTestHelper.runCommand(`impt device restart -d ${config.devices[config.deviceidx]} ${outputMode}`, (commandOut) => {
-                    _checkSuccessRestartedDeviceMessage(commandOut, config.devices[config.deviceidx]);
-                    ImptTestHelper.checkSuccessStatus(commandOut);
-                }).
-                    then(done).
-                    catch(error => done.fail(error));
-            });
-
-            it('restart device by device mac', (done) => {
-                ImptTestHelper.runCommand(`impt device restart -d ${config.devicemacs[config.deviceidx]} ${outputMode}`, (commandOut) => {
-                    _checkSuccessRestartedDeviceMessage(commandOut, config.devicemacs[config.deviceidx]);
-                    ImptTestHelper.checkSuccessStatus(commandOut);
-                }).
-                    then(done).
-                    catch(error => done.fail(error));
-            });
-
-            it('conditional restart device by agent id', (done) => {
-                ImptTestHelper.runCommand(`impt device restart -c -d ${config.deviceaids[config.deviceidx]} ${outputMode}`, (commandOut) => {
-                    _checkSuccessCondRestartedDeviceMessage(commandOut, config.deviceaids[config.deviceidx]);
-                    ImptTestHelper.checkSuccessStatus(commandOut);
-                }).
-                    then(done).
-                    catch(error => done.fail(error));
-            });
-
-            xit('restart device with log', (done) => {
-                ImptTestHelper.runCommandInteractive(`impt device restart -l -d ${config.devices[config.deviceidx]} ${outputMode}`, (commandOut) => {
-                    _checkSuccessRestartedDeviceMessage(commandOut, config.devices[config.deviceidx]);
-                    ImptTestHelper.checkSuccessStatus(commandOut);
-                }).
-                    then(done).
-                    catch(error => done.fail(error));
-            });
         });
 
-        describe('device group create negative tests >', () => {
-            it('restart not exist device', (done) => {
-                ImptTestHelper.runCommand(`impt device restart -d not-exist-device ${outputMode}`, (commandOut) => {
-                    MessageHelper.checkEntityNotFoundError(commandOut, MessageHelper.DEVICE, 'not-exist-device');
-                    ImptTestHelper.checkFailStatus(commandOut);
-                }).
-                    then(done).
-                    catch(error => done.fail(error));
-            });
+        it('restart device by device name', (done) => {
+            ImptTestHelper.runCommand(`impt device restart -d ${device_name} ${outputMode}`, (commandOut) => {
+                _checkSuccessRestartedDeviceMessage(commandOut, device_name);
+                ImptTestHelper.checkSuccessStatus(commandOut);
+            }).
+                then(done).
+                catch(error => done.fail(error));
+        });
+
+        it('restart device by device mac', (done) => {
+            ImptTestHelper.runCommand(`impt device restart -d ${device_mac} ${outputMode}`, (commandOut) => {
+                _checkSuccessRestartedDeviceMessage(commandOut, device_mac);
+                ImptTestHelper.checkSuccessStatus(commandOut);
+            }).
+                then(done).
+                catch(error => done.fail(error));
+        });
+
+        it('conditional restart device by agent id', (done) => {
+            ImptTestHelper.runCommand(`impt device restart -c -d ${agent_id} ${outputMode}`, (commandOut) => {
+                _checkSuccessCondRestartedDeviceMessage(commandOut, agent_id);
+                ImptTestHelper.checkSuccessStatus(commandOut);
+            }).
+                then(done).
+                catch(error => done.fail(error));
+        });
+
+        xit('restart device with log', (done) => {
+            ImptTestHelper.runCommandInteractive(`impt device restart -l -d ${config.devices[config.deviceidx]} ${outputMode}`, (commandOut) => {
+                _checkSuccessRestartedDeviceMessage(commandOut, config.devices[config.deviceidx]);
+                ImptTestHelper.checkSuccessStatus(commandOut);
+            }).
+                then(done).
+                catch(error => done.fail(error));
+        });
+    });
+
+    describe('device group create negative tests >', () => {
+        it('restart not exist device', (done) => {
+            ImptTestHelper.runCommand(`impt device restart -d not-exist-device ${outputMode}`, (commandOut) => {
+                MessageHelper.checkEntityNotFoundError(commandOut, MessageHelper.DEVICE, 'not-exist-device');
+                ImptTestHelper.checkFailStatus(commandOut);
+            }).
+                then(done).
+                catch(error => done.fail(error));
         });
     });
 });
+
