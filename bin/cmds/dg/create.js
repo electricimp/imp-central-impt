@@ -66,6 +66,7 @@ exports.builder = function (yargs) {
                 ' The target Device Group must be of the type %s or %s correspondingly and belongs to the specified Product.',
                 Options.DG_TYPE_FACTORY, Options.DG_TYPE_PRE_FACTORY, Options.DG_TYPE_PRODUCTION, Options.DG_TYPE_PRE_PRODUCTION)
         },
+        [Options.REGION] : false,
         [Options.OUTPUT] : false
     });
     return yargs
@@ -76,6 +77,14 @@ exports.builder = function (yargs) {
             if (!opts.target && Options.isProductionTargetRequired(opts.deviceGroupType)) {
                 return new Errors.ImptError(UserInteractor.ERRORS.CMD_TARGET_REQUIRED,
                     Options.TARGET, Options.getDeviceGroupTypeName(opts.deviceGroupType));
+            }
+            if (opts.region && !Options.isProductionDeviceGroupType(opts.deviceGroupType)) {
+                return new Errors.ImptError(
+                    UserInteractor.ERRORS.WRONG_DG_TYPE_FOR_OPTION,
+                    Options.REGION,
+                    Options.getDeviceGroupTypeName(opts.deviceGroupType),
+                    Options.DG_TYPE_PRE_PRODUCTION,
+                    Options.DG_TYPE_PRODUCTION);
             }
             return Options.checkOptions(argv, options);
         })
