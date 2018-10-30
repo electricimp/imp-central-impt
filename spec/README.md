@@ -7,24 +7,18 @@ There are [Jasmine](https://www.npmjs.com/package/jasmine) tests in the [spec fo
 1. Clone or download the latest version of *imp-central-impt* repository to a local *imp-central-impt* folder. For example, by a command `git clone --recursive https://github.com/electricimp/imp-central-impt.git imp-central-impt`
 1. Install imp-central-impt dependencies by calling `npm install` command from your local *imp-central-impt* folder.
 1. Set the mandatory environment variables:
-    - **IMPT_USER_ID** - impCentral account ID.
     - **IMPT_USER_NAME** - impCentral account username.
-    - **IMPT_USER_EMAIL** - impCentral account email address.
     - **IMPT_USER_PASSWORD** - impCentral account password.
     - **IMPT_DEVICE_IDS** - comma separated list of Device IDs that will be used for tests execution.
-    - **IMPT_DEVICE_NAMES** - comma separated list of Device names that will be used for tests execution.
-    - **IMPT_DEVICE_MACS** - comma separated list of Device MACs that will be used for tests execution.
-    - **IMPT_DEVICE_AGENTIDS** - comma separated list of Agent IDs that will be used for tests execution.
     
-    ***NOTE*** - all comma separated values in the **IMPT_DEVICE_\*** variables must be in same order, according to the order of the devices.
 1. If needed, set optional environment variables:
     - **IMPT_DEBUG** - if *true*, displays additional output of the command execution (default: *false*).
     - **IMPT_ENDPOINT** - impCentral API endpoint (default: *https://api.electricimp.com/v5*). You need to specify it when working with a private impCentral installation.
     - **IMPT_GITHUB_USER** / **IMPT_GITHUB_TOKEN** - a GitHub account username / password or personal access token. You need to specify them when you got `GitHub rate limit reached` error.
     - **IMPT_SUFFIX** - Additional custom suffix for entity names created and used during testing. To prevent collisions due to identical entity names in collaborator's accounts the tests try to create unique entity names by adding a suffix with the first 8 symbols of the current account Id. If needed, you may specify an additional suffix via this variable.
     - **IMPT_FOLDER_SUFFIX** - Custom suffix for test execution folder name. You need to specify it for [Parallel Tests Execution](#parallel-tests-execution).
-    - **IMPT_DEVICE_IDX** - Index (starting from 0) of the value (i.e. a particular device) in the **IMPT_DEVICE_\*** variables. You may need to specify it to select a concrete device from the device list, eg. for [Parallel Tests Execution](#parallel-tests-execution).
-1. Alternatively, instead of the environment variables setting, you can directly specify the values of the corresponding variables in your local [imp-central-impt/spec/config.js file](../spec/config.js).
+    - **IMPT_DEVICE_IDX** - Index (starting from 0) of the value (i.e. a particular device) in the **IMPT_DEVICE_IDS** variable. You may need to specify it to select a concrete device from the device list, eg. for [Parallel Tests Execution](#parallel-tests-execution).
+
 1. Run the tests by calling `npm test` command from your local *imp-central-impt* folder.
 
 ## Parallel Tests Execution ##
@@ -35,7 +29,7 @@ To avoid collisions, every thread should use it's own folder. So, you must speci
 
 The following groups of tests do not require a device and can be always executed in parallel: `auth`, `loginkey`, `product`, `project`, `webhook`, `help`.
 
-The following groups of tests require a device and cannot be executed in parallel on the same device: `build`, `log`, `device`, `dg`, `test`. They should be executed either sequentially, or in parallel using different devices (use **IMPT_DEVICE_IDX** variable to specify a concrete device for every thread).
+The following groups of tests require a device and cannot be executed in parallel on the same device: `build`, `log`, `device`, `dg`. They should be executed either sequentially, or in parallel using different devices (use **IMPT_DEVICE_IDX** variable to specify a concrete device for every thread).
 
 ### Example ###
 
@@ -46,7 +40,7 @@ Scripts for the fastest tests execution:
 ##### On Windows #####
 
 ```
-    start cmd /k "npm test --filter **/build/*.spec.js  **/log/*.spec.js **/dg/*.spec.js **/device/*.spec.js **/test/*.spec.js IMPT_FOLDER_SUFFIX=build"
+    start cmd /k "npm test --filter **/build/*.spec.js  **/log/*.spec.js **/dg/*.spec.js **/device/*.spec.js IMPT_FOLDER_SUFFIX=build"
     start cmd /k "npm test --filter **/auth/*.spec.js IMPT_FOLDER_SUFFIX=auth"
     start cmd /k "npm test --filter **/loginkey/*.spec.js IMPT_FOLDER_SUFFIX=loginkey"
     start cmd /k "npm test --filter **/product/*.spec.js IMPT_FOLDER_SUFFIX=product" 
@@ -59,7 +53,7 @@ Scripts for the fastest tests execution:
 
 ```
     #/bin/sh
-    npm test --filter **/build/*.spec.js  **/log/*.spec.js **/dg/*.spec.js **/device/*.spec.js **/test/*.spec.js IMPT_FOLDER_SUFFIX=build &
+    npm test --filter **/build/*.spec.js  **/log/*.spec.js **/dg/*.spec.js **/device/*.spec.js IMPT_FOLDER_SUFFIX=build &
     npm test --filter **/auth/*.spec.js IMPT_FOLDER_SUFFIX=auth &
     npm test --filter **/loginkey/*.spec.js IMPT_FOLDER_SUFFIX=loginkey &
     npm test --filter **/product/*.spec.js IMPT_FOLDER_SUFFIX=product & 
@@ -68,7 +62,7 @@ Scripts for the fastest tests execution:
     npm test --filter **/help/*.spec.js IMPT_FOLDER_SUFFIX=help
 ```
 
-#### Using 5 devices ####
+#### Using 4 devices ####
 
 ##### On Windows #####
 
@@ -77,7 +71,6 @@ Scripts for the fastest tests execution:
     start cmd /k "npm test --filter **/log/*.spec.js IMPT_FOLDER_SUFFIX=log IMPT_DEVICE_IDX=1"
     start cmd /k "npm test --filter **/dg/*.spec.js IMPT_FOLDER_SUFFIX=dg IMPT_DEVICE_IDX=2"
     start cmd /k "npm test --filter **/device/*.spec.js IMPT_FOLDER_SUFFIX=device IMPT_DEVICE_IDX=3"
-    start cmd /k "npm test --filter **/test/*.spec.js IMPT_FOLDER_SUFFIX=test IMPT_DEVICE_IDX=4"
     start cmd /k "npm test --filter **/auth/*.spec.js IMPT_FOLDER_SUFFIX=auth"
     start cmd /k "npm test --filter **/loginkey/*.spec.js IMPT_FOLDER_SUFFIX=loginkey"
     start cmd /k "npm test --filter **/product/*.spec.js IMPT_FOLDER_SUFFIX=product" 
@@ -94,7 +87,6 @@ Scripts for the fastest tests execution:
     npm test --filter **/log/*.spec.js IMPT_FOLDER_SUFFIX=log IMPT_DEVICE_IDX=1 &
     npm test --filter **/dg/*.spec.js IMPT_FOLDER_SUFFIX=dg IMPT_DEVICE_IDX=2 &
     npm test --filter **/device/*.spec.js IMPT_FOLDER_SUFFIX=device IMPT_DEVICE_IDX=3 &
-    npm test --filter **/test/*.spec.js IMPT_FOLDER_SUFFIX=test IMPT_DEVICE_IDX=4 &
     npm test --filter **/auth/*.spec.js IMPT_FOLDER_SUFFIX=auth &
     npm test --filter **/loginkey/*.spec.js IMPT_FOLDER_SUFFIX=loginkey &
     npm test --filter **/product/*.spec.js IMPT_FOLDER_SUFFIX=product &
@@ -107,7 +99,6 @@ Scripts for the fastest tests execution:
 
 - Device remove command tests can not be execute automaticaly, because impt have no command for add device to account. Due this fact device must added to account manualy after each test.
 - Count of login key is limit up to 10. Be shure that you have enought quantity free login key slots for test execute.
-- At this moment some tests for *impt test run* command need to be run either on an imp001 or an imp002 module as they are designed to fail with an `"Out of memory"` error, which does not happen on imp modules with more memory available.
 
 ## Tests Running Management ##
 
@@ -128,7 +119,7 @@ One test file contains one test suite, intended to test one or several *impt* co
 Test files are combined in directories. One directory includes all test files (test suites) intended to test *impt* commands of one command group. For example:
 - [imp-central-impt/spec/auth](../spec/auth) directory contains test suites to test *impt auth* commands
 - [imp-central-impt/spec/product](../spec/product) directory contains test suites to test *impt product* commands
-- [imp-central-impt/spec/test](../spec/test) directory contains test suites to test *impt test* commands
+- [imp-central-impt/spec/dg](../spec/dg) directory contains test suites to test *impt dg* commands
 
 A test file should be named as `<test_suite_name>.spec.js`, where `<test_suite_name>` is some meaningful name, eg. it includes the tested command name.
 
