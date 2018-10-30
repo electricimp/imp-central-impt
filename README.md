@@ -752,7 +752,7 @@ Many *impt* commands combine several impCentral API requests which change impCen
 
 ## Testing ##
 
-There are [Jasmine](https://www.npmjs.com/package/jasmine) tests available to verify *impt* implementation itself. The [Testing read me](./spec/TestingReadme.md) describes how to run the tests and extend them, if necessary.
+There are [Jasmine](https://www.npmjs.com/package/jasmine) tests available to verify *impt* implementation itself. The [Readme](./spec/README.md) describes how to run the tests and extend them, if necessary.
 
 ## License ##
 
