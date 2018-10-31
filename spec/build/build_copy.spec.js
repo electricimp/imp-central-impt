@@ -48,6 +48,8 @@ const BUILD_ORIGIN = `build_origin${config.suffix}`;
 // Test suite for 'impt build copy' command.
 // Runs 'impt build copy' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
+    if (outputMode === '-z debug') return;
+
     describe(`impt build copy test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         let dg_id = null;
         let build_id = null;

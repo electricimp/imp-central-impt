@@ -41,6 +41,8 @@ const DEVICE_GROUP_EXIST_NAME = `dg_exist_name${config.suffix}`;
 // Test suite for 'impt dg create' command.
 // Runs 'impt dg create' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
+    if (outputMode === '-z debug') return;
+
     describe(`impt device group create test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         let dg_id = null;
         let product_id = null;

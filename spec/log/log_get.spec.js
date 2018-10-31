@@ -33,214 +33,214 @@ const Shell = require('shelljs');
 const PRODUCT_NAME = `__impt_log_product${config.suffix}`;
 const DEVICE_GROUP_NAME = `__impt_log_device_group${config.suffix}`;
 
+const outputMode = '';
+
 // Test suite for 'impt log get' command.
 // Runs 'impt log get' command with different combinations of options,
-ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
-    describe(`impt log get test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
-        let device_mac = null;
-        let device_name = null;
-        let agent_id = null;
+describe(`impt log get test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
+    let device_mac = null;
+    let device_name = null;
+    let agent_id = null;
 
+    beforeAll((done) => {
+        ImptTestHelper.init().
+            then(_testSuiteCleanUp).
+            then(_testSuiteInit).
+            then(done).
+            catch(error => done.fail(error));
+    }, ImptTestHelper.TIMEOUT);
+
+    afterAll((done) => {
+        _testSuiteCleanUp().
+            then(ImptTestHelper.cleanUp).
+            then(done).
+            catch(error => done.fail(error));
+    }, ImptTestHelper.TIMEOUT);
+
+    // prepare environment for impt log get command testing
+    function _testSuiteInit() {
+        return ImptTestHelper.getDeviceAttrs(PRODUCT_NAME, DEVICE_GROUP_NAME, (commandOut) => {
+            if (commandOut && commandOut.mac) {
+                device_mac = commandOut.mac;
+                device_name = commandOut.name;
+                agent_id = commandOut.agentid;
+            }
+            else fail("TestSuitInit error: Fail get addition device attributes");
+        }).
+            then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx)).
+            then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx)).
+            then(() => ImptTestHelper.deviceAssign(DEVICE_GROUP_NAME)).
+            then(() => Shell.cp('-Rf', `${__dirname}/fixtures/devicecode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER)).
+            then(() => ImptTestHelper.runCommand(`impt build run -g ${DEVICE_GROUP_NAME} -x devicecode.nut`, ImptTestHelper.emptyCheckEx));
+    }
+
+    function _checkLogMessages(commandOut, messages = {}) {
+        let matcher = commandOut.output.match(new RegExp(/....-..-..T..:..:../g));
+        expect(matcher.length).toEqual(messages.count)
+        // if output contains non server.log messages change message start nuber
+        matcher = commandOut.output.match(new RegExp(/server\.log/g));
+        if (matcher.length < messages.count) {
+            messages.startNumber = messages.startNumber + (messages.count - matcher.length);
+        }
+        expect(commandOut.output).toMatch(`Message #${messages.startNumber}#`);
+        expect(commandOut.output).toMatch(`Message #${messages.endNumber}#`);
+    }
+
+    // delete all entities using in impt log get test suite
+    function _testSuiteCleanUp() {
+        return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
+    }
+
+    describe('log get positive tests >', () => {
         beforeAll((done) => {
-            ImptTestHelper.init().
-                then(_testSuiteCleanUp).
-                then(_testSuiteInit).
+            ImptTestHelper.projectCreate(DEVICE_GROUP_NAME).
                 then(done).
                 catch(error => done.fail(error));
         }, ImptTestHelper.TIMEOUT);
 
         afterAll((done) => {
-            _testSuiteCleanUp().
-                then(ImptTestHelper.cleanUp).
+            ImptTestHelper.projectDelete().
                 then(done).
                 catch(error => done.fail(error));
         }, ImptTestHelper.TIMEOUT);
 
-        // prepare environment for impt log get command testing
-        function _testSuiteInit() {
-            return ImptTestHelper.getDeviceAttrs(PRODUCT_NAME,DEVICE_GROUP_NAME,(commandOut) => {
-                if (commandOut && commandOut.mac) {
-                    device_mac = commandOut.mac;
-                    device_name = commandOut.name;
-                    agent_id = commandOut.agentid;
-                }
-                else fail("TestSuitInit error: Fail get addition device attributes");
+        it('log get by project', (done) => {
+            ImptTestHelper.runCommandInteractive(`impt log get ${outputMode}`, (commandOut) => {
+                _checkLogMessages(commandOut, { startNumber: 1, endNumber: 20, count: 20 });
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
-                then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx)).
-                then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx)).
-                then(() => ImptTestHelper.deviceAssign(DEVICE_GROUP_NAME)).
-                then(() => Shell.cp('-Rf', `${__dirname}/fixtures/devicecode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER)).
-                then(() => ImptTestHelper.runCommand(`impt build run -g ${DEVICE_GROUP_NAME} -x devicecode.nut`, ImptTestHelper.emptyCheckEx));
-        }
-
-        function _checkLogMessages(commandOut, messages = {}) {
-            let matcher = commandOut.output.match(new RegExp(/....-..-..T..:..:../g));
-            expect(matcher.length).toEqual(messages.count)
-            // if output contains non server.log messages change message start nuber
-            matcher = commandOut.output.match(new RegExp(/server\.log/g));
-            if (matcher.length < messages.count) {
-                messages.startNumber = messages.startNumber + (messages.count - matcher.length);
-            }
-            expect(commandOut.output).toMatch(`Message #${messages.startNumber}#`);
-            expect(commandOut.output).toMatch(`Message #${messages.endNumber}#`);
-        }
-
-        // delete all entities using in impt log get test suite
-        function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
-        }
-
-        describe('log get positive tests >', () => {
-            beforeAll((done) => {
-                ImptTestHelper.projectCreate(DEVICE_GROUP_NAME).
-                    then(done).
-                    catch(error => done.fail(error));
-            }, ImptTestHelper.TIMEOUT);
-
-            afterAll((done) => {
-                ImptTestHelper.projectDelete().
-                    then(done).
-                    catch(error => done.fail(error));
-            }, ImptTestHelper.TIMEOUT);
-
-            it('log get by project', (done) => {
-                ImptTestHelper.runCommandInteractive(`impt log get ${outputMode}`, (commandOut) => {
-                    _checkLogMessages(commandOut, { startNumber: 1, endNumber: 20, count: 20 });
-                    ImptTestHelper.checkSuccessStatus(commandOut);
-                }).
-                    then(done).
-                    catch(error => done.fail(error));
-            });
-
-            it('log get by device id', (done) => {
-                ImptTestHelper.runCommandInteractive(`impt log get -d ${config.devices[config.deviceidx]} ${outputMode}`, (commandOut) => {
-                    _checkLogMessages(commandOut, { startNumber: 1, endNumber: 20, count: 20 });
-                    ImptTestHelper.checkSuccessStatus(commandOut);
-                }).
-                    then(done).
-                    catch(error => done.fail(error));
-            });
-
-            it('log get by device mac', (done) => {
-                ImptTestHelper.runCommandInteractive(`impt log get -d ${device_mac} ${outputMode}`, (commandOut) => {
-                    _checkLogMessages(commandOut, { startNumber: 1, endNumber: 20, count: 20 });
-                    ImptTestHelper.checkSuccessStatus(commandOut);
-                }).
-                    then(done).
-                    catch(error => done.fail(error));
-            });
-
-            it('log get by agent id', (done) => {
-                ImptTestHelper.runCommandInteractive(`impt log get -d ${agent_id} ${outputMode}`, (commandOut) => {
-                    _checkLogMessages(commandOut, { startNumber: 1, endNumber: 20, count: 20 });
-                    ImptTestHelper.checkSuccessStatus(commandOut);
-                }).
-                    then(done).
-                    catch(error => done.fail(error));
-            });
-
-            it('log get by device name', (done) => {
-                ImptTestHelper.runCommandInteractive(`impt log get -d ${device_name} ${outputMode}`, (commandOut) => {
-                    _checkLogMessages(commandOut, { startNumber: 1, endNumber: 20, count: 20 });
-                    ImptTestHelper.checkSuccessStatus(commandOut);
-                }).
-                    then(done).
-                    catch(error => done.fail(error));
-            });
-
-            it('log get with page size', (done) => {
-                ImptTestHelper.runCommandInteractive(`impt log get -d ${config.devices[config.deviceidx]} --page-size 4 ${outputMode}`, (commandOut) => {
-                    _checkLogMessages(commandOut, { startNumber: 17, endNumber: 20, count: 4 });
-                    ImptTestHelper.checkSuccessStatus(commandOut);
-                }).
-                    then(done).
-                    catch(error => done.fail(error));
-            });
-
-            it('log get with page size and number', (done) => {
-                ImptTestHelper.runCommandInteractive(`impt log get -d ${config.devices[config.deviceidx]} --page-size 5 --page-number 3 ${outputMode}`, (commandOut) => {
-                    _checkLogMessages(commandOut, { startNumber: 6, endNumber: 10, count: 5 });
-                    ImptTestHelper.checkSuccessStatus(commandOut);
-                }).
-                    then(done).
-                    catch(error => done.fail(error));
-            });
+                then(done).
+                catch(error => done.fail(error));
         });
 
-        describe('log get negative tests >', () => {
-            it('log get by not exist project', (done) => {
-                ImptTestHelper.runCommand(`impt log get ${outputMode}`, (commandOut) => {
-                    MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, MessageHelper.DEVICE);
-                    ImptTestHelper.checkFailStatus(commandOut);
-                }).
-                    then(done).
-                    catch(error => done.fail(error));
-            });
+        it('log get by device id', (done) => {
+            ImptTestHelper.runCommandInteractive(`impt log get -d ${config.devices[config.deviceidx]} ${outputMode}`, (commandOut) => {
+                _checkLogMessages(commandOut, { startNumber: 1, endNumber: 20, count: 20 });
+                ImptTestHelper.checkSuccessStatus(commandOut);
+            }).
+                then(done).
+                catch(error => done.fail(error));
+        });
 
-            it('log get without device value', (done) => {
-                ImptTestHelper.runCommand(`impt log get ${outputMode} -d`, (commandOut) => {
-                    MessageHelper.checkNotEnoughArgumentsError(commandOut, 'd');
-                    ImptTestHelper.checkFailStatus(commandOut);
-                }).
-                    then(() => ImptTestHelper.runCommand(`impt log get ${outputMode} -d ""`, (commandOut) => {
-                        MessageHelper.checkMissingArgumentValueError(commandOut, 'device');
-                        ImptTestHelper.checkFailStatus(commandOut);
-                    })).
-                    then(done).
-                    catch(error => done.fail(error));
-            });
+        it('log get by device mac', (done) => {
+            ImptTestHelper.runCommandInteractive(`impt log get -d ${device_mac} ${outputMode}`, (commandOut) => {
+                _checkLogMessages(commandOut, { startNumber: 1, endNumber: 20, count: 20 });
+                ImptTestHelper.checkSuccessStatus(commandOut);
+            }).
+                then(done).
+                catch(error => done.fail(error));
+        });
 
-            it('log get with incorrect page size value', (done) => {
-                ImptTestHelper.runCommand(`impt log get -d ${config.devices[config.deviceidx]} ${outputMode} -s 0`, (commandOut) => {
+        it('log get by agent id', (done) => {
+            ImptTestHelper.runCommandInteractive(`impt log get -d ${agent_id} ${outputMode}`, (commandOut) => {
+                _checkLogMessages(commandOut, { startNumber: 1, endNumber: 20, count: 20 });
+                ImptTestHelper.checkSuccessStatus(commandOut);
+            }).
+                then(done).
+                catch(error => done.fail(error));
+        });
+
+        it('log get by device name', (done) => {
+            ImptTestHelper.runCommandInteractive(`impt log get -d ${device_name} ${outputMode}`, (commandOut) => {
+                _checkLogMessages(commandOut, { startNumber: 1, endNumber: 20, count: 20 });
+                ImptTestHelper.checkSuccessStatus(commandOut);
+            }).
+                then(done).
+                catch(error => done.fail(error));
+        });
+
+        it('log get with page size', (done) => {
+            ImptTestHelper.runCommandInteractive(`impt log get -d ${config.devices[config.deviceidx]} --page-size 4 ${outputMode}`, (commandOut) => {
+                _checkLogMessages(commandOut, { startNumber: 17, endNumber: 20, count: 4 });
+                ImptTestHelper.checkSuccessStatus(commandOut);
+            }).
+                then(done).
+                catch(error => done.fail(error));
+        });
+
+        it('log get with page size and number', (done) => {
+            ImptTestHelper.runCommandInteractive(`impt log get -d ${config.devices[config.deviceidx]} --page-size 5 --page-number 3 ${outputMode}`, (commandOut) => {
+                _checkLogMessages(commandOut, { startNumber: 6, endNumber: 10, count: 5 });
+                ImptTestHelper.checkSuccessStatus(commandOut);
+            }).
+                then(done).
+                catch(error => done.fail(error));
+        });
+    });
+
+    describe('log get negative tests >', () => {
+        it('log get by not exist project', (done) => {
+            ImptTestHelper.runCommand(`impt log get ${outputMode}`, (commandOut) => {
+                MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, MessageHelper.DEVICE);
+                ImptTestHelper.checkFailStatus(commandOut);
+            }).
+                then(done).
+                catch(error => done.fail(error));
+        });
+
+        it('log get without device value', (done) => {
+            ImptTestHelper.runCommand(`impt log get ${outputMode} -d`, (commandOut) => {
+                MessageHelper.checkNotEnoughArgumentsError(commandOut, 'd');
+                ImptTestHelper.checkFailStatus(commandOut);
+            }).
+                then(() => ImptTestHelper.runCommand(`impt log get ${outputMode} -d ""`, (commandOut) => {
+                    MessageHelper.checkMissingArgumentValueError(commandOut, 'device');
+                    ImptTestHelper.checkFailStatus(commandOut);
+                })).
+                then(done).
+                catch(error => done.fail(error));
+        });
+
+        it('log get with incorrect page size value', (done) => {
+            ImptTestHelper.runCommand(`impt log get -d ${config.devices[config.deviceidx]} ${outputMode} -s 0`, (commandOut) => {
+                MessageHelper.checkOptionPositiveValueError(commandOut, '--page-size');
+                ImptTestHelper.checkFailStatus(commandOut);
+            }).
+                then(() => ImptTestHelper.runCommand(`impt log get -d ${config.devices[config.deviceidx]} ${outputMode} -s -4`, (commandOut) => {
                     MessageHelper.checkOptionPositiveValueError(commandOut, '--page-size');
                     ImptTestHelper.checkFailStatus(commandOut);
-                }).
-                    then(() => ImptTestHelper.runCommand(`impt log get -d ${config.devices[config.deviceidx]} ${outputMode} -s -4`, (commandOut) => {
-                        MessageHelper.checkOptionPositiveValueError(commandOut, '--page-size');
-                        ImptTestHelper.checkFailStatus(commandOut);
-                    })).
-                    then(done).
-                    catch(error => done.fail(error));
-            });
+                })).
+                then(done).
+                catch(error => done.fail(error));
+        });
 
-            it('log get with incorrect page number value', (done) => {
-                ImptTestHelper.runCommand(`impt log get -d ${config.devices[config.deviceidx]} ${outputMode} --page-number 0`, (commandOut) => {
+        it('log get with incorrect page number value', (done) => {
+            ImptTestHelper.runCommand(`impt log get -d ${config.devices[config.deviceidx]} ${outputMode} --page-number 0`, (commandOut) => {
+                MessageHelper.checkOptionPositiveValueError(commandOut, '--page-number');
+                ImptTestHelper.checkFailStatus(commandOut);
+            }).
+                then(() => ImptTestHelper.runCommand(`impt log get -d ${config.devices[config.deviceidx]} ${outputMode} -n -4`, (commandOut) => {
                     MessageHelper.checkOptionPositiveValueError(commandOut, '--page-number');
                     ImptTestHelper.checkFailStatus(commandOut);
-                }).
-                    then(() => ImptTestHelper.runCommand(`impt log get -d ${config.devices[config.deviceidx]} ${outputMode} -n -4`, (commandOut) => {
-                        MessageHelper.checkOptionPositiveValueError(commandOut, '--page-number');
-                        ImptTestHelper.checkFailStatus(commandOut);
-                    })).
-                    then(done).
-                    catch(error => done.fail(error));
-            });
+                })).
+                then(done).
+                catch(error => done.fail(error));
+        });
 
-            it('log get without size and num values', (done) => {
-                ImptTestHelper.runCommand(`impt log get -d ${config.devices[config.deviceidx]} ${outputMode} -s`, (commandOut) => {
-                    MessageHelper.checkNotEnoughArgumentsError(commandOut, 's');
+        it('log get without size and num values', (done) => {
+            ImptTestHelper.runCommand(`impt log get -d ${config.devices[config.deviceidx]} ${outputMode} -s`, (commandOut) => {
+                MessageHelper.checkNotEnoughArgumentsError(commandOut, 's');
+                ImptTestHelper.checkFailStatus(commandOut);
+            }).
+                then(() => ImptTestHelper.runCommand(`impt log get -d ${config.devices[config.deviceidx]} ${outputMode} -n`, (commandOut) => {
+                    MessageHelper.checkNotEnoughArgumentsError(commandOut, 'n');
                     ImptTestHelper.checkFailStatus(commandOut);
-                }).
-                    then(() => ImptTestHelper.runCommand(`impt log get -d ${config.devices[config.deviceidx]} ${outputMode} -n`, (commandOut) => {
-                        MessageHelper.checkNotEnoughArgumentsError(commandOut, 'n');
-                        ImptTestHelper.checkFailStatus(commandOut);
-                    })).
-                    then(done).
-                    catch(error => done.fail(error));
-            });
+                })).
+                then(done).
+                catch(error => done.fail(error));
+        });
 
-            it('log get without output value', (done) => {
-                ImptTestHelper.runCommand(`impt log get -d ${config.devices[config.deviceidx]} -z`, (commandOut) => {
-                    MessageHelper.checkNotEnoughArgumentsError(commandOut, 'z');
+        it('log get without output value', (done) => {
+            ImptTestHelper.runCommand(`impt log get -d ${config.devices[config.deviceidx]} -z`, (commandOut) => {
+                MessageHelper.checkNotEnoughArgumentsError(commandOut, 'z');
+                ImptTestHelper.checkFailStatus(commandOut);
+            }).
+                then(() => ImptTestHelper.runCommand(`impt log get -d ${config.devices[config.deviceidx]} -z undefined`, (commandOut) => {
+                    MessageHelper.checkInvalidValuesError(commandOut);
                     ImptTestHelper.checkFailStatus(commandOut);
-                }).
-                    then(() => ImptTestHelper.runCommand(`impt log get -d ${config.devices[config.deviceidx]} -z undefined`, (commandOut) => {
-                        MessageHelper.checkInvalidValuesError(commandOut);
-                        ImptTestHelper.checkFailStatus(commandOut);
-                    })).
-                    then(done).
-                    catch(error => done.fail(error));
-            });
+                })).
+                then(done).
+                catch(error => done.fail(error));
         });
     });
 });

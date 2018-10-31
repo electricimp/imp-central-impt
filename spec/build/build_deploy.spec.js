@@ -45,6 +45,8 @@ const BUILD_ORIGIN = `build_origin${config.suffix}`;
 // Test suite for 'impt build deploy' command.
 // Runs 'impt build deploy' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
+    if (outputMode === '-z debug') return;
+
     describe(`impt build deploy test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         let dg_id = null;
         let build_id = null;

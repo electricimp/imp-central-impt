@@ -40,7 +40,7 @@ const WH_URL = `http://example.com/wc/${config.suffix}`;
 // Runs 'impt webhook create' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
     // skip debug outputmode
-    if (outputMode == '-z debug') return;
+    if (outputMode === '-z debug') return;
     describe(`impt webhook create test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         let dg_id = null;
         let wh_id = null;
