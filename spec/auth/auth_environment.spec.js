@@ -40,10 +40,19 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
     describe(`impt auth using environment variables test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         const endpoint = config.apiEndpoint ? `${config.apiEndpoint}` : `${DEFAULT_ENDPOINT}`;
         let loginkey = null;
+        let email = null;
+        let userid = null;
 
         beforeAll((done) => {
             ImptTestHelper.init(true).
                 then(_createLoginkey).
+                then(() => ImptTestHelper.getAuthAttrs((commandOut) => {
+                    if (commandOut && commandOut.email && commandOut.id) {
+                        email = commandOut.email;
+                        userid = commandOut.id;
+                    }
+                    else fail("TestSuitInit error: Fail get addition auth attributes");
+                })).
                 then(_prepAuthPath).
                 then(ImptAuthCommandsHelper.localLogout).
                 then(ImptAuthCommandsHelper.globalLogout).
@@ -171,7 +180,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     (commandOut) => {
                         _checkLoginInfo(commandOut, { auth: 'Environment variables' });
                         ImptTestHelper.checkSuccessStatus(commandOut);
-                    }, { 'IMPT_USER': config.username, 'IMPT_PASSWORD': config.password, 'IMPT_ENDPOINT': endpoint }).
+                    }, { 'IMPT_USER': email, 'IMPT_PASSWORD': config.password, 'IMPT_ENDPOINT': endpoint }).
                     then(done).
                     catch(error => done.fail(error));
             });
