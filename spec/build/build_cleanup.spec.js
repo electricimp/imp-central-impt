@@ -40,6 +40,8 @@ const DEVICE_GROUP2_NAME = `__impt_bld_device_group_2${config.suffix}`;
 // Test suite for 'impt build cleanup' command.
 // Runs 'impt build cleanup' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
+    if (outputMode === '-z debug') return;
+    
     describe(`impt build cleanup test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         let product_id = null;
         let build_id = null;
