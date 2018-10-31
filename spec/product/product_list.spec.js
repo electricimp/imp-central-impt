@@ -34,7 +34,7 @@ const PRODUCT_NAME_2 = `__impt_pr_product_2${config.suffix}`;
 // Test suite for 'impt product list' command.
 // Runs 'impt product list' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
-    fdescribe(`impt product list test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
+    describe(`impt product list test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         let email = null;
         let userid = null;
 
