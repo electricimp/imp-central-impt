@@ -29,8 +29,8 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'list';
 const COMMAND_SECTION = 'webhook';
-const COMMAND_SHORT_DESCR = 'Displays information about all or filtered Webhooks.';
-const COMMAND_DESCRIPTION = 'Displays information about all Webhooks available to the current logged-in account.';
+const COMMAND_SHORT_DESCR = 'Displays information about all or filtered webhooks.';
+const COMMAND_DESCRIPTION = 'Displays information about all webhooks available to the current account.';
 
 exports.command = COMMAND;
 
@@ -44,27 +44,27 @@ exports.builder = function (yargs) {
             demandOption : false,
             type : 'array',
             elemType : 'string',
-            describe : 'Lists Webhooks created for Device Groups which belong to the specified Product only.'
+            describe : 'Lists webhooks created for Device Groups which belong to the specified Product(s) only.'
         },
         [Options.DEVICE_GROUP_IDENTIFIER] : {
             demandOption : false,
             type : 'array',
             elemType : 'string',
-            describe : 'Lists Webhooks created for the specified Device Group only.'
+            describe : 'Lists webhooks created for the specified Device Group(s) only.'
         },
         [Options.DEVICE_GROUP_TYPE] : {
             demandOption : false,
-            describe : 'Lists Webhooks created for Device Groups of the specified type only.'
+            describe : 'Lists webhooks created for Device Groups of the specified type only.'
         },
         [Options.URL] : {
             demandOption : false,
-            describe : 'Lists Webhooks with the specified target URL only.',
+            describe : 'Lists webhooks with the specified target URL only.',
             type : 'array',
             elemType : 'string'
         },
         [Options.EVENT] : {
             demandOption : false,
-            describe : 'Lists Webhooks for the specified event only.',
+            describe : 'Lists webhooks for the specified event only.',
             type : 'array',
             elemType : 'string'
         },

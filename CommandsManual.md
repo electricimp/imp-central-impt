@@ -491,8 +491,8 @@ The returned list of the builds may be filtered. Filtering uses any combination 
 | --tag | -t | No | Yes | Builds with the specified tag only |
 | --flagged | -f | No | No | Builds with the *flagged* attribute set to `true` only |
 | --unflagged | -u | No | No | Builds with the *flagged* attribute set to `false` only |
-| --non-zombie | -n | No | No | Only builds which are related to the Device Group |
-| --zombie | -m | No | No | Only builds which are not related to the Device Group |
+| --non-zombie | -n | No | No | Only builds which are related to a Device Group |
+| --zombie | -m | No | No | Only builds which are not related to any Device Group |
 
 #### Build Run ####
 

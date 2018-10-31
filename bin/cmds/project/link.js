@@ -29,8 +29,8 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'link';
 const COMMAND_SECTION = 'project';
-const COMMAND_SHORT_DESCR = 'Creates new Project File by linking it to the specified Device Group.';
-const COMMAND_DESCRIPTION = 'Creates new Project File in the current directory by linking it to the specified Device Group.';
+const COMMAND_SHORT_DESCR = 'Creates a new Project file and links it to the specified Device Group.';
+const COMMAND_DESCRIPTION = 'Creates a new Project file in the current directory and links it to the specified Device Group.';
 
 exports.command = COMMAND;
 
@@ -41,12 +41,12 @@ exports.builder = function (yargs) {
         [Options.DEVICE_GROUP_IDENTIFIER] : true,
         [Options.DEVICE_FILE] :  {
             demandOption : false,
-            describe: 'Name of a file for IMP device source code. If the file does not exist, empty file is created.',
+            describe: 'The device source code file name. If the file does not exist, an empty file is created.',
             default: 'device.nut'
         },
         [Options.AGENT_FILE] : {
             demandOption : false,
-            describe: 'Name of a file for IMP agent source code. If the file does not exist, empty file is created.',
+            describe: 'The agent source code file name. If the file does not exist, an empty file is created.',
             default: 'agent.nut'
         },
         [Options.CONFIRMED] : false,

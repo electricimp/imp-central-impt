@@ -30,8 +30,8 @@ const Options = require('../../../lib/util/Options');
 const COMMAND = 'builds';
 const COMMAND_SECTION = 'dg';
 const COMMAND_SHORT_DESCR = 'Updates/deletes builds of the specified Device Group.';
-const COMMAND_DESCRIPTION = 'Updates and/or deletes builds (Deployments) of the specified Device Group' + 
-    ' and displays information about all Deployments of the Device Group at the end of the command execution.';
+const COMMAND_DESCRIPTION = "Updates and/or deletes builds (Deployments) belonging to the specified Device Group" +
+    " and displays information about all of the Device Group's Deployments at the end of the command execution.";
 
 exports.command = COMMAND;
 
@@ -42,7 +42,7 @@ exports.builder = function (yargs) {
         [Options.DEVICE_GROUP_IDENTIFIER] : false,
         [Options.UNFLAG] : {
             demandOption : false,
-            describe : 'Set "flagged" attribute to false in all Deployments of the specified Device Group.'
+            describe : 'Set the "flagged" attribute to false for all the Deployments of the specified Device Group.'
         },
         [Options.UNFLAG_OLD] : false,
         [Options.REMOVE] : false,

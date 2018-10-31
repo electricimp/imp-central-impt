@@ -34,7 +34,7 @@ const COMMAND = 'create';
 const COMMAND_SECTION = 'dg';
 const COMMAND_SHORT_DESCR = 'Creates a new Device Group for the specified Product.';
 const COMMAND_DESCRIPTION = 'Creates a new Device Group for the specified Product.' +
-    ' Fails if Device Group with the specified Name already exists in the specified Product.';
+    ' Fails if a Device Group with the specified name already exists under the specified Product.';
 
 exports.command = COMMAND;
 
@@ -44,26 +44,26 @@ exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.NAME] : {
             demandOption : true,
-            describe : 'Name of the Device Group. Must be unique among all Device Groups in the specified Product.',
+            describe : "The new Device Group's name. Must be unique among all Device Groups belonging to the specified Product.",
             _usage : '<device_group_name>'
         },
         [Options.DEVICE_GROUP_TYPE] : {
             demandOption : false,
-            describe : 'Type of the Device Group.',
+            describe : "The new Device Group's type.",
             type : 'string',
             default: Options.DG_TYPE_DEVELOPMENT
         },
         [Options.PRODUCT_IDENTIFIER] : false,
         [Options.DESCRIPTION] : {
             demandOption : false,
-            describe : 'Description of the Device Group.',
+            describe : 'An optional description of the Device Group.',
             _usage : '<device_group_description>'
         },
         [Options.TARGET] : {
             demandOption : false,
-            describe : Util.format('Device Group Identifier of the production target Device Group for the being created Device Group.' +
-                ' Should be specified for the being created Device Group of the type %s or %s only.' +
-                ' The target Device Group must be of the type %s or %s correspondingly and belongs to the specified Product.',
+            describe : Util.format("The Device Group identifier of the new Device Group's production target Device Group." +
+                " Should only be specified if the new Device Group is of the %s or %s type." +
+                " The target Device Group must be of the type %s or %s correspondingly, and belong to the specified Product.",
                 Options.DG_TYPE_FACTORY, Options.DG_TYPE_PRE_FACTORY, Options.DG_TYPE_PRODUCTION, Options.DG_TYPE_PRE_PRODUCTION)
         },
         [Options.REGION] : false,

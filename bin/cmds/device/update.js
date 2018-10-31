@@ -29,7 +29,7 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'update';
 const COMMAND_SECTION = 'device';
-const COMMAND_SHORT_DESCR = 'Updates Name of the specified Device.';
+const COMMAND_SHORT_DESCR = 'Updates the name of the specified device.'
 const COMMAND_DESCRIPTION = COMMAND_SHORT_DESCR;
 
 exports.command = COMMAND;
@@ -41,7 +41,7 @@ exports.builder = function (yargs) {
         [Options.DEVICE_IDENTIFIER] : true,
         [Options.NAME] : {
             demandOption : true,
-            describe : 'New Name of the Device.',
+            describe : "The device's new name.",
             requiresArg : false,
             _usage : '<device_name>'
         },

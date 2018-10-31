@@ -41,7 +41,8 @@ exports.builder = function (yargs) {
         [Options.DEVICE_GROUP_IDENTIFIER] : false,
         [Options.FULL] : {
             demandOption : false,
-            describe : 'Displays additional information. Details about every Device assigned to the Device Group, Deployments and other.'
+            describe : 'Displays additional information, including details about the devices assigned to the Device Group,' +
+                ' and Webhooks created for the Device Group.'
         },
         [Options.OUTPUT] : false
     });

@@ -30,7 +30,7 @@ const Options = require('../../../lib/util/Options');
 const COMMAND = 'list';
 const COMMAND_SECTION = 'product';
 const COMMAND_SHORT_DESCR = 'Displays information about all or filtered Products.';
-const COMMAND_DESCRIPTION = 'Displays information about all Products available to the current logged-in account.';
+const COMMAND_DESCRIPTION = 'Displays information about all of the Products available to the current account.';
 
 exports.command = COMMAND;
 

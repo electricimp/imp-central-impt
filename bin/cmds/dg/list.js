@@ -30,7 +30,7 @@ const Options = require('../../../lib/util/Options');
 const COMMAND = 'list';
 const COMMAND_SECTION = 'dg';
 const COMMAND_SHORT_DESCR = 'Displays information about all or filtered Device Groups.';
-const COMMAND_DESCRIPTION = 'Displays information about all Device Groups available to the current logged-in account.';
+const COMMAND_DESCRIPTION = 'Displays information about all Device Groups available to the current account.';
 
 exports.command = COMMAND;
 
@@ -44,7 +44,7 @@ exports.builder = function (yargs) {
             demandOption : false,
             type : 'array',
             elemType : 'string',
-            describe : 'Lists Device Groups which belong to the specified Product only.'
+            describe : 'Lists Device Groups which belong to the specified Product(s) only.'
         },
         [Options.DEVICE_GROUP_TYPE] : {
             demandOption : false,
