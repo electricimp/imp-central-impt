@@ -225,30 +225,7 @@ class ImptTestHelper {
             then(output);
     }
 
-    static getAuthAttrsWithLogin(output) {
-        let jsonInfo = null;
-        return ImptTestHelper.runCommand(`impt auth -l -u ${config.username} -w ${config.password} -q`, ImptTestHelper.emptyCheckEx).
-            then(() => ImptTestHelper.runCommand(`impt auth info -z json`, (commandOut) => {
-                jsonInfo = commandOut.output;
-                ImptTestHelper.emptyCheck(commandOut);
-            })).
-            then(() => ImptTestHelper.runCommand(`impt auth logout -l`, ImptTestHelper.emptyCheckEx)).
-            then(() => {
-                return new Promise((resolve) => {
-                    let json = JSON.parse(jsonInfo);
-                    if (json.Auth) {
-                        let auth_email = json.Auth.Email;
-                        let user_id = json.Auth['Account id'];
-                        resolve({ email: auth_email, id: user_id });
-                    }
-                    else
-                        resolve(null);
-                })
-            }).
-            then(output);
-    }
-
-    // Checks if file exist in the TESTS_EXECUTION_FOLDER
+     // Checks if file exist in the TESTS_EXECUTION_FOLDER
     static checkFileExist(fileName) {
         expect(Shell.test('-e', `${TESTS_EXECUTION_FOLDER}/${fileName}`)).toBe(true);
     }

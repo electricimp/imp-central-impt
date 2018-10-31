@@ -34,7 +34,7 @@ const PRODUCT_NAME_2 = `__impt_pr_product_2${config.suffix}`;
 // Test suite for 'impt product list' command.
 // Runs 'impt product list' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
-    describe(`impt product list test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
+    fdescribe(`impt product list test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         let email = null;
         let userid = null;
 
@@ -55,10 +55,10 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // prepare test environment for impt product list test
         function _testSuiteInit() {
-            return ImptTestHelper.getAuthInfo((commandOut) => {
-                if (commandOut && commandOut.email && commandOut.userid) {
+            return ImptTestHelper.getAuthAttrs((commandOut) => {
+                if (commandOut && commandOut.email && commandOut.id) {
                     email = commandOut.email;
-                    userid = commandOut.userid;
+                    userid = commandOut.id;
                 }
                 else fail("TestSuitInit error: Fail get addition auth attributes");
             }).

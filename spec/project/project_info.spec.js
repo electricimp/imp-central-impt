@@ -67,10 +67,10 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // prepare test environment for impt project info test suite
         function _testSuiteInit() {
-            return ImptTestHelper.getAuthInfo((commandOut) => {
-                if (commandOut && commandOut.email && commandOut.userid) {
+            return ImptTestHelper.getAuthAttrs((commandOut) => {
+                if (commandOut && commandOut.email && commandOut.id) {
                     email = commandOut.email;
-                    userid = commandOut.userid;
+                    userid = commandOut.id;
                 }
                 else fail("TestSuitInit error: Fail get addition auth attributes");
             });
