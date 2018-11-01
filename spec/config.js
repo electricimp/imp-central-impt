@@ -37,4 +37,4 @@ exports.apiEndpoint = process.env.IMPT_ENDPOINT;
 exports.githubUser = process.env.IMPT_GITHUB_USER;
 exports.githubToken = process.env.IMPT_GITHUB_TOKEN;
 exports.deviceidx = process.env.IMPT_DEVICE_IDX ? process.env.IMPT_DEVICE_IDX : 0;
-exports.suffix = process.env.IMPT_SUFFIX ? `_${process.env.IMPT_USER_ID.slice(0,8)}_${process.env.IMPT_SUFFIX}` : `_${process.env.IMPT_USER_ID.slice(0,8)}`;
+exports.suffix = process.env.IMPT_SUFFIX ? `_${process.env.IMPT_USER_NAME}_${process.env.IMPT_SUFFIX}` : `_${process.env.IMPT_USER_NAME}`;

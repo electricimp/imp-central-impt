@@ -15,10 +15,11 @@ There are [Jasmine](https://www.npmjs.com/package/jasmine) tests in the [spec fo
     - **IMPT_DEBUG** - if *true*, displays additional output of the command execution (default: *false*).
     - **IMPT_ENDPOINT** - impCentral API endpoint (default: *https://api.electricimp.com/v5*). You need to specify it when working with a private impCentral installation.
     - **IMPT_GITHUB_USER** / **IMPT_GITHUB_TOKEN** - a GitHub account username / password or personal access token. You need to specify them when you got `GitHub rate limit reached` error.
-    - **IMPT_SUFFIX** - Additional custom suffix for entity names created and used during testing. To prevent collisions due to identical entity names in collaborator's accounts the tests try to create unique entity names by adding a suffix with the first 8 symbols of the current account Id. If needed, you may specify an additional suffix via this variable.
+    - **IMPT_SUFFIX** - Additional custom suffix for entity names created and used during testing. To prevent collisions due to identical entity names in collaborator's accounts the tests try to create unique entity names by adding a suffix with the current user name. If needed, you may specify an additional suffix via this variable.
     - **IMPT_FOLDER_SUFFIX** - Custom suffix for test execution folder name. You need to specify it for [Parallel Tests Execution](#parallel-tests-execution).
     - **IMPT_DEVICE_IDX** - Index (starting from 0) of the value (i.e. a particular device) in the **IMPT_DEVICE_IDS** variable. You may need to specify it to select a concrete device from the device list, eg. for [Parallel Tests Execution](#parallel-tests-execution).
-
+    - **IMPT_OUTPUT_MODES** - Output modes for impt commands test. Some tests can not be
+    executed with all existing output modes, in this case unsupported output modes will be skipped.
 1. Run the tests by calling `npm test` command from your local *imp-central-impt* folder.
 
 ## Parallel Tests Execution ##
