@@ -41,7 +41,7 @@ const DEVICE_GROUP2_NAME = `__impt_bld_device_group_2${config.suffix}`;
 // Runs 'impt build cleanup' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
     if (outputMode === '-z debug') return;
-    
+
     describe(`impt build cleanup test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         let product_id = null;
         let build_id = null;
@@ -182,7 +182,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         function _testCleanUp() {
             return ImptTestHelper.runCommand(`impt build cleanup -p ${PRODUCT_NAME} -u -q`, ImptTestHelper.emptyCheckEx).
-            then(()=>ImptTestHelper.runCommand(`impt build cleanup -p ${PRODUCT2_NAME} -u -q`, ImptTestHelper.emptyCheckEx));
+                then(() => ImptTestHelper.runCommand(`impt build cleanup -p ${PRODUCT2_NAME} -u -q`, ImptTestHelper.emptyCheckEx));
         }
 
         // check 'no deployments found' output message 
