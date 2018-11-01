@@ -71,7 +71,8 @@ describe(`impt log get test suite (output: ${outputMode ? outputMode : 'default'
             then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx)).
             then(() => ImptTestHelper.deviceAssign(DEVICE_GROUP_NAME)).
             then(() => Shell.cp('-Rf', `${__dirname}/fixtures/devicecode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER)).
-            then(() => ImptTestHelper.runCommand(`impt build run -g ${DEVICE_GROUP_NAME} -x devicecode.nut`, ImptTestHelper.emptyCheckEx));
+            then(() => ImptTestHelper.runCommand(`impt build run -g ${DEVICE_GROUP_NAME} -x devicecode.nut`, ImptTestHelper.emptyCheckEx)).
+            then(() => ImptTestHelper.delayMs(10000));
     }
 
     function _checkLogMessages(commandOut, messages = {}) {

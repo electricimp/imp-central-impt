@@ -218,7 +218,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         });
 
         it('update not existing product', (done) => {
-            ImptTestHelper.runCommand(`impt product update -p __not_existing_product  -n "${PRODUCT_NAME} ${outputMode}`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt product update -p __not_existing_product  -n ${PRODUCT_NAME} ${outputMode}`, (commandOut) => {
                 MessageHelper.checkEntityNotFoundError(commandOut, Identifier.ENTITY_TYPE.TYPE_PRODUCT, '__not_existing_product');
                 ImptTestHelper.checkFailStatus(commandOut);
             }).
