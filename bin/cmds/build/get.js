@@ -42,16 +42,16 @@ exports.builder = function (yargs) {
         [Options.BUILD_IDENTIFIER] : false,
         [Options.DEVICE_FILE] : {
             demandOption : false,
-            describe : Util.format('Name of a file to where download the source code for IMP device.' +
-                ' If not specified, the file referenced by Project File in the current directory is assumed;' +
-                ' if no Project File and --%s option is not specified, the command fails.',
+            describe : Util.format('The device source code file name.' +
+                ' If not specified, the file referenced by the Project file in the current directory is used;' +
+                ' if there is no Project file and the --%s option is not specified, the command fails.',
                 Options.AGENT_ONLY)
         },
         [Options.AGENT_FILE] : {
             demandOption : false,
-            describe : Util.format('Name of a file to where download the source code for IMP agent.' +
-                ' If not specified, the file referenced by Project File in the current directory is assumed;' +
-                ' if no Project File and --%s option is not specified, the command fails.',
+            describe : Util.format('The agent source code file name.' +
+                ' If not specified, the file referenced by the Project file in the current directory is used;' +
+                ' if there is no Project file and the --%s option is not specified, the command fails.',
                 Options.DEVICE_ONLY)
         },
         [Options.DEVICE_ONLY] : false,

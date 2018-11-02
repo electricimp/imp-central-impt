@@ -31,8 +31,8 @@ const COMMAND = 'info';
 const COMMAND_SECTION = 'project';
 const COMMAND_SHORT_DESCR = 'Displays information about the project.';
 const COMMAND_DESCRIPTION = 'Displays information about the project.' +
-    ' Fails if there is no Project File in the current directory.' +
-    ' With every call the latest actual information is obtained using impCentral API.';
+    ' Fails if there is no Project file in the current directory.' +
+    ' With every call the latest information is obtained using the impCentral API.';
 
 exports.command = COMMAND;
 
@@ -42,8 +42,8 @@ exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.FULL] : {
             demandOption : false,
-            describe : 'Displays additional information.' +
-                ' Full details about the corresponding Device Group, authentication status applicable to the current directory.'
+            describe : 'Displays additional information: full details about the corresponding Device Group' +
+                ' and authentication status applicable to the current directory.'
         },
         [Options.OUTPUT] : false
     });

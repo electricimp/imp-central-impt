@@ -30,9 +30,9 @@ const Util = require('util');
 
 const COMMAND = 'delete';
 const COMMAND_SECTION = 'test';
-const COMMAND_SHORT_DESCR = 'Deletes Test Configuration File.';
-const COMMAND_DESCRIPTION = 'Deletes Test Configuration File in the current directory.' +
-    ' Does nothing if there is no Test Configuration File in the current directory.';
+const COMMAND_SHORT_DESCR = 'Deletes the test configuration file.';
+const COMMAND_DESCRIPTION = 'Deletes the test configuration file in the current directory.' +
+    ' Does nothing if there is no test configuration file in the current directory.';
 
 exports.command = COMMAND;
 
@@ -48,7 +48,7 @@ exports.builder = function (yargs) {
             default : undefined,
             requiresArg : false,
             _usage: '',
-            describe : 'Also deletes the github credentials file referenced by Test Configuration File.'
+            describe : 'Also deletes the GitHub credentials file referenced by test configuration file.'
         },
         [Options.BUILDER_CONFIG] : {
             demandOption : false,
@@ -58,11 +58,11 @@ exports.builder = function (yargs) {
             default : undefined,
             requiresArg : false,
             _usage: '',
-            describe : 'Also deletes the file with Builder variables referenced by Test Configuration File.'
+            describe : 'Also deletes the file with Builder variables referenced by test configuration file.'
         },
         [Options.ENTITIES] : {
             demandOption : false,
-            describe: 'Also deletes the impCentral API entities (Device Group, Product, Deployments) referenced by Test Configuration File.'
+            describe: 'Also deletes the impCentral API entities (Device Group, Product, Deployments) referenced by test configuration file.'
         },
         [Options.ALL] : {
             demandOption : false,

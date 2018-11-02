@@ -32,10 +32,10 @@ const UserInteractor = require('../../../lib/util/UserInteractor');
 
 const COMMAND = 'delete';
 const COMMAND_SECTION = 'project';
-const COMMAND_SHORT_DESCR = 'Deletes Project File and related entities.';
-const COMMAND_DESCRIPTION = 'Deletes Project File in the current directory and, optionally,' +
-    ' the impCentral API entities (Device Group, Product, Deployments) related to the project, and, optionally,' +
-    ' the local source files. Does nothing if there is no Project File in the current directory.';
+const COMMAND_SHORT_DESCR = 'Deletes the Project file and related entities.';
+const COMMAND_DESCRIPTION = 'Deletes the Project file in the current directory and, optionally,' +
+    ' the impCentral API entities (Device Group, Product, Deployments) related to the Project, and, optionally,' +
+    ' the local source files. Does nothing if there is no Project file in the current directory.'
 
 exports.command = COMMAND;
 
@@ -45,7 +45,8 @@ exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.ENTITIES] : {
             demandOption : false,
-            describe: 'Also deletes the impCentral API entities (Device Group, Product, Deployments) referenced by Project File.'
+            describe: 'Also deletes all of the impCentral API entities (Device Group, Product, Deployments)' +
+                ' referenced by the Project file.'
         },
         [Options.FILES] : false,
         [Options.ALL] : {

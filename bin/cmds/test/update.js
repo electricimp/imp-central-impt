@@ -29,9 +29,9 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'update';
 const COMMAND_SECTION = 'test';
-const COMMAND_SHORT_DESCR = 'Updates Test Configuration File.';
-const COMMAND_DESCRIPTION = 'Updates Test Configuration File in the current directory.' +
-    ' Fails if there is no Test Configuration File in the current directory.';
+const COMMAND_SHORT_DESCR = 'Updates the test configuration file.';
+const COMMAND_DESCRIPTION = 'Updates the test configuration file in the current directory.' +
+    ' Fails if there is no test configuration file in the current directory.';
 
 exports.command = COMMAND;
 
@@ -41,12 +41,13 @@ exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.DEVICE_GROUP_IDENTIFIER] : {
             demandOption : false,
-            describe : 'Device Group Identifier of Device Group whose Devices are used for tests execution.'
+            describe : 'The Device Group identifier of the Device Group whose devices are used for tests execution.'
         },
         [Options.DEVICE_FILE] : {
             demandOption : false,
-            describe : 'A path to a file with IMP device source code that is deployed along with the tests.' +
-                ' A relative or absolute path can be used. Specify this option w/o a value to remove this file from the test configuration.',
+            describe : 'A path to a file with device source code that is deployed along with the tests.' +
+                ' A relative or absolute path can be used.' +
+                ' Specify this option without a value to remove this file from the test configuration.',
             requiresArg : false,
             nargs: 0,
             default : undefined,
@@ -54,8 +55,9 @@ exports.builder = function (yargs) {
         },
         [Options.AGENT_FILE] : {
             demandOption : false,
-            describe : 'A path to a file with IMP agent source code that is deployed along with the tests.' +
-                ' A relative or absolute path can be used. Specify this option w/o a value to remove this file from the test configuration.',
+            describe : 'A path to a file with agent source code that is deployed along with the tests.' +
+                ' A relative or absolute path can be used.' +
+                ' Specify this option without a value to remove this file from the test configuration.',
             requiresArg : false,
             nargs: 0,
             default : undefined,
@@ -69,19 +71,19 @@ exports.builder = function (yargs) {
         [Options.ALLOW_DISCONNECT] : false,
         [Options.BUILDER_CACHE] : {
             demandOption : false,
-            describe : 'If true or no value: cache external libraries in the local .builder-cache directory.' +
-                ' If false value: do not cache external libraries; in this case, if the local .builder-cache directory exists, it is cleaned up.'
+            describe : 'If true or no value, cache external libraries in the local .builder-cache directory.' +
+                ' If false, do not cache external libraries; in this case, if the local .builder-cache directory exists, it is cleaned.'
         },
         [Options.TEST_FILE] : {
             demandOption : false,
-            describe : 'Test file name or pattern. All files located in the current directory and all its subdirectories' +
-                ' which names match the specified name or pattern are considered as files with test cases.' +
-                ' The specified values fully replace the existed setting.',
+            describe : 'Test file name or pattern. All files located in the current directory and all its sub-directories' +
+                ' whose names match the specified name or pattern are considered as files with test cases.' + 
+                ' The specified values fully replace the existed setting.'
         },
         [Options.GITHUB_CONFIG] : {
             demandOption : false,
-            describe : 'A path to a github credentials file. A relative or absolute path can be used. The specified file may not exist.' +
-                ' Specify this option w/o a value to remove a github credentials file from the test configuration.',
+            describe : 'A path to a GitHub credentials file. A relative or absolute path can be used. The specified file may not exist.' +
+                ' Specify this option without a value to remove a GitHub credentials file from the test configuration.',
             requiresArg : false,
             nargs: 0,
             default : undefined,
@@ -90,7 +92,7 @@ exports.builder = function (yargs) {
         [Options.BUILDER_CONFIG] : {
             demandOption : false,
             describe : 'A path to a file with Builder variables. A relative or absolute path can be used. The specified file may not exist.' +
-                ' Specify this option w/o a value to remove a file with Builder variables from the test configuration.',
+                ' Specify this option without a value to remove a file with Builder variables from the test configuration.',
             requiresArg : false,
             nargs: 0,
             default : undefined,

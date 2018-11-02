@@ -29,8 +29,8 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'cleanup';
 const COMMAND_SECTION = 'build';
-const COMMAND_SHORT_DESCR = 'Deletes builds which do not have existent relation to any Device Group.';
-const COMMAND_DESCRIPTION = 'Deletes builds (Deployments) which do not have existent relation to any Device Group.';
+const COMMAND_SHORT_DESCR = 'Deletes builds which are not related to any Device Group.';
+const COMMAND_DESCRIPTION = "Deletes builds (Deployments) which are not related to any Device Group ('zombie' builds).";
 
 exports.command = COMMAND;
 
@@ -40,11 +40,11 @@ exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.PRODUCT_IDENTIFIER] : {
             demandOption : false,
-            describe: 'Product Identifier: Product Id or Product name.'
+            describe: 'A Product identifier: Product ID or Product name.'
         },
         [Options.UNFLAG] :  {
             demandOption : false,
-            describe: 'Delete a Deployment even if it has "flagged" attribute set to true.'
+            describe: 'Delete a Deployment even if it has its "flagged" attribute set to true.'
         },
         [Options.CONFIRMED] : false,
         [Options.OUTPUT] : false

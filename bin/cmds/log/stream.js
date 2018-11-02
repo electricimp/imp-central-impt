@@ -30,8 +30,8 @@ const Util = require('util');
 
 const COMMAND = 'stream';
 const COMMAND_SECTION = 'log';
-const COMMAND_SHORT_DESCR = 'Displays logs from the specified Devices in real-time.';
-const COMMAND_DESCRIPTION = 'Creates a log stream and displays logs from the specified Devices in real-time.';
+const COMMAND_SHORT_DESCR = 'Displays logs from the specified devices in real-time.';
+const COMMAND_DESCRIPTION = 'Creates a log stream and displays logs from the specified devices in real-time.';
 
 exports.command = COMMAND;
 
@@ -43,16 +43,16 @@ exports.builder = function (yargs) {
             demandOption : false,
             type : 'array',
             elemType : 'string',
-            describe : 'Device Identifier of the Device which logs will be added to the log stream.'
+            describe : 'The device identifier of the device to be added to the log stream.'
         },
         [Options.DEVICE_GROUP_IDENTIFIER] : {
             demandOption : false,
             type : 'array',
             elemType : 'string',
-            describe : Util.format('Device Group Identifier: Device Group Id or Device Group name.' +
-                ' Logs from all Devices assigned to the specified Device Groups will be added to the log stream.' +
-                ' --%s and --%s options are cumulative. If the both --%s and --%s options are not specified but there is' +
-                ' Project File in the current directory, all Devices assigned to the Device Group referenced by the Project File are assumed.',
+            describe : Util.format('A Device Group identifier: Device Group ID or Device Group name.' +
+                ' Logs from all of the devices assigned to the specified Device Groups will be added to the log stream.' +
+                ' --%s and --%s options are cumulative. If neither the --%s nor the --%s options are specified but there is' +
+                ' a Project file in the current directory, all of the devices assigned to the Device Group referenced by the Project file are added.',
                 Options.DEVICE_IDENTIFIER, Options.DEVICE_GROUP_IDENTIFIER, Options.DEVICE_IDENTIFIER, Options.DEVICE_GROUP_IDENTIFIER)
         },
         [Options.OUTPUT] : false

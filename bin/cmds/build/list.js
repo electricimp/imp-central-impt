@@ -32,7 +32,7 @@ const UserInteractor = require('../../../lib/util/UserInteractor');
 const COMMAND = 'list';
 const COMMAND_SECTION = 'build';
 const COMMAND_SHORT_DESCR = 'Displays information about all or filtered builds.';
-const COMMAND_DESCRIPTION = 'Displays information about all builds (Deployments) available to the current logged-in account.';
+const COMMAND_DESCRIPTION = 'Displays information about all of the builds (Deployments) available to the current account.';
 
 exports.command = COMMAND;
 
@@ -46,13 +46,13 @@ exports.builder = function (yargs) {
             demandOption : false,
             type : 'array',
             elemType : 'string',
-            describe : 'Lists builds deployed to Device Groups which belong to the specified Product only.'
+            describe : 'Lists builds deployed to Device Groups which belong to the specified Product(s) only.'
         },
         [Options.DEVICE_GROUP_IDENTIFIER] : {
             demandOption : false,
             type : 'array',
             elemType : 'string',
-            describe : 'Lists builds deployed to the specified Device Group only.'
+            describe : 'Lists builds deployed to the specified Device Group(s) only.'
         },
         [Options.DEVICE_GROUP_TYPE] : {
             demandOption : false,
@@ -70,7 +70,7 @@ exports.builder = function (yargs) {
         },
         [Options.FLAGGED] : {
             demandOption : false,
-            describe : 'Lists builds with the flagged attribute set to true only.',
+            describe : 'Lists builds with the "flagged" attribute set to true only.',
             nargs: 0,
             noValue: true,
             _usage: ''

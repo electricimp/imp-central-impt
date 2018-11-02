@@ -32,9 +32,9 @@ const UserInteractor = require('../../../lib/util/UserInteractor');
 
 const COMMAND = 'update';
 const COMMAND_SECTION = 'project';
-const COMMAND_SHORT_DESCR = 'Updates the project settings and/or related Device Group attributes.';
-const COMMAND_DESCRIPTION = 'Updates the project settings and/or Name, Description, production target of the' +
-    ' Device Group referenced by Project File. Fails if there is no Project File in the current directory.';
+const COMMAND_SHORT_DESCR = 'Updates the Project settings and/or related Device Group attributes.';
+const COMMAND_DESCRIPTION = 'Updates the Project settings and/or the name, description, or production target' +
+    ' of the Device Group referenced by the Project file. Fails if there is no Project file in the current directory.';
 
 exports.command = COMMAND;
 
@@ -44,28 +44,27 @@ exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.NAME] : {
             demandOption : false,
-            describe : 'New Name of the Device Group referenced by Project File. Must be unique among all Device Groups in the Product.',
+            describe : "The Project Device Group's new name. Must be unique among all Device Groups in the Product.",
             _usage : '<device_group_name>'
         },
         [Options.DESCRIPTION] : {
             demandOption : false,
-            describe : 'New Description of the Device Group referenced by Project File.',
+            describe : "The Project Device Group's new description.",
             _usage : '<device_group_description>'
         },
         [Options.DEVICE_FILE] :  {
             demandOption : false,
-            describe: 'New name of a file for IMP device source code. If the file does not exist, empty file is created.'
+            describe: 'A new device source code file name. If the file does not exist, an empty file is created.'
         },
         [Options.AGENT_FILE] : {
             demandOption : false,
-            describe: 'New name of a file for IMP agent source code. If the file does not exist, empty file is created.'
+            describe: 'A new agent source code file name. If the file does not exist, an empty file is created.'
         },
         [Options.TARGET] : {
             demandOption : false,
-            describe : Util.format('Device Group Identifier of the production target Device Group for the Device Group referenced by Project File.' +
-                ' May be specified if the Device Group referenced by Project File is of the type %s only.' +
-                ' The specified target Device Group must be of the type %s and belongs to the same Product' +
-                ' as the Device Group referenced by Project File.',
+            describe : Util.format("The Device Group identifier of the Project Device Group's production target Device Group." +
+                " May only be specified if the Project Device Group is of the %s type." +
+                " The specified target Device Group must be of the type %s and belong to the same Product as the Project Device Group.",
                 Options.DG_TYPE_PRE_FACTORY, Options.DG_TYPE_PRE_PRODUCTION)
         },
         [Options.OUTPUT] : false

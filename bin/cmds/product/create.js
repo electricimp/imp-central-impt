@@ -30,7 +30,7 @@ const Options = require('../../../lib/util/Options');
 const COMMAND = 'create';
 const COMMAND_SECTION = 'product';
 const COMMAND_SHORT_DESCR = 'Creates a new Product.';
-const COMMAND_DESCRIPTION = 'Creates a new Product. Fails if Product with the specified Name already exists.';
+const COMMAND_DESCRIPTION = 'Creates a new Product. Fails if a Product with the specified name already exists.';
 
 exports.command = COMMAND;
 
@@ -40,12 +40,12 @@ exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.NAME] : {
             demandOption : true,
-            describe : 'Name of the Product. Must be unique among all Products owned by the logged-in account.',
+            describe : "The Product's name. Must be unique among all of the current account's Products",
             _usage : '<product_name>'
         },
         [Options.DESCRIPTION] : {
             demandOption : false,
-            describe : 'Description of the Product.',
+            describe : 'An optional description of the Product.',
             _usage : '<product_description>'
         },
         [Options.OUTPUT] : false
