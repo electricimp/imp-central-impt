@@ -42,6 +42,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         let dg_id = null;
         let device_mac = null;
         let device_name = null;
+        let old_name = null;
         let agent_id = null;
 
 
@@ -65,11 +66,14 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             return ImptTestHelper.getDeviceAttrs(PRODUCT_NAME,DEVICE_GROUP_NAME,(commandOut) => {
                 if (commandOut && commandOut.mac) {
                     device_mac = commandOut.mac;
-                    device_name = commandOut.name;
+                    old_name = commandOut.name;
+                    device_name = `${commandOut.name}${config.suffix}`;
                     agent_id = commandOut.agentid;
                 }
                 else fail("TestSuitInit error: Fail get addition device attributes");
             }).
+                then(() => ImptTestHelper.runCommand(`impt device update -d ${config.devices[config.deviceidx]} --name ${device_name}`, ImptTestHelper.emptyCheckEx)).
+                then(() => ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx)).
                 then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx)).
                 then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
                     dg_id = ImptTestHelper.parseId(commandOut);
@@ -80,7 +84,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // delete all entities using in impt device assign test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx).
+                then(() => ImptTestHelper.runCommand(`impt device update -d ${config.devices[config.deviceidx]} --name ${old_name ? old_name : '""'}`, ImptTestHelper.emptyCheckEx));
         }
 
         function _testCleanUp() {

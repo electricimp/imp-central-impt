@@ -42,12 +42,12 @@ const outputMode = '';
 // Runs 'impt device restart' command with different combinations of options,
 describe(`impt device restart test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
     let device_mac = null;
+    let old_name = null;
     let device_name = null;
     let agent_id = null;
 
     beforeAll((done) => {
         ImptTestHelper.init().
-            then(_testSuiteCleanUp).
             then(_testSuiteInit).
             then(done).
             catch(error => done.fail(error));
@@ -65,11 +65,14 @@ describe(`impt device restart test suite (output: ${outputMode ? outputMode : 'd
         return ImptTestHelper.getDeviceAttrs(PRODUCT_NAME, DEVICE_GROUP_NAME, (commandOut) => {
             if (commandOut && commandOut.mac) {
                 device_mac = commandOut.mac;
-                device_name = commandOut.name;
+                old_name = commandOut.name;
+                device_name = `${commandOut.name}${config.suffix}`;
                 agent_id = commandOut.agentid;
             }
             else fail("TestSuitInit error: Fail get addition device attributes");
         }).
+            then(() => ImptTestHelper.runCommand(`impt device update -d ${config.devices[config.deviceidx]} --name ${device_name}`, ImptTestHelper.emptyCheckEx)).
+            then(() => ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx)).
             then(() => ImptTestHelper.runCommand(`impt project create --product ${PRODUCT_NAME} --create-product --name ${DEVICE_GROUP_NAME}  ${outputMode}`, ImptTestHelper.emptyCheckEx)).
             then(() => Shell.cp('-Rf', `${__dirname}/fixtures/device.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER)).
             then(() => ImptTestHelper.deviceAssign(DEVICE_GROUP_NAME)).
@@ -78,7 +81,8 @@ describe(`impt device restart test suite (output: ${outputMode ? outputMode : 'd
 
     // delete all entities using in impt device restart test suite
     function _testSuiteCleanUp() {
-        return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx);
+        return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx).
+            then(() => ImptTestHelper.runCommand(`impt device update -d ${config.devices[config.deviceidx]} --name ${old_name ? old_name : '""'}`, ImptTestHelper.emptyCheckEx));
     }
 
     // check 'device successfully restarted' output message 

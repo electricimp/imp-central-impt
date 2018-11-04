@@ -41,12 +41,12 @@ const DEVICE_NEW_NAME = `__impt_dev_device${config.suffix}`;
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
     describe(`impt device update test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
         let device_mac = null;
+        let old_name = null;
         let device_name = null;
         let agent_id = null;
 
         beforeAll((done) => {
             ImptTestHelper.init().
-                then(_testSuiteCleanUp).
                 then(_testSuiteInit).
                 then(done).
                 catch(error => done.fail(error));
@@ -61,14 +61,17 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // prepare environment for device update command test suite 
         function _testSuiteInit() {
-            return ImptTestHelper.getDeviceAttrs(PRODUCT_NAME,DEVICE_GROUP_NAME,(commandOut) => {
+            return ImptTestHelper.getDeviceAttrs(PRODUCT_NAME, DEVICE_GROUP_NAME, (commandOut) => {
                 if (commandOut && commandOut.mac) {
                     device_mac = commandOut.mac;
-                    device_name = commandOut.name;
+                    old_name = commandOut.name;
+                    device_name = `${commandOut.name}${config.suffix}`;
                     agent_id = commandOut.agentid;
                 }
                 else fail("TestSuitInit error: Fail get addition device attributes");
             }).
+                then(() => ImptTestHelper.runCommand(`impt device update -d ${config.devices[config.deviceidx]} --name ${device_name}`, ImptTestHelper.emptyCheckEx)).
+                then(() => ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx)).
                 then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx)).
                 then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx)).
                 then(() => ImptTestHelper.deviceAssign(DEVICE_GROUP_NAME));
@@ -76,7 +79,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // delete all entities using in impt device update test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx).
+                then(() => ImptTestHelper.runCommand(`impt device update -d ${config.devices[config.deviceidx]} --name ${old_name ? old_name : '""'}`, ImptTestHelper.emptyCheckEx));
         }
 
         // delete all entities using in impt device update test suite

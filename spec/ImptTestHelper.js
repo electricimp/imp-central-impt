@@ -96,6 +96,10 @@ class ImptTestHelper {
         jasmine.DEFAULT_TIMEOUT_INTERVAL = TIMEOUT_MS;
         Utils.removeDirSync(TESTS_EXECUTION_FOLDER);
         FS.mkdirSync(TESTS_EXECUTION_FOLDER);
+        if (!config.username || !config.password) {
+            console.log("Error! Environment variable IMPT_USER_NAME and/or IMPT_USER_PASSWORD not set");
+            return;
+        }
         if (login) {
             const endpoint = config.apiEndpoint ? `--endpoint ${config.apiEndpoint}` : '';
             return ImptTestHelper.runCommand(
@@ -225,7 +229,7 @@ class ImptTestHelper {
             then(output);
     }
 
-     // Checks if file exist in the TESTS_EXECUTION_FOLDER
+    // Checks if file exist in the TESTS_EXECUTION_FOLDER
     static checkFileExist(fileName) {
         expect(Shell.test('-e', `${TESTS_EXECUTION_FOLDER}/${fileName}`)).toBe(true);
     }
