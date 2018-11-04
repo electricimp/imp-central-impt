@@ -124,8 +124,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('unassign device by device name', (done) => {
-                ImptTestHelper.runCommand(`impt device unassign -d ${config.devices[config.deviceidx]} ${outputMode}`, (commandOut) => {
-                    _checkSuccessUnassignedDeviceMessage(commandOut, config.devices[config.deviceidx]);
+                ImptTestHelper.runCommand(`impt device unassign -d ${device_name} ${outputMode}`, (commandOut) => {
+                    _checkSuccessUnassignedDeviceMessage(commandOut, device_name);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => _checkUnassignDevice).
