@@ -29,7 +29,7 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'create';
 const COMMAND_SECTION = 'webhook';
-const COMMAND_SHORT_DESCR = 'Creates a new Webhook for the specified Device Group.';
+const COMMAND_SHORT_DESCR = 'Creates a new webhook for the specified Device Group.';
 const COMMAND_DESCRIPTION = COMMAND_SHORT_DESCR;
 
 exports.command = COMMAND;

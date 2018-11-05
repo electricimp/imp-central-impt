@@ -29,8 +29,8 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'create';
 const COMMAND_SECTION = 'test';
-const COMMAND_SHORT_DESCR = 'Creates Test Configuration File.';
-const COMMAND_DESCRIPTION = 'Creates Test Configuration File in the current directory.';
+const COMMAND_SHORT_DESCR = 'Creates a test configuration file.';
+const COMMAND_DESCRIPTION = 'Creates a test configuration file in the current directory.';
 
 exports.command = COMMAND;
 
@@ -40,17 +40,17 @@ exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.DEVICE_GROUP_IDENTIFIER] : {
             demandOption : true,
-            describe : 'Device Group Identifier of Device Group whose Devices are used for tests execution.'
+            describe : 'The Device Group identifier of the Device Group whose devices are used for tests execution.'
         },
         [Options.DEVICE_FILE] : {
             demandOption : false,
-            describe : 'A path to an optional file with IMP device source code that is deployed along with the tests.' +
+            describe : 'A path to an optional file with device source code that is deployed along with the tests.' +
                 ' A relative or absolute path can be used.',
             default : undefined
         },
         [Options.AGENT_FILE] : {
             demandOption : false,
-            describe : 'A path to an optional file with IMP agent source code that is deployed along with the tests.' +
+            describe : 'A path to an optional file with agent source code that is deployed along with the tests.' +
                 ' A relative or absolute path can be used.',
             default : undefined
         },
@@ -69,8 +69,8 @@ exports.builder = function (yargs) {
         },
         [Options.BUILDER_CACHE] : {
             demandOption : false,
-            describe : 'If true or no value: cache external libraries in the local .builder-cache directory.' +
-                ' If false value: do not cache external libraries. If the local .builder-cache directory exists, it is cleaned up.',
+            describe : 'If true or no value, cache external libraries in the local .builder-cache directory.' +
+                ' If false, do not cache external libraries. If the local .builder-cache directory exists, it is cleaned.',
             default : false
         },
         [Options.TEST_FILE] : {
@@ -79,11 +79,11 @@ exports.builder = function (yargs) {
         },
         [Options.GITHUB_CONFIG] : {
             demandOption : false,
-            describe : 'A path to a github credentials file. A relative or absolute path can be used. The specified file may not exist.'
+            describe : 'A path to a GitHub credentials file. A relative or absolute path can be used. The specified file may not exist.'
         },
         [Options.BUILDER_CONFIG] : {
             demandOption : false,
-            describe : 'A path to a file with *Builder* variables. A relative or absolute path can be used. The specified file may not exist.'
+            describe : 'A path to a file with Builder variables. A relative or absolute path can be used. The specified file may not exist.'
         },
         [Options.CONFIRMED] : false,
         [Options.OUTPUT] : false

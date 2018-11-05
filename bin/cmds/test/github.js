@@ -31,7 +31,7 @@ const UserInteractor = require('../../../lib/util/UserInteractor');
 
 const COMMAND = 'github';
 const COMMAND_SECTION = 'test';
-const COMMAND_SHORT_DESCR = 'Creates or updates github credentials file.';
+const COMMAND_SHORT_DESCR = 'Creates or updates a GitHub credentials file.';
 const COMMAND_DESCRIPTION = COMMAND_SHORT_DESCR;
 
 exports.command = COMMAND;
@@ -42,16 +42,16 @@ exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.GITHUB_CONFIG] : {
             demandOption : true,
-            describe : 'A path to the github credentials file. A relative or absolute path can be used.'
+            describe : 'A path to the GitHub credentials file. A relative or absolute path can be used.'
         },
         [Options.USER] : {
             demandOption : false,
-            describe : 'GitHub username.',
+            describe : 'A GitHub account username.',
             _usage: '<github_username>'
         },
         [Options.PASSWORD] : {
             demandOption : false,
-            describe : 'GitHub password or personal access token.',
+            describe : 'A GitHub account password or personal access token.',
             _usage: '<github_password>'
         },
         [Options.CONFIRMED] : false,

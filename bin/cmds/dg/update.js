@@ -42,20 +42,20 @@ exports.builder = function (yargs) {
         [Options.DEVICE_GROUP_IDENTIFIER] : false,
         [Options.NAME] : {
             demandOption : false,
-            describe : 'New Name of the Device Group. Must be unique among all Device Groups in the Product.',
+            describe : "The Device Group's new name. Must be unique among all of the Device Groups belonging to the Product",
             _usage : '<device_group_name>'
         },
         [Options.DESCRIPTION] : {
             demandOption : false,
-            describe : 'Description of the Device Group.',
+            describe : 'An optional description of the Device Group.',
             _usage : '<device_group_description>'
         },
         [Options.TARGET] : {
             demandOption : false,
-            describe : Util.format('Device Group Identifier of the production target Device Group for the being updated Device Group.' +
-                ' May be specified for the being updated Device Group of the type %s or %s only.' +
-                ' The target Device Group must be of the type %s or %s correspondingly and' +
-                ' belongs to the same Product as the being updated Device Group. Otherwise the command fails.',
+            describe : Util.format("The Device Group identifier of the specified Device Group's production target Device Group." +
+                " May only be specified for %s and %s Device Groups." +
+                " The target Device Group must be of the type %s or %s correspondingly," +
+                " and belong to the same Product as the specified Device Group.",
                 Options.DG_TYPE_FACTORY, Options.DG_TYPE_PRE_FACTORY, Options.DG_TYPE_PRODUCTION, Options.DG_TYPE_PRE_PRODUCTION)
         },
         [Options.LOAD_CODE_AFTER_BLESSING] : false,
