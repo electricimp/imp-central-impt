@@ -24,13 +24,13 @@
 
 'use strict';
 
-const Product = require('../../../lib/Product');
+const Account = require('../../../lib/Account');
 const Options = require('../../../lib/util/Options');
 
-const COMMAND = 'create';
-const COMMAND_SECTION = 'product';
-const COMMAND_SHORT_DESCR = 'Creates a new Product.';
-const COMMAND_DESCRIPTION = 'Creates a new Product. Fails if a Product with the specified name already exists.';
+const COMMAND = 'info';
+const COMMAND_SECTION = 'account';
+const COMMAND_SHORT_DESCR = 'Displays information about the specified account.';
+const COMMAND_DESCRIPTION = COMMAND_SHORT_DESCR;
 
 exports.command = COMMAND;
 
@@ -38,20 +38,11 @@ exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({
-        [Options.NAME] : {
-            demandOption : true,
-            describe : "The Product's name. Must be unique among all of the current account's Products.",
-            _usage : '<product_name>'
-        },
-        [Options.DESCRIPTION] : {
+        [Options.USER] : {
             demandOption : false,
-            describe : 'An optional description of the Product.',
-            _usage : '<product_description>'
-        },
-        [Options.OWNER] : {
-            demandOption : false,
-            describe: 'The Product will be created in the specified Account. If not specified, the current account is assumed.',
-            type : 'string'
+            describe: 'An Account identifier. If not specified, the current account is assumed.',
+            _usage: '<ACCOUNT_IDENTIFIER>',
+            default: 'me'
         },
         [Options.OUTPUT] : false
     });
@@ -66,5 +57,5 @@ exports.builder = function (yargs) {
 
 exports.handler = function (argv) {
     const options = new Options(argv);
-    new Product(options).create(options);
+    new Account(options).info(options);
 };

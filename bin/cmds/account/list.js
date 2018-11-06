@@ -24,13 +24,13 @@
 
 'use strict';
 
-const Product = require('../../../lib/Product');
+const Account = require('../../../lib/Account');
 const Options = require('../../../lib/util/Options');
 
-const COMMAND = 'create';
-const COMMAND_SECTION = 'product';
-const COMMAND_SHORT_DESCR = 'Creates a new Product.';
-const COMMAND_DESCRIPTION = 'Creates a new Product. Fails if a Product with the specified name already exists.';
+const COMMAND = 'list';
+const COMMAND_SECTION = 'account';
+const COMMAND_SHORT_DESCR = 'Displays information about all available accounts.';
+const COMMAND_DESCRIPTION = 'Displays information about the current account and all shared accounts the current one is collaborating on.';
 
 exports.command = COMMAND;
 
@@ -38,21 +38,6 @@ exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
     const options = Options.getOptions({
-        [Options.NAME] : {
-            demandOption : true,
-            describe : "The Product's name. Must be unique among all of the current account's Products.",
-            _usage : '<product_name>'
-        },
-        [Options.DESCRIPTION] : {
-            demandOption : false,
-            describe : 'An optional description of the Product.',
-            _usage : '<product_description>'
-        },
-        [Options.OWNER] : {
-            demandOption : false,
-            describe: 'The Product will be created in the specified Account. If not specified, the current account is assumed.',
-            type : 'string'
-        },
         [Options.OUTPUT] : false
     });
     return yargs
@@ -66,5 +51,5 @@ exports.builder = function (yargs) {
 
 exports.handler = function (argv) {
     const options = new Options(argv);
-    new Product(options).create(options);
+    new Account(options).list(options);
 };
