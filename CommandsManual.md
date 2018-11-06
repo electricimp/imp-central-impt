@@ -72,6 +72,7 @@
 
 - [Command Syntax](#command-syntax)
 - [The Help Option](#the-help-option)
+- [The Version Option](#the-version-option)
 - [Command Output](#command-output)
 - [Entity Identification](#entity-identification)
 - [Device Group Type](#device-group-type)
@@ -115,6 +116,10 @@ The `--help` option (alias: `-h`) can be used with a fully or a partially specif
 - `impt --help` &mdash; Displays a list of all the command groups.
 - `impt <command_group> --help` &mdash; Displays a list of all of the group’s commands.
 - `impt <command_group> <command_name> --help` &mdash; Displays a detailed description of the command.
+
+## The Version Option ##
+
+- `impt --version` or `impt -v` &mdash; Displays the version of *impt*.
 
 ## Command Output ##
 
@@ -893,7 +898,7 @@ The command allows you to add multiple devices to the newly created log stream. 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --device | -d | No | Yes | The [device identifier](#device-identifier) of the device to be added to the log stream. This option may be repeated multiple times to specify multiple devices |
-| --dg | -g | no/[Project](#project-files) | Yes | A [Device Group identifier](#device-group-identifier). This option may be repeated multiple times to specify multiple Device Groups. Logs from all of the devices assigned to the specified Device Groups will be added to the log stream. `--device` and `--dg` options are cumulative. If neither the `--device` nor the `--dg` options are specified but there is a [Project file](#project-files) in the current directory, all of the devices assigned to the Device Group referenced by the [Project file](#project-files) are added |
+| --dg | -g | No/[Project](#project-files) | Yes | A [Device Group identifier](#device-group-identifier). This option may be repeated multiple times to specify multiple Device Groups. Logs from all of the devices assigned to the specified Device Groups will be added to the log stream. `--device` and `--dg` options are cumulative. If neither the `--device` nor the `--dg` options are specified but there is a [Project file](#project-files) in the current directory, all of the devices assigned to the Device Group referenced by the [Project file](#project-files) are added |
 | --output | -z | No | Yes | Adjusts the [command's output](#command-output) |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
@@ -981,7 +986,8 @@ Updates the specified login key’s description.
 #### Product Create ####
 
 ```
-impt product create --name <product_name> [--descr <product_description>] [--output <mode>] [--help]
+impt product create --name <product_name> [--descr <product_description>] [--owner <ACCOUNT_IDENTIFIER>]
+    [--output <mode>] [--help]
 ```
 
 Creates a new Product. Fails if a Product with the specified name already exists.
@@ -990,6 +996,7 @@ Creates a new Product. Fails if a Product with the specified name already exists
 | --- | --- | --- | --- | --- |
 | --name | -n | Yes | Yes | The Product’s name. Must be unique among all of the current account’s Products |
 | --descr | -s | No | Yes | An optional description of the Product |
+| --owner | -o | No | Yes | The Product will be created in the [specified Account](#account-identifier). If not specified, the current account is assumed  |
 | --output | -z | No | Yes | Adjusts the [command's output](#command-output) |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
@@ -1468,7 +1475,7 @@ Updates the specified webhook with a new target URL and/or MIME content-type. Fa
 | -s | --descr, --sha, --page-size, --stop-on-fail |
 | -t | --tag, --timeout, --temp, --target, --to, --tests |
 | -u | --user, --full, --unflagged, --unflag, --unassigned, --unbond, --url |
-| -v | |
+| -v | --version |
 | -w | --wh, --pwd |
 | -x | --device-file |
 | -y | --agent-file, --dg-type |
