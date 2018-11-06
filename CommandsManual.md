@@ -2,6 +2,9 @@
 
 ## List Of Commands ##
 
+**[impt account info](#account-info)**<br />
+**[impt account list](#account-list)**<br />
+
 **[impt auth info](#auth-info)**<br />
 **[impt auth login](#auth-login)**<br />
 **[impt auth logout](#auth-logout)**<br />
@@ -137,17 +140,19 @@ The `--output` option has the following `<mode>` values:
 
 Applicable to the following impCentral API entities &mdash; Account, Product, Device Group, Device and Deployment &mdash; these rules govern how *impt* searches an entity:
 
-- There is an order of attributes for every entity type (see below).
-- *impt* starts from the first attribute in the order and searches the specified value for this attribute.
+- There is an order of attributes for every entity type (described in the subsections below).
+- Some of the entity types additionally support hierarchical identifiers (described in the subsections below).
+- If an entity type supports a hierarchical identifier and the specified value matches the hierarchical identifier pattern, *impt* searches an entity by parsing the hierarchical identifier. If one and only one entity is found, the search is stopped.
+- Otherwise, *impt* starts from the first attribute in the order of the entity type supported attributes and searches the specified value for this attribute.
 - If no entity is found for this attribute, the tool searches the specified value for the next attribute in the order.
 - If at least one entity is found for the particular attribute, the search is stopped.
 - If no entity is found for all attributes, or more than one entity is found, then, depending on a particular command, that may be considered as a success (for all `list` commands) or as a fail (for all other commands).
 
+An Entity Identifier must not be empty.
+
 ### Account Identifier ###
 
-Option: `--owner <ACCOUNT_IDENTIFIER>`
-
-Attributes accepted as <ACCOUNT_IDENTIFIER> (in order of search):
+Attributes accepted as `<ACCOUNT_IDENTIFIER>` (in order of search):
 
 - `"me"` (a predefined word, means the current logged-in account)
 - Account ID (always unique)
@@ -156,25 +161,27 @@ Attributes accepted as <ACCOUNT_IDENTIFIER> (in order of search):
 
 ### Product Identifier ###
 
-Option: `--product <PRODUCT_IDENTIFIER>`
-
 Attributes accepted as `<PRODUCT_IDENTIFIER>` (in order of search):
 
 - Product ID (always unique)
 - Product name (unique among all Products owned by a particular user)
 
-### Device Group Identifier ###
+Hierarchical identifier pattern: `{<ACCOUNT_IDENTIFIER>}{<PRODUCT_IDENTIFIER>}`
 
-Option: `--dg <DEVICE_GROUP_IDENTIFIER>`
+Where, `<ACCOUNT_IDENTIFIER>` is an [Account identifier](#account-identifier) attribute, `<PRODUCT_IDENTIFIER>` is a [Product identifier](#product-identifier) attribute. An attribute of the hierarchical identifier must not be a hierarchical identifier itself. An attribute of the hierarchical identifier must not contain `}{` substring.
+
+### Device Group Identifier ###
 
 Attributes accepted as `<DEVICE_GROUP_IDENTIFIER>` (in order of search):
 
 - Device Group ID (always unique)
 - Device Group name (unique among all the Device Groups within a Product)
 
-### Device Identifier ###
+Hierarchical identifier pattern: `{<ACCOUNT_IDENTIFIER>}{<PRODUCT_IDENTIFIER>}{<DEVICE_GROUP_IDENTIFIER}`
 
-Option: `--device <DEVICE_IDENTIFIER>`
+Where, `<ACCOUNT_IDENTIFIER>` is an [Account identifier](#account-identifier) attribute, `<PRODUCT_IDENTIFIER>` is a [Product identifier](#product-identifier) attribute, `<DEVICE_GROUP_IDENTIFIER>` is a [Device Group identifier](#product-identifier) attribute. An attribute of the hierarchical identifier must not be a hierarchical identifier itself. An attribute of the hierarchical identifier must not contain `}{` substring.
+
+### Device Identifier ###
 
 Attributes accepted as `<DEVICE_IDENTIFIER>` (in order of search):
 
@@ -184,8 +191,6 @@ Attributes accepted as `<DEVICE_IDENTIFIER>` (in order of search):
 - Device name
 
 ### Build Identifier ###
-
-Option: `--build <BUILD_IDENTIFIER>`
 
 Attributes accepted as `<BUILD_IDENTIFIER>` (in order of search):
 
@@ -272,6 +277,35 @@ A test configuration file is a `.impt.test` file located in a given directory. D
 A test configuration file contains settings to run unit tests which are created with the [*impUnit*](https://github.com/electricimp/impUnit) test framework. Test configuration files affect [Test Commands](#test-commands) only.
 
 ## Command Description ##
+
+### Account Information Commands ###
+
+#### Account Info ####
+
+```
+impt account info [--user <ACCOUNT_IDENTIFIER>] [--output <mode>] [--help]
+```
+
+Displays information about the specified account.
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --user | -u | No | Yes | An [Account identifier](#account-identifier). If not specified, the current account is assumed  |
+| --output | -z | No | Yes | Adjusts the [command's output](#command-output) |
+| --help | -h | No | No | Displays a description of the command. Ignores any other options |
+
+#### Account List ####
+
+```
+impt account list [--output <mode>] [--help]
+```
+
+Displays information about the current account and all shared accounts the current one is collaborating on.
+
+| Option | Alias | Mandatory? | Value Required? | Description |
+| --- | --- | --- | --- | --- |
+| --output | -z | No | Yes | Adjusts the [command's output](#command-output) |
+| --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
 ### Authentication Commands ###
 
