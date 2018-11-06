@@ -48,6 +48,11 @@ exports.builder = function (yargs) {
             describe : 'An optional description of the Product.',
             _usage : '<product_description>'
         },
+        [Options.OWNER] : {
+            demandOption : false,
+            describe: 'The Product will be created in the specified Account. If not specified, the current account is assumed.',
+            type : 'string'
+        },
         [Options.OUTPUT] : false
     });
     return yargs
