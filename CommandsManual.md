@@ -179,7 +179,7 @@ Attributes accepted as `<DEVICE_GROUP_IDENTIFIER>` (in order of search):
 
 Hierarchical identifier pattern: `{<ACCOUNT_IDENTIFIER>}{<PRODUCT_IDENTIFIER>}{<DEVICE_GROUP_IDENTIFIER}`
 
-Where, `<ACCOUNT_IDENTIFIER>` is an [Account identifier](#account-identifier) attribute, `<PRODUCT_IDENTIFIER>` is a [Product identifier](#product-identifier) attribute, `<DEVICE_GROUP_IDENTIFIER>` is a [Device Group identifier](#product-identifier) attribute. An attribute of the hierarchical identifier must not be a hierarchical identifier itself. An attribute of the hierarchical identifier must not contain `}{` substring.
+Where, `<ACCOUNT_IDENTIFIER>` is an [Account identifier](#account-identifier) attribute, `<PRODUCT_IDENTIFIER>` is a [Product identifier](#product-identifier) attribute, `<DEVICE_GROUP_IDENTIFIER>` is a [Device Group identifier](#device-group-identifier) attribute. An attribute of the hierarchical identifier must not be a hierarchical identifier itself. An attribute of the hierarchical identifier must not contain `}{` substring.
 
 ### Device Identifier ###
 
