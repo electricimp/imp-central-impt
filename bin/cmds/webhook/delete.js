@@ -29,7 +29,7 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'delete';
 const COMMAND_SECTION = 'webhook';
-const COMMAND_SHORT_DESCR = 'Deletes the specified Webhook.';
+const COMMAND_SHORT_DESCR = 'Deletes the specified webhook.';
 const COMMAND_DESCRIPTION = COMMAND_SHORT_DESCR;
 
 exports.command = COMMAND;

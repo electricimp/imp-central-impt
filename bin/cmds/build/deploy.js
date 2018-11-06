@@ -31,8 +31,8 @@ const COMMAND = 'deploy';
 const COMMAND_SECTION = 'build';
 const COMMAND_SHORT_DESCR = 'Creates and deploys a build.';
 const COMMAND_DESCRIPTION = 'Creates a build (Deployment) from the specified source files,' +
-    ' with Description (if specified) and attributes (if specified) and deploys it to all Devices' +
-    ' of the specified Device Group.';
+    ' with a description (if specified) and attributes (if specified), and deploys it to all the devices' +
+    ' assigned to the specified Device Group.';
 
 exports.command = COMMAND;
 
@@ -43,19 +43,19 @@ exports.builder = function (yargs) {
         [Options.DEVICE_GROUP_IDENTIFIER] : false,
         [Options.DEVICE_FILE] : {
             demandOption : false,
-            describe : 'Name of a file which contains a source code for IMP device.' +
-                ' If not specified, the file referenced by Project File in the current directory is assumed;' +
-                ' if no Project File, empty code is assumed. If the specified file does not exist, the command fails.'
+            describe : 'The device source code file name.' +
+                ' If not specified, the file referenced by the Project file in the current directory is used;' +
+                ' if there is no Project file, empty code is used. If the specified file does not exist, the command fails.'
         },
         [Options.AGENT_FILE] : {
             demandOption : false,
-            describe : 'Name of a file which contains a source code for IMP agent.' +
-                ' If not specified, the file referenced by Project File in the current directory is assumed;' +
-                ' if no Project File, empty code is assumed. If the specified file does not exist, the command fails.'
+            describe : 'The agent source code file name.' +
+                ' If not specified, the file referenced by the Project file in the current directory is used;' +
+                ' if there is no Project file, empty code is used. If the specified file does not exist, the command fails.'
         },
         [Options.DESCRIPTION] : {
             demandOption : false,
-            describe : 'Description of the build (Deployment).',
+            describe : 'A description of the build (Deployment).',
             _usage : '<build_description>'
         },
         [Options.ORIGIN] : false,

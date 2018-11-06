@@ -31,8 +31,8 @@ const COMMAND = 'update';
 const COMMAND_SECTION = 'build';
  
 const COMMAND_SHORT_DESCR = 'Updates the specified build.';
-const COMMAND_DESCRIPTION = 'Updates Description, tags and flagged attribute (whatever specified) of the specified build (Deployment).' +
-    ' Fails if the specified build (Deployment) does not exist.';
+const COMMAND_DESCRIPTION = 'Updates the description, tags and/or the "flagged" attribute (whichever is specified)' +
+    ' of the specified build (Deployment). Fails if the specified build (Deployment) does not exist.';
 
 exports.command = COMMAND;
 
@@ -43,7 +43,7 @@ exports.builder = function (yargs) {
         [Options.BUILD_IDENTIFIER] : false,
         [Options.DESCRIPTION] : {
             demandOption : false,
-            describe : 'Description of the build (Deployment).',
+            describe : 'A description of the build (Deployment).',
             _usage : '<build_description>'
         },
         [Options.TAG] : false,

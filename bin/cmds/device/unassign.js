@@ -29,8 +29,8 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'unassign';
 const COMMAND_SECTION = 'device';
-const COMMAND_SHORT_DESCR = 'Unassigns the specified Device.';
-const COMMAND_DESCRIPTION = 'Unassigns the specified Device. Does nothing if the Device already unassigned.';
+const COMMAND_SHORT_DESCR = 'Unassigns the specified device.';
+const COMMAND_DESCRIPTION = 'Unassigns the specified device. Does nothing if the device already unassigned.'
 
 exports.command = COMMAND;
 

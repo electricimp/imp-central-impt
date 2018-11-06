@@ -36,7 +36,7 @@ Yargs
     .strict()
     .version(false)
     .usage(Options.getCommandGroupUsage(null))
-    .help('help', 'Displays description of the command. Ignores any other options.')
+    .help('help', 'Displays a description of the command. Ignores any other options.')
     .alias('help', 'h')
     .fail(function (msg, err, yargs) {
         console.log(yargs.help());

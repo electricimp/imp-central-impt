@@ -41,8 +41,9 @@ exports.builder = function (yargs) {
         [Options.PRODUCT_IDENTIFIER] : false,
         [Options.FULL] : {
             demandOption : false,
-            describe : 'Displays additional information.' +
-                ' Details about every Device Group that belongs to the Product, Devices assigned to every Device Group and other.'
+            describe : 'Displays additional information and the full structure of the Product,' +
+                ' including details about every Device Group that belongs to the Product,' +
+                ' and devices assigned to those Device Groups.'
         },
         [Options.OUTPUT] : false
     });

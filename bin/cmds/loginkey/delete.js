@@ -29,7 +29,7 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'delete';
 const COMMAND_SECTION = 'loginkey';
-const COMMAND_SHORT_DESCR = 'Deletes the specified Login Key.';
+const COMMAND_SHORT_DESCR = 'Deletes the specified login key.';
 const COMMAND_DESCRIPTION = COMMAND_SHORT_DESCR;
 
 exports.command = COMMAND;

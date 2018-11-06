@@ -29,8 +29,8 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'list';
 const COMMAND_SECTION = 'loginkey';
-const COMMAND_SHORT_DESCR = 'Displays information about all available Login Keys.';
-const COMMAND_DESCRIPTION = 'Displays information about all Login Keys of the current logged-in account.';
+const COMMAND_SHORT_DESCR = 'Displays information about all login keys.';
+const COMMAND_DESCRIPTION = 'Displays information about all of the login keys belonging to the current account.';
 
 exports.command = COMMAND;
 

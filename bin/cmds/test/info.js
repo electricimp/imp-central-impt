@@ -29,9 +29,9 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'info';
 const COMMAND_SECTION = 'test';
-const COMMAND_SHORT_DESCR = 'Displays information about the tests configuration.';
-const COMMAND_DESCRIPTION = 'Displays information about the tests configuration defined by Test Configuration File' +
-    ' in the current directory. With every call the latest actual information is obtained using impCentral API.';
+const COMMAND_SHORT_DESCR = 'Displays information about the test configuration.';
+const COMMAND_DESCRIPTION = 'Displays information about the test configuration defined by the test configuration file' +
+    ' in the current directory. With every call, the latest actual information is obtained using the impCentral API.';
 
 exports.command = COMMAND;
 

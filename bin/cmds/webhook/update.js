@@ -29,9 +29,9 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'update';
 const COMMAND_SECTION = 'webhook';
-const COMMAND_SHORT_DESCR = 'Updates the specified Webhook.';
-const COMMAND_DESCRIPTION = 'Updates the specified Webhook by a new target URL and/or MIME content-type.' +
-    ' Fails if the specified Webhook does not exist.';
+const COMMAND_SHORT_DESCR = 'Updates the specified webhook.';
+const COMMAND_DESCRIPTION = 'Updates the specified webhook with a new target URL and/or MIME content-type.' +
+    ' Fails if the specified webhook does not exist.';
 
 exports.command = COMMAND;
 
@@ -42,7 +42,7 @@ exports.builder = function (yargs) {
         [Options.WEBHOOK_IDENTIFIER] : true,
         [Options.URL] : {
             demandOption : false,
-            describe : "The Webhook's new target URL."
+            describe : "The webhook's new target URL."
         },
         [Options.MIME] :  {
             demandOption : false,
