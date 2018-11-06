@@ -66,7 +66,7 @@ describe(`impt device restart test suite (output: ${outputMode ? outputMode : 'd
             if (commandOut && commandOut.mac) {
                 device_mac = commandOut.mac;
                 old_name = commandOut.name;
-                device_name = `${commandOut.name}${config.suffix}`;
+                device_name = `${config.devices[config.deviceidx]}${config.suffix}`;
                 agent_id = commandOut.agentid;
             }
             else fail("TestSuitInit error: Fail get addition device attributes");

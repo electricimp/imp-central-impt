@@ -63,7 +63,7 @@ describe(`impt log get test suite (output: ${outputMode ? outputMode : 'default'
             if (commandOut && commandOut.mac) {
                 device_mac = commandOut.mac;
                 old_name = commandOut.name;
-                device_name = `${commandOut.name}${config.suffix}`;
+                device_name = `${config.devices[config.deviceidx]}${config.suffix}`;
                 agent_id = commandOut.agentid;
             }
             else fail("TestSuitInit error: Fail get addition device attributes");
@@ -80,7 +80,8 @@ describe(`impt log get test suite (output: ${outputMode ? outputMode : 'default'
 
     function _checkLogMessages(commandOut, messages = {}) {
         let matcher = commandOut.output.match(new RegExp(/....-..-..T..:..:../g));
-        expect(matcher.length).toEqual(messages.count)
+        expect(matcher).not.toBeNull();
+        expect(matcher.length).toEqual(messages.count);
         // if output contains non server.log messages change message start nuber
         matcher = commandOut.output.match(new RegExp(/server\.log/g));
         if (matcher.length < messages.count) {
