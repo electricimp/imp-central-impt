@@ -1,4 +1,4 @@
-﻿# impt #
+# impt #
 
 *impt* is a command line tool which allows you to interact with the Electric Imp impCloud™ via the [impCentral™ API](https://apidoc.electricimp.com) for the development, testing and deployment of application and factory code, and for device and product management.
 
@@ -753,7 +753,7 @@ Many *impt* commands combine several impCentral API requests which change impCen
 
 ## Testing ##
 
-There are [Jasmine](https://www.npmjs.com/package/jasmine) tests available to verify *impt* implementation itself. The [Readme](./spec/README.md) describes how to run the tests and extend them, if necessary.
+There are [Jasmine](https://www.npmjs.com/package/jasmine) tests available to verify *impt* implementation itself. The [Testing read me](./spec/TestingReadme.md) describes how to run the tests and extend them, if necessary.
 
 ## License ##
 
