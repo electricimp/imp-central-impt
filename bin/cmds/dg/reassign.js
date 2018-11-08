@@ -29,8 +29,8 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'reassign';
 const COMMAND_SECTION = 'dg';
-const COMMAND_SHORT_DESCR = 'Reassigns all Devices from one Device Group to another.';
-const COMMAND_DESCRIPTION = 'Reassigns all Devices from one Device Group to another.' +
+const COMMAND_SHORT_DESCR = 'Reassigns all of the devices from one Device Group to another.';
+const COMMAND_DESCRIPTION = 'Reassigns all of the devices from one Device Group to another.' +
     ' Fails if any of the specified Device Groups does not exist.';
 
 exports.command = COMMAND;

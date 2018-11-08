@@ -29,8 +29,8 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'assign';
 const COMMAND_SECTION = 'device';
-const COMMAND_SHORT_DESCR = 'Assigns the specified Device to the Device Group.';
-const COMMAND_DESCRIPTION = 'Assigns the specified Device to the specified Device Group. Fails if the specified Device Group does not exist.';
+const COMMAND_SHORT_DESCR = 'Assigns the specified device to the Device Group.';
+const COMMAND_DESCRIPTION = 'Assigns the specified device to the specified Device Group. Fails if the specified Device Group does not exist.'
 
 exports.command = COMMAND;
 

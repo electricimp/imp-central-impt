@@ -40,7 +40,7 @@ exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.BUILD_IDENTIFIER] : {
             demandOption : true,
-            describe : 'Build Identifier: Deployment Id, sha, tag or origin.'
+            describe : 'A Build identifier: Deployment ID, SHA, Tag or Origin.'
         },
         [Options.FORCE] : false,
         [Options.CONFIRMED] : false,

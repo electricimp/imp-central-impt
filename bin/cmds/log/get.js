@@ -29,8 +29,8 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'get';
 const COMMAND_SECTION = 'log';
-const COMMAND_SHORT_DESCR = 'Displays historical logs for the specified Device.';
-const COMMAND_DESCRIPTION = 'Displays historical logs for the specified Device. The logs are displayed starting from the most recent one.';
+const COMMAND_SHORT_DESCR = 'Displays historical logs for the specified device.';
+const COMMAND_DESCRIPTION = 'Displays historical logs for the specified device. The logs are displayed with the most recent entry first.';
 
 exports.command = COMMAND;
 
@@ -40,10 +40,10 @@ exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.DEVICE_IDENTIFIER] : {
             demandOption : false,
-            describe : 'Device Identifier: Device Id, MAC address, IP address, Agent Id or Device name.' +
-                ' If not specified and there is one and only one Device in the Device Group referenced by' +
-                ' Project File in the current directory, then this Device is assumed' +
-                ' (if no Project File or the Device Group has zero or more than one Devices, the command fails).'
+            describe : 'A device identifier: Device ID, MAC address, Agent ID or Device name.' +
+                ' If not specified and there is only one device in the Device Group referenced by' +
+                ' the Project file in the current directory, then this device is used' +
+                ' (if there is no Project file, or the Device Group has none or more than one device, the command fails).'
         },
         [Options.PAGE_SIZE] : {
             demandOption : false,

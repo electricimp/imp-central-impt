@@ -491,8 +491,8 @@ The returned list of the builds may be filtered. Filtering uses any combination 
 | --tag | -t | No | Yes | Builds with the specified tag only |
 | --flagged | -f | No | No | Builds with the *flagged* attribute set to `true` only |
 | --unflagged | -u | No | No | Builds with the *flagged* attribute set to `false` only |
-| --non-zombie | -n | No | No | Only builds which are related to the Device Group |
-| --zombie | -m | No | No | Only builds which are not related to the Device Group |
+| --non-zombie | -n | No | No | Only builds which are related to a Device Group |
+| --zombie | -m | No | No | Only builds which are not related to any Device Group |
 
 #### Build Run ####
 
@@ -702,7 +702,7 @@ The user is asked to confirm the operation if any Deployment is going to be dele
 ```
 impt dg create --name <device_group_name> [--dg-type <device_group_type>]
     [--product <PRODUCT_IDENTIFIER>] [--descr <device_group_description>]
-    [--target <DEVICE_GROUP_IDENTIFIER>] [--output <mode>] [--help]
+    [--target <DEVICE_GROUP_IDENTIFIER>] [--region <region_name>] [--output <mode>] [--help]
 ```
 
 Creates a new Device Group for the specified Product. Fails if a Device Group with the specified name already exists under the specified Product.
@@ -714,6 +714,7 @@ Creates a new Device Group for the specified Product. Fails if a Device Group wi
 | --product | -p | Yes/[Project](#project-files) | Yes | The [Product identifier](#product-identifier) of the Product to which the Device Group belongs. If not specified, the Product referenced by the [Project file](#project-files) in the current directory is used (if there is no Project file, the command fails) |
 | --descr | -s | No | Yes | An optional description of the Device Group |
 | --target | -t | No | Yes | The [Device Group identifier](#device-group-identifier) of the new Device Group’s production target Device Group. Should only be specified if the new Device Group is of the *factory* or *pre-factory* [type](#device-group-type). The target Device Group must be of the [type](#device-group-type) *production* or *pre-production* correspondingly, and belong to the specified Product. Otherwise the command fails |
+| --region | -r | No | Yes | A region. May be specified if the new Device Group is of the *production* or *pre-production* [type](#device-group-type) only |
 | --output | -z | No | Yes | Adjusts the [command's output](#command-output) |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
@@ -1463,7 +1464,7 @@ Updates the specified webhook with a new target URL and/or MIME content-type. Fa
 | -o | --owner, --origin, --unflag-old |
 | -p | --product |
 | -q | --confirmed |
-| -r | --create-target, --remove-tag, --remove |
+| -r | --create-target, --remove-tag, --remove, --region |
 | -s | --descr, --sha, --page-size, --stop-on-fail |
 | -t | --tag, --timeout, --temp, --target, --to, --tests |
 | -u | --user, --full, --unflagged, --unflag, --unassigned, --unbond, --url |

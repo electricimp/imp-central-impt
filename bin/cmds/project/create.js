@@ -32,8 +32,8 @@ const UserInteractor = require('../../../lib/util/UserInteractor');
 
 const COMMAND = 'create';
 const COMMAND_SECTION = 'project';
-const COMMAND_SHORT_DESCR = 'Creates a new Device Group and new Project File.';
-const COMMAND_DESCRIPTION = 'Creates a new Device Group for the specified Product and creates new Project File' +
+const COMMAND_SHORT_DESCR = 'Creates a new Device Group and a new Project file.';
+const COMMAND_DESCRIPTION = 'Creates a new Device Group for the specified Product and creates a new Project file' +
     ' in the current directory by linking it to the new Device Group.';
 
 exports.command = COMMAND;
@@ -46,31 +46,30 @@ exports.builder = function (yargs) {
         [Options.CREATE_PRODUCT] : false,
         [Options.NAME] : {
             demandOption : true,
-            describe : 'Name of the new Device Group. Must be unique among all Device Groups in the specified Product.',
+            describe : 'The name of the new Device Group. Must be unique among all Device Groups in the specified Product.',
             _usage : '<device_group_name>'
         },
         [Options.DESCRIPTION] : {
             demandOption : false,
-            describe : 'Description of the Device Group.',
+            describe : "The Device Group's optional description.",
             _usage : '<device_group_description>'
         },
         [Options.DEVICE_FILE] :  {
             demandOption : false,
-            describe: 'Name of a file for IMP device source code. If the file does not exist, empty file is created.',
+            describe: 'The device source code file name. If the file does not exist, an empty file is created.',
             default: 'device.nut'
         },
         [Options.AGENT_FILE] : {
             demandOption : false,
-            describe: 'Name of a file for IMP agent source code. If the file does not exist, empty file is created.',
+            describe: 'The agent source code file name. If the file does not exist, an empty file is created.',
             default: 'agent.nut'
         },
         [Options.PRE_FACTORY] : false,
         [Options.TARGET] : {
             demandOption : false,
-            describe : Util.format('Device Group Identifier of the production target Device Group for the being created Device Group.' +
-                ' May be specified if and only if --%s option is specified.' +
-                ' The specified target Device Group must be of the type %s and belongs to the specified Product.' +
-                ' Otherwise the command fails.',
+            describe : Util.format("The Device Group identifier of the new Project Device Group's production target Device Group." +
+                " May be specified only if --%s is also specified." +
+                " The specified Device Group must be of the type %s and belong to the specified Product.",
                 Options.PRE_FACTORY, Options.DG_TYPE_PRE_PRODUCTION)
         },
         [Options.CREATE_TARGET] : false,

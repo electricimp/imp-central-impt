@@ -41,19 +41,19 @@ exports.builder = function (yargs) {
         [Options.DEVICE_GROUP_IDENTIFIER] : false,
         [Options.DEVICE_FILE] : {
             demandOption : false,
-            describe : 'Name of a file which contains a source code for IMP device.' +
-                ' If not specified, the file referenced by Project File in the current directory is assumed;' +
-                ' if no Project File, empty code is assumed. If the specified file does not exist, the command fails.'
+            describe : 'The device source code file name.' +
+                ' If not specified, the file referenced by the Project file in the current directory is used;' +
+                ' if there is no Project file, empty code is used. If the specified file does not exist, the command fails.'
         },
         [Options.AGENT_FILE] : {
             demandOption : false,
-            describe : 'Name of a file which contains a source code for IMP agent.' +
-                ' If not specified, the file referenced by Project File in the current directory is assumed;' +
-                ' if no Project File, empty code is assumed. If the specified file does not exist, the command fails.'
+            describe : 'The agent source code file name.' +
+                ' If not specified, the file referenced by the Project file in the current directory is used;' +
+                ' if there is no Project file, empty code is used. If the specified file does not exist, the command fails.'
         },
         [Options.DESCRIPTION] : {
             demandOption : false,
-            describe : 'Description of the build (Deployment).',
+            describe : 'A description of the build (Deployment).',
             _usage : '<build_description>'
         },
         [Options.ORIGIN] : false,
@@ -61,7 +61,7 @@ exports.builder = function (yargs) {
         [Options.FLAGGED] : false,
         [Options.CONDITIONAL] : {
             demandOption : false,
-            describe : 'Conditional restart of Devices assigned to the specified Device Group instead of a normal restart.'
+            describe : 'Trigger a conditional restart of the devices assigned to the specified Device Group instead of a normal restart.'
         },
         [Options.LOG] : false,
         [Options.OUTPUT] : false

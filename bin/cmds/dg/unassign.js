@@ -29,9 +29,9 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'unassign';
 const COMMAND_SECTION = 'dg';
-const COMMAND_SHORT_DESCR = 'Unassigns all Devices from the specified Device Group.';
-const COMMAND_DESCRIPTION = 'Unassigns all Devices from the specified Device Group.' +
-    ' Does nothing if the Device Group has no Devices assigned.';
+const COMMAND_SHORT_DESCR = 'Unassigns all of the devices from the specified Device Group.';
+const COMMAND_DESCRIPTION = 'Unassigns all of the devices from the specified Device Group.' +
+    ' Does nothing if the Device Group has no devices assigned to it.';
 
 exports.command = COMMAND;
 

@@ -29,8 +29,8 @@ const Options = require('../../../lib/util/Options');
 
 const COMMAND = 'run';
 const COMMAND_SECTION = 'test';
-const COMMAND_SHORT_DESCR = 'Runs the tests specified by Test Configuration File.';
-const COMMAND_DESCRIPTION = 'Runs the tests specified by Test Configuration File in the current directory.';
+const COMMAND_SHORT_DESCR = 'Runs the tests specified by the test configuration file.';
+const COMMAND_DESCRIPTION = 'Runs the tests specified by the test configuration file in the current directory.';
 
 exports.command = COMMAND;
 

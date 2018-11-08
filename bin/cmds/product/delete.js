@@ -24,6 +24,7 @@
 
 'use strict';
 
+const Util = require('util');
 const Product = require('../../../lib/Product');
 const Options = require('../../../lib/util/Options');
 
@@ -41,8 +42,10 @@ exports.builder = function (yargs) {
         [Options.PRODUCT_IDENTIFIER] : false,
         [Options.BUILDS] : {
             demandOption : false,
-            describe : 'Additionally deletes all Deployments related to all Device Groups which belong/belonged to the Product,' +
-                ' including the Device Groups that were deleted before.',
+            describe : Util.format('Additionally deletes all Deployments related to all of the Device Groups which belong to the Product,' +
+                ' including Device Groups that were deleted previously.' +
+                ' The command fails if any Deployment has its "flagged" attribute set to true and the --%s option was not specified.',
+                Options.FORCE)
         },
         [Options.FORCE] : false,
         [Options.CONFIRMED] : false,

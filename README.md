@@ -1,4 +1,4 @@
-# impt #
+﻿# impt #
 
 *impt* is a command line tool which allows you to interact with the Electric Imp impCloud™ via the [impCentral™ API](https://apidoc.electricimp.com) for the development, testing and deployment of application and factory code, and for device and product management.
 
@@ -130,7 +130,7 @@ Commands:
   impt webhook   Webhook manipulation commands.
 
 Options:
-  --help, -h  Displays description of the command. Ignores any other options.
+  --help, -h  Displays a description of the command. Ignores any other options.
                                                                        [boolean]
 ```
 
@@ -151,7 +151,7 @@ Commands:
   impt product update  Updates the specified Product.
 
 Options:
-  --help, -h  Displays description of the command. Ignores any other options.
+  --help, -h  Displays a description of the command. Ignores any other options.
                                                                        [boolean]
 ```
 
@@ -163,14 +163,15 @@ Options:
 Usage: impt product create --name <product_name> [--descr <product_description>]
 [--output <mode>] [--help]
 
-Creates a new Product. Fails if Product with the specified Name already exists.
+Creates a new Product. Fails if a Product with the specified name already
+exists.
 
 Options:
-  --help, -h    Displays description of the command. Ignores any other options.
-                                                                       [boolean]
-  --name, -n    Name of the Product. Must be unique among all Products owned by
-                the logged-in account.                       [string] [required]
-  --descr, -s   Description of the Product.                             [string]
+  --help, -h    Displays a description of the command. Ignores any other
+                options.                                               [boolean]
+  --name, -n    The Product's name. Must be unique among all of the current
+                account's Products                           [string] [required]
+  --descr, -s   An optional description of the Product.                 [string]
   --output, -z  Adjusts the command's output.
                                   [string] [choices: "minimal", "json", "debug"]
 ```

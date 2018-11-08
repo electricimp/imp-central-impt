@@ -30,7 +30,8 @@ const Options = require('../../../lib/util/Options');
 const COMMAND = 'update';
 const COMMAND_SECTION = 'product';
 const COMMAND_SHORT_DESCR = 'Updates the specified Product.';
-const COMMAND_DESCRIPTION = 'Updates the specified Product by a new Name and/or Description. Fails if the specified Product does not exist.';
+const COMMAND_DESCRIPTION = 'Updates the specified Product with a new name and/or description.' +
+    ' Fails if the specified Product does not exist.';
 
 exports.command = COMMAND;
 
@@ -41,12 +42,12 @@ exports.builder = function (yargs) {
         [Options.PRODUCT_IDENTIFIER] : false,
         [Options.NAME] : {
             demandOption : false,
-            describe : 'New Name of the Product. Must be unique among all Products owned by a particular Account.',
+            describe : "The Product's new name. Must be unique among all of the current Account's Products.",
             _usage : '<product_name>'
         },
         [Options.DESCRIPTION] : {
             demandOption : false,
-            describe : 'Description of the Product.',
+            describe : "The Product's new description.",
             _usage : '<product_description>'
         },
         [Options.OUTPUT] : false

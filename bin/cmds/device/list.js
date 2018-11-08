@@ -31,8 +31,8 @@ const UserInteractor = require('../../../lib/util/UserInteractor');
 
 const COMMAND = 'list';
 const COMMAND_SECTION = 'device';
-const COMMAND_SHORT_DESCR = 'Displays information about all or filtered Devices.';
-const COMMAND_DESCRIPTION = 'Displays information about all Devices available to the current logged-in account.';
+const COMMAND_SHORT_DESCR = 'Displays information about all or filtered devices.';
+const COMMAND_DESCRIPTION = 'Displays information about all of the devices available to the current account.';
 
 exports.command = COMMAND;
 
@@ -46,17 +46,17 @@ exports.builder = function (yargs) {
             demandOption : false,
             type : 'array',
             elemType : 'string',
-            describe : 'Lists Devices assigned to Device Groups which belong to the specified Product only.'
+            describe : 'Lists devices assigned to Device Groups which belong to the specified Product(s) only.'
         },
         [Options.DEVICE_GROUP_IDENTIFIER] : {
             demandOption : false,
             type : 'array',
             elemType : 'string',
-            describe : 'Lists Devices assigned to the specified Device Group only.'
+            describe : 'Lists devices assigned to the specified Device Group(s) only.'
         },
         [Options.DEVICE_GROUP_TYPE] : {
             demandOption : false,
-            describe : 'Lists Devices assigned to Device Groups of the specified type only.'
+            describe : 'Lists devices assigned to Device Groups of the specified type only.'
         },
         [Options.UNASSIGNED] : false,
         [Options.ASSIGNED] : false,
