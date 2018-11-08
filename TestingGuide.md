@@ -1,4 +1,4 @@
-# impt Testing Guide #
+﻿# impt Testing Guide #
 
 This additional guide is intended for developers and testers who use *impt* to test Squirrel libraries and code with unit tests which are created using the [*impUnit*](https://github.com/electricimp/impUnit) test framework. *impt* supersedes the [previous version of *impTest*](https://github.com/electricimp/impTest) by integrating a new version of the *impTest* code.
 
@@ -372,7 +372,7 @@ Performs a deep comparison of tables, arrays and classes.
 
 ```squirrel
 // OK
-this.assertDeepEqual({"a" : { "b" : 1 }}, {"a" : { "b" : 0 }});
+this.assertDeepEqual({"a" : { "b" : 1 }}, {"a" : { "b" : 1 }});
 
 // Failure: Missing slot [a.b] in actual value
 this.assertDeepEqual({"a" : { "b" : 1 }}, {"a" : { "_b" : 0 }});

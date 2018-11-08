@@ -24,10 +24,17 @@
 
 'use strict';
 
-exports.email = process.env.IMPT_USER_EMAIL;
+exports.username = process.env.IMPT_USER_NAME;
 exports.password = process.env.IMPT_USER_PASSWORD;
 exports.devices = process.env.IMPT_DEVICE_IDS ? process.env.IMPT_DEVICE_IDS.split(',') : [];
+
+// output modes for run tests in addition to default mode  
+exports.outputModes = process.env.IMPT_OUTPUT_MODES ? process.env.IMPT_OUTPUT_MODES.split(',') : [];
+
+// not mandatory variables
 exports.debug = process.env.IMPT_DEBUG === 'true' || process.env.IMPT_DEBUG === '1';
 exports.apiEndpoint = process.env.IMPT_ENDPOINT;
 exports.githubUser = process.env.IMPT_GITHUB_USER;
 exports.githubToken = process.env.IMPT_GITHUB_TOKEN;
+exports.deviceidx = process.env.IMPT_DEVICE_IDX ? process.env.IMPT_DEVICE_IDX : 0;
+exports.suffix = process.env.IMPT_SUFFIX ? `_${process.env.IMPT_USER_NAME}_${process.env.IMPT_SUFFIX}` : `_${process.env.IMPT_USER_NAME}`;
