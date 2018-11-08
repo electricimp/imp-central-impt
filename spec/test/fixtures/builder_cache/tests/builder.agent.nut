@@ -1,3 +1,0 @@
-
-class AgentTestCase extends ImpTestCase {
-}

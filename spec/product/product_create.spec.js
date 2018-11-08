@@ -26,111 +26,196 @@
 
 require('jasmine-expect');
 const config = require('../config');
-const ImptTestingHelper = require('../ImptTestingHelper');
+const ImptTestHelper = require('../ImptTestHelper');
+const Identifier = require('../../lib/util/Identifier');
+const UserInterractor = require('../../lib/util/UserInteractor');
+const Util = require('util');
+const MessageHelper = require('../MessageHelper');
 
-const PRODUCT_NAME = '__impt_product';
-const PRODUCT_NAME_2 = '__impt_product_2';
+const PRODUCT_NAME = `__impt_pr_product${config.suffix}`;
+const PRODUCT_EXIST_NAME = `__impt_pr_product_2${config.suffix}`;
+
 const PRODUCT_DESCR = 'impt temp product description';
+const PRODUCT_EXIST_DESCR = 'impt temp product description 2';
 
-// Test suite for 'impt create product' command.
-// Runs 'impt create product' command with different combinations of options,
-// checks that products are actually created using 'impt product info' and 'impt product list' commands.
-describe('impt product create test suite >', () => {
-    let productId = null;
+// Test suite for 'impt product create' command.
+// Runs 'impt product create' command with different combinations of options,
+ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
+    describe(`impt product create test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
+        let product_id = null;
 
-    beforeAll((done) => {
-        ImptTestingHelper.init().
-            then(testSuiteCleanUp).
-            then(done).
-            catch(error => done.fail(error));
-    }, ImptTestingHelper.TIMEOUT);
-
-    afterAll((done) => {
-        testSuiteCleanUp().
-            then(ImptTestingHelper.cleanUp).
-            then(done).
-            catch(error => done.fail(error));
-    }, ImptTestingHelper.TIMEOUT);
-
-    function testSuiteCleanUp() {
-        return ImptTestingHelper.runCommand(`impt product delete --product ${PRODUCT_NAME} --confirmed`, ImptTestingHelper.emptyCheck).
-            then(() => ImptTestingHelper.runCommand(`impt product delete -p ${PRODUCT_NAME_2} -q`, ImptTestingHelper.emptyCheck));
-    }
-
-    it('product create', (done) => {
-        ImptTestingHelper.runCommand(`impt product create --name ${PRODUCT_NAME} --descr "${PRODUCT_DESCR}"`, ImptTestingHelper.checkSuccessStatus).
-            then(done).
-            catch(error => done.fail(error));
-    });
-
-    it('product create without description', (done) => {
-        ImptTestingHelper.runCommand(`impt product create -n ${PRODUCT_NAME_2} --output debug`, ImptTestingHelper.checkSuccessStatus).
-            then(done).
-            catch(error => done.fail(error));
-    });
-
-    it('check product info', (done) => {
-        ImptTestingHelper.runCommand(`impt product info --product ${PRODUCT_NAME}`, (commandOut) => {
-                ImptTestingHelper.checkAttribute(commandOut, ImptTestingHelper.ATTR_NAME, PRODUCT_NAME);
-                ImptTestingHelper.checkAttribute(commandOut, ImptTestingHelper.ATTR_DESCRIPTION, PRODUCT_DESCR);
-                const idMatcher = commandOut.match(new RegExp(`${ImptTestingHelper.ATTR_ID}:\\s+([A-Za-z0-9-]+)`));
-                expect(idMatcher).toBeNonEmptyArray();
-                if (idMatcher) {
-                    productId = idMatcher[1];
-                }
-                ImptTestingHelper.checkSuccessStatus(commandOut);
-            }).
-            then(done).
-            catch(error => done.fail(error));
-    });
-
-    it('check full product info by id', (done) => {
-        if (productId) {
-            ImptTestingHelper.runCommand(`impt product info -p ${productId} --full`, (commandOut) => {
-                    ImptTestingHelper.checkAttribute(commandOut, ImptTestingHelper.ATTR_NAME, PRODUCT_NAME);
-                    ImptTestingHelper.checkAttribute(commandOut, ImptTestingHelper.ATTR_DESCRIPTION, PRODUCT_DESCR);
-                    ImptTestingHelper.checkSuccessStatus(commandOut);
-                }).
+        beforeAll((done) => {
+            ImptTestHelper.init().
+                then(_testCleanUp).
+                then(_testSuiteCleanUp).
+                then(_testSuiteInit).
                 then(done).
                 catch(error => done.fail(error));
-        }
-        else {
-            done();
-        }
-    });
+        }, ImptTestHelper.TIMEOUT);
 
-    it('check product list', (done) => {
-        ImptTestingHelper.runCommand('impt product list', (commandOut) => {
-                ImptTestingHelper.checkAttribute(commandOut, ImptTestingHelper.ATTR_NAME, PRODUCT_NAME);
-                ImptTestingHelper.checkAttribute(commandOut, ImptTestingHelper.ATTR_NAME, PRODUCT_NAME_2);
-                if (productId) {
-                    ImptTestingHelper.checkAttribute(commandOut, ImptTestingHelper.ATTR_ID, productId);
-                }
-                ImptTestingHelper.checkSuccessStatus(commandOut);
+        afterAll((done) => {
+            _testSuiteCleanUp().
+                then(ImptTestHelper.cleanUp).
+                then(done).
+                catch(error => done.fail(error));
+        }, ImptTestHelper.TIMEOUT);
+
+        afterEach((done) => {
+            _testCleanUp().
+                then(done).
+                catch(error => done.fail(error));
+        }, ImptTestHelper.TIMEOUT);
+
+        // delete all entities using in impt product create test suite
+        function _testSuiteCleanUp() {
+            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_EXIST_NAME} -f -q`, ImptTestHelper.emptyCheckEx);
+        }
+
+        // delete all entities using in impt product create test
+        function _testCleanUp() {
+            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx);
+        }
+
+        // prepare test environment for impt product create test suite
+        function _testSuiteInit() {
+            return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_EXIST_NAME} -s "${PRODUCT_EXIST_DESCR}"`, ImptTestHelper.emptyCheckEx);
+        }
+
+        // check command`s result by exec product info command
+        function _checkProductInfo(expectInfo = {}) {
+            return ImptTestHelper.runCommand(`impt product info -p ${expectInfo.name ? expectInfo.name : PRODUCT_NAME}  ${outputMode}`, (commandOut) => {
+                ImptTestHelper.checkAttribute(commandOut, ImptTestHelper.ATTR_ID, `${expectInfo.id ? expectInfo.id : product_id}`);
+                ImptTestHelper.checkAttribute(commandOut, ImptTestHelper.ATTR_NAME, `${expectInfo.name ? expectInfo.name : PRODUCT_NAME}`);
+                ImptTestHelper.checkAttribute(commandOut, ImptTestHelper.ATTR_DESCRIPTION, `${expectInfo.descr ? expectInfo.descr : ''}`);
+                ImptTestHelper.checkSuccessStatus(commandOut);
+            });
+        }
+
+        // check successfuly created product output message 
+        function _checkSuccessCreateProductMessage(commandOut, productName) {
+            ImptTestHelper.checkOutputMessage(`${outputMode}`, commandOut,
+                Util.format(`${UserInterractor.MESSAGES.ENTITY_CREATED}`,
+                    `${Identifier.ENTITY_TYPE.TYPE_PRODUCT} "${productName}"`)
+            );
+        }
+
+        it('product create', (done) => {
+            ImptTestHelper.runCommand(`impt product create --name ${PRODUCT_NAME} --descr "${PRODUCT_DESCR}" ${outputMode}`, (commandOut) => {
+                product_id = ImptTestHelper.parseId(commandOut);
+                expect(product_id).not.toBeNull;
+                _checkSuccessCreateProductMessage(commandOut, PRODUCT_NAME);
+                ImptTestHelper.checkAttribute(commandOut, ImptTestHelper.ATTR_NAME, PRODUCT_NAME);
+                ImptTestHelper.checkAttribute(commandOut, ImptTestHelper.ATTR_ID, product_id);
+                ImptTestHelper.checkSuccessStatus(commandOut);
             }).
-            then(done).
-            catch(error => done.fail(error));
-    });
+                then(() => _checkProductInfo({ name: PRODUCT_NAME, descr: PRODUCT_DESCR })).
+                then(done).
+                catch(error => done.fail(error));
+        });
 
-    // negative tests
-    it('create duplicated product', (done) => {
-        ImptTestingHelper.runCommand(`impt product create -n ${PRODUCT_NAME} -s "${PRODUCT_DESCR}"`, ImptTestingHelper.checkFailStatus).
-            then(done).
-            catch(error => done.fail(error));
-    });
+        it('product create without description', (done) => {
+            ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME} ${outputMode}`, (commandOut) => {
+                product_id = ImptTestHelper.parseId(commandOut);
+                expect(product_id).not.toBeNull;
+                _checkSuccessCreateProductMessage(commandOut, PRODUCT_NAME);
+                ImptTestHelper.checkAttribute(commandOut, ImptTestHelper.ATTR_NAME, `${PRODUCT_NAME}`);
+                ImptTestHelper.checkSuccessStatus(commandOut);
+            }).
+                then(() => _checkProductInfo({ name: PRODUCT_NAME })).
+                then(done).
+                catch(error => done.fail(error));
+        });
 
-    it('product create without name', (done) => {
-        ImptTestingHelper.runCommand('impt product create', ImptTestingHelper.checkFailStatus).
-            then(() => ImptTestingHelper.runCommand(`impt product create --descr "${PRODUCT_DESCR}"`, ImptTestingHelper.checkFailStatus)).
-            then(() => ImptTestingHelper.runCommand('impt product create -z', ImptTestingHelper.checkFailStatus)).
-            then(done).
-            catch(error => done.fail(error));
-    });
+        it('product create with duplicated description', (done) => {
+            ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME} --descr "${PRODUCT_EXIST_DESCR}" ${outputMode}`, (commandOut) => {
+                product_id = ImptTestHelper.parseId(commandOut);
+                expect(product_id).not.toBeNull;
+                _checkSuccessCreateProductMessage(commandOut, PRODUCT_NAME);
+                ImptTestHelper.checkAttribute(commandOut, ImptTestHelper.ATTR_NAME, `${PRODUCT_NAME}`);
+                ImptTestHelper.checkSuccessStatus(commandOut);
+            }).
+                then(() => _checkProductInfo({ name: PRODUCT_NAME, descr: PRODUCT_EXIST_DESCR })).
+                then(done).
+                catch(error => done.fail(error));
+        });
 
-    it('product create with empty name', (done) => {
-        ImptTestingHelper.runCommand('impt product create -n ""', ImptTestingHelper.checkFailStatus).
-            then(() => ImptTestingHelper.runCommand('impt product create --name', ImptTestingHelper.checkFailStatus)).
-            then(done).
-            catch(error => done.fail(error));
+        it('product create with empty description', (done) => {
+            ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME} -s "" ${outputMode}`, (commandOut) => {
+                product_id = ImptTestHelper.parseId(commandOut);
+                expect(product_id).not.toBeNull;
+                _checkSuccessCreateProductMessage(commandOut, PRODUCT_NAME);
+                ImptTestHelper.checkAttribute(commandOut, 'name', `${PRODUCT_NAME}`);
+                ImptTestHelper.checkSuccessStatus(commandOut);
+            }).
+                then(() => _checkProductInfo({ name: PRODUCT_NAME })).
+                then(done).
+                catch(error => done.fail(error));
+        });
+
+        it('create duplicated product', (done) => {
+            ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_EXIST_NAME} ${outputMode}`, (commandOut) => {
+                MessageHelper.checkDuplicateResourceError(commandOut, Identifier.ENTITY_TYPE.TYPE_PRODUCT);
+                ImptTestHelper.checkFailStatus(commandOut);
+            }).
+                then(done).
+                catch(error => done.fail(error));
+        });
+
+        it('create duplicated product with description', (done) => {
+            ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_EXIST_NAME} -s "${PRODUCT_EXIST_DESCR}" ${outputMode}`, (commandOut) => {
+                MessageHelper.checkDuplicateResourceError(commandOut, Identifier.ENTITY_TYPE.TYPE_PRODUCT);
+                ImptTestHelper.checkFailStatus(commandOut);
+            }).
+                then(done).
+                catch(error => done.fail(error));
+        });
+
+        it('product create without name', (done) => {
+            ImptTestHelper.runCommand('impt product create', (commandOut) => {
+                MessageHelper.checkMissingArgumentsError(commandOut, 'name');
+                ImptTestHelper.checkFailStatus(commandOut);
+            }).
+                then(() => ImptTestHelper.runCommand(`impt product create --descr "${PRODUCT_DESCR}" ${outputMode}`, (commandOut) => {
+                    MessageHelper.checkMissingArgumentsError(commandOut, 'name');
+                    ImptTestHelper.checkFailStatus(commandOut);
+                })).
+                then(done).
+                catch(error => done.fail(error));
+        });
+
+        it('product create with empty name', (done) => {
+            ImptTestHelper.runCommand(`impt product create -n "" ${outputMode}`, (commandOut) => {
+                MessageHelper.checkMissingArgumentValueError(commandOut, 'name');
+                ImptTestHelper.checkFailStatus(commandOut);
+            }).
+                then(() => ImptTestHelper.runCommand(`impt product create --name`, (commandOut) => {
+                    MessageHelper.checkNotEnoughArgumentsError(commandOut, 'name');
+                    ImptTestHelper.checkFailStatus(commandOut);
+                })).
+                then(done).
+                catch(error => done.fail(error));
+        });
+
+        it('product create without description value', (done) => {
+            ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME} --descr`, (commandOut) => {
+                MessageHelper.checkNotEnoughArgumentsError(commandOut, 'descr');
+                ImptTestHelper.checkFailStatus(commandOut);
+            }).
+                then(done).
+                catch(error => done.fail(error));
+        });
+
+        it('product create without output value', (done) => {
+            ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}  --output`, (commandOut) => {
+                MessageHelper.checkNotEnoughArgumentsError(commandOut, 'output');
+                ImptTestHelper.checkFailStatus(commandOut);
+            }).
+                then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME} --output undefined`, (commandOut) => {
+                    MessageHelper.checkInvalidValuesError(commandOut);
+                    ImptTestHelper.checkFailStatus(commandOut);
+                })).
+                then(done).
+                catch(error => done.fail(error));
+        });
     });
 });
