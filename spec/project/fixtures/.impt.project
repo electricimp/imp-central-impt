@@ -1,0 +1,9 @@
+{
+ 
+  "deviceGroupId": "not-exist-device-group",
+
+  "deviceFile": "device.nut",
+
+  "agentFile": "agent.nut"
+
+}
