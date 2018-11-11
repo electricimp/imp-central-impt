@@ -129,7 +129,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     _checkSuccessDeleteDeploymentMessage(commandOut, build_id);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommand(`impt build info -b ${build_id}`, ImptTestHelper.checkFailStatusEx)).
+                    then(() => ImptTestHelper.runCommand(`impt build info -b ${build_id}`, ImptTestHelper.checkFailStatus)).
                     then(done).
                     catch(error => done.fail(error));
             });
@@ -139,7 +139,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     _checkSuccessDeleteDeploymentMessage(commandOut, build_sha);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommand(`impt build info -b ${build_id}`, ImptTestHelper.checkFailStatusEx)).
+                    then(() => ImptTestHelper.runCommand(`impt build info -b ${build_id}`, ImptTestHelper.checkFailStatus)).
                     then(done).
                     catch(error => done.fail(error));
             });
@@ -149,7 +149,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     _checkSuccessDeleteDeploymentMessage(commandOut, BUILD_TAG);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommand(`impt build info -b ${build_id}`, ImptTestHelper.checkFailStatusEx)).
+                    then(() => ImptTestHelper.runCommand(`impt build info -b ${build_id}`, ImptTestHelper.checkFailStatus)).
                     then(done).
                     catch(error => done.fail(error));
             });
@@ -159,7 +159,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     _checkSuccessDeleteDeploymentMessage(commandOut, BUILD_ORIGIN);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommand(`impt build info -b ${build_id}`, ImptTestHelper.checkFailStatusEx)).
+                    then(() => ImptTestHelper.runCommand(`impt build info -b ${build_id}`, ImptTestHelper.checkFailStatus)).
                     then(done).
                     catch(error => done.fail(error));
             });
@@ -198,7 +198,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                         _checkSuccessDeleteDeploymentMessage(commandOut, build_id);
                         ImptTestHelper.checkSuccessStatus(commandOut);
                     }).
-                        then(() => ImptTestHelper.runCommand(`impt build info -b ${build_id}`, ImptTestHelper.checkFailStatusEx)).
+                        then(() => ImptTestHelper.runCommand(`impt build info -b ${build_id}`, ImptTestHelper.checkFailStatus)).
                         then(done).
                         catch(error => done.fail(error));
                 });

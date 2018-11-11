@@ -123,7 +123,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     _checkSuccessDeleteDeviceMessage(commandOut, config.devices[config.deviceidx]);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommand(`impt device info -d ${config.devices[config.deviceidx]}`, ImptTestHelper.checkFailStatusEx)).
+                    then(() => ImptTestHelper.runCommand(`impt device info -d ${config.devices[config.deviceidx]}`, ImptTestHelper.checkFailStatus)).
                     then(done).
                     catch(error => done.fail(error));
             });
@@ -133,7 +133,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     _checkSuccessDeleteDeviceMessage(commandOut, device_mac);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommand(`impt device info -d ${config.devices[config.deviceidx]}`, ImptTestHelper.checkFailStatusEx)).
+                    then(() => ImptTestHelper.runCommand(`impt device info -d ${config.devices[config.deviceidx]}`, ImptTestHelper.checkFailStatus)).
                     then(done).
                     catch(error => done.fail(error));
             });
@@ -143,7 +143,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     _checkSuccessDeleteDeviceMessage(commandOut, agent_id);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommand(`impt device info -d ${config.devices[config.deviceidx]}`, ImptTestHelper.checkFailStatusEx)).
+                    then(() => ImptTestHelper.runCommand(`impt device info -d ${config.devices[config.deviceidx]}`, ImptTestHelper.checkFailStatus)).
                     then(done).
                     catch(error => done.fail(error));
             });
@@ -153,7 +153,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     _checkSuccessDeleteDeviceMessage(commandOut, device_name);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommand(`impt device info -d ${config.devices[config.deviceidx]}`, ImptTestHelper.checkFailStatusEx)).
+                    then(() => ImptTestHelper.runCommand(`impt device info -d ${config.devices[config.deviceidx]}`, ImptTestHelper.checkFailStatus)).
                     then(done).
                     catch(error => done.fail(error));
             });
@@ -172,7 +172,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     _checkSuccessDeleteDeviceMessage(commandOut, config.devices[config.deviceidx]);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.runCommand(`impt device info -d ${config.devices[config.deviceidx]}`, ImptTestHelper.checkFailStatusEx)).
+                    then(() => ImptTestHelper.runCommand(`impt device info -d ${config.devices[config.deviceidx]}`, ImptTestHelper.checkFailStatus)).
                     then(done).
                     catch(error => done.fail(error));
             });

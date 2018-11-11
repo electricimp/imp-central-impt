@@ -132,8 +132,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         });
 
         it('product list without output value', (done) => {
-            ImptTestHelper.runCommand(`impt product list -z`, ImptTestHelper.checkFailStatusEx).
-                then(() => ImptTestHelper.runCommand(`impt product list -z undefined`, ImptTestHelper.checkFailStatusEx)).
+            ImptTestHelper.runCommand(`impt product list -z`, ImptTestHelper.checkFailStatus).
+                then(() => ImptTestHelper.runCommand(`impt product list -z undefined`, ImptTestHelper.checkFailStatus)).
                 then(done).
                 catch(error => done.fail(error));
         });

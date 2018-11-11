@@ -201,29 +201,34 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('product info without product name', (done) => {
-                ImptTestHelper.runCommand(`impt product info ${outputMode}`, ImptTestHelper.checkFailStatusEx).
+                ImptTestHelper.runCommand(`impt product info ${outputMode}`, ImptTestHelper.checkFailStatus).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('product info with empty product name', (done) => {
-                ImptTestHelper.runCommand(`impt product info --product "" ${outputMode}`, ImptTestHelper.checkFailStatusEx).
-                    then(() => ImptTestHelper.runCommand(`impt product info --product {me}{} ${outputMode}`, ImptTestHelper.checkFailStatusEx)).
-                    then(() => ImptTestHelper.runCommand(`impt product info --product  ${outputMode}`, ImptTestHelper.checkFailStatusEx)).
+                ImptTestHelper.runCommand(`impt product info --product "" ${outputMode}`, ImptTestHelper.checkFailStatus).
+                    then(() => ImptTestHelper.runCommand(`impt product info --product {me}{} ${outputMode}`, (commandOut) => {
+                        MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, MessageHelper.PRODUCT);
+                        ImptTestHelper.checkFailStatus(commandOut);
+                    })).
+                    then(() => ImptTestHelper.runCommand(`impt product info --product  ${outputMode}`, ImptTestHelper.checkFailStatus)).
                     then(done).
                     catch(error => done.fail(error));
             });
-           
+
             it('product info with empty owner', (done) => {
-                ImptTestHelper.runCommand(`impt product info --product {}{${PRODUCT_NAME}} ${outputMode}`, ImptTestHelper.checkFailStatusEx).
-                    then(() => ImptTestHelper.runCommand(`impt product info --product  ${outputMode}`, ImptTestHelper.checkFailStatusEx)).
+                ImptTestHelper.runCommand(`impt product info --product {}{${PRODUCT_NAME}} ${outputMode}`, (commandOut) => {
+                    MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, MessageHelper.ACCOUNT);
+                    ImptTestHelper.checkFailStatus(commandOut);
+                }).
                     then(done).
                     catch(error => done.fail(error));
             });
-            
+
             it('product info without output value', (done) => {
-                ImptTestHelper.runCommand(`impt product info --product ${PRODUCT_NAME} -z`, ImptTestHelper.checkFailStatusEx).
-                    then(() => ImptTestHelper.runCommand(`impt product info --product ${PRODUCT_NAME} -z undefined`, ImptTestHelper.checkFailStatusEx)).
+                ImptTestHelper.runCommand(`impt product info --product ${PRODUCT_NAME} -z`, ImptTestHelper.checkFailStatus).
+                    then(() => ImptTestHelper.runCommand(`impt product info --product ${PRODUCT_NAME} -z undefined`, ImptTestHelper.checkFailStatus)).
                     then(done).
                     catch(error => done.fail(error));
             });

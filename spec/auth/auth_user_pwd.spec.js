@@ -72,37 +72,37 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('login without user/password', (done) => {
-                ImptTestHelper.runCommand('impt auth login', ImptTestHelper.checkFailStatusEx).
-                    then(() => ImptTestHelper.runCommand('impt auth login --local', ImptTestHelper.checkFailStatusEx)).
-                    then(() => ImptTestHelper.runCommand('impt auth login -l -u', ImptTestHelper.checkFailStatusEx)).
-                    then(() => ImptTestHelper.runCommand('impt auth login -l -w', ImptTestHelper.checkFailStatusEx)).
-                    then(() => ImptTestHelper.runCommand(`impt auth login -l -u ${config.username}`, ImptTestHelper.checkFailStatusEx)).
-                    then(() => ImptTestHelper.runCommand(`impt auth login -l -w ${config.password}`, ImptTestHelper.checkFailStatusEx)).
+                ImptTestHelper.runCommand('impt auth login', ImptTestHelper.checkFailStatus).
+                    then(() => ImptTestHelper.runCommand('impt auth login --local', ImptTestHelper.checkFailStatus)).
+                    then(() => ImptTestHelper.runCommand('impt auth login -l -u', ImptTestHelper.checkFailStatus)).
+                    then(() => ImptTestHelper.runCommand('impt auth login -l -w', ImptTestHelper.checkFailStatus)).
+                    then(() => ImptTestHelper.runCommand(`impt auth login -l -u ${config.username}`, ImptTestHelper.checkFailStatus)).
+                    then(() => ImptTestHelper.runCommand(`impt auth login -l -w ${config.password}`, ImptTestHelper.checkFailStatus)).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('login without output argument', (done) => {
-                ImptTestHelper.runCommand('impt auth login -z', ImptTestHelper.checkFailStatusEx).
-                    then(() => ImptTestHelper.runCommand('impt auth login --output undefined', ImptTestHelper.checkFailStatusEx)).
+                ImptTestHelper.runCommand('impt auth login -z', ImptTestHelper.checkFailStatus).
+                    then(() => ImptTestHelper.runCommand('impt auth login --output undefined', ImptTestHelper.checkFailStatus)).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('login without endpoint argument', (done) => {
-                ImptTestHelper.runCommand('impt auth login --endpoint', ImptTestHelper.checkFailStatusEx).
+                ImptTestHelper.runCommand('impt auth login --endpoint', ImptTestHelper.checkFailStatus).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('global logout without login', (done) => {
-                ImptTestHelper.runCommand('impt auth logout', ImptTestHelper.checkFailStatusEx).
+                ImptTestHelper.runCommand('impt auth logout', ImptTestHelper.checkFailStatus).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('local logout without login', (done) => {
-                ImptTestHelper.runCommand('impt auth logout -l', ImptTestHelper.checkFailStatusEx).
+                ImptTestHelper.runCommand('impt auth logout -l', ImptTestHelper.checkFailStatus).
                     then(done).
                     catch(error => done.fail(error));
             });
@@ -253,7 +253,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('local logout with global login', (done) => {
-                ImptTestHelper.runCommand(`impt auth logout -l ${outputMode}`, ImptTestHelper.checkFailStatusEx).
+                ImptTestHelper.runCommand(`impt auth logout -l ${outputMode}`, ImptTestHelper.checkFailStatus).
                     then(done).
                     catch(error => done.fail(error));
             });
@@ -386,13 +386,13 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('global logout with local login', (done) => {
-                ImptTestHelper.runCommand(`impt auth logout ${outputMode}`, ImptTestHelper.checkFailStatusEx).
+                ImptTestHelper.runCommand(`impt auth logout ${outputMode}`, ImptTestHelper.checkFailStatus).
                     then(done).
                     catch(error => done.fail(error));
             });
 
             it('global logout without output value', (done) => {
-                ImptTestHelper.runCommand(`impt auth logout -z`, ImptTestHelper.checkFailStatusEx).
+                ImptTestHelper.runCommand(`impt auth logout -z`, ImptTestHelper.checkFailStatus).
                     then(done).
                     catch(error => done.fail(error));
             });
@@ -407,7 +407,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('auth info without output value', (done) => {
-                ImptTestHelper.runCommand(`impt auth info -z`, ImptTestHelper.checkFailStatusEx).
+                ImptTestHelper.runCommand(`impt auth info -z`, ImptTestHelper.checkFailStatus).
                     then(done).
                     catch(error => done.fail(error));
             });
