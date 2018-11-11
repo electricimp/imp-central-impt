@@ -45,6 +45,7 @@ describe(`impt device group list test suite (output: ${outputMode ? outputMode :
     let product_id = null;
     let email = null;
     let userid = null;
+    
 
     // custom matcher for search Device Group with expected properties in Device Group array
     let customMatcher = {
@@ -92,12 +93,12 @@ describe(`impt device group list test suite (output: ${outputMode ? outputMode :
 
     // prepare environment for device group list command testing
     function _testSuiteInit() {
-        return ImptTestHelper.getAuthAttrs((commandOut) => {
+        return ImptTestHelper.getAccountAttrs((commandOut) => {
             if (commandOut && commandOut.email && commandOut.id) {
                 email = commandOut.email;
                 userid = commandOut.id;
             }
-            else fail("TestSuitInit error: Fail get addition auth attributes");
+            else fail("TestSuitInit error: Fail get account attributes");
         }).
             then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, (commandOut) => {
                 product_id = ImptTestHelper.parseId(commandOut);

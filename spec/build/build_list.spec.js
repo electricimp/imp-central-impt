@@ -123,12 +123,12 @@ describe(`impt build list test suite (output: ${outputMode ? outputMode : 'defau
 
     // prepare environment for build list command testing
     function _testSuiteInit() {
-        return ImptTestHelper.getAuthAttrs((commandOut) => {
+        return ImptTestHelper.getAccountAttrs((commandOut) => {
             if (commandOut && commandOut.email && commandOut.id) {
                 email = commandOut.email;
                 userid = commandOut.id;
             }
-            else fail("TestSuitInit error: Fail get addition auth attributes");
+            else fail("TestSuitInit error: Fail get account attributes");
         }).
             then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx)).
             then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {

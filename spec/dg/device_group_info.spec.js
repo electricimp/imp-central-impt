@@ -39,10 +39,13 @@ const outputMode = '-z json';
 describe(`impt device group info test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
     let dg_id = null;
     let product_id = null;
+    let email = null;
+    let userid = null;
 
     beforeAll((done) => {
         ImptTestHelper.init().
             then(_testSuiteCleanUp).
+            then(_testSuiteInit).
             then(done).
             catch(error => done.fail(error));
     }, ImptTestHelper.TIMEOUT);
@@ -65,6 +68,13 @@ describe(`impt device group info test suite (output: ${outputMode ? outputMode :
                 dg_id = ImptTestHelper.parseId(commandOut);
                 if (!dg_id) fail("TestSuitInit error: Fail create device group");
                 ImptTestHelper.emptyCheck(commandOut);
+            })).
+            then(() => ImptTestHelper.getAccountAttrs((commandOut) => {
+                if (commandOut && commandOut.email && commandOut.id) {
+                    email = commandOut.email;
+                    userid = commandOut.id;
+                }
+                else fail("TestSuitInit error: Fail get account attributes");
             })).
             then(() => ImptTestHelper.runCommand(`impt device assign -d ${config.devices[config.deviceidx]} -g ${DEVICE_GROUP_NAME} -q`, ImptTestHelper.emptyCheckEx)).
             then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME}`, ImptTestHelper.emptyCheckEx));
@@ -94,8 +104,7 @@ describe(`impt device group info test suite (output: ${outputMode ? outputMode :
 
     describe('device group info positive tests >', () => {
         beforeAll((done) => {
-            _testSuiteInit().
-                then(() => ImptTestHelper.projectCreate(DEVICE_GROUP_NAME)).
+            ImptTestHelper.projectCreate(DEVICE_GROUP_NAME).
                 then(done).
                 catch(error => done.fail(error));
         }, ImptTestHelper.TIMEOUT);
@@ -134,9 +143,69 @@ describe(`impt device group info test suite (output: ${outputMode ? outputMode :
                 then(done).
                 catch(error => done.fail(error));
         });
+
+        it('device group full info by id and owner me', (done) => {
+            ImptTestHelper.runCommand(`impt dg info -g {me}{${product_id}}{${dg_id}} -u -z json`, (commandOut) => {
+                _checkDeviceGroupInfo(commandOut);
+                _checkDeviceGroupAdditionalInfo(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
+            }).
+                then(done).
+                catch(error => done.fail(error));
+        });
+
+        it('device group full info by id and owner id', (done) => {
+            ImptTestHelper.runCommand(`impt dg info -g {${userid}}{${product_id}}{${dg_id}} -u -z json`, (commandOut) => {
+                _checkDeviceGroupInfo(commandOut);
+                _checkDeviceGroupAdditionalInfo(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
+            }).
+                then(done).
+                catch(error => done.fail(error));
+        });
+
+        it('device group full info by id and owner email', (done) => {
+            ImptTestHelper.runCommand(`impt dg info -g {${email}}{${product_id}}{${dg_id}} -u -z json`, (commandOut) => {
+                _checkDeviceGroupInfo(commandOut);
+                _checkDeviceGroupAdditionalInfo(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
+            }).
+                then(done).
+                catch(error => done.fail(error));
+        });
+
+        it('device group full info by id and owner name', (done) => {
+            ImptTestHelper.runCommand(`impt dg info -g {${config.username}}{${product_id}}{${dg_id}} -u -z json`, (commandOut) => {
+                _checkDeviceGroupInfo(commandOut);
+                _checkDeviceGroupAdditionalInfo(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
+            }).
+                then(done).
+                catch(error => done.fail(error));
+        });
+
+        it('device group full info by id and product name', (done) => {
+            ImptTestHelper.runCommand(`impt dg info -g {me}{${PRODUCT_NAME}}{${dg_id}} -u -z json`, (commandOut) => {
+                _checkDeviceGroupInfo(commandOut);
+                _checkDeviceGroupAdditionalInfo(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
+            }).
+                then(done).
+                catch(error => done.fail(error));
+        });
+
+        it('device group full info by name and product name', (done) => {
+            ImptTestHelper.runCommand(`impt dg info -g {me}{${PRODUCT_NAME}}{${DEVICE_GROUP_NAME}} -u -z json`, (commandOut) => {
+                _checkDeviceGroupInfo(commandOut);
+                _checkDeviceGroupAdditionalInfo(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut);
+            }).
+                then(done).
+                catch(error => done.fail(error));
+        });
     });
 
-    describe('device group delete negative tests  >', () => {
+    describe('device group info negative tests  >', () => {
         it('device group info by not exist project', (done) => {
             ImptTestHelper.runCommand(`impt dg info`, (commandOut) => {
                 MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, MessageHelper.DG);
@@ -149,6 +218,42 @@ describe(`impt device group info test suite (output: ${outputMode ? outputMode :
         it('not exist device group info', (done) => {
             ImptTestHelper.runCommand(`impt dg info --dg not-exist-device-group --full`, (commandOut) => {
                 MessageHelper.checkEntityNotFoundError(commandOut, MessageHelper.DG, 'not-exist-device-group');
+                ImptTestHelper.checkFailStatus(commandOut);
+            }).
+                then(done).
+                catch(error => done.fail(error));
+        });
+
+        it('hierarchical dg id without owner', (done) => {
+            ImptTestHelper.runCommand(`impt dg info -g {${PRODUCT_NAME}}{${DEVICE_GROUP_NAME}}`, (commandOut) => {
+                MessageHelper.checkEntityNotFoundError(commandOut, MessageHelper.DG, `{${PRODUCT_NAME}}{${DEVICE_GROUP_NAME}}`);
+                ImptTestHelper.checkFailStatus(commandOut);
+            }).
+                then(done).
+                catch(error => done.fail(error));
+        });
+
+        it('hierarchical dg id with empty owner', (done) => {
+            ImptTestHelper.runCommand(`impt dg info -g {}{${PRODUCT_NAME}}{${DEVICE_GROUP_NAME}}`, (commandOut) => {
+                MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, MessageHelper.ACCOUNT);
+                ImptTestHelper.checkFailStatus(commandOut);
+            }).
+                then(done).
+                catch(error => done.fail(error));
+        });
+
+        it('hierarchical dg id with empty product', (done) => {
+            ImptTestHelper.runCommand(`impt dg info -g {me}{}{${DEVICE_GROUP_NAME}}`, (commandOut) => {
+                MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, MessageHelper.PRODUCT);
+                ImptTestHelper.checkFailStatus(commandOut);
+            }).
+                then(done).
+                catch(error => done.fail(error));
+        });
+
+        it('hierarchical dg id with empty dg', (done) => {
+            ImptTestHelper.runCommand(`impt dg info -g {me}{${PRODUCT_NAME}}{}`, (commandOut) => {
+                MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, MessageHelper.DG);
                 ImptTestHelper.checkFailStatus(commandOut);
             }).
                 then(done).
