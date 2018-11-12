@@ -16,6 +16,7 @@ This guide covers the basic and common usage of *impt*, and should be read first
 ## Contents ##
 
 - [Installation](#installation)
+- [Version](#version)
 - [Proxy Setup](#proxy-setup)
 - [Syntax and Command Groups](#syntax-and-command-groups)
 - [Help](#help)
@@ -37,6 +38,15 @@ This guide covers the basic and common usage of *impt*, and should be read first
 
 ```bash
 npm install -g imp-central-impt
+```
+
+## Version ##
+
+Call `impt --version` or `impt -v` to displays the version of the installed *impt*.
+
+```bash
+impt --version
+TODO
 ```
 
 ## Proxy Setup ##
@@ -70,6 +80,7 @@ The commands are logically divided into groups. Most of the groups directly map 
 - [Log Manipulation Commands](./CommandsManual.md#log-manipulation-commands) &mdash; `impt log <command_name> [<options>]`
 - [Webhook Manipulation Commands](./CommandsManual.md#webhook-manipulation-commands) &mdash; `impt webhook <command_name> [<options>]`
 - [Login Key Manipulation Commands](./CommandsManual.md#login-key-manipulation-commands) &mdash; `impt loginkey <command_name> [<options>]`
+- [Account Information Commands](./CommandsManual.md#account-information-commands) &mdash; `impt account <command_name> [<options>]`
 
 A further group of commands covers API access:
 
@@ -111,6 +122,8 @@ Every command has a `--help` option (alias: `-h`). If it is specified, any other
 The [help option](./CommandsManual.md#the-help-option) is applicable to a partially specified command, but also may be used to list all available command groups or to list all commands available in one group.
 
 ##### Example 1: List all command groups #####
+
+TODO update
 
 ```bash
 > impt --help
@@ -513,6 +526,8 @@ If you want to use this feature, please read the [Commands Manual](./CommandsMan
 
 When it is hard to uniquely specify an entity without knowing the entity ID, use [entity listing](#entity-listing-and-ownership) commands to view the entities basing on some attributes, choose the required entity and use its entity ID in the required command.
 
+For some of the entities (eg. a Product, a Device Group) *impt* provides an ability to uniquely identify them by their names &mdash; using hierarchical identifiers. The format and details of every concrete hierarchical identifier are described in the [Commands Manual](./CommandsManual.md#entity-identification). This is convinient to use in scripts &mdash; you can pass a name of an entity and call all manipulation commands with that entity (create, update, delete, etc.) using that name only, without obtaining an ID of the created entity.
+
 ##### Example 1: An entity is found successfully**
 
 ```bash
@@ -564,6 +579,12 @@ Impossible to execute the command.
 IMPT COMMAND FAILS
 ```
 
+##### Example 3: Use a hierarchical identifier #####
+
+```bash
+TODO
+```
+
 ## Entity Listing And Ownership ##
 
 Many groups of commands contain a command to list entities: [Products](./CommandsManual.md#product-list), [Device Groups](./CommandsManual.md#device-group-list), [Devices](./CommandsManual.md#device-list), [Builds](./CommandsManual.md#build-list) and [Webhooks](./CommandsManual.md#webhook-list). By default, such a command returns the list of all entities available to the current (ie. logged in) account. But the returned list may be filtered using filter options. These are the common rules applicable to all list commands:
@@ -574,11 +595,13 @@ Many groups of commands contain a command to list entities: [Products](./Command
 
 Some filter options have the same name and meaning across list commands. They are summarized [here](./CommandsManual.md#common-filter-options). A particular command may have specific filter options too. Filter options applicable to every concrete list command are detailed in the [Command Description](./CommandsManual.md#command-description).
 
-For some list commands, the default returned list includes entities owned by the current account as well as entities owned by collaborators. For other list commands, only the entities owned by the current account are returned. This is impCentral API-specific behavior not controlled by *impt*. But you can always specify a concrete Account ID, email or username as a value of the `--owner <value>` filter option (alias: `-o`) and get the entities owned by that account, if they are available to you as to a collaborator. Also, you can always specify the `--owner me` filter option and get the entities owned by you only.
+For some list commands, the default returned list includes entities owned by the current account as well as entities owned by other accounts currently available to you (all shared accounts the current one is collaborating on). For other list commands, only the entities owned by the current account are returned. This is impCentral API-specific behavior not controlled by *impt*. But you can always specify a concrete Account ID, email or username as a value of the `--owner <value>` filter option (alias: `-o`) and get the entities owned by that account, if they are available to you as to a collaborator. Also, you can always specify the `--owner me` filter option and get the entities owned by you only.
 
 As a general rule, if an entity is owned by the current logged-in account, information about Owner is not displayed. If an entity is owned by another account, then Account ID and email of the Owner are displayed for the entity. This rule applies to all *impt* commands which display details of an entity: entity listing, [entity information](#entity-information) and other.
 
 To display the Account ID and email of the current account, use [`impt auth info`](./CommandsManual.md#auth-info).
+
+To display the Account ID, email and other attributes of any available account, use [Account Information Commands](./CommandsManual.md#account-information-commands) &mdash; [`impt account list`](./CommandsManual.md#account-list), [`impt account info`](./CommandsManual.md#account-info).
 
 ##### Example 1: List all Products owned by me and my collaborators #####
 
@@ -668,6 +691,12 @@ Device Group:
     id:   2390fed8-d14c-cd55-2176-30e370b23519
     name: TestProduct
 IMPT COMMAND SUCCEEDS
+```
+
+##### Example 4: List all available accounts #####
+
+```bash
+TODO account list
 ```
 
 ## Entity Information ##
