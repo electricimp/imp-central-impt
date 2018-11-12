@@ -42,11 +42,11 @@ npm install -g imp-central-impt
 
 ## Version ##
 
-Call `impt --version` or `impt -v` to displays the version of the installed *impt*.
+Call `impt --version` or `impt -v` to display the version of the installed *impt*.
 
 ```bash
-impt --version
-TODO
+> impt --version
+2.4.0
 ```
 
 ## Proxy Setup ##
@@ -123,14 +123,13 @@ The [help option](./CommandsManual.md#the-help-option) is applicable to a partia
 
 ##### Example 1: List all command groups #####
 
-TODO update
-
 ```bash
 > impt --help
 
 Usage: impt <command> [options]
 
 Commands:
+  impt account   Account information commands.
   impt auth      Authentication commands.
   impt build     Build manipulation commands.
   impt device    Device manipulation commands.
@@ -143,8 +142,8 @@ Commands:
   impt webhook   Webhook manipulation commands.
 
 Options:
-  --help, -h  Displays a description of the command. Ignores any other options.
-                                                                       [boolean]
+  --version, -v  Displays the version of impt.                         [boolean]
+  --help, -h     Displays a description of the command.                [boolean]
 ```
 
 ##### Example 2: List all the commands in one group #####
@@ -174,7 +173,7 @@ Options:
 > impt product create --help
 
 Usage: impt product create --name <product_name> [--descr <product_description>]
-[--output <mode>] [--help]
+[--owner <ACCOUNT_IDENTIFIER>] [--output <mode>] [--help]
 
 Creates a new Product. Fails if a Product with the specified name already
 exists.
@@ -183,8 +182,10 @@ Options:
   --help, -h    Displays a description of the command. Ignores any other
                 options.                                               [boolean]
   --name, -n    The Product's name. Must be unique among all of the current
-                account's Products                           [string] [required]
+                account's Products.                          [string] [required]
   --descr, -s   An optional description of the Product.                 [string]
+  --owner, -o   The Product will be created in the specified Account. If not
+                specified, the current account is assumed.              [string]
   --output, -z  Adjusts the command's output.
                                   [string] [choices: "minimal", "json", "debug"]
 ```
@@ -555,26 +556,22 @@ IMPT COMMAND SUCCEEDS
 ##### Example 2: An entity is not unique, so the command fails #####
 
 ```bash
-> impt build info --build MyRC1
-Error: Multiple Deployments "MyRC1" are found:
-Deployment:
-  id:           24aa0e91-ebc0-9198-090c-44cca8b977f3
-  sha:          4e7f3395e86658ab39a178f9fe4b8cd8244a8ade92cb5ae1bb2d758434174c05
-  tags:         MyRC1
-  flagged:      true
-  Device Group:
-    id:   da27eb09-61d7-100b-095e-47578bada966
-    type: pre-production
-    name: MyPreProductionDG
-Deployment:
-  id:           bf485681-37c3-a813-205a-e90e19b1a817
-  sha:          4e7f3395e86658ab39a178f9fe4b8cd8244a8ade92cb5ae1bb2d758434174c05
-  tags:         MyRC1
-  flagged:      true
-  Device Group:
-    id:   dfcde3bd-3d89-6c75-bf2a-a543c47e586b
-    type: development
-    name: MyDevDG
+> impt dg info --dg TestDG
+Error: Multiple Device Groups "TestDG" are found:
+Device Group:
+  id:      3667ed96-12cd-ea20-9c09-0b2f32d1f73b
+  type:    development
+  name:    TestDG
+  Product:
+    id:   2390fed8-d14c-cd55-2176-30e370b23519
+    name: TestProduct
+Device Group:
+  id:      60faac39-1d5a-8494-d4d2-5f0744e67c27
+  type:    development
+  name:    TestDG
+  Product:
+    id:   c4e006ed-85b9-3513-fa99-0700333c3ad7
+    name: MyProduct
 Impossible to execute the command.
 IMPT COMMAND FAILS
 ```
@@ -582,7 +579,19 @@ IMPT COMMAND FAILS
 ##### Example 3: Use a hierarchical identifier #####
 
 ```bash
-TODO
+> impt dg info --dg {me}{TestProduct}{TestDG}
+Device Group:
+  id:          3667ed96-12cd-ea20-9c09-0b2f32d1f73b
+  type:        development
+  name:        TestDG
+  description:
+  region:
+  created_at:  2018-11-12T12:25:06.777Z
+  updated_at:  2018-11-12T12:25:06.777Z
+  Product:
+    id:   2390fed8-d14c-cd55-2176-30e370b23519
+    name: TestProduct
+IMPT COMMAND SUCCEEDS
 ```
 
 ## Entity Listing And Ownership ##
@@ -617,6 +626,7 @@ Product:
   Owner:
     id:    c1d61eef-d544-4d09-c8dc-d43e6742cae3
     email: user@email.com
+    username: username
 Product:
   id:   885dfd24-e8f6-0621-32fc-556d24ed4cab
   name: SmartFridge
@@ -626,6 +636,7 @@ Product:
   Owner:
     id:    c1d61eef-d544-4d09-c8dc-d43e6742cae3
     email: user@email.com
+    username: username
 IMPT COMMAND SUCCEEDS
 ```
 
@@ -644,6 +655,7 @@ Device Group:
   Owner:
     id:    c1d61eef-d544-4d09-c8dc-d43e6742cae3
     email: user@email.com
+    username: username
 Device Group:
   id:      b26aae4c-92d7-7e60-7c71-3fe2486e352f
   type:    factory
@@ -654,6 +666,7 @@ Device Group:
   Owner:
     id:    c1d61eef-d544-4d09-c8dc-d43e6742cae3
     email: user@email.com
+    username: username
 IMPT COMMAND SUCCEEDS
 ```
 
@@ -696,7 +709,17 @@ IMPT COMMAND SUCCEEDS
 ##### Example 4: List all available accounts #####
 
 ```bash
-TODO account list
+> impt account list
+Account list (3 items):
+Account:
+  id:       c1d61eef-d544-4d09-c8dc-d43e6742cae3
+  email:    user@email.com
+  username: username
+Account:
+  id:       8047f481-5040-ac99-7e72-af156da4b497
+  email:    user2@email.com
+  username: username2
+IMPT COMMAND SUCCEEDS
 ```
 
 ## Entity Information ##
