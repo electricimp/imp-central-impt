@@ -97,8 +97,8 @@ Scripts for the fastest tests execution:
 
 ## Limitations ##
 
-- Device remove command tests can not be execute automatically, because impt have no command for add device to account. Due this fact device must added to account manually after each test.
-- Count of login key is limit up to 10. Be sure that you have enough quantity free login key slots for test execute.
+- Tests for device removal can not be executed automatically, as *impt* does not have a command to add device to account. Due to this fact, a device must be added to account manually after each test.
+- Total number of login keys is limited to 10 per account. Be sure that you have enough "free" login key slots for tests execution.
 
 ## Tests Running Management ##
 
