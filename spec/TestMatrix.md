@@ -5384,28 +5384,6 @@ product create with empty name</a></sub></th>
  href="./product/product_create.spec.js">product/product_create.spec.js:<br>
 product create with empty name</a></sub></th>
     </tr>
-     <tr align="center">
-      <td></td>
-      <td><sub>{me}{}</sub></td>
-      <td></td>
-      <td></td>
-      <td><sub>all</sub></td>
-      <th></th>
-      <th align="left"><sub><a
- href="./product/product_create.spec.js">product/product_create.spec.js:<br>
-product create with empty name</a></sub></th>
-    </tr>
-     <tr align="center">
-      <td></td>
-      <td><sub>{}{name}</sub></td>
-      <td></td>
-      <td></td>
-      <td><sub>all</sub></td>
-      <th></th>
-      <th align="left"><sub><a
- href="./product/product_create.spec.js">product/product_create.spec.js:<br>
-product create with empty owner</a></sub></th>
-    </tr>
     <tr align="center">
       <td></td>
       <td><sub>Y</sub></td>
