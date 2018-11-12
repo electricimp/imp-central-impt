@@ -81,9 +81,9 @@ class MessageHelper {
         );
     }
 
-    static checkMissingArgumentValueError(commandOut, option) {
+    static checkNonEmptyOptionValueError(commandOut, option) {
         ImptTestHelper.checkAttribute(commandOut, UserInterractor.ERRORS.ERROR,
-            `Missing argument value: ${option}`
+            Util.format(`${UserInterractor.ERRORS.CMD_NON_EMPTY_VALUE}`, option)
         );
     }
 

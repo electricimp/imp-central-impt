@@ -190,7 +190,7 @@ describe(`impt log get test suite (output: ${outputMode ? outputMode : 'default'
                 ImptTestHelper.checkFailStatus(commandOut);
             }).
                 then(() => ImptTestHelper.runCommand(`impt log get ${outputMode} -d ""`, (commandOut) => {
-                    MessageHelper.checkMissingArgumentValueError(commandOut, 'device');
+                    MessageHelper.checkNonEmptyOptionValueError(commandOut, 'device');
                     ImptTestHelper.checkFailStatus(commandOut);
                 })).
                 then(done).

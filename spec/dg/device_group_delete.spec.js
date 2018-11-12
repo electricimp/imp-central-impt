@@ -199,7 +199,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
             it('delete device group by empty name', (done) => {
                 ImptTestHelper.runCommand(`impt dg delete --dg "" -q ${outputMode}`, (commandOut) => {
-                    MessageHelper.checkMissingArgumentValueError(commandOut, 'dg');
+                    MessageHelper.checkNonEmptyOptionValueError(commandOut, 'dg');
                     ImptTestHelper.checkFailStatus(commandOut);
                 }).
                     then(done).

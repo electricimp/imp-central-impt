@@ -197,7 +197,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
             it('product create with empty name', (done) => {
                 ImptTestHelper.runCommand(`impt product create -n "" ${outputMode}`, (commandOut) => {
-                    MessageHelper.checkMissingArgumentValueError(commandOut, 'name');
+                    MessageHelper.checkNonEmptyOptionValueError(commandOut, 'name');
                     ImptTestHelper.checkFailStatus(commandOut);
                 }).
                     then(() => ImptTestHelper.runCommand(`impt product create --name`, (commandOut) => {
