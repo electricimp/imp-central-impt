@@ -44,6 +44,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         beforeAll((done) => {
             ImptTestHelper.init().
+                then(_testSuiteCleanUp).
                 then(done).
                 catch(error => done.fail(error));
         }, ImptTestHelper.TIMEOUT);
@@ -61,7 +62,6 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 if (!product_id) fail("TestSuitInit error: Fail create product");
                 ImptTestHelper.emptyCheck(commandOut);
             }).
-                then(() => ImptTestHelper.runCommand(`impt project create --product ${PRODUCT_NAME} --name ${DEVICE_GROUP_NAME}`, ImptTestHelper.emptyCheckEx)).
                 then(() => ImptTestHelper.getAccountAttrs((commandOut) => {
                     if (commandOut && commandOut.email && commandOut.id) {
                         email = commandOut.email;
@@ -78,8 +78,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         describe(`product info positive tests >`, () => {
             beforeAll((done) => {
-                _testSuiteCleanUp().
-                    then(_testSuiteInit).
+                _testSuiteInit().
                     then(done).
                     catch(error => done.fail(error));
             }, ImptTestHelper.TIMEOUT);
@@ -124,12 +123,14 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('product info by project', (done) => {
-                ImptTestHelper.runCommand(`impt product info ${outputMode}`, (commandOut) => {
-                    expect(commandOut.output).toMatch(`${PRODUCT_NAME}`);
-                    expect(commandOut.output).toMatch(`${PRODUCT_DESCR}`);
-                    expect(commandOut.output).toMatch(`${product_id}`);
-                    ImptTestHelper.checkSuccessStatus(commandOut);
-                }).
+                ImptTestHelper.runCommand(`impt project create --product ${PRODUCT_NAME} --name ${DEVICE_GROUP_NAME}`, ImptTestHelper.emptyCheckEx).
+                    then(() => ImptTestHelper.runCommand(`impt product info ${outputMode}`, (commandOut) => {
+                        expect(commandOut.output).toMatch(`${PRODUCT_NAME}`);
+                        expect(commandOut.output).toMatch(`${PRODUCT_DESCR}`);
+                        expect(commandOut.output).toMatch(`${product_id}`);
+                        ImptTestHelper.checkSuccessStatus(commandOut);
+                    })).
+                    then(ImptTestHelper.projectDelete).
                     then(done).
                     catch(error => done.fail(error));
             });
@@ -206,20 +207,36 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     catch(error => done.fail(error));
             });
 
-            it('product info with empty product name', (done) => {
-                ImptTestHelper.runCommand(`impt product info --product "" ${outputMode}`, ImptTestHelper.checkFailStatus).
-                    then(() => ImptTestHelper.runCommand(`impt product info --product {me}{} ${outputMode}`, (commandOut) => {
-                        MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, MessageHelper.PRODUCT);
-                        ImptTestHelper.checkFailStatus(commandOut);
-                    })).
-                    then(() => ImptTestHelper.runCommand(`impt product info --product  ${outputMode}`, ImptTestHelper.checkFailStatus)).
+            it('hierarchical product id without owner', (done) => {
+                ImptTestHelper.runCommand(`impt product info --product {${PRODUCT_NAME}} ${outputMode}`, (commandOut) => {
+                    MessageHelper.checkEntityNotFoundError(commandOut, MessageHelper.PRODUCT, `{${PRODUCT_NAME}}`);
+                    ImptTestHelper.checkFailStatus(commandOut);
+                }).
                     then(done).
                     catch(error => done.fail(error));
             });
 
-            it('product info with empty owner', (done) => {
+            it('hierarchical product id with empty product', (done) => {
+                ImptTestHelper.runCommand(`impt product info --product {me}{} ${outputMode}`, (commandOut) => {
+                    MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, MessageHelper.PRODUCT);
+                    ImptTestHelper.checkFailStatus(commandOut);
+                }).
+                    then(done).
+                    catch(error => done.fail(error));
+            });
+
+            it('hierarchical product id with empty owner', (done) => {
                 ImptTestHelper.runCommand(`impt product info --product {}{${PRODUCT_NAME}} ${outputMode}`, (commandOut) => {
                     MessageHelper.checkNoIdentifierIsSpecifiedMessage(commandOut, MessageHelper.ACCOUNT);
+                    ImptTestHelper.checkFailStatus(commandOut);
+                }).
+                    then(done).
+                    catch(error => done.fail(error));
+            });
+
+            it('hierarchical product id with excess field', (done) => {
+                ImptTestHelper.runCommand(`impt product info --product {me}{${PRODUCT_NAME}}{} ${outputMode}`, (commandOut) => {
+                    MessageHelper.checkEntityNotFoundError(commandOut, MessageHelper.PRODUCT, `{me}{${PRODUCT_NAME}}{}`);
                     ImptTestHelper.checkFailStatus(commandOut);
                 }).
                     then(done).

@@ -5635,7 +5635,7 @@ product full info by name</a></sub></td>
 product info by id and owner me</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>{username}{id}</sub></td>
+      <td><sub>{name}{id}</sub></td>
       <td></td>
       <td><sub>all</sub></td>
       <td></td>
@@ -5653,7 +5653,7 @@ product info by id and owner name</a></sub></td>
 product info by id and owner email</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>{user id}{id}</sub></td>
+      <td><sub>{id}{id}</sub></td>
       <td></td>
       <td><sub>all</sub></td>
       <td></td>
@@ -5662,7 +5662,7 @@ product info by id and owner email</a></sub></td>
 product info by id and owner id</a></sub></td>
     </tr>
     <tr align="center">
-      <td><sub>{user id}{name}</sub></td>
+      <td><sub>{id}{name}</sub></td>
       <td></td>
       <td><sub>all</sub></td>
       <td></td>
@@ -5709,6 +5709,46 @@ product info with empty product name</a></sub></th>
       <th align="left"><sub><a
  href="./product/product_info.spec.js">product/product_info.spec.js:<br>
 product info with empty product name</a></sub></th>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td><sub>{name}</sub></td>
+      <td></td>
+      <td><sub>all</sub></td>
+      <td></td>
+      <th align="left"><sub><a
+ href="./product/product_info.spec.js">product/product_info.spec.js:<br>
+hierarchical product id without owner</a></sub></th>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td><sub>{}{name}</sub></td>
+      <td></td>
+      <td><sub>all</sub></td>
+      <td></td>
+      <th align="left"><sub><a
+ href="./product/product_info.spec.js">product/product_info.spec.js:<br>
+hierarchical product id with empty owner</a></sub></th>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td><sub>{me}{}</sub></td>
+      <td></td>
+      <td><sub>all</sub></td>
+      <td></td>
+      <th align="left"><sub><a
+ href="./product/product_info.spec.js">product/product_info.spec.js:<br>
+hierarchical product id with empty product</a></sub></th>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td><sub>{me}{name}{}</sub></td>
+      <td></td>
+      <td><sub>all</sub></td>
+      <td></td>
+      <th align="left"><sub><a
+ href="./product/product_info.spec.js">product/product_info.spec.js:<br>
+hierarchical product id with excess field</a></sub></th>
     </tr>
     <tr align="center">
       <td><sub>product<br>
