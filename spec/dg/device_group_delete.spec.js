@@ -67,7 +67,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         function _testInit() {
             return ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
                 dg_id = ImptTestHelper.parseId(commandOut);
-                if (!dg_id) fail("TestInit error: Fail create device group");
+                if (!dg_id) fail("TestInit error: Failed to create device group");
                 ImptTestHelper.emptyCheck(commandOut);
             });
         }
@@ -149,7 +149,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 beforeEach((done) => {
                     ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME} -f`, (commandOut) => {
                         build_id = ImptTestHelper.parseId(commandOut);
-                        if (!build_id) fail("TestInit error: Fail create build");
+                        if (!build_id) fail("TestInit error: Failed to create build");
                         ImptTestHelper.emptyCheck(commandOut);
                     }).
                         then(done).

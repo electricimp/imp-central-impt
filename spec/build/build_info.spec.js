@@ -71,21 +71,21 @@ describe(`impt build info test suite (output: ${outputMode ? outputMode : 'defau
     function _testSuiteInit() {
         return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, (commandOut) => {
             product_id = ImptTestHelper.parseId(commandOut);
-            if (!product_id) fail("TestSuitInit error: Fail create product");
+            if (!product_id) fail("TestSuitInit error: Failed to create product");
             ImptTestHelper.emptyCheck(commandOut);
         }).
             then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
                 dg_id = ImptTestHelper.parseId(commandOut);
-                if (!dg_id) fail("TestSuitInit error: Fail create device group");
+                if (!dg_id) fail("TestSuitInit error: Failed to create device group");
                 ImptTestHelper.emptyCheck(commandOut);
             })).
             then(() => Shell.cp('-Rf', `${__dirname}/fixtures/devicecode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER)).
             then(() => Shell.cp('-Rf', `${__dirname}/fixtures/agentcode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER)).
             then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME} -s build_descr -x devicecode.nut -y agentcode.nut -t ${BUILD_TAG} -o ${BUILD_ORIGIN} `, (commandOut) => {
                 build_id = ImptTestHelper.parseId(commandOut);
-                if (!build_id) fail("TestSuiteInit error: Fail create build");
+                if (!build_id) fail("TestSuiteInit error: Failed to create build");
                 build_sha = ImptTestHelper.parseSha(commandOut);
-                if (!build_sha) fail("TestSuiteInit error: Fail parse build sha");
+                if (!build_sha) fail("TestSuiteInit error: Failed to parse build sha");
                 ImptTestHelper.emptyCheck(commandOut);
             }));
     }

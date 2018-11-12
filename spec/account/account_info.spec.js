@@ -58,7 +58,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     email = commandOut.email;
                     userid = commandOut.id;
                 }
-                else fail("TestSuitInit error: Fail get account attributes");
+                else fail("TestSuitInit error: Failed to get account attributes");
             });
         }
 

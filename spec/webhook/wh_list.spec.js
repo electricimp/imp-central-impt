@@ -75,28 +75,28 @@ describe(`impt webhook list test suite (output: ${outputMode ? outputMode : 'def
     function _testSuiteInit() {
         return ImptTestHelper.runCommand(`impt product create --name ${PRODUCT_NAME}`, (commandOut) => {
             product_id = ImptTestHelper.parseId(commandOut);
-            if (!product_id) fail("TestSuitInit error: Fail create product");
+            if (!product_id) fail("TestSuitInit error: Failed to create product");
             ImptTestHelper.emptyCheck(commandOut);
         }).
             then(() => ImptTestHelper.runCommand(`impt dg create --name ${DG_NAME} -p ${PRODUCT_NAME} `, (commandOut) => {
                 dg_id = ImptTestHelper.parseId(commandOut);
-                if (!dg_id) fail("TestSuitInit error: Fail create device group");
+                if (!dg_id) fail("TestSuitInit error: Failed to create device group");
                 ImptTestHelper.emptyCheck(commandOut);
             })).
             then(() => ImptTestHelper.runCommand(`impt product create --name ${PRODUCT_NAME_2}`, ImptTestHelper.emptyCheckEx)).
             then(() => ImptTestHelper.runCommand(`impt dg create --name ${DG_NAME_2} -p ${PRODUCT_NAME_2} `, (commandOut) => {
                 dg2_id = ImptTestHelper.parseId(commandOut);
-                if (!dg2_id) fail("TestSuitInit error: Fail create device group");
+                if (!dg2_id) fail("TestSuitInit error: Failed to create device group");
                 ImptTestHelper.emptyCheck(commandOut);
             })).
             then(() => ImptTestHelper.runCommand(`impt webhook create --dg ${DG_NAME} --url ${WH_URL} --event deployment --mime json `, (commandOut) => {
                 wh_id = ImptTestHelper.parseId(commandOut);
-                if (!wh_id) fail("TestSuitInit error: Fail create webhook");
+                if (!wh_id) fail("TestSuitInit error: Failed to create webhook");
                 ImptTestHelper.emptyCheck(commandOut);
             })).
             then(() => ImptTestHelper.runCommand(`impt webhook create --dg ${DG_NAME_2} --url ${WH_URL_2} --event deployment --mime urlencoded `, (commandOut) => {
                 wh2_id = ImptTestHelper.parseId(commandOut);
-                if (!wh2_id) fail("TestSuitInit error: Fail create webhook");
+                if (!wh2_id) fail("TestSuitInit error: Failed to create webhook");
                 ImptTestHelper.emptyCheck(commandOut);
             }));
     }

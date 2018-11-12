@@ -81,7 +81,7 @@ describe(`impt account list test suite (output: ${outputMode ? outputMode : 'def
                 email = commandOut.email;
                 userid = commandOut.id;
             }
-            else fail("TestSuitInit error: Fail get account attributes");
+            else fail("TestSuitInit error: Failed to get account attributes");
         });
     }
 

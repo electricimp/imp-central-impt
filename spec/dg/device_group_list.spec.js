@@ -49,7 +49,7 @@ describe(`impt device group list test suite (output: ${outputMode ? outputMode :
 
     // custom matcher for search Device Group with expected properties in Device Group array
     let customMatcher = {
-        toContainsDeviceGroup: function (util, customEqualityTesters) {
+        toContainDeviceGroup: function (util, customEqualityTesters) {
             return {
                 compare: function (DgArray, expected = {}) {
                     let result = { pass: false };
@@ -98,11 +98,11 @@ describe(`impt device group list test suite (output: ${outputMode ? outputMode :
                 email = commandOut.email;
                 userid = commandOut.id;
             }
-            else fail("TestSuitInit error: Fail get account attributes");
+            else fail("TestSuitInit error: Failed to get account attributes");
         }).
             then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, (commandOut) => {
                 product_id = ImptTestHelper.parseId(commandOut);
-                if (!product_id) fail("TestSuitInit error: Fail create product");
+                if (!product_id) fail("TestSuitInit error: Failed to create product");
                 ImptTestHelper.emptyCheck(commandOut);
             })).
             then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx)).
@@ -122,7 +122,7 @@ describe(`impt device group list test suite (output: ${outputMode ? outputMode :
     function _checkDeviceGroupExist(commandOut, expInfo) {
         const json = JSON.parse(commandOut.output);
         expect(json).toBeArrayOfObjects();
-        expect(json).toContainsDeviceGroup(expInfo);
+        expect(json).toContainDeviceGroup(expInfo);
     }
 
     // check device group count in  list

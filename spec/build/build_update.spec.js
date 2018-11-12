@@ -80,14 +80,14 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         function _testInit() {
             return ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
                 dg_id = ImptTestHelper.parseId(commandOut);
-                if (!dg_id) fail("TestInit error: Fail create device group");
+                if (!dg_id) fail("TestInit error: Failed to create device group");
                 ImptTestHelper.emptyCheck(commandOut);
             }).
                 then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME} -x devicecode.nut -t ${BUILD_TAG}  -t ${BUILD2_TAG} -t ${BUILD3_TAG} -o ${BUILD_ORIGIN} `, (commandOut) => {
                     build_id = ImptTestHelper.parseId(commandOut);
-                    if (!build_id) fail("TestInit error: Fail create build");
+                    if (!build_id) fail("TestInit error: Failed to create build");
                     build_sha = ImptTestHelper.parseSha(commandOut);
-                    if (!build_id) fail("TestInit error: Fail parse build sha");
+                    if (!build_id) fail("TestInit error: Failed to parse build sha");
                     ImptTestHelper.emptyCheck(commandOut);
                 }));
         }

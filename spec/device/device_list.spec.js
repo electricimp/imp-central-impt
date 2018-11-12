@@ -62,7 +62,7 @@ describe(`impt device list test suite (output: ${outputMode ? outputMode : 'defa
 
     // custom matcher for search Device with expected properties in Device array
     let customMatcher = {
-        toContainsDevice: function (util, customEqualityTesters) {
+        toContainDevice: function (util, customEqualityTesters) {
             return {
                 compare: function (commandOut, expected = {}) {
                     let result = { pass: false };
@@ -88,7 +88,7 @@ describe(`impt device list test suite (output: ${outputMode ? outputMode : 'defa
                 }
             };
         },
-        toDeviceCountEqual: function () {
+        toHaveDeviceCountEqual: function () {
             return {
                 compare: function (commandOut, expected) {
                     let result = { pass: false };
@@ -104,22 +104,22 @@ describe(`impt device list test suite (output: ${outputMode ? outputMode : 'defa
     function _testSuiteInit() {
         return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, (commandOut) => {
             product_id = ImptTestHelper.parseId(commandOut);
-            if (!product_id) fail("TestSuitInit error: Fail create product");
+            if (!product_id) fail("TestSuitInit error: Failed to create product");
             ImptTestHelper.emptyCheck(commandOut);
         }).
             then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME_2}`, (commandOut) => {
                 product2_id = ImptTestHelper.parseId(commandOut);
-                if (!product2_id) fail("TestSuitInit error: Fail create product");
+                if (!product2_id) fail("TestSuitInit error: Failed to create product");
                 ImptTestHelper.emptyCheck(commandOut);
             })).
             then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
                 dg_id = ImptTestHelper.parseId(commandOut);
-                if (!dg_id) fail("TestSuitInit error: Fail create device group");
+                if (!dg_id) fail("TestSuitInit error: Failed to create device group");
                 ImptTestHelper.emptyCheck(commandOut);
             })).
             then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME_2} -p ${PRODUCT_NAME_2}`, (commandOut) => {
                 dg2_id = ImptTestHelper.parseId(commandOut);
-                if (!dg2_id) fail("TestSuitInit error: Fail create device group");
+                if (!dg2_id) fail("TestSuitInit error: Failed to create device group");
                 ImptTestHelper.emptyCheck(commandOut);
             })).
             then(() => ImptTestHelper.deviceAssign(DEVICE_GROUP_NAME));
@@ -134,7 +134,7 @@ describe(`impt device list test suite (output: ${outputMode ? outputMode : 'defa
     describe('impt device list positive  tests >', () => {
         it('device list by owner me', (done) => {
             ImptTestHelper.runCommand(`impt device list --owner me -z json`, (commandOut) => {
-                expect(commandOut).toContainsDevice({ id: `${config.devices[config.deviceidx]}` });
+                expect(commandOut).toContainDevice({ id: `${config.devices[config.deviceidx]}` });
                 ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).
@@ -143,11 +143,11 @@ describe(`impt device list test suite (output: ${outputMode ? outputMode : 'defa
 
         it('device list by product id', (done) => {
             ImptTestHelper.runCommand(`impt device list --product ${product_id} -z json`, (commandOut) => {
-                expect(commandOut).toContainsDevice({ id: `${config.devices[config.deviceidx]}` });
+                expect(commandOut).toContainDevice({ id: `${config.devices[config.deviceidx]}` });
                 ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(() => ImptTestHelper.runCommand(`impt device list --product ${product2_id} -z json`, (commandOut) => {
-                    expect(commandOut).toDeviceCountEqual(0);
+                    expect(commandOut).toHaveDeviceCountEqual(0);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 })).
                 then(done).
@@ -156,11 +156,11 @@ describe(`impt device list test suite (output: ${outputMode ? outputMode : 'defa
 
         it('device list by product name', (done) => {
             ImptTestHelper.runCommand(`impt device list --product ${PRODUCT_NAME} -z json`, (commandOut) => {
-                expect(commandOut).toContainsDevice({ id: `${config.devices[config.deviceidx]}` });
+                expect(commandOut).toContainDevice({ id: `${config.devices[config.deviceidx]}` });
                 ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(() => ImptTestHelper.runCommand(`impt device list --product ${PRODUCT_NAME_2} -z json`, (commandOut) => {
-                    expect(commandOut).toDeviceCountEqual(0);
+                    expect(commandOut).toHaveDeviceCountEqual(0);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 })).
                 then(done).
@@ -169,11 +169,11 @@ describe(`impt device list test suite (output: ${outputMode ? outputMode : 'defa
 
         it('device list by dg id', (done) => {
             ImptTestHelper.runCommand(`impt device list --dg ${dg_id} -z json`, (commandOut) => {
-                expect(commandOut).toContainsDevice({ id: `${config.devices[config.deviceidx]}` });
+                expect(commandOut).toContainDevice({ id: `${config.devices[config.deviceidx]}` });
                 ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(() => ImptTestHelper.runCommand(`impt device list --dg ${dg2_id} -z json`, (commandOut) => {
-                    expect(commandOut).toDeviceCountEqual(0);
+                    expect(commandOut).toHaveDeviceCountEqual(0);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 })).
                 then(done).
@@ -182,7 +182,7 @@ describe(`impt device list test suite (output: ${outputMode ? outputMode : 'defa
 
         it('device list by dg type', (done) => {
             ImptTestHelper.runCommand(`impt device list --dg-type development -z json`, (commandOut) => {
-                expect(commandOut).toContainsDevice({ id: `${config.devices[config.deviceidx]}` });
+                expect(commandOut).toContainDevice({ id: `${config.devices[config.deviceidx]}` });
                 ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).
@@ -191,11 +191,11 @@ describe(`impt device list test suite (output: ${outputMode ? outputMode : 'defa
 
         it('device list by product name and dg id', (done) => {
             ImptTestHelper.runCommand(`impt device list -p ${PRODUCT_NAME} -g ${dg_id} -z json`, (commandOut) => {
-                expect(commandOut).toContainsDevice({ id: `${config.devices[config.deviceidx]}` });
+                expect(commandOut).toContainDevice({ id: `${config.devices[config.deviceidx]}` });
                 ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(() => ImptTestHelper.runCommand(`impt device list -p ${PRODUCT_NAME} -g ${dg2_id} -z json`, (commandOut) => {
-                    expect(commandOut).toDeviceCountEqual(0);
+                    expect(commandOut).toHaveDeviceCountEqual(0);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 })).
                 then(done).
@@ -204,7 +204,7 @@ describe(`impt device list test suite (output: ${outputMode ? outputMode : 'defa
 
         it('device list by two dg', (done) => {
             ImptTestHelper.runCommand(`impt device list -g ${DEVICE_GROUP_NAME} -g ${dg2_id} -z json`, (commandOut) => {
-                expect(commandOut).toContainsDevice({ id: `${config.devices[config.deviceidx]}` });
+                expect(commandOut).toContainDevice({ id: `${config.devices[config.deviceidx]}` });
                 ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).
@@ -213,7 +213,7 @@ describe(`impt device list test suite (output: ${outputMode ? outputMode : 'defa
 
         it('assigned device list', (done) => {
             ImptTestHelper.runCommand(`impt device list --assigned -z json`, (commandOut) => {
-                expect(commandOut).toContainsDevice({ id: `${config.devices[config.deviceidx]}` });
+                expect(commandOut).toContainDevice({ id: `${config.devices[config.deviceidx]}` });
                 ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).
@@ -222,7 +222,7 @@ describe(`impt device list test suite (output: ${outputMode ? outputMode : 'defa
 
         it('unassigned device list', (done) => {
             ImptTestHelper.runCommand(`impt device list --unassigned -z json`, (commandOut) => {
-                expect(commandOut).not.toContainsDevice({ id: `${config.devices[config.deviceidx]}` });
+                expect(commandOut).not.toContainDevice({ id: `${config.devices[config.deviceidx]}` });
                 ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).
@@ -231,7 +231,7 @@ describe(`impt device list test suite (output: ${outputMode ? outputMode : 'defa
 
         it('online device list', (done) => {
             ImptTestHelper.runCommand(`impt device list --online -z json`, (commandOut) => {
-                expect(commandOut).toContainsDevice({ id: `${config.devices[config.deviceidx]}` });
+                expect(commandOut).toContainDevice({ id: `${config.devices[config.deviceidx]}` });
                 ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).
@@ -240,7 +240,7 @@ describe(`impt device list test suite (output: ${outputMode ? outputMode : 'defa
 
         it('offline device list', (done) => {
             ImptTestHelper.runCommand(`impt device list --offline -z json`, (commandOut) => {
-                expect(commandOut).not.toContainsDevice({ id: `${config.devices[config.deviceidx]}` });
+                expect(commandOut).not.toContainDevice({ id: `${config.devices[config.deviceidx]}` });
                 ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).

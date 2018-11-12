@@ -66,7 +66,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 if (idMatcher && idMatcher.length > 0) {
                     loginkey = idMatcher[0];
                 }
-                else fail("TestSuitInit error: Fail create loginkey");
+                else fail("TestSuitInit error: Failed to create loginkey");
                 ImptTestHelper.emptyCheck(commandOut);
             });
         }

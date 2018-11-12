@@ -62,12 +62,12 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         function _testSuiteInit() {
             return ImptTestHelper.runCommand(`impt loginkey create --pwd ${config.password} ${outputMode}`, (commandOut) => {
                 loginkey_id = ImptTestHelper.parseId(commandOut);
-                if (!loginkey_id) fail("TestSuitInit error: Fail create loginkey");
+                if (!loginkey_id) fail("TestSuitInit error: Failed to create loginkey");
                 ImptTestHelper.emptyCheck(commandOut);
             }).
                 then(() => ImptTestHelper.runCommand(`impt loginkey create --pwd ${config.password} ${outputMode}`, (commandOut) => {
                     loginkey2_id = ImptTestHelper.parseId(commandOut);
-                    if (!loginkey2_id) fail("TestSuitInit error: Fail create loginkey");
+                    if (!loginkey2_id) fail("TestSuitInit error: Failed to create loginkey");
                     ImptTestHelper.emptyCheck(commandOut);
                 }));
         }
