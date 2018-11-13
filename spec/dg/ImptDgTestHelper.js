@@ -60,7 +60,7 @@ class ImptDgTestHelper {
 
     // check device group not exist
     static checkDeviceGroupNotExist(dg) {
-        return ImptTestHelper.runCommand(`impt dg info --dg ${dg}`, ImptTestHelper.checkFailStatusEx);
+        return ImptTestHelper.runCommand(`impt dg info --dg ${dg}`, ImptTestHelper.checkFailStatus);
     }
 
     // check base atributes of requested device group

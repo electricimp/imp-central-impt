@@ -45,7 +45,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // custom matcher for search flagged and  not flagged deployments
         let customMatcher = {
-            toContainsDeployment: function () {
+            toContainDeployment: function () {
                 return {
                     compare: function (DeploymentArray, expected) {
                         let result = { pass: false };
@@ -55,13 +55,13 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                         if (result.pass) {
                             result.message = "Deployment array contains deployment \"" + expected + "\"";
                         } else {
-                            result.message = "Deployment array not contains deployment \"" + expected + "\"";
+                            result.message = "Deployment array does not contain deployment \"" + expected + "\"";
                         }
                         return result;
                     }
                 };
             },
-            toContainsFlaggedDeployment: function () {
+            toContainFlaggedDeployment: function () {
                 return {
                     compare: function (DeploymentArray, expected) {
                         let result = { pass: false };
@@ -71,7 +71,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                         if (result.pass) {
                             result.message = "Deployment array contains flagged deployment \"" + expected + "\"";
                         } else {
-                            result.message = "Deployment array not contains flagged deployment \"" + expected + "\"";
+                            result.message = "Deployment array does not contain flagged deployment \"" + expected + "\"";
                         }
                         return result;
                     }
@@ -100,7 +100,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
                 then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -s "${DEVICE_GROUP_DESCR}" -p ${PRODUCT_NAME}`, (commandOut) => {
                     dg_id = ImptTestHelper.parseId(commandOut);
-                    if (!dg_id) fail("TestSuitInit error: Fail create device group");
+                    if (!dg_id) fail("TestSuitInit error: Failed to create device group");
                     ImptTestHelper.emptyCheck(commandOut);
                 })).
                 then(() => ImptTestHelper.deviceAssign(DEVICE_GROUP_NAME));
@@ -114,17 +114,17 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         function _testInit() {
             return ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME} -f`, (commandOut) => {
                 build_id = ImptTestHelper.parseId(commandOut);
-                if (!build_id) fail("TestInit error: Fail create build");
+                if (!build_id) fail("TestInit error: Failed to create build");
                 ImptTestHelper.emptyCheck(commandOut);
             }).
                 then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME} -f`, (commandOut) => {
                     build2_id = ImptTestHelper.parseId(commandOut);
-                    if (!build2_id) fail("TestInit error: Fail create build");
+                    if (!build2_id) fail("TestInit error: Failed to create build");
                     ImptTestHelper.emptyCheck(commandOut);
                 })).
                 then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME}`, (commandOut) => {
                     build3_id = ImptTestHelper.parseId(commandOut);
-                    if (!build3_id) fail("TestInit error: Fail create build");
+                    if (!build3_id) fail("TestInit error: Failed to create build");
                     ImptTestHelper.emptyCheck(commandOut);
                 })).
                 then(() => ImptTestHelper.runCommand(`impt dg update -g ${DEVICE_GROUP_NAME} --min-supported-deployment  ${build2_id}`, (commandOut) => {
@@ -166,9 +166,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             it('builds by device group id', (done) => {
                 ImptTestHelper.runCommand(`impt dg builds --dg ${dg_id} -z json`, (commandOut) => {
                     const json = JSON.parse(commandOut.output);
-                    expect(json).toContainsFlaggedDeployment(build_id);
-                    expect(json).toContainsFlaggedDeployment(build2_id);
-                    expect(json).toContainsDeployment(build3_id);
+                    expect(json).toContainFlaggedDeployment(build_id);
+                    expect(json).toContainFlaggedDeployment(build2_id);
+                    expect(json).toContainDeployment(build3_id);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(done).
@@ -178,9 +178,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             it('unflag builds by device group name', (done) => {
                 ImptTestHelper.runCommand(`impt dg builds --dg ${DEVICE_GROUP_NAME} --unflag -z json`, (commandOut) => {
                     const json = JSON.parse(commandOut.output);
-                    expect(json).toContainsDeployment(build_id);
-                    expect(json).toContainsDeployment(build2_id);
-                    expect(json).toContainsDeployment(build3_id);
+                    expect(json).toContainDeployment(build_id);
+                    expect(json).toContainDeployment(build2_id);
+                    expect(json).toContainDeployment(build3_id);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(done).
@@ -190,9 +190,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             it('unflag old builds by device group name', (done) => {
                 ImptTestHelper.runCommand(`impt dg builds --dg ${DEVICE_GROUP_NAME} --unflag-old -z json`, (commandOut) => {
                     const json = JSON.parse(commandOut.output);
-                    expect(json).toContainsDeployment(build_id);
-                    expect(json).toContainsFlaggedDeployment(build2_id);
-                    expect(json).toContainsDeployment(build3_id);
+                    expect(json).toContainDeployment(build_id);
+                    expect(json).toContainFlaggedDeployment(build2_id);
+                    expect(json).toContainDeployment(build3_id);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(done).
@@ -202,9 +202,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             it('remove builds by project', (done) => {
                 ImptTestHelper.runCommand(`impt dg builds --remove -q -z json`, (commandOut) => {
                     const json = JSON.parse(commandOut.output);
-                    expect(json).not.toContainsDeployment(build_id);
-                    expect(json).toContainsFlaggedDeployment(build2_id);
-                    expect(json).toContainsDeployment(build3_id);
+                    expect(json).not.toContainDeployment(build_id);
+                    expect(json).toContainFlaggedDeployment(build2_id);
+                    expect(json).toContainDeployment(build3_id);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(done).

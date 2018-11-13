@@ -55,12 +55,12 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // prepare test environment for impt product list test
         function _testSuiteInit() {
-            return ImptTestHelper.getAuthAttrs((commandOut) => {
+            return ImptTestHelper.getAccountAttrs((commandOut) => {
                 if (commandOut && commandOut.email && commandOut.id) {
                     email = commandOut.email;
                     userid = commandOut.id;
                 }
-                else fail("TestSuitInit error: Fail get addition auth attributes");
+                else fail("TestSuitInit error: Failed to get account attributes");
             }).
                 then(() => ImptTestHelper.runCommand(`impt product create --name ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx)).
                 then(() => ImptTestHelper.runCommand(`impt product create --name ${PRODUCT_NAME_2}`, ImptTestHelper.emptyCheckEx));
@@ -132,8 +132,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         });
 
         it('product list without output value', (done) => {
-            ImptTestHelper.runCommand(`impt product list -z`, ImptTestHelper.checkFailStatusEx).
-                then(() => ImptTestHelper.runCommand(`impt product list -z undefined`, ImptTestHelper.checkFailStatusEx)).
+            ImptTestHelper.runCommand(`impt product list -z`, ImptTestHelper.checkFailStatus).
+                then(() => ImptTestHelper.runCommand(`impt product list -z undefined`, ImptTestHelper.checkFailStatus)).
                 then(done).
                 catch(error => done.fail(error));
         });

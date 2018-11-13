@@ -72,9 +72,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME} -s early_build`, ImptTestHelper.emptyCheckEx)).
                 then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME} -s build_descr -x devicecode.nut -y agentcode.nut -t ${BUILD_TAG} -o ${BUILD_ORIGIN} `, (commandOut) => {
                     build_id = ImptTestHelper.parseId(commandOut);
-                    if (!build_id) fail("TestSuiteInit error: Fail create build");
+                    if (!build_id) fail("TestSuiteInit error: Failed to create build");
                     build_sha = ImptTestHelper.parseSha(commandOut);
-                    if (!build_sha) fail("TestSuiteInit error: Fail parse build sha");
+                    if (!build_sha) fail("TestSuiteInit error: Failed to parse build sha");
                     ImptTestHelper.emptyCheck(commandOut);
                 }));
         }
@@ -94,41 +94,41 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         describe('build get positive tests >', () => {
             it('build get by build id', (done) => {
-                ImptTestHelper.runCommand(`impt build get --build ${build_id} --device-file devicereaded.nut --device-only --confirmed ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt build get --build ${build_id} --device-file deviceread.nut --device-only --confirmed ${outputMode}`, (commandOut) => {
                     _checkSourceFilesDownloadedSuccessfulyMessage(commandOut, build_id);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.checkFileEqual('devicereaded.nut', 'devicecode.nut')).
+                    then(() => ImptTestHelper.checkFileEqual('deviceread.nut', 'devicecode.nut')).
                     then(done).
                     catch(error => done.fail(error));
             }, ImptTestHelper.TIMEOUT);
 
             xit('build get by build sha', (done) => {
-                ImptTestHelper.runCommand(`impt build get -b ${build_sha} --agent-file agentreaded.nut --agent-only -q ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt build get -b ${build_sha} --agent-file agentread.nut --agent-only -q ${outputMode}`, (commandOut) => {
                     _checkSourceFilesDownloadedSuccessfulyMessage(commandOut, build_sha);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.checkFileEqual('agentreaded.nut', 'agentcode.nut')).
+                    then(() => ImptTestHelper.checkFileEqual('agentread.nut', 'agentcode.nut')).
                     then(done).
                     catch(error => done.fail(error));
             }, ImptTestHelper.TIMEOUT);
 
             it('build get by build tag', (done) => {
-                ImptTestHelper.runCommand(`impt build get -b ${BUILD_TAG} -x devicereaded.nut -i -q ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt build get -b ${BUILD_TAG} -x deviceread.nut -i -q ${outputMode}`, (commandOut) => {
                     _checkSourceFilesDownloadedSuccessfulyMessage(commandOut, BUILD_TAG);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.checkFileEqual('devicereaded.nut', 'devicecode.nut')).
+                    then(() => ImptTestHelper.checkFileEqual('deviceread.nut', 'devicecode.nut')).
                     then(done).
                     catch(error => done.fail(error));
             }, ImptTestHelper.TIMEOUT);
 
             it('build get by build origin', (done) => {
-                ImptTestHelper.runCommand(`impt build get -b ${BUILD_ORIGIN}  -y agentreaded.nut -j -q ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt build get -b ${BUILD_ORIGIN}  -y agentread.nut -j -q ${outputMode}`, (commandOut) => {
                     _checkSourceFilesDownloadedSuccessfulyMessage(commandOut, BUILD_ORIGIN);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.checkFileEqual('agentreaded.nut', 'agentcode.nut')).
+                    then(() => ImptTestHelper.checkFileEqual('agentread.nut', 'agentcode.nut')).
                     then(done).
                     catch(error => done.fail(error));
             }, ImptTestHelper.TIMEOUT);
@@ -169,7 +169,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             }, ImptTestHelper.TIMEOUT);
 
             it('build get without agent file', (done) => {
-                ImptTestHelper.runCommand(`impt build get -b ${build_id} -x devicereaded.nut -q ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt build get -b ${build_id} -x deviceread.nut -q ${outputMode}`, (commandOut) => {
                     MessageHelper.checkOptionMustBeSpecifiedMessage(commandOut, 'agent-file');
                     ImptTestHelper.checkFailStatus(commandOut);
                 }).

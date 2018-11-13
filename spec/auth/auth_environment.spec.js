@@ -46,12 +46,12 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         beforeAll((done) => {
             ImptTestHelper.init(true).
                 then(_createLoginkey).
-                then(() => ImptTestHelper.getAuthAttrs((commandOut) => {
+                then(() => ImptTestHelper.getAccountAttrs((commandOut) => {
                     if (commandOut && commandOut.email && commandOut.id) {
                         email = commandOut.email;
                         userid = commandOut.id;
                     }
-                    else fail("TestSuitInit error: Fail get addition auth attributes");
+                    else fail("TestSuitInit error: Failed to get account attributes");
                 })).
                 then(_prepAuthPath).
                 then(ImptAuthCommandsHelper.localLogout).
@@ -85,7 +85,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 if (idMatcher && idMatcher.length > 0) {
                     loginkey = idMatcher[0];
                 }
-                else fail("TestSuitInit error: Fail create loginkey");
+                else fail("TestSuitInit error: Failed to create loginkey");
                 ImptTestHelper.emptyCheck(commandOut);
             });
         }

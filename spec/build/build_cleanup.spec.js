@@ -69,7 +69,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // custom matcher for search Build with expected properties in Build array
         let customMatcher = {
-            toContainsBuild: function (util, customEqualityTesters) {
+            toContainBuild: function (util, customEqualityTesters) {
                 return {
                     compare: function (commandOut, expected = {}) {
                         let result = { pass: false };
@@ -95,7 +95,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     }
                 };
             },
-            toBuildCountEqual: function () {
+            toHaveBuildCountEqual: function () {
                 return {
                     compare: function (commandOut, expected) {
                         let result = { pass: false };
@@ -105,7 +105,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     }
                 };
             },
-            toBuildCountMore: function () {
+            toHaveBuildCountGreaterThan: function () {
                 return {
                     compare: function (commandOut, expected) {
                         let result = { pass: false };
@@ -115,7 +115,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     }
                 };
             },
-            toBuildCountEqualOrMore: function () {
+            toHaveBuildCountGreaterThanOrEqualTo: function () {
                 return {
                     compare: function (commandOut, expected) {
                         let result = { pass: false };
@@ -131,7 +131,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         function _testSuiteInit() {
             return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, (commandOut) => {
                 product_id = ImptTestHelper.parseId(commandOut);
-                if (!product_id) fail("TestSuitInit error: Fail create product");
+                if (!product_id) fail("TestSuitInit error: Failed to create product");
                 ImptTestHelper.emptyCheck(commandOut);
             }).
                 then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT2_NAME}`, (commandOut) => {
@@ -154,22 +154,22 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 })).
                 then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME}`, (commandOut) => {
                     build_id = ImptTestHelper.parseId(commandOut);
-                    if (!build_id) fail("TestInit error: Fail create build");
+                    if (!build_id) fail("TestInit error: Failed to create build");
                     ImptTestHelper.emptyCheck(commandOut);
                 })).
                 then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME}`, (commandOut) => {
                     build2_id = ImptTestHelper.parseId(commandOut);
-                    if (!build2_id) fail("TestInit error: Fail create build");
+                    if (!build2_id) fail("TestInit error: Failed to create build");
                     ImptTestHelper.emptyCheck(commandOut);
                 })).
                 then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP2_NAME}`, (commandOut) => {
                     build3_id = ImptTestHelper.parseId(commandOut);
-                    if (!build3_id) fail("TestInit error: Fail create build");
+                    if (!build3_id) fail("TestInit error: Failed to create build");
                     ImptTestHelper.emptyCheck(commandOut);
                 })).
                 then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP2_NAME}`, (commandOut) => {
                     build4_id = ImptTestHelper.parseId(commandOut);
-                    if (!build4_id) fail("TestInit error: Fail create build");
+                    if (!build4_id) fail("TestInit error: Failed to create build");
                     ImptTestHelper.emptyCheck(commandOut);
                 })).
                 // delete device groups to generate zombie builds
@@ -226,11 +226,11 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => ImptTestHelper.runCommand(`impt build list -o me --zombie -z json`, (commandOut) => {
-                        expect(commandOut).toContainsBuild({ id: build_id });
-                        expect(commandOut).not.toContainsBuild({ id: build2_id });
-                        expect(commandOut).toContainsBuild({ id: build3_id });
-                        expect(commandOut).toContainsBuild({ id: build4_id });
-                        expect(commandOut).toBuildCountEqualOrMore(3);
+                        expect(commandOut).toContainBuild({ id: build_id });
+                        expect(commandOut).not.toContainBuild({ id: build2_id });
+                        expect(commandOut).toContainBuild({ id: build3_id });
+                        expect(commandOut).toContainBuild({ id: build4_id });
+                        expect(commandOut).toHaveBuildCountGreaterThanOrEqualTo(3);
                         ImptTestHelper.checkSuccessStatus(commandOut);
                     })).
                     then(done).
@@ -245,11 +245,11 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => ImptTestHelper.runCommand(`impt build list  -o me --zombie -z json`, (commandOut) => {
-                        expect(commandOut).not.toContainsBuild({ id: build_id });
-                        expect(commandOut).not.toContainsBuild({ id: build2_id });
-                        expect(commandOut).toContainsBuild({ id: build3_id });
-                        expect(commandOut).toContainsBuild({ id: build4_id });
-                        expect(commandOut).toBuildCountEqualOrMore(2);
+                        expect(commandOut).not.toContainBuild({ id: build_id });
+                        expect(commandOut).not.toContainBuild({ id: build2_id });
+                        expect(commandOut).toContainBuild({ id: build3_id });
+                        expect(commandOut).toContainBuild({ id: build4_id });
+                        expect(commandOut).toHaveBuildCountGreaterThanOrEqualTo(2);
                         ImptTestHelper.checkSuccessStatus(commandOut);
                     })).
                     then(done).
@@ -263,10 +263,10 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => ImptTestHelper.runCommand(`impt build list -o me --zombie -z json`, (commandOut) => {
-                        expect(commandOut).toContainsBuild({ id: build_id });
-                        expect(commandOut).toContainsBuild({ id: build3_id });
-                        expect(commandOut).not.toContainsBuild({ id: build2_id });
-                        expect(commandOut).not.toContainsBuild({ id: build4_id });
+                        expect(commandOut).toContainBuild({ id: build_id });
+                        expect(commandOut).toContainBuild({ id: build3_id });
+                        expect(commandOut).not.toContainBuild({ id: build2_id });
+                        expect(commandOut).not.toContainBuild({ id: build4_id });
                         ImptTestHelper.checkSuccessStatus(commandOut);
                     })).
                     then(done).
@@ -284,10 +284,10 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => ImptTestHelper.runCommand(`impt build list -o me --zombie -z json`, (commandOut) => {
-                        expect(commandOut).not.toContainsBuild({ id: build_id });
-                        expect(commandOut).not.toContainsBuild({ id: build3_id });
-                        expect(commandOut).not.toContainsBuild({ id: build2_id });
-                        expect(commandOut).not.toContainsBuild({ id: build4_id });
+                        expect(commandOut).not.toContainBuild({ id: build_id });
+                        expect(commandOut).not.toContainBuild({ id: build3_id });
+                        expect(commandOut).not.toContainBuild({ id: build2_id });
+                        expect(commandOut).not.toContainBuild({ id: build4_id });
                         ImptTestHelper.checkSuccessStatus(commandOut);
                     })).
                     then(done).

@@ -66,24 +66,24 @@ describe(`impt device info test suite (output: ${outputMode ? outputMode : 'defa
                 device_name = `${config.devices[config.deviceidx]}${config.suffix}`;
                 agent_id = commandOut.agentid;
             }
-            else fail("TestSuitInit error: Fail get addition device attributes");
+            else fail("TestSuitInit error: Failed to get additional device attributes");
         }).
             then(() => ImptTestHelper.runCommand(`impt device update -d ${config.devices[config.deviceidx]} --name ${device_name}`, ImptTestHelper.emptyCheckEx)).
             then(() => ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx)).
             then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, (commandOut) => {
                 product_id = ImptTestHelper.parseId(commandOut);
-                if (!product_id) fail("TestSuitInit error: Fail create product");
+                if (!product_id) fail("TestSuitInit error: Failed to create product");
                 ImptTestHelper.emptyCheck(commandOut);
             })).
             then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
                 dg_id = ImptTestHelper.parseId(commandOut);
-                if (!dg_id) fail("TestSuitInit error: Fail create device group");
+                if (!dg_id) fail("TestSuitInit error: Failed to create device group");
                 ImptTestHelper.emptyCheck(commandOut);
             })).
             then(() => ImptTestHelper.deviceAssign(DEVICE_GROUP_NAME)).
             then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME}`, (commandOut) => {
                 build_id = ImptTestHelper.parseId(commandOut);
-                if (!build_id) fail("TestSuiteInit error: Fail create build");
+                if (!build_id) fail("TestSuiteInit error: Failed to create build");
                 ImptTestHelper.emptyCheck(commandOut);
             }));
     }

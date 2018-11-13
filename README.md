@@ -16,6 +16,7 @@ This guide covers the basic and common usage of *impt*, and should be read first
 ## Contents ##
 
 - [Installation](#installation)
+- [Version](#version)
 - [Proxy Setup](#proxy-setup)
 - [Syntax and Command Groups](#syntax-and-command-groups)
 - [Help](#help)
@@ -37,6 +38,15 @@ This guide covers the basic and common usage of *impt*, and should be read first
 
 ```bash
 npm install -g imp-central-impt
+```
+
+## Version ##
+
+Call `impt --version` or `impt -v` to display the version of the installed *impt*.
+
+```bash
+> impt --version
+2.4.0
 ```
 
 ## Proxy Setup ##
@@ -70,6 +80,7 @@ The commands are logically divided into groups. Most of the groups directly map 
 - [Log Manipulation Commands](./CommandsManual.md#log-manipulation-commands) &mdash; `impt log <command_name> [<options>]`
 - [Webhook Manipulation Commands](./CommandsManual.md#webhook-manipulation-commands) &mdash; `impt webhook <command_name> [<options>]`
 - [Login Key Manipulation Commands](./CommandsManual.md#login-key-manipulation-commands) &mdash; `impt loginkey <command_name> [<options>]`
+- [Account Information Commands](./CommandsManual.md#account-information-commands) &mdash; `impt account <command_name> [<options>]`
 
 A further group of commands covers API access:
 
@@ -118,6 +129,7 @@ The [help option](./CommandsManual.md#the-help-option) is applicable to a partia
 Usage: impt <command> [options]
 
 Commands:
+  impt account   Account information commands.
   impt auth      Authentication commands.
   impt build     Build manipulation commands.
   impt device    Device manipulation commands.
@@ -130,8 +142,8 @@ Commands:
   impt webhook   Webhook manipulation commands.
 
 Options:
-  --help, -h  Displays a description of the command. Ignores any other options.
-                                                                       [boolean]
+  --version, -v  Displays the version of impt.                         [boolean]
+  --help, -h     Displays a description of the command.                [boolean]
 ```
 
 ##### Example 2: List all the commands in one group #####
@@ -161,7 +173,7 @@ Options:
 > impt product create --help
 
 Usage: impt product create --name <product_name> [--descr <product_description>]
-[--output <mode>] [--help]
+[--owner <ACCOUNT_IDENTIFIER>] [--output <mode>] [--help]
 
 Creates a new Product. Fails if a Product with the specified name already
 exists.
@@ -170,8 +182,10 @@ Options:
   --help, -h    Displays a description of the command. Ignores any other
                 options.                                               [boolean]
   --name, -n    The Product's name. Must be unique among all of the current
-                account's Products                           [string] [required]
+                account's Products.                          [string] [required]
   --descr, -s   An optional description of the Product.                 [string]
+  --owner, -o   The Product will be created in the specified Account. If not
+                specified, the current account is assumed.              [string]
   --output, -z  Adjusts the command's output.
                                   [string] [choices: "minimal", "json", "debug"]
 ```
@@ -513,6 +527,8 @@ If you want to use this feature, please read the [Commands Manual](./CommandsMan
 
 When it is hard to uniquely specify an entity without knowing the entity ID, use [entity listing](#entity-listing-and-ownership) commands to view the entities basing on some attributes, choose the required entity and use its entity ID in the required command.
 
+For some of the entities (eg. a Product, a Device Group) *impt* provides an ability to uniquely identify them by their names &mdash; using hierarchical identifiers. The format and details of every concrete hierarchical identifier are described in the [Commands Manual](./CommandsManual.md#entity-identification). This is convinient to use in scripts &mdash; you can pass a name of an entity and call all manipulation commands with that entity (create, update, delete, etc.) using that name only, without obtaining an ID of the created entity.
+
 ##### Example 1: An entity is found successfully**
 
 ```bash
@@ -540,28 +556,42 @@ IMPT COMMAND SUCCEEDS
 ##### Example 2: An entity is not unique, so the command fails #####
 
 ```bash
-> impt build info --build MyRC1
-Error: Multiple Deployments "MyRC1" are found:
-Deployment:
-  id:           24aa0e91-ebc0-9198-090c-44cca8b977f3
-  sha:          4e7f3395e86658ab39a178f9fe4b8cd8244a8ade92cb5ae1bb2d758434174c05
-  tags:         MyRC1
-  flagged:      true
-  Device Group:
-    id:   da27eb09-61d7-100b-095e-47578bada966
-    type: pre-production
-    name: MyPreProductionDG
-Deployment:
-  id:           bf485681-37c3-a813-205a-e90e19b1a817
-  sha:          4e7f3395e86658ab39a178f9fe4b8cd8244a8ade92cb5ae1bb2d758434174c05
-  tags:         MyRC1
-  flagged:      true
-  Device Group:
-    id:   dfcde3bd-3d89-6c75-bf2a-a543c47e586b
-    type: development
-    name: MyDevDG
+> impt dg info --dg TestDG
+Error: Multiple Device Groups "TestDG" are found:
+Device Group:
+  id:      3667ed96-12cd-ea20-9c09-0b2f32d1f73b
+  type:    development
+  name:    TestDG
+  Product:
+    id:   2390fed8-d14c-cd55-2176-30e370b23519
+    name: TestProduct
+Device Group:
+  id:      60faac39-1d5a-8494-d4d2-5f0744e67c27
+  type:    development
+  name:    TestDG
+  Product:
+    id:   c4e006ed-85b9-3513-fa99-0700333c3ad7
+    name: MyProduct
 Impossible to execute the command.
 IMPT COMMAND FAILS
+```
+
+##### Example 3: Use a hierarchical identifier #####
+
+```bash
+> impt dg info --dg {me}{TestProduct}{TestDG}
+Device Group:
+  id:          3667ed96-12cd-ea20-9c09-0b2f32d1f73b
+  type:        development
+  name:        TestDG
+  description:
+  region:
+  created_at:  2018-11-12T12:25:06.777Z
+  updated_at:  2018-11-12T12:25:06.777Z
+  Product:
+    id:   2390fed8-d14c-cd55-2176-30e370b23519
+    name: TestProduct
+IMPT COMMAND SUCCEEDS
 ```
 
 ## Entity Listing And Ownership ##
@@ -574,11 +604,13 @@ Many groups of commands contain a command to list entities: [Products](./Command
 
 Some filter options have the same name and meaning across list commands. They are summarized [here](./CommandsManual.md#common-filter-options). A particular command may have specific filter options too. Filter options applicable to every concrete list command are detailed in the [Command Description](./CommandsManual.md#command-description).
 
-For some list commands, the default returned list includes entities owned by the current account as well as entities owned by collaborators. For other list commands, only the entities owned by the current account are returned. This is impCentral API-specific behavior not controlled by *impt*. But you can always specify a concrete Account ID, email or username as a value of the `--owner <value>` filter option (alias: `-o`) and get the entities owned by that account, if they are available to you as to a collaborator. Also, you can always specify the `--owner me` filter option and get the entities owned by you only.
+For some list commands, the default returned list includes entities owned by the current account as well as entities owned by other accounts currently available to you (all shared accounts the current one is collaborating on). For other list commands, only the entities owned by the current account are returned. This is impCentral API-specific behavior not controlled by *impt*. But you can always specify a concrete Account ID, email or username as a value of the `--owner <value>` filter option (alias: `-o`) and get the entities owned by that account, if they are available to you as to a collaborator. Also, you can always specify the `--owner me` filter option and get the entities owned by you only.
 
 As a general rule, if an entity is owned by the current logged-in account, information about Owner is not displayed. If an entity is owned by another account, then Account ID and email of the Owner are displayed for the entity. This rule applies to all *impt* commands which display details of an entity: entity listing, [entity information](#entity-information) and other.
 
 To display the Account ID and email of the current account, use [`impt auth info`](./CommandsManual.md#auth-info).
+
+To display the Account ID, email and other attributes of any available account, use [Account Information Commands](./CommandsManual.md#account-information-commands) &mdash; [`impt account list`](./CommandsManual.md#account-list), [`impt account info`](./CommandsManual.md#account-info).
 
 ##### Example 1: List all Products owned by me and my collaborators #####
 
@@ -594,6 +626,7 @@ Product:
   Owner:
     id:    c1d61eef-d544-4d09-c8dc-d43e6742cae3
     email: user@email.com
+    username: username
 Product:
   id:   885dfd24-e8f6-0621-32fc-556d24ed4cab
   name: SmartFridge
@@ -603,6 +636,7 @@ Product:
   Owner:
     id:    c1d61eef-d544-4d09-c8dc-d43e6742cae3
     email: user@email.com
+    username: username
 IMPT COMMAND SUCCEEDS
 ```
 
@@ -621,6 +655,7 @@ Device Group:
   Owner:
     id:    c1d61eef-d544-4d09-c8dc-d43e6742cae3
     email: user@email.com
+    username: username
 Device Group:
   id:      b26aae4c-92d7-7e60-7c71-3fe2486e352f
   type:    factory
@@ -631,6 +666,7 @@ Device Group:
   Owner:
     id:    c1d61eef-d544-4d09-c8dc-d43e6742cae3
     email: user@email.com
+    username: username
 IMPT COMMAND SUCCEEDS
 ```
 
@@ -667,6 +703,22 @@ Device Group:
   Product:
     id:   2390fed8-d14c-cd55-2176-30e370b23519
     name: TestProduct
+IMPT COMMAND SUCCEEDS
+```
+
+##### Example 4: List all available accounts #####
+
+```bash
+> impt account list
+Account list (3 items):
+Account:
+  id:       c1d61eef-d544-4d09-c8dc-d43e6742cae3
+  email:    user@email.com
+  username: username
+Account:
+  id:       8047f481-5040-ac99-7e72-af156da4b497
+  email:    user2@email.com
+  username: username2
 IMPT COMMAND SUCCEEDS
 ```
 

@@ -32,8 +32,9 @@ const outputMode = '';
 
 describe(`impt help pages test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
     let tool = ['impt'];
-    tool.impt = ['', 'auth', 'build', 'device', 'dg', 'log', 'loginkey', 'product', 'project', 'test', 'webhook'];
+    tool.impt = ['', 'account', 'auth', 'build', 'device', 'dg', 'log', 'loginkey', 'product', 'project', 'test', 'webhook'];
     tool.impt[''] = [''];
+    tool.impt.account = ['', 'info', 'list'];
     tool.impt.auth = ['', 'info', 'login', 'logout'];
     tool.impt.build = ['', 'cleanup', 'copy', 'delete', 'deploy', 'get', 'info', 'list', 'run', 'update'];
     tool.impt.device = ['', 'assign', 'info', 'list', 'remove', 'restart', 'unassign', 'update'];
@@ -70,6 +71,17 @@ describe(`impt help pages test suite (output: ${outputMode ? outputMode : 'defau
                 then(done).
                 catch(error => done.fail(error));
         });
+
+        // impt version test
+        it(`${imptool} version`, (done) => {
+            ImptTestHelper.runCommand(`${imptool} --version`, (commandOut) => {
+                expect(commandOut.output).toMatch('[0-9]\.[0-9]\.[0-9]');
+                ImptTestHelper.checkSuccessStatus(commandOut);
+            }).
+                then(done).
+                catch(error => done.fail(error));
+        });
+
         tool[imptool].forEach((commandGroup) => {
             // negative test for each command group 
             it(`${imptool} ${commandGroup} without command`, (done) => {

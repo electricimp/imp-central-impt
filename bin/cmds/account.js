@@ -27,8 +27,8 @@
 const Options = require('../../lib/util/Options');
 const UserInteractor = require('../../lib/util/UserInteractor');
 
-const COMMAND = 'log';
-const COMMAND_DESCRIPTION = 'Logs manipulation commands.';
+const COMMAND = 'account';
+const COMMAND_DESCRIPTION = 'Account information commands.';
 
 exports.command = COMMAND;
 
@@ -36,7 +36,7 @@ exports.describe = COMMAND_DESCRIPTION;
 
 exports.builder = function (yargs) {
     return yargs
-        .commandDir('log')
+        .commandDir('account')
         .demandCommand(1, UserInteractor.ERRORS.CMD_UNKNOWN)
         .strict()
         .version(false)
