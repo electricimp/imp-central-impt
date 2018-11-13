@@ -27,7 +27,7 @@ In order to decrease a time of the tests execution, the tests for different comm
 
 To avoid collisions, every thread should use it's own folder. So, you must specify **IMPT_FOLDER_SUFFIX** variable for each thread.
 
-The following groups of tests do not require a device and can be always executed in parallel: `auth`, `loginkey`, `product`, `project`, `webhook`, `help`.
+The following groups of tests do not require a device and can be always executed in parallel: `auth`, `account`, `loginkey`, `product`, `project`, `webhook`, `help`.
 
 The following groups of tests require a device and cannot be executed in parallel on the same device: `build`, `log`, `device`, `dg`. They should be executed either sequentially, or in parallel using different devices (use **IMPT_DEVICE_IDX** variable to specify a concrete device for every thread).
 
@@ -42,6 +42,7 @@ Scripts for the fastest tests execution:
 ```
     start cmd /k "npm test --filter **/build/*.spec.js  **/log/*.spec.js **/dg/*.spec.js **/device/*.spec.js IMPT_FOLDER_SUFFIX=build"
     start cmd /k "npm test --filter **/auth/*.spec.js IMPT_FOLDER_SUFFIX=auth"
+    start cmd /k "npm test --filter **/account/*.spec.js IMPT_FOLDER_SUFFIX=account"
     start cmd /k "npm test --filter **/loginkey/*.spec.js IMPT_FOLDER_SUFFIX=loginkey"
     start cmd /k "npm test --filter **/product/*.spec.js IMPT_FOLDER_SUFFIX=product" 
     start cmd /k "npm test --filter **/webhook/*.spec.js IMPT_FOLDER_SUFFIX=webhook"
@@ -55,6 +56,7 @@ Scripts for the fastest tests execution:
     #/bin/sh
     npm test --filter **/build/*.spec.js  **/log/*.spec.js **/dg/*.spec.js **/device/*.spec.js IMPT_FOLDER_SUFFIX=build &
     npm test --filter **/auth/*.spec.js IMPT_FOLDER_SUFFIX=auth &
+    npm test --filter **/account/*.spec.js IMPT_FOLDER_SUFFIX=account &
     npm test --filter **/loginkey/*.spec.js IMPT_FOLDER_SUFFIX=loginkey &
     npm test --filter **/product/*.spec.js IMPT_FOLDER_SUFFIX=product & 
     npm test --filter **/webhook/*.spec.js IMPT_FOLDER_SUFFIX=webhook &
@@ -72,6 +74,7 @@ Scripts for the fastest tests execution:
     start cmd /k "npm test --filter **/dg/*.spec.js IMPT_FOLDER_SUFFIX=dg IMPT_DEVICE_IDX=2"
     start cmd /k "npm test --filter **/device/*.spec.js IMPT_FOLDER_SUFFIX=device IMPT_DEVICE_IDX=3"
     start cmd /k "npm test --filter **/auth/*.spec.js IMPT_FOLDER_SUFFIX=auth"
+    start cmd /k "npm test --filter **/account/*.spec.js IMPT_FOLDER_SUFFIX=account"
     start cmd /k "npm test --filter **/loginkey/*.spec.js IMPT_FOLDER_SUFFIX=loginkey"
     start cmd /k "npm test --filter **/product/*.spec.js IMPT_FOLDER_SUFFIX=product" 
     start cmd /k "npm test --filter **/webhook/*.spec.js IMPT_FOLDER_SUFFIX=webhook"
@@ -88,6 +91,7 @@ Scripts for the fastest tests execution:
     npm test --filter **/dg/*.spec.js IMPT_FOLDER_SUFFIX=dg IMPT_DEVICE_IDX=2 &
     npm test --filter **/device/*.spec.js IMPT_FOLDER_SUFFIX=device IMPT_DEVICE_IDX=3 &
     npm test --filter **/auth/*.spec.js IMPT_FOLDER_SUFFIX=auth &
+    npm test --filter **/account/*.spec.js IMPT_FOLDER_SUFFIX=account &
     npm test --filter **/loginkey/*.spec.js IMPT_FOLDER_SUFFIX=loginkey &
     npm test --filter **/product/*.spec.js IMPT_FOLDER_SUFFIX=product &
     npm test --filter **/webhook/*.spec.js IMPT_FOLDER_SUFFIX=webhook &
@@ -149,4 +153,4 @@ The files may be extended by adding more reusable methods during new tests devel
 
 ## Test Matrix ##
 
-The list and details of the existing tests as described in the [Test Matrix document](./TestMatrix.md).
+The list and details of the existing tests are described in the [Test Matrix document](./TestMatrix.md).
