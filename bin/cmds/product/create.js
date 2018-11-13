@@ -40,13 +40,18 @@ exports.builder = function (yargs) {
     const options = Options.getOptions({
         [Options.NAME] : {
             demandOption : true,
-            describe : "The Product's name. Must be unique among all of the current account's Products",
+            describe : "The Product's name. Must be unique among all of the current account's Products.",
             _usage : '<product_name>'
         },
         [Options.DESCRIPTION] : {
             demandOption : false,
             describe : 'An optional description of the Product.',
             _usage : '<product_description>'
+        },
+        [Options.OWNER] : {
+            demandOption : false,
+            describe: 'The Product will be created in the specified Account. If not specified, the current account is assumed.',
+            type : 'string'
         },
         [Options.OUTPUT] : false
     });
