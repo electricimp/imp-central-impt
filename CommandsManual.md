@@ -138,12 +138,12 @@ The `--output` option has the following `<mode>` values:
 
 ## Entity Identification ##
 
-Applicable to the following impCentral API entities &mdash; Account, Product, Device Group, Device and Deployment &mdash; these rules govern how *impt* searches an entity:
+For the impCentral API entities described in this section &mdash; Account, Product, Device Group, Device and Deployment &mdash; *impt* obeys the following rules when searching one of these entities:
 
-- There is an order of attributes for every entity type (described in the subsections below).
+- For every entity type, attributes must be included in a specific order (described in the subsections below).
 - Some of the entity types additionally support hierarchical identifiers (described in the subsections below).
-- If an entity type supports a hierarchical identifier and the specified value matches the hierarchical identifier pattern, *impt* searches an entity by parsing the hierarchical identifier. If one and only one entity is found, the search is stopped.
-- Otherwise, *impt* starts from the first attribute in the order of the entity type supported attributes and searches the specified value for this attribute.
+- If an entity type supports a hierarchical identifier and the specified value matches the hierarchical identifier pattern, *impt* searches the entity by parsing the hierarchical identifier. If only one entity is found, the search is stopped.
+- Otherwise, *impt* starts from the first attribute in the list of the entity type's supported attributes and seeks the specified value for this attribute.
 - If no entity is found for this attribute, the tool searches the specified value for the next attribute in the order.
 - If at least one entity is found for the particular attribute, the search is stopped.
 - If no entity is found for all attributes, or more than one entity is found, then, depending on a particular command, that may be considered as a success (for all `list` commands) or as a fail (for all other commands).
@@ -154,7 +154,7 @@ An Entity Identifier must not be empty.
 
 Attributes accepted as `<ACCOUNT_IDENTIFIER>` (in order of search):
 
-- `"me"` (a predefined word, means the current logged-in account)
+- `"me"` (a predefined word which means the current logged-in account)
 - Account ID (always unique)
 - Email (always unique)
 - Username (always unique)
@@ -168,7 +168,7 @@ Attributes accepted as `<PRODUCT_IDENTIFIER>` (in order of search):
 
 Hierarchical identifier pattern: `{<ACCOUNT_IDENTIFIER>}{<PRODUCT_IDENTIFIER>}`
 
-Where, `<ACCOUNT_IDENTIFIER>` is an [Account identifier](#account-identifier) attribute, `<PRODUCT_IDENTIFIER>` is a [Product identifier](#product-identifier) attribute. An attribute of the hierarchical identifier must not be a hierarchical identifier itself. An attribute of the hierarchical identifier must not contain `}{` substring.
+Where `<ACCOUNT_IDENTIFIER>` is an [Account identifier](#account-identifier) attribute and `<PRODUCT_IDENTIFIER>` is a [Product identifier](#product-identifier) attribute. An attribute of the hierarchical identifier must not itself be a hierarchical identifier. An attribute of the hierarchical identifier must not contain the `}{` substring.
 
 ### Device Group Identifier ###
 
@@ -179,7 +179,7 @@ Attributes accepted as `<DEVICE_GROUP_IDENTIFIER>` (in order of search):
 
 Hierarchical identifier pattern: `{<ACCOUNT_IDENTIFIER>}{<PRODUCT_IDENTIFIER>}{<DEVICE_GROUP_IDENTIFIER}`
 
-Where, `<ACCOUNT_IDENTIFIER>` is an [Account identifier](#account-identifier) attribute, `<PRODUCT_IDENTIFIER>` is a [Product identifier](#product-identifier) attribute, `<DEVICE_GROUP_IDENTIFIER>` is a [Device Group identifier](#device-group-identifier) attribute. An attribute of the hierarchical identifier must not be a hierarchical identifier itself. An attribute of the hierarchical identifier must not contain `}{` substring.
+Where `<ACCOUNT_IDENTIFIER>` is an [Account identifier](#account-identifier) attribute, `<PRODUCT_IDENTIFIER>` is a [Product identifier](#product-identifier) attribute and `<DEVICE_GROUP_IDENTIFIER>` is a [Device Group identifier](#device-group-identifier) attribute. An attribute of the hierarchical identifier must not itself be a hierarchical identifier. An attribute of the hierarchical identifier must not contain the `}{` substring.
 
 ### Device Identifier ###
 
@@ -290,7 +290,7 @@ Displays information about the specified account.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
-| --user | -u | No | Yes | An [Account identifier](#account-identifier). If not specified, the current account is assumed  |
+| --user | -u | No | Yes | An [Account identifier](#account-identifier). If no account is specified, the current account is used |
 | --output | -z | No | Yes | Adjusts the [command's output](#command-output) |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
@@ -300,7 +300,7 @@ Displays information about the specified account.
 impt account list [--output <mode>] [--help]
 ```
 
-Displays information about the current account and all shared accounts the current one is collaborating on.
+Displays information about the current account and any other accounts on which the current account is collaborating.
 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
@@ -932,7 +932,7 @@ The command allows you to add multiple devices to the newly created log stream. 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --device | -d | No | Yes | The [device identifier](#device-identifier) of the device to be added to the log stream. This option may be repeated multiple times to specify multiple devices |
-| --dg | -g | No/[Project](#project-files) | Yes | A [Device Group identifier](#device-group-identifier). This option may be repeated multiple times to specify multiple Device Groups. Logs from all of the devices assigned to the specified Device Groups will be added to the log stream. `--device` and `--dg` options are cumulative. If neither the `--device` nor the `--dg` options are specified but there is a [Project file](#project-files) in the current directory, all of the devices assigned to the Device Group referenced by the [Project file](#project-files) are added |
+| --dg | -g | No/[Project](#project-files) | Yes | A [Device Group identifier](#device-group-identifier). This option may be included multiple times to specify multiple Device Groups. Logs from all of the devices assigned to the specified Device Groups will be added to the log stream. `--device` and `--dg` options are cumulative. If neither the `--device` nor the `--dg` options are specified but there is a [Project file](#project-files) in the current directory, all of the devices assigned to the Device Group referenced by the [Project file](#project-files) are added |
 | --output | -z | No | Yes | Adjusts the [command's output](#command-output) |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
@@ -1030,7 +1030,7 @@ Creates a new Product. Fails if a Product with the specified name already exists
 | --- | --- | --- | --- | --- |
 | --name | -n | Yes | Yes | The Product’s name. Must be unique among all of the current account’s Products |
 | --descr | -s | No | Yes | An optional description of the Product |
-| --owner | -o | No | Yes | The Product will be created in the [specified Account](#account-identifier). If not specified, the current account is assumed  |
+| --owner | -o | No | Yes | The Product will be created in the [specified Account](#account-identifier). If no account is specified, the current account is used  |
 | --output | -z | No | Yes | Adjusts the [command's output](#command-output) |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 
