@@ -140,10 +140,10 @@ The `--output` option has the following `<mode>` values:
 
 For the impCentral API entities described in this section &mdash; Account, Product, Device Group, Device and Deployment &mdash; *impt* obeys the following rules when searching one of these entities:
 
-- For every entity type, attributes must be included in a specific order (described in the subsections below).
+- *impt* defines a specific order of attributes for every entity type (described in the subsections below).
 - Some of the entity types additionally support hierarchical identifiers (described in the subsections below).
 - If an entity type supports a hierarchical identifier and the specified value matches the hierarchical identifier pattern, *impt* searches the entity by parsing the hierarchical identifier. If only one entity is found, the search is stopped.
-- Otherwise, *impt* starts from the first attribute in the list of the entity type's supported attributes and seeks the specified value for this attribute.
+- Otherwise, *impt* starts from the first attribute in the list of the entity type's supported attributes and searches the specified value for this attribute.
 - If no entity is found for this attribute, the tool searches the specified value for the next attribute in the order.
 - If at least one entity is found for the particular attribute, the search is stopped.
 - If no entity is found for all attributes, or more than one entity is found, then, depending on a particular command, that may be considered as a success (for all `list` commands) or as a fail (for all other commands).
