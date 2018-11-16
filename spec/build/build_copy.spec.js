@@ -58,7 +58,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // custom matcher for search flagged and  not flagged deployments
         let customMatcher = {
-            toContainsDeployment: function () {
+            toContainDeployment: function () {
                 return {
                     compare: function (DeploymentArray, expected) {
                         let result = { pass: false };
@@ -68,13 +68,13 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                         if (result.pass) {
                             result.message = "Deployment array contains deployment \"" + expected + "\"";
                         } else {
-                            result.message = "Deployment array not contains deployment \"" + expected + "\"";
+                            result.message = "Deployment array does not contain deployment \"" + expected + "\"";
                         }
                         return result;
                     }
                 };
             },
-            toContainsFlaggedDeployment: function () {
+            toContainFlaggedDeployment: function () {
                 return {
                     compare: function (DeploymentArray, expected) {
                         let result = { pass: false };
@@ -84,7 +84,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                         if (result.pass) {
                             result.message = "Deployment array contains flagged deployment \"" + expected + "\"";
                         } else {
-                            result.message = "Deployment array not contains flagged deployment \"" + expected + "\"";
+                            result.message = "Deployment array does not contain flagged deployment \"" + expected + "\"";
                         }
                         return result;
                     }
@@ -117,9 +117,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 then(() => Shell.cp('-Rf', `${__dirname}/fixtures/devicecode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER)).
                 then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME} -x devicecode.nut -t ${BUILD_TAG} -o ${BUILD_ORIGIN} `, (commandOut) => {
                     build_id = ImptTestHelper.parseId(commandOut);
-                    if (!build_id) fail("TestSuiteInit error: Fail create build");
+                    if (!build_id) fail("TestSuiteInit error: Failed to create build");
                     build_sha = ImptTestHelper.parseSha(commandOut);
-                    if (!build_sha) fail("TestSuiteInit error: Fail parse build sha");
+                    if (!build_sha) fail("TestSuiteInit error: Failed to parse build sha");
                     ImptTestHelper.emptyCheck(commandOut);
                 }));
         }
@@ -134,7 +134,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT2_NAME}`, ImptTestHelper.emptyCheckEx).
                 then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP2_NAME} -p ${PRODUCT2_NAME}`, (commandOut) => {
                     dg_id = ImptTestHelper.parseId(commandOut);
-                    if (!dg_id) fail("TestSuitInit error: Fail create device group");
+                    if (!dg_id) fail("TestSuitInit error: Failed to create device group");
                     ImptTestHelper.emptyCheck(commandOut);
                 }));
         }

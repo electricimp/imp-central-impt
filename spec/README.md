@@ -97,8 +97,8 @@ Scripts for the fastest tests execution:
 
 ## Limitations ##
 
-- Device remove command tests can not be execute automaticaly, because impt have no command for add device to account. Due this fact device must added to account manualy after each test.
-- Count of login key is limit up to 10. Be shure that you have enought quantity free login key slots for test execute.
+- Tests for device removal can not be executed automatically, as *impt* does not have a command to add device to account. Due to this fact, a device must be added to account manually after each test.
+- Total number of login keys is limited to 10 per account. Be sure that you have at least one "free" login key slot for tests execution.
 
 ## Tests Running Management ##
 
@@ -129,7 +129,7 @@ Every test file (test suite) includes two mandatory methods:
 - `beforeAll()` - is executed before any other code in the file. Should be used to setup an environment before the test suite execution (eg. logging in, creation a Product, etc.)
 - `afterAll()` - is executed after any other code in the file. Should be used to cleanup the environment after the test suite execution (eg. deleting the Product, etc.)
 
-Additionaly test file (test suite) includes two not mandatory methods:
+Additionally test file (test suite) includes two not mandatory methods:
 - `beforeEach()` - is executed before each test in the file. Should be used to setup an environment before the each test execution if necessary.
 - `afterEach()` - is executed after each test in the file. Should be used to cleanup the environment after the each test execution if necessary.
 

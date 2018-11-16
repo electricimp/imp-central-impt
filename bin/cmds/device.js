@@ -39,5 +39,7 @@ exports.builder = function (yargs) {
         .commandDir('device')
         .demandCommand(1, UserInteractor.ERRORS.CMD_UNKNOWN)
         .strict()
+        .version(false)
+        .describe(Options.HELP, Options.getOption(Options.HELP).describe)
         .usage(Options.getCommandGroupUsage(COMMAND, COMMAND_DESCRIPTION));
 };

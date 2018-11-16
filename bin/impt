@@ -34,10 +34,12 @@ Yargs
     .commandDir('cmds')
     .demandCommand(1, UserInteractor.ERRORS.CMD_UNKNOWN)
     .strict()
-    .version(false)
+    .version()
+    .alias(Options.VERSION, Options.getOption(Options.VERSION).alias)
+    .describe(Options.VERSION, Options.getOption(Options.VERSION).describe)
     .usage(Options.getCommandGroupUsage(null))
-    .help('help', 'Displays a description of the command. Ignores any other options.')
-    .alias('help', 'h')
+    .help(Options.HELP, Options.getOption(Options.HELP).rootDescribe)
+    .alias(Options.HELP, Options.getOption(Options.HELP).alias)
     .fail(function (msg, err, yargs) {
         console.log(yargs.help());
         if (err) {

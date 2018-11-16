@@ -66,7 +66,7 @@ describe(`impt log get test suite (output: ${outputMode ? outputMode : 'default'
                 device_name = `${config.devices[config.deviceidx]}${config.suffix}`;
                 agent_id = commandOut.agentid;
             }
-            else fail("TestSuitInit error: Fail get addition device attributes");
+            else fail("TestSuitInit error: Failed to get additional device attributes");
         }).
             then(() => ImptTestHelper.runCommand(`impt device update -d ${config.devices[config.deviceidx]} --name ${device_name}`, ImptTestHelper.emptyCheckEx)).
             then(() => ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx)).
@@ -190,7 +190,7 @@ describe(`impt log get test suite (output: ${outputMode ? outputMode : 'default'
                 ImptTestHelper.checkFailStatus(commandOut);
             }).
                 then(() => ImptTestHelper.runCommand(`impt log get ${outputMode} -d ""`, (commandOut) => {
-                    MessageHelper.checkMissingArgumentValueError(commandOut, 'device');
+                    MessageHelper.checkNonEmptyOptionValueError(commandOut, 'device');
                     ImptTestHelper.checkFailStatus(commandOut);
                 })).
                 then(done).

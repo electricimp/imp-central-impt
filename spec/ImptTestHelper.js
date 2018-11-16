@@ -208,19 +208,19 @@ class ImptTestHelper {
             then(output);
     }
 
-    static getAuthAttrs(output) {
+    static getAccountAttrs(output, owner = 'me') {
         let jsonInfo = null;
-        return ImptTestHelper.runCommand(`impt auth info -z json`, (commandOut) => {
+        return ImptTestHelper.runCommand(`impt account info -u ${owner} -z json`, (commandOut) => {
             jsonInfo = commandOut.output;
             ImptTestHelper.emptyCheck(commandOut);
         }).
             then(() => {
                 return new Promise((resolve) => {
                     let json = JSON.parse(jsonInfo);
-                    if (json.Auth) {
-                        let auth_email = json.Auth.Email;
-                        let user_id = json.Auth['Account id'];
-                        resolve({ email: auth_email, id: user_id });
+                    if (json.Account) {
+                        let account_email = json.Account.email;
+                        let account_id = json.Account.id;
+                        resolve({ email: account_email, id: account_id });
                     }
                     else
                         resolve(null);

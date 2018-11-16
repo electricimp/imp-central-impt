@@ -68,7 +68,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     device_name = `${config.devices[config.deviceidx]}${config.suffix}`;
                     agent_id = commandOut.agentid;
                 }
-                else fail("TestSuitInit error: Fail get addition device attributes");
+                else fail("TestSuitInit error: Failed to get additional device attributes");
             }).
                 then(() => ImptTestHelper.runCommand(`impt device update -d ${config.devices[config.deviceidx]} --name ${device_name}`, ImptTestHelper.emptyCheckEx)).
                 then(() => ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx)).

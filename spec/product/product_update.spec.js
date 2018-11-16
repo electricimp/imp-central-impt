@@ -76,7 +76,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         function _testSuiteInit() {
             return ImptTestHelper.runCommand(`impt product create --name ${PRODUCT_NAME} --descr "${PRODUCT_DESCR}"`, (commandOut) => {
                 product_id = ImptTestHelper.parseId(commandOut);
-                if (!product_id) fail("TestSuitInit error: Fail create product");
+                if (!product_id) fail("TestSuitInit error: Failed to create product");
                 ImptTestHelper.emptyCheck(commandOut);
             });
         }
@@ -161,7 +161,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         it('update product to empty name', (done) => {
             ImptTestHelper.runCommand(`impt product update -p ${PRODUCT_NAME} -n "" ${outputMode}`, (commandOut) => {
-                MessageHelper.checkMissingArgumentValueError(commandOut, 'name');
+                MessageHelper.checkNonEmptyOptionValueError(commandOut, 'name');
                 ImptTestHelper.checkFailStatus(commandOut);
             }).
                 then(done).
@@ -188,7 +188,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         it('update product by empty name', (done) => {
             ImptTestHelper.runCommand(`impt product update -n ${PRODUCT_NAME} -p "" `, (commandOut) => {
-                MessageHelper.checkMissingArgumentValueError(commandOut, 'product');
+                MessageHelper.checkNonEmptyOptionValueError(commandOut, 'product');
                 ImptTestHelper.checkFailStatus(commandOut);
             }).
                 then(done).

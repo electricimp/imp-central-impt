@@ -65,13 +65,13 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
                 then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
                     dg_id = ImptTestHelper.parseId(commandOut);
-                    if (!dg_id) fail("TestSuitInit error: Fail create device group");
+                    if (!dg_id) fail("TestSuitInit error: Failed to create device group");
                     ImptTestHelper.emptyCheck(commandOut);
                 })).
                 then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_DST_NAME}`, ImptTestHelper.emptyCheckEx)).
                 then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_DST_NAME} -p ${PRODUCT_DST_NAME}`, (commandOut) => {
                     dg_dst_id = ImptTestHelper.parseId(commandOut);
-                    if (!dg_dst_id) fail("TestSuitInit error: Fail create device group");
+                    if (!dg_dst_id) fail("TestSuitInit error: Failed to create device group");
                     ImptTestHelper.emptyCheck(commandOut);
                 }));
         }

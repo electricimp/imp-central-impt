@@ -24,22 +24,38 @@
 
 'use strict';
 
-const Options = require('../../lib/util/Options');
-const UserInteractor = require('../../lib/util/UserInteractor');
+const Account = require('../../../lib/Account');
+const Options = require('../../../lib/util/Options');
 
-const COMMAND = 'log';
-const COMMAND_DESCRIPTION = 'Logs manipulation commands.';
+const COMMAND = 'info';
+const COMMAND_SECTION = 'account';
+const COMMAND_SHORT_DESCR = 'Displays information about the specified account.';
+const COMMAND_DESCRIPTION = COMMAND_SHORT_DESCR;
 
 exports.command = COMMAND;
 
-exports.describe = COMMAND_DESCRIPTION;
+exports.describe = COMMAND_SHORT_DESCR;
 
 exports.builder = function (yargs) {
+    const options = Options.getOptions({
+        [Options.USER] : {
+            demandOption : false,
+            describe: 'An Account identifier. If not specified, the current account is assumed.',
+            _usage: '<ACCOUNT_IDENTIFIER>',
+            default: 'me'
+        },
+        [Options.OUTPUT] : false
+    });
     return yargs
-        .commandDir('log')
-        .demandCommand(1, UserInteractor.ERRORS.CMD_UNKNOWN)
-        .strict()
-        .version(false)
-        .describe(Options.HELP, Options.getOption(Options.HELP).describe)
-        .usage(Options.getCommandGroupUsage(COMMAND, COMMAND_DESCRIPTION));
+        .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
+        .options(options)
+        .check(function (argv) {
+            return Options.checkOptions(argv, options);
+        })
+        .strict();
+};
+
+exports.handler = function (argv) {
+    const options = new Options(argv);
+    new Account(options).info(options);
 };

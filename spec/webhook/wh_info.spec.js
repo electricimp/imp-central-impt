@@ -67,12 +67,12 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             return ImptTestHelper.runCommand(`impt product create --name ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
                 then(() => ImptTestHelper.runCommand(`impt dg create --name ${DG_NAME} -p ${PRODUCT_NAME} `, (commandOut) => {
                     dg_id = ImptTestHelper.parseId(commandOut);
-                    if (!dg_id) fail("TestSuitInit error: Fail create device group");
+                    if (!dg_id) fail("TestSuitInit error: Failed to create device group");
                     ImptTestHelper.emptyCheck(commandOut);
                 })).
                 then(() => ImptTestHelper.runCommand(`impt webhook create --dg ${DG_NAME} --url ${WH_URL} --event deployment --mime json `, (commandOut) => {
                     wh_id = ImptTestHelper.parseId(commandOut);
-                    if (!wh_id) fail("TestSuitInit error: Fail create webhook");
+                    if (!wh_id) fail("TestSuitInit error: Failed to create webhook");
                 ImptTestHelper.emptyCheck(commandOut);
                 }));
         }
