@@ -527,7 +527,7 @@ If you want to use this feature, please read the [Commands Manual](./CommandsMan
 
 When it is hard to uniquely specify an entity without knowing the entity ID, use [entity listing](#entity-listing-and-ownership) commands to view the entities basing on some attributes, choose the required entity and use its entity ID in the required command.
 
-For some of the entities (eg. a Product, a Device Group) *impt* provides an ability to uniquely identify them by their names &mdash; using hierarchical identifiers. The format and details of every concrete hierarchical identifier are described in the [Commands Manual](./CommandsManual.md#entity-identification). This is convinient to use in scripts &mdash; you can pass a name of an entity and call all manipulation commands with that entity (create, update, delete, etc.) using that name only, without obtaining an ID of the created entity.
+For some impCentral entities, such as Products and Device Groups, *impt* provides the ability, when using hierarchical identifiers, to identify them solely by their name. This is particularly helpful when you are developing scripts: you can pass the name of an entity and then call all manipulation commands with that entity (create, update, delete, etc.) without first obtaining the ID of the entity. The format and details of every concrete hierarchical identifier are described in the [Commands Manual](./CommandsManual.md#entity-identification). 
 
 ##### Example 1: An entity is found successfully**
 
@@ -576,7 +576,7 @@ Impossible to execute the command.
 IMPT COMMAND FAILS
 ```
 
-##### Example 3: Use a hierarchical identifier #####
+##### Example 3: Using a hierarchical identifier #####
 
 ```bash
 > impt dg info --dg {me}{TestProduct}{TestDG}
@@ -604,13 +604,13 @@ Many groups of commands contain a command to list entities: [Products](./Command
 
 Some filter options have the same name and meaning across list commands. They are summarized [here](./CommandsManual.md#common-filter-options). A particular command may have specific filter options too. Filter options applicable to every concrete list command are detailed in the [Command Description](./CommandsManual.md#command-description).
 
-For some list commands, the default returned list includes entities owned by the current account as well as entities owned by other accounts currently available to you (all shared accounts the current one is collaborating on). For other list commands, only the entities owned by the current account are returned. This is impCentral API-specific behavior not controlled by *impt*. But you can always specify a concrete Account ID, email or username as a value of the `--owner <value>` filter option (alias: `-o`) and get the entities owned by that account, if they are available to you as to a collaborator. Also, you can always specify the `--owner me` filter option and get the entities owned by you only.
+For some list commands, the default returned list includes not only entities owned by the current account but also entities owned by accounts for which the current account is a collaborator. For other list commands, only the entities owned by the current account are returned. This is impCentral API-specific behavior not controlled by *impt*. However, you can always specify a concrete Account ID, email or username as a value of the `--owner <value>` filter option (alias: `-o`) and get the entities owned by the specified account, if they are available to you as to a collaborator. You can specify the `--owner me` filter option to get only your own entities.
 
 As a general rule, if an entity is owned by the current logged-in account, information about Owner is not displayed. If an entity is owned by another account, then Account ID and email of the Owner are displayed for the entity. This rule applies to all *impt* commands which display details of an entity: entity listing, [entity information](#entity-information) and other.
 
 To display the Account ID and email of the current account, use [`impt auth info`](./CommandsManual.md#auth-info).
 
-To display the Account ID, email and other attributes of any available account, use [Account Information Commands](./CommandsManual.md#account-information-commands) &mdash; [`impt account list`](./CommandsManual.md#account-list), [`impt account info`](./CommandsManual.md#account-info).
+To display the Account ID, email and other attributes of any available account, use the [Account Information Commands](./CommandsManual.md#account-information-commands) [`impt account list`](./CommandsManual.md#account-list) and [`impt account info`](./CommandsManual.md#account-info).
 
 ##### Example 1: List all Products owned by me and my collaborators #####
 
@@ -706,7 +706,7 @@ Device Group:
 IMPT COMMAND SUCCEEDS
 ```
 
-##### Example 4: List all available accounts #####
+##### Example 4: List all available accounts I have access to #####
 
 ```bash
 > impt account list
