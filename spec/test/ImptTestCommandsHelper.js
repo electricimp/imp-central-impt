@@ -66,7 +66,7 @@ class ImptTestCommandsHelper {
                 dg_id = ImptTestHelper.parseId(commandOut);
                 ImptTestHelper.checkSuccessStatus(commandOut)
             })).
-            hen(() => ImptTestHelper.runCommand(
+            then(() => ImptTestHelper.runCommand(
                 `impt device assign --device ${config.devices[config.deviceidx]} --dg ${TEST_DG_NAME} --confirmed`, ImptTestHelper.checkSuccessStatus)).
             then(() => Promise.resolve({ productId: product_id, dgId: dg_id })).
             then(output);
