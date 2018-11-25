@@ -82,7 +82,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         it('loginkey create', (done) => {
             ImptTestHelper.runCommand(`impt loginkey create --pwd ${config.password} --descr "${LOGINKEY_DESCR}" ${outputMode}`, (commandOut) => {
-                loginkey_id = ImptTestHelper.parseId(commandOut);
+                loginkey_id = ImptTestHelper.parseLoginkey(commandOut);
                 expect(loginkey_id).not.toBeNull;
                 _checkSuccessCreateLoginkeyMessage(commandOut, loginkey_id);
                 ImptTestHelper.checkAttribute(commandOut, ImptTestHelper.ATTR_ID, loginkey_id);
@@ -96,7 +96,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         it('loginkey create without description', (done) => {
             ImptTestHelper.runCommand(`impt loginkey create --pwd ${config.password} ${outputMode}`, (commandOut) => {
-                loginkey_id = ImptTestHelper.parseId(commandOut);
+                loginkey_id = ImptTestHelper.parseLoginkey(commandOut);
                 expect(loginkey_id).not.toBeNull;
                 _checkSuccessCreateLoginkeyMessage(commandOut, loginkey_id);
                 ImptTestHelper.checkAttribute(commandOut, ImptTestHelper.ATTR_ID, loginkey_id);

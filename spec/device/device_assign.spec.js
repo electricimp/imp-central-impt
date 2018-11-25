@@ -48,6 +48,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         beforeAll((done) => {
             ImptTestHelper.init().
+                then(() => ImptTestHelper.checkDeviceStatus(config.devices[config.deviceidx])).
                 then(_testSuiteCleanUp).
                 then(_testSuiteInit).
                 then(done).
@@ -63,7 +64,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // prepare environment for device assign command testing
         function _testSuiteInit() {
-            return ImptTestHelper.getDeviceAttrs(PRODUCT_NAME,DEVICE_GROUP_NAME,(commandOut) => {
+            return ImptTestHelper.getDeviceAttrs(PRODUCT_NAME, DEVICE_GROUP_NAME, (commandOut) => {
                 if (commandOut && commandOut.mac) {
                     device_mac = commandOut.mac;
                     old_name = commandOut.name;

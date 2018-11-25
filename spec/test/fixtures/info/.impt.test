@@ -1,0 +1,11 @@
+{
+  "deviceGroupId": "not-exist-device-group",
+  "timeout": 30,
+  "stopOnFail": false,
+  "allowDisconnect": false,
+  "builderCache": false,
+  "testFiles": [
+    "testfile.nut",
+    "testfile2.nut"
+  ]
+}

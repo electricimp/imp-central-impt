@@ -30,7 +30,7 @@ const ImptTestHelper = require('../ImptTestHelper');
 const ImptTestCommandsHelper = require('./ImptTestCommandsHelper');
 
 // Deep equal tests
-fdescribe('impt test run for asserts scenario >', () => {
+describe('impt test run for asserts scenario >', () => {
     beforeAll((done) => {
         ImptTestHelper.init().
             then(ImptTestCommandsHelper.cleanUpTestEnvironment).
@@ -41,7 +41,7 @@ fdescribe('impt test run for asserts scenario >', () => {
 
     afterAll((done) => {
         ImptTestCommandsHelper.cleanUpTestEnvironment().
-            then(() => ImptTestHelper.cleanUp).
+            then(ImptTestHelper.cleanUp).
             then(done).
             catch(error => done.fail(error));
     }, ImptTestHelper.TIMEOUT);

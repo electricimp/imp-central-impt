@@ -45,6 +45,7 @@ describe(`impt log get test suite (output: ${outputMode ? outputMode : 'default'
 
     beforeAll((done) => {
         ImptTestHelper.init().
+            then(() => ImptTestHelper.checkDeviceStatus(config.devices[config.deviceidx])).
             then(_testSuiteInit).
             then(done).
             catch(error => done.fail(error));

@@ -37,15 +37,13 @@ const outputMode = '-z json';
 // Runs 'impt loginkey list' command with different combinations of options,
 describe(`impt loginkey list test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
     let loginkey_id = null;
-    let loginkey2_id = null;
 
     // custom matcher for search Loginkey with expected properties in Loginkey array
     let customMatcher = {
         toContainLoginkey: function (util, customEqualityTesters) {
             return {
-                compare: function (LoginKeyArray, expected) {
-                    let result = {};
-                    if (expected === undefined) expected = {};
+                compare: function (LoginKeyArray, expected = {}) {
+                    let result = { pass: false };
                     lodash.map(LoginKeyArray, function (LoginKeyItem) {
                         lodash.map(LoginKeyItem, function (LoginKeyProperties) {
                             let compareFlag = true;
@@ -79,22 +77,16 @@ describe(`impt loginkey list test suite (output: ${outputMode ? outputMode : 'de
 
     // delete all entities using in impt loginkey list test suite
     function _testSuiteCleanUp() {
-        return ImptTestHelper.runCommand(`impt loginkey delete --lk ${loginkey_id} --pwd ${config.password} --confirmed`, ImptTestHelper.emptyCheckEx).
-            then(() => ImptTestHelper.runCommand(`impt loginkey delete --lk ${loginkey2_id} --pwd ${config.password} --confirmed`, ImptTestHelper.emptyCheckEx));
+        return ImptTestHelper.runCommand(`impt loginkey delete --lk ${loginkey_id} --pwd ${config.password} --confirmed`, ImptTestHelper.emptyCheckEx);
     }
 
     // prepare test environment for impt loginkey list test suite
     function _testSuiteInit() {
         return ImptTestHelper.runCommand(`impt loginkey create --pwd ${config.password} --descr "${LOGINKEY_DESCR}"`, (commandOut) => {
-            loginkey_id = ImptTestHelper.parseId(commandOut);
+            loginkey_id = ImptTestHelper.parseLoginkey(commandOut);
             if (!loginkey_id) fail("TestSuitInit error: Failed to create loginkey");
             ImptTestHelper.emptyCheck(commandOut);
-        }).
-            then(() => ImptTestHelper.runCommand(`impt loginkey create --pwd ${config.password}`, (commandOut) => {
-                loginkey2_id = ImptTestHelper.parseId(commandOut);
-                if (!loginkey2_id) fail("TestSuitInit error: Failed to create loginkey");
-                ImptTestHelper.emptyCheck(commandOut);
-            }));
+        });
     }
 
     // check loginkey exist in loginkey list
@@ -108,7 +100,6 @@ describe(`impt loginkey list test suite (output: ${outputMode ? outputMode : 'de
         ImptTestHelper.runCommand(`impt loginkey list -z json`, (commandOut) => {
             _checkLoginkeyExist(commandOut);
             _checkLoginkeyExist(commandOut, { id: loginkey_id, description: LOGINKEY_DESCR });
-            _checkLoginkeyExist(commandOut, { id: loginkey2_id });
             ImptTestHelper.checkSuccessStatus(commandOut);
         }).
             then(done).

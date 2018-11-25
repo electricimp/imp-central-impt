@@ -59,7 +59,7 @@ describe(`impt device info test suite (output: ${outputMode ? outputMode : 'defa
 
     // prepare environment for device info command testing
     function _testSuiteInit() {
-        return ImptTestHelper.getDeviceAttrs(PRODUCT_NAME,DEVICE_GROUP_NAME,(commandOut) => {
+        return ImptTestHelper.getDeviceAttrs(PRODUCT_NAME, DEVICE_GROUP_NAME, (commandOut) => {
             if (commandOut && commandOut.mac) {
                 device_mac = commandOut.mac;
                 old_name = commandOut.name;
@@ -158,16 +158,16 @@ describe(`impt device info test suite (output: ${outputMode ? outputMode : 'defa
 
         it('unassigned device info', (done) => {
             ImptTestHelper.runCommand(`impt device unassign -d ${config.devices[config.deviceidx]}`, ImptTestHelper.emptyCheckEx).
-                then(()=>ImptTestHelper.runCommand(`impt device info --device ${config.devices[config.deviceidx]} -z json`, (commandOut) => {
-                let json = JSON.parse(commandOut.output);
-                expect(json.Device.id).toBe(config.devices[config.deviceidx]);
-                expect(json.Device.name).toBe(device_name);
-                expect(json.Device.mac_address).toBe(device_mac);
-                expect(json.Device.agent_id).toBeEmptyString();
-                expect(json.Device['Device Group']).toBeUndefined();
-                expect(json.Device['Product']).toBeUndefined();
-                ImptTestHelper.checkSuccessStatus(commandOut);
-            })).
+                then(() => ImptTestHelper.runCommand(`impt device info --device ${config.devices[config.deviceidx]} -z json`, (commandOut) => {
+                    let json = JSON.parse(commandOut.output);
+                    expect(json.Device.id).toBe(config.devices[config.deviceidx]);
+                    expect(json.Device.name).toBe(device_name);
+                    expect(json.Device.mac_address).toBe(device_mac);
+                    expect(json.Device.agent_id).toBeEmptyString();
+                    expect(json.Device['Device Group']).toBeUndefined();
+                    expect(json.Device['Product']).toBeUndefined();
+                    ImptTestHelper.checkSuccessStatus(commandOut);
+                })).
                 then(done).
                 catch(error => done.fail(error));
         });

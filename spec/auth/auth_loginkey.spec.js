@@ -43,7 +43,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         beforeAll((done) => {
             ImptTestHelper.init(true).
-                then(_createLoginkey).
+                then(() => ImptAuthCommandsHelper.createLoginkey((commandOut) => {
+                    loginkey = commandOut;
+                })).
                 then(ImptAuthCommandsHelper.localLogout).
                 then(ImptAuthCommandsHelper.globalLogout).
                 then(done).
@@ -52,30 +54,13 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         afterAll((done) => {
             ImptAuthCommandsHelper.localLogin().
-                then(_deleteLoginkey).
+                then(() => ImptAuthCommandsHelper.deleteLoginkey(loginkey)).
                 then(ImptAuthCommandsHelper.localLogout).
                 then(ImptAuthCommandsHelper.globalLogout).
                 then(ImptTestHelper.cleanUp).
                 then(done).
                 catch(error => done.fail(error));
         }, ImptTestHelper.TIMEOUT);
-
-        function _createLoginkey() {
-            return ImptTestHelper.runCommand(`impt loginkey create --pwd ${config.password}`, (commandOut) => {
-                const idMatcher = commandOut.output.match(new RegExp(`[0-9a-z]{16}`));
-                if (idMatcher && idMatcher.length > 0) {
-                    loginkey = idMatcher[0];
-                }
-                else fail("TestSuitInit error: Failed to create loginkey");
-                ImptTestHelper.emptyCheck(commandOut);
-            });
-        }
-
-        function _deleteLoginkey() {
-            return ImptTestHelper.runCommand(`impt loginkey delete --lk ${loginkey} --pwd ${config.password} -q`,
-                ImptTestHelper.emptyCheckEx);
-        }
-
 
         function _checkLoginInfo(expInfo = {}) {
             return ImptTestHelper.runCommand(`impt auth info`, (commandOut) => {

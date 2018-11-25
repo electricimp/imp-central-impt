@@ -37,6 +37,14 @@ const TEST_DG_NAME = `__impt_test_run_dg${config.suffix}`;
 // Contains common methods for impt test commands execution:
 // creating test Product and DG, creating test config, check test run status
 class ImptTestCommandsHelper {
+    static get TEST_PRODUCT_NAME() {
+        return TEST_PRODUCT_NAME;
+    }
+
+    static get TEST_DG_NAME() {
+        return TEST_DG_NAME;
+    }
+
     // Creates test Product and DG, copies test files to the tests execution folder,
     // creates test config.
     // Keys of testCreateOptions are optional 'impt test run' command options
@@ -47,13 +55,21 @@ class ImptTestCommandsHelper {
     }
 
     // Creates test Product and DG
-    static createTestProductAndDG() {
-        return ImptTestHelper.runCommand(`impt product create --name ${TEST_PRODUCT_NAME}`, ImptTestHelper.checkSuccessStatus).
-            then(() => ImptTestHelper.runCommand(
-                `impt dg create --name ${TEST_DG_NAME} --product ${TEST_PRODUCT_NAME}`, ImptTestHelper.checkSuccessStatus)).
-            then(() => Promise.all(config.devices.map(deviceId => 
-                ImptTestHelper.runCommand(
-                    `impt device assign --device ${deviceId} --dg ${TEST_DG_NAME} --confirmed`, ImptTestHelper.checkSuccessStatus))));
+    static createTestProductAndDG(output) {
+        let product_id = null;
+        let dg_id = null;
+        return ImptTestHelper.runCommand(`impt product create --name ${TEST_PRODUCT_NAME}`, (commandOut) => {
+            product_id = ImptTestHelper.parseId(commandOut);
+            ImptTestHelper.checkSuccessStatus(commandOut)
+        }).
+            then(() => ImptTestHelper.runCommand(`impt dg create --name ${TEST_DG_NAME} --product ${TEST_PRODUCT_NAME}`, (commandOut) => {
+                dg_id = ImptTestHelper.parseId(commandOut);
+                ImptTestHelper.checkSuccessStatus(commandOut)
+            })).
+            hen(() => ImptTestHelper.runCommand(
+                `impt device assign --device ${config.devices[config.deviceidx]} --dg ${TEST_DG_NAME} --confirmed`, ImptTestHelper.checkSuccessStatus)).
+            then(() => Promise.resolve({ productId: product_id, dgId: dg_id })).
+            then(output);
     }
 
     // Copies test files to the tests execution folder and creates test config.
@@ -65,7 +81,7 @@ class ImptTestCommandsHelper {
             const optionValue = testCreateOptions[optionName];
             let option = '';
             if (optionValue) {
-                option = Array.isArray(optionValue) ? 
+                option = Array.isArray(optionValue) ?
                     optionValue.reduce((opts, val) => `${opts} --${optionName} ${val}`, '') :
                     `--${optionName} ${optionValue}`;
             }
@@ -90,6 +106,35 @@ class ImptTestCommandsHelper {
     // Checks failure status of 'impt test run' command
     static checkTestFailStatus(commandOut) {
         expect(commandOut.output).toMatch('Testing failed');
+    }
+
+    // Copy files to test execution folder
+    static copyFiles(testFilesPath, file = '*') {
+        Shell.cp('-rf', `${__dirname}/${testFilesPath}/${file}`, ImptTestHelper.TESTS_EXECUTION_FOLDER);
+        return Promise.resolve();
+    }
+
+    // Check test info
+    static checkTestInfo(expectInfo = {}) {
+        return ImptTestHelper.runCommand(`impt test info -z json`, (commandOut) => {
+            const json = JSON.parse(commandOut.output);
+            expect(json['Test Configuration']).toBeDefined;
+            // Mandatory attrs check
+            (expectInfo.testFiles ? expectInfo.testFiles : ["*.test.nut", "tests/**/*.test.nut"]).map(testFile =>
+                expect(json['Test Configuration']['Test files']).toContain(testFile));
+            expect(json['Test Configuration']['Stop on failure']).toBe(expectInfo.stopOnFailure ? expectInfo.stopOnFailure : false);
+            expect(json['Test Configuration']['Allow disconnect']).toBe(expectInfo.allowDisconnect ? expectInfo.allowDisconnect : false);
+            expect(json['Test Configuration']['Builder cache']).toBe(expectInfo.builderCashe ? expectInfo.builderCashe : false);
+            expect(json['Test Configuration']['Timeout']).toBe(expectInfo.timeout ? expectInfo.timeout : 30);
+            expect(json['Test Configuration']['Device Group'].id).toBe(expectInfo.dgId ? expectInfo.dgId : json['Test Configuration']['Device Group'].id);
+            expect(json['Test Configuration']['Device Group'].name).toBe(expectInfo.dgName ? expectInfo.dgName : json['Test Configuration']['Device Group'].name);
+            // not mandatory attrs check
+            if (expectInfo.deviceFile) expect(json['Test Configuration']['Device file']).toBe(expectInfo.deviceFile);
+            if (expectInfo.agentFile) expect(json['Test Configuration']['Agent file']).toBe(expectInfo.agentFile);
+            if (expectInfo.githubConfig) expect(json['Test Configuration']['Github config']).toBe(expectInfo.githubConfig);
+            if (expectInfo.builderConfig) expect(json['Test Configuration']['Builder config']).toBe(expectInfo.builderConfig);
+            ImptTestHelper.checkSuccessStatus(commandOut);
+        });
     }
 }
 

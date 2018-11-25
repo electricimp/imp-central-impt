@@ -58,6 +58,21 @@ class ImptAuthCommandsHelper {
         return ImptTestHelper.runCommand(`impt auth login --lk ${loginkey} --local --confirmed`,
             ImptTestHelper.emptyCheckEx);
     }
+
+    static createLoginkey(output) {
+        let loginkey = null;
+        return ImptTestHelper.runCommand(`impt loginkey create --pwd ${config.password}`, (commandOut) => {
+            loginkey = ImptTestHelper.parseLoginkey(commandOut);
+            ImptTestHelper.emptyCheck(commandOut);
+        }).
+            then(() => Promise.resolve(loginkey)).
+            then(output);
+    }
+
+    static deleteLoginkey(loginkey) {
+        return loginkey ? ImptTestHelper.runCommand(`impt loginkey delete --lk ${loginkey} --pwd ${config.password} -q`,
+            ImptTestHelper.emptyCheckEx) : Promise.resolve();
+    }
 }
 
 module.exports = ImptAuthCommandsHelper;

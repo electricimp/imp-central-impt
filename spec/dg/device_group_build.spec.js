@@ -81,6 +81,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         beforeAll((done) => {
             ImptTestHelper.init().
+                then(() => ImptTestHelper.checkDeviceStatus(config.devices[config.deviceidx])).
                 then(_testSuiteCleanUp).
                 then(_testSuiteInit).
                 then(() => jasmine.addMatchers(customMatcher)).

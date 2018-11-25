@@ -33,7 +33,7 @@ const Utils = require('../lib/util/Utils');
 const UserInteractor = require('../lib/util/UserInteractor');
 const child_process = require('child_process');
 
-const TIMEOUT_MS = 300000;
+const TIMEOUT_MS = 999999;
 const TESTS_EXECUTION_FOLDER = `${__dirname}/../__test${process.env.IMPT_FOLDER_SUFFIX ? process.env.IMPT_FOLDER_SUFFIX : ''}`;
 const KEY_ANSWER = {
     CTRL_C: '\x03',
@@ -311,6 +311,26 @@ class ImptTestHelper {
             return idMatcher[1];
         }
         else return null;
+    }
+
+    // parse loginkey id from command output and return id value if success, otherwise return null
+    static parseLoginkey(commandOut) {
+        if (commandOut.output.match('Account Limit Reached')) {
+            console.log('Error: No free loginkey slot');
+            return null;
+        }
+        const idMatcher = commandOut.output.match(new RegExp(`[0-9a-z]{16}`));
+        if (idMatcher && idMatcher.length > 0) {
+            return idMatcher[0];
+        }
+        else return null;
+    }
+
+    static checkDeviceStatus(device) {
+        return ImptTestHelper.runCommand(`impt device info --device ${device} `, (commandOut) => {
+            if (commandOut.output.match('not found')) console.log(`Error: Device id:${device} not found`);
+            if (commandOut.output.match(/device_online:\\s+false/)) console.log(`Error: Device id:${device} is offline`);
+        });
     }
 }
 

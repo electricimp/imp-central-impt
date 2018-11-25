@@ -62,7 +62,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         // prepare test environment for impt loginkey info test suite
         function _testSuiteInit() {
             return ImptTestHelper.runCommand(`impt loginkey create --pwd ${config.password} --descr "${LOGINKEY_DESCR}" ${outputMode}`, (commandOut) => {
-                loginkey_id = ImptTestHelper.parseId(commandOut);
+                loginkey_id = ImptTestHelper.parseLoginkey(commandOut);
                 if (!loginkey_id) fail("TestSuitInit error: Failed to create loginkey");
                 ImptTestHelper.emptyCheck(commandOut);
             });
