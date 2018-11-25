@@ -29,7 +29,7 @@ To avoid collisions, every thread should use it's own folder. So, you must speci
 
 The following groups of tests do not require a device and can be always executed in parallel: `auth`, `account`, `loginkey`, `product`, `project`, `webhook`, `help`.
 
-The following groups of tests require a device and cannot be executed in parallel on the same device: `build`, `log`, `device`, `dg`. They should be executed either sequentially, or in parallel using different devices (use **IMPT_DEVICE_IDX** variable to specify a concrete device for every thread).
+The following groups of tests require a device and cannot be executed in parallel on the same device: `build`, `log`, `device`, `dg`,`test`. They should be executed either sequentially, or in parallel using different devices (use **IMPT_DEVICE_IDX** variable to specify a concrete device for every thread).
 
 ### Example ###
 
@@ -40,7 +40,7 @@ Scripts for the fastest tests execution:
 ##### On Windows #####
 
 ```
-    start cmd /k "npm test --filter **/build/*.spec.js  **/log/*.spec.js **/dg/*.spec.js **/device/*.spec.js IMPT_FOLDER_SUFFIX=build"
+    start cmd /k "npm test --filter **/build/*.spec.js  **/log/*.spec.js **/dg/*.spec.js **/device/*.spec.js **/test/*.spec.js IMPT_FOLDER_SUFFIX=build"
     start cmd /k "npm test --filter **/auth/*.spec.js IMPT_FOLDER_SUFFIX=auth"
     start cmd /k "npm test --filter **/account/*.spec.js IMPT_FOLDER_SUFFIX=account"
     start cmd /k "npm test --filter **/loginkey/*.spec.js IMPT_FOLDER_SUFFIX=loginkey"
@@ -54,7 +54,7 @@ Scripts for the fastest tests execution:
 
 ```
     #/bin/sh
-    npm test --filter **/build/*.spec.js  **/log/*.spec.js **/dg/*.spec.js **/device/*.spec.js IMPT_FOLDER_SUFFIX=build &
+    npm test --filter **/build/*.spec.js  **/log/*.spec.js **/dg/*.spec.js **/device/*.spec.js **/test/*.spec.js IMPT_FOLDER_SUFFIX=build &
     npm test --filter **/auth/*.spec.js IMPT_FOLDER_SUFFIX=auth &
     npm test --filter **/account/*.spec.js IMPT_FOLDER_SUFFIX=account &
     npm test --filter **/loginkey/*.spec.js IMPT_FOLDER_SUFFIX=loginkey &
@@ -64,7 +64,7 @@ Scripts for the fastest tests execution:
     npm test --filter **/help/*.spec.js IMPT_FOLDER_SUFFIX=help
 ```
 
-#### Using 4 devices ####
+#### Using 5 devices ####
 
 ##### On Windows #####
 
@@ -73,6 +73,7 @@ Scripts for the fastest tests execution:
     start cmd /k "npm test --filter **/log/*.spec.js IMPT_FOLDER_SUFFIX=log IMPT_DEVICE_IDX=1"
     start cmd /k "npm test --filter **/dg/*.spec.js IMPT_FOLDER_SUFFIX=dg IMPT_DEVICE_IDX=2"
     start cmd /k "npm test --filter **/device/*.spec.js IMPT_FOLDER_SUFFIX=device IMPT_DEVICE_IDX=3"
+    start cmd /k "npm test --filter **/test/*.spec.js IMPT_FOLDER_SUFFIX=test IMPT_DEVICE_IDX=4"
     start cmd /k "npm test --filter **/auth/*.spec.js IMPT_FOLDER_SUFFIX=auth"
     start cmd /k "npm test --filter **/account/*.spec.js IMPT_FOLDER_SUFFIX=account"
     start cmd /k "npm test --filter **/loginkey/*.spec.js IMPT_FOLDER_SUFFIX=loginkey"
@@ -90,6 +91,7 @@ Scripts for the fastest tests execution:
     npm test --filter **/log/*.spec.js IMPT_FOLDER_SUFFIX=log IMPT_DEVICE_IDX=1 &
     npm test --filter **/dg/*.spec.js IMPT_FOLDER_SUFFIX=dg IMPT_DEVICE_IDX=2 &
     npm test --filter **/device/*.spec.js IMPT_FOLDER_SUFFIX=device IMPT_DEVICE_IDX=3 &
+    npm test --filter **/test/*.spec.js IMPT_FOLDER_SUFFIX=test IMPT_DEVICE_IDX=4 &
     npm test --filter **/auth/*.spec.js IMPT_FOLDER_SUFFIX=auth &
     npm test --filter **/account/*.spec.js IMPT_FOLDER_SUFFIX=account &
     npm test --filter **/loginkey/*.spec.js IMPT_FOLDER_SUFFIX=loginkey &
