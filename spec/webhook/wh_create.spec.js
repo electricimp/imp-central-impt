@@ -152,8 +152,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         });
 
         it('webhook create with not exist dg', (done) => {
-            ImptTestHelper.runCommand(`impt webhook create --dg ${DG_NAME_2} --url ${WH_URL} --event deployment --mime json ${outputMode}`, (commandOut) => {
-                MessageHelper.checkEntityNotFoundError(commandOut, Identifier.ENTITY_TYPE.TYPE_DEVICE_GROUP, DG_NAME_2);
+            ImptTestHelper.runCommand(`impt webhook create --dg not-exist-device-group --url ${WH_URL} --event deployment --mime json ${outputMode}`, (commandOut) => {
+                MessageHelper.checkEntityNotFoundError(commandOut, Identifier.ENTITY_TYPE.TYPE_DEVICE_GROUP, 'not-exist-device-group');
                 ImptTestHelper.checkFailStatus(commandOut);
             }).
                 then(done).
