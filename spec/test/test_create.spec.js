@@ -81,7 +81,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     catch(error => done.fail(error));
             });
 
-            fit('test create by dg id with options', (done) => {
+            it('test create by dg id with options', (done) => {
                 ImptTestHelper.runCommand(`impt test create --dg ${dg_id}  -x devicecode.nut -y agentcode.nut -f testfile.nut -f testfile2.nut -i github.impt -j builder.impt -q ${outputMode}`, ImptTestHelper.checkSuccessStatus).
                     then(() => ImptTestCommandsHelper.checkTestInfo({
                         dgId: dg_id,
