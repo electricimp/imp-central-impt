@@ -20,7 +20,6 @@ The normal font indicates positive tests, the **bold font** indicates negative t
 - Positive tests for `impt log stream`.
 - Tests for interactive user input.
 - Tests for builds identification by `sha` attribute.
-- Tests for `impt test` command group.
 
 ## List Of Tested Commands ##
 
