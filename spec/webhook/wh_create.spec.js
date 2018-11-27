@@ -33,7 +33,6 @@ const Util = require('util');
 const UserInterractor = require('../../lib/util/UserInteractor');
 const PRODUCT_NAME = `__impt_wh_product${config.suffix}`;
 const DG_NAME = `__impt_wh_device_group${config.suffix}`;
-const DG_NAME_2 = `__impt_wh_device_group_2${config.suffix}`;
 const WH_URL = `http://example.com/wc/${config.suffix}`;
 
 // Test suite for 'impt webhook create' command.
@@ -68,8 +67,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // delete all entities using in impt webhook create test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommand(`impt product delete --product ${PRODUCT_NAME} --force --confirmed`, ImptTestHelper.emptyCheckEx).
-                then(() => ImptTestHelper.runCommand(`impt dg delete --dg ${DG_NAME_2} -f `, ImptTestHelper.emptyCheckEx));
+            return ImptTestHelper.runCommand(`impt product delete --product ${PRODUCT_NAME} --force --confirmed`, ImptTestHelper.emptyCheckEx);
         }
 
         // prepare test environment for impt webhook create test suite
