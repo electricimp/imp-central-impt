@@ -49,7 +49,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             return ImptTestCommandsHelper.copyFiles('fixtures/github');
         }
 
-        fdescribe(`test github positive tests >`, () => {
+        describe(`test github positive tests >`, () => {
             it('create github config', (done) => {
                 ImptTestHelper.runCommand(`impt test github -i github -u githubuser -w githubpassword ${outputMode}`, (commandOut) => {
                     ImptTestHelper.checkSuccessStatus(commandOut);
