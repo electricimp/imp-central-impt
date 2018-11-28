@@ -247,6 +247,12 @@ class ImptTestHelper {
         expect(file).toEqual(file2);
     }
 
+    static checkFileContainsString(fileName, string) {
+        expect(Shell.test('-e', `${TESTS_EXECUTION_FOLDER}/${fileName}`)).toBe(true);
+        let file = Shell.cat(`${TESTS_EXECUTION_FOLDER}/${fileName}`);
+        expect(file).toMatch(string);
+    }
+
     static projectCreate(dg, dfile = 'device.nut', afile = 'agent.nut') {
         return ImptTestHelper.runCommand(`impt project link -g ${dg} -x ${dfile}  -y ${afile} -q`, ImptTestHelper.emptyCheckEx);
     }

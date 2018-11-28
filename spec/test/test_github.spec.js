@@ -49,12 +49,13 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             return ImptTestCommandsHelper.copyFiles('fixtures/github');
         }
 
-        describe(`test github positive tests >`, () => {
+        fdescribe(`test github positive tests >`, () => {
             it('create github config', (done) => {
                 ImptTestHelper.runCommand(`impt test github -i github -u githubuser -w githubpassword ${outputMode}`, (commandOut) => {
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.checkFileEqual('github', 'github.impt')).
+                    then(() => ImptTestHelper.checkFileContainsString('github', '"githubUser": "githubuser"')).
+                    then(() => ImptTestHelper.checkFileContainsString('github', '"githubToken": "githubpassword"')).
                     then(done).
                     catch(error => done.fail(error));
             });
@@ -63,7 +64,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 ImptTestHelper.runCommand(`impt test github -i github2 -u githubuser -w githubpassword -q ${outputMode}`, (commandOut) => {
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.checkFileEqual('github2', 'github.impt')).
+                    then(() => ImptTestHelper.checkFileContainsString('github', '"githubUser": "githubuser"')).
+                    then(() => ImptTestHelper.checkFileContainsString('github', '"githubToken": "githubpassword"')).
                     then(done).
                     catch(error => done.fail(error));
             });
