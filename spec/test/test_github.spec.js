@@ -64,8 +64,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 ImptTestHelper.runCommand(`impt test github -i github2 -u githubuser -w githubpassword -q ${outputMode}`, (commandOut) => {
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => ImptTestHelper.checkFileContainsString('github', '"githubUser": "githubuser"')).
-                    then(() => ImptTestHelper.checkFileContainsString('github', '"githubToken": "githubpassword"')).
+                    then(() => ImptTestHelper.checkFileContainsString('github2', '"githubUser": "githubuser"')).
+                    then(() => ImptTestHelper.checkFileContainsString('github2', '"githubToken": "githubpassword"')).
                     then(done).
                     catch(error => done.fail(error));
             });
