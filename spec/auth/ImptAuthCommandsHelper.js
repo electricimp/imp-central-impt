@@ -32,36 +32,36 @@ const ImptTestHelper = require('../ImptTestHelper');
 // Helper class for testing impt auth commands.
 class ImptAuthCommandsHelper {
     static localLogout() {
-        return ImptTestHelper.runCommand(`impt auth logout --local `, ImptTestHelper.emptyCheckEx);
+        return ImptTestHelper.runCommand(`impt auth logout --local `, ImptTestHelper.emptyCheck);
     }
 
     static globalLogout() {
-        return ImptTestHelper.runCommand(`impt auth logout`, ImptTestHelper.emptyCheckEx);
+        return ImptTestHelper.runCommand(`impt auth logout`, ImptTestHelper.emptyCheck);
     }
 
     static localLogin() {
-        return ImptTestHelper.runCommand(`impt auth login --local --user ${config.username} --pwd ${config.password} --confirmed`,
-            ImptTestHelper.emptyCheckEx);
+        return ImptTestHelper.runCommand(`impt auth login --local --user ${config.username} --pwd "${config.password}" --confirmed`,
+            ImptTestHelper.emptyCheck);
     }
 
     static globalLogin() {
-        return ImptTestHelper.runCommand(`impt auth login --user ${config.username} --pwd ${config.password} --confirmed`,
-            ImptTestHelper.emptyCheckEx);
+        return ImptTestHelper.runCommand(`impt auth login --user ${config.username} --pwd "${config.password}" --confirmed`,
+            ImptTestHelper.emptyCheck);
     }
 
     static globalLoginByLoginkey(loginkey) {
         return ImptTestHelper.runCommand(`impt auth login --lk ${loginkey} --confirmed`,
-            ImptTestHelper.emptyCheckEx);
+            ImptTestHelper.emptyCheck);
     }
 
     static localLoginByLoginkey(loginkey) {
         return ImptTestHelper.runCommand(`impt auth login --lk ${loginkey} --local --confirmed`,
-            ImptTestHelper.emptyCheckEx);
+            ImptTestHelper.emptyCheck);
     }
 
     static createLoginkey(output) {
         let loginkey = null;
-        return ImptTestHelper.runCommand(`impt loginkey create --pwd ${config.password}`, (commandOut) => {
+        return ImptTestHelper.runCommand(`impt loginkey create --pwd "${config.password}"`, (commandOut) => {
             loginkey = ImptTestHelper.parseLoginkey(commandOut);
             ImptTestHelper.emptyCheck(commandOut);
         }).
@@ -70,8 +70,8 @@ class ImptAuthCommandsHelper {
     }
 
     static deleteLoginkey(loginkey) {
-        return loginkey ? ImptTestHelper.runCommand(`impt loginkey delete --lk ${loginkey} --pwd ${config.password} -q`,
-            ImptTestHelper.emptyCheckEx) : Promise.resolve();
+        return loginkey ? ImptTestHelper.runCommand(`impt loginkey delete --lk ${loginkey} --pwd "${config.password}" -q`,
+            ImptTestHelper.emptyCheck) : Promise.resolve();
     }
 }
 

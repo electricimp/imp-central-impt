@@ -98,7 +98,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // prepare environment for device group builds command testing
         function _testSuiteInit() {
-            return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
+            return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheck).
                 then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -s "${DEVICE_GROUP_DESCR}" -p ${PRODUCT_NAME}`, (commandOut) => {
                     dg_id = ImptTestHelper.parseId(commandOut);
                     if (!dg_id) fail("TestSuitInit error: Failed to create device group");
@@ -109,7 +109,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // delete all entities using in impt dg builds test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheck);
         }
 
         function _testInit() {
@@ -134,9 +134,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         }
 
         function _testCleanUp() {
-            return ImptTestHelper.runCommand(`impt build delete -b ${build_id} -f -q`, ImptTestHelper.emptyCheckEx).
-                then(() => ImptTestHelper.runCommand(`impt build delete -b ${build2_id} -f -q`, ImptTestHelper.emptyCheckEx)).
-                then(() => ImptTestHelper.runCommand(`impt build delete -b ${build3_id} -f -q`, ImptTestHelper.emptyCheckEx));
+            return ImptTestHelper.runCommand(`impt build delete -b ${build_id} -f -q`, ImptTestHelper.emptyCheck).
+                then(() => ImptTestHelper.runCommand(`impt build delete -b ${build2_id} -f -q`, ImptTestHelper.emptyCheck)).
+                then(() => ImptTestHelper.runCommand(`impt build delete -b ${build3_id} -f -q`, ImptTestHelper.emptyCheck));
         }
 
         describe('device group build positive tests >', () => {

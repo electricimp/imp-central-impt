@@ -61,7 +61,7 @@ describe(`impt device group restart test suite (output: ${outputMode ? outputMod
 
     // prepare environment for device group restart command testing
     function _testSuiteInit() {
-        return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
+        return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheck).
             then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -s "${DEVICE_GROUP_DESCR}" -p ${PRODUCT_NAME}`, (commandOut) => {
                 dg_id = ImptTestHelper.parseId(commandOut);
                 if (!dg_id) fail("TestSuitInit error: Failed to create device group");
@@ -71,7 +71,7 @@ describe(`impt device group restart test suite (output: ${outputMode ? outputMod
 
     // delete all entities using in impt dg restart test suite
     function _testSuiteCleanUp() {
-        return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx);
+        return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheck);
     }
 
     // check 'device group successfully restarted' output message 

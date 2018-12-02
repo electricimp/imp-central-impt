@@ -78,12 +78,12 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // delete all entities using in impt dg create test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheck);
         }
 
         // delete device group using in impt dg create test
         function _testCleanUp() {
-            return ImptTestHelper.runCommand(`impt dg delete --dg ${DEVICE_GROUP_NAME} -f -q`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommand(`impt dg delete --dg ${DEVICE_GROUP_NAME} -f -q`, ImptTestHelper.emptyCheck);
         }
 
         // check successfuly created device group output message 

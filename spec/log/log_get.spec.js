@@ -69,13 +69,13 @@ describe(`impt log get test suite (output: ${outputMode ? outputMode : 'default'
             }
             else fail("TestSuitInit error: Failed to get additional device attributes");
         }).
-            then(() => ImptTestHelper.runCommand(`impt device update -d ${config.devices[config.deviceidx]} --name ${device_name}`, ImptTestHelper.emptyCheckEx)).
-            then(() => ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx)).
-            then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx)).
-            then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx)).
+            then(() => ImptTestHelper.runCommand(`impt device update -d ${config.devices[config.deviceidx]} --name ${device_name}`, ImptTestHelper.emptyCheck)).
+            then(() => ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheck)).
+            then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheck)).
+            then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, ImptTestHelper.emptyCheck)).
             then(() => ImptTestHelper.deviceAssign(DEVICE_GROUP_NAME)).
             then(() => Shell.cp('-Rf', `${__dirname}/fixtures/devicecode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER)).
-            then(() => ImptTestHelper.runCommand(`impt build run -g ${DEVICE_GROUP_NAME} -x devicecode.nut`, ImptTestHelper.emptyCheckEx)).
+            then(() => ImptTestHelper.runCommand(`impt build run -g ${DEVICE_GROUP_NAME} -x devicecode.nut`, ImptTestHelper.emptyCheck)).
             then(() => ImptTestHelper.delayMs(10000));
     }
 
@@ -94,8 +94,8 @@ describe(`impt log get test suite (output: ${outputMode ? outputMode : 'default'
 
     // delete all entities using in impt log get test suite
     function _testSuiteCleanUp() {
-        return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx).
-            then(() => ImptTestHelper.runCommand(`impt device update -d ${config.devices[config.deviceidx]} --name ${old_name ? old_name : '""'}`, ImptTestHelper.emptyCheckEx));
+        return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheck).
+            then(() => ImptTestHelper.runCommand(`impt device update -d ${config.devices[config.deviceidx]} --name ${old_name ? old_name : '""'}`, ImptTestHelper.emptyCheck));
     }
 
     describe('log get positive tests >', () => {

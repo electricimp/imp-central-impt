@@ -130,7 +130,7 @@ describe(`impt build list test suite (output: ${outputMode ? outputMode : 'defau
             }
             else fail("TestSuitInit error: Failed to get account attributes");
         }).
-            then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx)).
+            then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheck)).
             then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
                 ImptTestHelper.emptyCheck(commandOut);
             })).
@@ -165,13 +165,13 @@ describe(`impt build list test suite (output: ${outputMode ? outputMode : 'defau
                 if (!build3_id) fail("TestSuiteInit error: Failed to create build");
                 ImptTestHelper.emptyCheck(commandOut);
             })).
-            then(() => ImptTestHelper.runCommand(`impt dg delete -g ${DEVICE_GROUP3_NAME} -q`, ImptTestHelper.emptyCheckEx));
+            then(() => ImptTestHelper.runCommand(`impt dg delete -g ${DEVICE_GROUP3_NAME} -q`, ImptTestHelper.emptyCheck));
     }
 
     // delete all entities using in impt build list test suite
     function _testSuiteCleanUp() {
-        return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx).
-            then(() => ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT2_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx));
+        return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheck).
+            then(() => ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT2_NAME} -f -b -q`, ImptTestHelper.emptyCheck));
     }
 
     // check 'no deployments found' output message 

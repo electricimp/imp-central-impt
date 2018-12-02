@@ -62,15 +62,15 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 }
                 else fail("TestSuitInit error: Failed to get account attributes");
             }).
-                then(() => ImptTestHelper.runCommand(`impt product create --name ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx)).
-                then(() => ImptTestHelper.runCommand(`impt product create --name ${PRODUCT_NAME_2}`, ImptTestHelper.emptyCheckEx));
+                then(() => ImptTestHelper.runCommand(`impt product create --name ${PRODUCT_NAME}`, ImptTestHelper.emptyCheck)).
+                then(() => ImptTestHelper.runCommand(`impt product create --name ${PRODUCT_NAME_2}`, ImptTestHelper.emptyCheck));
         }
 
         // delete all entities using in impt product list test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommand(`impt product delete --product ${PRODUCT_NAME} --confirmed`, ImptTestHelper.emptyCheckEx).
+            return ImptTestHelper.runCommand(`impt product delete --product ${PRODUCT_NAME} --confirmed`, ImptTestHelper.emptyCheck).
                 then(() => ImptTestHelper.runCommand(`impt product delete --product ${PRODUCT_NAME_2} --confirmed`,
-                    ImptTestHelper.emptyCheckEx));
+                    ImptTestHelper.emptyCheck));
         }
 
         it('product list', (done) => {

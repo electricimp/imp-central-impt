@@ -71,18 +71,18 @@ describe(`impt device restart test suite (output: ${outputMode ? outputMode : 'd
             }
             else fail("TestSuitInit error: Failed to get additional device attributes");
         }).
-            then(() => ImptTestHelper.runCommand(`impt device update -d ${config.devices[config.deviceidx]} --name ${device_name}`, ImptTestHelper.emptyCheckEx)).
-            then(() => ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx)).
-            then(() => ImptTestHelper.runCommand(`impt project create --product ${PRODUCT_NAME} --create-product --name ${DEVICE_GROUP_NAME}  ${outputMode}`, ImptTestHelper.emptyCheckEx)).
+            then(() => ImptTestHelper.runCommand(`impt device update -d ${config.devices[config.deviceidx]} --name ${device_name}`, ImptTestHelper.emptyCheck)).
+            then(() => ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheck)).
+            then(() => ImptTestHelper.runCommand(`impt project create --product ${PRODUCT_NAME} --create-product --name ${DEVICE_GROUP_NAME}  ${outputMode}`, ImptTestHelper.emptyCheck)).
             then(() => Shell.cp('-Rf', `${__dirname}/fixtures/device.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER)).
             then(() => ImptTestHelper.deviceAssign(DEVICE_GROUP_NAME)).
-            then(() => ImptTestHelper.runCommand(`impt build run`, ImptTestHelper.emptyCheckEx));
+            then(() => ImptTestHelper.runCommand(`impt build run`, ImptTestHelper.emptyCheck));
     }
 
     // delete all entities using in impt device restart test suite
     function _testSuiteCleanUp() {
-        return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx).
-            then(() => ImptTestHelper.runCommand(`impt device update -d ${config.devices[config.deviceidx]} --name ${old_name ? old_name : '""'}`, ImptTestHelper.emptyCheckEx));
+        return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheck).
+            then(() => ImptTestHelper.runCommand(`impt device update -d ${config.devices[config.deviceidx]} --name ${old_name ? old_name : '""'}`, ImptTestHelper.emptyCheck));
     }
 
     // check 'device successfully restarted' output message 

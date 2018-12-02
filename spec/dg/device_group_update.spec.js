@@ -88,13 +88,13 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // delete all entities using in impt dg update test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheck);
         }
 
         // delete device group using in impt dg update test
         function _testCleanUp() {
-            return ImptTestHelper.runCommand(`impt dg delete --dg ${DEVICE_GROUP_NAME} -f -q`, ImptTestHelper.emptyCheckEx).
-                then(() => ImptTestHelper.runCommand(`impt dg delete --dg ${DEVICE_GROUP_NEW_NAME} -f -q`, ImptTestHelper.emptyCheckEx));
+            return ImptTestHelper.runCommand(`impt dg delete --dg ${DEVICE_GROUP_NAME} -f -q`, ImptTestHelper.emptyCheck).
+                then(() => ImptTestHelper.runCommand(`impt dg delete --dg ${DEVICE_GROUP_NEW_NAME} -f -q`, ImptTestHelper.emptyCheck));
         }
 
         // check 'device group successfully updated' output message 

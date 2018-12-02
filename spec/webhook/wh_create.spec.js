@@ -60,19 +60,19 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         }, ImptTestHelper.TIMEOUT);
 
         afterEach((done) => {
-            ImptTestHelper.runCommand(`impt webhook delete --wh ${wh_id} -q`, ImptTestHelper.emptyCheckEx).
+            ImptTestHelper.runCommand(`impt webhook delete --wh ${wh_id} -q`, ImptTestHelper.emptyCheck).
                 then(done).
                 catch(error => done.fail(error));
         }, ImptTestHelper.TIMEOUT);
 
         // delete all entities using in impt webhook create test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommand(`impt product delete --product ${PRODUCT_NAME} --force --confirmed`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommand(`impt product delete --product ${PRODUCT_NAME} --force --confirmed`, ImptTestHelper.emptyCheck);
         }
 
         // prepare test environment for impt webhook create test suite
         function _testSuiteInit() {
-            return ImptTestHelper.runCommand(`impt product create --name ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
+            return ImptTestHelper.runCommand(`impt product create --name ${PRODUCT_NAME}`, ImptTestHelper.emptyCheck).
                 then(() => ImptTestHelper.runCommand(`impt dg create --name ${DG_NAME} -p ${PRODUCT_NAME} `, (commandOut) => {
                     dg_id = ImptTestHelper.parseId(commandOut);
                     if (!dg_id) fail("TestSuitInit error: Failed to create device group");

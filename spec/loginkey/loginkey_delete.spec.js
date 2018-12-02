@@ -65,12 +65,12 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // delete all entities using in impt loginkey delete test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommand(`impt loginkey delete --lk ${loginkey_id} --pwd ${config.password} --confirmed`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommand(`impt loginkey delete --lk ${loginkey_id} --pwd "${config.password}" --confirmed`, ImptTestHelper.emptyCheck);
         }
 
         // prepare test environment for impt loginkey delete test suite
         function _testSuiteInit() {
-            return ImptTestHelper.runCommand(`impt loginkey create --pwd ${config.password} ${outputMode}`, (commandOut) => {
+            return ImptTestHelper.runCommand(`impt loginkey create --pwd "${config.password}" ${outputMode}`, (commandOut) => {
                 loginkey_id = ImptTestHelper.parseLoginkey(commandOut);
                 if (!loginkey_id) fail("TestSuitInit error: Failed to create loginkey");
                 ImptTestHelper.emptyCheck(commandOut);
@@ -86,7 +86,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         }
 
         it('loginkey delete', (done) => {
-            ImptTestHelper.runCommand(`impt loginkey delete --lk ${loginkey_id} --pwd ${config.password} --confirmed ${outputMode}`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt loginkey delete --lk ${loginkey_id} --pwd "${config.password}" --confirmed ${outputMode}`, (commandOut) => {
                 _checkSuccessDeleteLoginkeyMessage(commandOut, loginkey_id);
                 ImptTestHelper.checkSuccessStatus(commandOut);
             }).
@@ -107,7 +107,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         });
 
         it('loginkey delete without confirmation', (done) => {
-            ImptTestHelper.runCommand(`impt loginkey delete --lk ${loginkey_id} --pwd ${config.password} ${outputMode}`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt loginkey delete --lk ${loginkey_id} --pwd "${config.password}" ${outputMode}`, (commandOut) => {
                 ImptTestHelper.checkFailStatus(commandOut);
             }).
                 then(done).
@@ -115,7 +115,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         });
 
         it('not exist loginkey delete', (done) => {
-            ImptTestHelper.runCommand(`impt loginkey delete --lk not-exist-loginkey --pwd ${config.password} ${outputMode}`, (commandOut) => {
+            ImptTestHelper.runCommand(`impt loginkey delete --lk not-exist-loginkey --pwd "${config.password}" ${outputMode}`, (commandOut) => {
                 MessageHelper.checkEntityNotFoundError(commandOut, Identifier.ENTITY_TYPE.TYPE_LOGIN_KEY, 'not-exist-loginkey');
                 ImptTestHelper.checkFailStatus(commandOut);
             }).

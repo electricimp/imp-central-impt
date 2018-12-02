@@ -103,7 +103,7 @@ class ImptTestHelper {
         if (login) {
             const endpoint = config.apiEndpoint ? `--endpoint ${config.apiEndpoint}` : '';
             return ImptTestHelper.runCommand(
-                `impt auth login --local --user ${config.username} --pwd ${config.password} ${endpoint}`,
+                `impt auth login --local --user ${config.username} --pwd "${config.password}" ${endpoint}`,
                 ImptTestHelper.checkSuccessStatus);
         }
         return Promise.resolve();
@@ -155,26 +155,6 @@ class ImptTestHelper {
         }).then(outputChecker);
     }
 
-    static runCommandWithTerminate(command, outputChecker) {
-        var child;
-        return Promise.all([
-            new Promise((resolve, reject) => {
-                if (config.debug) {
-                    console.log('Running command: ' + command);
-                }
-                child = Shell.exec(`node ${__dirname}/../bin/${command}`,
-                    { silent: !config.debug },
-                    (code, stdout, stderr) => {
-                        resolve({ code: code, output: stdout.replace(/((\u001b\[2K.*\u001b\[1G)|(\u001b\[[0-9]{2}m))/g, '') });
-                    });
-
-            }).then(outputChecker),
-            this.delayMs(20000).
-                then(() => child.kill('SIGINT')).
-                then(() => child.kill())
-        ]);
-    }
-
     static delayMs(ms) {
         return new Promise((resolve) => {
             setTimeout(resolve, ms);
@@ -183,15 +163,15 @@ class ImptTestHelper {
 
     static getDeviceAttrs(product, dg, output) {
         let jsonInfo = null;
-        return ImptTestHelper.runCommand(`impt product create -n ${product}`, ImptTestHelper.emptyCheckEx).
+        return ImptTestHelper.runCommand(`impt product create -n ${product}`, ImptTestHelper.emptyCheck).
             then(() => ImptTestHelper.runCommand(`impt dg create -n ${dg} -p ${product}`, ImptTestHelper.emptyCheck)).
-            then(() => ImptTestHelper.runCommand(`impt device assign -d ${config.devices[config.deviceidx]} -g ${dg} -q`, ImptTestHelper.emptyCheckEx)).
-            then(() => ImptTestHelper.runCommand(`impt build deploy -g ${dg}`, ImptTestHelper.emptyCheckEx)).
+            then(() => ImptTestHelper.runCommand(`impt device assign -d ${config.devices[config.deviceidx]} -g ${dg} -q`, ImptTestHelper.emptyCheck)).
+            then(() => ImptTestHelper.runCommand(`impt build deploy -g ${dg}`, ImptTestHelper.emptyCheck)).
             then(() => ImptTestHelper.runCommand(`impt device info -d ${config.devices[config.deviceidx]} -z json`, (commandOut) => {
                 jsonInfo = commandOut.output;
                 ImptTestHelper.emptyCheck(commandOut);
             })).
-            then(() => ImptTestHelper.runCommand(`impt product delete -p ${product} -f -b -q`, ImptTestHelper.emptyCheckEx)).
+            then(() => ImptTestHelper.runCommand(`impt product delete -p ${product} -f -b -q`, ImptTestHelper.emptyCheck)).
             then(() => {
                 return new Promise((resolve) => {
                     let json = JSON.parse(jsonInfo);
@@ -254,23 +234,23 @@ class ImptTestHelper {
     }
 
     static projectCreate(dg, dfile = 'device.nut', afile = 'agent.nut') {
-        return ImptTestHelper.runCommand(`impt project link -g ${dg} -x ${dfile}  -y ${afile} -q`, ImptTestHelper.emptyCheckEx);
+        return ImptTestHelper.runCommand(`impt project link -g ${dg} -x ${dfile}  -y ${afile} -q`, ImptTestHelper.emptyCheck);
     }
 
     static projectDelete() {
-        return ImptTestHelper.runCommand(`impt project delete -f -q`, ImptTestHelper.emptyCheckEx);
+        return ImptTestHelper.runCommand(`impt project delete -f -q`, ImptTestHelper.emptyCheck);
     }
 
     static deviceAssign(dg) {
-        return ImptTestHelper.runCommand(`impt device assign -d ${config.devices[config.deviceidx]} -g ${dg} -q`, ImptTestHelper.emptyCheckEx);
+        return ImptTestHelper.runCommand(`impt device assign -d ${config.devices[config.deviceidx]} -g ${dg} -q`, ImptTestHelper.emptyCheck);
     }
 
     static deviceRestart() {
-        return ImptTestHelper.runCommand(`impt device restart -d ${config.devices[config.deviceidx]}`, ImptTestHelper.emptyCheckEx);
+        return ImptTestHelper.runCommand(`impt device restart -d ${config.devices[config.deviceidx]}`, ImptTestHelper.emptyCheck);
     }
 
     static deviceUnassign(dg) {
-        return ImptTestHelper.runCommand(`impt dg unassign -g ${dg}`, ImptTestHelper.emptyCheckEx);
+        return ImptTestHelper.runCommand(`impt dg unassign -g ${dg}`, ImptTestHelper.emptyCheck);
     }
 
     // Checks success return code of the command
