@@ -1,7 +1,6 @@
 @include __PATH__+"/myfile.nut";
 
 class MyTestCase extends ImpTestCase {
-
     function doWaitForData() {
         local myFunc = null;
         return Promise(function(ok, err) {

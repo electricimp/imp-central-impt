@@ -23,17 +23,11 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 
 class TestCaseBetweenAsserts extends ImpTestCase {
-    // test boundary values
-    function test1() {
+    function testBetween() {
         assertBetween(9, 9, 11);
     } 
 
-    function test2() {
-        assertBetween(11, 9, 11);
-    }
-
-    // negative test
-    function test3() {
+    function testNotBetween() {
         assertBetween(10, 11, 12);
     }
 }   
