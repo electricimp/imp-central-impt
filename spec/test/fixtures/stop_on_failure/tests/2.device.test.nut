@@ -23,11 +23,11 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 
 class TestCase2 extends ImpTestCase {
-  function test01() {
-    this.assertTrue(true);
-  }
+    function test01() {
+        assertTrue(true);
+    }
 
-  function test02() {
-    this.assertTrue(true);
-  }
+    function test02() {
+        assertTrue(true);
+    }
 }

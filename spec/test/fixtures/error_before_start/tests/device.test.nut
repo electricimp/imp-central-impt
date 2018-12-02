@@ -23,11 +23,11 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 
 class DeviceTestCase extends ImpTestCase {
-  function setUp() {
-    oom();
-  }
+    function setUp() {
+        oom();
+    }
 
-  function testSomething() {
-  }
+    function testSomething() {
+    }
 }
 

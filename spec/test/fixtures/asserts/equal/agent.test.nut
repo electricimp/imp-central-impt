@@ -22,24 +22,22 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 
-class TestCase1 extends ImpTestCase {
-  function test1() {
-    this.assertEqual(
-      /* expected */
-      1
-	  ,
-      /* actual */
-      1
-    );
-  }
+class TestCaseEqualAsserts extends ImpTestCase {
+    function testEqual() {
+        assertEqual(
+            /* expected */
+            1,
+            /* actual */
+            1
+        );
+    }
 
-  function test2() {
-    this.assertEqual(
-      /* expected */
-      true
-	  ,
-      /* actual */
-      false
-    );
-  }
+    function testNotEqual() {
+        assertEqual(
+            /* expected */
+            true,
+            /* actual */
+            false
+        );
+    } 
 }

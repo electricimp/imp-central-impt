@@ -22,8 +22,10 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 
-class TestFile2Case1 extends ImpTestCase {
-  function test1() {
+
+// second dummy test file for check selective test execution
+class SecondTestCase extends ImpTestCase {
+  function testMethod() {
     info("TestFile2Case1Test1");
   }
   }

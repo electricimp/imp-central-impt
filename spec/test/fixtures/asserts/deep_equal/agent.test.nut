@@ -22,81 +22,40 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 
-class TestCase1 extends ImpTestCase {
-  function test1() {
-    this.assertDeepEqual(
-      /* expected */
-      {
-        "a" : 1,
-        "b" : {
-          "c" : 3
-        }
-      },
-      /* actual */
-      {
-        "a" : 1,
-        "b" : {
-//          "c" : 3
-        }
-      }
-    );
-  }
+class TestCaseDeepEqualAsserts extends ImpTestCase {
+    function testMissingSlot() {
+        assertDeepEqual(
+            /* expected */
+            { "a": 1, "b": { "c": 3 } },
+            /* actual */
+            { "a": 1, "b": {} }
+        );
+    }
 
-  function test2() {
-    this.assertDeepEqual(
-      /* expected */
-      {
-        "a" : 1,
-        "b" : {
-          "c" : 3
-        }
-      },
-      /* actual */
-      {
-        "a" : 1,
-        "b" : {
-          "c" : 3,
-          "d" : 4
-        }
-      }
-    );
-  }
+    function testExtraSlot() {
+        assertDeepEqual(
+            /* expected */
+            { "a": 1, "b": { "c": 3 } },
+            /* actual */
+            { "a": 1, "b": { "c": 3, "d": 4 } }
+        );
+    }
 
-  function test3() {
-    this.assertDeepEqual(
-      /* expected */
-      {
-        "a" : 1,
-        "b" : {
-          "c" : 3
-        }
-      },
-      /* actual */
-      {
-        "a" : 1,
-        "b" : {
-          "c" : 100
-        }
-      }
-    );
-  }
+    function testNotEqual() {
+        assertDeepEqual(
+            /* expected */
+            { "a": 1, "b": { "c": 3 } },
+            /* actual */
+            { "a": 1, "b": { "c": 100 } }
+        );
+    }
 
-function test4() {
-    this.assertDeepEqual(
-      /* expected */
-      {
-        "a" : 1,
-        "b" : {
-          "c" : 3
-        }
-      },
-      /* actual */
-      {
-        "a" : 1,
-        "b" : {
-          "c" : 3
-        }
-      }
-    );
-  }
+    function testEqual() {
+        assertDeepEqual(
+            /* expected */
+            { "a": 1, "b": { "c": 3 } },
+            /* actual */
+            { "a": 1, "b": { "c": 3 } }
+        );
+    }    
 }

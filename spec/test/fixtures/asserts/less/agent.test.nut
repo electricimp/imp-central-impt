@@ -22,12 +22,12 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 
-class TestCase1 extends ImpTestCase {
-  function test1() {
-    this.assertLess(-8, 2);
-  }
+class TestCaseLessAsserts extends ImpTestCase {
+    function testLess() {
+        assertLess(-8, 2);
+    }
 
-  function test2() {
-    this.assertLess(2, 2);
-  }
+    function testNotLess() {
+        assertLess(2, 2);
+    }
 }

@@ -22,12 +22,18 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 
-class TestCase1 extends ImpTestCase {
-  function test1() {
-    assertBetween(9, 9, 11);
-  }
+class TestCaseBetweenAsserts extends ImpTestCase {
+    // test boundary values
+    function test1() {
+        assertBetween(9, 9, 11);
+    } 
 
-  function test2() {
-    this.assertBetween(10, 11, 12);
-  }
-}
+    function test2() {
+        assertBetween(11, 9, 11);
+    }
+
+    // negative test
+    function test3() {
+        assertBetween(10, 11, 12);
+    }
+}   

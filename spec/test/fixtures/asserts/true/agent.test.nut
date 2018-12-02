@@ -22,12 +22,12 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 
-class TestCase1 extends ImpTestCase {
-  function test1() {
-    this.assertTrue(1 == 1);
-  }
+class TestCaseTrueAsserts extends ImpTestCase {
+    function testTrue() {
+        assertTrue(1 == 1);
+    }
 
-  function test2() {
-    this.assertTrue(1 == 2);
-  }
+    function testNotTrue() {
+        assertTrue(1 == 2);
+    }
 }
