@@ -82,7 +82,7 @@ describe(`impt test run (output: ${outputMode ? outputMode : 'default'}) >`, () 
 
         it('test run one test case', (done) => {
             ImptTestCommandsHelper.createTestConfig('fixtures/run', {}).
-                then(() => ImptTestHelper.runCommand('impt test run -t testfile.test.nut:TestFile1Case1', (commandOut) => {
+                then(() => ImptTestHelper.runCommand('impt test run -t testfile.test.nut:FirstTestCase', (commandOut) => {
                     expect(commandOut.output).not.toBeEmptyString();
                     expect(commandOut.output).toMatch('TestFile1Case1Test1');
                     expect(commandOut.output).toMatch('TestFile1Case1Test2');
@@ -97,7 +97,7 @@ describe(`impt test run (output: ${outputMode ? outputMode : 'default'}) >`, () 
 
         it('test run one test method', (done) => {
             ImptTestCommandsHelper.createTestConfig('fixtures/run', {}).
-                then(() => ImptTestHelper.runCommand('impt test run -t testfile.test.nut:TestFile1Case1::test1', (commandOut) => {
+                then(() => ImptTestHelper.runCommand('impt test run -t testfile.test.nut:FirstTestCase::testMethod', (commandOut) => {
                     expect(commandOut.output).not.toBeEmptyString();
                     expect(commandOut.output).toMatch('TestFile1Case1Test1');
                     expect(commandOut.output).not.toMatch('TestFile1Case1Test2');
@@ -137,7 +137,7 @@ describe(`impt test run (output: ${outputMode ? outputMode : 'default'}) >`, () 
 
         it('test run not exist test method', (done) => {
             ImptTestCommandsHelper.createTestConfig('fixtures/run', {}).
-                then(() => ImptTestHelper.runCommand('impt test run -t testfile.test.nut:TestFile1Case1::not-exist-method', (commandOut) => {
+                then(() => ImptTestHelper.runCommand('impt test run -t testfile.test.nut:FirstTestCase::not-exist-method', (commandOut) => {
                     expect(commandOut.output).not.toMatch('TestFile1Case1Test1');
                     expect(commandOut.output).not.toMatch('TestFile1Case1Test2');
                     ImptTestHelper.checkSuccessStatus(commandOut);

@@ -25,7 +25,7 @@
 
 // second dummy test file for check selective test execution
 class SecondTestCase extends ImpTestCase {
-  function testMethod() {
-    info("TestFile2Case1Test1");
-  }
+    function testMethod() {
+        info("TestFile2Case1Test1");
+    }
   }
