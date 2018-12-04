@@ -22,28 +22,24 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 
-class TestCase1 extends ImpTestCase {
-    function test01() {
-        return Promise(function (resolve, reject) {
-            imp.wakeup(5.0, function() {
-                resolve();
-            });
+function delay(sec) {
+    return Promise(function (resolve, reject) {
+        imp.wakeup(sec, function () {
+            resolve();
         });
+    });
+}
+
+class TestCaseTimeouts extends ImpTestCase {
+    function test01() {
+        return delay(5.0);    
     }
 
     function test02() {
-        return Promise(function (resolve, reject) {
-            imp.wakeup(5.0, function() {
-                resolve();
-            });
-        });
+        return delay(5.0); 
     }
 
     function test03() {
-        return Promise(function (resolve, reject) {
-            imp.wakeup(5.0, function() {
-                resolve();
-            });
-        });
+        return delay(5.0); 
     }
 }

@@ -57,5 +57,5 @@ class TestCaseDeepEqualAsserts extends ImpTestCase {
             /* actual */
             { "a": 1, "b": { "c": 3 } }
         );
-    }    
+    }
 }

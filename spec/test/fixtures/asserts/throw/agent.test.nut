@@ -23,13 +23,13 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 
 class TestCaseThrowsAsserts extends ImpTestCase {
-    function test1() {
+    function testThrowError() {
         assertThrowsError(function (a) {
             throw a;
         }, this, ["abc"]);
     }
 
-    function test2() {
+    function testNotThrowError() {
         assertThrowsError(function () {}, this);
     }
 }
