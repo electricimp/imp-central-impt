@@ -22,6 +22,8 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 
+// dummy test case, just check stop on failure behavior
+
 class TestCase1 extends ImpTestCase {
     function test01() {
         assertTrue(false);

@@ -30,6 +30,7 @@ function delay(sec) {
     });
 }
 
+// test case with several long time execution tests
 class TestCaseTimeouts extends ImpTestCase {
     function test01() {
         return delay(5.0);    
