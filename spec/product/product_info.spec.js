@@ -73,7 +73,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // delete all entities using in impt product info test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommand(`impt product delete --product ${PRODUCT_NAME} --force --confirmed`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommand(`impt product delete --product ${PRODUCT_NAME} --force --confirmed`, ImptTestHelper.emptyCheck);
         }
 
         describe(`product info positive tests >`, () => {
@@ -123,7 +123,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('product info by project', (done) => {
-                ImptTestHelper.runCommand(`impt project create --product ${PRODUCT_NAME} --name ${DEVICE_GROUP_NAME}`, ImptTestHelper.emptyCheckEx).
+                ImptTestHelper.runCommand(`impt project create --product ${PRODUCT_NAME} --name ${DEVICE_GROUP_NAME}`, ImptTestHelper.emptyCheck).
                     then(() => ImptTestHelper.runCommand(`impt product info ${outputMode}`, (commandOut) => {
                         expect(commandOut.output).toMatch(`${PRODUCT_NAME}`);
                         expect(commandOut.output).toMatch(`${PRODUCT_DESCR}`);

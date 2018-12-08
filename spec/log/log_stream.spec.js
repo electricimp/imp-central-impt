@@ -58,29 +58,17 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // prepare environment for impt log stream command testing
         function _testSuiteInit() {
-            return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
-                then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx)).
-                then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP2_NAME} -p ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx)).
+            return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheck).
+                then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, ImptTestHelper.emptyCheck)).
+                then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP2_NAME} -p ${PRODUCT_NAME}`, ImptTestHelper.emptyCheck)).
                 then(() => ImptTestHelper.deviceAssign(DEVICE_GROUP_NAME)).
                 then(() => Shell.cp('-Rf', `${__dirname}/fixtures/devicecode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER)).
-                then(() => ImptTestHelper.runCommand(`impt build run -g ${DEVICE_GROUP_NAME} -x devicecode.nut`, ImptTestHelper.emptyCheckEx));
-        }
-
-        function _checkLogMessages(commandOut, messages = {}) {
-            let matcher = commandOut.output.match(new RegExp(/....-..-..T..:..:../g));
-            expect(matcher.length).toEqual(messages.count)
-            // if output contains non server.log messages change message start nuber
-            matcher = commandOut.output.match(new RegExp(/server\.log/g));
-            if (matcher.length < messages.count) {
-                messages.startNumber = messages.startNumber + (messages.count - matcher.length);
-            }
-            expect(commandOut.output).toMatch(`Message #${messages.startNumber}#`);
-            expect(commandOut.output).toMatch(`Message #${messages.endNumber}#`);
+                then(() => ImptTestHelper.runCommand(`impt build run -g ${DEVICE_GROUP_NAME} -x devicecode.nut`, ImptTestHelper.emptyCheck));
         }
 
         // delete all entities using in impt log stream test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheck);
         }
 
         function _checkLogStreamOpenedMessage(commandOut, device) {

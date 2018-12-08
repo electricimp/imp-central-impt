@@ -79,9 +79,9 @@ class ImptProjectTestHelper {
     // Checks if project`s entities exists
     static checkProjectsEntitiesExists(expEntities = {}) {
         return ImptTestHelper.runCommand(`impt product info -p ${expEntities.product_name ? expEntities.product_name : PRODUCT_NAME}`,
-            ImptTestHelper.checkSuccessStatusEx).
+            ImptTestHelper.checkSuccessStatus).
             then(() => ImptTestHelper.runCommand(`impt dg info -g ${expEntities.dg_name ? expEntities.dg_name : DG_NAME}`,
-                ImptTestHelper.checkSuccessStatusEx));
+                ImptTestHelper.checkSuccessStatus));
     }
 
     // Checks if project`s entities not exists

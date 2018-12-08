@@ -51,6 +51,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         beforeAll((done) => {
             ImptTestHelper.init().
+                then(() => ImptTestHelper.checkDeviceStatus(config.devices[config.deviceidx])).
                 then(_testCleanUp).
                 then(_testSuiteCleanUp).
                 then(_testSuiteInit).
@@ -141,8 +142,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // delete all entities using in impt build cleanup test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx).
-                then(() => ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT2_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx));
+            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheck).
+                then(() => ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT2_NAME} -f -b -q`, ImptTestHelper.emptyCheck));
         }
 
         function _testInit() {
@@ -173,16 +174,16 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     ImptTestHelper.emptyCheck(commandOut);
                 })).
                 // delete device groups to generate zombie builds
-                then(() => ImptTestHelper.runCommand(`impt dg delete -g ${DEVICE_GROUP_NAME} -q`, ImptTestHelper.emptyCheckEx)).
-                then(() => ImptTestHelper.runCommand(`impt dg delete -g ${DEVICE_GROUP2_NAME} -q`, ImptTestHelper.emptyCheckEx)).
+                then(() => ImptTestHelper.runCommand(`impt dg delete -g ${DEVICE_GROUP_NAME} -q`, ImptTestHelper.emptyCheck)).
+                then(() => ImptTestHelper.runCommand(`impt dg delete -g ${DEVICE_GROUP2_NAME} -q`, ImptTestHelper.emptyCheck)).
                 // set flagged attribute for some zombie builds
-                then(() => ImptTestHelper.runCommand(`impt build update -b ${build_id} -f`, ImptTestHelper.emptyCheckEx)).
-                then(() => ImptTestHelper.runCommand(`impt build update -b ${build3_id} -f`, ImptTestHelper.emptyCheckEx));
+                then(() => ImptTestHelper.runCommand(`impt build update -b ${build_id} -f`, ImptTestHelper.emptyCheck)).
+                then(() => ImptTestHelper.runCommand(`impt build update -b ${build3_id} -f`, ImptTestHelper.emptyCheck));
         }
 
         function _testCleanUp() {
-            return ImptTestHelper.runCommand(`impt build cleanup -p ${PRODUCT_NAME} -u -q`, ImptTestHelper.emptyCheckEx).
-                then(() => ImptTestHelper.runCommand(`impt build cleanup -p ${PRODUCT2_NAME} -u -q`, ImptTestHelper.emptyCheckEx));
+            return ImptTestHelper.runCommand(`impt build cleanup -p ${PRODUCT_NAME} -u -q`, ImptTestHelper.emptyCheck).
+                then(() => ImptTestHelper.runCommand(`impt build cleanup -p ${PRODUCT2_NAME} -u -q`, ImptTestHelper.emptyCheck));
         }
 
         // check 'no deployments found' output message 

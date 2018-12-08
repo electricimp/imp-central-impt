@@ -59,8 +59,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // delete all entities using in impt project create test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx).
-                then(() => ImptTestHelper.runCommand(`impt project delete --all --confirmed`, ImptTestHelper.emptyCheckEx));
+            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheck).
+                then(() => ImptTestHelper.runCommand(`impt project delete --all --confirmed`, ImptTestHelper.emptyCheck));
         }
         
         // prepare test environment for impt project create test suite

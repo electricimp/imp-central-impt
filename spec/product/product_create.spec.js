@@ -65,17 +65,17 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // delete all entities using in impt product create test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_EXIST_NAME} -f -q`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_EXIST_NAME} -f -q`, ImptTestHelper.emptyCheck);
         }
 
         // delete all entities using in impt product create test
         function _testCleanUp(owner = 'me') {
-            return ImptTestHelper.runCommand(`impt product delete -p {${owner}}{${PRODUCT_NAME}} -f -q`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommand(`impt product delete -p {${owner}}{${PRODUCT_NAME}} -f -q`, ImptTestHelper.emptyCheck);
         }
 
         // prepare test environment for impt product create test suite
         function _testSuiteInit() {
-            return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_EXIST_NAME} -s "${PRODUCT_EXIST_DESCR}"`, ImptTestHelper.emptyCheckEx).
+            return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_EXIST_NAME} -s "${PRODUCT_EXIST_DESCR}"`, ImptTestHelper.emptyCheck).
                 then(() => ImptTestHelper.getAccountAttrs((commandOut) => {
                     if (commandOut && commandOut.email && commandOut.id) {
                         email = commandOut.email;

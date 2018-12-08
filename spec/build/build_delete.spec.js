@@ -68,14 +68,14 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // prepare environment for build delete command testing
         function _testSuiteInit() {
-            return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
+            return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheck).
                 then(() => Shell.cp('-Rf', `${__dirname}/fixtures/devicecode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER));
 
         }
 
         // delete all entities using in impt build delete test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheck);
         }
 
         function _testInit() {
@@ -96,11 +96,11 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                     if (!build2_id) fail("TestInit error: Failed to create build");
                     ImptTestHelper.emptyCheck(commandOut);
                 })).
-                then(() => ImptTestHelper.runCommand(`impt dg update -g ${DEVICE_GROUP_NAME} -m ${build2_id}`, ImptTestHelper.emptyCheckEx));
+                then(() => ImptTestHelper.runCommand(`impt dg update -g ${DEVICE_GROUP_NAME} -m ${build2_id}`, ImptTestHelper.emptyCheck));
         }
 
         function _testCleanUp() {
-            return ImptTestHelper.runCommand(`impt dg delete -g ${DEVICE_GROUP_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommand(`impt dg delete -g ${DEVICE_GROUP_NAME} -f -b -q`, ImptTestHelper.emptyCheck);
         }
 
         // check 'deployment successfully deleted' output message 
@@ -181,7 +181,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 }, ImptTestHelper.TIMEOUT);
 
                 function _flaggedBuild() {
-                    return ImptTestHelper.runCommand(`impt build update -b ${build_id} -f ${outputMode}`, ImptTestHelper.checkEmptyEx);
+                    return ImptTestHelper.runCommand(`impt build update -b ${build_id} -f ${outputMode}`, ImptTestHelper.emptyCheck);
                 }
 
                 it('flagged build delete', (done) => {

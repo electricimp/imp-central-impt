@@ -78,8 +78,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // delete all entities using in impt project info test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx).
-                then(() => ImptTestHelper.runCommand(`impt project delete --all -q`, ImptTestHelper.emptyCheckEx));
+            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheck).
+                then(() => ImptTestHelper.runCommand(`impt project delete --all -q`, ImptTestHelper.emptyCheck));
         }
 
         describe('project exist preconditions >', () => {

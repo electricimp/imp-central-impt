@@ -33,7 +33,7 @@ const Utils = require('../lib/util/Utils');
 const UserInteractor = require('../lib/util/UserInteractor');
 const child_process = require('child_process');
 
-const TIMEOUT_MS = 300000;
+const TIMEOUT_MS = 999999;
 const TESTS_EXECUTION_FOLDER = `${__dirname}/../__test${process.env.IMPT_FOLDER_SUFFIX ? process.env.IMPT_FOLDER_SUFFIX : ''}`;
 const KEY_ANSWER = {
     CTRL_C: '\x03',
@@ -103,7 +103,7 @@ class ImptTestHelper {
         if (login) {
             const endpoint = config.apiEndpoint ? `--endpoint ${config.apiEndpoint}` : '';
             return ImptTestHelper.runCommand(
-                `impt auth login --local --user ${config.username} --pwd ${config.password} ${endpoint}`,
+                `impt auth login --local --user ${config.username} --pwd "${config.password}" ${endpoint}`,
                 ImptTestHelper.checkSuccessStatus);
         }
         return Promise.resolve();
@@ -155,26 +155,6 @@ class ImptTestHelper {
         }).then(outputChecker);
     }
 
-    static runCommandWithTerminate(command, outputChecker) {
-        var child;
-        return Promise.all([
-            new Promise((resolve, reject) => {
-                if (config.debug) {
-                    console.log('Running command: ' + command);
-                }
-                child = Shell.exec(`node ${__dirname}/../bin/${command}`,
-                    { silent: !config.debug },
-                    (code, stdout, stderr) => {
-                        resolve({ code: code, output: stdout.replace(/((\u001b\[2K.*\u001b\[1G)|(\u001b\[[0-9]{2}m))/g, '') });
-                    });
-
-            }).then(outputChecker),
-            this.delayMs(20000).
-                then(() => child.kill('SIGINT')).
-                then(() => child.kill())
-        ]);
-    }
-
     static delayMs(ms) {
         return new Promise((resolve) => {
             setTimeout(resolve, ms);
@@ -183,15 +163,15 @@ class ImptTestHelper {
 
     static getDeviceAttrs(product, dg, output) {
         let jsonInfo = null;
-        return ImptTestHelper.runCommand(`impt product create -n ${product}`, ImptTestHelper.emptyCheckEx).
+        return ImptTestHelper.runCommand(`impt product create -n ${product}`, ImptTestHelper.emptyCheck).
             then(() => ImptTestHelper.runCommand(`impt dg create -n ${dg} -p ${product}`, ImptTestHelper.emptyCheck)).
-            then(() => ImptTestHelper.runCommand(`impt device assign -d ${config.devices[config.deviceidx]} -g ${dg} -q`, ImptTestHelper.emptyCheckEx)).
-            then(() => ImptTestHelper.runCommand(`impt build deploy -g ${dg}`, ImptTestHelper.emptyCheckEx)).
+            then(() => ImptTestHelper.runCommand(`impt device assign -d ${config.devices[config.deviceidx]} -g ${dg} -q`, ImptTestHelper.emptyCheck)).
+            then(() => ImptTestHelper.runCommand(`impt build deploy -g ${dg}`, ImptTestHelper.emptyCheck)).
             then(() => ImptTestHelper.runCommand(`impt device info -d ${config.devices[config.deviceidx]} -z json`, (commandOut) => {
                 jsonInfo = commandOut.output;
                 ImptTestHelper.emptyCheck(commandOut);
             })).
-            then(() => ImptTestHelper.runCommand(`impt product delete -p ${product} -f -b -q`, ImptTestHelper.emptyCheckEx)).
+            then(() => ImptTestHelper.runCommand(`impt product delete -p ${product} -f -b -q`, ImptTestHelper.emptyCheck)).
             then(() => {
                 return new Promise((resolve) => {
                     let json = JSON.parse(jsonInfo);
@@ -247,24 +227,30 @@ class ImptTestHelper {
         expect(file).toEqual(file2);
     }
 
+    static checkFileContainsString(fileName, string) {
+        expect(Shell.test('-e', `${TESTS_EXECUTION_FOLDER}/${fileName}`)).toBe(true);
+        let file = Shell.cat(`${TESTS_EXECUTION_FOLDER}/${fileName}`);
+        expect(file).toMatch(string);
+    }
+
     static projectCreate(dg, dfile = 'device.nut', afile = 'agent.nut') {
-        return ImptTestHelper.runCommand(`impt project link -g ${dg} -x ${dfile}  -y ${afile} -q`, ImptTestHelper.emptyCheckEx);
+        return ImptTestHelper.runCommand(`impt project link -g ${dg} -x ${dfile}  -y ${afile} -q`, ImptTestHelper.emptyCheck);
     }
 
     static projectDelete() {
-        return ImptTestHelper.runCommand(`impt project delete -f -q`, ImptTestHelper.emptyCheckEx);
+        return ImptTestHelper.runCommand(`impt project delete -f -q`, ImptTestHelper.emptyCheck);
     }
 
     static deviceAssign(dg) {
-        return ImptTestHelper.runCommand(`impt device assign -d ${config.devices[config.deviceidx]} -g ${dg} -q`, ImptTestHelper.emptyCheckEx);
+        return ImptTestHelper.runCommand(`impt device assign -d ${config.devices[config.deviceidx]} -g ${dg} -q`, ImptTestHelper.emptyCheck);
     }
 
     static deviceRestart() {
-        return ImptTestHelper.runCommand(`impt device restart -d ${config.devices[config.deviceidx]}`, ImptTestHelper.emptyCheckEx);
+        return ImptTestHelper.runCommand(`impt device restart -d ${config.devices[config.deviceidx]}`, ImptTestHelper.emptyCheck);
     }
 
     static deviceUnassign(dg) {
-        return ImptTestHelper.runCommand(`impt dg unassign -g ${dg}`, ImptTestHelper.emptyCheckEx);
+        return ImptTestHelper.runCommand(`impt dg unassign -g ${dg}`, ImptTestHelper.emptyCheck);
     }
 
     // Checks success return code of the command
@@ -311,6 +297,26 @@ class ImptTestHelper {
             return idMatcher[1];
         }
         else return null;
+    }
+
+    // parse loginkey id from command output and return id value if success, otherwise return null
+    static parseLoginkey(commandOut) {
+        if (commandOut.output.match('Account Limit Reached')) {
+            console.log('Error: No free loginkey slot');
+            return null;
+        }
+        const idMatcher = commandOut.output.match(new RegExp(`[0-9a-z]{16}`));
+        if (idMatcher && idMatcher.length > 0) {
+            return idMatcher[0];
+        }
+        else return null;
+    }
+
+    static checkDeviceStatus(device) {
+        return ImptTestHelper.runCommand(`impt device info --device ${device} `, (commandOut) => {
+            if (commandOut.output.match('not found')) console.log(`Error: Device id:${device} not found`);
+            if (commandOut.output.match(/device_online:\\s+false/)) console.log(`Error: Device id:${device} is offline`);
+        });
     }
 }
 

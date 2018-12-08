@@ -56,13 +56,13 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // delete all entities using in impt loginkey info test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommand(`impt loginkey delete --lk ${loginkey_id} --pwd ${config.password} --confirmed`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommand(`impt loginkey delete --lk ${loginkey_id} --pwd "${config.password}" --confirmed`, ImptTestHelper.emptyCheck);
         }
 
         // prepare test environment for impt loginkey info test suite
         function _testSuiteInit() {
-            return ImptTestHelper.runCommand(`impt loginkey create --pwd ${config.password} --descr "${LOGINKEY_DESCR}" ${outputMode}`, (commandOut) => {
-                loginkey_id = ImptTestHelper.parseId(commandOut);
+            return ImptTestHelper.runCommand(`impt loginkey create --pwd "${config.password}" --descr "${LOGINKEY_DESCR}" ${outputMode}`, (commandOut) => {
+                loginkey_id = ImptTestHelper.parseLoginkey(commandOut);
                 if (!loginkey_id) fail("TestSuitInit error: Failed to create loginkey");
                 ImptTestHelper.emptyCheck(commandOut);
             });

@@ -60,7 +60,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // delete all entities using in impt loginkey create test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommand(`impt loginkey delete --lk ${loginkey_id} --pwd ${config.password} --confirmed`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommand(`impt loginkey delete --lk ${loginkey_id} --pwd "${config.password}" --confirmed`, ImptTestHelper.emptyCheck);
         }
 
         // check command`s result by exec loginkey info command
@@ -81,8 +81,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         }
 
         it('loginkey create', (done) => {
-            ImptTestHelper.runCommand(`impt loginkey create --pwd ${config.password} --descr "${LOGINKEY_DESCR}" ${outputMode}`, (commandOut) => {
-                loginkey_id = ImptTestHelper.parseId(commandOut);
+            ImptTestHelper.runCommand(`impt loginkey create --pwd "${config.password}" --descr "${LOGINKEY_DESCR}" ${outputMode}`, (commandOut) => {
+                loginkey_id = ImptTestHelper.parseLoginkey(commandOut);
                 expect(loginkey_id).not.toBeNull;
                 _checkSuccessCreateLoginkeyMessage(commandOut, loginkey_id);
                 ImptTestHelper.checkAttribute(commandOut, ImptTestHelper.ATTR_ID, loginkey_id);
@@ -95,8 +95,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         });
 
         it('loginkey create without description', (done) => {
-            ImptTestHelper.runCommand(`impt loginkey create --pwd ${config.password} ${outputMode}`, (commandOut) => {
-                loginkey_id = ImptTestHelper.parseId(commandOut);
+            ImptTestHelper.runCommand(`impt loginkey create --pwd "${config.password}" ${outputMode}`, (commandOut) => {
+                loginkey_id = ImptTestHelper.parseLoginkey(commandOut);
                 expect(loginkey_id).not.toBeNull;
                 _checkSuccessCreateLoginkeyMessage(commandOut, loginkey_id);
                 ImptTestHelper.checkAttribute(commandOut, ImptTestHelper.ATTR_ID, loginkey_id);
