@@ -255,6 +255,7 @@ class ImptTestHelper {
 
     // Checks success return code of the command
     static checkSuccessStatus(commandOut) {
+        expect(commandOut.output).not.toMatch(UserInteractor.ERRORS.ACCESS_FAILED);
         expect(commandOut.code).toEqual(0);
     }
 
