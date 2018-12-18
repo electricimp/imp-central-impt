@@ -33,7 +33,7 @@ const Utils = require('../lib/util/Utils');
 const UserInteractor = require('../lib/util/UserInteractor');
 const child_process = require('child_process');
 
-const TIMEOUT_MS = 999999;
+const TIMEOUT_MS = 10000000;
 const TESTS_EXECUTION_FOLDER = `${__dirname}/../__test${process.env.IMPT_FOLDER_SUFFIX ? process.env.IMPT_FOLDER_SUFFIX : ''}`;
 const KEY_ANSWER = {
     CTRL_C: '\x03',
@@ -255,6 +255,7 @@ class ImptTestHelper {
 
     // Checks success return code of the command
     static checkSuccessStatus(commandOut) {
+        expect(commandOut.output).not.toMatch(UserInteractor.ERRORS.ACCESS_FAILED);
         expect(commandOut.code).toEqual(0);
     }
 
@@ -271,7 +272,7 @@ class ImptTestHelper {
 
     // Checks if the command output contains the specified attribute name and value
     static checkAttribute(commandOut, attrName, attrValue) {
-        expect(commandOut.output).toMatch(new RegExp(`${attrName}"?:\\s+"?${attrValue.replace(new RegExp(/"/g), '\\\\?"')}"?`));
+        expect(commandOut.output).toMatch(new RegExp(`${attrName}"?:\\s+"?${attrValue.replace(new RegExp(/([\^\[\.\$\{\*\(\\\+\)\|\?\<\>])/g),'\\$&').replace(new RegExp(/"/g), '\\\\?"')}"?`));
     }
 
     // Checks if the command output contains the specified message for default or debug output mode
