@@ -111,6 +111,12 @@ class MessageHelper {
         );
     }
 
+    static checkTestDeviceGroupNotExistMessage(commandOut, deviceGroup) {
+        ImptTestHelper.checkAttribute(commandOut, UserInterractor.ERRORS.ERROR,
+            Util.format(`${UserInterractor.ERRORS.CONFIG_OUTDATED}`, `Device Group "${deviceGroup}"`, 'Test Configuration')
+        );
+    }
+
     static checkProjectNotFoundMessage(commandOut) {
         ImptTestHelper.checkAttribute(commandOut, UserInterractor.ERRORS.ERROR,
             `Project File is not found in the current directory.`
@@ -157,6 +163,10 @@ class MessageHelper {
         ImptTestHelper.checkAttribute(commandOut, UserInterractor.ERRORS.ERROR,
             Util.format(`${UserInterractor.ERRORS.CMD_REQUIRED_OPTION}`, `${option}`)
         );
+    }
+    static checkNoTestFileFoundMessage(commandOut) {
+        ImptTestHelper.checkAttribute(commandOut, UserInterractor.ERRORS.ERROR,
+            UserInterractor.ERRORS.TEST_NO_FILES_FOUND);
     }
 }
 

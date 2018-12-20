@@ -105,18 +105,18 @@ describe(`impt device group list test suite (output: ${outputMode ? outputMode :
                 if (!product_id) fail("TestSuitInit error: Failed to create product");
                 ImptTestHelper.emptyCheck(commandOut);
             })).
-            then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx)).
-            then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME2}`, ImptTestHelper.emptyCheckEx)).
-            then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME2} -p ${PRODUCT_NAME2}`, ImptTestHelper.emptyCheckEx)).
-            then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME3}`, ImptTestHelper.emptyCheckEx)).
-            then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME3} -p ${PRODUCT_NAME3}`, ImptTestHelper.emptyCheckEx));
+            then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, ImptTestHelper.emptyCheck)).
+            then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME2}`, ImptTestHelper.emptyCheck)).
+            then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME2} -p ${PRODUCT_NAME2}`, ImptTestHelper.emptyCheck)).
+            then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME3}`, ImptTestHelper.emptyCheck)).
+            then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME3} -p ${PRODUCT_NAME3}`, ImptTestHelper.emptyCheck));
     }
 
     // delete all entities using in impt dg list test suite
     function _testSuiteCleanUp() {
-        return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx).
-            then(() => ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME2} -f -q`, ImptTestHelper.emptyCheckEx)).
-            then(() => ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME3} -f -q`, ImptTestHelper.emptyCheckEx));
+        return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheck).
+            then(() => ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME2} -f -q`, ImptTestHelper.emptyCheck)).
+            then(() => ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME3} -f -q`, ImptTestHelper.emptyCheck));
     }
 
     function _checkDeviceGroupExist(commandOut, expInfo) {

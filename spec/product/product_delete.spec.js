@@ -67,7 +67,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // delete all entities using in impt product delete test
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx);
+            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheck);
         }
 
         // prepare test environment for impt product delete test
@@ -166,7 +166,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
             // create project for test purposes
             function _testSuiteProjectInit() {
-                return ImptTestHelper.runCommand(`impt project create --product ${PRODUCT_NAME} --name ${DEVICE_GROUP_NAME} -q`, ImptTestHelper.emptyCheckEx);
+                return ImptTestHelper.runCommand(`impt project create --product ${PRODUCT_NAME} --name ${DEVICE_GROUP_NAME} -q`, ImptTestHelper.emptyCheck);
             }
 
             it('product delete by project', (done) => {

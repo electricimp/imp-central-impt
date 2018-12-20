@@ -92,7 +92,7 @@ describe(`impt build info test suite (output: ${outputMode ? outputMode : 'defau
 
     // delete all entities using in impt build info test suite
     function _testSuiteCleanUp() {
-        return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx);
+        return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheck);
     }
 
     function _checkBuildInfo(commandOut) {

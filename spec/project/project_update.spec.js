@@ -81,8 +81,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // prepare test environment for impt project update test
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, (commandOut) => ImptTestHelper.emptyCheckEx).
-            then(() => ImptTestHelper.runCommand(`impt project delete --all -q`, ImptTestHelper.emptyCheckEx));
+            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, (commandOut) => ImptTestHelper.emptyCheck).
+            then(() => ImptTestHelper.runCommand(`impt project delete --all -q`, ImptTestHelper.emptyCheck));
         }
 
         // check 'project successfully updated' output message 

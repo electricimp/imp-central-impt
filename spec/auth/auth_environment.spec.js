@@ -45,7 +45,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         beforeAll((done) => {
             ImptTestHelper.init(true).
-                then(_createLoginkey).
+                then(() => ImptAuthCommandsHelper.createLoginkey((commandOut) => {
+                    loginkey = commandOut;
+                })).
                 then(() => ImptTestHelper.getAccountAttrs((commandOut) => {
                     if (commandOut && commandOut.email && commandOut.id) {
                         email = commandOut.email;
@@ -62,7 +64,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         afterAll((done) => {
             ImptAuthCommandsHelper.localLogin().
-                then(_deleteLoginkey).
+                then(() => ImptAuthCommandsHelper.deleteLoginkey(loginkey)).
                 then(ImptAuthCommandsHelper.localLogout).
                 then(ImptAuthCommandsHelper.globalLogout).
                 then(ImptTestHelper.cleanUp).
@@ -77,22 +79,6 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 Shell.cp('-rf', `${ImptTestHelper.TESTS_EXECUTION_FOLDER}/.impt.auth`, `${ImptTestHelper.TESTS_EXECUTION_FOLDER}/Auth/.impt.auth`);
                 resolve();
             });
-        }
-
-        function _createLoginkey() {
-            return ImptTestHelper.runCommand(`impt loginkey create --pwd ${config.password}`, (commandOut) => {
-                const idMatcher = commandOut.output.match(new RegExp(`[0-9a-z]{16}`));
-                if (idMatcher && idMatcher.length > 0) {
-                    loginkey = idMatcher[0];
-                }
-                else fail("TestSuitInit error: Failed to create loginkey");
-                ImptTestHelper.emptyCheck(commandOut);
-            });
-        }
-
-        function _deleteLoginkey() {
-            return ImptTestHelper.runCommand(`impt loginkey delete --lk ${loginkey} --pwd ${config.password} -q`,
-                ImptTestHelper.emptyCheckEx);
         }
 
         function _checkLoginInfo(commandOut, expInfo = {}) {

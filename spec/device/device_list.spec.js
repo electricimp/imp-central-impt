@@ -127,8 +127,8 @@ describe(`impt device list test suite (output: ${outputMode ? outputMode : 'defa
     
     // delete all entities using in impt device list test suite
     function _testSuiteCleanUp() {
-        return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheckEx).
-            then(() => ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME_2} -f -q`, ImptTestHelper.emptyCheckEx));
+        return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheck).
+            then(() => ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME_2} -f -q`, ImptTestHelper.emptyCheck));
     }
 
     describe('impt device list positive  tests >', () => {

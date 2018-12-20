@@ -20,7 +20,6 @@ The normal font indicates positive tests, the **bold font** indicates negative t
 - Positive tests for `impt log stream`.
 - Tests for interactive user input.
 - Tests for builds identification by `sha` attribute.
-- Tests for `impt test` command group.
 
 ## List Of Tested Commands ##
 
@@ -85,6 +84,13 @@ The normal font indicates positive tests, the **bold font** indicates negative t
 **[impt webhook info](#webhook-info)**<br>
 **[impt webhook list](#webhook-list)**<br>
 **[impt webhook update](#webhook-update)**<br>
+
+**[impt test create](#test-create)**<br>
+**[impt test delete](#test-delete)**<br>
+**[impt test github](#test-github)**<br>
+**[impt test info](#test-info)**<br>
+**[impt test run](#test-run)**<br>
+**[impt test update](#test-update)**<br>
 
 ## Impt account command group ##
 
@@ -6854,4 +6860,589 @@ impt help pages test suite</a></sub></td>
   </tbody>
 </table>
 
+## Impt test command group ##
 
+## test create ##
+
+<table>
+  <tbody>
+    <tr align="center">
+      <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
+      <th colspan="13" rowspan="1"><sub>Options</sub></th>
+      <th colspan="1" rowspan="2"><sub>Test name</sub></th>
+    </tr>
+    <tr align="center">
+      <th><sub>dg</sub></th>
+      <th><sub>device<br>file</sub></th>
+      <th><sub>agent<br>file</sub></th>
+      <th><sub>timeout</sub></th>
+      <th><sub>stop<br>on fail</sub></th>
+      <th><sub>allow<br>disconnect</sub></th>
+      <th><sub>builder<br>cache</sub></th>
+      <th><sub>test<br>file</sub></th>
+      <th><sub>github<br>config</sub></th>
+      <th><sub>builder<br>config</sub></th>
+      <th><sub>confirmed</sub></th>
+      <th><sub>output</sub></th>
+      <th><sub>help</sub></th>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td><sub>id</sub></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td><sub>all</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./test/test_create.spec.js">test/test_create.spec.js:<br>
+test create by dg id</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td><sub>name</sub></td>
+      <td></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td><sub>Y</sub></td>
+      <td><sub>Y</sub></td>
+      <td><sub>Y</sub></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td><sub>all</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./test/test_create.spec.js">test/test_create.spec.js:<br>
+test create by dg name with options</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td><sub>id</sub></td>
+      <td><sub>Y</sub></td>
+      <td><sub>Y</sub></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td><sub>Y</sub></td>
+      <td><sub>Y</sub></td>
+      <td><sub>Y</sub></td>
+      <td><sub>all</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./test/test_create.spec.js">test/test_create.spec.js:<br>
+test create by dg id with options</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td><sub>dg<br>
+not exist</sub></td>
+      <td><sub>name</sub></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td><sub>all</sub></td>
+      <td></td>
+      <th align="left"><sub><a
+ href="./test/test_create.spec.js">test/test_create.spec.js:<br>
+test create by not exist dg</a></sub></th>
+    </tr>
+    <tr align="center">
+      <td><sub>device file <br>
+not exist</sub></td>
+      <td><sub>name</sub></td>
+      <td><sub>Y</sub></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td><sub>all</sub></td>
+      <td></td>
+      <th align="left"><sub><a
+ href="./test/test_create.spec.js">test/test_create.spec.js:<br>
+test create whit not exist device file</a></sub></th>
+    </tr>
+    <tr align="center">
+      <td><sub>agent file <br>
+not exist</sub></td>
+      <td><sub>name</sub></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td><sub>all</sub></td>
+      <td></td>
+      <th align="left"><sub><a
+ href="./test/test_create.spec.js">test/test_create.spec.js:<br>
+test create whit not exist agent file</a></sub></th>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><sub>default</sub></td>
+      <td><sub>Y</sub></td>
+      <td align="left"><sub><a
+ href="./help/help.spec.js">help/help.spec.js:<br>
+impt help pages test suite</a></sub></td>
+    </tr>
+  </tbody>
+</table>
+
+
+## test delete ##
+
+<table>
+  <tbody>
+    <tr align="center">
+      <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
+      <th colspan="7" rowspan="1"><sub>Options</sub></th>
+      <th colspan="1" rowspan="2"><sub>Test name</sub></th>
+    </tr>
+    <tr align="center">
+      <th><sub>github config</sub></th>
+      <th><sub>builder config</sub></th>
+      <th><sub>entities</sub></th>
+      <th><sub>all</sub></th>
+      <th><sub>confirmed</sub></th>
+      <th><sub>output</sub></th>
+      <th><sub>help</sub></th>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td><sub>all</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./test/test_delete.spec.js">test/test_delete.spec.js:<br>
+test delete</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td><sub>Y</sub></td>
+      <td><sub>Y</sub></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td><sub>all</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./test/test_delete.spec.js">test/test_delete.spec.js:<br>
+test delete with options</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td><sub>product with<br>several dg</sub></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td><sub>Y</sub></td>
+      <td><sub>all</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./test/test_delete.spec.js">test/test_delete.spec.js:<br>
+test delete with all entities</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td><sub>dg not<br>exist</sub></td>
+      <td></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td><sub>all</sub></td>
+      <td></td>
+      <th align="left"><sub><a
+ href="./test/test_delete.spec.js">test/test_delete.spec.js:<br>
+test delete with not exist dg</a></sub></th>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><sub>default</sub></td>
+      <td><sub>Y</sub></td>
+      <td align="left"><sub><a
+ href="./help/help.spec.js">help/help.spec.js:<br>
+impt help pages test suite</a></sub></td>
+    </tr>
+  </tbody>
+</table>
+
+## test github ##
+
+<table>
+  <tbody>
+    <tr align="center">
+      <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
+      <th colspan="6" rowspan="1"><sub>Options</sub></th>
+      <td colspan="1" rowspan="2"><sub>Test name</sub></td>
+    </tr>
+    <tr align="center">
+      <th><sub>github config</sub></th>
+      <th><sub>user</sub></th>
+      <th><sub>pwd</sub></th>
+      <th><sub>confirmed</sub></th>
+      <th><sub>output</sub></th>
+      <th><sub>help</sub></th>
+    </tr>
+    <tr align="center">
+      <td><sub>config not exist</sub></td>
+      <td><sub>Y</sub></td>
+      <td><sub>Y</sub></td>
+      <td><sub>Y</sub></td>
+      <td></td>
+      <td><sub>all</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./test/test_github.spec.js">test/test_github.spec.js:<br>
+create github config</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td><sub>config exist</sub></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td><sub>all</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./test/test_github.spec.js">test/test_github.spec.js:<br>
+update github config</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><sub>default</sub></td>
+      <td><sub>Y</sub></td>
+      <td align="left"><sub><a
+ href="./help/help.spec.js">help/help.spec.js:<br>
+impt help pages test suite</a></sub></td>
+    </tr>
+  </tbody>
+</table>
+
+## test info ##
+
+<table>
+  <tbody>
+    <tr align="center">
+      <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
+      <th colspan="2" rowspan="1"><sub>Options</sub></th>
+      <th colspan="1" rowspan="2"><sub>
+Test name</sub></th>
+    </tr>
+    <tr align="center">
+      <th><sub>output</sub></th>
+      <th><sub>help</sub></th>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./test/test_info.spec.js">test/test_info.spec.js:<br>
+test info</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td><sub>dg not exist</sub></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./test/test_info.spec.js">test/test_info.spec.js:<br>
+test info with not exist dg</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td><sub>default</sub></td>
+      <td><sub>Y</sub></td>
+      <td align="left"><sub><a
+ href="./help/help.spec.js">help/help.spec.js:<br>
+impt help pages test suite</a></sub></td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+## test run ##
+
+<table>
+  <tbody>
+    <tr align="center">
+      <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
+      <th colspan="4" rowspan="1"><sub>Options</sub></th>
+      <th colspan="1" rowspan="2"><sub>Test name</sub></th>
+    </tr>
+    <tr align="center">
+      <th><sub>test</sub></th>
+      <th><sub>clear<br>cache</sub></th>
+      <th><sub>output</sub></th>
+      <th><sub>help</sub></th>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./test/test_run.spec.js">test/test_run.spec.js:<br>
+test run all test files</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td><sub>[testfile]</sub></td>
+      <td></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./test/test_run.spec.js">test/test_run.spec.js:<br>
+test run one test file</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td><sub>[testfile]:<br>
+[testcase]</sub></td>
+      <td></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./test/test_run.spec.js">test/test_run.spec.js:<br>
+test run one test case</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td><sub>[testfile]:<br>[testcase]:<br>[testmethod]</sub></td>
+      <td></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./test/test_run.spec.js">test/test_run.spec.js:<br>
+test run one test method</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td><sub>test file<br>not exist</sub></td>
+      <td><sub>[testfile]</sub></td>
+      <td></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <th align="left"><sub><a
+ href="./test/test_run.spec.js">test/test_run.spec.js:<br>
+test run not exist test file</a></sub></th>
+    </tr>
+     <tr align="center">
+      <td><sub>test case<br>not exist</sub></td>
+      <td><sub>[testfile]:<br>[testcase]</sub></td>
+      <td></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <th align="left"><sub><a
+ href="./test/test_run.spec.js">test/test_run.spec.js:<br>
+      test run not exist test case</a></sub></th>
+    </tr>
+    <tr align="center">
+      <td><sub>test method<br>not exist</sub></td>
+      <td><sub>[testfile]:<br>[testcase]:<br>[testmethod]</sub></td>
+      <td></td>
+      <td><sub>default</sub></td>
+      <td></td>
+      <th align="left"><sub><a
+ href="./test/test_run.spec.js">test/test_run.spec.js:<br>
+      test run not exist test method</a></sub></th>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><sub>default</sub></td>
+      <td><sub>Y</sub></td>
+      <td align="left"><sub><a
+ href="./help/help.spec.js">help/help.spec.js:<br>
+impt help pages test suite</a></sub></td>
+    </tr>
+  </tbody>
+</table>
+
+## test update ##
+
+<table>
+  <tbody>
+    <tr align="center">
+      <th colspan="1" rowspan="2"><sub>Precondition</sub></th>
+      <th colspan="12" rowspan="1"><sub>Options</sub></th>
+      <th colspan="1" rowspan="2"><sub>Test name</sub></th>
+    </tr>
+    <tr center="" align="">
+      <th><sub>dg</sub></th>
+      <th><sub>device<br>file</sub></th>
+      <th><sub>agent<br>file</sub></th>
+      <th><sub>timeout</sub></th>
+      <th><sub>stop<br>on fail</sub></th>
+      <th><sub>allow<br>disconnect</sub></th>
+      <th><sub>builder<br>cache</sub></th>
+      <th><sub>test file</sub></th>
+      <th><sub>github<br>config</sub></th>
+      <th><sub>builder<br>config</sub></th>
+      <th><sub>output</sub></th>
+      <th><sub>help</sub></th>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td><sub>Y</sub></td>
+      <td><sub>Y</sub></td>
+      <td><sub>Y</sub></td>
+      <td><sub>Y</sub></td>
+      <td><sub>Y</sub></td>
+      <td><sub>Y</sub></td>
+      <td><sub>Y</sub></td>
+      <td><sub>Y</sub></td>
+      <td><sub>all</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./test/test_update.spec.js">test/test_update.spec.js:<br>
+test update all attrs</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td></td>
+      <td><sub>v/o value</sub></td>
+      <td><sub>v/o value</sub></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><sub>v/o value</sub></td>
+      <td><sub>v/o value</sub></td>
+      <td><sub>all</sub></td>
+      <td></td>
+      <td align="left"><sub><a
+ href="./test/test_update.spec.js">test/test_update.spec.js:<br>
+test update remove attrs</a></sub></td>
+    </tr>
+    <tr align="center">
+      <td><sub>dg not<br>
+exist</sub></td>
+      <td><sub>Y</sub></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><sub>all</sub></td>
+      <td></td>
+      <th align="left"><sub><a
+ href="./test/test_update.spec.js">test/test_update.spec.js:<br>
+test update to not exist dg</a></sub></th>
+    </tr>
+    <tr align="center">
+      <td><sub>file not<br>
+exist</sub></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><sub>all</sub></td>
+      <td></td>
+      <th align="left"><sub><a
+ href="./test/test_update.spec.js">test/test_update.spec.js:<br>
+test update to not exist device file</a></sub></th>
+    </tr>
+    <tr align="center">
+      <td><sub>file not<br>
+exist</sub></td>
+      <td></td>
+      <td></td>
+      <td><sub>Y</sub></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><sub>all</sub></td>
+      <td></td>
+      <th align="left"><sub><a
+ href="./test/test_update.spec.js">test/test_update.spec.js:<br>
+test update to not exist agent file</a></sub></th>
+    </tr>
+    <tr align="center">
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><sub>default</sub></td>
+      <td><sub>Y</sub></td>
+      <td align="left"><sub><a
+ href="./help/help.spec.js">help/help.spec.js:<br>
+impt help pages test suite</a></sub></td>
+    </tr>
+  </tbody>
+</table>

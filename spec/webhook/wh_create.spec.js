@@ -33,7 +33,6 @@ const Util = require('util');
 const UserInterractor = require('../../lib/util/UserInteractor');
 const PRODUCT_NAME = `__impt_wh_product${config.suffix}`;
 const DG_NAME = `__impt_wh_device_group${config.suffix}`;
-const DG_NAME_2 = `__impt_wh_device_group_2${config.suffix}`;
 const WH_URL = `http://example.com/wc/${config.suffix}`;
 
 // Test suite for 'impt webhook create' command.
@@ -61,20 +60,19 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         }, ImptTestHelper.TIMEOUT);
 
         afterEach((done) => {
-            ImptTestHelper.runCommand(`impt webhook delete --wh ${wh_id} -q`, ImptTestHelper.emptyCheckEx).
+            ImptTestHelper.runCommand(`impt webhook delete --wh ${wh_id} -q`, ImptTestHelper.emptyCheck).
                 then(done).
                 catch(error => done.fail(error));
         }, ImptTestHelper.TIMEOUT);
 
         // delete all entities using in impt webhook create test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommand(`impt product delete --product ${PRODUCT_NAME} --force --confirmed`, ImptTestHelper.emptyCheckEx).
-                then(() => ImptTestHelper.runCommand(`impt dg delete --dg ${DG_NAME_2} -f `, ImptTestHelper.emptyCheckEx));
+            return ImptTestHelper.runCommand(`impt product delete --product ${PRODUCT_NAME} --force --confirmed`, ImptTestHelper.emptyCheck);
         }
 
         // prepare test environment for impt webhook create test suite
         function _testSuiteInit() {
-            return ImptTestHelper.runCommand(`impt product create --name ${PRODUCT_NAME}`, ImptTestHelper.emptyCheckEx).
+            return ImptTestHelper.runCommand(`impt product create --name ${PRODUCT_NAME}`, ImptTestHelper.emptyCheck).
                 then(() => ImptTestHelper.runCommand(`impt dg create --name ${DG_NAME} -p ${PRODUCT_NAME} `, (commandOut) => {
                     dg_id = ImptTestHelper.parseId(commandOut);
                     if (!dg_id) fail("TestSuitInit error: Failed to create device group");
@@ -152,8 +150,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         });
 
         it('webhook create with not exist dg', (done) => {
-            ImptTestHelper.runCommand(`impt webhook create --dg ${DG_NAME_2} --url ${WH_URL} --event deployment --mime json ${outputMode}`, (commandOut) => {
-                MessageHelper.checkEntityNotFoundError(commandOut, Identifier.ENTITY_TYPE.TYPE_DEVICE_GROUP, DG_NAME_2);
+            ImptTestHelper.runCommand(`impt webhook create --dg not-exist-device-group --url ${WH_URL} --event deployment --mime json ${outputMode}`, (commandOut) => {
+                MessageHelper.checkEntityNotFoundError(commandOut, Identifier.ENTITY_TYPE.TYPE_DEVICE_GROUP, 'not-exist-device-group');
                 ImptTestHelper.checkFailStatus(commandOut);
             }).
                 then(done).

@@ -59,7 +59,7 @@ describe(`impt device info test suite (output: ${outputMode ? outputMode : 'defa
 
     // prepare environment for device info command testing
     function _testSuiteInit() {
-        return ImptTestHelper.getDeviceAttrs(PRODUCT_NAME,DEVICE_GROUP_NAME,(commandOut) => {
+        return ImptTestHelper.getDeviceAttrs(PRODUCT_NAME, DEVICE_GROUP_NAME, (commandOut) => {
             if (commandOut && commandOut.mac) {
                 device_mac = commandOut.mac;
                 old_name = commandOut.name;
@@ -68,8 +68,8 @@ describe(`impt device info test suite (output: ${outputMode ? outputMode : 'defa
             }
             else fail("TestSuitInit error: Failed to get additional device attributes");
         }).
-            then(() => ImptTestHelper.runCommand(`impt device update -d ${config.devices[config.deviceidx]} --name ${device_name}`, ImptTestHelper.emptyCheckEx)).
-            then(() => ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx)).
+            then(() => ImptTestHelper.runCommand(`impt device update -d ${config.devices[config.deviceidx]} --name ${device_name}`, ImptTestHelper.emptyCheck)).
+            then(() => ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheck)).
             then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, (commandOut) => {
                 product_id = ImptTestHelper.parseId(commandOut);
                 if (!product_id) fail("TestSuitInit error: Failed to create product");
@@ -90,8 +90,8 @@ describe(`impt device info test suite (output: ${outputMode ? outputMode : 'defa
 
     // delete all entities using in impt device info test suite
     function _testSuiteCleanUp() {
-        return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheckEx).
-            then(() => ImptTestHelper.runCommand(`impt device update -d ${config.devices[config.deviceidx]} --name ${old_name ? old_name : '""'}`, ImptTestHelper.emptyCheckEx));
+        return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheck).
+            then(() => ImptTestHelper.runCommand(`impt device update -d ${config.devices[config.deviceidx]} --name ${old_name ? old_name : '""'}`, ImptTestHelper.emptyCheck));
     }
 
     function _checkDeviceInfo(commandOut) {
@@ -157,17 +157,17 @@ describe(`impt device info test suite (output: ${outputMode ? outputMode : 'defa
         });
 
         it('unassigned device info', (done) => {
-            ImptTestHelper.runCommand(`impt device unassign -d ${config.devices[config.deviceidx]}`, ImptTestHelper.emptyCheckEx).
-                then(()=>ImptTestHelper.runCommand(`impt device info --device ${config.devices[config.deviceidx]} -z json`, (commandOut) => {
-                let json = JSON.parse(commandOut.output);
-                expect(json.Device.id).toBe(config.devices[config.deviceidx]);
-                expect(json.Device.name).toBe(device_name);
-                expect(json.Device.mac_address).toBe(device_mac);
-                expect(json.Device.agent_id).toBeEmptyString();
-                expect(json.Device['Device Group']).toBeUndefined();
-                expect(json.Device['Product']).toBeUndefined();
-                ImptTestHelper.checkSuccessStatus(commandOut);
-            })).
+            ImptTestHelper.runCommand(`impt device unassign -d ${config.devices[config.deviceidx]}`, ImptTestHelper.emptyCheck).
+                then(() => ImptTestHelper.runCommand(`impt device info --device ${config.devices[config.deviceidx]} -z json`, (commandOut) => {
+                    let json = JSON.parse(commandOut.output);
+                    expect(json.Device.id).toBe(config.devices[config.deviceidx]);
+                    expect(json.Device.name).toBe(device_name);
+                    expect(json.Device.mac_address).toBe(device_mac);
+                    expect(json.Device.agent_id).toBeEmptyString();
+                    expect(json.Device['Device Group']).toBeUndefined();
+                    expect(json.Device['Product']).toBeUndefined();
+                    ImptTestHelper.checkSuccessStatus(commandOut);
+                })).
                 then(done).
                 catch(error => done.fail(error));
         });
