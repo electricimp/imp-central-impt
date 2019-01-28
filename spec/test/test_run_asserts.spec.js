@@ -1,4 +1,4 @@
-// MIT License
+﻿// MIT License
 //
 // Copyright 2018 Electric Imp
 //
@@ -111,7 +111,7 @@ describe('impt test run for asserts scenario >', () => {
             catch(error => done.fail(error));
     });
 
-    fit('test assert deep equal', (done) => {
+    it('test assert deep equal', (done) => {
         ImptTestCommandsHelper.createTestConfig('fixtures/asserts/deep_equal', {}).
             then(() => ImptTestHelper.runCommand('impt test run', (commandOut) => {
                 expect(commandOut.output).not.toBeEmptyString();
