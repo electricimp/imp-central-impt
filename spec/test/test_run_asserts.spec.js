@@ -1,4 +1,4 @@
-// MIT License
+﻿// MIT License
 //
 // Copyright 2018 Electric Imp
 //
@@ -116,9 +116,9 @@ describe('impt test run for asserts scenario >', () => {
             then(() => ImptTestHelper.runCommand('impt test run', (commandOut) => {
                 expect(commandOut.output).not.toBeEmptyString();
                 expect(commandOut.output).toMatch(/Success/);
-                expect(commandOut.output).toMatch(/Missing slot \[a\.b\.c\] in actual value/);
-                expect(commandOut.output).toMatch(/Extra slot \[a\.b\.d\] in actual value/);
-                expect(commandOut.output).toMatch(/At \[a\.b\.c\]: expected \"3\", got \"100\"/);
+                expect(commandOut.output).toMatch(/Comparison failed on 'a\.b\.c': expected 3, got none/);
+                expect(commandOut.output).toMatch(/Comparison failed on 'a\.b\.d': expected none, got 4/);
+                expect(commandOut.output).toMatch(/Comparison failed on 'a\.b\.c': expected 3, got 100/);
                 ImptTestCommandsHelper.checkTestFailStatus(commandOut);
                 ImptTestHelper.checkFailStatus(commandOut);
             })).
