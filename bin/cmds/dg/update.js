@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright 2018 Electric Imp
+// Copyright 2018-2019 Electric Imp
 //
 // SPDX-License-Identifier: MIT
 //
@@ -49,6 +49,14 @@ exports.builder = function (yargs) {
             demandOption : false,
             describe : 'An optional description of the Device Group.',
             _usage : '<device_group_description>'
+        },
+        [Options.DUT] : {
+            demandOption : false,
+            describe : Util.format("The Device Group identifier of the specified Device Group's device-under-test target Device Group." +
+                " May only be specified for %s and %s Device Groups." +
+                " The device-under-test target Device Group must be of the type %s or %s correspondingly," +
+                " and belong to the same Product as the specified Device Group.",
+                Options.DG_TYPE_FACTORY, Options.DG_TYPE_PRE_FACTORY, Options.DG_TYPE_DUT, Options.DG_TYPE_PRE_DUT)
         },
         [Options.TARGET] : {
             demandOption : false,

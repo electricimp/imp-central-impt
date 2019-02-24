@@ -582,13 +582,13 @@ The following assumes:
 
 3. Create a Project for [factory firmware](https://developer.electricimp.com/examples/factoryfirmware) which is linked to the existing Product "MyProduct"; create new Device Groups "MyPreFactoryDG", "MyPreDUTDG" and "MyPreProductionDG" in that Product, and empty files `factory.device.nut` and `factory.agent.nut`, and a [Project file](./CommandsManual.md#project-files).
 
-**UPDATE!!!**
 ```
 > impt project create --pre-factory --product MyProduct --name MyPreFactoryDG 
     --descr "Factory Firmware" --dut MyPreDUTDG --create-dut
     --target MyPreProductionDG --create-target 
     --device-file factory.device.nut --agent-file factory.agent.nut
 Device Group "MyPreProductionDG" is created successfully.
+Device Group "MyPreDUTDG" is created successfully.
 Device Group "MyPreFactoryDG" is created successfully.
 Device source file "factory.device.nut" is created successfully.
 Agent source file "factory.agent.nut" is created successfully.
@@ -611,16 +611,19 @@ Project:
       id:   53ca29f4-937d-e684-729b-7e6b6a192c19
       type: pre-production
       name: MyPreProductionDG
+    DUT Target:
+      id:   10c6179c-8608-1af2-7aee-5d1dc5539cda
+      type: pre-dut
+      name: MyPreDUTDG
 IMPT COMMAND SUCCEEDS
 ```
 
 4. Copy your factory test firmware's build tagged as “MyTestsRC1” to the “MyPreDUTDG” Device Group. “MyTestsRC1” contains the test code for devices tested during the factory process. Build attributes are not copied.
 
-**UPDATE!!!**
 ```
-> impt build copy --build MyTestRC1 --dg MyPreDUTDG
-Deployment "a0e8e599-c6c5-62c0-2a88-a8d4ac3e07d8" is created successfully.
-Deployment "MyRC1" is copied successfully to Deployment "a0e8e599-c6c5-62c0-2a88-a8d4ac3e07d8".
+> impt build copy --build MyTestsRC1 --dg MyPreDUTDG
+Deployment "26036a34-9751-705b-4f91-3f50c2a9ac47" is created successfully.
+Deployment "MyTestsRC1" is copied successfully to Deployment "26036a34-9751-705b-4f91-3f50c2a9ac47".
 IMPT COMMAND SUCCEEDS
 ```
 
@@ -846,7 +849,6 @@ IMPT COMMAND SUCCEEDS
 
 9. Display and review the full structure of your Product.
 
-**UPDATE!!!**
 ```
 > impt product info --full
 Product:
@@ -869,6 +871,21 @@ Product:
         id:  429c3a4c-947b-3d84-77f8-fa15cf3038b5
         sha: f4756c7578aa69910a8857d8ec08ff15bc2d7e1a8fc8007caf98e3ea9fca07a3
     Device Group:
+      id:                 10c6179c-8608-1af2-7aee-5d1dc5539cda
+      type:               pre-dut
+      name:               MyPreDUTDG
+      Current Deployment:
+        id:  26036a34-9751-705b-4f91-3f50c2a9ac47
+        sha: 5c832c6b984ea536dfa5a8f56707809a8cfac089df49196bd742fda158501b27
+      Min supported Deployment:
+        id:  26036a34-9751-705b-4f91-3f50c2a9ac47
+        sha: 5c832c6b984ea536dfa5a8f56707809a8cfac089df49196bd742fda158501b27
+      DUT Target for:
+        Device Group:
+          id:   71c3be05-a7d2-a326-8906-8af3b205bd13
+          type: pre-factory
+          name: MyPreFactoryDG
+    Device Group:
       id:                       71c3be05-a7d2-a326-8906-8af3b205bd13
       type:                     pre-factory
       name:                     MyPreFactoryDG
@@ -884,6 +901,10 @@ Product:
         id:   53ca29f4-937d-e684-729b-7e6b6a192c19
         type: pre-production
         name: MyPreProductionDG
+      DUT Target:
+        id:   10c6179c-8608-1af2-7aee-5d1dc5539cda
+        type: pre-dut
+        name: MyPreDUTDG
     Device Group:
       id:                       53ca29f4-937d-e684-729b-7e6b6a192c19
       type:                     pre-production
@@ -940,7 +961,6 @@ If your development work was temporary, you may want to remove all of your devel
 
 2. Delete your factory firmware Project, the source files and all impCentral API entities. The “MyPreFactoryDG” and “MyPreProductionDG” Device Groups and all their builds (including *flagged* ones) will be deleted, and the devices will be unassigned from them. The “MyProduct” Product will not be deleted as you still have another Project (ie. a Device Group) related to it.
 
-**UPDATE!!!**
 ```
 > impt project delete --all
 The following entities will be deleted:
@@ -949,12 +969,19 @@ Device Group:
   type: pre-production
   name: MyPreProductionDG
 Device Group:
+  id:   10c6179c-8608-1af2-7aee-5d1dc5539cda
+  type: pre-dut
+  name: MyPreDUTDG
+Device Group:
   id:   71c3be05-a7d2-a326-8906-8af3b205bd13
   type: pre-factory
   name: MyPreFactoryDG
 Deployment:
   id:  a0e8e599-c6c5-62c0-2a88-a8d4ac3e07d8
   sha: f4756c7578aa69910a8857d8ec08ff15bc2d7e1a8fc8007caf98e3ea9fca07a3
+Deployment:
+  id:  26036a34-9751-705b-4f91-3f50c2a9ac47
+  sha: 5c832c6b984ea536dfa5a8f56707809a8cfac089df49196bd742fda158501b27
 Deployment:
   id:      4a7339e4-1f7c-3caa-2ce5-15c367df9a3f
   sha:     f6f710ce359d1e1bee10b17f62184a8f2a9884d17dd44292b0e9dc640c52daf6
@@ -991,8 +1018,10 @@ Device "5000d8c46a56cfca" is unassigned successfully.
 Deployment "4a7339e4-1f7c-3caa-2ce5-15c367df9a3f" is updated successfully.
 Device Group "71c3be05-a7d2-a326-8906-8af3b205bd13" is deleted successfully.
 Device Group "53ca29f4-937d-e684-729b-7e6b6a192c19" is deleted successfully.
+Device Group "10c6179c-8608-1af2-7aee-5d1dc5539cda" is deleted successfully.
 Deployment "5dbfc968-5c94-fc4c-dd37-424f779b7e40" is deleted successfully.
 Deployment "4a7339e4-1f7c-3caa-2ce5-15c367df9a3f" is deleted successfully.
+Deployment "26036a34-9751-705b-4f91-3f50c2a9ac47" is deleted successfully.
 Deployment "a0e8e599-c6c5-62c0-2a88-a8d4ac3e07d8" is deleted successfully.
 Device/agent source files "factory.device.nut", "factory.agent.nut" are deleted successfully.
 Project is deleted successfully.
