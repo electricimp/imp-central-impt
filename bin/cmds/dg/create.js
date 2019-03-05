@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright 2018 Electric Imp
+// Copyright 2018-2019 Electric Imp
 //
 // SPDX-License-Identifier: MIT
 //
@@ -59,6 +59,13 @@ exports.builder = function (yargs) {
             describe : 'An optional description of the Device Group.',
             _usage : '<device_group_description>'
         },
+        [Options.DUT] : {
+            demandOption : false,
+            describe : Util.format("The Device Group identifier of the new Device Group's device-under-test target Device Group." +
+                " Should only be specified if the new Device Group is of the %s or %s type." +
+                " The device-under-test target Device Group must be of the type %s or %s correspondingly, and belong to the specified Product.",
+                Options.DG_TYPE_FACTORY, Options.DG_TYPE_PRE_FACTORY, Options.DG_TYPE_DUT, Options.DG_TYPE_PRE_DUT)
+        },
         [Options.TARGET] : {
             demandOption : false,
             describe : Util.format("The Device Group identifier of the new Device Group's production target Device Group." +
@@ -74,7 +81,11 @@ exports.builder = function (yargs) {
         .options(options)
         .check(function (argv) {
             const opts = new Options(argv);
-            if (!opts.target && Options.isProductionTargetRequired(opts.deviceGroupType)) {
+            if (!opts.dut && Options.isTargetRequired(opts.deviceGroupType)) {
+                return new Errors.ImptError(UserInteractor.ERRORS.CMD_TARGET_REQUIRED,
+                    Options.DUT, Options.getDeviceGroupTypeName(opts.deviceGroupType));
+            }
+            if (!opts.target && Options.isTargetRequired(opts.deviceGroupType)) {
                 return new Errors.ImptError(UserInteractor.ERRORS.CMD_TARGET_REQUIRED,
                     Options.TARGET, Options.getDeviceGroupTypeName(opts.deviceGroupType));
             }

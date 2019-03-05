@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright 2018 Electric Imp
+// Copyright 2018-2019 Electric Imp
 //
 // SPDX-License-Identifier: MIT
 //
@@ -65,6 +65,14 @@ exports.builder = function (yargs) {
             default: 'agent.nut'
         },
         [Options.PRE_FACTORY] : false,
+        [Options.DUT] : {
+            demandOption : false,
+            describe : Util.format("The Device Group identifier of the new Project Device Group's device-under-test target Device Group." +
+                " May be specified only if --%s is also specified." +
+                " The specified Device Group must be of the type %s and belong to the specified Product.",
+                Options.PRE_FACTORY, Options.DG_TYPE_PRE_DUT)
+        },
+        [Options.CREATE_DUT] : false,
         [Options.TARGET] : {
             demandOption : false,
             describe : Util.format("The Device Group identifier of the new Project Device Group's production target Device Group." +
@@ -83,6 +91,9 @@ exports.builder = function (yargs) {
             const opts = new Options(argv);
             if (opts.preFactory && !opts.target || !opts.preFactory && opts.target) {
                 return new Errors.CommandSyntaxError(UserInteractor.ERRORS.CMD_COOPERATIVE_OPTIONS, Options.PRE_FACTORY, Options.TARGET);
+            }
+            if (opts.preFactory && !opts.dut || !opts.preFactory && opts.dut) {
+                return new Errors.CommandSyntaxError(UserInteractor.ERRORS.CMD_COOPERATIVE_OPTIONS, Options.PRE_FACTORY, Options.DUT);
             }
             return Options.checkOptions(argv, options);
         })
