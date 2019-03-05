@@ -20,7 +20,8 @@ The full *impt* commands specification is described in the [*impt* Commands Manu
   - [Deleting a Project](#deleting-a-project)
 - [Typical Use-cases](#typical-use-cases)
   - [Develop Application Firmware](#develop-application-firmware)
-  - [Develop Factory Firmware](#develop-factory-firmware)
+  - [Develop Factory Test Firmware](#develop-factory-test-firmware)
+  - [Develop Factory Fixture Firmware](#develop-factory-fixture-firmware)
   - [Clean-up](#clean-up)
 
 ## Projects ##
@@ -95,12 +96,19 @@ Use the [`impt project create`](./CommandsManual.md#project-create) command. Thi
 - If you already have the Product, specify its ID or name as a value of the `--product <PRODUCT_IDENTIFIER>` option.
 - If you want to create a new Product, specify its name as a value of the `--product <PRODUCT_IDENTIFIER>` option and add the `--create-product` option.
 
-By default, it is assumed that the new Project is going to be used for application firmware development, so the new Device Group will be a Development Device Group. If you create the Project for [factory firmware](https://developer.electricimp.com/examples/factoryfirmware) development, specify the `--pre-factory` option to create a Pre-factory Device Group. In this case, you also need to specify a production target Device Group which should be of the *pre-production* [type](./CommandsManual.md#device-group-type) and belong to the same Product:
+By default, it is assumed that the new Project is going to be used for application firmware development, so the new Device Group will be a Development Device Group.
 
-- If you already have the production target Device Group, specify its ID or name as a value of the `--target <DEVICE_GROUP_IDENTIFIER>` option.
-- If you need to create a new production target Device Group, specify its name as a value of the `--target <DEVICE_GROUP_IDENTIFIER>` option and add the `--create-target` option.
+If you create the Project for [factory firmware](https://developer.electricimp.com/examples/factoryfirmware) development, specify the `--pre-factory` option to create a Pre-factory Device Group. In this case, you also need to specify two target Device Groups which should belong to the same Product:
 
-Alternatively, you can create the required impCentral API entities in advance using other *impt* commands. For example, use [`impt product create`](./CommandsManual.md#product-create) to create the Product, and [`impt dg create`](./CommandsManual.md#device-group-create) to create the production target Device Group and/or the Project's Device Group itself.
+1. Device-under-test (DUT) target Device Group which should be of the *pre-dut* [type](./CommandsManual.md#device-group-type).
+    - If you already have the device-under-test target Device Group, specify its ID or name as a value of the `--dut <DEVICE_GROUP_IDENTIFIER>` option.
+    - If you need to create a new device-under-test target Device Group, specify its name as a value of the `--dut <DEVICE_GROUP_IDENTIFIER>` option and add the `--create-dut` option.
+
+2. Production target Device Group which should be of the *pre-production* [type](./CommandsManual.md#device-group-type).
+    - If you already have the production target Device Group, specify its ID or name as a value of the `--target <DEVICE_GROUP_IDENTIFIER>` option.
+    - If you need to create a new production target Device Group, specify its name as a value of the `--target <DEVICE_GROUP_IDENTIFIER>` option and add the `--create-target` option.
+
+Alternatively, you can create the required impCentral API entities in advance using other *impt* commands. For example, use [`impt product create`](./CommandsManual.md#product-create) to create the Product, and [`impt dg create`](./CommandsManual.md#device-group-create) to create the production and/or DUT target Device Group and/or the Project's Device Group itself.
 
 The source code files can be specified directly using the `--device-file <device_file>` and `--agent-file <agent_file>` options. Or the default names can be used. If a specified file does not exist, the command creates it as an empty file.
 
@@ -133,7 +141,7 @@ IMPT COMMAND SUCCEEDS
 
 You can update your Project at any time with the [`impt project update`](./CommandsManual.md#project-update) command. The following can be updated:
 
-- The project’s Device Group name and description, and the production target. The same can be done with [`impt dg update`](./CommandsManual.md#device-group-update).
+- The project’s Device Group name and description, the production and device-under-test targets. The same can be done with [`impt dg update`](./CommandsManual.md#device-group-update).
 - Change the source files which are linked to the Project.
 
 **Note** You can update other impCentral API entities related to your Project by using other *impt* commands. For example, use [`impt product update`](./CommandsManual.md#product-update) to change the name and/or description of the related Product.
@@ -555,23 +563,32 @@ Deployment "e0059ee6-2483-4ab1-50eb-e693e62155b7" is updated successfully.
 IMPT COMMAND SUCCEEDS
 ```
 
-### Develop Factory Firmware ###
+### Develop Factory Test Firmware ###
+
+You may develop the tests which will be run on the devices-under-test during the factory process the same way as your application firmware. See [Develop Application Firmware](#develop-application-firmware) section.
+
+### Develop Factory Fixture Firmware ###
 
 **Note:** you need to have appropriate permission to make use of the impCentral API entities related to pre-production processes.
 
-The following assumes you are making use of the Product created in the use-case above.
+The following assumes:
+- you are making use of the Product created in the use-case above,
+- you already have the [Factory Test Firmware](#develop-factory-test-firmware) for devices tested during the factory process,
+- you already have the [Application Firmware](#develop-application-firmware) for devices blessed during the factory process.
 
 1. Create a new directory called, for example, `factory`.
 
 2. Go to the new directory.
 
-3. Create a Project for [factory firmware](https://developer.electricimp.com/examples/factoryfirmware) which is linked to the existing Product "MyProduct"; create new Device Groups "MyPreFactoryDG" and "MyPreProductionDG" in that Product, and empty files `factory.device.nut` and `factory.agent.nut`, and a [Project file](./CommandsManual.md#project-files).
+3. Create a Project for [factory firmware](https://developer.electricimp.com/examples/factoryfirmware) which is linked to the existing Product "MyProduct"; create new Device Groups "MyPreFactoryDG", "MyPreDUTDG" and "MyPreProductionDG" in that Product, and empty files `factory.device.nut` and `factory.agent.nut`, and a [Project file](./CommandsManual.md#project-files).
 
 ```
 > impt project create --pre-factory --product MyProduct --name MyPreFactoryDG 
-    --descr "Factory Firmware" --target MyPreProductionDG --create-target 
+    --descr "Factory Firmware" --dut MyPreDUTDG --create-dut
+    --target MyPreProductionDG --create-target 
     --device-file factory.device.nut --agent-file factory.agent.nut
 Device Group "MyPreProductionDG" is created successfully.
+Device Group "MyPreDUTDG" is created successfully.
 Device Group "MyPreFactoryDG" is created successfully.
 Device source file "factory.device.nut" is created successfully.
 Agent source file "factory.agent.nut" is created successfully.
@@ -594,10 +611,23 @@ Project:
       id:   53ca29f4-937d-e684-729b-7e6b6a192c19
       type: pre-production
       name: MyPreProductionDG
+    DUT Target:
+      id:   10c6179c-8608-1af2-7aee-5d1dc5539cda
+      type: pre-dut
+      name: MyPreDUTDG
 IMPT COMMAND SUCCEEDS
 ```
 
-4. Copy your application’s build tagged as “MyRC1” to the “MyPreProductionDG” Device Group. “MyRC1” contains the code for devices blessed by your factory firmware. Build attributes are not copied.
+4. Copy your factory test firmware's build tagged as “MyTestsRC1” to the “MyPreDUTDG” Device Group. “MyTestsRC1” contains the test code for devices tested during the factory process. Build attributes are not copied.
+
+```
+> impt build copy --build MyTestsRC1 --dg MyPreDUTDG
+Deployment "26036a34-9751-705b-4f91-3f50c2a9ac47" is created successfully.
+Deployment "MyTestsRC1" is copied successfully to Deployment "26036a34-9751-705b-4f91-3f50c2a9ac47".
+IMPT COMMAND SUCCEEDS
+```
+
+5. Copy your application firmware’s build tagged as “MyRC1” to the “MyPreProductionDG” Device Group. “MyRC1” contains the code for devices blessed during the factory process. Build attributes are not copied.
 
 ```
 > impt build copy --build MyRC1 --dg MyPreProductionDG
@@ -606,11 +636,11 @@ Deployment "MyRC1" is copied successfully to Deployment "a0e8e599-c6c5-62c0-2a88
 IMPT COMMAND SUCCEEDS
 ```
 
-5. Write your [factory firmware](https://developer.electricimp.com/examples/factoryfirmware) using the Project’s source code files.
+6. Write your [factory fixture firmware](https://developer.electricimp.com/examples/factoryfirmware) using the Project’s source code files.
 
-6. Add your test factory BlinkUp fixture to your Electric Imp account as if it were a development device.
+7. Add your test factory BlinkUp fixture to your Electric Imp account as if it were a development device.
 
-7. List all of your unassigned devices and find the test fixture.
+8. List all of your unassigned devices and find the test fixture.
 
 ```
 > impt device list --unassigned
@@ -628,7 +658,7 @@ Device:
 IMPT COMMAND SUCCEEDS
 ```
 
-8. Add the test fixture to your project. You can specify the device by its ID, Name, MAC or agent ID.
+9. Add the test fixture to your project. You can specify the device by its ID, Name, MAC or agent ID.
 
 ```
 > impt device assign --device 5000d8c46a56cfca
@@ -636,7 +666,7 @@ Device "5000d8c46a56cfca" is assigned successfully to Device Group "71c3be05-a7d
 IMPT COMMAND SUCCEEDS
 ```
 
-9. Create a new factory firmware build, run it and start logging.
+10. Create a new factory firmware build, run it and start logging.
 
 ```
 > impt build run --log
@@ -655,13 +685,13 @@ IMPT COMMAND SUCCEEDS
 Press <Ctrl-C> to exit.
 ```
 
-10. Use the fixture to configure test DUTs. They will connect, and download and run the factory firmware which will test and bless them.
+11. Use the fixture to configure test DUTs. They will connect, and download and run the test application which will test and bless them.
 
-11. Stop the logging by pressing *Ctrl-C*.
+12. Stop the logging by pressing *Ctrl-C*.
 
-12. If needed, update your factory firmware code, and create and run a new build by using the command listed in Step 9.
+13. If needed, update your factory fixture firmware code, and create and run a new build by using the command listed in Step 10.
 
-13. When you are satisfied with your factory firmware, mark the latest build by a tag, eg. “MyFactoryRC1”, and set its *flagged* attribute to `true` (this protects it from accidental deletion).
+14. When you are satisfied with your factory fixture firmware, mark the latest build by a tag, eg. “MyFactoryRC1”, and set its *flagged* attribute to `true` (this protects it from accidental deletion).
 
 ```
 > impt build update --descr "My Factory Firmware Release Candidate 1" --tag MyFactoryRC1 --flagged
@@ -673,11 +703,11 @@ IMPT COMMAND SUCCEEDS
 
 #### Go To Production ####
 
-If you are developing production firmware, whether application, factory or both, you may want to keep the impCentral API entities your created, especially the final builds, but still do some minimal clean-up after your development activities are complete.
+If you are developing production firmware, whether application, factory fixture, factory test or all, you may want to keep the impCentral API entities your created, especially the final builds, but still do some minimal clean-up after your development activities are complete.
 
 1. Go to the `factory` directory.
 
-2. Delete all unnecessary builds of your factory firmware code (*flagged* builds will not be deleted).
+2. Delete all unnecessary builds of your factory fixture firmware code (*flagged* builds will not be deleted).
 
 ```
 > impt dg builds --remove
@@ -740,7 +770,7 @@ Device:
 IMPT COMMAND SUCCEEDS
 ```
 
-5. If you want, delete your factory firmware Project and the source files in this directory. The impCentral API entities will not be deleted; you may keep the source files in your version control or software configuration management tool.
+5. If you want, delete your factory fixture firmware Project and the source files in this directory. The impCentral API entities will not be deleted; you may keep the source files in your version control or software configuration management tool.
 
 ```
 > impt project delete --files
@@ -841,6 +871,21 @@ Product:
         id:  429c3a4c-947b-3d84-77f8-fa15cf3038b5
         sha: f4756c7578aa69910a8857d8ec08ff15bc2d7e1a8fc8007caf98e3ea9fca07a3
     Device Group:
+      id:                 10c6179c-8608-1af2-7aee-5d1dc5539cda
+      type:               pre-dut
+      name:               MyPreDUTDG
+      Current Deployment:
+        id:  26036a34-9751-705b-4f91-3f50c2a9ac47
+        sha: 5c832c6b984ea536dfa5a8f56707809a8cfac089df49196bd742fda158501b27
+      Min supported Deployment:
+        id:  26036a34-9751-705b-4f91-3f50c2a9ac47
+        sha: 5c832c6b984ea536dfa5a8f56707809a8cfac089df49196bd742fda158501b27
+      DUT Target for:
+        Device Group:
+          id:   71c3be05-a7d2-a326-8906-8af3b205bd13
+          type: pre-factory
+          name: MyPreFactoryDG
+    Device Group:
       id:                       71c3be05-a7d2-a326-8906-8af3b205bd13
       type:                     pre-factory
       name:                     MyPreFactoryDG
@@ -856,6 +901,10 @@ Product:
         id:   53ca29f4-937d-e684-729b-7e6b6a192c19
         type: pre-production
         name: MyPreProductionDG
+      DUT Target:
+        id:   10c6179c-8608-1af2-7aee-5d1dc5539cda
+        type: pre-dut
+        name: MyPreDUTDG
     Device Group:
       id:                       53ca29f4-937d-e684-729b-7e6b6a192c19
       type:                     pre-production
@@ -900,6 +949,8 @@ Global logout is successful.
 IMPT COMMAND SUCCEEDS
 ```
 
+**Note.** If you developed the factory test code as a project, you may clean-up it the same way as your application project.
+
 The *impt* usage for factory and production processes is described fully in the [*impt* Production Guide](./ProductionGuide.md).
 
 #### Full Clean-up ####
@@ -918,12 +969,19 @@ Device Group:
   type: pre-production
   name: MyPreProductionDG
 Device Group:
+  id:   10c6179c-8608-1af2-7aee-5d1dc5539cda
+  type: pre-dut
+  name: MyPreDUTDG
+Device Group:
   id:   71c3be05-a7d2-a326-8906-8af3b205bd13
   type: pre-factory
   name: MyPreFactoryDG
 Deployment:
   id:  a0e8e599-c6c5-62c0-2a88-a8d4ac3e07d8
   sha: f4756c7578aa69910a8857d8ec08ff15bc2d7e1a8fc8007caf98e3ea9fca07a3
+Deployment:
+  id:  26036a34-9751-705b-4f91-3f50c2a9ac47
+  sha: 5c832c6b984ea536dfa5a8f56707809a8cfac089df49196bd742fda158501b27
 Deployment:
   id:      4a7339e4-1f7c-3caa-2ce5-15c367df9a3f
   sha:     f6f710ce359d1e1bee10b17f62184a8f2a9884d17dd44292b0e9dc640c52daf6
@@ -960,8 +1018,10 @@ Device "5000d8c46a56cfca" is unassigned successfully.
 Deployment "4a7339e4-1f7c-3caa-2ce5-15c367df9a3f" is updated successfully.
 Device Group "71c3be05-a7d2-a326-8906-8af3b205bd13" is deleted successfully.
 Device Group "53ca29f4-937d-e684-729b-7e6b6a192c19" is deleted successfully.
+Device Group "10c6179c-8608-1af2-7aee-5d1dc5539cda" is deleted successfully.
 Deployment "5dbfc968-5c94-fc4c-dd37-424f779b7e40" is deleted successfully.
 Deployment "4a7339e4-1f7c-3caa-2ce5-15c367df9a3f" is deleted successfully.
+Deployment "26036a34-9751-705b-4f91-3f50c2a9ac47" is deleted successfully.
 Deployment "a0e8e599-c6c5-62c0-2a88-a8d4ac3e07d8" is deleted successfully.
 Device/agent source files "factory.device.nut", "factory.agent.nut" are deleted successfully.
 Project is deleted successfully.
@@ -1034,3 +1094,5 @@ IMPT COMMAND SUCCEEDS
 Global logout is successful.
 IMPT COMMAND SUCCEEDS
 ```
+
+**Note.** If you developed the factory test code as a project, you may clean-up it the same way as your application project.

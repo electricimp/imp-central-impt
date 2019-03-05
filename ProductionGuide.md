@@ -1,5 +1,7 @@
 # impt Production Guide #
 
+**SHOULD BE UPDATED FOR DUT DGs**
+
 This additional guide is intended for those customers who use *impt* with [production processes](https://developer.electricimp.com/manufacturing). You may use scripts on top of *impt* commands to automate some of the operations.
 
 Please read the main [Read Me file](./README.md) first as it covers all the basic *impt* usage and its common components.
