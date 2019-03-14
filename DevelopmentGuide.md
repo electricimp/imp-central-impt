@@ -10,19 +10,19 @@ The full *impt* commands specification is described in the [*impt* Commands Manu
 
 - [Projects](#projects)
 - [Development Tasks](#development-tasks)
-    - [Project Creation](#project-creation)
+    - [Creating Projects](#creating-projects)
     - [Updating Projects](#updating-projects)
     - [Device Manipulation](#device-manipulation)
     - [Creating And Running Builds](#creating-and-running-builds)
     - [Logging](#logging)
-    - [Project Information](#project-information)
+    - [Getting Project Information](#getting-project-information)
     - [Sharing Projects](#sharing-projects)
-    - [Deleting A Project](#deleting-a-project)
+    - [Deleting Projects](#deleting-projects)
 - [Typical Use-cases](#typical-use-cases)
     - [Develop Application Firmware](#develop-application-firmware)
-    - [Develop Factory Fixture Firmware](#develop-factory-fixture-firmware)
     - [Develop Factory Device-Under-Test Firmware](#develop-factory-device-under-test-firmware)
-    - [Clean-up](#clean-up)
+    - [Develop Factory Fixture Firmware](#develop-factory-fixture-firmware)
+    - [Cleaning Up](#cleaning-up)
 
 ## Projects ##
 
@@ -56,9 +56,9 @@ For Project management, *impt* includes [Project Manipulation Commands](./Comman
 
 The following documentation assumes that all commands are called from the directory in which your Project is located.
 
-### Project Creation ###
+### Creating Projects ###
 
-Project creation centers on the creation of a [Project file](./CommandsManual.md#project-files) in the working directory where the project creation command is called. If the directory already contains a [Project file](./CommandsManual.md#project-files), it will be overwritten after confirmation from the user. However, we recommend that you [explicitly delete](#deleting-a-project) the previous Project file first.
+Project creation centers on the creation of a [Project file](./CommandsManual.md#project-files) in the working directory where the project creation command is called. If the directory already contains a [Project file](./CommandsManual.md#project-files), it will be overwritten after confirmation from the user. However, we recommend that you [explicitly delete](#deleting-projects) the previous Project file first.
 
 There are two ways to create a Project: [base it on an existing Device Group](#link-an-existing-device-group) or [create a new one from scratch](#create-a-new-device-group).
 
@@ -319,7 +319,7 @@ Press <Ctrl-C> to exit.
 IMPT COMMAND SUCCEEDS
 ```
 
-### Project Information ###
+### Getting Project Information ###
 
 You can get the status of your Project configuration &mdash; the referenced Device Group, its Product, the linked source files, etc. &mdash; with [`impt project info`](./CommandsManual.md#project-info). The option `--full` provides you even more details: for example, information about devices added to your Project, the authentication status of the Project directory (as per [`impt auth info`](./CommandsManual.md#auth-info)).
 
@@ -375,11 +375,11 @@ Your Project can be easily shared, copied or moved: just copy the directory cont
 
 **Note** The Project directory may also include a [local auth file](./CommandsManual.md#local-auth-file), which you may not wish to share. If you *do* want to share or copy the authentication information along with your Project but the directory does not include a [local auth file](./CommandsManual.md#local-auth-file), call [`impt auth login`](./CommandsManual.md#auth-login) with the option `--local` and with the credentials and endpoint you would like to share. A [local auth file](./CommandsManual.md#local-auth-file) will be created and you will be able to copy it alongside the other Project files.
 
-### Deleting A Project ###
+### Deleting Projects ###
 
 There are several levels of Project deletion:
 
-- The command [`impt project delete`](./CommandsManual.md#project-delete) without additional options deletes the [Project file](./CommandsManual.md#project-files) only, ie. it simply removes the link between the Device Group and the source files. The same effect occurs when you [create a new Project](#project-creation) in the same directory to overwrite the previous [Project file](./CommandsManual.md#project-files).
+- The command [`impt project delete`](./CommandsManual.md#project-delete) without additional options deletes the [Project file](./CommandsManual.md#project-files) only, ie. it simply removes the link between the Device Group and the source files. The same effect occurs when you [create a new Project](#creating-projects) in the same directory to overwrite the previous [Project file](./CommandsManual.md#project-files).
 - The command [`impt project delete`](./CommandsManual.md#project-delete) with the option `--files` will also delete the linked source files. This is equivalent to manually deleting the Project directory.
 - The command [`impt project delete`](./CommandsManual.md#project-delete) with the option `--entities` will also delete the related impCentral API entities. See [the command’s specification](./CommandsManual.md#project-delete) for more details. Use this option when, for example, you want to clean up all of the entities after working on a temporary test project.
 
@@ -560,6 +560,11 @@ Deployment "e0059ee6-2483-4ab1-50eb-e693e62155b7" is updated successfully.
 IMPT COMMAND SUCCEEDS
 ```
 
+### Develop Factory Device-Under-Test Firmware ###
+
+You develop the factory firmware which will be run on devices under test (DUTs) on your assembly line (ie. DUT firmware) in the same way that you [develop your application firmware](#develop-application-firmware), but the Project will be based on a Pre-DUT Device Group rather than a Development Device Group. Having completed development of your DUT firmware, you can tag it and set its *flagged* attribute to `true` to protect it from accidental deletion, as described in step 13 of [‘Develop Application Firmware’, above](#develop-application-firmware).
+
+
 ### Develop Factory Fixture Firmware ###
 
 You need to have appropriate permission to make use of the impCentral API entities related to pre-production (ie. factory test) processes.
@@ -693,11 +698,7 @@ Deployment "4a7339e4-1f7c-3caa-2ce5-15c367df9a3f" is updated successfully.
 IMPT COMMAND SUCCEEDS
 ```
 
-### Develop Factory Device-Under-Test Firmware ###
-
-You develop the factory firmware which will be run on devices under test (DUTs) on your assembly line (ie. DUT firmware) in the same way that you [develop your application firmware](#develop-application-firmware), but the Project will be based on a Pre-DUT Device Group rather than a Development Device Group. Having completed development of your DUT firmware, you can tag it and set its *flagged* attribute to `true` to protect it from accidental deletion, as described in step 13 of [‘Develop Application Firmware’, above](#develop-application-firmware).
-
-### Clean-up ###
+### Cleaning Up ###
 
 #### Go To Production ####
 
