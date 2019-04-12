@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright 2018 Electric Imp
+// Copyright 2018-2019 Electric Imp
 //
 // SPDX-License-Identifier: MIT
 //
@@ -59,6 +59,13 @@ exports.builder = function (yargs) {
         [Options.AGENT_FILE] : {
             demandOption : false,
             describe: 'A new agent source code file name. If the file does not exist, an empty file is created.'
+        },
+        [Options.DUT] : {
+            demandOption : false,
+            describe : Util.format("The Device Group identifier of the Project Device Group's device-under-test target Device Group." +
+                " May only be specified if the Project Device Group is of the %s type." +
+                " The specified device-under-test target Device Group must be of the type %s and belong to the same Product as the Project Device Group.",
+                Options.DG_TYPE_PRE_FACTORY, Options.DG_TYPE_PRE_DUT)
         },
         [Options.TARGET] : {
             demandOption : false,

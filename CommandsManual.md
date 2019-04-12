@@ -205,8 +205,10 @@ Attributes accepted as `<BUILD_IDENTIFIER>` (in order of search):
 
 - *development* &mdash; for the impCentral API’s "development_devicegroup" type
 - *pre-factory* &mdash; for the impCentral API’s "pre_factoryfixture_devicegroup" type
+- *pre-dut* &mdash; for the impCentral API’s "pre_dut_devicegroup" type
 - *pre-production* &mdash; for the impCentral API’s "pre_production_devicegroup" type
 - *factory* &mdash; for the impCentral API’s "factoryfixture_devicegroup" type
+- *dut* &mdash; for the impCentral API’s "dut_devicegroup" type
 - *production* &mdash; for the impCentral API’s "production_devicegroup" type
 
 ## Auth Files ##
@@ -741,7 +743,8 @@ The user is asked to confirm the operation if any Deployment is going to be dele
 ```
 impt dg create --name <device_group_name> [--dg-type <device_group_type>]
     [--product <PRODUCT_IDENTIFIER>] [--descr <device_group_description>]
-    [--target <DEVICE_GROUP_IDENTIFIER>] [--region <region_name>] [--output <mode>] [--help]
+    [--dut <DEVICE_GROUP_IDENTIFIER>] [--target <DEVICE_GROUP_IDENTIFIER>]
+    [--region <region_name>] [--output <mode>] [--help]
 ```
 
 Creates a new Device Group for the specified Product. Fails if a Device Group with the specified name already exists under the specified Product.
@@ -752,6 +755,7 @@ Creates a new Device Group for the specified Product. Fails if a Device Group wi
 | --dg-type | -y | No | Yes | The new Device Group’s [type](#device-group-type). Default: *development*. If the type value is invalid, the command fails |
 | --product | -p | Yes/[Project](#project-files) | Yes | The [Product identifier](#product-identifier) of the Product to which the Device Group belongs. If not specified, the Product referenced by the [Project file](#project-files) in the current directory is used (if there is no Project file, the command fails) |
 | --descr | -s | No | Yes | An optional description of the Device Group |
+| --dut | -u | No | Yes | The [Device Group identifier](#device-group-identifier) of the new Device Group’s device-under-test target Device Group. Should only be specified if the new Device Group is of the *factory* or *pre-factory* [type](#device-group-type). The device-under-test target Device Group must be of the [type](#device-group-type) *dut* or *pre-dut* correspondingly, and belong to the specified Product. Otherwise the command fails |
 | --target | -t | No | Yes | The [Device Group identifier](#device-group-identifier) of the new Device Group’s production target Device Group. Should only be specified if the new Device Group is of the *factory* or *pre-factory* [type](#device-group-type). The target Device Group must be of the [type](#device-group-type) *production* or *pre-production* correspondingly, and belong to the specified Product. Otherwise the command fails |
 | --region | -r | No | Yes | A region. May be specified if the new Device Group is of the *production* or *pre-production* [type](#device-group-type) only |
 | --output | -z | No | Yes | Adjusts the [command's output](#command-output) |
@@ -765,7 +769,7 @@ impt dg delete [--dg <DEVICE_GROUP_IDENTIFIER>] [--builds] [--force] [--confirme
 
 Deletes the specified Device Group and, optionally, all of the related builds (Deployments).
 
-The command fails if the Device Group is the production target of another Device Group. Use either [`impt dg update`](#device-group-update) to update the production target of the other Device Group, or `impt dg delete` to delete the other Device Group before the specified one.
+The command fails if the Device Group is the device-under-test target or the production target of another Device Group. Use either [`impt dg update`](#device-group-update) to update the device-under-test / production target of the other Device Group, or `impt dg delete` to delete the other Device Group before the specified one.
 
 The command also fails when the `--force` option is not specified and:
 - There are devices assigned to the specified Device Group. Use either the `--force` option, [`impt dg unassign`](#device-group-unassign) or [`impt dg reassign`](#device-group-reassign) to unassign the devices from this Device Group.
@@ -872,7 +876,8 @@ Unassigns all of the devices from the specified Device Group. Does nothing if th
 
 ```
 impt dg update [--dg <DEVICE_GROUP_IDENTIFIER>] [--name <device_group_name>]
-    [--descr <device_group_description>] [--target <DEVICE_GROUP_IDENTIFIER>]
+    [--descr <device_group_description>]
+    [--dut <DEVICE_GROUP_IDENTIFIER>] [--target <DEVICE_GROUP_IDENTIFIER>]
     [--load-code-after-blessing [true|false]]
     [--min-supported-deployment <BUILD_IDENTIFIER>] [--output <mode>] [--help]
 ```
@@ -884,6 +889,7 @@ Updates the specified Device Group. Fails if the specified Device Group does not
 | --dg | -g | Yes/[Project](#project-files) | Yes | A [Device Group identifier](#device-group-identifier). If not specified, the Device Group referenced by the [Project file](#project-files) in the current directory is used (if there is no Project file, the command fails) |
 | --name | -n | No | Yes | The Device Group’s new name. Must be unique among all of the Device Groups belonging to the Product |
 | --descr | -s | No | Yes | An optional description of the Device Group |
+| --dut | -u | No | Yes | The [Device Group identifier](#device-group-identifier) of the specified Device Group’s device-under-test target Device Group. May only be specified for *factory* and *pre-factory* Device Groups. The device-under-test target Device Group must be of the [type](#device-group-type) *dut* or *pre-dut* correspondingly, and belong to the same Product as the specified Device Group. Otherwise the command fails |
 | --target | -t | No | Yes | The [Device Group identifier](#device-group-identifier) of the specified Device Group’s production target Device Group. May only be specified for *factory* and *pre-factory* Device Groups. The target Device Group must be of the [type](#device-group-type) *production* or *pre-production* correspondingly, and belong to the same Product as the specified Device Group. Otherwise the command fails |
 | --load-code-after-blessing | -l | No | No | Only applicable to *production* and *pre-production* Device Groups. If `true` or no value is supplied, production application code is immediately loaded by the device after blessing. If `false`, production code will be loaded when the device first connects as part of BlinkUp. Newly created Production Device Groups default this setting to `true` |
 | --min-supported-deployment | -m | No | Yes | The [Build identifier](#build-identifier) of the new *min_supported_deployment* (see the impCentral API specification). The Deployment should belong to this Device Group and should be newer than the current *min_supported_deployment* |
@@ -1114,7 +1120,8 @@ Updates the specified Product with a new name and/or description. Fails if the s
 ```
 impt project create --product <PRODUCT_IDENTIFIER> [--create-product] --name <device_group_name>
     [--descr <device_group_description>] [--device-file <device_file>] [--agent-file <agent_file>]
-    [--pre-factory] [--target <DEVICE_GROUP_IDENTIFIER>] [--create-target] [--confirmed]
+    [--pre-factory] [--dut <DEVICE_GROUP_IDENTIFIER>] [--create-dut]
+    [--target <DEVICE_GROUP_IDENTIFIER>] [--create-target] [--confirmed]
     [--output <mode>] [--help]
 ```
 
@@ -1123,6 +1130,7 @@ Creates a new Device Group for the specified Product and creates a new [Project 
 The command fails if:
 - The specified Product does not exist and the `--create-product` option was not specified. Use either the `--create-product` option or the [`impt product create`](#product-create) command to create the Product first.
 - The Device Group with the specified name already exist in the specified Product. Use [`impt project link`](#project-link) to create the Project linked to that Device Group.
+- The optionally specified device-under-test target Device Group does not exist and the `--create-dut` option was not specified. Use either the `--create-dut` option or the [`impt dg create`](#device-group-create) command to create the required Device Group of the [type](#device-group-type) *pre-dut*.
 - The optionally specified production target Device Group does not exist and the `--create-target` option was not specified. Use either the `--create-target` option or the [`impt dg create`](#device-group-create) command to create the required Device Group of the [type](#device-group-type) *pre-production*.
 
 The user is asked to confirm the operation if the current directory already contains a [Project file](#project-files), unless confirmed automatically with the `--confirmed` option. If confirmed, the existing [Project file](#project-files) is overwritten.
@@ -1140,6 +1148,8 @@ At the end of the command execution, information about the Project is displayed 
 | --device-file | -x | No | Yes | The device source code file name. Default: `device.nut`. If the file does not exist, an empty file is created |
 | --agent-file | -y | No | Yes | The agent source code file name. Default: `agent.nut`. If the file does not exist, an empty file is created |
 | --pre-factory | -f | No | No | If not specified, the new Device Group is of the [type](#device-group-type) *development*. If specified, the new Device Group is of the [type](#device-group-type) *pre-factory* |
+| --dut | -u | No | Yes | The [Device Group identifier](#device-group-identifier) of the new Project Device Group’s device-under-test target Device Group. May be specified only if `--pre-factory` is also specified. The specified Device Group must be of the [type](#device-group-type) *pre-dut* and belong to the specified Product. Otherwise the command fails |
+| --create-dut | -w | No | No | If the Device Group specified by `--dut` option does not exist, it is created. In this case, the value of `--dut` is used as the name of the new Device Group. If `--dut` is not specified or the Device Group specified by `--dut` exists, `--create-dut` is ignored |
 | --target | -t | No | Yes | The [Device Group identifier](#device-group-identifier) of the new Project Device Group’s production target Device Group. May be specified only if `--pre-factory` is also specified. The specified Device Group must be of the [type](#device-group-type) *pre-production* and belong to the specified Product. Otherwise the command fails |
 | --create-target | -r | No | No | If the Device Group specified by `--target` option does not exist, it is created. In this case, the value of `--target` is used as the name of the new Device Group. If `--target` is not specified or the Device Group specified by `--target` exists, `--create-target` is ignored |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
@@ -1158,11 +1168,15 @@ If the `--entities` option is specified, the command additionally:
 - Unassigns all devices from the Project Device Group.
 - Deletes the Project  Device Group.
 - Deletes all of the Project Device Group’s builds (Deployments), including Deployments with their *flagged* attribute set to `true`.
+- If the Project Device Group has a device-under-test target Device Group, and the latter is the device-under-test target for the Project Device Group only:
+    - Unassigns all devices from the device-under-test target Device Group.
+    - Deletes the device-under-test target Device Group.
+    - Deletes all the device-under-test target Device Group’s builds (Deployments), including Deployments with their *flagged* attribute set to `true`.
 - If the Project  Device Group has a production target Device Group, and the latter is the production target for the Project Device Group only:
     - Unassigns all devices from the production target Device Group.
     - Deletes the production target Device Group.
     - Deletes all the production target Device Group’s builds (Deployments), including Deployments with their *flagged* attribute set to `true`.
-- The corresponding Product if the corresponding Product (the Product which contains the Project Device Group) includes only the Project Device Group and, if applicable, the production target Device Group mentioned above.
+- The corresponding Product if the corresponding Product (the Product which contains the Project Device Group) includes only the Project Device Group and, if applicable, the device-under-test target and production target Device Group mentioned above.
 
 The user is informed about all entities and files which are going to be deleted or updated, and is asked to confirm the operation, unless confirmed automatically with the `--confirmed` option.
 
@@ -1223,11 +1237,12 @@ At the end of the command execution, information about the Project is displayed 
 
 ```
 impt project update [--name <device_group_name>] [--descr <device_group_description>]
-    [--device-file <device_file>] [--agent-file <agent_file>] [--target <DEVICE_GROUP_IDENTIFIER>]
+    [--device-file <device_file>] [--agent-file <agent_file>]
+    [--dut <DEVICE_GROUP_IDENTIFIER>] [--target <DEVICE_GROUP_IDENTIFIER>]
     [--output <mode>] [--help]
 ```
 
-Updates the Project settings and/or the name, description, or production target of the Device Group referenced by the [Project file](#project-files). Fails if there is no [Project file](#project-files) in the current directory.
+Updates the Project settings and/or the name, description, device-under-test target or production target of the Device Group referenced by the [Project file](#project-files). Fails if there is no [Project file](#project-files) in the current directory.
 
 Informs the user if the Device Group referenced by the [Project file](#project-files) does not exist. The [Project file](#project-files) is not updated or deleted in this case. To delete it, call [`impt project delete`](#project-delete).
 
@@ -1239,6 +1254,7 @@ At the end of the command execution, information about the Project is displayed 
 | --descr | -s | No | Yes | The Project Device Group’s new description |
 | --device-file | -x | No | Yes | A new device source code file name. If the file does not exist, an empty file is created |
 | --agent-file | -y | No | Yes | A new agent source code file name. If the file does not exist, an empty file is created |
+| --dut | -u | No | Yes | The [Device Group identifier](#device-group-identifier) of the Project Device Group’s device-under-test target Device Group. May only be specified if the Project Device Group is of the *pre-factory* [type](#device-group-type). The specified device-under-test target Device Group must be of the [type](#device-group-type) *pre-dut* and belong to the same Product as the Project Device Group. Otherwise the command fails |
 | --target | -t | No | Yes | The [Device Group identifier](#device-group-identifier) of the Project Device Group’s production target Device Group. May only be specified if the Project Device Group is of the *pre-factory* [type](#device-group-type). The specified target Device Group must be of the [type](#device-group-type) *pre-production* and belong to the same Product as the Project Device Group. Otherwise the command fails |
 | --output | -z | No | Yes | Adjusts the [command's output](#command-output) |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
@@ -1508,9 +1524,9 @@ Updates the specified webhook with a new target URL and/or MIME content-type. Fa
 | -r | --create-target, --remove-tag, --remove, --region |
 | -s | --descr, --sha, --page-size, --stop-on-fail |
 | -t | --tag, --timeout, --temp, --target, --to, --tests |
-| -u | --user, --full, --unflagged, --unflag, --unassigned, --unbond, --url |
+| -u | --user, --full, --unflagged, --unflag, --unassigned, --unbond, --url, --dut |
 | -v | --version |
-| -w | --wh, --pwd |
+| -w | --wh, --pwd, --create-dut |
 | -x | --device-file |
 | -y | --agent-file, --dg-type |
 | -z | --output |

@@ -1,5 +1,7 @@
 # impt Production Guide #
 
+**NOTE:** The contents of this guide have **NOT** been updated with the release of v2.5.0 (support for DUT device groups), and so some of the contents may be out of date.
+
 This additional guide is intended for those customers who use *impt* with [production processes](https://developer.electricimp.com/manufacturing). You may use scripts on top of *impt* commands to automate some of the operations.
 
 Please read the main [Read Me file](./README.md) first as it covers all the basic *impt* usage and its common components.
@@ -44,14 +46,14 @@ Device Groups may be of different [types](./CommandsManual.md#device-group-type)
 
 ### Production Device Groups ###
 
-Your production devices, which are utilized by end-users, are organized into one or more Device Groups of the *production* type. Different Production Device Groups within the same Product may be used to encapsulate and manage different versions or flavors of your application. Production devices are units that have been blessed; up until that point they are referred to as devices under test (DUTs). 
+Your production devices, which are utilized by end-users, are organized into one or more Device Groups of the *production* type. Different Production Device Groups within the same Product may be used to encapsulate and manage different versions or flavors of your application. Production devices are units that have been blessed; up until that point they are referred to as devices under test (DUTs).
 
 You can create a Production Device Group with [`impt dg create --dg-type production`](./CommandsManual.md#device-group-create).
 
 Production Device Groups have an attribute called *load-code-after-blessing*. This defines when your application is loaded onto production devices: in your factory after blessing, or when an end-user activates a device using BlinkUp™. When a new Production Device Group is created, this attribute always has the value `true`. To change the attribute you can use the `--load-code-after-blessing` option of the [`impt dg update`](./CommandsManual.md#device-group-update) command:
 
 ```
-impt dg create --name MyProductionDG --descr "Production Device Group for application" 
+impt dg create --name MyProductionDG --descr "Production Device Group for application"
     --dg-type production --product MyProduct
 impt dg update --dg MyProductionDG --load-code-after-blessing false
 ```
@@ -63,11 +65,11 @@ For your [factory setup](https://developer.electricimp.com/manufacturing/factory
 You can create Factory Device Group with the [`impt dg create --dg-type factory`](./CommandsManual.md#device-group-create) command.
 
 Each Factory Device Group references a single Production Device Group within the same Product. This is the Factory Device Group’s *target* and this the Production Device Group to which DUTs will automatically be assigned once they have been blessed and become production devices. You specify a Factory Device Group’s target by using the `--target` option during Factory Device Group creation:
- 
+
 ```
-impt dg create --name MyFactoryDG --descr "Factory Device Group for factory firmware" 
+impt dg create --name MyFactoryDG --descr "Factory Device Group for factory firmware"
     --dg-type factory --product MyProduct --target MyProductionDG
-``` 
+```
 
 ## Deployments ##
 
@@ -84,7 +86,7 @@ This guide assumes you have already developed and tested your application and fa
 impt build copy --build MyRC1 --dg MyProductionDG
 ```
 
-```  
+```
 impt build copy --build MyFactoryRC1 --dg MyFactoryDG
 ```
 
@@ -98,7 +100,7 @@ In order to connect your Factory BlinkUp Fixtures to the factory’s WiFi networ
 
 ```
 impt device assign --device <device_id> --dg MyFactoryDG
-```  
+```
 
 ### Devices Under Test (DUTs) ###
 
