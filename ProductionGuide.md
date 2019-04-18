@@ -1,6 +1,6 @@
 # impt Production Guide #
 
-**NOTE:** The contents of this guide have **NOT** been updated with the release of v2.5.0 (support for DUT device groups), and so some of the contents may be out of date.
+**NOTE:** The contents of this guide have **NOT** been updated with the release of v2.5.0 and above (support for DUT device groups), and so some of the contents may be out of date.
 
 This additional guide is intended for those customers who use *impt* with [production processes](https://developer.electricimp.com/manufacturing). You may use scripts on top of *impt* commands to automate some of the operations.
 
