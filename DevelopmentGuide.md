@@ -38,13 +38,13 @@ A Project is encapsulated in one directory. A directory represents a Project if 
 
 Each Project references a single Device Group which is specified during Project creation and cannot be changed (you must re-create the Project instead). Only three [types](./CommandsManual.md#device-group-type) of Device Group are supported by a Project:
 
-- Development &mdash; for application firmware.
-- Pre-factory &mdash; for [BlinkUp™ fixture firmware](https://developer.electricimp.com/examples/factoryfirmware).
-- Pre-DUT &mdash; for [Device Under Test (DUT) firmware](https://developer.electricimp.com/examples/factoryfirmware).
+- *Development* &mdash; for application firmware.
+- *Pre-factory* &mdash; for [BlinkUp™ fixture firmware](https://developer.electricimp.com/examples/factoryfirmware#fixture-firmware).
+- *Pre-DUT* &mdash; for [device-under-test (DUT) firmware](https://developer.electricimp.com/examples/factoryfirmware#dut-firmware).
 
 A Project implicitly references other impCentral API entities: for example, the Product to which the Project’s Device Group belongs, the latest code Deployment to the Device Group, and Devices assigned to the Device Group.
 
-Each Project always references two files, one containing the device source code, the other containing the agent source code. It is assumed that the files are located in the same directory as the [Project file](./CommandsManual.md#project-files). At any time, the Project may be updated to reference other files. Any one or both files may not exist: for example, you may be working on device code but not agent code. Most Project-related operations can still be carried out in this case, but both device *and* agent files are always required if you want to deploy a new build &mdash; either of these files may be empty but should exist.
+Each Project always references two files, one containing the device source code, the other containing the agent source code. It is assumed that the files are located in the same directory as the [Project file](./CommandsManual.md#project-files). At any time, the Project may be updated to reference other files. Any one or both files may not exist: for example, you may be working on device code but not agent code. Most Project-related operations can still be carried out in this case, but both device *and* agent files are always required if you want to deploy a new build. Either of these files may be empty but should exist.
 
 When you call *impt* commands from a directory with a [Project file](./CommandsManual.md#project-files), all of the related entities (Device Group, Product, Deployment, Devices, files) are specified by default. You need not specify them explicitly in subsequent commands.
 
@@ -66,7 +66,7 @@ There are two ways to create a Project: [base it on an existing Device Group](#l
 
 Use the [`impt project link`](./CommandsManual.md#project-link) command. This creates a Project which references the existing Device Group; it links it to the local source files. The source files can be specified directly using the `--device-file <device_file>` and `--agent-file <agent_file>` options. Or the default names can be used. If a specified file does not exist, the command creates it as an empty file.
 
-##### Example ######
+#### Example ####
 
 ```bash
 > impt project link --dg MyDG
@@ -115,7 +115,7 @@ Alternatively, you can create the required impCentral API entities in advance us
 
 The source code files can be specified directly using the `--device-file <device_file>` and `--agent-file <agent_file>` options. Or the default names can be used. If a specified file does not exist, the command creates it as an empty file.
 
-##### Example #####
+#### Example ####
 
 ```bash
 > impt project create --product MyProduct --name MyDG
@@ -149,9 +149,9 @@ You can update your Project at any time with the [`impt project update`](./Comma
 
 **Note** You can update other impCentral API entities related to your Project by using other *impt* commands. For example, use [`impt product update`](./CommandsManual.md#product-update) to change the name and/or description of the related Product.
 
-##### Example #####
+#### Example ####
 
-Update the description of the Project’s Device Group, and change the linked device source file to `device1.nut`.
+Update the description of the Project’s Device Group, and change the linked device source file to `device1.nut`:
 
 ```bash
 > impt project update --descr "New description of my DG" --device-file device1.nut
@@ -186,7 +186,7 @@ You can add devices to your Project, or remove them, at any time by assigning/un
 
 You can use [`impt device list`](./CommandsManual.md#device-list) to find an identifier for the required device.
 
-##### Examples #####
+#### Examples ####
 
 ```bash
 > impt device assign --device myDevice1
@@ -218,7 +218,7 @@ When you want to run the newly created Deployment:
 
 Alternatively, you can use [`impt build run`](./CommandsManual.md#build-run). This behaves exactly like the [`impt build deploy`](./CommandsManual.md#build-deploy) command followed by [`impt dg restart`](./CommandsManual.md#device-group-restart).
 
-##### Example 1: Create A New Flagged Deployment With Description And Tag #####
+#### Example 1: Create A New Flagged Deployment With Description And Tag ####
 
 ```bash
 > impt build deploy --descr "my new build" --tag TAG1 --flagged
@@ -231,7 +231,7 @@ Deployment:
 IMPT COMMAND SUCCEEDS
 ```
 
-##### Example 2: Run The New Deployment #####
+#### Example 2: Run The New Deployment ####
 
 ```bash
 > impt dg restart
@@ -257,7 +257,7 @@ The log entries are displayed in pages. The page size may be specified in the co
 
 **Note** A limited number of log entries are kept by impCentral API for a limited period of time.
 
-##### Example #####
+#### Example ####
 
 ```bash
 > impt log get --page-size 5
@@ -300,9 +300,9 @@ While the logs are being streamed, no other command can be called. To stop displ
 
 The log stream may be closed by the impCentral API: for example, when a new log stream is requested by the same account and that exceeds the per-account limit of opened streams.
 
-If the log stream is stopped by an error (eg. due to a disconnection), *impt* tries to automatically reconnect and re-establish the stream. Even if the stream is restored, some log entries may have been be lost and will not be displayed.
+If the log stream is stopped by an error (eg. due to a disconnection), *impt* tries to automatically reconnect and re-establish the stream. Even if the stream is restored, some log entries may have been lost and will not be displayed.
 
-##### Example: Start logging A Device From The Project’s Device Group #####
+#### Example: Start logging A Device From The Project’s Device Group ####
 
 ```bash
 > impt log stream
@@ -325,7 +325,7 @@ You can get the status of your Project configuration &mdash; the referenced Devi
 
 Use [`impt product info`](./CommandsManual.md#product-info) with the option `--full` to review the full structure of the Product related by your Project.
 
-##### Example #####
+#### Example ####
 
 ```
 > impt project info --full
@@ -385,7 +385,7 @@ There are several levels of Project deletion:
 
 **Note** The command [`impt project delete`](./CommandsManual.md#project-delete) never deletes the [local auth file](./CommandsManual.md#local-auth-file), if it exists in the Project directory. Use [`impt auth logout --local`](./CommandsManual.md#auth-login) to delete the [local auth file](./CommandsManual.md#local-auth-file), or remove it manually.
 
-##### Example: Delete Everything #####
+#### Example: Delete Everything ####
 
 ```bash
 > impt project delete --all
@@ -564,7 +564,6 @@ IMPT COMMAND SUCCEEDS
 
 You develop the factory firmware which will be run on devices under test (DUTs) on your assembly line (ie. DUT firmware) in the same way that you [develop your application firmware](#develop-application-firmware), but the Project will be based on a Pre-DUT Device Group rather than a Development Device Group. Having completed development of your DUT firmware, you can tag it and set its *flagged* attribute to `true` to protect it from accidental deletion, as described in step 13 of [‘Develop Application Firmware’, above](#develop-application-firmware).
 
-
 ### Develop Factory Fixture Firmware ###
 
 You need to have appropriate permission to make use of the impCentral API entities related to pre-production (ie. factory test) processes.
@@ -572,14 +571,14 @@ You need to have appropriate permission to make use of the impCentral API entiti
 The following discussion assumes:
 
 - You are making use of the Product created in [the use-case above](#develop-application-firmware).
-- You already have the [device-under-test (DUT) firmware](#develop-factory-device-under-test-firmware) which will run on DUTs after factory BlinkUp™.
+- You already have the [device-under-test (DUT) firmware](#develop-factory-device-under-test-firmware) which will run on DUTs after factory BlinkUp.
 - You already have the [application firmware](#develop-application-firmware) which will run on Production Devices after blessing.
 
 1. Create a new directory called, for example, `factory`.
 
 2. Go to the new directory.
 
-3. Create a Project for [fixture firmware](https://developer.electricimp.com/examples/factoryfirmware) which is linked to the existing Product "MyProduct"; create new Device Groups "MyPreFactoryDG", "MyPreDUTDG" and "MyPreProductionDG" in that Product, and empty files `factory.device.nut` and `factory.agent.nut`, and a [Project file](./CommandsManual.md#project-files).
+3. Create a Project for [fixture firmware](https://developer.electricimp.com/examples/factoryfirmware#fixture-firmware) which is linked to the existing Product "MyProduct"; create new Device Groups "MyPreFactoryDG", "MyPreDUTDG" and "MyPreProductionDG" in that Product, and empty files `factory.device.nut` and `factory.agent.nut`, and a [Project file](./CommandsManual.md#project-files).
 
 ```bash
 > impt project create --pre-factory --product MyProduct --name MyPreFactoryDG
@@ -635,7 +634,7 @@ Deployment "MyRC1" is copied successfully to Deployment "a0e8e599-c6c5-62c0-2a88
 IMPT COMMAND SUCCEEDS
 ```
 
-6. Write your [fixture firmware](https://developer.electricimp.com/examples/factoryfirmware) using the Project’s source code files.
+6. Write your [fixture firmware](https://developer.electricimp.com/examples/factoryfirmware#fixture-firmware) using the Project’s source code files.
 
 7. Add a BlinkUp fixture to your Electric Imp account as if it were a development device.
 

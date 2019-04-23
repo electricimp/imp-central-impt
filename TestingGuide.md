@@ -117,7 +117,7 @@ Tests may call external (eg. a host operating system) commands; please find furt
 
 [Assertions](#assertions) and [diagnostic messages](#diagnostic-messages) are also available for your tests.
 
-**Example**
+#### Example ####
 
 ```squirrel
 class MyTestCase extends ImpTestCase {
@@ -148,7 +148,7 @@ For example, `"Test1.agent.test.nut"` (a test file with test cases for agent cod
 
 **Note** It is sufficient that only the test file is selected for the run, ie. it satisfies the test file search pattern defined during [test configuration](#test-configuration). The corresponding partner file will be added to the test session automatically.
 
-**Example**
+#### Example ####
 
 Test file `"Test1.agent.test.nut"`:
 
@@ -194,7 +194,7 @@ Every test method, including *setUp()* and *tearDown()*, can be run either synch
 
 Test methods should return an instance of the [Promise](https://github.com/electricimp/Promise) class if it needs to do some work asynchronously. The resolution of the Promise indicates that the test has been passed. The rejection of the Promise denotes a failure.
 
-**Example**
+#### Example ####
 
 ```squirrel
 function testSomethingAsynchronously() {
@@ -290,7 +290,7 @@ The following assertions are available in tests:
 
 Asserts that the condition is truthful.
 
-**Example**
+#### Example ####
 
 ```squirrel
 // OK
@@ -306,7 +306,7 @@ this.assertTrue(1 == 2);
 
 Asserts that two values are equal.
 
-**Example**
+#### Example ####
 
 ```squirrel
 // OK
@@ -322,7 +322,7 @@ this.assertEqual(1, 2);
 
 Asserts that a value is greater than some other value.
 
-**Example**
+#### Example ####
 
 ```squirrel
 // OK
@@ -338,7 +338,7 @@ this.assertGreater(1, 2);
 
 Asserts that a value is less than some other value.
 
-**Example**
+#### Example ####
 
 ```squirrel
 // OK
@@ -354,7 +354,7 @@ this.assertLess(2, 2);
 
 Asserts that a value is within a specified range of an expected value.
 
-**Example**
+#### Example ####
 
 ```squirrel
 // OK
@@ -370,7 +370,7 @@ this.assertClose(10, 9, 0.5);
 
 Performs a deep comparison of tables, arrays and classes.
 
-**Example**
+#### Example ####
 
 ```squirrel
 // OK
@@ -392,7 +392,7 @@ this.assertDeepEqual({"a" : { "b" : 1 }}, {"a" : { "b" : 0 }});
 
 Asserts that a value belongs to the range from _from_ to _to_.
 
-**Example**
+#### Example ####
 
 ```squirrel
 // OK
@@ -408,7 +408,7 @@ this.assertBetween(10, 11, 12);
 
 Asserts that the function _func_ throws an error when it is called with the arguments _args_ and the context _ctx_. Returns an error thrown by _func_.
 
-**Example**
+#### Example ####
 
 ```squirrel
 // OK, returns "abc"
@@ -432,7 +432,7 @@ There are three ways to display diagnostic messages in the console from your tes
 
 Examples of tests output are provided in the [section on running tests](#running-tests).
 
-### A Test Case Example ###
+#### A Test Case Example ####
 
 The utility file `myFile.nut` contains the following code:
 
@@ -533,7 +533,7 @@ The configuration settings include:
 
 - `--timeout`, `--stop-on-fail`, `--allow-disconnect`, `--builder-cache` &mdash; Other settings, their meaning and default values are described in the [command’s spec](./CommandsManual.md#test-create).
 
-**Example**
+#### Example ####
 
 ```bash
 > impt test create --dg MyTestDG --agent-file MyLibrary.agent.lib.nut
@@ -566,7 +566,7 @@ IMPT COMMAND SUCCEEDS
 
 You may update the test configuration by calling [`impt test update`](./CommandsManual.md#test-update). The existing [test configuration file](./CommandsManual.md#test-configuration-files) will be updated with the new settings. The new `--test-file` option value(s) completely replace any existing setting.
 
-**Example**
+#### Example ####
 
 ```bash
 > impt test update --timeout 60 --builder-cache true
@@ -597,7 +597,7 @@ IMPT COMMAND SUCCEEDS
 
 You may also display the current test configuration by calling [`impt test info`](./CommandsManual.md#test-info).
 
-**Example**
+#### Example ####
 
 ```bash
 > impt test info
@@ -639,7 +639,7 @@ For unauthenticated requests, the GitHub API allows you to make [up to 60 reques
   - This file may be created or updated with [`impt test github`](./CommandsManual.md#test-github). You specify a GitHub username and password, and they are saved in the specified file. **Important** The credentials are stored in a plain text.
   - You may have several GitHub credential files and they may be located in any place. You specify a concrete GitHub credentials file during [test configuration](#test-configuration). If the specified file exists when you [run the tests](#running-tests), the GitHub credentials are taken from it. If the specified file does not exist, the GitHub credentials are taken from the environment variables, if they are set.
 
-**Example**
+#### Example ####
 
 ```bash
 > impt test github --github-config github.conf --user github_username
@@ -666,7 +666,7 @@ Every test is treated as failed if an error is thrown or a timeout, as defined i
 
 When all tests are passed, the [`impt test run`](./CommandsManual.md#test-run) command outputs `IMPT COMMAND SUCCEEDS` and returns an exit code of zero. Otherwise, it outputs `IMPT COMMAND FAILS` and returns a non-zero exit code.
 
-**Example: Testing Failed**
+#### Example: Testing Failed ####
 
 ```bash
 > impt test run
@@ -703,7 +703,7 @@ Error: Testing failed
 IMPT COMMAND FAILS
 ```
 
-**Example: All Tests Passed**
+#### Example: All Tests Passed ####
 
 ```bash
 > impt test run
@@ -749,7 +749,7 @@ The `--tests <testcase_pattern>` option of the [`impt test run`](./CommandsManua
 
 - `testMethod` is the name of a test method. Should be fully qualified. Test methods with an identical name may exist in different test cases; in this situation all of them will be selected if the cases are selected.
 
-**Example**
+#### Example ####
 
 A test file `TestFile1.test.nut` contains:
 
@@ -790,7 +790,7 @@ You may run your tests in debug mode by specifying the `--output debug` option o
 - All communications with the [*impUnit* test framework](https://github.com/electricimp/impUnit) are displayed in the console.
 - Device and agent code for all the running builds are placed in the `.build` folder inside the test home.
 
-**Example**
+#### Example ####
 
 ```bash
 > impt test run --tests TestFile1:MyTestCase::testMe --output debug
@@ -879,7 +879,7 @@ IMPT COMMAND SUCCEEDS
 
 After testing is complete, you may want to clean the various entities created during testing. If you want to delete your test project, call [`impt test delete`](./CommandsManual.md#test-delete) from the test home. This deletes the [test configuration file](./CommandsManual.md#test-configuration-files), the *Builder* cache directory and any debug information. By specifying additional options you may also delete the GitHub credentials file, any file containing *Builder* variables, and impCentral API entities (Device Group, Deployments, Product) which were used or created during testing. Please see the [delete command’s spec](./CommandsManual.md#test-delete) for more information.
 
-**Example**
+#### Example ####
 
 ```bash
 > impt test delete --all
@@ -929,7 +929,7 @@ IMPT COMMAND SUCCEEDS
 
 Alternatively, you may fully delete the Device Group which you used for the testing by calling `impt dg delete --dg <DEVICE_GROUP_IDENTIFIER> --builds --force`. This fully cleans all of the impCentral entities created during testing, unassigns all devices from the Device Group, deletes all builds created for the Device Group, and deletes the Device Group itself.
 
-**Example**
+#### Example ####
 
 ```bash
 > impt dg delete --dg MyTestDG --builds --force
@@ -969,7 +969,7 @@ IMPT COMMAND SUCCEEDS
 
 If you only want to unassign the devices from the testing Device Group, use [`impt dg unassign`](./CommandsManual.md#device-group-unassign) or [`impt device unassign`](./CommandsManual.md#device-unassign).
 
-**Example**
+#### Example ####
 
 ```bash
 > impt dg unassign --dg MyTestDG
@@ -991,7 +991,7 @@ IMPT COMMAND SUCCEEDS
 
 If you want to delete the Product, use [`impt product delete`](./CommandsManual.md#product-delete).
 
-**Example**
+#### Example ####
 
 ```bash
 > impt product delete --product MyTestProduct --builds --force

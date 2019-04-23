@@ -225,7 +225,7 @@ If the `--output debug` mode is specified, *impt* displays debug information for
 
 ### Script Support ###
 
-*impt* makes it easy for scripts to process its output. User interaction is minimal. Only a few commands, such as [delete](#entity-deletion), ask for a confirmation from the user. However, all of these commands support the `--confirmed` option (alias: `-q`), which if specified, prevents the command from requiring confirmation from the user. Scripts should use this option.
+*impt* makes it easy for scripts to process its output. User interaction is minimal. Only a few commands, such as [delete](#entity-deletion), ask for a confirmation from the user. However, all of these commands support the `--confirmed` option (alias: `-q`), which, if specified, prevents the command from requiring confirmation from the user. Scripts should use this option.
 
 Scripts can also use the [result of the command execution](#command-execution-result) &mdash; an exit code or a predefined phrase &mdash; to determine command outcomes.
 
@@ -382,7 +382,7 @@ The tool takes care of obtaining an access token and refreshing it using an obta
 
 At any time, you can call the [logout command](./CommandsManual.md#auth-logout), `impt auth logout`, to delete the [auth file](./CommandsManual.md#auth-files). Usually you will not be able to work with the impCentral API after logging out and will have to log in again to continue working, but see the [Command Execution Context](./CommandsManual.md#command-execution-context) rules.
 
-You do not need to use the logout command if you want just to login again immediately using other credentials. A new login command overwrites the [auth file](./CommandsManual.md#auth-files) if it exists and the operation is confirmed by the user.
+You do not need to use the logout command if you just want to re-login using other credentials. A new login command overwrites the [auth file](./CommandsManual.md#auth-files) if it exists and the operation is confirmed by the user.
 
 ### Global And Local Auth Files ###
 
@@ -392,7 +392,7 @@ By default, the [login](./CommandsManual.md#auth-login) and [logout](./CommandsM
 
 To work with a [local auth file](./CommandsManual.md#local-auth-file), specify the `--local` option (alias: `-l`) in the [login](./CommandsManual.md#auth-login) and [logout](./CommandsManual.md#auth-logout) commands.
 
-There can be only one [local auth file](./CommandsManual.md#local-auth-file) in a directory, but any number of directories with local auth files. And all of them are independent of each other and of the [global auth file](./CommandsManual.md#global-auth-file). The local auth file only impacts the current directory and does not affect any sub-directories, which may contain their own local auth files.
+There can be only one [local auth file](./CommandsManual.md#local-auth-file) in a directory, but any number of directories with local auth files. All of them are independent of each other and of the [global auth file](./CommandsManual.md#global-auth-file). The local auth file only affects the current directory and does not affect any sub-directories, which may contain their own local auth files.
 
 ### Auth Environment Variables ###
 
@@ -806,7 +806,7 @@ Many *impt* commands combine several impCentral API requests which change impCen
 
 ## Testing ##
 
-There are [Jasmine](https://www.npmjs.com/package/jasmine) tests available to verify *impt* implementation itself. The [Read Me](./spec/README.md) describes how to run the tests and extend them, if necessary.
+There are [Jasmine](https://www.npmjs.com/package/jasmine) tests available to verify *impt* implementation itself. This [Read Me](./spec/README.md) describes how to run the tests and extend them, if necessary.
 
 ## License ##
 
