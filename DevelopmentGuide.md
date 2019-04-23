@@ -144,7 +144,7 @@ IMPT COMMAND SUCCEEDS
 
 You can update your Project at any time with the [`impt project update`](./CommandsManual.md#project-update) command. The following can be updated:
 
-- The Project Device Group’s name, description, Pre-production Device Group target and/or Pre-DUT Device Group target. The same can be done with [`impt dg update`](./CommandsManual.md#device-group-update).
+- The Project Device Group’s name and description, the Pre-production Device Group target and/or Pre-DUT Device Group target. The same can be done with [`impt dg update`](./CommandsManual.md#device-group-update).
 - Change the source files which are linked to the Project.
 
 **Note** You can update other impCentral API entities related to your Project by using other *impt* commands. For example, use [`impt product update`](./CommandsManual.md#product-update) to change the name and/or description of the related Product.
@@ -302,7 +302,7 @@ The log stream may be closed by the impCentral API: for example, when a new log 
 
 If the log stream is stopped by an error (eg. due to a disconnection), *impt* tries to automatically reconnect and re-establish the stream. Even if the stream is restored, some log entries may have been lost and will not be displayed.
 
-#### Example: Start logging A Device From The Project’s Device Group ####
+#### Example: Start Logging For A Device From The Project’s Device Group ####
 
 ```bash
 > impt log stream
@@ -683,7 +683,7 @@ IMPT COMMAND SUCCEEDS
 Press <Ctrl-C> to exit.
 ```
 
-11. Use the fixture to configure some DUTs. They will connect, and download and run their assigned DUT firmware which will test and bless them.
+11. Use the fixture to configure some DUTs. They will connect, then download and run their assigned DUT firmware which will test and bless them.
 
 12. Stop the logging by pressing *Ctrl-C*.
 
@@ -701,7 +701,7 @@ IMPT COMMAND SUCCEEDS
 
 #### Go To Production ####
 
-If you are developing production firmware, whether application, fixture, DUT or all of three of these, you may want to keep the impCentral API entities your created, especially the final builds, but still do some minimal clean-up after your development activities are complete.
+If you are developing production firmware, whether application, factory fixture, DUT or all of three of these, you may want to keep the impCentral API entities you created, especially the final builds, but still do some minimal clean-up after your development activities are complete.
 
 1. Go to the `factory` directory.
 
