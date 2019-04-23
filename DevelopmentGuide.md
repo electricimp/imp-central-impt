@@ -209,7 +209,7 @@ IMPT COMMAND SUCCEEDS
 
 ### Creating And Running Builds ###
 
-To create a new build (a Deployment) without running it immediately, use [`impt build deploy`](./CommandsManual.md#build-deploy). By default, the Deployment will be created from the source files referenced by your Project. 
+To create a new build (a Deployment) without running it immediately, use [`impt build deploy`](./CommandsManual.md#build-deploy). By default, the Deployment will be created from the source files referenced by your Project.
 
 When you want to run the newly created Deployment:
 
@@ -582,9 +582,9 @@ The following discussion assumes:
 3. Create a Project for [fixture firmware](https://developer.electricimp.com/examples/factoryfirmware) which is linked to the existing Product "MyProduct"; create new Device Groups "MyPreFactoryDG", "MyPreDUTDG" and "MyPreProductionDG" in that Product, and empty files `factory.device.nut` and `factory.agent.nut`, and a [Project file](./CommandsManual.md#project-files).
 
 ```bash
-> impt project create --pre-factory --product MyProduct --name MyPreFactoryDG 
+> impt project create --pre-factory --product MyProduct --name MyPreFactoryDG
     --descr "Factory Firmware" --dut MyPreDUTDG --create-dut
-    --target MyPreProductionDG --create-target 
+    --target MyPreProductionDG --create-target
     --device-file factory.device.nut --agent-file factory.agent.nut
 Device Group "MyPreProductionDG" is created successfully.
 Device Group "MyPreDUTDG" is created successfully.

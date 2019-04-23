@@ -315,7 +315,7 @@ Response body: {
   }
 }
 Product "TestProduct" is created successfully.
-Product: 
+Product:
   id:   4e264cef-3316-cdfa-7f39-7a5d458994b3
   name: TestProduct
 IMPT COMMAND SUCCEEDS
@@ -366,7 +366,7 @@ The Command Execution Context rules (how *impt* determines authentication and ot
 impt auth login --lk <login_key>
 ```
 
-or by an account identifier: 
+or by an account identifier:
 
 ```bash
 impt auth login --user <user_id> --pwd <password>
@@ -413,13 +413,13 @@ The `IMPT_LOGINKEY`, `IMPT_USER`, `IMPT_PASSWORD` and `IMPT_ENDPOINT` variables 
 - You may have as many different [local auth files](./CommandsManual.md#local-auth-file) as you want and run *impt* commands with different authentication information in parallel (eg. for different projects/products) by running them from different processes (eg. consoles). But you should note that a [local auth file](./CommandsManual.md#local-auth-file) affects commands called from the directory where the file is located only, not from sub-directories.
 
 - If you want to run *impt* commands in parallel in different processes (eg. consoles) with different authentication information and call them from any directory, you can utilize the [environment variables](./CommandsManual.md#auth-environment-variables):
- 
+
     - Option 1 &mdash; Create the required number of [auth files](./CommandsManual.md#auth-files) with different authentication information; in every process specify its own path to the required auth file using the `IMPT_AUTH_FILE_PATH` environment variable.
 
     - Option 2 &mdash; In every process specify its own required authentication information using the `IMPT_LOGINKEY`, `IMPT_USER`, `IMPT_PASSWORD` and `IMPT_ENDPOINT` environment variables.
 
 - If you do not want to have the user credentials visible in the console (shell) history, call the [login command](./CommandsManual.md#auth-login) without specifying the credentials; *impt* will prompt to enter them.
-  
+
 - If you do not want to store any authentication information in files, use the `IMPT_LOGINKEY`, `IMPT_USER`, `IMPT_PASSWORD` and `IMPT_ENDPOINT` environment variables for authentication.
 
 - At any time, and in any directory, you can get the execution context currently applicable to this directory and the login status. Call the [`impt auth info`](./CommandsManual.md#auth-info) command from the required directory. The returned information includes a type of the authentication applicable to the current directory, access token status, account ID and other details.
@@ -441,7 +441,7 @@ Choose authentication method:
  (2) Login Key
 Enter 1 or 2: 1
 Enter username or email address: username
-Enter password: 
+Enter password:
 Global login is successful.
 IMPT COMMAND SUCCEEDS
 ```
@@ -528,7 +528,7 @@ If you want to use this feature, please read the [Commands Manual](./CommandsMan
 
 When it is hard to uniquely specify an entity without knowing the entity ID, use [entity listing](#entity-listing-and-ownership) commands to view the entities basing on some attributes, choose the required entity and use its entity ID in the required command.
 
-For some impCentral entities, such as Products and Device Groups, *impt* provides the ability, when using hierarchical identifiers, to identify them solely by their name. This is particularly helpful when you are developing scripts: you can pass the name of an entity and then call all manipulation commands with that entity (create, update, delete, etc.) without first obtaining the ID of the entity. The format and details of every concrete hierarchical identifier are described in the [Commands Manual](./CommandsManual.md#entity-identification). 
+For some impCentral entities, such as Products and Device Groups, *impt* provides the ability, when using hierarchical identifiers, to identify them solely by their name. This is particularly helpful when you are developing scripts: you can pass the name of an entity and then call all manipulation commands with that entity (create, update, delete, etc.) without first obtaining the ID of the entity. The format and details of every concrete hierarchical identifier are described in the [Commands Manual](./CommandsManual.md#entity-identification).
 
 ##### Example 1: An Entity Is Found Successfully**
 

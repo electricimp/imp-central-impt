@@ -168,7 +168,7 @@ Attributes accepted as `<PRODUCT_IDENTIFIER>` (in order of search):
 
 Hierarchical identifier pattern: `{<ACCOUNT_IDENTIFIER>}{<PRODUCT_IDENTIFIER>}`
 
-where `<ACCOUNT_IDENTIFIER>` is an [Account identifier](#account-identifier) attribute and `<PRODUCT_IDENTIFIER>` is a Product identifier attribute. 
+where `<ACCOUNT_IDENTIFIER>` is an [Account identifier](#account-identifier) attribute and `<PRODUCT_IDENTIFIER>` is a Product identifier attribute.
 
 ### Device Group Identifier ###
 
@@ -240,7 +240,7 @@ This is how *impt* determines a context (authentication and other settings) for 
 1. If the current directory contains an auth file ([local auth file](#local-auth-file)):
     - The command is executed in the context defined by this file.
     - If the file is broken, the command fails.
-  
+
 2. Otherwise, if the `IMPT_AUTH_FILE_PATH` environment variable is set:
     - The command is executed in the context defined by the auth file in the directory referenced by this environment variable.
     - If the file does not exist or is broken, the command fails.
