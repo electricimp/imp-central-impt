@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright 2018 Electric Imp
+// Copyright 2018-2019 Electric Imp
 //
 // SPDX-License-Identifier: MIT
 //
@@ -76,13 +76,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         // prepare test environment for impt product create test suite
         function _testSuiteInit() {
             return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_EXIST_NAME} -s "${PRODUCT_EXIST_DESCR}"`, ImptTestHelper.emptyCheck).
-                then(() => ImptTestHelper.getAccountAttrs((commandOut) => {
-                    if (commandOut && commandOut.email && commandOut.id) {
-                        email = commandOut.email;
-                        userid = commandOut.id;
-                    }
-                    else fail("TestSuitInit error: Failed to get account attributes");
-                }, username));
+                then(() => ImptTestHelper.getAccountAttrs(username)).
+                then((account) => { email = account.email; userid = account.id; });
         }
 
         // check command`s result by exec product info command

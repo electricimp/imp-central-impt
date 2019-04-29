@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright 2018 Electric Imp
+// Copyright 2018-2019 Electric Imp
 //
 // SPDX-License-Identifier: MIT
 //
@@ -45,7 +45,7 @@ describe(`impt device group list test suite (output: ${outputMode ? outputMode :
     let product_id = null;
     let email = null;
     let userid = null;
-    
+
 
     // custom matcher for search Device Group with expected properties in Device Group array
     let customMatcher = {
@@ -93,30 +93,19 @@ describe(`impt device group list test suite (output: ${outputMode ? outputMode :
 
     // prepare environment for device group list command testing
     function _testSuiteInit() {
-        return ImptTestHelper.getAccountAttrs((commandOut) => {
-            if (commandOut && commandOut.email && commandOut.id) {
-                email = commandOut.email;
-                userid = commandOut.id;
-            }
-            else fail("TestSuitInit error: Failed to get account attributes");
-        }).
-            then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, (commandOut) => {
-                product_id = ImptTestHelper.parseId(commandOut);
-                if (!product_id) fail("TestSuitInit error: Failed to create product");
-                ImptTestHelper.emptyCheck(commandOut);
-            })).
-            then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, ImptTestHelper.emptyCheck)).
-            then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME2}`, ImptTestHelper.emptyCheck)).
-            then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME2} -p ${PRODUCT_NAME2}`, ImptTestHelper.emptyCheck)).
-            then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME3}`, ImptTestHelper.emptyCheck)).
-            then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME3} -p ${PRODUCT_NAME3}`, ImptTestHelper.emptyCheck));
+        return ImptTestHelper.getAccountAttrs().
+            then((account) => { email = account.email; userid = account.id; }).
+            then(() => ImptTestHelper.createDeviceGroup(PRODUCT_NAME, DEVICE_GROUP_NAME)).
+            then((dgInfo) => { product_id = dgInfo.productId; }).
+            then(() => ImptTestHelper.createDeviceGroup(PRODUCT_NAME2, DEVICE_GROUP_NAME2)).
+            then(() => ImptTestHelper.createDeviceGroup(PRODUCT_NAME3, DEVICE_GROUP_NAME3));
     }
 
     // delete all entities using in impt dg list test suite
     function _testSuiteCleanUp() {
-        return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheck).
-            then(() => ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME2} -f -q`, ImptTestHelper.emptyCheck)).
-            then(() => ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME3} -f -q`, ImptTestHelper.emptyCheck));
+        return ImptTestHelper.productDelete(PRODUCT_NAME).
+            then(() => ImptTestHelper.productDelete(PRODUCT_NAME2)).
+            then(() => ImptTestHelper.productDelete(PRODUCT_NAME3));
     }
 
     function _checkDeviceGroupExist(commandOut, expInfo) {

@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright 2018 Electric Imp
+// Copyright 2018-2019 Electric Imp
 //
 // SPDX-License-Identifier: MIT
 //
@@ -51,6 +51,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         afterAll((done) => {
             _testSuiteCleanUp().
+                then(() => ImptTestHelper.restoreDeviceInfo()).
                 then(ImptTestHelper.cleanUp).
                 then(done).
                 catch(error => done.fail(error));
@@ -58,7 +59,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // prepare environment for impt log stream command testing
         function _testSuiteInit() {
-            return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheck).
+            return ImptTestHelper.retrieveDeviceInfo(PRODUCT_NAME, DEVICE_GROUP_NAME).
+                then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheck)).
                 then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, ImptTestHelper.emptyCheck)).
                 then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP2_NAME} -p ${PRODUCT_NAME}`, ImptTestHelper.emptyCheck)).
                 then(() => ImptTestHelper.deviceAssign(DEVICE_GROUP_NAME)).
@@ -68,7 +70,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // delete all entities using in impt log stream test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheck);
+            return ImptTestHelper.productDelete(PRODUCT_NAME);
         }
 
         function _checkLogStreamOpenedMessage(commandOut, device) {

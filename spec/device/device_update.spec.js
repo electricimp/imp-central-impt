@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright 2018 Electric Imp
+// Copyright 2018-2019 Electric Imp
 //
 // SPDX-License-Identifier: MIT
 //
@@ -40,10 +40,6 @@ const DEVICE_NEW_NAME = `__impt_dev_device${config.suffix}`;
 // Runs 'impt device update' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
     describe(`impt device update test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
-        let device_mac = null;
-        let old_name = null;
-        let device_name = null;
-        let agent_id = null;
 
         beforeAll((done) => {
             ImptTestHelper.init().
@@ -54,6 +50,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         afterAll((done) => {
             _testSuiteCleanUp().
+                then(() => ImptTestHelper.restoreDeviceInfo()).
                 then(ImptTestHelper.cleanUp).
                 then(done).
                 catch(error => done.fail(error));
@@ -61,31 +58,19 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // prepare environment for device update command test suite 
         function _testSuiteInit() {
-            return ImptTestHelper.getDeviceAttrs(PRODUCT_NAME, DEVICE_GROUP_NAME, (commandOut) => {
-                if (commandOut && commandOut.mac) {
-                    device_mac = commandOut.mac;
-                    old_name = commandOut.name;
-                    device_name = `${config.devices[config.deviceidx]}${config.suffix}`;
-                    agent_id = commandOut.agentid;
-                }
-                else fail("TestSuitInit error: Failed to get additional device attributes");
-            }).
-                then(() => ImptTestHelper.runCommand(`impt device update -d ${config.devices[config.deviceidx]} --name ${device_name}`, ImptTestHelper.emptyCheck)).
-                then(() => ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheck)).
-                then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheck)).
-                then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, ImptTestHelper.emptyCheck)).
+            return ImptTestHelper.retrieveDeviceInfo(PRODUCT_NAME, DEVICE_GROUP_NAME).
+                then(() => ImptTestHelper.createDeviceGroup(PRODUCT_NAME, DEVICE_GROUP_NAME)).
                 then(() => ImptTestHelper.deviceAssign(DEVICE_GROUP_NAME));
         }
 
         // delete all entities using in impt device update test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheck).
-                then(() => ImptTestHelper.runCommand(`impt device update -d ${config.devices[config.deviceidx]} --name ${old_name ? old_name : '""'}`, ImptTestHelper.emptyCheck));
+            return ImptTestHelper.productDelete(PRODUCT_NAME);
         }
 
         // delete all entities using in impt device update test suite
         function _testCleanUp() {
-            return ImptTestHelper.runCommand(`impt device update -d ${config.devices[config.deviceidx]} --name ${device_name}`, ImptTestHelper.emptyCheck);
+            return ImptTestHelper.runCommand(`impt device update -d ${config.devices[config.deviceidx]} --name ${ImptTestHelper.deviceInfo.deviceName}`, ImptTestHelper.emptyCheck);
         }
 
         // check 'device successfully updated' output message 
@@ -123,8 +108,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('device update by device mac', (done) => {
-                ImptTestHelper.runCommand(`impt device update --device ${device_mac}  --name ${DEVICE_NEW_NAME} ${outputMode}`, (commandOut) => {
-                    _checkSuccessUpdatedDeviceMessage(commandOut, device_mac)
+                ImptTestHelper.runCommand(`impt device update --device ${ImptTestHelper.deviceInfo.deviceMac}  --name ${DEVICE_NEW_NAME} ${outputMode}`, (commandOut) => {
+                    _checkSuccessUpdatedDeviceMessage(commandOut, ImptTestHelper.deviceInfo.deviceMac)
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => _checkDeviceInfo).
@@ -133,8 +118,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('device update by device name', (done) => {
-                ImptTestHelper.runCommand(`impt device update --device ${device_name}  --name ${DEVICE_NEW_NAME} ${outputMode}`, (commandOut) => {
-                    _checkSuccessUpdatedDeviceMessage(commandOut, device_name)
+                ImptTestHelper.runCommand(`impt device update --device ${ImptTestHelper.deviceInfo.deviceName}  --name ${DEVICE_NEW_NAME} ${outputMode}`, (commandOut) => {
+                    _checkSuccessUpdatedDeviceMessage(commandOut, ImptTestHelper.deviceInfo.deviceName)
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => _checkDeviceInfo).
@@ -143,8 +128,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('device update by agent id', (done) => {
-                ImptTestHelper.runCommand(`impt device update --device ${agent_id}  --name ${DEVICE_NEW_NAME} ${outputMode}`, (commandOut) => {
-                    _checkSuccessUpdatedDeviceMessage(commandOut, agent_id)
+                ImptTestHelper.runCommand(`impt device update --device ${ImptTestHelper.deviceInfo.deviceAgentId}  --name ${DEVICE_NEW_NAME} ${outputMode}`, (commandOut) => {
+                    _checkSuccessUpdatedDeviceMessage(commandOut, ImptTestHelper.deviceInfo.deviceAgentId)
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => _checkDeviceInfo).

@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright 2018 Electric Imp
+// Copyright 2018-2019 Electric Imp
 //
 // SPDX-License-Identifier: MIT
 //
@@ -52,6 +52,7 @@ describe(`impt device group info test suite (output: ${outputMode ? outputMode :
 
     afterAll((done) => {
         _testSuiteCleanUp().
+            then(() => ImptTestHelper.restoreDeviceInfo()).
             then(ImptTestHelper.cleanUp).
             then(done).
             catch(error => done.fail(error));
@@ -59,30 +60,18 @@ describe(`impt device group info test suite (output: ${outputMode ? outputMode :
 
     // prepare environment for device group info command testing
     function _testSuiteInit() {
-        return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, (commandOut) => {
-            product_id = ImptTestHelper.parseId(commandOut);
-            if (!product_id) fail("TestSuitInit error: Failed to create product");
-            ImptTestHelper.emptyCheck(commandOut);
-        }).
-            then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
-                dg_id = ImptTestHelper.parseId(commandOut);
-                if (!dg_id) fail("TestSuitInit error: Failed to create device group");
-                ImptTestHelper.emptyCheck(commandOut);
-            })).
-            then(() => ImptTestHelper.getAccountAttrs((commandOut) => {
-                if (commandOut && commandOut.email && commandOut.id) {
-                    email = commandOut.email;
-                    userid = commandOut.id;
-                }
-                else fail("TestSuitInit error: Failed to get account attributes");
-            })).
-            then(() => ImptTestHelper.runCommand(`impt device assign -d ${config.devices[config.deviceidx]} -g ${DEVICE_GROUP_NAME} -q`, ImptTestHelper.emptyCheck)).
+        return ImptTestHelper.retrieveDeviceInfo(PRODUCT_NAME, DEVICE_GROUP_NAME).
+            then(() => ImptTestHelper.createDeviceGroup(PRODUCT_NAME, DEVICE_GROUP_NAME)).
+            then((dgInfo) => { product_id = dgInfo.productId; dg_id = dgInfo.dgId; }).
+            then(() => ImptTestHelper.getAccountAttrs()).
+            then((account) => { email = account.email; userid = account.id; }).
+            then(() => ImptTestHelper.deviceAssign(DEVICE_GROUP_NAME)).
             then(() => ImptTestHelper.runCommand(`impt build deploy -g ${DEVICE_GROUP_NAME}`, ImptTestHelper.emptyCheck));
     }
 
     // delete all entities using in impt dg info test suite
     function _testSuiteCleanUp() {
-        return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheck);
+        return ImptTestHelper.productDelete(PRODUCT_NAME);
     }
 
     // check base atributes of requested device group

@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright 2018 Electric Imp
+// Copyright 2018-2019 Electric Imp
 //
 // SPDX-License-Identifier: MIT
 //
@@ -38,6 +38,7 @@ describe('impt test run for Builder cache scenario >', () => {
     beforeAll((done) => {
         ImptTestHelper.init().
             then(ImptTestCommandsHelper.cleanUpTestEnvironment).
+            then(() => ImptTestCommandsHelper.saveDeviceInfo()).
             then(ImptTestCommandsHelper.createTestProductAndDG).
             then(createGitHubConfig).
             then(done).
@@ -46,6 +47,7 @@ describe('impt test run for Builder cache scenario >', () => {
 
     afterAll((done) => {
         ImptTestCommandsHelper.cleanUpTestEnvironment().
+            then(() => ImptTestHelper.restoreDeviceInfo()).
             then(() => ImptTestHelper.cleanUp()).
             then(done).
             catch(error => done.fail(error));
@@ -65,11 +67,11 @@ describe('impt test run for Builder cache scenario >', () => {
         ImptTestCommandsHelper.createTestConfig(
             'fixtures/builder_cache',
             {
-                'device-file' : 'myDevice.class.nut',
-                'agent-file' : 'myAgent.class.nut',
+                'device-file': 'myDevice.class.nut',
+                'agent-file': 'myAgent.class.nut',
                 'timeout': 40,
-                'test-file' : 'tests/builder.agent.nut',
-                'github-config' : gitHubConfigName
+                'test-file': 'tests/builder.agent.nut',
+                'github-config': gitHubConfigName
             }).
             then(() => ImptTestHelper.runCommand('impt test run', (commandOut) => {
                 expect(Shell.test('-e', '.builder-cache')).toBe(false);
@@ -84,12 +86,12 @@ describe('impt test run for Builder cache scenario >', () => {
         ImptTestCommandsHelper.createTestConfig(
             'fixtures/builder_cache',
             {
-                'device-file' : 'myDevice.class.nut',
-                'agent-file' : 'myAgent.class.nut',
-                'timeout' : 40,
-                'test-file' : 'tests/builder.agent.nut',
-                'builder-cache' : true,
-                'github-config' : gitHubConfigName
+                'device-file': 'myDevice.class.nut',
+                'agent-file': 'myAgent.class.nut',
+                'timeout': 40,
+                'test-file': 'tests/builder.agent.nut',
+                'builder-cache': true,
+                'github-config': gitHubConfigName
             }).
             then(() => ImptTestHelper.runCommand('impt test run', (commandOut) => {
                 expect(Shell.test('-e', '.builder-cache')).toBe(true);
@@ -105,12 +107,12 @@ describe('impt test run for Builder cache scenario >', () => {
         ImptTestCommandsHelper.createTestConfig(
             'fixtures/builder_cache',
             {
-                'device-file' : 'myDevice.class.nut',
-                'agent-file' : 'myAgent.class.nut',
+                'device-file': 'myDevice.class.nut',
+                'agent-file': 'myAgent.class.nut',
                 'timeout': 40,
-                'test-file' : 'tests/builder.agent.nut',
-                'builder-cache' : false,
-                'github-config' : gitHubConfigName
+                'test-file': 'tests/builder.agent.nut',
+                'builder-cache': false,
+                'github-config': gitHubConfigName
             }).
             then(() => ImptTestHelper.runCommand('impt test run --clear-cache', (commandOut) => {
                 expect(Shell.test('-e', '.builder-cache')).toBe(false);

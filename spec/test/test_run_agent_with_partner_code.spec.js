@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright 2018 Electric Imp
+// Copyright 2018-2019 Electric Imp
 //
 // SPDX-License-Identifier: MIT
 //
@@ -32,15 +32,17 @@ describe('impt test run for Agent code and device code together scenario >', () 
     beforeAll((done) => {
         ImptTestHelper.init().
             then(ImptTestCommandsHelper.cleanUpTestEnvironment).
+            then(() => ImptTestCommandsHelper.saveDeviceInfo()).
             then(() => ImptTestCommandsHelper.createTestEnvironment(
                 'fixtures/agent_with_partner_code',
-                {'test-file' : 'tests/tmp.agent.*.nut'})).
+                { 'test-file': 'tests/tmp.agent.*.nut' })).
             then(done).
             catch(error => done.fail(error));
     }, ImptTestHelper.TIMEOUT);
 
     afterAll((done) => {
         ImptTestCommandsHelper.cleanUpTestEnvironment().
+            then(() => ImptTestHelper.restoreDeviceInfo()).
             then(() => ImptTestHelper.cleanUp()).
             then(done).
             catch(error => done.fail(error));
@@ -48,12 +50,12 @@ describe('impt test run for Agent code and device code together scenario >', () 
 
     it('run test', (done) => {
         ImptTestHelper.runCommand('impt test run --tests :MyTestCase::testMe_1', (commandOut) => {
-                expect(commandOut.output).not.toBeEmptyString();
-                expect(commandOut.output).not.toMatch(/MyTestCase::testMe\(\)\n/);
-                expect(commandOut.output).toMatch(/MyTestCase::testMe_1\(\)\n/);
-                ImptTestHelper.checkSuccessStatus(commandOut);
-                ImptTestHelper.checkSuccessStatus(commandOut);
-            }).
+            expect(commandOut.output).not.toBeEmptyString();
+            expect(commandOut.output).not.toMatch(/MyTestCase::testMe\(\)\n/);
+            expect(commandOut.output).toMatch(/MyTestCase::testMe_1\(\)\n/);
+            ImptTestHelper.checkSuccessStatus(commandOut);
+            ImptTestHelper.checkSuccessStatus(commandOut);
+        }).
             then(done).
             catch(error => done.fail(error));
     });

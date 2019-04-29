@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright 2018 Electric Imp
+// Copyright 2018-2019 Electric Imp
 //
 // SPDX-License-Identifier: MIT
 //
@@ -161,52 +161,46 @@ class ImptTestHelper {
         });
     }
 
-    static getDeviceAttrs(product, dg, output) {
-        let jsonInfo = null;
-        return ImptTestHelper.runCommand(`impt product create -n ${product}`, ImptTestHelper.emptyCheck).
-            then(() => ImptTestHelper.runCommand(`impt dg create -n ${dg} -p ${product}`, ImptTestHelper.emptyCheck)).
-            then(() => ImptTestHelper.runCommand(`impt device assign -d ${config.devices[config.deviceidx]} -g ${dg} -q`, ImptTestHelper.emptyCheck)).
-            then(() => ImptTestHelper.runCommand(`impt build deploy -g ${dg}`, ImptTestHelper.emptyCheck)).
+    static retrieveDeviceInfo(product, deviceGroup) {
+        return ImptTestHelper.createDeviceGroup(product, deviceGroup).
             then(() => ImptTestHelper.runCommand(`impt device info -d ${config.devices[config.deviceidx]} -z json`, (commandOut) => {
-                jsonInfo = commandOut.output;
+                let _json = JSON.parse(commandOut.output);
+                this.deviceInfo.originalName = _json.Device.name;
+                this.deviceInfo.deviceName = `${config.devices[config.deviceidx]}${config.suffix}`;
+                this.deviceInfo.deviceMac = _json.Device.mac_address;
+                this.deviceInfo.deviceGroup = _json.Device["Device Group"] ? _json.Device["Device Group"].id : null;
+                this.deviceInfo.deviceAgentId = _json.Device.agent_id;
                 ImptTestHelper.emptyCheck(commandOut);
             })).
-            then(() => ImptTestHelper.runCommand(`impt product delete -p ${product} -f -b -q`, ImptTestHelper.emptyCheck)).
-            then(() => {
-                return new Promise((resolve) => {
-                    let json = JSON.parse(jsonInfo);
-                    if (json.Device) {
-                        let device_mac = json.Device.mac_address;
-                        let device_name = json.Device.name;
-                        let agent_id = json.Device.agent_id;
-                        resolve({ mac: device_mac, name: device_name, agentid: agent_id });
-                    }
-                    else
-                        resolve(null);
-                })
-            }).
-            then(output);
+            then(() => ImptTestHelper.runCommand(`impt device assign -d ${config.devices[config.deviceidx]} -g "${deviceGroup}" -q`, ImptTestHelper.emptyCheck)).
+            then(() => ImptTestHelper.runCommand(`impt device info -d ${config.devices[config.deviceidx]} -z json`, (commandOut) => {
+                let _json = JSON.parse(commandOut.output);
+                this.deviceInfo.deviceAgentId = _json.Device.agent_id;
+                ImptTestHelper.emptyCheck(commandOut);
+            })).
+            then(() => ImptTestHelper.runCommand(`impt device update -d ${config.devices[config.deviceidx]} --name "${this.deviceInfo.deviceName}"`, ImptTestHelper.emptyCheck));
     }
 
-    static getAccountAttrs(output, owner = 'me') {
-        let jsonInfo = null;
-        return ImptTestHelper.runCommand(`impt account info -u ${owner} -z json`, (commandOut) => {
-            jsonInfo = commandOut.output;
-            ImptTestHelper.emptyCheck(commandOut);
-        }).
+    static restoreDeviceInfo() {
+        return ImptTestHelper.runCommand(`impt device update -d ${config.devices[config.deviceidx]} --name "${this.deviceInfo.originalName ? this.deviceInfo.originalName : ''}"`, ImptTestHelper.emptyCheck).
             then(() => {
-                return new Promise((resolve) => {
-                    let json = JSON.parse(jsonInfo);
-                    if (json.Account) {
-                        let account_email = json.Account.email;
-                        let account_id = json.Account.id;
-                        resolve({ email: account_email, id: account_id });
-                    }
-                    else
-                        resolve(null);
-                })
-            }).
-            then(output);
+                if (this.deviceInfo.deviceGroup) {
+                    return this.deviceAssign(this.deviceInfo.deviceGroup);
+                } else {
+                    return Promise.resolve();
+                }
+            });
+    }
+
+    static getAccountAttrs(owner = 'me') {
+        return ImptTestHelper.runCommand(`impt account info -u ${owner} -z json`, (commandOut) => {
+            let json = JSON.parse(commandOut.output);
+            if (json.Account) {
+                return Promise.resolve({ email: json.Account.email, id: json.Account.id });
+            } else {
+                return Promise.reject("Failed to create device group");
+            }
+        });
     }
 
     // Checks if file exist in the TESTS_EXECUTION_FOLDER
@@ -241,6 +235,26 @@ class ImptTestHelper {
         return ImptTestHelper.runCommand(`impt project delete -f -q`, ImptTestHelper.emptyCheck);
     }
 
+    static createDeviceGroup(productName, dgName) {
+        let product_id = null;
+        return ImptTestHelper.runCommand(`impt product delete -p "${productName}" -f -b -q`, ImptTestHelper.emptyCheck).
+            then(() => ImptTestHelper.runCommand(`impt product create -n "${productName}"`, (commandOut) => {
+                product_id = ImptTestHelper.parseId(commandOut);
+            })).
+            then(() => ImptTestHelper.runCommand(`impt dg create -n "${dgName}" -p "${productName}"`, (commandOut) => {
+                let dg_id = ImptTestHelper.parseId(commandOut);
+                if (dg_id) {
+                    return Promise.resolve({ productId: product_id, dgId: dg_id });
+                } else {
+                    return Promise.reject("Failed to create device group");
+                }
+            }));
+    }
+
+    static productDelete(productName) {
+        return ImptTestHelper.runCommand(`impt product delete -p "${productName}" -f -b -q`, ImptTestHelper.emptyCheck);
+    }
+
     static deviceAssign(dg) {
         return ImptTestHelper.runCommand(`impt device assign -d ${config.devices[config.deviceidx]} -g ${dg} -q`, ImptTestHelper.emptyCheck);
     }
@@ -250,7 +264,7 @@ class ImptTestHelper {
     }
 
     static deviceUnassign(dg) {
-        return ImptTestHelper.runCommand(`impt dg unassign -g ${dg}`, ImptTestHelper.emptyCheck);
+        return ImptTestHelper.runCommand(`impt dg unassign -g "${dg}"`, ImptTestHelper.emptyCheck);
     }
 
     // Checks success return code of the command
@@ -272,7 +286,7 @@ class ImptTestHelper {
 
     // Checks if the command output contains the specified attribute name and value
     static checkAttribute(commandOut, attrName, attrValue) {
-        expect(commandOut.output).toMatch(new RegExp(`${attrName}"?:\\s+"?${attrValue.replace(new RegExp(/([\^\[\.\$\{\*\(\\\+\)\|\?\<\>])/g),'\\$&').replace(new RegExp(/"/g), '\\\\?"')}"?`));
+        expect(commandOut.output).toMatch(new RegExp(`${attrName}"?:\\s+"?${attrValue.replace(new RegExp(/([\^\[\.\$\{\*\(\\\+\)\|\?\<\>])/g), '\\$&').replace(new RegExp(/"/g), '\\\\?"')}"?`));
     }
 
     // Checks if the command output contains the specified message for default or debug output mode
@@ -320,5 +334,7 @@ class ImptTestHelper {
         });
     }
 }
+
+ImptTestHelper.deviceInfo = {};
 
 module.exports = ImptTestHelper;

@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright 2018 Electric Imp
+// Copyright 2018-2019 Electric Imp
 //
 // SPDX-License-Identifier: MIT
 //
@@ -55,6 +55,7 @@ describe(`impt device list test suite (output: ${outputMode ? outputMode : 'defa
 
     afterAll((done) => {
         _testSuiteCleanUp().
+            then(() => ImptTestHelper.restoreDeviceInfo()).
             then(ImptTestHelper.cleanUp).
             then(done).
             catch(error => done.fail(error));
@@ -102,33 +103,18 @@ describe(`impt device list test suite (output: ${outputMode ? outputMode : 'defa
 
     // prepare environment for device list command test suite 
     function _testSuiteInit() {
-        return ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, (commandOut) => {
-            product_id = ImptTestHelper.parseId(commandOut);
-            if (!product_id) fail("TestSuitInit error: Failed to create product");
-            ImptTestHelper.emptyCheck(commandOut);
-        }).
-            then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME_2}`, (commandOut) => {
-                product2_id = ImptTestHelper.parseId(commandOut);
-                if (!product2_id) fail("TestSuitInit error: Failed to create product");
-                ImptTestHelper.emptyCheck(commandOut);
-            })).
-            then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, (commandOut) => {
-                dg_id = ImptTestHelper.parseId(commandOut);
-                if (!dg_id) fail("TestSuitInit error: Failed to create device group");
-                ImptTestHelper.emptyCheck(commandOut);
-            })).
-            then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME_2} -p ${PRODUCT_NAME_2}`, (commandOut) => {
-                dg2_id = ImptTestHelper.parseId(commandOut);
-                if (!dg2_id) fail("TestSuitInit error: Failed to create device group");
-                ImptTestHelper.emptyCheck(commandOut);
-            })).
+        return ImptTestHelper.retrieveDeviceInfo(PRODUCT_NAME, DEVICE_GROUP_NAME).
+            then(() => ImptTestHelper.createDeviceGroup(PRODUCT_NAME, DEVICE_GROUP_NAME)).
+            then((dgInfo) => { product_id = dgInfo.productId; dg_id = dgInfo.dgId; }).
+            then(() => ImptTestHelper.createDeviceGroup(PRODUCT_NAME_2, DEVICE_GROUP_NAME_2)).
+            then((dgInfo) => { product2_id = dgInfo.productId; dg2_id = dgInfo.dgId; }).
             then(() => ImptTestHelper.deviceAssign(DEVICE_GROUP_NAME));
     }
-    
+
     // delete all entities using in impt device list test suite
     function _testSuiteCleanUp() {
-        return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheck).
-            then(() => ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME_2} -f -q`, ImptTestHelper.emptyCheck));
+        return ImptTestHelper.productDelete(PRODUCT_NAME).
+            then(() => ImptTestHelper.productDelete(PRODUCT_NAME_2));
     }
 
     describe('impt device list positive  tests >', () => {
