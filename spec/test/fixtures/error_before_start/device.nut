@@ -22,11 +22,10 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 
-// causes out-of memory error
-function oom() {
-    local s = "abcdefghijklmnopqrstuvwxyz";
-    while (1) s += s;
+// causes error
+function error() {
+    local s = 1 / 0;
 }
 
-// cause OOM before session start
-oom();
+// cause error before session start
+error();

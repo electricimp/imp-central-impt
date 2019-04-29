@@ -24,7 +24,7 @@
 
 class DeviceTestCase extends ImpTestCase {
     function setUp() {
-        oom();
+        error();
     }
 
     function testSomething() {

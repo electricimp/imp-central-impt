@@ -34,6 +34,7 @@ describe('impt test run for asserts scenario >', () => {
     beforeAll((done) => {
         ImptTestHelper.init().
             then(ImptTestCommandsHelper.cleanUpTestEnvironment).
+            then(() => ImptTestCommandsHelper.saveDeviceInfo()).
             then(ImptTestCommandsHelper.createTestProductAndDG).
             then(done).
             catch(error => done.fail(error));
@@ -41,6 +42,7 @@ describe('impt test run for asserts scenario >', () => {
 
     afterAll((done) => {
         ImptTestCommandsHelper.cleanUpTestEnvironment().
+            then(() => ImptTestHelper.restoreDeviceInfo()).
             then(ImptTestHelper.cleanUp).
             then(done).
             catch(error => done.fail(error));
