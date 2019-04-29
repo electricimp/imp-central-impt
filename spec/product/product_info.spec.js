@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright 2018 Electric Imp
+// Copyright 2018-2019 Electric Imp
 //
 // SPDX-License-Identifier: MIT
 //
@@ -62,18 +62,13 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                 if (!product_id) fail("TestSuitInit error: Failed to create product");
                 ImptTestHelper.emptyCheck(commandOut);
             }).
-                then(() => ImptTestHelper.getAccountAttrs((commandOut) => {
-                    if (commandOut && commandOut.email && commandOut.id) {
-                        email = commandOut.email;
-                        userid = commandOut.id;
-                    }
-                    else fail("TestSuitInit error: Failed to get account attributes");
-                }));
+                then(() => ImptTestHelper.getAccountAttrs()).
+                then((account) => { email = account.email; userid = account.id; });
         }
 
         // delete all entities using in impt product info test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommand(`impt product delete --product ${PRODUCT_NAME} --force --confirmed`, ImptTestHelper.emptyCheck);
+            return ImptTestHelper.productDelete(PRODUCT_NAME);
         }
 
         describe(`product info positive tests >`, () => {

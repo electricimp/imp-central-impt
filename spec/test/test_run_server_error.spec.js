@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright 2018 Electric Imp
+// Copyright 2018-2019 Electric Imp
 //
 // SPDX-License-Identifier: MIT
 //
@@ -33,6 +33,7 @@ describe('impt test run for test server error scenario >', () => {
     beforeAll((done) => {
         ImptTestHelper.init().
             then(ImptTestCommandsHelper.cleanUpTestEnvironment).
+            then(() => ImptTestCommandsHelper.saveDeviceInfo()).
             then(ImptTestCommandsHelper.createTestProductAndDG).
             then(done).
             catch(error => done.fail(error));
@@ -40,6 +41,7 @@ describe('impt test run for test server error scenario >', () => {
 
     afterAll((done) => {
         ImptTestCommandsHelper.cleanUpTestEnvironment().
+            then(() => ImptTestHelper.restoreDeviceInfo()).
             then(() => ImptTestHelper.cleanUp()).
             then(done).
             catch(error => done.fail(error));
@@ -49,10 +51,10 @@ describe('impt test run for test server error scenario >', () => {
         ImptTestCommandsHelper.createTestConfig(
             'fixtures/server_error',
             {
-                'device-file' : 'myDevice.class.nut',
-                'agent-file' : 'myAgent.class.nut',
+                'device-file': 'myDevice.class.nut',
+                'agent-file': 'myAgent.class.nut',
                 'timeout': 40,
-                'test-file' : [
+                'test-file': [
                     'tests/server-error.agent.nut',
                     'tests/server-error2.agent.nut',
                     'tests/server-error.device.nut',
@@ -73,9 +75,9 @@ describe('impt test run for test server error scenario >', () => {
         ImptTestCommandsHelper.createTestConfig(
             'fixtures/server_error',
             {
-                'agent-file' : 'myAgent.class.nut',
+                'agent-file': 'myAgent.class.nut',
                 'timeout': 40,
-                'test-file' : 'tests/server-index-access-failure.agent.nut'
+                'test-file': 'tests/server-index-access-failure.agent.nut'
             }).
             then(() => ImptTestHelper.runCommand('impt test run', (commandOut) => {
                 expect(commandOut.output).not.toBeEmptyString();
@@ -91,9 +93,9 @@ describe('impt test run for test server error scenario >', () => {
         ImptTestCommandsHelper.createTestConfig(
             'fixtures/server_error',
             {
-                'agent-file' : 'myAgent.class.nut',
+                'agent-file': 'myAgent.class.nut',
                 'timeout': 40,
-                'test-file' : 'tests/server-throw-exception.agent.nut'
+                'test-file': 'tests/server-throw-exception.agent.nut'
             }).
             then(() => ImptTestHelper.runCommand('impt test run', (commandOut) => {
                 expect(commandOut.output).not.toBeEmptyString();

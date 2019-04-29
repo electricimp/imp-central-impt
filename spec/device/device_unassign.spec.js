@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright 2018 Electric Imp
+// Copyright 2018-2019 Electric Imp
 //
 // SPDX-License-Identifier: MIT
 //
@@ -39,10 +39,6 @@ const DEVICE_GROUP_NAME = `__impt_dev_device_group${config.suffix}`;
 // Runs 'impt device unassign' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
     describe(`impt device unassign test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
-        let device_mac = null;
-        let old_name = null;
-        let device_name = null;
-        let agent_id = null;
 
         beforeAll((done) => {
             ImptTestHelper.init().
@@ -53,6 +49,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         afterAll((done) => {
             _testSuiteCleanUp().
+                then(() => ImptTestHelper.restoreDeviceInfo()).
                 then(ImptTestHelper.cleanUp).
                 then(done).
                 catch(error => done.fail(error));
@@ -60,25 +57,13 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // prepare environment for device group unassign command test suite 
         function _testSuiteInit() {
-            return ImptTestHelper.getDeviceAttrs(PRODUCT_NAME, DEVICE_GROUP_NAME, (commandOut) => {
-                if (commandOut && commandOut.mac) {
-                    device_mac = commandOut.mac;
-                    old_name = commandOut.name;
-                    device_name = `${config.devices[config.deviceidx]}${config.suffix}`;
-                    agent_id = commandOut.agentid;
-                }
-                else fail("TestSuitInit error: Failed to get additional device attributes");
-            }).
-                then(() => ImptTestHelper.runCommand(`impt device update -d ${config.devices[config.deviceidx]} --name ${device_name}`, ImptTestHelper.emptyCheck)).
-                then(() => ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheck)).
-                then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheck)).
-                then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, ImptTestHelper.emptyCheck));
+            return ImptTestHelper.retrieveDeviceInfo(PRODUCT_NAME, DEVICE_GROUP_NAME).
+                then(() => ImptTestHelper.createDeviceGroup(PRODUCT_NAME, DEVICE_GROUP_NAME));
         }
 
         // delete all entities using in impt device unassign test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -q`, ImptTestHelper.emptyCheck).
-                then(() => ImptTestHelper.runCommand(`impt device update -d ${config.devices[config.deviceidx]} --name ${old_name ? old_name : '""'}`, ImptTestHelper.emptyCheck));
+            return ImptTestHelper.productDelete(PRODUCT_NAME);
         }
 
         // check if device is unassigned
@@ -124,8 +109,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('unassign device by device name', (done) => {
-                ImptTestHelper.runCommand(`impt device unassign -d ${device_name} ${outputMode}`, (commandOut) => {
-                    _checkSuccessUnassignedDeviceMessage(commandOut, device_name);
+                ImptTestHelper.runCommand(`impt device unassign -d ${ImptTestHelper.deviceInfo.deviceName} ${outputMode}`, (commandOut) => {
+                    _checkSuccessUnassignedDeviceMessage(commandOut, ImptTestHelper.deviceInfo.deviceName);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => _checkUnassignDevice).
@@ -134,8 +119,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('unassign device by device mac', (done) => {
-                ImptTestHelper.runCommand(`impt device unassign -d ${device_mac} ${outputMode}`, (commandOut) => {
-                    _checkSuccessUnassignedDeviceMessage(commandOut, device_mac);
+                ImptTestHelper.runCommand(`impt device unassign -d ${ImptTestHelper.deviceInfo.deviceMac} ${outputMode}`, (commandOut) => {
+                    _checkSuccessUnassignedDeviceMessage(commandOut, ImptTestHelper.deviceInfo.deviceMac);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => _checkUnassignDevice).
@@ -144,8 +129,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('unassign device by agent id', (done) => {
-                ImptTestHelper.runCommand(`impt device unassign -d ${agent_id} ${outputMode}`, (commandOut) => {
-                    _checkSuccessUnassignedDeviceMessage(commandOut, agent_id);
+                ImptTestHelper.runCommand(`impt device unassign -d ${ImptTestHelper.deviceInfo.deviceAgentId} ${outputMode}`, (commandOut) => {
+                    _checkSuccessUnassignedDeviceMessage(commandOut, ImptTestHelper.deviceInfo.deviceAgentId);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => _checkUnassignDevice).

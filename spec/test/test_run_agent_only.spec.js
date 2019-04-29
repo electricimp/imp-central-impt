@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright 2018 Electric Imp
+// Copyright 2018-2019 Electric Imp
 //
 // SPDX-License-Identifier: MIT
 //
@@ -34,6 +34,7 @@ describe('impt test run for agent-only scenario >', () => {
     beforeAll((done) => {
         ImptTestHelper.init().
             then(ImptTestCommandsHelper.cleanUpTestEnvironment).
+            then(() => ImptTestCommandsHelper.saveDeviceInfo()).
             then(() => ImptTestCommandsHelper.createTestEnvironment(
                 'fixtures/agent_only',
                 { 'agent-file': 'agent.nut', 'test-file': 'tests/agent.test.nut' })).
@@ -43,6 +44,7 @@ describe('impt test run for agent-only scenario >', () => {
 
     afterAll((done) => {
         ImptTestCommandsHelper.cleanUpTestEnvironment().
+            then(() => ImptTestHelper.restoreDeviceInfo()).
             then(() => ImptTestHelper.cleanUp()).
             then(done).
             catch(error => done.fail(error));

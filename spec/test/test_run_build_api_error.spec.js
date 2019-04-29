@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright 2018 Electric Imp
+// Copyright 2018-2019 Electric Imp
 //
 // SPDX-License-Identifier: MIT
 //
@@ -34,15 +34,17 @@ describe('impt test run for build-api-error behavior >', () => {
     beforeAll((done) => {
         ImptTestHelper.init().
             then(ImptTestCommandsHelper.cleanUpTestEnvironment).
+            then(() => ImptTestCommandsHelper.saveDeviceInfo()).
             then(() => ImptTestCommandsHelper.createTestEnvironment(
                 'fixtures/build_api_error',
-                {'device-file' : 'device.nut'})).
+                { 'device-file': 'device.nut' })).
             then(done).
             catch(error => done.fail(error));
     }, ImptTestHelper.TIMEOUT);
 
     afterAll((done) => {
         ImptTestCommandsHelper.cleanUpTestEnvironment().
+            then(() => ImptTestHelper.restoreDeviceInfo()).
             then(() => ImptTestHelper.cleanUp()).
             then(done).
             catch(error => done.fail(error));
@@ -50,18 +52,18 @@ describe('impt test run for build-api-error behavior >', () => {
 
     it('run test', (done) => {
         ImptTestHelper.runCommand('impt test run', (commandOut) => {
-                expect(commandOut.output).not.toBeEmptyString();
-                // verify that "Compilation Error" error occured
-                expect(commandOut.output).toMatch(/Compilation Error/);
+            expect(commandOut.output).not.toBeEmptyString();
+            // verify that "Compilation Error" error occured
+            expect(commandOut.output).toMatch(/Compilation Error/);
 
-                // verify that 2 sessions started
-                // which means that compilation error has not stopped the command
-                expect(commandOut.output).toMatch(/Using device test file "tests\/1\-device\.test\.nut"\n/);
-                expect(commandOut.output).toMatch(/Using device test file "tests\/2\-device\.test\.nut"\n/);
+            // verify that 2 sessions started
+            // which means that compilation error has not stopped the command
+            expect(commandOut.output).toMatch(/Using device test file "tests\/1\-device\.test\.nut"\n/);
+            expect(commandOut.output).toMatch(/Using device test file "tests\/2\-device\.test\.nut"\n/);
 
-                ImptTestCommandsHelper.checkTestFailStatus(commandOut);
-                ImptTestHelper.checkFailStatus(commandOut);
-            }).
+            ImptTestCommandsHelper.checkTestFailStatus(commandOut);
+            ImptTestHelper.checkFailStatus(commandOut);
+        }).
             then(done).
             catch(error => done.fail(error));
     });

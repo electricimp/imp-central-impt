@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright 2018 Electric Imp
+// Copyright 2018-2019 Electric Imp
 //
 // SPDX-License-Identifier: MIT
 //
@@ -39,10 +39,6 @@ const DEVICE_GROUP_NAME = `__impt_dev_device_group${config.suffix}`;
 // Runs 'impt device remove' command with different combinations of options,
 ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
     xdescribe(`impt device remove test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
-        let device_mac = null;
-        let old_name = null;
-        let device_name = null;
-        let agent_id = null;
 
         beforeAll((done) => {
             ImptTestHelper.init().
@@ -52,8 +48,9 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         }, ImptTestHelper.TIMEOUT);
 
         afterAll((done) => {
-            ImptTestHelper.cleanUp().
-                then(_testSuiteCleanUp).
+            _testSuiteCleanUp().
+                then(() => ImptTestHelper.restoreDeviceInfo()).
+                then(ImptTestHelper.cleanUp).
                 then(done).
                 catch(error => done.fail(error));
         }, ImptTestHelper.TIMEOUT);
@@ -66,25 +63,13 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         // prepare environment for device remove command testing
         function _testSuiteInit() {
-            return ImptTestHelper.getDeviceAttrs(PRODUCT_NAME, DEVICE_GROUP_NAME, (commandOut) => {
-                if (commandOut && commandOut.mac) {
-                    device_mac = commandOut.mac;
-                    old_name = commandOut.name;
-                    device_name = `${config.devices[config.deviceidx]}${config.suffix}`;
-                    agent_id = commandOut.agentid;
-                }
-                else fail("TestSuitInit error: Failed to get additional device attributes");
-            }).
-                then(() => ImptTestHelper.runCommand(`impt device update -d ${config.devices[config.deviceidx]} --name ${device_name}`, ImptTestHelper.emptyCheck)).
-                then(() => ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheck)).
-                then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheck)).
-                then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, ImptTestHelper.emptyCheck));
+            return ImptTestHelper.retrieveDeviceInfo(PRODUCT_NAME, DEVICE_GROUP_NAME).
+                then(() => ImptTestHelper.createDeviceGroup(PRODUCT_NAME, DEVICE_GROUP_NAME));
         }
 
         // delete all entities using in impt device remove test suite
         function _testSuiteCleanUp() {
-            return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheck).
-                then(() => ImptTestHelper.runCommand(`impt device update -d ${config.devices[config.deviceidx]} --name ${old_name ? old_name : '""'}`, ImptTestHelper.emptyCheck));
+            return ImptTestHelper.productDelete(PRODUCT_NAME);
         }
 
         // show insert device message and waiting confirmation
@@ -129,8 +114,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('remove device by mac', (done) => {
-                ImptTestHelper.runCommand(`impt device remove -d ${device_mac} -q ${outputMode}`, (commandOut) => {
-                    _checkSuccessDeleteDeviceMessage(commandOut, device_mac);
+                ImptTestHelper.runCommand(`impt device remove -d ${ImptTestHelper.deviceInfo.deviceMac} -q ${outputMode}`, (commandOut) => {
+                    _checkSuccessDeleteDeviceMessage(commandOut, ImptTestHelper.deviceInfo.deviceMac);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => ImptTestHelper.runCommand(`impt device info -d ${config.devices[config.deviceidx]}`, ImptTestHelper.checkFailStatus)).
@@ -139,8 +124,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('remove device by agent id', (done) => {
-                ImptTestHelper.runCommand(`impt device remove -d ${agent_id} -q ${outputMode}`, (commandOut) => {
-                    _checkSuccessDeleteDeviceMessage(commandOut, agent_id);
+                ImptTestHelper.runCommand(`impt device remove -d ${ImptTestHelper.deviceInfo.deviceAgentId} -q ${outputMode}`, (commandOut) => {
+                    _checkSuccessDeleteDeviceMessage(commandOut, ImptTestHelper.deviceInfo.deviceAgentId);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => ImptTestHelper.runCommand(`impt device info -d ${config.devices[config.deviceidx]}`, ImptTestHelper.checkFailStatus)).
@@ -149,8 +134,8 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('remove device by name', (done) => {
-                ImptTestHelper.runCommand(`impt device remove -d ${device_name} -q ${outputMode}`, (commandOut) => {
-                    _checkSuccessDeleteDeviceMessage(commandOut, device_name);
+                ImptTestHelper.runCommand(`impt device remove -d ${ImptTestHelper.deviceInfo.deviceName} -q ${outputMode}`, (commandOut) => {
+                    _checkSuccessDeleteDeviceMessage(commandOut, ImptTestHelper.deviceInfo.deviceName);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
                     then(() => ImptTestHelper.runCommand(`impt device info -d ${config.devices[config.deviceidx]}`, ImptTestHelper.checkFailStatus)).
