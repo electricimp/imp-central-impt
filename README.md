@@ -1,7 +1,5 @@
 ﻿# impt #
 
-![Build Status](https://cse-ci.electricimp.com/app/rest/builds/buildType:(id:ImpCentralImpt_BuildAndTest)/statusIcon)
-
 *impt* is a command line tool which allows you to interact with the Electric Imp impCloud™ via the [impCentral™ API](https://apidoc.electricimp.com) for the development, testing and deployment of application and factory code, and for device and product management.
 
 *impt* replaces the [*build-cli*](https://github.com/electricimp/build-cli) and [*impTest*](https://github.com/electricimp/impTest) tools, and provides additional functionality.
@@ -14,6 +12,8 @@ This guide covers the basic and common usage of *impt*, and should be read first
 - [*impt* Commands Manual](./CommandsManual.md)
 
 *impt* is written in [Node.js](https://nodejs.org) and uses [Electric Imp’s impCentral API JavaScript library](https://github.com/electricimp/imp-central-api).
+
+![Build Status](https://cse-ci.electricimp.com/app/rest/builds/buildType:(id:ImpCentralImpt_BuildAndTest)/statusIcon)
 
 ## Contents ##
 
