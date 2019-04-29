@@ -20,9 +20,9 @@ The full *impt* tool command specification is described in the [Commands Manual]
     - [Production Devices](#production-devices)
         - [Unblessing Production Devices](#unblessing-production-devices)
     - [Device Logging](#device-logging)
+- [Monitoring Production With Webhooks](#monitoring-production-with-webhooks)
 - [Deployments](#deployments)
     - [New Application Versions](#new-application-versions)
-- [Monitoring Production With Webhooks](#monitoring-production-with-webhooks)
 - [Cleaning Up](#cleaning-up)
 
 ## Product Creation ##
@@ -120,6 +120,14 @@ Once a device has been blessed during manufacturing (become a production device)
 impt device unassign --device <device_id> --unbond <unbond_key>
 ```
 
+### Device Logging ###
+
+You can use [Log Manipulation Commands](./CommandsManual.md#log-manipulation-commands) to view logs for (Pre-)Factory and (Pre-)DUT devices.
+
+```bash
+impt log get -device <device_id>
+```
+
 ## Monitoring Production With Webhooks ##
 
 You may use [Webhooks](https://developer.electricimp.com/manufacturing/webhooks) to monitor your factory test, production and post-production activities. There are three types of Webhooks:
@@ -136,14 +144,6 @@ impt webhook create --dg MyProductionDG --url <webhook_url> --event blessing --m
 
 ```bash
 impt webhook create --dg MyProductionDG --url <webhook_url> --event blinkup --mime urlencoded
-```
-
-### Device Logging ###
-
-You can use [Log Manipulation Commands](./CommandsManual.md#log-manipulation-commands) to view logs for (Pre-)Factory and (Pre-)DUT devices.
-
-```bash
-impt log get -device <device_id>
 ```
 
 ## Deployments ##
