@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright 2018 Electric Imp
+// Copyright 2018-2019 Electric Imp
 //
 // SPDX-License-Identifier: MIT
 //
@@ -38,6 +38,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         beforeAll((done) => {
             ImptTestHelper.init().
                 then(ImptTestCommandsHelper.cleanUpTestEnvironment).
+                then(() => ImptTestCommandsHelper.saveDeviceInfo()).
                 then(_testSuiteInit).
                 then(done).
                 catch(error => done.fail(error));
@@ -45,6 +46,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
 
         afterAll((done) => {
             ImptTestCommandsHelper.cleanUpTestEnvironment().
+                then(() => ImptTestHelper.restoreDeviceInfo()).
                 then(ImptTestHelper.cleanUp).
                 then(done).
                 catch(error => done.fail(error));

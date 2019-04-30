@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright 2018 Electric Imp
+// Copyright 2018-2019 Electric Imp
 //
 // SPDX-License-Identifier: MIT
 //
@@ -38,10 +38,6 @@ const outputMode = '';
 // Test suite for 'impt log get' command.
 // Runs 'impt log get' command with different combinations of options,
 describe(`impt log get test suite (output: ${outputMode ? outputMode : 'default'}) >`, () => {
-    let device_mac = null;
-    let old_name = null;
-    let device_name = null;
-    let agent_id = null;
 
     beforeAll((done) => {
         ImptTestHelper.init().
@@ -53,6 +49,7 @@ describe(`impt log get test suite (output: ${outputMode ? outputMode : 'default'
 
     afterAll((done) => {
         _testSuiteCleanUp().
+            then(() => ImptTestHelper.restoreDeviceInfo()).
             then(ImptTestHelper.cleanUp).
             then(done).
             catch(error => done.fail(error));
@@ -60,19 +57,8 @@ describe(`impt log get test suite (output: ${outputMode ? outputMode : 'default'
 
     // prepare environment for impt log get command testing
     function _testSuiteInit() {
-        return ImptTestHelper.getDeviceAttrs(PRODUCT_NAME, DEVICE_GROUP_NAME, (commandOut) => {
-            if (commandOut && commandOut.mac) {
-                device_mac = commandOut.mac;
-                old_name = commandOut.name;
-                device_name = `${config.devices[config.deviceidx]}${config.suffix}`;
-                agent_id = commandOut.agentid;
-            }
-            else fail("TestSuitInit error: Failed to get additional device attributes");
-        }).
-            then(() => ImptTestHelper.runCommand(`impt device update -d ${config.devices[config.deviceidx]} --name ${device_name}`, ImptTestHelper.emptyCheck)).
-            then(() => ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheck)).
-            then(() => ImptTestHelper.runCommand(`impt product create -n ${PRODUCT_NAME}`, ImptTestHelper.emptyCheck)).
-            then(() => ImptTestHelper.runCommand(`impt dg create -n ${DEVICE_GROUP_NAME} -p ${PRODUCT_NAME}`, ImptTestHelper.emptyCheck)).
+        return ImptTestHelper.retrieveDeviceInfo(PRODUCT_NAME, DEVICE_GROUP_NAME).
+            then(() => ImptTestHelper.createDeviceGroup(PRODUCT_NAME, DEVICE_GROUP_NAME)).
             then(() => ImptTestHelper.deviceAssign(DEVICE_GROUP_NAME)).
             then(() => Shell.cp('-Rf', `${__dirname}/fixtures/devicecode.nut`, ImptTestHelper.TESTS_EXECUTION_FOLDER)).
             then(() => ImptTestHelper.runCommand(`impt build run -g ${DEVICE_GROUP_NAME} -x devicecode.nut`, ImptTestHelper.emptyCheck)).
@@ -94,8 +80,7 @@ describe(`impt log get test suite (output: ${outputMode ? outputMode : 'default'
 
     // delete all entities using in impt log get test suite
     function _testSuiteCleanUp() {
-        return ImptTestHelper.runCommand(`impt product delete -p ${PRODUCT_NAME} -f -b -q`, ImptTestHelper.emptyCheck).
-            then(() => ImptTestHelper.runCommand(`impt device update -d ${config.devices[config.deviceidx]} --name ${old_name ? old_name : '""'}`, ImptTestHelper.emptyCheck));
+        return ImptTestHelper.productDelete(PRODUCT_NAME);
     }
 
     describe('log get positive tests >', () => {
@@ -130,7 +115,7 @@ describe(`impt log get test suite (output: ${outputMode ? outputMode : 'default'
         });
 
         it('log get by device mac', (done) => {
-            ImptTestHelper.runCommandInteractive(`impt log get -d ${device_mac} ${outputMode}`, (commandOut) => {
+            ImptTestHelper.runCommandInteractive(`impt log get -d ${ImptTestHelper.deviceInfo.deviceMac} ${outputMode}`, (commandOut) => {
                 _checkLogMessages(commandOut, { startNumber: 1, endNumber: 20, count: 20 });
                 ImptTestHelper.checkSuccessStatus(commandOut);
             }).
@@ -139,7 +124,7 @@ describe(`impt log get test suite (output: ${outputMode ? outputMode : 'default'
         });
 
         it('log get by agent id', (done) => {
-            ImptTestHelper.runCommandInteractive(`impt log get -d ${agent_id} ${outputMode}`, (commandOut) => {
+            ImptTestHelper.runCommandInteractive(`impt log get -d ${ImptTestHelper.deviceInfo.deviceAgentId} ${outputMode}`, (commandOut) => {
                 _checkLogMessages(commandOut, { startNumber: 1, endNumber: 20, count: 20 });
                 ImptTestHelper.checkSuccessStatus(commandOut);
             }).
@@ -148,7 +133,7 @@ describe(`impt log get test suite (output: ${outputMode ? outputMode : 'default'
         });
 
         it('log get by device name', (done) => {
-            ImptTestHelper.runCommandInteractive(`impt log get -d ${device_name} ${outputMode}`, (commandOut) => {
+            ImptTestHelper.runCommandInteractive(`impt log get -d ${ImptTestHelper.deviceInfo.deviceName} ${outputMode}`, (commandOut) => {
                 _checkLogMessages(commandOut, { startNumber: 1, endNumber: 20, count: 20 });
                 ImptTestHelper.checkSuccessStatus(commandOut);
             }).

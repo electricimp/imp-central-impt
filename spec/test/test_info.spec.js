@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright 2018 Electric Imp
+// Copyright 2018-2019 Electric Imp
 //
 // SPDX-License-Identifier: MIT
 //
@@ -36,48 +36,32 @@ const outputMode = '-z json';
 describe(`impt test info tests (output: ${outputMode ? outputMode : 'default'}) >`, () => {
     let dg_id = null;
     let product_id = null;
-    let device_mac = null;
-    let old_name = null;
-    let device_name = null;
-    let agent_id = null;
 
     beforeAll((done) => {
         ImptTestHelper.init().
+            then(() => ImptTestCommandsHelper.saveDeviceInfo()).
             then(done).
             catch(error => done.fail(error));
     }, ImptTestHelper.TIMEOUT);
 
     afterAll((done) => {
-        ImptTestHelper.cleanUp().
+        ImptTestHelper.restoreDeviceInfo().
+            then(() => ImptTestHelper.cleanUp()).
             then(done).
             catch(error => done.fail(error));
     }, ImptTestHelper.TIMEOUT);
 
     // prepare test environment for impt test create test
     function _testSuiteInit() {
-        return ImptTestHelper.getDeviceAttrs(ImptTestCommandsHelper.TEST_PRODUCT_NAME, ImptTestCommandsHelper.TEST_DG_NAME, (commandOut) => {
-            if (commandOut && commandOut.mac) {
-                device_mac = commandOut.mac;
-                old_name = commandOut.name;
-                device_name = `${config.devices[config.deviceidx]}${config.suffix}`;
-                agent_id = commandOut.agentid;
+        return ImptTestCommandsHelper.createTestProductAndDG((commandOut) => {
+            if (commandOut && commandOut.dgId && commandOut.productId) {
+                dg_id = commandOut.dgId;
+                product_id = commandOut.productId
             }
-            else fail("TestSuitInit error: Failed to get additional device attributes");
+            else fail('TestSuiteInit error: Failed to get product and dg ids');
         }).
-            then(() => ImptTestHelper.runCommand(`impt device update -d ${config.devices[config.deviceidx]} --name ${device_name}`, ImptTestHelper.emptyCheck)).
-            then(() => ImptTestCommandsHelper.createTestProductAndDG((commandOut) => {
-                if (commandOut && commandOut.dgId && commandOut.productId) {
-                    dg_id = commandOut.dgId;
-                    product_id = commandOut.productId
-                }
-                else fail('TestSuiteInit error: Failed to get product and dg ids');
-            })).
             then(() => ImptTestCommandsHelper.copyFiles('fixtures/create')).
             then(() => ImptTestHelper.runCommand(`impt test create --dg ${dg_id}  -x devicecode.nut -y agentcode.nut -f testfile.nut -f testfile2.nut -i github.impt -j builder.impt -t 20 -s -a -e  -q`, ImptTestHelper.emptyCheck));
-    }
-
-    function _testSuiteCleanup() {
-        return ImptTestHelper.runCommand(`impt device update -d ${config.devices[config.deviceidx]} --name ${old_name ? old_name : '""'}`, ImptTestHelper.emptyCheck);
     }
 
     describe(`test info positive tests >`, () => {
@@ -90,7 +74,6 @@ describe(`impt test info tests (output: ${outputMode ? outputMode : 'default'}) 
 
         afterAll((done) => {
             ImptTestCommandsHelper.cleanUpTestEnvironment().
-                then(_testSuiteCleanup).
                 then(done).
                 catch(error => done.fail(error));
         }, ImptTestHelper.TIMEOUT);
@@ -115,9 +98,9 @@ describe(`impt test info tests (output: ${outputMode ? outputMode : 'default'}) 
                 expect(json['Test Configuration']['Device Group']['Product'].id).toBe(product_id);
                 expect(json['Test Configuration']['Device Group']['Product'].name).toBe(ImptTestCommandsHelper.TEST_PRODUCT_NAME);
                 expect(json['Test Configuration']['Device Group'].Devices[0].Device.id).toBe(config.devices[config.deviceidx]);
-                expect(json['Test Configuration']['Device Group'].Devices[0].Device.mac_address).toBe(device_mac);
-                expect(json['Test Configuration']['Device Group'].Devices[0].Device.name).toBe(device_name);
-                expect(json['Test Configuration']['Device Group'].Devices[0].Device.agent_id).toBe(agent_id);
+                expect(json['Test Configuration']['Device Group'].Devices[0].Device.mac_address).toBe(ImptTestHelper.deviceInfo.deviceMac);
+                expect(json['Test Configuration']['Device Group'].Devices[0].Device.name).toBe(ImptTestHelper.deviceInfo.deviceName);
+                expect(json['Test Configuration']['Device Group'].Devices[0].Device.agent_id).toBe(ImptTestHelper.deviceInfo.deviceAgentId);
                 ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).

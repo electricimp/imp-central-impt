@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright 2018 Electric Imp
+// Copyright 2018-2019 Electric Imp
 //
 // SPDX-License-Identifier: MIT
 //
@@ -35,13 +35,15 @@ describe('impt test run for error-before-start behavior >', () => {
     beforeAll((done) => {
         ImptTestHelper.init().
             then(ImptTestCommandsHelper.cleanUpTestEnvironment).
-            then(() => ImptTestCommandsHelper.createTestEnvironment('fixtures/error_before_start', {'device-file' : 'device.nut'})).
+            then(() => ImptTestCommandsHelper.saveDeviceInfo()).
+            then(() => ImptTestCommandsHelper.createTestEnvironment('fixtures/error_before_start', { 'device-file': 'device.nut' })).
             then(done).
             catch(error => done.fail(error));
     }, ImptTestHelper.TIMEOUT);
 
     afterAll((done) => {
         ImptTestCommandsHelper.cleanUpTestEnvironment().
+            then(() => ImptTestHelper.restoreDeviceInfo()).
             then(() => ImptTestHelper.cleanUp()).
             then(done).
             catch(error => done.fail(error));
@@ -49,13 +51,13 @@ describe('impt test run for error-before-start behavior >', () => {
 
     it('run test', (done) => {
         ImptTestHelper.runCommand('impt test run', (commandOut) => {
-                expect(commandOut.output).not.toBeEmptyString();
-                expect(commandOut.output).toMatch(/warning\] Device is out of memory/);
-                expect(commandOut.output).toMatch(/error\] Session startup timeout/);
-                expect(commandOut.output).not.toMatch(/test\] Device is out of memory/);
-                ImptTestCommandsHelper.checkTestFailStatus(commandOut);
-                ImptTestHelper.checkFailStatus(commandOut);
-            }).
+            expect(commandOut.output).not.toBeEmptyString();
+            //expect(commandOut.output).toMatch(/warning\] Device is out of memory/);
+            expect(commandOut.output).toMatch(/error\] Session startup timeout/);
+            //expect(commandOut.output).not.toMatch(/test\] Device is out of memory/);
+            ImptTestCommandsHelper.checkTestFailStatus(commandOut);
+            ImptTestHelper.checkFailStatus(commandOut);
+        }).
             then(done).
             catch(error => done.fail(error));
     });

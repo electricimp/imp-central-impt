@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright 2018 Electric Imp
+// Copyright 2018-2019 Electric Imp
 //
 // SPDX-License-Identifier: MIT
 //
@@ -56,20 +56,16 @@ class ImptTestCommandsHelper {
 
     // Creates test Product and DG
     static createTestProductAndDG(output) {
-        let product_id = null;
-        let dg_id = null;
-        return ImptTestHelper.runCommand(`impt product create --name ${TEST_PRODUCT_NAME}`, (commandOut) => {
-            product_id = ImptTestHelper.parseId(commandOut);
-            ImptTestHelper.checkSuccessStatus(commandOut)
-        }).
-            then(() => ImptTestHelper.runCommand(`impt dg create --name ${TEST_DG_NAME} --product ${TEST_PRODUCT_NAME}`, (commandOut) => {
-                dg_id = ImptTestHelper.parseId(commandOut);
-                ImptTestHelper.checkSuccessStatus(commandOut)
-            })).
-            then(() => ImptTestHelper.runCommand(
-                `impt device assign --device ${config.devices[config.deviceidx]} --dg ${TEST_DG_NAME} --confirmed`, ImptTestHelper.checkSuccessStatus)).
-            then(() => Promise.resolve({ productId: product_id, dgId: dg_id })).
+        let dg = null;
+        return ImptTestHelper.createDeviceGroup(TEST_PRODUCT_NAME, TEST_DG_NAME).
+            then((dgInfo) => { dg = dgInfo; }).
+            then(() => ImptTestHelper.deviceAssign(TEST_DG_NAME)).
+            then(() => Promise.resolve(dg)).
             then(output);
+    }
+
+    static saveDeviceInfo() {
+        return ImptTestHelper.retrieveDeviceInfo(TEST_PRODUCT_NAME, TEST_DG_NAME);
     }
 
     // Copies test files to the tests execution folder and creates test config.
@@ -93,9 +89,7 @@ class ImptTestCommandsHelper {
 
     // Removes test Product, DG and Deployments.
     static cleanUpTestEnvironment() {
-        return ImptTestHelper.runCommand(
-            `impt product delete --product ${TEST_PRODUCT_NAME} --builds --force --confirmed`,
-            ImptTestHelper.emptyCheck);
+        return ImptTestHelper.productDelete(TEST_PRODUCT_NAME);
     }
 
     // Checks success status of 'impt test run' command

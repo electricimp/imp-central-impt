@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright 2018 Electric Imp
+// Copyright 2018-2019 Electric Imp
 //
 // SPDX-License-Identifier: MIT
 //
@@ -34,6 +34,7 @@ describe('impt test run for timeout behavior >', () => {
     beforeAll((done) => {
         ImptTestHelper.init().
             then(ImptTestCommandsHelper.cleanUpTestEnvironment).
+            then(() => ImptTestCommandsHelper.saveDeviceInfo()).
             then(ImptTestCommandsHelper.createTestProductAndDG).
             then(done).
             catch(error => done.fail(error));
@@ -41,13 +42,14 @@ describe('impt test run for timeout behavior >', () => {
 
     afterAll((done) => {
         ImptTestCommandsHelper.cleanUpTestEnvironment().
+            then(() => ImptTestHelper.restoreDeviceInfo()).
             then(() => ImptTestHelper.cleanUp()).
             then(done).
             catch(error => done.fail(error));
     }, ImptTestHelper.TIMEOUT);
 
     it('run test with too small timeout', (done) => {
-        ImptTestCommandsHelper.createTestConfig('fixtures/timeout', { 'timeout' : 3 }).
+        ImptTestCommandsHelper.createTestConfig('fixtures/timeout', { 'timeout': 3 }).
             then(() => ImptTestHelper.runCommand('impt test run', (commandOut) => {
                 expect(commandOut.output).not.toBeEmptyString();
                 expect(commandOut.output).toMatch('Test timed out');
@@ -60,7 +62,7 @@ describe('impt test run for timeout behavior >', () => {
 
     // checks that timeout is applied to every test method, not to the whole session
     it('run test with appropriate timeout', (done) => {
-        ImptTestCommandsHelper.createTestConfig('fixtures/timeout', { 'timeout' : 10 }).
+        ImptTestCommandsHelper.createTestConfig('fixtures/timeout', { 'timeout': 10 }).
             then(() => ImptTestHelper.runCommand('impt test run', (commandOut) => {
                 expect(commandOut.output).not.toBeEmptyString();
                 ImptTestCommandsHelper.checkTestSuccessStatus(commandOut);
