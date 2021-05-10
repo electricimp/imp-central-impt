@@ -6,7 +6,7 @@
   "engines": {
     "node": ""
   },
-  "preferGlobal": "true",
+  "preferGlobal": true,
   "bin": {
     "impt": "bin/impt"
   },
