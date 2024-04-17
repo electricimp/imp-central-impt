@@ -155,35 +155,21 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
                         then(done).
                         catch(error => done.fail(error));
                 }, ImptTestHelper.TIMEOUT);
-
-                it('force delete device group by name', (done) => {
-                    ImptTestHelper.runCommand(`impt dg delete --dg ${DEVICE_GROUP_NAME} --force -q ${outputMode}`, (commandOut) => {
-                        _checkSuccessDeleteDeviceGroupMessage(commandOut, DEVICE_GROUP_NAME);
-                        ImptTestHelper.checkSuccessStatus(commandOut);
-                    }).
-                        then(() => ImptTestHelper.runCommand(`impt build info -b ${build_id} ${outputMode}`, (commandOut) => {
-                            ImptTestHelper.checkAttribute(commandOut, 'flagged', 'false');
-                            ImptTestHelper.checkSuccessStatus(commandOut);
-                        })).
-                        then(() => ImptDgTestHelper.checkDeviceGroupNotExist(DEVICE_GROUP_NAME)).
-                        then(done).
-                        catch(error => done.fail(error));
+                 
+            it('force delete device group by name', (done) => {
+               
+                ImptTestHelper.runCommand(`impt device assign -d ${config.devices[config.deviceidx]} -g "${DEVICE_GROUP_NAME}" -q`, ImptTestHelper.checkSuccessStatus).
+                then(() =>ImptTestHelper.runCommand(`impt dg delete --dg ${DEVICE_GROUP_NAME} --force -q  ${outputMode}`, (commandOut) => {
+                expect(commandOut.output).toMatch(`Device "${config.devices[config.deviceidx]}" is unassigned successfully`);  
+                _checkSuccessUpdateDeploymentMessage(commandOut, build_id);
+                _checkSuccessDeleteDeviceGroupMessage(commandOut, DEVICE_GROUP_NAME);
+                    ImptTestHelper.checkSuccessStatus(commandOut);
+                })).
+                    then(() => ImptDgTestHelper.checkDeviceGroupNotExist(DEVICE_GROUP_NAME)).
+                    then(done).
+                    catch(error => done.fail(error));
                 });
 
-                it('delete device group with builds', (done) => {
-                    ImptTestHelper.runCommand(`impt dg delete --dg ${DEVICE_GROUP_NAME} -f --builds -q ${outputMode}`, (commandOut) => {
-                        _checkSuccessDeleteDeviceGroupMessage(commandOut, DEVICE_GROUP_NAME);
-                        _checkSuccessUpdateDeploymentMessage(commandOut, build_id);
-                        _checkSuccessDeleteDeploymentMessage(commandOut, build_id);
-                        ImptTestHelper.checkSuccessStatus(commandOut);
-                    }).
-                        then(() => ImptTestHelper.runCommand(`impt build info -b ${build_id} ${outputMode}`, (commandOut) => {
-                            ImptTestHelper.checkFailStatus(commandOut);
-                        })).
-                        then(() => ImptDgTestHelper.checkDeviceGroupNotExist(DEVICE_GROUP_NAME)).
-                        then(done).
-                        catch(error => done.fail(error));
-                });
             });
         });
 

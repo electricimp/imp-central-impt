@@ -764,10 +764,10 @@ Creates a new Device Group for the specified Product. Fails if a Device Group wi
 #### Device Group Delete ####
 
 ```
-impt dg delete [--dg <DEVICE_GROUP_IDENTIFIER>] [--builds] [--force] [--confirmed] [--output <mode>] [--help]
+impt dg delete [--dg <DEVICE_GROUP_IDENTIFIER>] [--force] [--confirmed] [--output <mode>] [--help]
 ```
 
-Deletes the specified Device Group and, optionally, all of the related builds (Deployments).
+Deletes the specified Device Group and, all of the related builds (Deployments).
 
 The command fails if the Device Group is a device-under-test target or production target of another Device Group. Use either [`impt dg update`](#device-group-update) to update the the other Device Group’s target/dut, or `impt dg delete` to delete the other Device Group before the specified one.
 
@@ -781,7 +781,6 @@ The user is asked to confirm the operation, unless confirmed automatically with 
 | Option | Alias | Mandatory? | Value Required? | Description |
 | --- | --- | --- | --- | --- |
 | --dg | -g | Yes/[Project](#project-files) | Yes | A [Device Group identifier](#device-group-identifier). If not specified, the Device Group referenced by the [Project file](#project-files) in the current directory is used (if there is no Project file, the command fails) |
-| --builds | -b | No | No | Additionally deletes all Deployments related to the Device Group |
 | --force | -f | No | No | Unassigns all of the Device Group’s devices as with [`impt dg unassign`](#device-group-unassign), and set the *flagged* attribute to `false` for all of the Device Group’s Deployments |
 | --confirmed | -q | No | No | Executes the operation without asking additional confirmation from user |
 | --output | -z | No | Yes | Adjusts the [command’s output](#command-output) |
