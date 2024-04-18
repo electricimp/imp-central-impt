@@ -767,7 +767,7 @@ Creates a new Device Group for the specified Product. Fails if a Device Group wi
 impt dg delete [--dg <DEVICE_GROUP_IDENTIFIER>] [--force] [--confirmed] [--output <mode>] [--help]
 ```
 
-Deletes the specified Device Group and, all of the related builds (Deployments).
+Deletes the specified Device Group and all of the related builds (Deployments).
 
 The command fails if the Device Group is a device-under-test target or production target of another Device Group. Use either [`impt dg update`](#device-group-update) to update the the other Device Group’s target/dut, or `impt dg delete` to delete the other Device Group before the specified one.
 
