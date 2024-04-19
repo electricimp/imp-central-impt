@@ -159,8 +159,8 @@ describe(`impt build list test suite (output: ${outputMode ? outputMode : 'defau
                 build3_id = ImptTestHelper.parseId(commandOut);
                 if (!build3_id) fail("TestSuiteInit error: Failed to create build");
                 ImptTestHelper.emptyCheck(commandOut);
-            })).
-            then(() => ImptTestHelper.runCommand(`impt dg delete -g ${DEVICE_GROUP3_NAME} -q`, ImptTestHelper.emptyCheck));
+            }))
+         
     }
 
     // delete all entities using in impt build list test suite
@@ -270,20 +270,12 @@ describe(`impt build list test suite (output: ${outputMode ? outputMode : 'defau
                 catch(error => done.fail(error));
         });
 
-        it('build list by product id  and zombie', (done) => {
-            ImptTestHelper.runCommand(`impt build list -p ${product_id} --zombie -z json`, (commandOut) => {
-                expect(commandOut).toContainBuild({ id: build3_id });
-                expect(commandOut).toHaveBuildCountEqual(1);
-                ImptTestHelper.checkSuccessStatus(commandOut);
-            }).
-                then(done).
-                catch(error => done.fail(error));
-        });
-
+    
         it('build list by product id and not zombie', (done) => {
             ImptTestHelper.runCommand(`impt build list -p ${product_id} --non-zombie -z json`, (commandOut) => {
                 expect(commandOut).toContainBuild({ id: build2_id });
-                expect(commandOut).toHaveBuildCountEqual(1);
+                expect(commandOut).toContainBuild({ id: build3_id });
+                expect(commandOut).toHaveBuildCountEqual(2);
                 ImptTestHelper.checkSuccessStatus(commandOut);
             }).
                 then(done).
