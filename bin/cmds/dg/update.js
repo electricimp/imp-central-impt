@@ -68,7 +68,8 @@ exports.builder = function (yargs) {
         },
         [Options.LOAD_CODE_AFTER_BLESSING] : false,
         [Options.MIN_SUPPORTED_DEPLOYMENT] : false,
-        [Options.OUTPUT] : false
+        [Options.OUTPUT] : false,
+        [Options.ENV_VARIABLE] : false
     });
     return yargs
         .usage(Options.getUsage(COMMAND_SECTION, COMMAND, COMMAND_DESCRIPTION, Options.getCommandOptions(options)))
