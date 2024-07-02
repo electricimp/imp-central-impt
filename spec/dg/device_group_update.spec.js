@@ -38,6 +38,7 @@ const DEVICE_GROUP_NAME = `__impt_dg_device_group${config.suffix}`;
 const DEVICE_GROUP_NEW_NAME = `__impt_dg_new_device_group${config.suffix}`;
 const DEVICE_GROUP_DESCR = 'impt temp device group description';
 const DEVICE_GROUP_NEW_DESCR = 'impt new device group description';
+const TEST_ENV_VARIBALE  = '{"foo":"bar"}'
 
 // Test suite for 'impt dg update' command.
 // Runs 'impt dg update' command with different combinations of options,
@@ -154,12 +155,12 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             });
 
             it('update device group by project', (done) => {
-                ImptTestHelper.runCommand(`impt dg update -n ${DEVICE_GROUP_NEW_NAME} -s "${DEVICE_GROUP_NEW_DESCR}" --min-supported-deployment  ${deploy_id} ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt dg update -n ${DEVICE_GROUP_NEW_NAME} -s "${DEVICE_GROUP_NEW_DESCR}" --min-supported-deployment  ${deploy_id} -e '${TEST_ENV_VARIBALE}' ${outputMode}`, (commandOut) => {
                     _checkSuccessUpdatedDeviceGroupMessage(commandOut, dg_id);
                     _checkSuccessUpdatedMinSupDeploymentMessage(commandOut, dg_id);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => ImptDgTestHelper.checkDeviceGroupInfo({ id: dg_id, p_id: product_id, name: DEVICE_GROUP_NEW_NAME, descr: DEVICE_GROUP_NEW_DESCR })).
+                    then(() => ImptDgTestHelper.checkDeviceGroupInfo({ id: dg_id, p_id: product_id, name: DEVICE_GROUP_NEW_NAME, descr: DEVICE_GROUP_NEW_DESCR ,env_vars : TEST_ENV_VARIBALE})).
                     then(done).
                     catch(error => done.fail(error));
             });

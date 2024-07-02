@@ -70,6 +70,7 @@ class ImptDgTestHelper {
             const json = JSON.parse(commandOut.output);
             expect(json['Device Group']).toBeDefined();
             expect(json['Device Group'].id).toBe(expInfo.id ? expInfo.id : json['Device Group'].id);
+            expect(JSON.stringify(json['Device Group'].env_vars)).toBe(expInfo.env_vars ? expInfo.env_vars : JSON.stringify(json['Device Group'].env_vars));
             expect(json['Device Group'].name).toBe(expInfo.name ? expInfo.name : DEVICE_GROUP_NAME);
             if (json['Device Group'].description) expect(json['Device Group'].description).toBe(expInfo.descr ? expInfo.descr : DEVICE_GROUP_DESCR);
             expect(json['Device Group'].type).toBe('development');

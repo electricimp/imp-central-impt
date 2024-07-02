@@ -744,6 +744,7 @@ The user is asked to confirm the operation if any Deployment is going to be dele
 impt dg create --name <device_group_name> [--dg-type <device_group_type>]
     [--product <PRODUCT_IDENTIFIER>] [--descr <device_group_description>]
     [--dut <DEVICE_GROUP_IDENTIFIER>] [--target <DEVICE_GROUP_IDENTIFIER>]
+    [--env-variable <user-env-variable>] 
     [--region <region_name>] [--output <mode>] [--help]
 ```
 
@@ -757,6 +758,7 @@ Creates a new Device Group for the specified Product. Fails if a Device Group wi
 | --descr | -s | No | Yes | An optional description of the Device Group |
 | --dut | -u | No | Yes | The [Device Group identifier](#device-group-identifier) of the new Device Group’s target device-under-test Device Group. Should only be specified for *factory* or *pre-factory* Device Groups. The target Device Group must be of the corresponding [type](#device-group-type) *dut* or *pre-dut*, and belong to the same Product as the specified Device Group. Otherwise the command fails |
 | --target | -t | No | Yes | The [Device Group identifier](#device-group-identifier) of the new Device Group’s target production Device Group. Should only be specified for *factory* or *pre-factory* Device Groups. The target Device Group must be of the corresponding [type](#device-group-type) *production* or *pre-production*, and belong to the same Product as the specified Device Group. Otherwise the command fails |
+| --env-variable | -e | No | Yes | Custom variables that can be used in the Device Group's code. Only Owners have permissions to edit. Must be valid JSON and enclosed in single quotes. Keys must be alphanumeric, and start with a letter. Values must be strings or numbers. A new deployment will need to be created, and devices restarted |
 | --region | -r | No | Yes | A region. May be specified if the new Device Group is of the *production* or *pre-production* [type](#device-group-type) only |
 | --output | -z | No | Yes | Adjusts the [command’s output](#command-output) |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
@@ -879,6 +881,7 @@ impt dg update [--dg <DEVICE_GROUP_IDENTIFIER>] [--name <device_group_name>]
     [--descr <device_group_description>]
     [--dut <DEVICE_GROUP_IDENTIFIER>] [--target <DEVICE_GROUP_IDENTIFIER>]
     [--load-code-after-blessing [true|false]]
+    [--env-variable <user-env-variable>] 
     [--min-supported-deployment <BUILD_IDENTIFIER>] [--output <mode>] [--help]
 ```
 
@@ -893,6 +896,7 @@ Updates the specified Device Group. Fails if the specified Device Group does not
 | --target | -t | No | Yes | The [Device Group identifier](#device-group-identifier) of the new Device Group’s target production Device Group. Should only be specified for *factory* or *pre-factory* Device Groups. The target Device Group must be of the corresponding [type](#device-group-type) *production* or *pre-production*, and belong to the same Product as the specified Device Group. Otherwise the command fails |
 | --load-code-after-blessing | -l | No | No | Only applicable to *production* and *pre-production* Device Groups. If `true` or no value is supplied, production application code is immediately loaded by the device after blessing. If `false`, production code will be loaded when the device first connects as part of BlinkUp. Newly created Production Device Groups default this setting to `true` |
 | --min-supported-deployment | -m | No | Yes | The [Build identifier](#build-identifier) of the new *min_supported_deployment* (see the impCentral API specification). The Deployment should belong to this Device Group and should be newer than the current *min_supported_deployment* |
+| --env-variable | -e | No | Yes | Custom variables that can be used in the Device Group's code. Only Owners have permissions to edit. Must be valid JSON and enclosed in single quotes. Keys must be alphanumeric, and start with a letter. Values must be strings or numbers. A new deployment will need to be created, and devices restarted |
 | --output | -z | No | Yes | Adjusts the [command’s output](#command-output) |
 | --help | -h | No | No | Displays a description of the command. Ignores any other options |
 

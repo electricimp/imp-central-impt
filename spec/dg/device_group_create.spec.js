@@ -37,6 +37,7 @@ const PRODUCT_NAME = `__impt_dg_product${config.suffix}`;
 const DEVICE_GROUP_NAME = `__impt_dg_device_group${config.suffix}`;
 const DEVICE_GROUP_DESCR = 'impt temp device group description';
 const DEVICE_GROUP_EXIST_NAME = `dg_exist_name${config.suffix}`;
+const TEST_ENV_VARIBALE  = '{"foo":"bar"}'
 
 // Test suite for 'impt dg create' command.
 // Runs 'impt dg create' command with different combinations of options,
@@ -121,13 +122,13 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
             }
 
             it('device group create by product id', (done) => {
-                ImptTestHelper.runCommand(`impt dg create --name ${DEVICE_GROUP_NAME} --descr "${DEVICE_GROUP_DESCR}" --product ${product_id} ${outputMode}`, (commandOut) => {
+                ImptTestHelper.runCommand(`impt dg create --name ${DEVICE_GROUP_NAME} --descr "${DEVICE_GROUP_DESCR}" --product ${product_id}  -e '${TEST_ENV_VARIBALE}' ${outputMode}`, (commandOut) => {
                     dg_id = ImptTestHelper.parseId(commandOut);
                     expect(dg_id).not.toBeNull;
                     _checkDeviceGroupCreateResult(commandOut);
                     ImptTestHelper.checkSuccessStatus(commandOut);
                 }).
-                    then(() => ImptDgTestHelper.checkDeviceGroupInfo({ id: dg_id, p_id: product_id })).
+                    then(() => ImptDgTestHelper.checkDeviceGroupInfo({ id: dg_id, p_id: product_id,env_vars : TEST_ENV_VARIBALE })).
                     then(done).
                     catch(error => done.fail(error));
             });
