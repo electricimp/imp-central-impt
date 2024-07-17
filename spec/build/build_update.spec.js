@@ -93,7 +93,7 @@ ImptTestHelper.OUTPUT_MODES.forEach((outputMode) => {
         }
 
         function _testCleanUp() {
-            return ImptTestHelper.runCommand(`impt dg delete -g ${DEVICE_GROUP_NAME} -f -b -q`, ImptTestHelper.emptyCheck);
+            return ImptTestHelper.runCommand(`impt dg delete -g ${DEVICE_GROUP_NAME} -f -q`, ImptTestHelper.emptyCheck);
         }
 
         function _checkBuildInfo(expInfo = {}) {
